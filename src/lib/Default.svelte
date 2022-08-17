@@ -1,6 +1,7 @@
 <script>
     import Select from "../components/Select.svelte";
     import networks from "../config/networksConfig.js";
+    import SftSetup from "../components/SftSetup.svelte";
 
     let activeNetwork;
 
@@ -41,29 +42,35 @@
 </script>
 
 <div class="container">
-  <div class="logo">
-    <img src="public/SFT.svg" alt="sft logo">
-    <div class="logo-label">SFCC</div>
-  </div>
+  <div class="default-header">
+    <div class="logo">
+      <img src="public/SFT.svg" alt="sft logo">
+      <div class="logo-label">SFCC</div>
+    </div>
 
-  <div class="menu">
-    <Select options={networks} on:select={handleNetworkSelect}></Select>
+    <div class="menu">
+      <Select options={networks} on:select={handleNetworkSelect}></Select>
+    </div>
+  </div>
+  <div class="card">
+    <SftSetup/>
   </div>
 </div>
 
+
 <style lang="scss">
   .container {
-    max-width: 1200px;
-    left: 167px;
-    top: 52px;
-    margin-right: 65px;
-    position: absolute;
     display: flex;
+    flex-direction: column;
+  }
+
+  .default-header {
     justify-content: space-between;
+    display: flex;
     width: 100%;
   }
 
-  .container .logo-label {
+  .logo-label {
     font-family: 'Mukta', sans-serif;
     font-style: normal;
     font-weight: 600;
@@ -72,4 +79,9 @@
     color: #F9DFA0;
   }
 
+  .card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 </style>

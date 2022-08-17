@@ -16,6 +16,11 @@ body {
   margin-right: 65px;
 }
 
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (prefers-color-scheme: light) {
 
 }

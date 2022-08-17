@@ -30,7 +30,6 @@
     .title {
         margin-left: 24px;
         margin-bottom: 11px;
-        font-family: 'Mukta', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
@@ -48,7 +47,6 @@
     }
 
     .form-box label {
-        font-family: 'Mukta', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
@@ -56,12 +54,17 @@
     }
 
     .form-box input {
-        width: 383px;
+        width: 370px;
         height: 28px;
         background: #ECECEC;
         border-radius: 5px;
         border: none;
         margin-bottom: 7px;
+        padding-left: 13px;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 27px;
     }
 
     .form-box input:focus {
@@ -75,7 +78,6 @@
     }
 
     .info-text {
-        font-family: 'Mukta', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 12px;
@@ -86,7 +88,6 @@
     }
 
     button {
-        font-family: 'Mukta', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
@@ -98,5 +99,9 @@
         color: #FFFFFF;
         border: none;
         cursor: pointer;
+    }
+
+    button:hover {
+        opacity: 0.9;
     }
 </style>

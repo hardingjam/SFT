@@ -126,10 +126,11 @@
     </div>
     {#if account}
 
-    <div class="menu">
-      <Select options={networks} on:select={handleNetworkSelect} label={activeNetwork.name || 'Available networks'}></Select>
-      <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}/>
-    </div>
+      <div class="menu">
+        <Select options={networks} on:select={handleNetworkSelect}
+                label={activeNetwork?.name || 'Available networks'}></Select>
+        <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}/>
+      </div>
     {/if}
 
   </div>
@@ -151,9 +152,15 @@
   {#if account}
     <div class="main-card">
       {#await promise}
-        <p>...waiting</p>
       {:then activeNetwork}
-        <SftSetup activeNetwork={activeNetwork} ethersData={ethersData}/>
+        {#if activeNetwork}
+          <SftSetup activeNetwork={activeNetwork} ethersData={ethersData}/>
+        {/if}
+        {#if !activeNetwork}
+          <div class="invalid-network">
+            <label>Choose a supported network from the list above</label>
+          </div>
+        {/if}
       {:catch error}
         <p style="color: red">{error.message}</p>
       {/await}

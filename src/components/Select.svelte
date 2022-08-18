@@ -31,7 +31,7 @@
   <Dropdown triggerElement={dropdownTrigger}>
     <button
         type="button"
-        class="btn btn-secondary dropdown-toggle"
+        class="btn dropdown-toggle"
         bind:this={dropdownTrigger}
     >
       {selected ? selected : label}
@@ -50,5 +50,26 @@
         position: relative;
         display: inline-block;
         cursor: pointer;
+    }
+
+    .btn:focus{
+        outline: none;
+        box-shadow: none;
+    }
+
+    .btn{
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 30px;
+        color: #FFFFFF;
+    }
+
+    .dropdown-toggle::after{
+        display: inline-block;
+        margin-left: 0.255em;
+        vertical-align: 0.255em;
+        content: url("../assets/icons/expand.svg");
+border: none;
     }
 </style>

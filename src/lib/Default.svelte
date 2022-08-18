@@ -3,8 +3,14 @@
     import networks from "../config/networksConfig.js";
     import SftSetup from "../components/SftSetup.svelte";
     import {ethers} from "ethers";
+    import { onMount } from 'svelte';
 
     let activeNetwork;
+
+    onMount(async () => {
+        await setNetwork()
+    });
+
     let account = localStorage.getItem('account');
 
     window.ethereum.on("accountsChanged", (accounts) => {
@@ -68,15 +74,13 @@
         return activeNetwork
     }
 
-    let promise = setNetwork();
-
     async function handleNetworkSelect(event) {
-        activeNetwork = event.detail.selected
         try {
             await window.ethereum.request({
                 method: "wallet_switchEthereumChain",
-                params: [{chainId: `0x${(activeNetwork.chainId).toString(16)}`}]
+                params: [{chainId: `0x${(event.detail.selected.chainId).toString(16)}`}]
             });
+            activeNetwork = event.detail.selected
         } catch (switchError) {
             // This error code indicates that the chain has not been added to MetaMask.
             if (switchError.code === 4902) {
@@ -135,7 +139,6 @@
       <div class="logo-label">SFCC</div>
     </div>
     {#if account}
-
       <div class="menu">
         <Select options={networks} on:select={handleNetworkSelect}
                 label={activeNetwork?.name || 'Available networks'}></Select>
@@ -161,8 +164,6 @@
   {/if}
   {#if account}
     <div class="main-card">
-      {#await promise}
-      {:then activeNetwork}
         {#if activeNetwork}
           <SftSetup activeNetwork={activeNetwork} ethersData={ethersData}/>
         {/if}
@@ -171,9 +172,6 @@
             <label>Choose a supported network from the list above</label>
           </div>
         {/if}
-      {:catch error}
-        <p style="color: red">{error.message}</p>
-      {/await}
     </div>
   {/if}
 </div>

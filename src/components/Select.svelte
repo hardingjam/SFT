@@ -38,7 +38,7 @@
     </button>
     <div slot="DropdownMenu">
       {#each options as option}
-        <button class="dropdown-item" type="button" on:click={commitAction(option)}>{option.name}</button>
+        <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>{option.name}</button>
       {/each}
     </div>
   </Dropdown>

@@ -14,6 +14,16 @@ const networks = [
         erc20ContractAddress: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"
     },
     {
+        id: 80001,
+        chainId: 80001,
+        name: "Mumbai Testnet",
+        currencySymbol: "MATIC",
+        scanURL: "https://mumbai.polygonscan.com/",
+        subgraphURL:
+            "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
+        rpcUrl: "https://rpc-mumbai.maticvigil.com/",
+    },
+    {
         id: 4,
         chainId: 4,
         name: "Rinkeby",

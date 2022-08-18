@@ -14,6 +14,32 @@
         signerOrProvider: "",
     }
 
+    let accountMenuOptions = [
+        {
+            id: "copy",
+            name: "Copy Address",
+            action: () => {
+                console.log(navigator)
+                if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+                    // this.showTooltip = true;
+                    // setTimeout(() => {
+                    //     this.showTooltip = false;
+                    // }, 1000);
+                    console.log(account)
+                    return navigator.clipboard.writeText(account);
+                }
+                return Promise.reject("The Clipboard API is not available.");
+            }
+        },
+        {
+            id: "view",
+            name: "View on Explorer",
+            action: () => {
+                window.open(`${activeNetwork.scanURL}address/${account}`);
+            },
+        }
+    ]
+
     async function getEthersData() {
         if (window.ethereum) {
             ethersData.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -36,7 +62,7 @@
     let promise = setNetwork();
 
     async function handleNetworkSelect(event) {
-        activeNetwork = event.detail.activeNetwork
+        activeNetwork = event.detail.selected
         try {
             await window.ethereum.request({
                 method: "wallet_switchEthereumChain",
@@ -98,10 +124,14 @@
       <img src="public/SFT.svg" alt="sft logo">
       <div class="logo-label">SFCC</div>
     </div>
+    {#if account}
 
     <div class="menu">
-      <Select options={networks} on:select={handleNetworkSelect}></Select>
+      <Select options={networks} on:select={handleNetworkSelect} label={activeNetwork.name || 'Available networks'}></Select>
+      <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}/>
     </div>
+    {/if}
+
   </div>
   {#if !account}
     <div>
@@ -109,7 +139,7 @@
         <label>To use the app:</label>
         <button class="connect-metamask-btn" on:click={()=>connect()}>
           {#if isMetamaskInstalled}
-            <span >Connect Metamask</span>
+            <span>Connect Metamask</span>
           {/if}
           {#if !isMetamaskInstalled}
             <span>Install Metamask</span>
@@ -119,7 +149,7 @@
     </div>
   {/if}
   {#if account}
-    <div class="card">
+    <div class="main-card">
       {#await promise}
         <p>...waiting</p>
       {:then activeNetwork}
@@ -153,13 +183,13 @@
     color: #F9DFA0;
   }
 
-  .card {
+  .main-card {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .invalid-network{
+  .invalid-network {
     background-color: transparent;
     align-items: center;
     display: flex;
@@ -172,7 +202,7 @@
     color: #FFFFFF;
   }
 
-  .connect-metamask-btn{
+  .connect-metamask-btn {
     background: #2C2C54;
     border-radius: 30px;
     padding: 7px 35px;
@@ -183,5 +213,9 @@
     color: #FFFFFF;
     cursor: pointer;
     border: none;
+  }
+
+  .menu {
+    display: flex;
   }
 </style>

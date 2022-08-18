@@ -2,29 +2,50 @@
     import {createEventDispatcher} from 'svelte';
 
     export let options;
+    export let label;
     let selected;
 
     const dispatch = createEventDispatcher();
 
-    function selectOption() {
+    function selectOption(option) {
         dispatch('select', {
-            activeNetwork: selected
+            selected: option
         });
-        return selected
+        selected = option.name
+    }
+
+    import Dropdown from 'sv-bootstrap-dropdown';
+
+    let dropdownTrigger;
+
+    function commitAction(option) {
+        if (option.action) {
+            option.action()
+        }
+        selectOption(option)
     }
 
 </script>
 
 <div class="container">
-  <select bind:value={selected} on:change={selectOption(selected)}>
-    {#each options as option}
-      <option value={option}>
-        {option.name}
-      </option>
-    {/each}
-  </select>
+  <Dropdown triggerElement={dropdownTrigger}>
+    <button
+        type="button"
+        class="btn btn-secondary dropdown-toggle"
+        bind:this={dropdownTrigger}
+    >
+      {selected ? selected : label}
+    </button>
+    <div slot="DropdownMenu">
+      {#each options as option}
+        <button class="dropdown-item" type="button" on:click={commitAction(option)}>{option.name}</button>
+      {/each}
+    </div>
+  </Dropdown>
 </div>
 <style>
+    @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");
+
     .container {
         position: relative;
         display: inline-block;

@@ -5,7 +5,16 @@
     import {ethers} from "ethers";
 
     let activeNetwork;
-    let account;
+    let account = localStorage.getItem('account');
+
+    window.ethereum.on("accountsChanged", (accounts) => {
+        if (!accounts.length) {
+            account = null;
+            localStorage.removeItem('account')
+        }
+    });
+
+
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
 
     let ethersData = {
@@ -110,6 +119,7 @@
                     method: "eth_requestAccounts"
                 }));
                 account = accounts[0];
+                localStorage.setItem('account', account)
             } catch (error) {
                 console.log(error);
             }

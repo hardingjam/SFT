@@ -52,24 +52,25 @@
         cursor: pointer;
     }
 
-    .btn:focus{
+    .btn:focus {
         outline: none;
         box-shadow: none;
     }
 
-    .btn{
+    .btn {
         font-style: normal;
         font-weight: 700;
         font-size: 18px;
         line-height: 30px;
         color: #FFFFFF;
+        display: flex;
     }
 
-    .dropdown-toggle::after{
+    .dropdown-toggle::after {
         display: inline-block;
-        margin-left: 0.255em;
+        margin-left: 17px;
         vertical-align: 0.255em;
         content: url("../assets/icons/expand.svg");
-border: none;
+        border: none;
     }
 </style>

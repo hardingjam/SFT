@@ -2,8 +2,38 @@
     import Select from "../components/Select.svelte";
     import networks from "../config/networksConfig.js";
     import SftSetup from "../components/SftSetup.svelte";
+    import {ethers} from "ethers";
 
     let activeNetwork;
+    let account;
+    let isMetamaskInstalled = typeof window.ethereum !== "undefined"
+
+    let ethersData = {
+        provider: "",
+        signer: "",
+        signerOrProvider: "",
+    }
+
+    async function getEthersData() {
+        if (window.ethereum) {
+            ethersData.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+            ethersData.signer = ethersData.provider.getSigner();
+            ethersData.signerOrProvider = ethersData.signer ? ethersData.signer : ethersData.provider;
+        }
+    }
+
+    getEthersData()
+
+    async function setNetwork() {
+        let network = await ethersData.provider.getNetwork();
+        let connectedChainId = parseInt(network.chainId);
+        activeNetwork = networks.find(
+            (network) => network.chainId === connectedChainId
+        )
+        return activeNetwork
+    }
+
+    let promise = setNetwork();
 
     async function handleNetworkSelect(event) {
         activeNetwork = event.detail.activeNetwork
@@ -39,6 +69,27 @@
             // handle other "switch" errors
         }
     }
+
+    async function connect() {
+        if (!isMetamaskInstalled) {
+            window.open("https://metamask.io/download/", "_blank");
+        } else {
+            try {
+                const accounts = await window.ethereum.request({
+                    method: "wallet_requestPermissions",
+                    params: [{
+                        eth_accounts: {}
+                    }]
+                }).then(() => window.ethereum.request({
+                    method: "eth_requestAccounts"
+                }));
+                account = accounts[0];
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
 </script>
 
 <div class="container">
@@ -52,9 +103,32 @@
       <Select options={networks} on:select={handleNetworkSelect}></Select>
     </div>
   </div>
-  <div class="card">
-    <SftSetup/>
-  </div>
+  {#if !account}
+    <div>
+      <div class="invalid-network">
+        <label>To use the app:</label>
+        <button class="connect-metamask-btn" on:click={()=>connect()}>
+          {#if isMetamaskInstalled}
+            <span >Connect Metamask</span>
+          {/if}
+          {#if !isMetamaskInstalled}
+            <span>Install Metamask</span>
+          {/if}
+        </button>
+      </div>
+    </div>
+  {/if}
+  {#if account}
+    <div class="card">
+      {#await promise}
+        <p>...waiting</p>
+      {:then activeNetwork}
+        <SftSetup activeNetwork={activeNetwork} ethersData={ethersData}/>
+      {:catch error}
+        <p style="color: red">{error.message}</p>
+      {/await}
+    </div>
+  {/if}
 </div>
 
 
@@ -83,5 +157,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .invalid-network{
+    background-color: transparent;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin-top: 6rem;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 66px;
+    color: #FFFFFF;
+  }
+
+  .connect-metamask-btn{
+    background: #2C2C54;
+    border-radius: 30px;
+    padding: 7px 35px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 42px;
+    color: #FFFFFF;
+    cursor: pointer;
+    border: none;
   }
 </style>

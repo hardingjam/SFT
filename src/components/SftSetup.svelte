@@ -2,9 +2,7 @@
     import {ethers} from "ethers";
     import contractAbi from "../contract/OffchainAssetVault-abi.json"
     import {onMount} from "svelte";
-    const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
-    let CONTRACT_FACTORY_ADDRESS = "0x032c40424bA404BB9D5A8b7A5CCF7065C9Fd45DC";
-
+    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../config/consts.js"
 
     let name = "";
     let admin_ledger = "";
@@ -48,7 +46,6 @@
                 constructionConfig
             );
 
-
         const vault = new ethers.Contract(
             ethers.utils.hexZeroPad(
                 ethers.utils.hexStripZeros(
@@ -66,7 +63,12 @@
             signer.address
         )
 
-        await vault.deployed();
+        try {
+            await vault.deployed()
+        }
+        catch (err){
+            console.log(err)
+        }
         console.log(
             "vault deployed to:",
             vault.address
@@ -75,14 +77,14 @@
     }
 
 
-    async function getEventArgs (tx,eventName,contract){
+    async function getEventArgs(tx, eventName, contract) {
         return contract.interface.decodeEventLog(eventName, (
                 await getEvent(tx, eventName, contract)
             ).data
         );
     }
 
-    async function getEvent(tx, eventName, contract){
+    async function getEvent(tx, eventName, contract) {
         const events = (await tx.wait()).events || [];
         const filter = (contract.filters[eventName]().topics || [])[0];
         const eventObj = events.find(
@@ -101,12 +103,12 @@
 <div class="sft-setup-container">
   <label class="title">SFT Setup</label>
   <div class="form-box">
-    <div class="space-between"><label>Token name:</label> <input type="text" bind:value={name} ></div>
-    <div class="space-between"><label>Admin ledger:</label> <input type="text" bind:value={admin_ledger} >
+    <div class="space-between"><label>Token name:</label> <input type="text" bind:value={name}></div>
+    <div class="space-between"><label>Admin ledger:</label> <input type="text" bind:value={admin_ledger}>
     </div>
-    <div class="space-between"><label>Token symbol:</label> <input type="text" bind:value={symbol} >
+    <div class="space-between"><label>Token symbol:</label> <input type="text" bind:value={symbol}>
     </div>
-    <div class="space-between"><label>URL:</label> <input type="text" bind:value={url} ></div>
+    <div class="space-between"><label>URL:</label> <input type="text" bind:value={url}></div>
   </div>
   <div class="form-after">
     <span class="info-text">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>

@@ -4,6 +4,7 @@
     import {onMount} from "svelte";
     import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract} from "../scripts/helpers.js";
+    import { navigate } from "svelte-routing";
 
     let name = null;
     let admin_ledger = null;
@@ -58,6 +59,7 @@
             admin_ledger = null;
             symbol = null;
             url = null;
+            navigate("/admin", { replace: false });
 
         } catch (err) {
             console.log(err)

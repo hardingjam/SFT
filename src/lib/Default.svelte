@@ -3,7 +3,9 @@
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../components/SftSetup.svelte";
     import {ethers} from "ethers";
-    import { onMount } from 'svelte';
+    import {onMount} from 'svelte';
+    import {Router, Route} from "svelte-routing"
+    import Admin from "./../routes/Admin.svelte";
 
     let activeNetwork;
 
@@ -130,51 +132,55 @@
         }
     }
 
+    export let url;
 </script>
+<Router url={url}>
 
-<div class="container">
-  <div class="default-header">
-    <div class="logo">
-      <img src="public/SFT.svg" alt="sft logo">
-      <div class="logo-label">SFCC</div>
+  <div class="container">
+    <div class="default-header">
+      <div class="logo">
+        <img src="public/SFT.svg" alt="sft logo">
+        <div class="logo-label">SFCC</div>
+      </div>
+      {#if account}
+        <div class="menu">
+          <Select options={networks} on:select={handleNetworkSelect}
+                  label={activeNetwork?.name || 'Available networks'}></Select>
+          <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}/>
+        </div>
+      {/if}
+
     </div>
-    {#if account}
-      <div class="menu">
-        <Select options={networks} on:select={handleNetworkSelect}
-                label={activeNetwork?.name || 'Available networks'}></Select>
-        <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}/>
+    {#if !account}
+      <div>
+        <div class="invalid-network">
+          <label>To use the app:</label>
+          <button class="connect-metamask-btn" on:click={()=>connect()}>
+            {#if isMetamaskInstalled}
+              <span>Connect Metamask</span>
+            {/if}
+            {#if !isMetamaskInstalled}
+              <span>Install Metamask</span>
+            {/if}
+          </button>
+        </div>
       </div>
     {/if}
-
-  </div>
-  {#if !account}
-    <div>
-      <div class="invalid-network">
-        <label>To use the app:</label>
-        <button class="connect-metamask-btn" on:click={()=>connect()}>
-          {#if isMetamaskInstalled}
-            <span>Connect Metamask</span>
-          {/if}
-          {#if !isMetamaskInstalled}
-            <span>Install Metamask</span>
-          {/if}
-        </button>
-      </div>
-    </div>
-  {/if}
-  {#if account}
-    <div class="main-card">
+    {#if account}
+      <div class="main-card">
         {#if activeNetwork}
-          <SftSetup activeNetwork={activeNetwork} ethersData={ethersData}/>
+          <Route path="/" component={SftSetup} activeNetwork={activeNetwork} ethersData={ethersData}/>
+          <Route path="/admin" component={Admin}/>
         {/if}
         {#if !activeNetwork}
           <div class="invalid-network">
             <label>Choose a supported network from the list above</label>
           </div>
         {/if}
-    </div>
-  {/if}
-</div>
+      </div>
+    {/if}
+  </div>
+</Router>
 
 
 <style lang="scss">

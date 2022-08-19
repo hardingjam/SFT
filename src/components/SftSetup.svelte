@@ -1,62 +1,24 @@
 <script>
     import {ethers} from "ethers";
     import contractAbi from "../contract/OffchainAssetVault-abi.json"
+    import {onMount} from "svelte";
     const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
-    let CONTRACT_FACTORY_ADDRESS = "0x431C85E807a1bc810538121db2E9934822e13643";
+    let CONTRACT_FACTORY_ADDRESS = "0x032c40424bA404BB9D5A8b7A5CCF7065C9Fd45DC";
 
 
-    let name = "OPUS";
-    let admin_ledger = "0xc0d477556c25c9d67e1f57245c7453da776b51cf";
-    let symbol = "OPS";
-    let url = "https://www.astro.com/h/index_e.htm";
+    let name = "";
+    let admin_ledger = "";
+    let symbol = "";
+    let url = "";
 
     export let activeNetwork;
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
     let contract;
 
-   async function createToken() {
-
-       const constructionConfig = {
-           admin: admin_ledger,
-           receiptVaultConfig: {
-               asset: ADDRESS_ZERO,
-               name,
-               symbol,
-               uri: url,
-           },
-       };
-
-       const erc20PriceOracleVaultTx =
-            await contract.createChildTyped(
-                constructionConfig
-            );
-
-
-       // const erc20PriceOracleVault = new ethers.Contract(
-       //     ethers.utils.hexZeroPad(
-       //         ethers.utils.hexStripZeros(
-       //             (
-       //                 await getEventArgs(
-       //                     erc20PriceOracleVaultTx,
-       //                     "NewChild",
-       //                     erc20PriceOracleVaultFactory
-       //                 )
-       //             ).child
-       //         ),
-       //         20
-       //     ),
-       //     (await artifacts.readArtifact("ERC20PriceOracleVault")).abi,
-       //     deployer
-       // ) as ERC20PriceOracleVault & Contract;
-       //
-       // await erc20PriceOracleVault.deployed();
-       // console.log(
-       //     "ERC20PriceOracleVault deployed to:",
-       //     erc20PriceOracleVault.address
-       // );
-
-    }
+    onMount(async () => {
+        await getContract()
+    });
 
     async function getContract() {
         if (activeNetwork) {
@@ -68,9 +30,71 @@
                 );
             }
         }
+    }
+
+    async function createToken() {
+        const constructionConfig = {
+            admin: admin_ledger,
+            receiptVaultConfig: {
+                asset: ADDRESS_ZERO,
+                name,
+                symbol,
+                uri: url,
+            },
+        };
+
+        const offChainAssetVaultTx =
+            await contract.createChildTyped(
+                constructionConfig
+            );
+
+
+        const vault = new ethers.Contract(
+            ethers.utils.hexZeroPad(
+                ethers.utils.hexStripZeros(
+                    (
+                        await getEventArgs(
+                            offChainAssetVaultTx,
+                            "NewChild",
+                            contract
+                        )
+                    ).child
+                ),
+                20
+            ),
+            contractAbi,
+            signer.address
+        )
+
+        await vault.deployed();
+        console.log(
+            "vault deployed to:",
+            vault.address
+        );
 
     }
-    getContract();
+
+
+    async function getEventArgs (tx,eventName,contract){
+        return contract.interface.decodeEventLog(eventName, (
+                await getEvent(tx, eventName, contract)
+            ).data
+        );
+    }
+
+    async function getEvent(tx, eventName, contract){
+        const events = (await tx.wait()).events || [];
+        const filter = (contract.filters[eventName]().topics || [])[0];
+        const eventObj = events.find(
+            (x) => x.topics[0] === filter && x.address === contract.address
+        );
+
+        if (!eventObj) {
+            throw new Error(`Could not find event with name ${eventName}`);
+        }
+
+        return eventObj;
+    }
 
 
 </script>

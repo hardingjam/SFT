@@ -2,7 +2,8 @@
     import {ethers} from "ethers";
     import contractAbi from "../contract/OffchainAssetVault-abi.json"
     import {onMount} from "svelte";
-    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../config/consts.js"
+    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
+    import {getEventArgs, getContract} from "../scripts/helpers.js";
 
     let name = "";
     let admin_ledger = "";
@@ -15,20 +16,8 @@
     let contract;
 
     onMount(async () => {
-        await getContract()
+        contract = await getContract(activeNetwork, CONTRACT_FACTORY_ADDRESS, contractAbi, signerOrProvider)
     });
-
-    async function getContract() {
-        if (activeNetwork) {
-            if (CONTRACT_FACTORY_ADDRESS) {
-                contract = new ethers.Contract(
-                    CONTRACT_FACTORY_ADDRESS,
-                    contractAbi,
-                    signerOrProvider
-                );
-            }
-        }
-    }
 
     async function createToken() {
         const constructionConfig = {
@@ -65,8 +54,8 @@
 
         try {
             await vault.deployed()
-        }
-        catch (err){
+
+        } catch (err) {
             console.log(err)
         }
         console.log(
@@ -74,28 +63,6 @@
             vault.address
         );
 
-    }
-
-
-    async function getEventArgs(tx, eventName, contract) {
-        return contract.interface.decodeEventLog(eventName, (
-                await getEvent(tx, eventName, contract)
-            ).data
-        );
-    }
-
-    async function getEvent(tx, eventName, contract) {
-        const events = (await tx.wait()).events || [];
-        const filter = (contract.filters[eventName]().topics || [])[0];
-        const eventObj = events.find(
-            (x) => x.topics[0] === filter && x.address === contract.address
-        );
-
-        if (!eventObj) {
-            throw new Error(`Could not find event with name ${eventName}`);
-        }
-
-        return eventObj;
     }
 
 

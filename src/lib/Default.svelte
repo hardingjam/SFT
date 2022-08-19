@@ -1,6 +1,6 @@
 <script>
     import Select from "../components/Select.svelte";
-    import networks from "../config/networksConfig.js";
+    import networks from "../scripts/networksConfig.js";
     import SftSetup from "../components/SftSetup.svelte";
     import {ethers} from "ethers";
     import { onMount } from 'svelte';

@@ -5,10 +5,10 @@
     import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract} from "../scripts/helpers.js";
 
-    let name = "";
-    let admin_ledger = "";
-    let symbol = "";
-    let url = "";
+    let name = null;
+    let admin_ledger = null;
+    let symbol = null;
+    let url = null;
 
     export let activeNetwork;
     export let ethersData;
@@ -54,6 +54,10 @@
 
         try {
             await vault.deployed()
+            name = null;
+            admin_ledger = null;
+            symbol = null;
+            url = null;
 
         } catch (err) {
             console.log(err)

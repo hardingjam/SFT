@@ -10,14 +10,24 @@
     <div class="executor">
       <span>Executor</span>
       {#each executors as executor}
-        <div>{executor.replace(/(.{7}).*/, "$1…")}</div>
+        <div>
+          {executor.replace(/(.{7}).*/, "$1…")}
+          <img class="btn-hover" src="./src/assets/icons/show.svg" alt="show"/>
+          <img class="btn-hover" src="./src/assets/icons/delete.svg" alt="delete"/>
+        </div>
       {/each}
+      <img class="btn-hover" src="./src/assets/icons/plus-sign.svg" alt="add new"/>
     </div>
     <div class="role-admin">
       <span>Role Admin</span>
       {#each admins as admin}
-        <div>{admin.replace(/(.{7}).*/, "$1…")}</div>
+        <div>
+          {admin.replace(/(.{7}).*/, "$1…")}
+          <img class="btn-hover" src="./src/assets/icons/show.svg" alt="show"/>
+          <img class="btn-hover" src="./src/assets/icons/delete.svg" alt="delete"/>
+        </div>
       {/each}
+      <img class="btn-hover" src="./src/assets/icons/plus-sign.svg" alt="add new"/>
     </div>
   </div>
 

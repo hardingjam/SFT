@@ -59,18 +59,18 @@
         )
 
         try {
+            //this line need to be moved down later
+            navigate("/admin", {replace: false});
             await vaultValue.deployed()
             name = null;
             admin_ledger = null;
             symbol = null;
             url = null;
-            vault.set(vault)
-            navigate("/admin", {replace: false});
 
         } catch (err) {
             console.log(err)
         }
-        alert(`vault deployed to: ${vaultValue.address}`)
+
         console.log(
             "vault deployed to:",
             vaultValue.address

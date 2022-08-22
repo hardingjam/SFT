@@ -2,13 +2,47 @@
 
     import Role from "../components/Role.svelte";
 
-    let executors = [
-        "0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324",
-        "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324",
-        "0x8888ad7C22fdC8788fe4cB1dAc15D6e976127324",
-    ];
-    let admins = [
-        "0x1111ad7C22fdC8788fe4cB1dAc15D6e976127324",
+    let roles = [
+        {
+            name: "Depositor",
+            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324"],
+            admins: ["0x9891ad7C22fdC8788fe4cB1dAc15D6e976127324"]
+        },
+        {
+            name: "Withdrawer",
+            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
+            admins: ["0x1364ad7C22fdC8788fe4cB1dAc15D6e976127324"]
+        },
+        {
+            name: "Certifier",
+            executors: ["0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
+            admins: ["0x1891ad7C22fdC8788fe4cB1dAc15D6e976127324"]
+        },
+        {
+            name: "Handler",
+            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
+            admins: ["0x1361ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"]
+        },
+        {
+            name: "ERC20 Tierer",
+            executors: ["0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
+            admins: ["0x1711ad7C22fdC8788fe4cB1dAc15D6e976127324"]
+        },
+        {
+            name: "ERC1155 Tierer",
+            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
+            admins: ["0x1111ad7C22fdC8788fe4cB1dAc15D6e976127324"]
+        },
+        {
+            name: "ERC20 Snapshotter",
+            executors: ["0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
+            admins: ["0x7961ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"]
+        },
+        {
+            name: 'Confiscator',
+            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
+            admins: ["0x7711ad7C22fdC8788fe4cB1dAc15D6e976127324"]
+        },
     ]
 </script>
 <div class="sft-admin-container">
@@ -18,7 +52,11 @@
   </div>
   <div class="roles-container">
     <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
-    <Role name="Depositor" admins={admins} executors={executors}></Role>
+    <div class="roles">
+      {#each roles as role}
+        <Role name={role.name} admins={role.admins} executors={role.executors}></Role>
+      {/each}
+    </div>
   </div>
 </div>
 <style>
@@ -53,6 +91,11 @@
         height: calc(100% - 50px);
         background: #FFFFFF;
         border-radius: 10px;
+    }
+
+    .roles {
+        overflow: auto;
+        height: calc(100% - 35px);
     }
 
     .warning {

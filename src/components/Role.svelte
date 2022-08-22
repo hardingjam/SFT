@@ -38,7 +38,7 @@
         color: #000000;
     }
 
-    .role-list{
+    .role-list {
         display: flex;
         justify-content: space-between;
         font-style: normal;

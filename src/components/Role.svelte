@@ -2,6 +2,10 @@
     export let name;
     export let executors;
     export let admins
+    import show from '../assets/icons/show.svg';
+    import delete_icon from '../assets/icons/delete.svg';
+    import plus_sign from '../assets/icons/plus-sign.svg';
+
 </script>
 
 <div class="role-container">
@@ -12,22 +16,22 @@
       {#each executors as executor}
         <div>
           {executor.replace(/(.{7}).*/, "$1…")}
-          <img class="btn-hover" src="./src/assets/icons/show.svg" alt="show"/>
-          <img class="btn-hover hidden" src="./src/assets/icons/delete.svg" alt="delete"/>
+          <img class="btn-hover" src={show} alt="show"/>
+          <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
         </div>
       {/each}
-      <img class="btn-hover hidden" src="./src/assets/icons/plus-sign.svg" alt="add new"/>
+      <img class="btn-hover hidden" src={plus_sign} alt="add new"/>
     </div>
     <div class="role-admin">
       <span>Role Admin</span>
       {#each admins as admin}
         <div>
           {admin.replace(/(.{7}).*/, "$1…")}
-          <img class="btn-hover" src="./src/assets/icons/show.svg" alt="show"/>
-          <img class="btn-hover hidden" src="./src/assets/icons/delete.svg" alt="delete"/>
+          <img class="btn-hover" src={show} alt="show"/>
+          <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
         </div>
       {/each}
-      <img class="btn-hover hidden" src="./src/assets/icons/plus-sign.svg" alt="add new"/>
+      <img class="btn-hover hidden" src={plus_sign} alt="add new"/>
     </div>
   </div>
 

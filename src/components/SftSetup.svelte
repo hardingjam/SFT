@@ -5,6 +5,7 @@
     import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract} from "../scripts/helpers.js";
     import { navigate } from "svelte-routing";
+    import { vault } from './../scripts/store.js';
 
     let name = null;
     let admin_ledger = null;
@@ -36,7 +37,7 @@
                 constructionConfig
             );
 
-        const vault = new ethers.Contract(
+        const vaultValue = new ethers.Contract(
             ethers.utils.hexZeroPad(
                 ethers.utils.hexStripZeros(
                     (
@@ -54,21 +55,23 @@
         )
 
         try {
-            await vault.deployed()
+            await vaultValue.deployed()
             name = null;
             admin_ledger = null;
             symbol = null;
             url = null;
+            vault.set(vault)
+            console.log(vault)
             navigate("/admin", { replace: false });
 
         } catch (err) {
             console.log(err)
         }
+        alert(`vault deployed to: ${vaultValue.address}`)
         console.log(
             "vault deployed to:",
-            vault.address
+            vaultValue.address
         );
-
     }
 
 
@@ -85,7 +88,7 @@
   </div>
   <div class="form-after">
     <span class="info-text">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
-    <button on:click={() => createToken()}>Create SFT</button>
+    <button class="btn-hover create-token" on:click={() => createToken()}>Create SFT</button>
   </div>
 
 </div>
@@ -162,7 +165,7 @@
         height: 45px;
     }
 
-    button {
+    .create-token {
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
@@ -176,7 +179,4 @@
         cursor: pointer;
     }
 
-    button:hover {
-        opacity: 0.9;
-    }
 </style>

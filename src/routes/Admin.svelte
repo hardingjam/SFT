@@ -1,13 +1,24 @@
 <script>
 
+    import Role from "../components/Role.svelte";
+
+    let executors = [
+        "0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324",
+        "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324",
+        "0x8888ad7C22fdC8788fe4cB1dAc15D6e976127324",
+    ];
+    let admins = [
+        "0x1111ad7C22fdC8788fe4cB1dAc15D6e976127324",
+    ]
 </script>
 <div class="sft-admin-container">
   <div class="admin-header">
     <span>Admin</span>
-    <button class="btn-back">Back</button>
+    <button class="btn-back btn-hover">Back</button>
   </div>
   <div class="roles-container">
     <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
+    <Role name="Depositor" admins={admins} executors={executors}></Role>
   </div>
 </div>
 <style>
@@ -32,6 +43,10 @@
         border-radius: 5px;
         background: transparent;
         color: #ffffff;
+    }
+
+    .btn-back:focus {
+        outline: none;
     }
 
     .roles-container {

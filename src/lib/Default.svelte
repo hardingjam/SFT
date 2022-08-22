@@ -6,6 +6,7 @@
     import {onMount} from 'svelte';
     import {Router, Route} from "svelte-routing"
     import Admin from "./../routes/Admin.svelte";
+    import logo from '../../public/SFT.svg';
 
     let activeNetwork;
 
@@ -139,7 +140,7 @@
   <div class="container">
     <div class="default-header">
       <div class="logo">
-        <img src="./public/SFT.svg" alt="sft logo">
+        <img src={logo} alt="sft logo">
         <div class="logo-label">SFCC</div>
       </div>
       {#if account}

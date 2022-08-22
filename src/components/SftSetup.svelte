@@ -2,12 +2,15 @@
     import {ethers} from "ethers";
     import contractAbi from "../contract/OffchainAssetVault-abi.json"
     import {onMount} from "svelte";
-    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../config/consts.js"
+    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
+    import {getEventArgs, getContract} from "../scripts/helpers.js";
+    import {navigate} from "svelte-routing";
+    import {vault} from './../scripts/store.js';
 
-    let name = "";
-    let admin_ledger = "";
-    let symbol = "";
-    let url = "";
+    let name = null;
+    let admin_ledger = null;
+    let symbol = null;
+    let url = null;
 
     export let activeNetwork;
     export let ethersData;
@@ -15,20 +18,12 @@
     let contract;
 
     onMount(async () => {
-        await getContract()
+        contract = await getContract(activeNetwork, CONTRACT_FACTORY_ADDRESS, contractAbi, signerOrProvider)
     });
 
-    async function getContract() {
-        if (activeNetwork) {
-            if (CONTRACT_FACTORY_ADDRESS) {
-                contract = new ethers.Contract(
-                    CONTRACT_FACTORY_ADDRESS,
-                    contractAbi,
-                    signerOrProvider
-                );
-            }
-        }
-    }
+    // function createToken() {
+    //     navigate("/admin", {replace: false});
+    // }
 
     async function createToken() {
         const constructionConfig = {
@@ -46,7 +41,7 @@
                 constructionConfig
             );
 
-        const vault = new ethers.Contract(
+        const vaultValue = new ethers.Contract(
             ethers.utils.hexZeroPad(
                 ethers.utils.hexStripZeros(
                     (
@@ -64,38 +59,22 @@
         )
 
         try {
-            await vault.deployed()
-        }
-        catch (err){
+            await vaultValue.deployed()
+            name = null;
+            admin_ledger = null;
+            symbol = null;
+            url = null;
+            vault.set(vault)
+            navigate("/admin", {replace: false});
+
+        } catch (err) {
             console.log(err)
         }
+        alert(`vault deployed to: ${vaultValue.address}`)
         console.log(
             "vault deployed to:",
-            vault.address
+            vaultValue.address
         );
-
-    }
-
-
-    async function getEventArgs(tx, eventName, contract) {
-        return contract.interface.decodeEventLog(eventName, (
-                await getEvent(tx, eventName, contract)
-            ).data
-        );
-    }
-
-    async function getEvent(tx, eventName, contract) {
-        const events = (await tx.wait()).events || [];
-        const filter = (contract.filters[eventName]().topics || [])[0];
-        const eventObj = events.find(
-            (x) => x.topics[0] === filter && x.address === contract.address
-        );
-
-        if (!eventObj) {
-            throw new Error(`Could not find event with name ${eventName}`);
-        }
-
-        return eventObj;
     }
 
 
@@ -112,7 +91,7 @@
   </div>
   <div class="form-after">
     <span class="info-text">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
-    <button on:click={() => createToken()}>Create SFT</button>
+    <button class="btn-hover create-token" on:click={() => createToken()}>Create SFT</button>
   </div>
 
 </div>
@@ -189,7 +168,7 @@
         height: 45px;
     }
 
-    button {
+    .create-token {
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
@@ -203,7 +182,4 @@
         cursor: pointer;
     }
 
-    button:hover {
-        opacity: 0.9;
-    }
 </style>

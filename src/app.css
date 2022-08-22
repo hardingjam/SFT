@@ -1,24 +1,29 @@
 body {
-  margin: 0;
-  display: flex;
-  min-width: 320px;
-  min-height: 100vh;
-  background: #6B5B9A;
-  background: linear-gradient(180deg, #6B5B9A 0%, #BCDAF5 100%);
+    margin: 0;
+    display: flex;
+    min-width: 320px;
+    min-height: 100vh;
+    background: #6B5B9A;
+    background: linear-gradient(180deg, #6B5B9A 0%, #BCDAF5 100%);
 }
 
 #app {
-  text-align: center;
-  width: 100%;
-  margin-left: 167px;
-  margin-top: 52px;
-  margin-right: 65px;
-  font-family: 'Mukta', sans-serif;
+    text-align: center;
+    width: 100%;
+    margin-left: 167px;
+    margin-top: 52px;
+    margin-right: 65px;
+    font-family: 'Mukta', sans-serif;
 }
 
 .space-between {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-hover:hover {
+    opacity: 0.7;
+    cursor: pointer;
 }
 
 @media (prefers-color-scheme: light) {

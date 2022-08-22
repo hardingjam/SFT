@@ -88,12 +88,12 @@
                 "type": "string"
               }
             ],
-            "internalType": "struct ConstructionConfig",
+            "internalType": "struct ReceiptVaultConstructionConfig",
             "name": "receiptVaultConfig",
             "type": "tuple"
           }
         ],
-        "internalType": "struct ConstructionConfig",
+        "internalType": "struct OffchainAssetVaultConstructionConfig",
         "name": "config_",
         "type": "tuple"
       }

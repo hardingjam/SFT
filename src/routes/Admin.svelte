@@ -1,5 +1,5 @@
 <script>
-
+    import {navigate} from "svelte-routing";
     import Role from "../components/Role.svelte";
 
     let roles = [
@@ -44,11 +44,16 @@
             admins: ["0x7711ad7C22fdC8788fe4cB1dAc15D6e976127324"]
         },
     ]
+
+    function goBack() {
+        navigate("/", {replace: false});
+    }
+
 </script>
 <div class="sft-admin-container">
   <div class="admin-header">
     <span>Admin</span>
-    <button class="btn-back btn-hover">Back</button>
+    <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
   </div>
   <div class="roles-container">
     <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>

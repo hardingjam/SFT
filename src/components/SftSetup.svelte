@@ -4,8 +4,8 @@
     import {onMount} from "svelte";
     import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract} from "../scripts/helpers.js";
-    import { navigate } from "svelte-routing";
-    import { vault } from './../scripts/store.js';
+    import {navigate} from "svelte-routing";
+    import {vault} from './../scripts/store.js';
 
     let name = null;
     let admin_ledger = null;
@@ -20,6 +20,10 @@
     onMount(async () => {
         contract = await getContract(activeNetwork, CONTRACT_FACTORY_ADDRESS, contractAbi, signerOrProvider)
     });
+
+    // function createToken() {
+    //     navigate("/admin", {replace: false});
+    // }
 
     async function createToken() {
         const constructionConfig = {
@@ -61,8 +65,7 @@
             symbol = null;
             url = null;
             vault.set(vault)
-            console.log(vault)
-            navigate("/admin", { replace: false });
+            navigate("/admin", {replace: false});
 
         } catch (err) {
             console.log(err)

@@ -1,6 +1,7 @@
 <script>
     import {activeNetwork, vault} from "../scripts/store.js";
     import Modal from "sv-bootstrap-modal";
+
     let isOpen = false;
 
     export let name;
@@ -10,15 +11,25 @@
     import delete_icon from '../assets/icons/delete.svg';
     import plus_sign from '../assets/icons/plus-sign.svg';
 
+    let roleToBeGranted;
+    let account = '';
+
     function showAddress(account) {
         window.open(`${$activeNetwork.blockExplorer}address/${account}`);
     }
 
-    async function showModal(roleName){
+    async function showModal(roleName, isAdminRole) {
         isOpen = true;
-        // roleName = roleName.toUpperCase()
-        // let role = await $vault[roleName]()
-        // await $vault.grantRole(role,"0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324");
+        roleToBeGranted = isAdminRole ? roleName.toUpperCase() + "_ADMIN" : roleName.toUpperCase()
+    }
+
+    async function grantRole() {
+        let role = await $vault[roleToBeGranted]()
+        try {
+            await $vault.grantRole(role, account);
+        } catch (err) {
+            console.log(err)
+        }
     }
 
 </script>
@@ -46,21 +57,21 @@
           <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
         </div>
       {/each}
-      <img class="btn-hover hidden" src={plus_sign} alt="add new"/>
+      <img class="btn-hover hidden" src={plus_sign} alt="add new" on:click={()=>showModal(name,true)}/>
     </div>
   </div>
 
   <Modal bind:open={isOpen}>
     <div class="modal-header">
-      <h5 class="modal-title">Modal title</h5>
+      <h5 class="modal-title">Grant {roleToBeGranted} Role to:</h5>
       <button type="button" class="close" on:click={() => (isOpen = false)}>
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body">Woohoo, you're reading this text in a modal!</div>
+    <div class="modal-body"><input type="text" bind:value={account}></div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" on:click={() => (isOpen = false)}>Close</button>
-      <button type="button" class="btn btn-primary">Save changes</button>
+      <button type="button" class="btn btn-primary" on:click={() => grantRole()}>Submit</button>
     </div>
   </Modal>
 

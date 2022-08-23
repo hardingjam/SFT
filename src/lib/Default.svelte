@@ -7,8 +7,7 @@
     import {Router, Route} from "svelte-routing"
     import Admin from "./../routes/Admin.svelte";
     import logo from '../../public/SFT.svg';
-
-    let activeNetwork;
+    import {activeNetwork} from "../scripts/store.js";
 
     onMount(async () => {
         await setNetwork()
@@ -37,7 +36,6 @@
             id: "copy",
             name: "Copy Address",
             action: () => {
-                console.log(navigator)
                 if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
                     // this.showTooltip = true;
                     // setTimeout(() => {
@@ -53,7 +51,7 @@
             id: "view",
             name: "View on Explorer",
             action: () => {
-                window.open(`${activeNetwork.scanURL}address/${account}`);
+                window.open(`${$activeNetwork.blockExplorer}address/${account}`);
             },
         }
     ]
@@ -71,10 +69,11 @@
     async function setNetwork() {
         let network = await ethersData.provider.getNetwork();
         let connectedChainId = parseInt(network.chainId);
-        activeNetwork = networks.find(
+        let temp = networks.find(
             (network) => network.chainId === connectedChainId
         )
-        return activeNetwork
+        activeNetwork.set(temp)
+        return temp
     }
 
     async function handleNetworkSelect(event) {
@@ -83,7 +82,7 @@
                 method: "wallet_switchEthereumChain",
                 params: [{chainId: `0x${(event.detail.selected.chainId).toString(16)}`}]
             });
-            activeNetwork = event.detail.selected
+            activeNetwork.set(event.detail.selected)
         } catch (switchError) {
             // This error code indicates that the chain has not been added to MetaMask.
             if (switchError.code === 4902) {
@@ -92,13 +91,13 @@
                         method: "wallet_addEthereumChain",
                         params: [
                             {
-                                chainId: `0x${(activeNetwork.chainId).toString(16)}`,
-                                chainName: activeNetwork.name,
-                                rpcUrls: [activeNetwork.rpcUrl],
-                                blockExplorerUrls: [activeNetwork.scanURL],
+                                chainId: `0x${($activeNetwork.chainId).toString(16)}`,
+                                chainName: $activeNetwork.name,
+                                rpcUrls: [$activeNetwork.rpcUrl],
+                                blockExplorerUrls: [$activeNetwork.scanURL],
                                 nativeCurrency: {
-                                    name: activeNetwork.currencySymbol,
-                                    symbol: activeNetwork.currencySymbol,
+                                    name: $activeNetwork.currencySymbol,
+                                    symbol: $activeNetwork.currencySymbol,
                                     decimals: 18
                                 }
                             }
@@ -146,7 +145,7 @@
       {#if account}
         <div class="menu">
           <Select options={networks} on:select={handleNetworkSelect}
-                  label={activeNetwork?.name || 'Available networks'}></Select>
+                  label={$activeNetwork?.name || 'Available networks'}></Select>
           <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}/>
         </div>
       {/if}
@@ -169,11 +168,11 @@
     {/if}
     {#if account}
       <div class="main-card">
-        {#if activeNetwork}
-          <Route path="/" component={SftSetup} activeNetwork={activeNetwork} ethersData={ethersData}/>
+        {#if $activeNetwork}
+          <Route path="/" component={SftSetup} activeNetwork={$activeNetwork} ethersData={ethersData}/>
           <Route path="/admin" component={Admin}/>
         {/if}
-        {#if !activeNetwork}
+        {#if !$activeNetwork}
           <div class="invalid-network">
             <label>Choose a supported network from the list above</label>
           </div>

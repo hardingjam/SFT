@@ -18,7 +18,7 @@ const networks = [
         chainId: 80001,
         name: "Mumbai Testnet",
         currencySymbol: "MATIC",
-        scanURL: "https://mumbai.polygonscan.com/",
+        blockExplorer: "https://mumbai.polygonscan.com/",
         subgraphURL:
             "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",

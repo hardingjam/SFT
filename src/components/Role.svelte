@@ -1,10 +1,16 @@
 <script>
+    import {activeNetwork} from "../scripts/store.js";
+
     export let name;
     export let executors;
     export let admins
     import show from '../assets/icons/show.svg';
     import delete_icon from '../assets/icons/delete.svg';
     import plus_sign from '../assets/icons/plus-sign.svg';
+
+    function showAddress(account) {
+        window.open(`${$activeNetwork.blockExplorer}address/${account}`);
+    }
 
 </script>
 
@@ -16,7 +22,7 @@
       {#each executors as executor}
         <div>
           {executor.replace(/(.{7}).*/, "$1…")}
-          <img class="btn-hover" src={show} alt="show"/>
+          <img class="btn-hover" src={show} alt="show" on:click={()=>showAddress(executor)}/>
           <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
         </div>
       {/each}
@@ -27,7 +33,7 @@
       {#each admins as admin}
         <div>
           {admin.replace(/(.{7}).*/, "$1…")}
-          <img class="btn-hover" src={show} alt="show"/>
+          <img class="btn-hover" src={show} alt="show" on:click={()=>showAddress(admin)}/>
           <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
         </div>
       {/each}

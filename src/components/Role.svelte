@@ -1,5 +1,7 @@
 <script>
-    import {activeNetwork} from "../scripts/store.js";
+    import {activeNetwork, vault} from "../scripts/store.js";
+    import Modal from "sv-bootstrap-modal";
+    let isOpen = false;
 
     export let name;
     export let executors;
@@ -10,6 +12,13 @@
 
     function showAddress(account) {
         window.open(`${$activeNetwork.blockExplorer}address/${account}`);
+    }
+
+    async function showModal(roleName){
+        isOpen = true;
+        // roleName = roleName.toUpperCase()
+        // let role = await $vault[roleName]()
+        // await $vault.grantRole(role,"0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324");
     }
 
 </script>
@@ -26,7 +35,7 @@
           <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
         </div>
       {/each}
-      <img class="btn-hover hidden" src={plus_sign} alt="add new"/>
+      <img class="btn-hover hidden" src={plus_sign} alt="add new" on:click={()=>showModal(name)}/>
     </div>
     <div class="role-admin">
       <span>Role Admin</span>
@@ -40,6 +49,20 @@
       <img class="btn-hover hidden" src={plus_sign} alt="add new"/>
     </div>
   </div>
+
+  <Modal bind:open={isOpen}>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal title</h5>
+      <button type="button" class="close" on:click={() => (isOpen = false)}>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">Woohoo, you're reading this text in a modal!</div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" on:click={() => (isOpen = false)}>Close</button>
+      <button type="button" class="btn btn-primary">Save changes</button>
+    </div>
+  </Modal>
 
 </div>
 

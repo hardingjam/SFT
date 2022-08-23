@@ -184,6 +184,8 @@
 
 
 <style lang="scss">
+  @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");
+
   .container {
     display: flex;
     flex-direction: column;

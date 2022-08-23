@@ -1,6 +1,7 @@
 <script>
     import {ethers} from "ethers";
-    import contractAbi from "../contract/OffchainAssetVault-abi.json"
+    import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
+    import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {onMount} from "svelte";
     import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract} from "../scripts/helpers.js";
@@ -15,10 +16,10 @@
     export let activeNetwork;
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
-    let contract;
+    let factoryContract;
 
     onMount(async () => {
-        contract = await getContract(activeNetwork, CONTRACT_FACTORY_ADDRESS, contractAbi, signerOrProvider)
+        factoryContract = await getContract(activeNetwork, CONTRACT_FACTORY_ADDRESS, contractFactoryAbi, signerOrProvider)
     });
 
     // function createToken() {
@@ -37,28 +38,24 @@
         };
 
         const offChainAssetVaultTx =
-            await contract.createChildTyped(
+            await factoryContract.createChildTyped(
                 constructionConfig
             );
 
-        const vaultValue = new ethers.Contract(
-            ethers.utils.hexZeroPad(
-                ethers.utils.hexStripZeros(
-                    (
-                        await getEventArgs(
-                            offChainAssetVaultTx,
-                            "NewChild",
-                            contract
-                        )
-                    ).child
-                ),
-                20
-            ),
-            contractAbi,
-            signer.address
-        )
+        let vaultValue;
 
         try {
+            vaultValue = new ethers.Contract(
+                ethers.utils.hexZeroPad(
+                    ethers.utils.hexStripZeros(
+                        (await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)).child
+                    ),
+                    20
+                ),
+                contractAbi,
+                signer.address
+            );
+
             //this line need to be moved down later
             navigate("/admin", {replace: false});
             await vaultValue.deployed()
@@ -75,6 +72,11 @@
             "vault deployed to:",
             vaultValue.address
         );
+
+        let contract = await getContract(activeNetwork, vaultValue.address, contractAbi, signerOrProvider)
+        vault.set(contract)
+        console.log($vault)
+        console.log(contract)
     }
 
 

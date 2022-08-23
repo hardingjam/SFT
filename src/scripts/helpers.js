@@ -1,4 +1,3 @@
-import {CONTRACT_FACTORY_ADDRESS} from "./consts.js";
 import {ethers} from "ethers";
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -25,7 +24,7 @@ export async function getEvent(tx, eventName, contract) {
 export async function getContract(network, address, abi, signerOrProvider) {
     let contract;
     if (network) {
-        if (CONTRACT_FACTORY_ADDRESS) {
+        if (address) {
             contract = new ethers.Contract(
                 address,
                 abi,

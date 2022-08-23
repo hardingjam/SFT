@@ -6,20 +6,19 @@
     import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract} from "../scripts/helpers.js";
     import {navigate} from "svelte-routing";
-    import {vault} from './../scripts/store.js';
+    import {activeNetwork, vault} from './../scripts/store.js';
 
-    let name = null;
-    let admin_ledger = null;
-    let symbol = null;
-    let url = null;
+    let name = "OPUS";
+    let admin_ledger = "0xc0d477556c25c9d67e1f57245c7453da776b51cf";
+    let symbol = "OPS";
+    let url = "https://www.astro.com/h/index_e.htm";
 
-    export let activeNetwork;
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
     let factoryContract;
 
     onMount(async () => {
-        factoryContract = await getContract(activeNetwork, CONTRACT_FACTORY_ADDRESS, contractFactoryAbi, signerOrProvider)
+        factoryContract = await getContract($activeNetwork, CONTRACT_FACTORY_ADDRESS, contractFactoryAbi, signerOrProvider)
     });
 
     // function createToken() {
@@ -42,41 +41,37 @@
                 constructionConfig
             );
 
-        let vaultValue;
+        let contract;
 
-        try {
-            vaultValue = new ethers.Contract(
-                ethers.utils.hexZeroPad(
-                    ethers.utils.hexStripZeros(
-                        (await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)).child
-                    ),
-                    20
+        contract = new ethers.Contract(
+            ethers.utils.hexZeroPad(
+                ethers.utils.hexStripZeros(
+                    (await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)).child
                 ),
-                contractAbi,
-                signer.address
-            );
+                20
+            ),
+            contractAbi,
+            signer.address
+        );
 
-            //this line need to be moved down later
-            navigate("/admin", {replace: false});
-            await vaultValue.deployed()
-            name = null;
-            admin_ledger = null;
-            symbol = null;
-            url = null;
+        //this line need to be moved down later
+        await contract.deployed()
 
-        } catch (err) {
-            console.log(err)
-        }
+        navigate("/admin", {replace: false});
+        name = null;
+        admin_ledger = null;
+        symbol = null;
+        url = null;
+
 
         console.log(
             "vault deployed to:",
-            vaultValue.address
+            contract.address
         );
 
-        let contract = await getContract(activeNetwork, vaultValue.address, contractAbi, signerOrProvider)
+        // let contract = await getContract($activeNetwork, vaultValue.address, contractAbi, signerOrProvider)
         vault.set(contract)
         console.log($vault)
-        console.log(contract)
     }
 
 

@@ -1,6 +1,7 @@
 <script>
     import {navigate} from "svelte-routing";
     import Role from "../components/Role.svelte";
+    import {vault, activeNetwork} from "../scripts/store.js";
 
     let roles = [
         {
@@ -55,6 +56,8 @@
     <span>Admin</span>
     <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
   </div>
+  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`} class="contract-address btn-hover"
+              target="_blank">{$vault.address}</a>
   <div class="roles-container">
     <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
     <div class="roles">
@@ -71,6 +74,8 @@
         background: rgba(44, 44, 84, 0.33);
         border-radius: 20px;
         padding: 12px;
+        color: #ffffff;
+
     }
 
     .admin-header {
@@ -93,9 +98,10 @@
     }
 
     .roles-container {
-        height: calc(100% - 50px);
+        height: calc(100% - 70px);
         background: #FFFFFF;
         border-radius: 10px;
+        color: #000000;
     }
 
     .roles {
@@ -109,5 +115,10 @@
         font-size: 8px;
         line-height: 13px;
         color: #000000;
+    }
+
+    .contract-address {
+        text-decoration: none;
+        color: #ffffff;
     }
 </style>

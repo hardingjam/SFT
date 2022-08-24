@@ -39,6 +39,28 @@
         }
     }
 
+    async function revokeRole(roleName, account) {
+        let role = await $vault[roleName]()
+
+        try {
+            const revokeRoleTx = await $vault.revokeRole(role, account);
+            await revokeRoleTx.wait()
+            let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
+            let accountIndex = updatedRoleHolders.indexOf(account)
+            updatedRoleHolders.splice(accountIndex, 1)
+            const newRoles = $roles.map(role => {
+                if (role.roleName === roleName) {
+                    return {...role, roleHolders: updatedRoleHolders};
+                }
+                return role;
+            });
+            roles.set([...newRoles])
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
+
     export let roleHolders;
 
 
@@ -53,7 +75,7 @@
         <div>
           {roleHolder.replace(/(.{7}).*/, "$1…")}
           <img class="btn-hover" src={show} alt="show" on:click={()=>showAddress(roleHolder)}/>
-          <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
+          <img class="btn-hover hidden" src={delete_icon} on:click={()=>revokeRole(name,roleHolder)} alt="delete"/>
         </div>
       {/each}
       <div class="grant-tole">

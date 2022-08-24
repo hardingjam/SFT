@@ -1,8 +1,6 @@
 <script>
     import {activeNetwork, vault} from "../scripts/store.js";
 
-    let isOpen = false;
-
     export let name;
     export let executors;
     export let admins
@@ -12,22 +10,19 @@
 
     let roleToBeGranted;
     let account = '';
+    let accountAdmin = '';
 
     function showAddress(account) {
         window.open(`${$activeNetwork.blockExplorer}address/${account}`);
     }
 
-    async function showModal(roleName, isAdminRole) {
-        isOpen = true;
+    async function grantRole(roleName, isAdminRole) {
         roleToBeGranted = isAdminRole ? roleName.toUpperCase() + "_ADMIN" : roleName.toUpperCase()
-    }
-
-    async function grantRole() {
+        let acc = isAdminRole ? accountAdmin : account
         let role = await $vault[roleToBeGranted]()
         try {
-            const grantRoleTx = await $vault.grantRole(role, account);
+            const grantRoleTx = await $vault.grantRole(role, acc);
             await grantRoleTx.wait()
-            isOpen = false;
         } catch (err) {
             console.log(err)
         }
@@ -63,7 +58,7 @@
       {/each}
       <div class="grant-tole hidden">
         <img class="btn-hover" src={plus_sign} alt="add new" on:click={()=>grantRole(name,true)}/>
-        <input type="text" class="account-input" bind:value={account}>
+        <input type="text" class="account-input" bind:value={accountAdmin}>
       </div>
     </div>
   </div>

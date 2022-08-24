@@ -68,10 +68,12 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body"><input type="text" bind:value={account}></div>
+    <div class="modal-body">
+      Account <input type="text" class="account-input" bind:value={account}>
+    </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" on:click={() => (isOpen = false)}>Close</button>
-      <button type="button" class="btn btn-primary" on:click={() => grantRole()}>Submit</button>
+      <button type="button" class="btn-default btn-cancel btn-hover" on:click={() => (isOpen=false)}>Close</button>
+      <button type="button" class="btn-default btn-submit btn-hover" on:click={() => grantRole()}>Submit</button>
     </div>
   </Modal>
 
@@ -107,5 +109,19 @@
 
     .role-container:hover .hidden {
         visibility: visible;
+    }
+
+    .account-input {
+        width: 370px;
+        height: 28px;
+        background: #ECECEC;
+        border-radius: 5px;
+        border: none;
+        margin-bottom: 7px;
+        padding-left: 13px;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 27px;
     }
 </style>

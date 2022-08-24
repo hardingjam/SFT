@@ -26,6 +26,35 @@ body {
     cursor: pointer;
 }
 
+.btn-default {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 27px;
+    height: 50px;
+    border-radius: 30px;
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+    padding: 0 30px;
+}
+
+.btn-submit {
+    background: #9D7334;
+}
+
+.btn-cancel {
+    background: #f11717;
+}
+
+input:focus {
+    outline: none;
+}
+
+button:focus, button:focus-visible {
+    outline: none!important;
+}
+
 @media (prefers-color-scheme: light) {
 
 }

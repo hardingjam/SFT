@@ -1,6 +1,5 @@
 <script>
     import {activeNetwork, vault} from "../scripts/store.js";
-    import Modal from "sv-bootstrap-modal";
 
     let isOpen = false;
 
@@ -26,7 +25,9 @@
     async function grantRole() {
         let role = await $vault[roleToBeGranted]()
         try {
-            await $vault.grantRole(role, account);
+            const grantRoleTx = await $vault.grantRole(role, account);
+            await grantRoleTx.wait()
+            isOpen = false;
         } catch (err) {
             console.log(err)
         }
@@ -46,7 +47,10 @@
           <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
         </div>
       {/each}
-      <img class="btn-hover hidden" src={plus_sign} alt="add new" on:click={()=>showModal(name)}/>
+      <div class="grant-tole hidden">
+        <img class="btn-hover" src={plus_sign} alt="add new" on:click={()=>grantRole(name)}/>
+        <input type="text" class="account-input" bind:value={account}>
+      </div>
     </div>
     <div class="role-admin">
       <span>Role Admin</span>
@@ -57,26 +61,12 @@
           <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
         </div>
       {/each}
-      <img class="btn-hover hidden" src={plus_sign} alt="add new" on:click={()=>showModal(name,true)}/>
+      <div class="grant-tole hidden">
+        <img class="btn-hover" src={plus_sign} alt="add new" on:click={()=>grantRole(name,true)}/>
+        <input type="text" class="account-input" bind:value={account}>
+      </div>
     </div>
   </div>
-
-  <Modal bind:open={isOpen}>
-    <div class="modal-header">
-      <h5 class="modal-title">Grant {roleToBeGranted} Role to:</h5>
-      <button type="button" class="close" on:click={() => (isOpen = false)}>
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      Account <input type="text" class="account-input" bind:value={account}>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn-default btn-cancel btn-hover" on:click={() => (isOpen=false)}>Close</button>
-      <button type="button" class="btn-default btn-submit btn-hover" on:click={() => grantRole()}>Submit</button>
-    </div>
-  </Modal>
-
 </div>
 
 <style>
@@ -123,5 +113,15 @@
         font-weight: 300;
         font-size: 16px;
         line-height: 27px;
+    }
+
+    .grant-tole {
+        display: flex;
+        align-items: center;
+    }
+
+    .grant-tole input {
+        width: 314px;
+        margin: 0 5px;
     }
 </style>

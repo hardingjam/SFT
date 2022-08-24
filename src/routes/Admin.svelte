@@ -69,7 +69,7 @@
 </div>
 <style>
     .sft-admin-container {
-        width: 510px;
+        width: 819px;
         height: calc(100vh - 280px);
         background: rgba(44, 44, 84, 0.33);
         border-radius: 20px;

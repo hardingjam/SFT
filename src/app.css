@@ -47,12 +47,20 @@ body {
     background: #f11717;
 }
 
+input {
+    border: none;
+}
+
 input:focus {
     outline: none;
 }
 
 button:focus, button:focus-visible {
-    outline: none!important;
+    outline: none !important;
+}
+
+.invalid-input {
+    border: 1px solid #f11717;
 }
 
 @media (prefers-color-scheme: light) {

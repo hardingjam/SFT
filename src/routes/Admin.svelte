@@ -1,50 +1,9 @@
 <script>
     import {navigate} from "svelte-routing";
     import Role from "../components/Role.svelte";
-    import {vault, activeNetwork} from "../scripts/store.js";
+    import {vault, activeNetwork, roles} from "../scripts/store.js";
 
-    let roles = [
-        {
-            name: "Depositor",
-            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x9891ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "Withdrawer",
-            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x1364ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "Certifier",
-            executors: ["0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x1891ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "Handler",
-            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x1361ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "ERC20 Tierer",
-            executors: ["0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x1711ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "ERC1155 Tierer",
-            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x1111ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "ERC20 Snapshotter",
-            executors: ["0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x7961ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: 'Confiscator',
-            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x7711ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-    ]
+    let executorRoles = $roles.filter(r => !r.roleName.includes('_ADMIN'))
 
     function goBack() {
         navigate("/", {replace: false});
@@ -61,9 +20,20 @@
   <div class="roles-container">
     <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
     <div class="roles">
-      {#each roles as role}
-        <Role name={role.name} admins={role.admins} executors={role.executors}></Role>
-      {/each}
+      <table>
+        {#each executorRoles as role}
+          <tr>
+            <td>
+              <Role name={role.roleName}
+                    roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders}></Role>
+            </td>
+            <td>
+              <Role name={role.roleName+"_ADMIN"}
+                    roleHolders={$roles.find(r=>r.roleName===role.roleName+"_ADMIN").roleHolders}></Role>
+            </td>
+          </tr>
+        {/each}
+      </table>
     </div>
   </div>
 </div>
@@ -107,6 +77,8 @@
     .roles {
         overflow: auto;
         height: calc(100% - 35px);
+        display: flex;
+        justify-content: center;
     }
 
     .warning {
@@ -121,4 +93,10 @@
         text-decoration: none;
         color: #ffffff;
     }
+
+    td {
+        vertical-align: top;
+        padding: 0 5px;
+    }
+
 </style>

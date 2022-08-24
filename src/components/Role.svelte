@@ -1,32 +1,46 @@
 <script>
-    import {activeNetwork, vault} from "../scripts/store.js";
+    import {activeNetwork, vault, roles} from "../scripts/store.js";
 
     export let name;
-    export let executors;
-    export let admins
     import show from '../assets/icons/show.svg';
     import delete_icon from '../assets/icons/delete.svg';
     import plus_sign from '../assets/icons/plus-sign.svg';
 
-    let roleToBeGranted;
     let account = '';
-    let accountAdmin = '';
+    let validAccount = true;
 
     function showAddress(account) {
         window.open(`${$activeNetwork.blockExplorer}address/${account}`);
     }
 
-    async function grantRole(roleName, isAdminRole) {
-        roleToBeGranted = isAdminRole ? roleName.toUpperCase() + "_ADMIN" : roleName.toUpperCase()
-        let acc = isAdminRole ? accountAdmin : account
-        let role = await $vault[roleToBeGranted]()
+    async function grantRole(roleName) {
+        let role = await $vault[roleName]()
         try {
-            const grantRoleTx = await $vault.grantRole(role, acc);
-            await grantRoleTx.wait()
+            if (account) {
+                validAccount = true;
+                const grantRoleTx = await $vault.grantRole(role, account);
+                await grantRoleTx.wait()
+                let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
+                updatedRoleHolders.push(account)
+                const newRoles = $roles.map(role => {
+                    if (role.roleName === roleName) {
+                        return {...role, roleHolders: updatedRoleHolders};
+                    }
+                    return role;
+                });
+                roles.set([...newRoles])
+                account = "";
+            } else {
+                validAccount = false;
+            }
+
         } catch (err) {
             console.log(err)
         }
     }
+
+    export let roleHolders;
+
 
 </script>
 
@@ -35,30 +49,17 @@
   <div class="role-list">
     <div class="executor">
       <span>Executor</span>
-      {#each executors as executor}
+      {#each roleHolders as roleHolder}
         <div>
-          {executor.replace(/(.{7}).*/, "$1…")}
-          <img class="btn-hover" src={show} alt="show" on:click={()=>showAddress(executor)}/>
+          {roleHolder.replace(/(.{7}).*/, "$1…")}
+          <img class="btn-hover" src={show} alt="show" on:click={()=>showAddress(roleHolder)}/>
           <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
         </div>
       {/each}
-      <div class="grant-tole hidden">
+      <div class="grant-tole">
         <img class="btn-hover" src={plus_sign} alt="add new" on:click={()=>grantRole(name)}/>
-        <input type="text" class="account-input" bind:value={account}>
-      </div>
-    </div>
-    <div class="role-admin">
-      <span>Role Admin</span>
-      {#each admins as admin}
-        <div>
-          {admin.replace(/(.{7}).*/, "$1…")}
-          <img class="btn-hover" src={show} alt="show" on:click={()=>showAddress(admin)}/>
-          <img class="btn-hover hidden" src={delete_icon} alt="delete"/>
-        </div>
-      {/each}
-      <div class="grant-tole hidden">
-        <img class="btn-hover" src={plus_sign} alt="add new" on:click={()=>grantRole(name,true)}/>
-        <input type="text" class="account-input" bind:value={accountAdmin}>
+        <input type="text" class="{validAccount ? 'account-input' : 'account-input invalid-input'}"
+               bind:value={account}>
       </div>
     </div>
   </div>
@@ -67,8 +68,6 @@
 <style>
     .role-container {
         text-align: left;
-        margin-left: 56px;
-        margin-right: 56px;
     }
 
     .title {
@@ -101,7 +100,6 @@
         height: 28px;
         background: #ECECEC;
         border-radius: 5px;
-        border: none;
         margin-bottom: 7px;
         padding-left: 13px;
         font-style: normal;

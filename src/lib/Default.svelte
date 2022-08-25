@@ -6,7 +6,7 @@
     import {onMount} from 'svelte';
     import {Router, Route} from "svelte-routing"
     import Admin from "./../routes/Admin.svelte";
-    import logo from '../../public/SFT.svg';
+    import {icons} from '../scripts/assets.js'
     import {activeNetwork} from "../scripts/store.js";
 
     onMount(async () => {
@@ -41,7 +41,6 @@
                     // setTimeout(() => {
                     //     this.showTooltip = false;
                     // }, 1000);
-                    console.log(account)
                     return navigator.clipboard.writeText(account);
                 }
                 return Promise.reject("The Clipboard API is not available.");
@@ -139,14 +138,20 @@
   <div class="container">
     <div class="default-header">
       <div class="logo">
-        <img src={logo} alt="sft logo">
+        <img src={icons.logo} alt="sft logo">
         <div class="logo-label">SFCC</div>
       </div>
       {#if account}
         <div class="menu">
           <Select options={networks} on:select={handleNetworkSelect}
-                  label={$activeNetwork?.name || 'Available networks'}></Select>
-          <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")} staticLabel={true}/>
+                  label={$activeNetwork?.name || 'Available networks'}>
+            <span slot="icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
+                                                       alt={$activeNetwork?.name}/></span>
+            <span slot="option-icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
+                                                              alt={$activeNetwork?.name}/></span>
+          </Select>
+          <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")} staticLabel={true}>
+          </Select>
         </div>
       {/if}
 
@@ -239,4 +244,5 @@
   .menu {
     display: flex;
   }
+
 </style>

@@ -1,11 +1,7 @@
 <script>
     import {activeNetwork, vault, roles} from "../scripts/store.js";
-
     export let name;
-    import show from '../assets/icons/show.svg';
-    import delete_icon from '../assets/icons/delete.svg';
-    import plus_sign from '../assets/icons/plus-sign.svg';
-
+    import {icons} from '../scripts/assets.js'
     let account = '';
     let validAccount = true;
 
@@ -79,12 +75,12 @@
       {#each roleHolders as roleHolder}
         <div>
           {roleHolder.replace(/(.{7}).*/, "$1…")}
-          <img class="btn-hover" src={show} alt="show" on:click={()=>showAddress(roleHolder)}/>
-          <img class="btn-hover hidden" src={delete_icon} on:click={()=>revokeRole(name,roleHolder)} alt="delete"/>
+          <img class="btn-hover" src={icons.show} alt="show" on:click={()=>showAddress(roleHolder)}/>
+          <img class="btn-hover hidden" src={icons.delete_icon} on:click={()=>revokeRole(name,roleHolder)} alt="delete"/>
         </div>
       {/each}
       <div class="grant-tole">
-        <img class="btn-hover" src={plus_sign} alt="add new" on:click={()=>grantRole(name)}/>
+        <img class="btn-hover" src={icons.plus_sign} alt="add new" on:click={()=>grantRole(name)}/>
         <input type="text" class="{validAccount ? 'account-input' : 'account-input invalid-input'}"
                bind:value={account}>
       </div>

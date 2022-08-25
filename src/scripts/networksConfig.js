@@ -11,17 +11,19 @@ const networks = [
     //     erc20PriceOracleVaultFactoryAddress: "0xd28756A63D6F6E558dF66135191D483E84fe236E",
     //     twoPriceOracleAddress: "0x52bc9566e47bbB4b938B7B9a8D4153462d8C4D8a",
     //     rpcUrl: "https://polygon-rpc.com",
-    //     erc20ContractAddress: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"
-    // },
+    //     erc20ContractAddress: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+    // icon: 'polygon'
+// },
     {
         id: 80001,
         chainId: 80001,
         name: "Mumbai Testnet",
         currencySymbol: "MATIC",
-        scanURL: "https://mumbai.polygonscan.com/",
+        blockExplorer: "https://mumbai.polygonscan.com/",
         subgraphURL:
             "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
+        icon: 'polygon'
     },
     // {
     //     id: 4,
@@ -36,7 +38,9 @@ const networks = [
     //     twoPriceOracleAddress: "0x6Bc5906f69883DAc8C58296282BcAB26e780fc4D",
     //     rpcUrl: "https://rinkeby.infura.io/v3/",
     //     erc20ContractAddress: "0xc778417E063141139Fce010982780140Aa0cD5Ab"
-    // }
+    // icon: 'rinkeby'
+
+// }
 ];
 
 export default networks;

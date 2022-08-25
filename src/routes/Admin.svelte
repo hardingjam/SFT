@@ -1,49 +1,9 @@
 <script>
     import {navigate} from "svelte-routing";
     import Role from "../components/Role.svelte";
+    import {vault, activeNetwork, roles} from "../scripts/store.js";
 
-    let roles = [
-        {
-            name: "Depositor",
-            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x9891ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "Withdrawer",
-            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x1364ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "Certifier",
-            executors: ["0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x1891ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "Handler",
-            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x1361ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "ERC20 Tierer",
-            executors: ["0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x1711ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "ERC1155 Tierer",
-            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x1111ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: "ERC20 Snapshotter",
-            executors: ["0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x7961ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-        {
-            name: 'Confiscator',
-            executors: ["0x8058ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324", "0x9999ad7C22fdC8788fe4cB1dAc15D6e976127324"],
-            admins: ["0x7711ad7C22fdC8788fe4cB1dAc15D6e976127324"]
-        },
-    ]
+    let executorRoles = $roles.filter(r => !r.roleName.includes('_ADMIN'))
 
     function goBack() {
         navigate("/", {replace: false});
@@ -55,22 +15,36 @@
     <span>Admin</span>
     <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
   </div>
+  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`} class="contract-address btn-hover"
+              target="_blank">{$vault.address}</a>
   <div class="roles-container">
     <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
     <div class="roles">
-      {#each roles as role}
-        <Role name={role.name} admins={role.admins} executors={role.executors}></Role>
-      {/each}
+      <table>
+        {#each executorRoles as role}
+          <tr>
+            <td>
+              <Role name={role.roleName}
+                    roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders} showName={true}></Role>
+            </td>
+            <td>
+              <Role roleHolders={$roles.find(r=>r.roleName===role.roleName+"_ADMIN").roleHolders} name={role.roleName+"_ADMIN"} showName={false}></Role>
+            </td>
+          </tr>
+        {/each}
+      </table>
     </div>
   </div>
 </div>
 <style>
     .sft-admin-container {
-        width: 510px;
+        width: 819px;
         height: calc(100vh - 280px);
         background: rgba(44, 44, 84, 0.33);
         border-radius: 20px;
         padding: 12px;
+        color: #ffffff;
+
     }
 
     .admin-header {
@@ -93,14 +67,17 @@
     }
 
     .roles-container {
-        height: calc(100% - 50px);
+        height: calc(100% - 70px);
         background: #FFFFFF;
         border-radius: 10px;
+        color: #000000;
     }
 
     .roles {
         overflow: auto;
         height: calc(100% - 35px);
+        display: flex;
+        justify-content: center;
     }
 
     .warning {
@@ -110,4 +87,15 @@
         line-height: 13px;
         color: #000000;
     }
+
+    .contract-address {
+        text-decoration: none;
+        color: #ffffff;
+    }
+
+    td {
+        vertical-align: top;
+        padding: 0 5px;
+    }
+
 </style>

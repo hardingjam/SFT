@@ -3,6 +3,7 @@
 
     export let options;
     export let label;
+    export let staticLabel;
     let selected;
 
     const dispatch = createEventDispatcher();
@@ -29,16 +30,20 @@
 
 <div class="container">
   <Dropdown triggerElement={dropdownTrigger}>
+
     <button
         type="button"
         class="btn dropdown-toggle"
         bind:this={dropdownTrigger}
     >
-      {selected ? selected : label}
+      <slot name="icon"></slot> <span class="select-label">{selected && !staticLabel ? selected : label}</span>
     </button>
-    <div slot="DropdownMenu">
+    <div slot="DropdownMenu" class="dropdown">
       {#each options as option}
-        <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>{option.name}</button>
+        <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
+          <slot name="option-icon"></slot>
+          <span class="select-label">{option.name}</span>
+        </button>
       {/each}
     </div>
   </Dropdown>
@@ -72,5 +77,9 @@
         vertical-align: 0.255em;
         content: url("../assets/icons/expand.svg");
         border: none;
+    }
+
+    .select-label{
+        margin-left: 10px;
     }
 </style>

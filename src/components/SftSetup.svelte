@@ -3,7 +3,7 @@
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {onMount} from "svelte";
-    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
+    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract} from "../scripts/helpers.js";
     import {navigate} from "svelte-routing";
     import {activeNetwork, vault} from './../scripts/store.js';
@@ -11,7 +11,7 @@
     let name = "OPUS";
     let admin_ledger = "0xc0d477556c25c9d67e1f57245c7453da776b51cf";
     let symbol = "OPS";
-    let url = "https://www.astro.com/h/index_e.htm";
+    let url = "https://www.astro.com/h/index_e.htm";A
 
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
@@ -21,10 +21,12 @@
         factoryContract = await getContract($activeNetwork, CONTRACT_FACTORY_ADDRESS, contractFactoryAbi, signerOrProvider)
     });
 
-    // function createToken() {
+    // async function createToken() {
+    //     let contract = await getContract($activeNetwork, TEST_CONTRACT_ADDRESS, contractAbi, signerOrProvider)
+    //     vault.set(contract)
     //     navigate("/admin", {replace: false});
     // }
-
+    //
     async function createToken() {
         const constructionConfig = {
             admin: admin_ledger,
@@ -54,24 +56,19 @@
             signer.address
         );
 
-        //this line need to be moved down later
-        await contract.deployed()
-
-        navigate("/admin", {replace: false});
         name = null;
         admin_ledger = null;
         symbol = null;
         url = null;
-
+        navigate("/admin", {replace: false});
 
         console.log(
             "vault deployed to:",
             contract.address
         );
 
-        // let contract = await getContract($activeNetwork, vaultValue.address, contractAbi, signerOrProvider)
-        vault.set(contract)
-        console.log($vault)
+        let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
+        vault.set(newVault)
     }
 
 
@@ -88,7 +85,7 @@
   </div>
   <div class="form-after">
     <span class="info-text">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
-    <button class="btn-hover create-token" on:click={() => createToken()}>Create SFT</button>
+    <button class="btn-hover create-token btn-default btn-submit" on:click={() => createToken()}>Create SFT</button>
   </div>
 
 </div>
@@ -145,10 +142,6 @@
         line-height: 27px;
     }
 
-    .form-box input:focus {
-        outline: none;
-    }
-
     .form-after {
         align-items: center;
         display: flex;
@@ -166,17 +159,7 @@
     }
 
     .create-token {
-        font-style: normal;
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 27px;
         width: 413px;
-        height: 50px;
-        background: #9D7334;
-        border-radius: 30px;
-        color: #FFFFFF;
-        border: none;
-        cursor: pointer;
     }
 
 </style>

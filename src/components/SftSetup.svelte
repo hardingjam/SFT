@@ -3,15 +3,15 @@
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {onMount} from "svelte";
-    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
+    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract} from "../scripts/helpers.js";
     import {navigate} from "svelte-routing";
     import {activeNetwork, vault} from './../scripts/store.js';
 
-    let name = "OPUS";
-    let admin_ledger = "0xc0d477556c25c9d67e1f57245c7453da776b51cf";
-    let symbol = "OPS";
-    let url = "https://www.astro.com/h/index_e.htm";A
+    let name = "";
+    let admin_ledger = "";
+    let symbol = "";
+    let url = "";
 
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;

@@ -25,10 +25,11 @@
           <tr>
             <td>
               <Role name={role.roleName}
-                    roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders} showName={true}></Role>
+                    roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders} admin={false}></Role>
             </td>
             <td>
-              <Role roleHolders={$roles.find(r=>r.roleName===role.roleName+"_ADMIN").roleHolders} name={role.roleName+"_ADMIN"} showName={false}></Role>
+              <Role roleHolders={$roles.find(r=>r.roleName===role.roleName+"_ADMIN").roleHolders}
+                    name={role.roleName+"_ADMIN"} admin={true}></Role>
             </td>
           </tr>
         {/each}

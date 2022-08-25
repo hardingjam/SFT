@@ -1,8 +1,10 @@
 <script>
     import {activeNetwork, vault, roles} from "../scripts/store.js";
+
     export let name;
-    export let showName;
+    export let admin;
     import {icons} from '../scripts/assets.js'
+
     let account = '';
     let validAccount = true;
 
@@ -64,20 +66,21 @@
 </script>
 
 <div class="role-container">
-  {#if showName}
+  {#if !admin}
     <span class="title">{name}</span>
   {/if}
-  {#if !showName}
+  {#if admin}
     <br>
   {/if}
   <div class="role-list">
-    <div class="executor">
-      <span>Executor</span>
+    <div class="role">
+      <span>{admin ? 'Role Admin' : 'Executor'}</span>
       {#each roleHolders as roleHolder}
         <div>
           {roleHolder.replace(/(.{7}).*/, "$1…")}
           <img class="btn-hover" src={icons.show} alt="show" on:click={()=>showAddress(roleHolder)}/>
-          <img class="btn-hover hidden" src={icons.delete_icon} on:click={()=>revokeRole(name,roleHolder)} alt="delete"/>
+          <img class="btn-hover hidden" src={icons.delete_icon} on:click={()=>revokeRole(name,roleHolder)}
+               alt="delete"/>
         </div>
       {/each}
       <div class="grant-tole">

@@ -3,6 +3,7 @@
 
     export let options;
     export let label;
+    export let staticLabel;
     let selected;
 
     const dispatch = createEventDispatcher();
@@ -34,7 +35,7 @@
         class="btn dropdown-toggle"
         bind:this={dropdownTrigger}
     >
-      {selected ? selected : label}
+      {selected && !staticLabel ? selected : label}
     </button>
     <div slot="DropdownMenu">
       {#each options as option}

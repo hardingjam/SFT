@@ -146,7 +146,7 @@
         <div class="menu">
           <Select options={networks} on:select={handleNetworkSelect}
                   label={$activeNetwork?.name || 'Available networks'}></Select>
-          <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}/>
+          <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")} staticLabel={true}/>
         </div>
       {/if}
 

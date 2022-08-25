@@ -1,6 +1,7 @@
 <script>
     import {activeNetwork, vault, roles} from "../scripts/store.js";
     export let name;
+    export let showName;
     import {icons} from '../scripts/assets.js'
     let account = '';
     let validAccount = true;
@@ -63,10 +64,10 @@
 </script>
 
 <div class="role-container">
-  {#if name}
+  {#if showName}
     <span class="title">{name}</span>
   {/if}
-  {#if !name}
+  {#if !showName}
     <br>
   {/if}
   <div class="role-list">

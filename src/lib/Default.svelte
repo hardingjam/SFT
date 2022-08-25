@@ -9,19 +9,9 @@
     import {icons} from '../scripts/assets.js'
     import {activeNetwork} from "../scripts/store.js";
 
-    onMount(async () => {
-        await setNetwork()
-    });
-
-    let account = localStorage.getItem('account');
-
-    window.ethereum.on("accountsChanged", (accounts) => {
-        if (!accounts.length) {
-            account = null;
-            localStorage.removeItem('account')
-        }
-    });
-
+    let connectedAccount;
+    let account;
+    export let url;
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
 
@@ -54,6 +44,29 @@
             },
         }
     ]
+
+    onMount(async () => {
+        if (isMetamaskInstalled) {
+            await setNetwork()
+            connectedAccount = await getMetamaskConnectedAccount()
+            if (connectedAccount) {
+                account = connectedAccount
+            } else {
+                localStorage.removeItem('account')
+            }
+
+            window.ethereum.on("accountsChanged", (accounts) => {
+                if (!accounts.length) {
+                    account = null;
+                    localStorage.removeItem('account')
+                } else {
+                    account = accounts[0];
+                    localStorage.setItem('account', account)
+                }
+            });
+
+        }
+    });
 
     async function getEthersData() {
         if (window.ethereum) {
@@ -131,7 +144,14 @@
         }
     }
 
-    export let url;
+    async function getMetamaskConnectedAccount() {
+        if (isMetamaskInstalled) {
+            const accounts = await ethersData.provider.listAccounts();
+            return accounts.length > 0 ? accounts[0] : null;
+        }
+    }
+
+
 </script>
 <Router url={url}>
 

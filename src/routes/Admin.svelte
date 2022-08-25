@@ -28,8 +28,7 @@
                     roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders}></Role>
             </td>
             <td>
-              <Role name={role.roleName+"_ADMIN"}
-                    roleHolders={$roles.find(r=>r.roleName===role.roleName+"_ADMIN").roleHolders}></Role>
+              <Role roleHolders={$roles.find(r=>r.roleName===role.roleName+"_ADMIN").roleHolders}></Role>
             </td>
           </tr>
         {/each}

@@ -67,7 +67,12 @@
 </script>
 
 <div class="role-container">
-  <span class="title">{name}</span>
+  {#if name}
+    <span class="title">{name}</span>
+  {/if}
+  {#if !name}
+    <br>
+  {/if}
   <div class="role-list">
     <div class="executor">
       <span>Executor</span>

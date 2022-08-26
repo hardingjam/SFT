@@ -4,6 +4,7 @@
     export let options;
     export let label;
     export let staticLabel;
+    export let className;
     let selected;
 
     const dispatch = createEventDispatcher();
@@ -33,7 +34,7 @@
 
     <button
         type="button"
-        class="btn dropdown-toggle"
+        class={`${className} btn dropdown-toggle`}
         bind:this={dropdownTrigger}
     >
       <slot name="icon"></slot> <span class="select-label">{selected && !staticLabel ? selected : label}</span>
@@ -67,7 +68,6 @@
         font-weight: 700;
         font-size: 18px;
         line-height: 30px;
-        color: #FFFFFF;
         display: flex;
     }
 
@@ -77,6 +77,23 @@
         vertical-align: 0.255em;
         content: url("../assets/icons/expand.svg");
         border: none;
+    }
+
+    .meinMenu{
+        color: #FFFFFF;
+    }
+
+    .inputSelect{
+        background: #ECECEC;
+        border-radius: 5px;
+        height: 26px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 25px;
+        color: #000000;
+        padding: 0;
+        width: 168px;
     }
 
     .select-label{

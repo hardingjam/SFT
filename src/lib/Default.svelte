@@ -164,13 +164,14 @@
       {#if account}
         <div class="menu">
           <Select options={networks} on:select={handleNetworkSelect}
-                  label={$activeNetwork?.name || 'Available networks'}>
+                  label={$activeNetwork?.name || 'Available networks'} className={'meinMenu'}>
             <span slot="icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
                                                        alt={$activeNetwork?.name}/></span>
             <span slot="option-icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
                                                               alt={$activeNetwork?.name}/></span>
           </Select>
-          <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")} staticLabel={true}>
+          <Select className={'meinMenu'} options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}
+                  staticLabel={true}>
           </Select>
         </div>
       {/if}

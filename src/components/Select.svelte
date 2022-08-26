@@ -7,6 +7,7 @@
     export let label;
     export let staticLabel;
     export let className;
+    export let dropDownClass;
     export let expandIcon = icons.expand;
     let selected;
 
@@ -43,7 +44,7 @@
       <span class="select-label">{selected && !staticLabel ? selected : label}</span>
       <img class="expand" src={expandIcon} alt="expand"/>
     </button>
-    <div slot="DropdownMenu" class="dropdown">
+    <div slot="DropdownMenu" class={`${dropDownClass} dropdown`}>
       {#each options as option}
         <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
           <slot name="option-icon"></slot>
@@ -104,6 +105,13 @@
         color: #000000;
         padding: 0;
         min-width: 180px;
+    }
+
+    .dropdown {
+        max-height: 255px;
+        height: auto;
+        overflow: auto;
+        background-color: #ececec;
     }
 
     .select-label {

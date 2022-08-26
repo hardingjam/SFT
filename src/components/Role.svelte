@@ -78,8 +78,8 @@
       {#each roleHolders as roleHolder}
         <div>
           {roleHolder.replace(/(.{7}).*/, "$1…")}
-          <img class="btn-hover" src={icons.show} alt="show" on:click={()=>showAddress(roleHolder)}/>
-          <img class="btn-hover hidden" src={icons.delete_icon} on:click={()=>revokeRole(name,roleHolder)}
+          <img class="btn-hover action-icon" src={icons.show} alt="show" on:click={()=>showAddress(roleHolder)}/>
+          <img class="btn-hover action-icon" src={icons.delete_icon} on:click={()=>revokeRole(name,roleHolder)}
                alt="delete"/>
         </div>
       {/each}
@@ -90,6 +90,7 @@
 <style>
     .role-container {
         text-align: left;
+        margin-bottom: 25px;
     }
 
     .title {
@@ -108,11 +109,7 @@
         line-height: 27px;
     }
 
-    .hidden {
-        visibility: hidden;
-    }
-
-    .role-container:hover .hidden {
-        visibility: visible;
+    .action-icon {
+        margin: 0 3px;
     }
 </style>

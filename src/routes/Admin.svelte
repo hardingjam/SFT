@@ -41,7 +41,7 @@
         <input type="text" class="{validAccount ? 'account-input' : 'account-input invalid-input'}"
                bind:value={account}>
         <br>
-        <button>enter</button>
+        <button class="default-btn">Enter</button>
       </div>
       <div class="roles-data">
         <div>
@@ -97,14 +97,13 @@
         color: #000000;
         display: flex;
         flex-direction: column;
-        align-items: center;
         overflow: hidden;
 
     }
 
     .roles {
         text-align: left;
-        width: calc(100% - 120px);
+        margin-left: 60px;
     }
 
     .roles-data {
@@ -114,6 +113,7 @@
         width: 100%;
         justify-content: space-between;
         margin-top: 15px;
+        padding-right: 60px;
     }
 
     .warning {

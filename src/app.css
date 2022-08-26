@@ -64,23 +64,23 @@ button:focus, button:focus-visible {
 }
 
 .dropdown-menu {
-    background-color: #D4CDC6 !important;
+    background-color: #ececec !important;
     border-radius: 5px !important;
     border: none !important;
 }
 
 .dropdown-item {
+    color: #000000;
     font-style: normal;
-    font-weight: 700 !important;
-    font-size: 18px !important;
-    line-height: 30px !important;
-    color: #000000 !important;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 27px;
+    padding: 0 !important;
 }
 
 .dropdown-item:focus, .dropdown-item:hover {
-    opacity: 0.7;
     text-decoration: none;
-    background-color: transparent !important;
+    background: #2c2c5454 !important;
 }
 
 .display-flex {
@@ -89,6 +89,42 @@ button:focus, button:focus-visible {
 
 .f-weight-700 {
     font-weight: 700;
+}
+
+.default-btn {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0 18px;
+    gap: 10px;
+    min-width: 73px;
+    height: 27px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+.default-btn:hover {
+    background: #ECECEC;
+}
+
+.default-btn:active {
+    background: #ECECEC;
+    border: 1px solid #000000;
+    box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+}
+
+.dropDownClass {
+    background-color: #ececec !important;
+}
+
+.dropDownClass .dropdown-item {
+    font-weight: 700 !important;
+    font-size: 18px !important;
+    line-height: 30px !important;
 }
 
 @media (prefers-color-scheme: light) {

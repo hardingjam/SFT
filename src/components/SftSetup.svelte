@@ -3,7 +3,7 @@
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {onMount} from "svelte";
-    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS} from "../scripts/consts.js"
+    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS,TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract} from "../scripts/helpers.js";
     import {navigate} from "svelte-routing";
     import {activeNetwork, vault} from './../scripts/store.js';

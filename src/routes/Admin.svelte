@@ -9,15 +9,41 @@
     let executorRoles = $roles.filter(r => !r.roleName.includes('_ADMIN'))
     let validAccount = true;
     let account = '';
+    let roleName = '';
 
     function goBack() {
         navigate("/", {replace: false});
     }
 
     function handleRoleSelect(event) {
-        console.log(event.detail.selected)
+        roleName = event.detail.selected.roleName
     }
 
+    async function grantRole() {
+        let role = await $vault[roleName]()
+        try {
+            if (account) {
+                validAccount = true;
+                const grantRoleTx = await $vault.grantRole(role, account);
+                await grantRoleTx.wait()
+                let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
+                updatedRoleHolders.push(account)
+                const newRoles = $roles.map(role => {
+                    if (role.roleName === roleName) {
+                        return {...role, roleHolders: updatedRoleHolders};
+                    }
+                    return role;
+                });
+                roles.set([...newRoles])
+                account = "";
+            } else {
+                validAccount = false;
+            }
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
 </script>
 <div class="sft-admin-container">
   <div class="admin-header">
@@ -41,7 +67,7 @@
         <input type="text" class="{validAccount ? 'account-input' : 'account-input invalid-input'}"
                bind:value={account}>
         <br>
-        <button class="default-btn">Enter</button>
+        <button class="default-btn" on:click={grantRole}>Enter</button>
       </div>
       <div class="roles-data">
         <table>

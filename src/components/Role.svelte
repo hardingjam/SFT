@@ -12,31 +12,7 @@
         window.open(`${$activeNetwork.blockExplorer}address/${account}`);
     }
 
-    // async function grantRole(roleName) {
-    //     let role = await $vault[roleName]()
-    //     try {
-    //         if (account) {
-    //             validAccount = true;
-    //             const grantRoleTx = await $vault.grantRole(role, account);
-    //             await grantRoleTx.wait()
-    //             let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
-    //             updatedRoleHolders.push(account)
-    //             const newRoles = $roles.map(role => {
-    //                 if (role.roleName === roleName) {
-    //                     return {...role, roleHolders: updatedRoleHolders};
-    //                 }
-    //                 return role;
-    //             });
-    //             roles.set([...newRoles])
-    //             account = "";
-    //         } else {
-    //             validAccount = false;
-    //         }
-    //
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
+
 
     async function revokeRole(roleName, account) {
         let role = await $vault[roleName]()

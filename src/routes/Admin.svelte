@@ -7,7 +7,6 @@
     import {icons} from "../scripts/assets.js";
 
     let executorRoles = $roles.filter(r => !r.roleName.includes('_ADMIN'))
-    let adminRoles = $roles.filter(r => r.roleName.includes('_ADMIN'))
     let validAccount = true;
     let account = '';
 
@@ -47,6 +46,11 @@
       <div class="roles-data">
         <table>
           {#each executorRoles as role}
+            <tr>
+              <td>
+                <span class="title f-weight-700">{role.roleName}</span>
+              </td>
+            </tr>
             <tr>
               <td>
                 <Role name={role.roleName}
@@ -154,4 +158,16 @@
     table {
         width: 100%;
     }
+
+    td {
+        vertical-align: top;
+    }
+
+    .title {
+        font-style: normal;
+        font-size: 16px;
+        line-height: 27px;
+        color: #000000;
+    }
+
 </style>

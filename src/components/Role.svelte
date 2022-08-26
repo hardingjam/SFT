@@ -66,12 +66,6 @@
 </script>
 
 <div class="role-container">
-  {#if !admin}
-    <span class="title f-weight-700">{name}</span>
-  {/if}
-  {#if admin}
-    <br>
-  {/if}
   <div class="role-list">
     <div class="role">
       <span>{admin ? 'Role Admin' : 'Executor'}</span>
@@ -93,12 +87,6 @@
         margin-bottom: 25px;
     }
 
-    .title {
-        font-style: normal;
-        font-size: 16px;
-        line-height: 27px;
-        color: #000000;
-    }
 
     .role-list {
         display: flex;

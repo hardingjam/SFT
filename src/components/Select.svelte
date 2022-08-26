@@ -111,6 +111,7 @@
     }
 
     .select-label {
+        margin-left: 10px;
         width: calc(100% - 15px);
     }
 </style>

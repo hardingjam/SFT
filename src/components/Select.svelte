@@ -1,9 +1,14 @@
 <script>
     import {createEventDispatcher} from 'svelte';
+    import {icons} from "../scripts/assets.js";
+    import Dropdown from 'sv-bootstrap-dropdown';
 
     export let options;
     export let label;
     export let staticLabel;
+    export let className;
+    export let dropDownClass;
+    export let expandIcon = icons.expand;
     let selected;
 
     const dispatch = createEventDispatcher();
@@ -12,10 +17,9 @@
         dispatch('select', {
             selected: option
         });
-        selected = option.name
+        selected = option.displayName
     }
 
-    import Dropdown from 'sv-bootstrap-dropdown';
 
     let dropdownTrigger;
 
@@ -33,16 +37,20 @@
 
     <button
         type="button"
-        class="btn dropdown-toggle"
+        class={`${className} btn dropdown-toggle`}
         bind:this={dropdownTrigger}
     >
-      <slot name="icon"></slot> <span class="select-label">{selected && !staticLabel ? selected : label}</span>
+      <slot name="icon"></slot>
+      <span class="select-label">{selected && !staticLabel ? selected : label}</span>
+      <img class="expand" src={expandIcon} alt="expand"/>
     </button>
-    <div slot="DropdownMenu" class="dropdown">
+    <div slot="DropdownMenu" class={`${dropDownClass} dropdown`}>
       {#each options as option}
         <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
-          <slot name="option-icon"></slot>
-          <span class="select-label">{option.name}</span>
+          {#if option.icon}
+            <img src={icons[option.icon]} alt={option?.displayName}/>
+          {/if}
+          <span class="select-label">{option.displayName}</span>
         </button>
       {/each}
     </div>
@@ -50,12 +58,6 @@
 </div>
 <style>
     @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");
-
-    .container {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
-    }
 
     .btn:focus {
         outline: none;
@@ -67,19 +69,49 @@
         font-weight: 700;
         font-size: 18px;
         line-height: 30px;
-        color: #FFFFFF;
         display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        text-align: start;
+    }
+
+    .expand {
+        margin-right: 10px;
+        margin-left: 17px;
     }
 
     .dropdown-toggle::after {
         display: inline-block;
-        margin-left: 17px;
-        vertical-align: 0.255em;
-        content: url("../assets/icons/expand.svg");
+        content: '';
         border: none;
     }
 
-    .select-label{
+    .meinMenu {
+        color: #FFFFFF;
+    }
+
+    .inputSelect {
+        background: #ECECEC;
+        border-radius: 5px;
+        height: 26px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 25px;
+        color: #000000;
+        padding: 0;
+        min-width: 180px;
+    }
+
+    .dropdown {
+        max-height: 255px;
+        height: auto;
+        overflow: auto;
+        background-color: #ececec;
+    }
+
+    .select-label {
         margin-left: 10px;
+        width: calc(100% - 15px);
     }
 </style>

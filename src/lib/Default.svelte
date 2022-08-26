@@ -24,7 +24,7 @@
     let accountMenuOptions = [
         {
             id: "copy",
-            name: "Copy Address",
+            displayName: "Copy Address",
             action: () => {
                 if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
                     // this.showTooltip = true;
@@ -38,7 +38,7 @@
         },
         {
             id: "view",
-            name: "View on Explorer",
+            displayName: "View on Explorer",
             action: () => {
                 window.open(`${$activeNetwork.blockExplorer}address/${account}`);
             },
@@ -104,7 +104,7 @@
                         params: [
                             {
                                 chainId: `0x${($activeNetwork.chainId).toString(16)}`,
-                                chainName: $activeNetwork.name,
+                                chainName: $activeNetwork.displayName,
                                 rpcUrls: [$activeNetwork.rpcUrl],
                                 blockExplorerUrls: [$activeNetwork.scanURL],
                                 nativeCurrency: {
@@ -164,13 +164,13 @@
       {#if account}
         <div class="menu">
           <Select options={networks} on:select={handleNetworkSelect}
-                  label={$activeNetwork?.name || 'Available networks'}>
+                  label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
+                  dropDownClass={'dropDownClass'}>
             <span slot="icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
-                                                       alt={$activeNetwork?.name}/></span>
-            <span slot="option-icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
-                                                              alt={$activeNetwork?.name}/></span>
+                                                       alt={$activeNetwork?.displayName}/></span>
           </Select>
-          <Select options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")} staticLabel={true}>
+          <Select className={'meinMenu'} options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}
+                  staticLabel={true} dropDownClass={'dropDownClass'}>
           </Select>
         </div>
       {/if}
@@ -178,9 +178,9 @@
     </div>
     {#if !account}
       <div>
-        <div class="invalid-network">
+        <div class="invalid-network f-weight-700">
           <label>To use the app:</label>
-          <button class="connect-metamask-btn" on:click={()=>connect()}>
+          <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
             {#if isMetamaskInstalled}
               <span>Connect Metamask</span>
             {/if}
@@ -242,7 +242,6 @@
     flex-direction: column;
     margin-top: 6rem;
     font-style: normal;
-    font-weight: 700;
     font-size: 40px;
     line-height: 66px;
     color: #FFFFFF;
@@ -253,7 +252,6 @@
     border-radius: 30px;
     padding: 7px 35px;
     font-style: normal;
-    font-weight: 700;
     font-size: 25px;
     line-height: 42px;
     color: #FFFFFF;
@@ -263,6 +261,9 @@
 
   .menu {
     display: flex;
+  }
+  .select-icon{
+    margin-right: 10px;
   }
 
 </style>

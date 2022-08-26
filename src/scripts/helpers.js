@@ -34,3 +34,14 @@ export async function getContract(network, address, abi, signerOrProvider) {
     }
     return contract
 }
+
+export function toSentenceCase(text){
+        text = text.toLowerCase()
+        let txtArr = text.split(/[,._\s]/)
+        let firstWord = txtArr[0]
+        let firstLetter = firstWord.charAt(0).toUpperCase()
+    firstWord = firstLetter + firstWord.slice(1)
+    txtArr = txtArr.slice(1)
+    txtArr.unshift(firstWord)
+    return(txtArr.join(' '))
+}

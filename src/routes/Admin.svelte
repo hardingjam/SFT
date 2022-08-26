@@ -4,6 +4,7 @@
     import {vault, activeNetwork, roles} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import {toSentenceCase} from "../scripts/helpers.js";
+    import {icons} from "../scripts/assets.js";
 
     let executorRoles = $roles.filter(r => !r.roleName.includes('_ADMIN'))
     let adminRoles = $roles.filter(r => r.roleName.includes('_ADMIN'))
@@ -29,14 +30,14 @@
   <div class="roles-container">
     <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
     <div class="roles">
-      <div class="grant-role-txt">Grant a role</div>
+      <div class="grant-role-txt f-weight-700">Grant a role</div>
       <div>
         <div class="display-flex">
-          <label>Role:</label>
+          <label class="f-weight-700">Role:</label>
           <Select options={$roles.map(r=>r = {...r,name: toSentenceCase(r.roleName)})} on:select={handleRoleSelect}
-                  label={'Choose'} className={"inputSelect"}></Select>
+                  label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
         </div>
-        <label>Address:</label>
+        <label class="f-weight-700">Address:</label>
         <input type="text" class="{validAccount ? 'account-input' : 'account-input invalid-input'}"
                bind:value={account}>
         <br>
@@ -62,12 +63,12 @@
 <style>
     .sft-admin-container {
         width: 697px;
-        height: calc(100vh - 250px);
+        height: calc(100vh - 180px);
         background: rgba(44, 44, 84, 0.33);
         border-radius: 20px;
         padding: 12px;
         color: #ffffff;
-
+        margin-top: -65px;
     }
 
     .admin-header {
@@ -108,7 +109,7 @@
 
     .roles-data {
         overflow: auto;
-        height: calc(100% - 540px);
+        height: calc(100% - 465px);
         display: flex;
         width: 100%;
         justify-content: space-between;
@@ -132,7 +133,6 @@
         margin-bottom: 25px;
         margin-top: 5px;
         font-style: normal;
-        font-weight: 700;
         font-size: 16px;
         line-height: 27px;
 

@@ -1,10 +1,13 @@
 <script>
     import {createEventDispatcher} from 'svelte';
+    import {icons} from "../scripts/assets.js";
+    import Dropdown from 'sv-bootstrap-dropdown';
 
     export let options;
     export let label;
     export let staticLabel;
     export let className;
+    export let expandIcon = icons.expand;
     let selected;
 
     const dispatch = createEventDispatcher();
@@ -16,7 +19,6 @@
         selected = option.name
     }
 
-    import Dropdown from 'sv-bootstrap-dropdown';
 
     let dropdownTrigger;
 
@@ -37,7 +39,9 @@
         class={`${className} btn dropdown-toggle`}
         bind:this={dropdownTrigger}
     >
-      <slot name="icon"></slot> <span class="select-label">{selected && !staticLabel ? selected : label}</span>
+      <slot name="icon"></slot>
+      <span class="select-label">{selected && !staticLabel ? selected : label}</span>
+      <img class="expand" src={expandIcon} alt="expand"/>
     </button>
     <div slot="DropdownMenu" class="dropdown">
       {#each options as option}
@@ -69,21 +73,27 @@
         font-size: 18px;
         line-height: 30px;
         display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        text-align: start;
+    }
+
+    .expand {
+        margin-right: 10px;
+        margin-left: 17px;
     }
 
     .dropdown-toggle::after {
         display: inline-block;
-        margin-left: 17px;
-        vertical-align: 0.255em;
-        content: url("../assets/icons/expand.svg");
+        content: '';
         border: none;
     }
 
-    .meinMenu{
+    .meinMenu {
         color: #FFFFFF;
     }
 
-    .inputSelect{
+    .inputSelect {
         background: #ECECEC;
         border-radius: 5px;
         height: 26px;
@@ -93,10 +103,11 @@
         line-height: 25px;
         color: #000000;
         padding: 0;
-        width: 168px;
+        min-width: 180px;
     }
 
-    .select-label{
+    .select-label {
         margin-left: 10px;
+        width: calc(100% - 15px);
     }
 </style>

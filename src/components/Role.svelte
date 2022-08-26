@@ -67,7 +67,7 @@
 
 <div class="role-container">
   {#if !admin}
-    <span class="title">{name}</span>
+    <span class="title f-weight-700">{name}</span>
   {/if}
   {#if admin}
     <br>
@@ -94,7 +94,6 @@
 
     .title {
         font-style: normal;
-        font-weight: 700;
         font-size: 16px;
         line-height: 27px;
         color: #000000;

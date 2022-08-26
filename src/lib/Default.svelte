@@ -179,9 +179,9 @@
     </div>
     {#if !account}
       <div>
-        <div class="invalid-network">
+        <div class="invalid-network f-weight-700">
           <label>To use the app:</label>
-          <button class="connect-metamask-btn" on:click={()=>connect()}>
+          <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
             {#if isMetamaskInstalled}
               <span>Connect Metamask</span>
             {/if}
@@ -243,7 +243,6 @@
     flex-direction: column;
     margin-top: 6rem;
     font-style: normal;
-    font-weight: 700;
     font-size: 40px;
     line-height: 66px;
     color: #FFFFFF;
@@ -254,7 +253,6 @@
     border-radius: 30px;
     padding: 7px 35px;
     font-style: normal;
-    font-weight: 700;
     font-size: 25px;
     line-height: 42px;
     color: #FFFFFF;

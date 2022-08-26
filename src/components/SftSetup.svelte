@@ -74,17 +74,17 @@
 
 </script>
 <div class="sft-setup-container">
-  <label class="title">SFT Setup</label>
+  <label class="title f-weight-700">SFT Setup</label>
   <div class="form-box">
-    <div class="space-between"><label>Token name:</label> <input type="text" bind:value={name}></div>
-    <div class="space-between"><label>Admin ledger:</label> <input type="text" bind:value={admin_ledger}>
+    <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}></div>
+    <div class="space-between"><label class="f-weight-700">Admin ledger:</label> <input type="text" bind:value={admin_ledger}>
     </div>
-    <div class="space-between"><label>Token symbol:</label> <input type="text" bind:value={symbol}>
+    <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text" bind:value={symbol}>
     </div>
-    <div class="space-between"><label>URL:</label> <input type="text" bind:value={url}></div>
+    <div class="space-between"><label class="f-weight-700">URL:</label> <input type="text" bind:value={url}></div>
   </div>
   <div class="form-after">
-    <span class="info-text">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
+    <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
     <button class="btn-hover create-token btn-default btn-submit" on:click={() => createToken()}>Create SFT</button>
   </div>
 
@@ -106,7 +106,6 @@
         margin-left: 24px;
         margin-bottom: 11px;
         font-style: normal;
-        font-weight: 700;
         font-size: 16px;
         line-height: 27px;
         color: #000000;
@@ -123,7 +122,6 @@
 
     .form-box label {
         font-style: normal;
-        font-weight: 700;
         font-size: 16px;
         line-height: 27px;
     }
@@ -150,7 +148,6 @@
 
     .info-text {
         font-style: normal;
-        font-weight: 700;
         font-size: 12px;
         line-height: 20px;
         margin-top: 21px;

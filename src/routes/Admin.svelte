@@ -24,7 +24,7 @@
         try {
             if (account) {
                 validAccount = true;
-                const grantRoleTx = await $vault.grantRole(role, account);
+                const grantRoleTx = await $vault.grantRole(role, account.trim());
                 await grantRoleTx.wait()
                 let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
                 updatedRoleHolders.push(account)

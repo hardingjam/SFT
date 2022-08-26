@@ -125,6 +125,7 @@ button:focus, button:focus-visible {
     font-weight: 700 !important;
     font-size: 18px !important;
     line-height: 30px !important;
+    padding: 0 10px!important;
 }
 
 @media (prefers-color-scheme: light) {

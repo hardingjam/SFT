@@ -104,7 +104,7 @@
                         params: [
                             {
                                 chainId: `0x${($activeNetwork.chainId).toString(16)}`,
-                                chainName: $activeNetwork.name,
+                                chainName: $activeNetwork.displayName,
                                 rpcUrls: [$activeNetwork.rpcUrl],
                                 blockExplorerUrls: [$activeNetwork.scanURL],
                                 nativeCurrency: {
@@ -164,12 +164,12 @@
       {#if account}
         <div class="menu">
           <Select options={networks} on:select={handleNetworkSelect}
-                  label={$activeNetwork?.name || 'Available networks'} className={'meinMenu'}
+                  label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
                   dropDownClass={'dropDownClass'}>
             <span slot="icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
-                                                       alt={$activeNetwork?.name}/></span>
+                                                       alt={$activeNetwork?.displayName}/></span>
             <span slot="option-icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
-                                                              alt={$activeNetwork?.name}/></span>
+                                                              alt={$activeNetwork?.displayName}/></span>
           </Select>
           <Select className={'meinMenu'} options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}
                   staticLabel={true} dropDownClass={'dropDownClass'}>

@@ -17,7 +17,7 @@
         dispatch('select', {
             selected: option
         });
-        selected = option.name
+        selected = option.displayName
     }
 
 
@@ -48,7 +48,7 @@
       {#each options as option}
         <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
           <slot name="option-icon"></slot>
-          <span class="select-label">{option.name}</span>
+          <span class="select-label">{option.displayName}</span>
         </button>
       {/each}
     </div>
@@ -56,12 +56,6 @@
 </div>
 <style>
     @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");
-
-    .container {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
-    }
 
     .btn:focus {
         outline: none;

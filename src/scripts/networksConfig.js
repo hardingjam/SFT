@@ -2,7 +2,8 @@ const networks = [
     // {
     //     id: 137,
     //     chainId: 137,
-    //     name: "Polygon",
+    //     name: 'polygon',
+    //     displayName: "Polygon",
     //     currencySymbol: "MATIC",
     //     scanURL: "https://polygonscan.com/",
     //     subgraphURL:
@@ -17,7 +18,8 @@ const networks = [
     {
         id: 80001,
         chainId: 80001,
-        name: "Mumbai Testnet",
+        name: 'mumbai',
+        displayName: "Mumbai Testnet",
         currencySymbol: "MATIC",
         blockExplorer: "https://mumbai.polygonscan.com/",
         subgraphURL:
@@ -25,22 +27,22 @@ const networks = [
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
         icon: 'polygon'
     },
-    // {
-    //     id: 4,
-    //     chainId: 4,
-    //     name: "Rinkeby",
-    //     currencySymbol: "ETH",
-    //     scanURL: "https://rinkeby.etherscan.io/",
-    //     subgraphURL:
-    //         "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
-    //     erc20PriceOracleVaultAddress: "0xC0485b77f873147B8C9f86F3CC0543021d4e769B",
-    //     erc20PriceOracleVaultFactoryAddress: "0x9505354B621fac407968821CcCc819C81Ae0bc26",
-    //     twoPriceOracleAddress: "0x6Bc5906f69883DAc8C58296282BcAB26e780fc4D",
-    //     rpcUrl: "https://rinkeby.infura.io/v3/",
-    //     erc20ContractAddress: "0xc778417E063141139Fce010982780140Aa0cD5Ab"
-    // icon: 'rinkeby'
-
-// }
+    {
+        id: 4,
+        chainId: 4,
+        name: 'rinkeby',
+        displayName: "Rinkeby Testnet",
+        currencySymbol: "ETH",
+        scanURL: "https://rinkeby.etherscan.io/",
+        subgraphURL:
+            "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
+        erc20PriceOracleVaultAddress: "0xC0485b77f873147B8C9f86F3CC0543021d4e769B",
+        erc20PriceOracleVaultFactoryAddress: "0x9505354B621fac407968821CcCc819C81Ae0bc26",
+        twoPriceOracleAddress: "0x6Bc5906f69883DAc8C58296282BcAB26e780fc4D",
+        rpcUrl: "https://rinkeby.infura.io/v3/",
+        erc20ContractAddress: "0xc778417E063141139Fce010982780140Aa0cD5Ab",
+        icon: 'ethereum'
+    }
 ];
 
 export default networks;

@@ -18,7 +18,7 @@
     let factoryContract;
 
     onMount(async () => {
-        factoryContract = await getContract($activeNetwork, CONTRACT_FACTORY_ADDRESS, contractFactoryAbi, signerOrProvider)
+        factoryContract = await getContract($activeNetwork, CONTRACT_FACTORY_ADDRESS[$activeNetwork.name], contractFactoryAbi, signerOrProvider)
     });
 
     // async function createToken() {

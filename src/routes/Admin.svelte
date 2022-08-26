@@ -34,7 +34,8 @@
       <div>
         <div class="display-flex">
           <label class="f-weight-700">Role:</label>
-          <Select options={$roles.map(r=>r = {...r,name: toSentenceCase(r.roleName)})} on:select={handleRoleSelect}
+          <Select options={$roles.map(r=>r = {...r,displayName: toSentenceCase(r.roleName)})}
+                  on:select={handleRoleSelect}
                   label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
         </div>
         <label class="f-weight-700">Address:</label>
@@ -44,18 +45,20 @@
         <button class="default-btn">Enter</button>
       </div>
       <div class="roles-data">
-        <div>
+        <table>
           {#each executorRoles as role}
-            <Role name={role.roleName}
-                  roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders} admin={false}></Role>
+            <tr>
+              <td>
+                <Role name={role.roleName}
+                      roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders} admin={false}></Role>
+              </td>
+              <td>
+                <Role roleHolders={$roles.find(r=>r.roleName===role.roleName+"_ADMIN").roleHolders}
+                      name={role.roleName+"_ADMIN"} admin={true}></Role>
+              </td>
+            </tr>
           {/each}
-        </div>
-        <div>
-          {#each adminRoles as role}
-            <Role roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders}
-                  name={role.roleName} admin={true}></Role>
-          {/each}
-        </div>
+        </table>
       </div>
     </div>
   </div>
@@ -63,7 +66,6 @@
 <style>
     .sft-admin-container {
         width: 697px;
-        height: calc(100vh - 180px);
         background: rgba(44, 44, 84, 0.33);
         border-radius: 20px;
         padding: 12px;
@@ -91,7 +93,6 @@
     }
 
     .roles-container {
-        height: calc(100% - 70px);
         background: #FFFFFF;
         border-radius: 10px;
         color: #000000;
@@ -108,12 +109,11 @@
 
     .roles-data {
         overflow: auto;
-        height: calc(100% - 465px);
+        height: calc(100vh - 453px);
         display: flex;
         width: 100%;
         justify-content: space-between;
         margin-top: 15px;
-        padding-right: 60px;
     }
 
     .warning {
@@ -151,4 +151,7 @@
         line-height: 27px;
     }
 
+    table {
+        width: 100%;
+    }
 </style>

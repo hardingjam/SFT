@@ -47,7 +47,7 @@
     <div slot="DropdownMenu" class={`${dropDownClass} dropdown`}>
       {#each options as option}
         <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
-          <slot name="option-icon"></slot>
+          <img src={icons[option.icon]} alt={option?.displayName}/>
           <span class="select-label">{option.displayName}</span>
         </button>
       {/each}

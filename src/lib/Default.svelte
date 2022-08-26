@@ -168,8 +168,6 @@
                   dropDownClass={'dropDownClass'}>
             <span slot="icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
                                                        alt={$activeNetwork?.displayName}/></span>
-            <span slot="option-icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
-                                                              alt={$activeNetwork?.displayName}/></span>
           </Select>
           <Select className={'meinMenu'} options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}
                   staticLabel={true} dropDownClass={'dropDownClass'}>

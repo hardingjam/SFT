@@ -262,5 +262,8 @@
   .menu {
     display: flex;
   }
+  .select-icon{
+    margin-right: 10px;
+  }
 
 </style>

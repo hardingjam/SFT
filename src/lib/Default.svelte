@@ -7,7 +7,9 @@
     import {Router, Route} from "svelte-routing"
     import Admin from "./../routes/Admin.svelte";
     import {icons} from '../scripts/assets.js'
-    import {activeNetwork} from "../scripts/store.js";
+    import {activeNetwork, data} from "../scripts/store.js";
+    import {getSubgraphData} from "../scripts/helpers.js"
+    import {TEST_CONTRACT_ADDRESS} from "../scripts/consts.js";
 
     let connectedAccount;
     let account;
@@ -44,7 +46,6 @@
             },
         }
     ]
-
     onMount(async () => {
         if (isMetamaskInstalled) {
             await setNetwork()
@@ -64,6 +65,8 @@
                     localStorage.setItem('account', account)
                 }
             });
+            data.set(await getSubgraphData($activeNetwork.chainId, TEST_CONTRACT_ADDRESS))
+            console.log($data.data)
 
         }
     });
@@ -262,7 +265,8 @@
   .menu {
     display: flex;
   }
-  .select-icon{
+
+  .select-icon {
     margin-right: 10px;
   }
 

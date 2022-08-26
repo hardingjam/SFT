@@ -29,7 +29,7 @@
     //
     async function createToken() {
         const constructionConfig = {
-            admin: admin_ledger,
+            admin: admin_ledger.trim(),
             receiptVaultConfig: {
                 asset: ADDRESS_ZERO,
                 name,

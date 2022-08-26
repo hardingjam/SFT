@@ -1,4 +1,5 @@
 import {ethers} from "ethers";
+import {SUBGRAPH_URL} from "./consts.js";
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -35,13 +36,50 @@ export async function getContract(network, address, abi, signerOrProvider) {
     return contract
 }
 
-export function toSentenceCase(text){
-        text = text.toLowerCase()
-        let txtArr = text.split(/[,._\s]/)
-        let firstWord = txtArr[0]
-        let firstLetter = firstWord.charAt(0).toUpperCase()
+export function toSentenceCase(text) {
+    text = text.toLowerCase()
+    let txtArr = text.split(/[,._\s]/)
+    let firstWord = txtArr[0]
+    let firstLetter = firstWord.charAt(0).toUpperCase()
     firstWord = firstLetter + firstWord.slice(1)
     txtArr = txtArr.slice(1)
     txtArr.unshift(firstWord)
-    return(txtArr.join(' '))
+    return (txtArr.join(' '))
+}
+
+export async function getSubgraphData(activeNetwork, offchainAssetVault) {
+    let id = offchainAssetVault
+    let query = `
+          query($id: ID!) {
+            offchainAssetVault(id: $id) {
+                id
+                address,
+                deployer,
+                admin,
+                roleHolders{
+                    role{
+                        roleName,
+                        roleHash
+                    }
+                    account{
+                        address
+                    }
+                }
+            }
+          }
+         `;
+    if (activeNetwork) {
+        let req = await fetch(SUBGRAPH_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                query,
+                variables: {id}
+            })
+        });
+        return await req.json()
+    }
+
 }

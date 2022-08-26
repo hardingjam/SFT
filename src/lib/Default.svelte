@@ -24,7 +24,7 @@
     let accountMenuOptions = [
         {
             id: "copy",
-            name: "Copy Address",
+            displayName: "Copy Address",
             action: () => {
                 if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
                     // this.showTooltip = true;
@@ -38,7 +38,7 @@
         },
         {
             id: "view",
-            name: "View on Explorer",
+            displayName: "View on Explorer",
             action: () => {
                 window.open(`${$activeNetwork.blockExplorer}address/${account}`);
             },

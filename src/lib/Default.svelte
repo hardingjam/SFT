@@ -13,7 +13,7 @@
 
     let connectedAccount;
     let account;
-    export let url;
+    export let url = '/';
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
 
@@ -197,7 +197,7 @@
     {#if account}
       <div class="main-card">
         {#if $activeNetwork}
-          <Route path="/" component={SftSetup} activeNetwork={$activeNetwork} ethersData={ethersData}/>
+          <Route path="/" component={SftSetup} ethersData={ethersData}/>
           <Route path="/admin" component={Admin}/>
         {/if}
         {#if !$activeNetwork}

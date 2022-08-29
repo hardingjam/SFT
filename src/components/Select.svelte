@@ -5,7 +5,7 @@
 
     export let options;
     export let label;
-    export let staticLabel;
+    export let staticLabel = '';
     export let className;
     export let dropDownClass;
     export let expandIcon = icons.expand;

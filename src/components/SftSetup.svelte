@@ -1,12 +1,12 @@
 <script>
+    import {activeNetwork, data, roles, vault} from './../scripts/store.js';
     import {ethers} from "ethers";
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {onMount} from "svelte";
-    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS,TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
-    import {getEventArgs, getContract} from "../scripts/helpers.js";
+    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
+    import {getEventArgs, getContract, getSubgraphData} from "../scripts/helpers.js";
     import {navigate} from "svelte-routing";
-    import {activeNetwork, vault} from './../scripts/store.js';
 
     let name = "";
     let admin_ledger = "";
@@ -24,6 +24,8 @@
     // async function createToken() {
     //     let contract = await getContract($activeNetwork, TEST_CONTRACT_ADDRESS, contractAbi, signerOrProvider)
     //     vault.set(contract)
+    //     await getSgData(contract.address)
+    //
     //     navigate("/admin", {replace: false});
     // }
     //
@@ -60,7 +62,6 @@
         admin_ledger = null;
         symbol = null;
         url = null;
-        navigate("/admin", {replace: false});
 
         console.log(
             "vault deployed to:",
@@ -69,6 +70,33 @@
 
         let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
         vault.set(newVault)
+
+
+        await getSgData(newVault.address)
+        navigate("/admin", {replace: false});
+
+    }
+
+    async function getSgData(vaultAddress) {
+        let sgData = await getSubgraphData($activeNetwork.chainId, vaultAddress.toLowerCase())
+        if (sgData) {
+            data.set(sgData)
+            roles.set($data.offchainAssetVault.roles)
+
+            let rolesFiltered = $roles.map(role => {
+                let roleRevokes = $data.offchainAssetVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
+                let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
+                let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
+                return {roleName: role.roleName, roleHolders: filtered}
+            })
+            roles.set(rolesFiltered)
+        }
+    }
+
+    function filterArray(arr1, arr2) {
+        return arr1.filter(a => {
+            return arr2.indexOf(a.account.address) === -1
+        })
     }
 
 
@@ -76,8 +104,10 @@
 <div class="sft-setup-container">
   <label class="title f-weight-700">SFT Setup</label>
   <div class="form-box">
-    <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}></div>
-    <div class="space-between"><label class="f-weight-700">Admin ledger:</label> <input type="text" bind:value={admin_ledger}>
+    <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
+    </div>
+    <div class="space-between"><label class="f-weight-700">Admin ledger:</label> <input type="text"
+                                                                                        bind:value={admin_ledger}>
     </div>
     <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text" bind:value={symbol}>
     </div>

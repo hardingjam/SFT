@@ -1,7 +1,7 @@
 <script>
+    import {vault, activeNetwork, roles} from "../scripts/store.js";
     import {navigate} from "svelte-routing";
     import Role from "../components/Role.svelte";
-    import {vault, activeNetwork, roles} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import {toSentenceCase} from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";

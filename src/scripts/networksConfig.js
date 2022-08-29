@@ -27,18 +27,18 @@ const networks = [
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
         icon: 'polygon'
     },
-    {
-        id: 4,
-        chainId: 4,
-        name: 'rinkeby',
-        displayName: "Rinkeby Testnet",
-        currencySymbol: "ETH",
-        blockExplorer: "https://rinkeby.etherscan.io/",
-        subgraphURL:
-            "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
-        rpcUrl: "https://rinkeby.infura.io/v3/",
-        icon: 'ethereum'
-    }
+    // {
+    //     id: 4,
+    //     chainId: 4,
+    //     name: 'rinkeby',
+    //     displayName: "Rinkeby Testnet",
+    //     currencySymbol: "ETH",
+    //     blockExplorer: "https://rinkeby.etherscan.io/",
+    //     subgraphURL:
+    //         "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
+    //     rpcUrl: "https://rinkeby.infura.io/v3/",
+    //     icon: 'ethereum'
+    // }
 ];
 
 export default networks;

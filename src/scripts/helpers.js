@@ -63,6 +63,16 @@ export async function getSubgraphData(activeNetwork, offchainAssetVault) {
                         address
                       }
                     }
+                },
+                roleRevokes{
+                    role{
+                        roleName
+                    }
+                    roleHolder{
+                        account{
+                          address
+                        }
+                    }
                 }
             }
           }
@@ -78,7 +88,8 @@ export async function getSubgraphData(activeNetwork, offchainAssetVault) {
                 variables: {id}
             })
         });
-        return await req.json()
+        let data = await req.json()
+        return data.data
     }
 
 }

@@ -7,7 +7,7 @@
     import {Router, Route} from "svelte-routing"
     import Admin from "./../routes/Admin.svelte";
     import {icons} from '../scripts/assets.js'
-    import {activeNetwork, data} from "../scripts/store.js";
+    import {activeNetwork, data, roles} from "../scripts/store.js";
     import {getSubgraphData} from "../scripts/helpers.js"
     import {TEST_CONTRACT_ADDRESS} from "../scripts/consts.js";
 
@@ -66,10 +66,27 @@
                 }
             });
             data.set(await getSubgraphData($activeNetwork.chainId, TEST_CONTRACT_ADDRESS))
-            console.log($data.data)
+            roles.set($data.offchainAssetVault.roles)
+
+            let rolesFiltered = $roles.map(role=>{
+                let roleRevokes = $data.offchainAssetVault.roleRevokes.filter(r=>r.role.roleName===role.roleName)
+                let roleRevokedAccounts = roleRevokes.map(rr=>rr.roleHolder.account.address)
+                let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
+                return {roleName: role.roleName, roleHolders:filtered}
+            })
+            roles.set(rolesFiltered)
+
 
         }
+
     });
+
+    function filterArray(arr1, arr2) {
+        let filtered = arr1.filter(a=>{
+            return arr2.indexOf(a.account.address) === -1
+        })
+        return filtered
+    }
 
     async function getEthersData() {
         if (window.ethereum) {

@@ -27,7 +27,7 @@
                 const grantRoleTx = await $vault.grantRole(role, account.trim());
                 await grantRoleTx.wait()
                 let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
-                updatedRoleHolders.push(account)
+                updatedRoleHolders.push({account: {address: account}})
                 const newRoles = $roles.map(role => {
                     if (role.roleName === roleName) {
                         return {...role, roleHolders: updatedRoleHolders};

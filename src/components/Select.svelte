@@ -7,7 +7,7 @@
     export let label;
     export let staticLabel = '';
     export let className;
-    export let dropDownClass;
+    export let dropDownClass = '';
     export let expandIcon = icons.expand;
     let selected;
 

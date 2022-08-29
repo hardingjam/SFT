@@ -45,14 +45,16 @@
   <div class="role-list">
     <div class="role">
       <span>{admin ? 'Role Admin' : 'Executor'}</span>
-      {#each roleHolders as roleHolder}
-        <div>
-          {roleHolder.replace(/(.{7}).*/, "$1…")}
-          <img class="btn-hover action-icon" src={icons.show} alt="show" on:click={()=>showAddress(roleHolder)}/>
-          <img class="btn-hover action-icon" src={icons.delete_icon} on:click={()=>revokeRole(name,roleHolder)}
-               alt="delete"/>
-        </div>
-      {/each}
+      {#if roleHolders.length}
+        {#each roleHolders as roleHolder}
+          <div>
+            {roleHolder.account.address.replace(/(.{7}).*/, "$1…")}
+            <img class="btn-hover action-icon" src={icons.show} alt="show" on:click={()=>showAddress(roleHolder.account.address)}/>
+            <img class="btn-hover action-icon" src={icons.delete_icon} on:click={()=>revokeRole(name,roleHolder.account.address)}
+                 alt="delete"/>
+          </div>
+        {/each}
+      {/if}
     </div>
   </div>
 </div>

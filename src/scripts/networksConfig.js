@@ -23,7 +23,7 @@ const networks = [
         currencySymbol: "MATIC",
         blockExplorer: "https://mumbai.polygonscan.com/",
         subgraphURL:
-            "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
+            "https://api.thegraph.com/subgraphs/name/gild-lab/offchainassetvault",
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
         icon: 'polygon'
     },
@@ -33,14 +33,10 @@ const networks = [
         name: 'rinkeby',
         displayName: "Rinkeby Testnet",
         currencySymbol: "ETH",
-        scanURL: "https://rinkeby.etherscan.io/",
+        blockExplorer: "https://rinkeby.etherscan.io/",
         subgraphURL:
             "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
-        erc20PriceOracleVaultAddress: "0xC0485b77f873147B8C9f86F3CC0543021d4e769B",
-        erc20PriceOracleVaultFactoryAddress: "0x9505354B621fac407968821CcCc819C81Ae0bc26",
-        twoPriceOracleAddress: "0x6Bc5906f69883DAc8C58296282BcAB26e780fc4D",
         rpcUrl: "https://rinkeby.infura.io/v3/",
-        erc20ContractAddress: "0xc778417E063141139Fce010982780140Aa0cD5Ab",
         icon: 'ethereum'
     }
 ];

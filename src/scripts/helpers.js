@@ -56,13 +56,12 @@ export async function getSubgraphData(activeNetwork, offchainAssetVault) {
                 address,
                 deployer,
                 admin,
-                roleHolders{
-                    role{
-                        roleName,
-                        roleHash
-                    }
-                    account{
+                roles{
+                    roleName,
+                    roleHolders{
+                      account{
                         address
+                      }
                     }
                 }
             }

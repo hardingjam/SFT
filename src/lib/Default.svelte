@@ -1,4 +1,5 @@
 <script>
+    import {activeNetwork, data, roles, vault} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../components/SftSetup.svelte";
@@ -7,11 +8,12 @@
     import {Router, Route} from "svelte-routing"
     import Admin from "./../routes/Admin.svelte";
     import {icons} from '../scripts/assets.js'
-    import {activeNetwork} from "../scripts/store.js";
+    import {getSubgraphData} from "../scripts/helpers.js"
+    import {TEST_CONTRACT_ADDRESS} from "../scripts/consts.js";
 
     let connectedAccount;
     let account;
-    export let url;
+    export let url = '/';
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
 
@@ -44,7 +46,6 @@
             },
         }
     ]
-
     onMount(async () => {
         if (isMetamaskInstalled) {
             await setNetwork()
@@ -65,8 +66,11 @@
                 }
             });
 
+
         }
+
     });
+
 
     async function getEthersData() {
         if (window.ethereum) {
@@ -165,12 +169,12 @@
         <div class="menu">
           <Select options={networks} on:select={handleNetworkSelect}
                   label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
-                  dropDownClass={'dropDownClass'}>
+                  dropDownClass={'nav-dropdown'}>
             <span slot="icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
                                                        alt={$activeNetwork?.displayName}/></span>
           </Select>
           <Select className={'meinMenu'} options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}
-                  staticLabel={true} dropDownClass={'dropDownClass'}>
+                  staticLabel={true} dropDownClass={'nav-dropdown'}>
           </Select>
         </div>
       {/if}
@@ -194,7 +198,7 @@
     {#if account}
       <div class="main-card">
         {#if $activeNetwork}
-          <Route path="/" component={SftSetup} activeNetwork={$activeNetwork} ethersData={ethersData}/>
+          <Route path="/" component={SftSetup} ethersData={ethersData}/>
           <Route path="/admin" component={Admin}/>
         {/if}
         {#if !$activeNetwork}
@@ -262,7 +266,8 @@
   .menu {
     display: flex;
   }
-  .select-icon{
+
+  .select-icon {
     margin-right: 10px;
   }
 

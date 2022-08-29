@@ -1,7 +1,7 @@
 <script>
+    import {vault, activeNetwork, roles} from "../scripts/store.js";
     import {navigate} from "svelte-routing";
     import Role from "../components/Role.svelte";
-    import {vault, activeNetwork, roles} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import {toSentenceCase} from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
@@ -27,7 +27,7 @@
                 const grantRoleTx = await $vault.grantRole(role, account.trim());
                 await grantRoleTx.wait()
                 let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
-                updatedRoleHolders.push(account)
+                updatedRoleHolders.push({account: {address: account}})
                 const newRoles = $roles.map(role => {
                     if (role.roleName === roleName) {
                         return {...role, roleHolders: updatedRoleHolders};

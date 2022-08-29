@@ -117,15 +117,15 @@ button:focus, button:focus-visible {
     border-radius: 5px;
 }
 
-.dropDownClass {
+.nav-dropdown {
     background-color: #ececec !important;
 }
 
-.dropDownClass .dropdown-item {
+.nav-dropdown .dropdown-item {
     font-weight: 700 !important;
     font-size: 18px !important;
     line-height: 30px !important;
-    padding: 0 10px!important;
+    padding: 0 10px !important;
 }
 
 @media (prefers-color-scheme: light) {

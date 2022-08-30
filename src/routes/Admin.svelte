@@ -12,7 +12,7 @@
     let roleName = '';
 
     function goBack() {
-        navigate("/", {replace: false});
+        navigate("/setup", {replace: false});
     }
 
     function handleRoleSelect(event) {

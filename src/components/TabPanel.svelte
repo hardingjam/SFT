@@ -9,5 +9,16 @@
 </script>
 
 {#if $selectedPanel === panel}
-  <slot></slot>
+  <div class="tab-panel-container">
+    <slot></slot>
+  </div>
 {/if}
+
+<style>
+  .tab-panel-container{
+      width: 492px;
+      height: 616px;
+      background: #FFFFFF;
+      border-radius: 0 20px 20px 20px;
+  }
+</style>

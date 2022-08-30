@@ -8,10 +8,11 @@
     import {Router, Route} from "svelte-routing"
     import Admin from "./../routes/Admin.svelte";
     import {icons} from '../scripts/assets.js'
+    import MintRedeem from "../routes/MintRedeem.svelte";
 
     let connectedAccount;
     let account;
-    export let url = '/';
+    export let url = '';
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
 
@@ -196,8 +197,15 @@
     {#if account}
       <div class="main-card">
         {#if $activeNetwork}
-          <Route path="/" component={SftSetup} ethersData={ethersData}/>
-          <Route path="/admin" component={Admin}/>
+          <Route path="setup" component={SftSetup} ethersData={ethersData}/>
+          <Route path="admin" component={Admin}/>
+          <Route path="/" component={MintRedeem}/>
+          <Route>
+            <div>
+              <h3>404</h3>
+              <div>No Route could be matched.</div>
+            </div>
+          </Route>
         {/if}
         {#if !$activeNetwork}
           <div class="invalid-network">

@@ -1,26 +1,36 @@
 <script>
-    import { getContext } from 'svelte';
-    import { TABS } from './Tabs.svelte';
+    import {getContext} from 'svelte';
+    import {TABS} from './Tabs.svelte';
 
     const tab = {};
-    const { registerTab, selectTab, selectedTab } = getContext(TABS);
+    const {registerTab, selectTab, selectedTab} = getContext(TABS);
 
     registerTab(tab);
 </script>
 
 <style>
     button {
-        background: none;
-        border: none;
-        border-bottom: 2px solid white;
-        border-radius: 0;
         margin: 0;
-        color: #ccc;
+        color: #000000;
+        width: 105px;
+        height: 36px;
+        background: linear-gradient(227.8deg, #FFFFFF 21.59%, #C5C4C4 61.47%);
+        border-radius: 20px 10px 0 0;
+        border: none;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 27px;
+
+    }
+
+    button:nth-child(2) {
+        border-radius: 10px 10px 0 0;
+        margin-left: -1px;
     }
 
     .selected {
-        border-bottom: 2px solid teal;
-        color: #333;
+        background: #FFFFFF;
+        font-weight: 700;
     }
 </style>
 

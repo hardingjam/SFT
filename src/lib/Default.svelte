@@ -1,15 +1,13 @@
 <script>
-    import {activeNetwork, data, roles, vault} from "../scripts/store.js";
+    import {activeNetwork} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
-    import SftSetup from "../components/SftSetup.svelte";
+    import SftSetup from "../routes/SftSetup.svelte";
     import {ethers} from "ethers";
     import {onMount} from 'svelte';
     import {Router, Route} from "svelte-routing"
     import Admin from "./../routes/Admin.svelte";
     import {icons} from '../scripts/assets.js'
-    import {getSubgraphData} from "../scripts/helpers.js"
-    import {TEST_CONTRACT_ADDRESS} from "../scripts/consts.js";
 
     let connectedAccount;
     let account;

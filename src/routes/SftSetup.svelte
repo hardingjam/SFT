@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, data, roles, vault} from './../scripts/store.js';
+    import {activeNetwork, data, roles, vault} from '../scripts/store.js';
     import {ethers} from "ethers";
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"

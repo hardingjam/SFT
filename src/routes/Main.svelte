@@ -12,8 +12,8 @@
 <Router url={url}>
   <Tabs>
     <TabList>
-      <Tab route="mint">Mint</Tab>
-      <Tab route="redeem">Redeem</Tab>
+      <Tab href="/mint"> Mint</Tab>
+      <Tab href="/redeem" isLast="{true}">Redeem</Tab>
     </TabList>
 
     <TabPanel>

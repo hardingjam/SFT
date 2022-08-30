@@ -1,17 +1,18 @@
 <script>
     import {getContext} from 'svelte';
     import {TABS} from './Tabs.svelte';
-    import {navigate} from "svelte-routing";
+    import {Link} from "yrv";
 
-    export let route;
     const tab = {};
     const {registerTab, selectTab, selectedTab} = getContext(TABS);
 
     registerTab(tab);
     function chaneRoute(tab) {
-        navigate(`/${route}`, {replace: false});
         selectTab(tab)
     }
+
+    export let href = ""
+    export let isLast = false;
 </script>
 
 <style>
@@ -29,8 +30,8 @@
 
     }
 
-    button:nth-child(2) {
-        border-radius: 10px 10px 0 0;
+    .last-tab{
+        border-radius: 10px 10px 0 0!important;
         margin-left: -1px;
     }
 
@@ -39,7 +40,9 @@
         font-weight: 700;
     }
 </style>
+<Link href={href}>
+  <button class:selected="{$selectedTab === tab}" class:last-tab="{isLast}" on:click="{() => chaneRoute(tab)}">
+    <slot></slot>
+  </button>
+</Link>
 
-<button class:selected="{$selectedTab === tab}" on:click="{() => chaneRoute(tab)}">
-  <slot></slot>
-</button>

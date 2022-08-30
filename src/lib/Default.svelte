@@ -5,10 +5,11 @@
     import SftSetup from "../routes/SftSetup.svelte";
     import {ethers} from "ethers";
     import {onMount} from 'svelte';
-    import {Router, Route} from "svelte-routing"
+    import {Router, Route} from "yrv"
     import Admin from "./../routes/Admin.svelte";
     import {icons} from '../scripts/assets.js'
-    import MintRedeem from "../routes/MintRedeem.svelte";
+    import Main from "../routes/Main.svelte";
+    import {navigate} from "svelte-routing";
 
     let connectedAccount;
     let account;
@@ -51,6 +52,7 @@
             connectedAccount = await getMetamaskConnectedAccount()
             if (connectedAccount) {
                 account = connectedAccount
+                navigate(window.location.pathname, {replace: false})
             } else {
                 localStorage.removeItem('account')
             }
@@ -197,15 +199,17 @@
     {#if account}
       <div class="main-card">
         {#if $activeNetwork}
-          <Route path="setup" component={SftSetup} ethersData={ethersData}/>
-          <Route path="admin" component={Admin}/>
-          <Route path="/" component={MintRedeem}/>
-          <Route>
-            <div>
-              <h3>404</h3>
-              <div>No Route could be matched.</div>
-            </div>
-          </Route>
+          <Route path="/setup" component={SftSetup} ethersData={ethersData}/>
+          <Route path="/admin" component={Admin}/>
+          <Route path="/mint" component={Main}/>
+          <Route path="/redeem" component={Main}/>
+
+          <!--          <Route>-->
+          <!--            <div>-->
+          <!--              <h3>404</h3>-->
+          <!--              <div>No Route could be matched.</div>-->
+          <!--            </div>-->
+          <!--          </Route>-->
         {/if}
         {#if !$activeNetwork}
           <div class="invalid-network">

@@ -1,11 +1,17 @@
 <script>
     import {getContext} from 'svelte';
     import {TABS} from './Tabs.svelte';
+    import {navigate} from "svelte-routing";
 
+    export let route;
     const tab = {};
     const {registerTab, selectTab, selectedTab} = getContext(TABS);
 
     registerTab(tab);
+    function chaneRoute(tab) {
+        navigate(`/${route}`, {replace: false});
+        selectTab(tab)
+    }
 </script>
 
 <style>
@@ -34,6 +40,6 @@
     }
 </style>
 
-<button class:selected="{$selectedTab === tab}" on:click="{() => selectTab(tab)}">
+<button class:selected="{$selectedTab === tab}" on:click="{() => chaneRoute(tab)}">
   <slot></slot>
 </button>

@@ -3,6 +3,29 @@
     import MintInput from "../components/MintInput.svelte";
 
     let amount = 0;
+
+    let auditInfo = [
+        {
+            label: "Meta Score 1",
+            value: 550
+        }, {
+            label: "Meta Score 1",
+            value: 234
+        }, {
+            label: "Meta Score 1",
+            value: 234
+        }, {
+            label: "Meta Score 1",
+            value: 23456
+        }, {
+            label: "Meta Score 1",
+            value: 233
+        }, {
+            label: "Meta Score 1",
+            value: 123123
+        },
+    ]
+
 </script>
 
 <div class="mint-container">
@@ -10,6 +33,30 @@
     <span>Audit History </span><img src={icons.show} alt="go to audit">
   </div>
   <MintInput bind:amount={amount}/>
+  <div class="audit-info-container basic-frame-parent">
+    <div class="audit-info basic-frame">
+      <span class="title">Audit info.</span>
+      <table>
+        <tr>
+          <td>PIE Certificate Number</td>
+          <td class="value">12312312414</td>
+        </tr>
+        {#each auditInfo as info}
+          <tr>
+            <td>{info.label}</td>
+            <td class="value">{info.value}</td>
+          </tr>
+        {/each}
+        <tr>
+          <td>Upload PIE Certificate</td>
+          <td>
+            <button class="default-btn">Upload</button>
+          </td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -31,6 +78,26 @@
         padding-right: 40px;
         margin-bottom: 15px;
         cursor: pointer;
+    }
+
+    .audit-info {
+        padding: 20px 60px;
+        display: flex;
+        text-align: left;
+        flex-direction: column;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 27px;
+
+    }
+
+    .audit-info .title {
+        font-weight: 700;
+        margin-left: -5px;
+    }
+
+    .value {
+        padding-left: 20px;
     }
 
 

@@ -128,6 +128,18 @@ button:focus, button:focus-visible {
     padding: 0 10px !important;
 }
 
+.basic-frame-parent {
+    padding: 12px 12px 25px 12px;
+    width: 100%;
+}
+
+.basic-frame {
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px solid #D2D2D2;
+    border-radius: 10px;
+}
+
 @media (prefers-color-scheme: light) {
 
 }

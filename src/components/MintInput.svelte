@@ -1,12 +1,14 @@
 <script>
     export let amount;
+    export let amountLabel;
+    export let label;
 </script>
 <div class="options-container">
   <div class="options-background">
     <div class="options">
       <div class="labels">
-        <div class="txt">Mint Amount</div>
-        <div class="txt-options">Options</div>
+        <div class="txt">{amountLabel}</div>
+        <div class="txt-options">{label}</div>
       </div>
       <div class="options-input"><input type="text" bind:value={amount} autofocus></div>
     </div>
@@ -44,6 +46,7 @@
         font-weight: 300;
         font-size: 16px;
         line-height: 27px;
+        white-space: nowrap;
     }
 
     .txt-options {

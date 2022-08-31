@@ -1,7 +1,7 @@
 <script>
     import {icons} from "../scripts/assets.js";
     import MintInput from "../components/MintInput.svelte";
-    import { ethers } from "ethers";
+    import {ethers} from "ethers";
     import {vault} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
 
@@ -54,7 +54,7 @@
   <div class="audit-history btn-hover">
     <span>Audit History </span><img src={icons.show} alt="go to audit">
   </div>
-  <MintInput bind:amount={amount}/>
+  <MintInput bind:amount={amount} amountLabel={"Mint Amount"} label={"Options"}/>
   <div class="audit-info-container basic-frame-parent">
     <div class="audit-info basic-frame">
       <span class="title f-weight-700">Audit info.</span>
@@ -82,7 +82,9 @@
   <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>
-  <button class="btn-hover mint-btn btn-default btn-submit" disabled={shouldDisable} on:click={() => mint()}>Mint Options</button>
+  <button class="btn-hover mint-btn btn-default btn-submit" disabled={shouldDisable} on:click={() => mint()}>Mint
+    Options
+  </button>
 
 </div>
 

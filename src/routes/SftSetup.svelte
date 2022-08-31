@@ -6,7 +6,7 @@
     import {onMount} from "svelte";
     import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract, getSubgraphData} from "../scripts/helpers.js";
-    import {navigate} from "svelte-routing";
+    import {navigateTo} from "yrv";
 
     let name = "";
     let admin_ledger = "";
@@ -26,9 +26,8 @@
     //     vault.set(contract)
     //     await getSgData(contract.address)
     //
-    //     navigate("/admin", {replace: false});
+    //     navigateTo("/admin", {replace: false});
     // }
-    //
     async function createToken() {
         const constructionConfig = {
             admin: admin_ledger.trim(),
@@ -73,7 +72,7 @@
 
 
         await getSgData(newVault.address)
-        navigate("/admin", {replace: false});
+        navigateTo("/admin", {replace: false});
 
     }
 

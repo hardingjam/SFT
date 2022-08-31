@@ -246,6 +246,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: -65px;
   }
 
   .invalid-network {

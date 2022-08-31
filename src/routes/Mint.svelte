@@ -1,8 +1,12 @@
 <script>
     import {icons} from "../scripts/assets.js";
     import MintInput from "../components/MintInput.svelte";
+    import { ethers } from "ethers";
+    import {vault} from "../scripts/store.js";
+    import {account} from "../scripts/store.js";
 
     let amount = 0;
+    let shouldDisable = false
 
     let auditInfo = [
         {
@@ -26,8 +30,22 @@
         },
     ]
 
-    function mint() {
+    async function mint() {
         console.log(555)
+
+        // try {
+        //     console.log($vault);
+        //     shouldDisable = true;
+        //     const mintAmount = ethers.utils.parseEther(amount);
+        //     // let approve = await erc20Contract.approve(erc20GildContract.address, mintAmount);
+        //     // await approve.wait();
+        //     const tx = await $vault["mint(uint256,address)"](mintAmount, $account);
+        //     await tx.wait();
+        //     amount = "";
+        // } catch (error) {
+        //     console.log(error);
+        // }
+        // shouldDisable = false;
     }
 
 </script>
@@ -64,7 +82,7 @@
   <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>
-  <button class="btn-hover mint-btn btn-default btn-submit" on:click={() => mint()}>Mint Options</button>
+  <button class="btn-hover mint-btn btn-default btn-submit" disabled={shouldDisable} on:click={() => mint()}>Mint Options</button>
 
 </div>
 

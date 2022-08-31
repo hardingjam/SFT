@@ -1,18 +1,16 @@
 <script>
-    import {activeNetwork} from "../scripts/store.js";
+    import {activeNetwork, account} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
     import {ethers} from "ethers";
     import {onMount} from 'svelte';
-    import {Router, Route} from "yrv"
+    import {Router, Route, navigateTo} from "yrv"
     import Admin from "./../routes/Admin.svelte";
     import {icons} from '../scripts/assets.js'
     import Main from "../routes/Main.svelte";
-    import {navigate} from "svelte-routing";
 
     let connectedAccount;
-    let account;
     export let url = '';
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
@@ -33,7 +31,7 @@
                     // setTimeout(() => {
                     //     this.showTooltip = false;
                     // }, 1000);
-                    return navigator.clipboard.writeText(account);
+                    return navigator.clipboard.writeText($account);
                 }
                 return Promise.reject("The Clipboard API is not available.");
             }
@@ -42,7 +40,7 @@
             id: "view",
             displayName: "View on Explorer",
             action: () => {
-                window.open(`${$activeNetwork.blockExplorer}address/${account}`);
+                window.open(`${$activeNetwork.blockExplorer}address/${$account}`);
             },
         }
     ]
@@ -51,19 +49,20 @@
             await setNetwork()
             connectedAccount = await getMetamaskConnectedAccount()
             if (connectedAccount) {
-                account = connectedAccount
-                navigate(window.location.pathname, {replace: false})
+
+                account.set(connectedAccount)
+                navigateTo(window.location.pathname, {replace: false})
             } else {
                 localStorage.removeItem('account')
             }
 
             window.ethereum.on("accountsChanged", (accounts) => {
                 if (!accounts.length) {
-                    account = null;
+                    account.set(null);
                     localStorage.removeItem('account')
                 } else {
-                    account = accounts[0];
-                    localStorage.setItem('account', account)
+                    account.set(accounts[0]);
+                    localStorage.setItem('account', $account)
                 }
             });
 
@@ -141,8 +140,8 @@
                 }).then(() => window.ethereum.request({
                     method: "eth_requestAccounts"
                 }));
-                account = accounts[0];
-                localStorage.setItem('account', account)
+                account.set(accounts[0]);
+                localStorage.setItem('account', $account)
             } catch (error) {
                 console.log(error);
             }
@@ -166,7 +165,7 @@
         <img src={icons.logo} alt="sft logo">
         <div class="logo-label">SFCC</div>
       </div>
-      {#if account}
+      {#if $account}
         <div class="menu">
           <Select options={networks} on:select={handleNetworkSelect}
                   label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
@@ -174,14 +173,15 @@
             <span slot="icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
                                                        alt={$activeNetwork?.displayName}/></span>
           </Select>
-          <Select className={'meinMenu'} options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}
+          <Select className={'meinMenu'} options={accountMenuOptions}
+                  label={$account.replace(/(.{6}).*(.{4})/, "$1…$2")}
                   staticLabel={true} dropDownClass={'nav-dropdown'}>
           </Select>
         </div>
       {/if}
 
     </div>
-    {#if !account}
+    {#if !$account}
       <div>
         <div class="invalid-network f-weight-700">
           <label>To use the app:</label>
@@ -196,7 +196,7 @@
         </div>
       </div>
     {/if}
-    {#if account}
+    {#if $account}
       <div class="main-card">
         {#if $activeNetwork}
           <Route path="/setup" component={SftSetup} ethersData={ethersData}/>

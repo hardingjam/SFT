@@ -26,6 +26,10 @@
         },
     ]
 
+    function mint() {
+        console.log(555)
+    }
+
 </script>
 
 <div class="mint-container">
@@ -35,7 +39,7 @@
   <MintInput bind:amount={amount}/>
   <div class="audit-info-container basic-frame-parent">
     <div class="audit-info basic-frame">
-      <span class="title">Audit info.</span>
+      <span class="title f-weight-700">Audit info.</span>
       <table>
         <tr>
           <td>PIE Certificate Number</td>
@@ -57,6 +61,11 @@
       </table>
     </div>
   </div>
+  <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
+    (FT)
+  </div>
+  <button class="btn-hover mint-btn btn-default btn-submit" on:click={() => mint()}>Mint Options</button>
+
 </div>
 
 <style>
@@ -92,12 +101,21 @@
     }
 
     .audit-info .title {
-        font-weight: 700;
         margin-left: -5px;
     }
 
     .value {
         padding-left: 20px;
+    }
+
+    .info-text {
+        font-size: 12px;
+        line-height: 20px;
+    }
+
+    .mint-btn {
+        width: calc(100% - 70px);
+        margin-top: 10px;
     }
 
 

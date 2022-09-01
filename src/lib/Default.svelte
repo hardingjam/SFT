@@ -170,7 +170,7 @@
           <Select options={networks} on:select={handleNetworkSelect}
                   label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
                   dropDownClass={'nav-dropdown'}>
-            <span slot="icon" class="select-icon"><img src={icons[$activeNetwork.icon]}
+            <span slot="icon" class="select-icon"><img src={icons[$activeNetwork?.icon]}
                                                        alt={$activeNetwork?.displayName}/></span>
           </Select>
           <Select className={'meinMenu'} options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}

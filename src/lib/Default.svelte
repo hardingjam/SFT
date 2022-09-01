@@ -8,7 +8,8 @@
     import {Router, Route, navigateTo} from "yrv"
     import Admin from "./../routes/Admin.svelte";
     import {icons} from '../scripts/assets.js'
-    import Main from "../routes/Main.svelte";
+    import Redeem from "../routes/Redeem.svelte";
+    import Mint from "../routes/Mint.svelte";
 
     let connectedAccount;
     export let url = '';
@@ -20,6 +21,8 @@
         signer: "",
         signerOrProvider: "",
     }
+
+    let location = window.location.pathname
 
     let accountMenuOptions = [
         {
@@ -51,7 +54,7 @@
             if (connectedAccount) {
 
                 account.set(connectedAccount)
-                navigateTo(window.location.pathname, {replace: false})
+                navigateTo(location, {replace: false})
             } else {
                 localStorage.removeItem('account')
             }
@@ -68,7 +71,9 @@
 
 
         }
-
+        if (location === '/') {
+            navigateTo('/mint')
+        }
     });
 
 
@@ -155,6 +160,12 @@
         }
     }
 
+    let selectedTab = location.slice(1) || 'mint'
+
+    function changeUrl(tab) {
+        navigateTo('/' + tab)
+        selectedTab = tab
+    }
 
 </script>
 <Router url={url}>
@@ -201,14 +212,26 @@
         {#if $activeNetwork}
           <Route path="/setup" component={SftSetup} ethersData={ethersData}/>
           <Route path="/admin" component={Admin}/>
-          <Route path="/" component={Main} ethersData={ethersData}/>
+          {#if location === '/mint' || location === "/redeem" }
+            <div class="tabs">
+              <div class="tab-buttons">
+                <button class:selected="{selectedTab === 'mint'}" class="tab-button"
+                        on:click="{() =>  changeUrl('mint')}">
+                  Mint
+                </button>
+                <button class:selected="{selectedTab === 'redeem'}" class="redeem-tab tab-button"
+                        on:click="{() =>  changeUrl('redeem')}">
+                  Redeem
+                </button>
+              </div>
 
-          <!--          <Route>-->
-          <!--            <div>-->
-          <!--              <h3>404</h3>-->
-          <!--              <div>No Route could be matched.</div>-->
-          <!--            </div>-->
-          <!--          </Route>-->
+              <div class="tab-panel-container">
+                <Route path="/mint" component={Mint} ethersData={ethersData}/>
+                <Route path="/redeem" component={Redeem}/>
+              </div>
+            </div>
+          {/if}
+
         {/if}
         {#if !$activeNetwork}
           <div class="invalid-network">
@@ -279,6 +302,48 @@
 
   .select-icon {
     margin-right: 10px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-direction: column;
+
+  }
+
+  .tab-buttons {
+    display: flex;
+
+  }
+
+  .tab-button {
+    margin: 0;
+    color: #000000;
+    width: 105px;
+    height: 36px;
+    background: linear-gradient(227.8deg, #FFFFFF 21.59%, #C5C4C4 61.47%);
+    border-radius: 20px 10px 0 0;
+    border: none;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 27px;
+  }
+
+  .tab-panel-container {
+    width: 492px;
+    min-height: 535px;
+    background: #FFFFFF;
+    border-radius: 0 20px 20px 20px;
+    padding-bottom: 20px;
+  }
+
+  .redeem-tab {
+    border-radius: 10px 10px 0 0 !important;
+    margin-left: 2px;
+  }
+
+  .selected {
+    background: #FFFFFF;
+    font-weight: 700;
   }
 
 </style>

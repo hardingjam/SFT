@@ -1,5 +1,5 @@
 import {ethers} from "ethers";
-import {SUBGRAPH_URL} from "./consts.js";
+import {ONE, SUBGRAPH_URL} from "./consts.js";
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -102,4 +102,12 @@ export async function getSubgraphData(activeNetwork, offchainAssetVault) {
 
     }
 
+}
+
+export function fixedPointMul(a, b) {
+    return a.mul(b).div(ONE);
+}
+
+export function fixedPointDiv(a, b) {
+    return a.mul(ONE).div(b);
 }

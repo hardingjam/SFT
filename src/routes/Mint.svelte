@@ -2,8 +2,29 @@
     import {icons} from "../scripts/assets.js";
     import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
-    import {vault} from "../scripts/store.js";
+    import {activeNetwork, vault} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
+    import {onMount} from "svelte";
+    import {fixedPointDiv, fixedPointMul, getContract} from "../scripts/helpers.js";
+    import {TEST_CONTRACT_ADDRESS} from "../scripts/consts.js";
+    import contractAbi from "../contract/OffchainAssetVaultAbi.json";
+
+
+    //test
+    export let ethersData;
+    let {signer, signerOrProvider, provider} = ethersData;
+
+    onMount(async () => {
+        await setVault()
+    });
+
+    async function setVault() {
+        let contract = await getContract($activeNetwork, TEST_CONTRACT_ADDRESS, contractAbi, signerOrProvider)
+        vault.set(contract)
+    }
+
+    //end test
+
 
     let amount = 0;
     let shouldDisable = false
@@ -31,21 +52,32 @@
     ]
 
     async function mint() {
-        console.log(555)
+        try {
+            let quotePrice = 170178000000
+            let basePrice = 82871700
 
-        // try {
-        //     console.log($vault);
-        //     shouldDisable = true;
-        //     const mintAmount = ethers.utils.parseEther(amount);
-        //     // let approve = await erc20Contract.approve(erc20GildContract.address, mintAmount);
-        //     // await approve.wait();
-        //     const tx = await $vault["mint(uint256,address)"](mintAmount, $account);
-        //     await tx.wait();
-        //     amount = "";
-        // } catch (error) {
-        //     console.log(error);
-        // }
-        // shouldDisable = false;
+            let shareRatio = fixedPointDiv(ethers.BigNumber.from(basePrice), ethers.BigNumber.from(quotePrice))
+
+            let erc20Contract = await getContract($activeNetwork, $activeNetwork.erc20ContractAddress, contractAbi, signerOrProvider)
+            const mintAmount = ethers.utils.parseEther(amount.toString());
+            let approve = await erc20Contract.connect(signer).approve($vault.address, mintAmount);
+            await approve.wait();
+
+            const shares = fixedPointMul(mintAmount, shareRatio);
+
+            const tx = await $vault
+                .connect(signer)
+                ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, [], {
+                gasLimit: 100000
+            });
+
+            await tx.wait();
+
+            amount = "";
+        } catch (error) {
+            console.log(error);
+        }
+        shouldDisable = false;
     }
 
 </script>

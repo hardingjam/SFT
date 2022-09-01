@@ -26,7 +26,7 @@ const networks = [
             "https://api.thegraph.com/subgraphs/name/gild-lab/offchainassetvault",
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
         icon: 'polygon',
-        erc20ContractAddress: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"
+        erc20ContractAddress: "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889"
     },
     // {
     //     id: 4,

@@ -201,7 +201,7 @@
         {#if $activeNetwork}
           <Route path="/setup" component={SftSetup} ethersData={ethersData}/>
           <Route path="/admin" component={Admin}/>
-          <Route path="/" component={Main}/>
+          <Route path="/" component={Main} ethersData={ethersData}/>
 
           <!--          <Route>-->
           <!--            <div>-->

@@ -1,12 +1,13 @@
 <script>
     import {Tab, TabList, TabPanel, Tabs} from "../scripts/tabs.js";
-    import {Router} from "yrv";
+    import {Router, Route} from "yrv";
     import Mint from "./Mint.svelte";
     import Redeem from "./Redeem.svelte";
 
     export let url = '';
 
-
+    export let ethersData;
+    let {signer, signerOrProvider, provider} = ethersData;
 </script>
 
 <Router url={url}>
@@ -17,7 +18,7 @@
     </TabList>
 
     <TabPanel>
-      <Mint></Mint>
+      <Mint ethersData={ethersData}></Mint>
     </TabPanel>
 
     <TabPanel>

@@ -7,9 +7,6 @@
     const {registerTab, selectTab, selectedTab} = getContext(TABS);
 
     registerTab(tab);
-    function chaneRoute(tab) {
-        selectTab(tab)
-    }
 
     export let href = ""
     export let isLast = false;
@@ -30,8 +27,8 @@
 
     }
 
-    .last-tab{
-        border-radius: 10px 10px 0 0!important;
+    .last-tab {
+        border-radius: 10px 10px 0 0 !important;
         margin-left: -1px;
     }
 
@@ -41,7 +38,7 @@
     }
 </style>
 <Link href={href}>
-  <button class:selected="{$selectedTab === tab}" class:last-tab="{isLast}" on:click="{() => chaneRoute(tab)}">
+  <button class:selected="{$selectedTab === tab}" class:last-tab="{isLast}" on:click="{() =>  selectTab(tab)}">
     <slot></slot>
   </button>
 </Link>

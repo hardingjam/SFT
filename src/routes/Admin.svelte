@@ -1,6 +1,6 @@
 <script>
     import {vault, activeNetwork, roles} from "../scripts/store.js";
-    import {navigate} from "svelte-routing";
+    import {navigateTo} from "yrv";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
     import {toSentenceCase} from "../scripts/helpers.js";
@@ -12,7 +12,7 @@
     let roleName = '';
 
     function goBack() {
-        navigate("/", {replace: false});
+        navigateTo("/setup", {replace: false});
     }
 
     function handleRoleSelect(event) {
@@ -100,7 +100,6 @@
         border-radius: 20px;
         padding: 12px;
         color: #ffffff;
-        margin-top: -65px;
     }
 
     .admin-header {
@@ -139,7 +138,7 @@
 
     .roles-data {
         overflow: auto;
-        height: calc(100vh - 453px);
+        height: calc(100vh - 480px);
         display: flex;
         width: 100%;
         justify-content: space-between;

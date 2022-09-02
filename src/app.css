@@ -10,9 +10,7 @@ body {
 #app {
     text-align: center;
     width: 100%;
-    margin-left: 167px;
     margin-top: 52px;
-    margin-right: 65px;
     font-family: 'Mukta', sans-serif;
 }
 
@@ -126,6 +124,18 @@ button:focus, button:focus-visible {
     font-size: 18px !important;
     line-height: 30px !important;
     padding: 0 10px !important;
+}
+
+.basic-frame-parent {
+    padding: 12px 12px 25px 12px;
+    width: 100%;
+}
+
+.basic-frame {
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px solid #D2D2D2;
+    border-radius: 10px;
 }
 
 @media (prefers-color-scheme: light) {

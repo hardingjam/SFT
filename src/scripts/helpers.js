@@ -91,17 +91,15 @@ export async function getSubgraphData(activeNetwork, offchainAssetVault) {
         });
 
         let data = await req.json()
-        //sg needs some time to be updated, so if it does not give response immediately
-        //after creating vault, we need to repeat the action
-        if (!data.data.offchainAssetVault) {
-            setTimeout(async function () {
-                console.log(55)
-                await getSubgraphData(activeNetwork, offchainAssetVault)
-            }, 2000)
-
-        }
+        // //sg needs some time to be updated, so if it does not give response immediately
+        // //after creating vault, we need to repeat the action
+        // while (!data.data.offchainAssetVault) {
+        //     setTimeout(async function () {
+        //         console.log(55)
+        //         await getSubgraphData(activeNetwork, offchainAssetVault)
+        //     }, 2000)
+        // }
         return data.data
-
     }
 
 }

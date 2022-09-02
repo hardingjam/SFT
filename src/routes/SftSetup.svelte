@@ -69,10 +69,12 @@
 
         let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
         vault.set(newVault)
+        //wait for sg data
+        setTimeout(async function () {
+            await getSgData(newVault.address)
+            navigateTo("/admin", {replace: false});
+        }, 2000)
 
-
-        await getSgData(newVault.address)
-        navigateTo("/admin", {replace: false});
 
     }
 

@@ -138,7 +138,7 @@
 
     .roles-data {
         overflow: auto;
-        height: calc(100vh - 453px);
+        height: calc(100vh - 480px);
         display: flex;
         width: 100%;
         justify-content: space-between;

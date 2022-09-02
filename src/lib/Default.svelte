@@ -170,7 +170,7 @@
 </script>
 <Router url={url}>
 
-  <div class="container">
+  <div class="">
     <div class="default-header">
       <div class="logo">
         <img src={icons.logo} alt="sft logo">
@@ -253,7 +253,9 @@
   .default-header {
     justify-content: space-between;
     display: flex;
+    padding-left: 167px;
     width: 100%;
+    padding-right: 65px;
   }
 
   .logo-label {
@@ -269,7 +271,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: -65px;
+    margin-top: -30px;
   }
 
   .invalid-network {

@@ -25,7 +25,9 @@ const networks = [
         subgraphURL:
             "https://api.thegraph.com/subgraphs/name/gild-lab/offchainassetvault",
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
-        icon: 'polygon'
+        icon: 'polygon',
+        factory_address: '0xa40dD833D65a039668291A9BfADF74ca643f4E95',
+        subgraph_url: "https://api.thegraph.com/subgraphs/name/gild-lab/offchainassetvault"
     },
     // {
     //     id: 4,
@@ -37,8 +39,23 @@ const networks = [
     //     subgraphURL:
     //         "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
     //     rpcUrl: "https://rinkeby.infura.io/v3/",
-    //     icon: 'ethereum'
+    //     icon: 'ethereum',
+    //     factory_address:"0xEE95D90fCBDcFCCA629D3C56D733373C7B0121Ac",
     // }
+    {
+        id: 3,
+        chainId: 3,
+        name: 'ropsten',
+        displayName: "Ropsten Testnet",
+        currencySymbol: "RopstenETH",
+        blockExplorer: "https://ropsten.etherscan.io",
+        subgraphURL:
+            "https://api.thegraph.com/subgraphs/name/ninokeldishvili/ethgsubgraph",
+        rpcUrl: "https://ropsten.infura.io/v3/",
+        icon: 'ethereum',
+        factory_address: '0x576FBc9ab2693d6e748e85B301eD0FC6b14fC708',
+        subgraph_url: "https://api.thegraph.com/subgraphs/name/gild-lab/offchainassetvault"
+    }
 ];
 
 export default networks;

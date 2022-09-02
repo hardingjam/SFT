@@ -1,5 +1,4 @@
 import {ethers} from "ethers";
-import {SUBGRAPH_URL} from "./consts.js";
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -78,7 +77,7 @@ export async function getSubgraphData(activeNetwork, offchainAssetVault) {
           }
          `;
     if (activeNetwork) {
-        let req = await fetch(SUBGRAPH_URL, {
+        let req = await fetch(activeNetwork.subgraph_url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

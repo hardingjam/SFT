@@ -4,7 +4,7 @@
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {onMount} from "svelte";
-    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
+    import {ADDRESS_ZERO, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract, getSubgraphData} from "../scripts/helpers.js";
     import {navigate} from "svelte-routing";
 
@@ -18,7 +18,7 @@
     let factoryContract;
 
     onMount(async () => {
-        factoryContract = await getContract($activeNetwork, CONTRACT_FACTORY_ADDRESS[$activeNetwork.name], contractFactoryAbi, signerOrProvider)
+        factoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, contractFactoryAbi, signerOrProvider)
     });
 
     // async function createToken() {

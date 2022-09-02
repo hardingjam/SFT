@@ -56,6 +56,7 @@ export async function getSubgraphData(activeNetwork, offchainAssetVault) {
                 address,
                 deployer,
                 admin,
+                name,
                 roles{
                     roleName,
                     roleHolders{
@@ -94,6 +95,7 @@ export async function getSubgraphData(activeNetwork, offchainAssetVault) {
         //after creating vault, we need to repeat the action
         if (!data.data.offchainAssetVault) {
             setTimeout(async function () {
+                console.log(55)
                 await getSubgraphData(activeNetwork, offchainAssetVault)
             }, 2000)
 

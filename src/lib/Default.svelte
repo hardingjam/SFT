@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, account} from "../scripts/store.js";
+    import {activeNetwork, account, data} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -174,7 +174,7 @@
     <div class="default-header">
       <div class="logo">
         <img src={icons.logo} alt="sft logo">
-        <div class="logo-label">SFCC</div>
+        <div class="logo-label">{$data?.offchainAssetVault?.name || ''}</div>
       </div>
       {#if $account}
         <div class="menu">

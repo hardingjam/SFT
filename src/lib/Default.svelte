@@ -72,7 +72,7 @@
 
         }
         if (location === '/') {
-            navigateTo('/mint')
+            navigateTo('/setup')
         }
     });
 
@@ -212,7 +212,7 @@
         {#if $activeNetwork}
           <Route path="/setup" component={SftSetup} ethersData={ethersData}/>
           <Route path="/admin" component={Admin}/>
-          {#if location === '/mint' || location === "/redeem" || location === '/'}
+          {#if location === '/mint' || location === "/redeem"}
             <div class="tabs">
               <div class="tab-buttons">
                 <button class:selected="{selectedTab === 'mint'}" class="tab-button"

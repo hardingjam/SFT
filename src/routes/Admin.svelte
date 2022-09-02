@@ -100,7 +100,6 @@
         border-radius: 20px;
         padding: 12px;
         color: #ffffff;
-        margin-top: -65px;
     }
 
     .admin-header {

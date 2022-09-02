@@ -1,19 +1,18 @@
 <script>
-    import {activeNetwork, data, roles, vault} from "../scripts/store.js";
+    import {activeNetwork, account, data} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
-    import SftSetup from "../components/SftSetup.svelte";
+    import SftSetup from "../routes/SftSetup.svelte";
     import {ethers} from "ethers";
     import {onMount} from 'svelte';
-    import {Router, Route} from "svelte-routing"
+    import {Router, Route, navigateTo} from "yrv"
     import Admin from "./../routes/Admin.svelte";
     import {icons} from '../scripts/assets.js'
-    import {getSubgraphData} from "../scripts/helpers.js"
-    import {TEST_CONTRACT_ADDRESS} from "../scripts/consts.js";
+    import Redeem from "../routes/Redeem.svelte";
+    import Mint from "../routes/Mint.svelte";
 
     let connectedAccount;
-    let account;
-    export let url = '/';
+    export let url = '';
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
 
@@ -22,6 +21,8 @@
         signer: "",
         signerOrProvider: "",
     }
+
+    let location = window.location.pathname
 
     let accountMenuOptions = [
         {
@@ -33,7 +34,7 @@
                     // setTimeout(() => {
                     //     this.showTooltip = false;
                     // }, 1000);
-                    return navigator.clipboard.writeText(account);
+                    return navigator.clipboard.writeText($account);
                 }
                 return Promise.reject("The Clipboard API is not available.");
             }
@@ -42,7 +43,7 @@
             id: "view",
             displayName: "View on Explorer",
             action: () => {
-                window.open(`${$activeNetwork.blockExplorer}address/${account}`);
+                window.open(`${$activeNetwork.blockExplorer}address/${$account}`);
             },
         }
     ]
@@ -51,24 +52,28 @@
             await setNetwork()
             connectedAccount = await getMetamaskConnectedAccount()
             if (connectedAccount) {
-                account = connectedAccount
+
+                account.set(connectedAccount)
+                navigateTo(location, {replace: false})
             } else {
                 localStorage.removeItem('account')
             }
 
             window.ethereum.on("accountsChanged", (accounts) => {
                 if (!accounts.length) {
-                    account = null;
+                    account.set(null);
                     localStorage.removeItem('account')
                 } else {
-                    account = accounts[0];
-                    localStorage.setItem('account', account)
+                    account.set(accounts[0]);
+                    localStorage.setItem('account', $account)
                 }
             });
 
 
         }
-
+        if (location === '/') {
+            navigateTo('/setup')
+        }
     });
 
 
@@ -140,8 +145,8 @@
                 }).then(() => window.ethereum.request({
                     method: "eth_requestAccounts"
                 }));
-                account = accounts[0];
-                localStorage.setItem('account', account)
+                account.set(accounts[0]);
+                localStorage.setItem('account', $account)
             } catch (error) {
                 console.log(error);
             }
@@ -155,17 +160,23 @@
         }
     }
 
+    let selectedTab = location.slice(1) || 'mint'
+
+    function changeUrl(tab) {
+        navigateTo('/' + tab)
+        selectedTab = tab
+    }
 
 </script>
 <Router url={url}>
 
-  <div class="container">
+  <div class="">
     <div class="default-header">
       <div class="logo">
         <img src={icons.logo} alt="sft logo">
-        <div class="logo-label">SFCC</div>
+        <div class="logo-label">{$data?.offchainAssetVault?.name || ''}</div>
       </div>
-      {#if account}
+      {#if $account}
         <div class="menu">
           <Select options={networks} on:select={handleNetworkSelect}
                   label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
@@ -173,14 +184,15 @@
             <span slot="icon" class="select-icon"><img src={icons[$activeNetwork?.icon]}
                                                        alt={$activeNetwork?.displayName}/></span>
           </Select>
-          <Select className={'meinMenu'} options={accountMenuOptions} label={account.replace(/(.{6}).*(.{4})/, "$1…$2")}
+          <Select className={'meinMenu'} options={accountMenuOptions}
+                  label={$account.replace(/(.{6}).*(.{4})/, "$1…$2")}
                   staticLabel={true} dropDownClass={'nav-dropdown'}>
           </Select>
         </div>
       {/if}
 
     </div>
-    {#if !account}
+    {#if !$account}
       <div>
         <div class="invalid-network f-weight-700">
           <label>To use the app:</label>
@@ -195,11 +207,31 @@
         </div>
       </div>
     {/if}
-    {#if account}
+    {#if $account}
       <div class="main-card">
         {#if $activeNetwork}
-          <Route path="/" component={SftSetup} ethersData={ethersData}/>
+          <Route path="/setup" component={SftSetup} ethersData={ethersData}/>
           <Route path="/admin" component={Admin}/>
+          {#if location === '/mint' || location === "/redeem"}
+            <div class="tabs">
+              <div class="tab-buttons">
+                <button class:selected="{selectedTab === 'mint'}" class="tab-button"
+                        on:click="{() =>  changeUrl('mint')}">
+                  Mint
+                </button>
+                <button class:selected="{selectedTab === 'redeem'}" class="redeem-tab tab-button"
+                        on:click="{() =>  changeUrl('redeem')}">
+                  Redeem
+                </button>
+              </div>
+
+              <div class="tab-panel-container">
+                <Route path="/mint" component={Mint} ethersData={ethersData}/>
+                <Route path="/redeem" component={Redeem}/>
+              </div>
+            </div>
+          {/if}
+
         {/if}
         {#if !$activeNetwork}
           <div class="invalid-network">
@@ -221,7 +253,9 @@
   .default-header {
     justify-content: space-between;
     display: flex;
+    padding-left: 167px;
     width: 100%;
+    padding-right: 65px;
   }
 
   .logo-label {
@@ -237,6 +271,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: -45px;
   }
 
   .invalid-network {
@@ -269,6 +304,48 @@
 
   .select-icon {
     margin-right: 10px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-direction: column;
+
+  }
+
+  .tab-buttons {
+    display: flex;
+
+  }
+
+  .tab-button {
+    margin: 0;
+    color: #000000;
+    width: 105px;
+    height: 36px;
+    background: linear-gradient(227.8deg, #FFFFFF 21.59%, #C5C4C4 61.47%);
+    border-radius: 20px 10px 0 0;
+    border: none;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 27px;
+  }
+
+  .tab-panel-container {
+    width: 492px;
+    min-height: 535px;
+    background: #FFFFFF;
+    border-radius: 0 20px 20px 20px;
+    padding-bottom: 20px;
+  }
+
+  .redeem-tab {
+    border-radius: 10px 10px 0 0 !important;
+    margin-left: 2px;
+  }
+
+  .selected {
+    background: #FFFFFF;
+    font-weight: 700;
   }
 
 </style>

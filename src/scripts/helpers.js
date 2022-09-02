@@ -1,4 +1,5 @@
 import {ethers} from "ethers";
+import {ONE} from "./consts.js";
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -55,6 +56,7 @@ export async function getSubgraphData(activeNetwork, offchainAssetVault) {
                 address,
                 deployer,
                 admin,
+                name,
                 roles{
                     roleName,
                     roleHolders{
@@ -89,16 +91,23 @@ export async function getSubgraphData(activeNetwork, offchainAssetVault) {
         });
 
         let data = await req.json()
-        //sg needs some time to be updated, so if it does not give response immediately
-        //after creating vault, we need to repeat the action
-        if (!data.data.offchainAssetVault) {
-            setTimeout(async function () {
-                await getSubgraphData(activeNetwork, offchainAssetVault)
-            }, 2000)
-
-        }
+        // //sg needs some time to be updated, so if it does not give response immediately
+        // //after creating vault, we need to repeat the action
+        // while (!data.data.offchainAssetVault) {
+        //     setTimeout(async function () {
+        //         console.log(55)
+        //         await getSubgraphData(activeNetwork, offchainAssetVault)
+        //     }, 2000)
+        // }
         return data.data
-
     }
 
+}
+
+export function fixedPointMul(a, b) {
+    return a.mul(b).div(ONE);
+}
+
+export function fixedPointDiv(a, b) {
+    return a.mul(ONE).div(b);
 }

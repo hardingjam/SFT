@@ -1,12 +1,12 @@
 <script>
-    import {activeNetwork, data, roles, vault} from './../scripts/store.js';
+    import {activeNetwork, data, roles, vault} from '../scripts/store.js';
     import {ethers} from "ethers";
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {onMount} from "svelte";
     import {ADDRESS_ZERO, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract, getSubgraphData} from "../scripts/helpers.js";
-    import {navigate} from "svelte-routing";
+    import {navigateTo} from "yrv";
 
     let name = "";
     let admin_ledger = "";
@@ -26,9 +26,8 @@
     //     vault.set(contract)
     //     await getSgData(contract.address)
     //
-    //     navigate("/admin", {replace: false});
+    //     navigateTo("/admin", {replace: false});
     // }
-    //
     async function createToken() {
         const constructionConfig = {
             admin: admin_ledger.trim(),
@@ -70,15 +69,17 @@
 
         let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
         vault.set(newVault)
+        //wait for sg data
+        setTimeout(async function () {
+            await getSgData(newVault.address)
+            navigateTo("/admin", {replace: false});
+        }, 2000)
 
-
-        await getSgData(newVault.address)
-        navigate("/admin", {replace: false});
 
     }
 
     async function getSgData(vaultAddress) {
-        let sgData = await getSubgraphData($activeNetwork.chainId, vaultAddress.toLowerCase())
+        let sgData = await getSubgraphData($activeNetwork, vaultAddress.toLowerCase())
         if (sgData) {
             data.set(sgData)
             roles.set($data.offchainAssetVault.roles)

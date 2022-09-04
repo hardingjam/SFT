@@ -2,6 +2,19 @@
     export let amount;
     export let amountLabel;
     export let label;
+
+    function allowNumbersOnly(evt) {
+        const charCode = evt.keyCode;
+        if (charCode !== 46
+            && charCode !== 110
+            && charCode !== 190
+            && charCode > 31
+            && (charCode < 48 || charCode > 57)
+            && (charCode < 96 || charCode > 105)) {
+            evt.preventDefault();
+        }
+    }
+
 </script>
 <div class="options-container">
   <div class="options-background">
@@ -10,7 +23,8 @@
         <div class="txt">{amountLabel}</div>
         <div class="txt-options">{label}</div>
       </div>
-      <div class="options-input"><input type="text" bind:value={amount} autofocus></div>
+      <div class="options-input"><input type="text" bind:value={amount} autofocus on:keydown={(e)=>allowNumbersOnly(e)}>
+      </div>
     </div>
   </div>
 </div>

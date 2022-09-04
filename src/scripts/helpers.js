@@ -71,13 +71,14 @@ export async function fetchSubgraphData(activeNetwork, offchainAssetVault, callb
 export function getSubgraphData(activeNetwork, offchainAssetVault) {
     return new Promise(async (resolve, reject) => {
         const showTime = await fetchSubgraphData(activeNetwork, offchainAssetVault.toLowerCase())
-        let interval = setInterval(showTime, 2000)
-        if(showTime.offchainAssetVault){
-
+        let interval = setInterval(function () {
+            showTime
+        }, 2000)
+        if (showTime.offchainAssetVault) {
             clearInterval(interval)
             return resolve(showTime)
-
         }
+
     })
 }
 

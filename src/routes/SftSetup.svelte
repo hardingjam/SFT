@@ -70,11 +70,11 @@
         let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
         vault.set(newVault)
         //wait for sg data
-            await getSgData(newVault.address)
+        await getSgData(newVault.address)
     }
 
     async function getSgData(vaultAddress) {
-        getSubgraphData($activeNetwork, vaultAddress.toLowerCase()).then((res)=>{
+        getSubgraphData($activeNetwork, vaultAddress.toLowerCase()).then((res) => {
             if (res) {
                 data.set(res)
                 roles.set($data.offchainAssetVault.roles)

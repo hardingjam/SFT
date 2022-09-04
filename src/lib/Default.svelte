@@ -5,7 +5,7 @@
     import SftSetup from "../routes/SftSetup.svelte";
     import {ethers} from "ethers";
     import {onMount} from 'svelte';
-    import {Router, Route, navigateTo} from "yrv"
+    import {Router, Route, navigateTo, router} from "yrv"
     import Admin from "./../routes/Admin.svelte";
     import {icons} from '../scripts/assets.js'
     import Redeem from "../routes/Redeem.svelte";
@@ -22,7 +22,14 @@
         signerOrProvider: "",
     }
 
-    let location = window.location.pathname
+    let location = window.location.pathname;
+
+    router.subscribe(e => {
+        if (!e.initial) {
+            location = e.path
+        }
+    });
+
 
     let accountMenuOptions = [
         {

@@ -15,11 +15,14 @@
     let {signer, signerOrProvider, provider} = ethersData;
 
     onMount(async () => {
-        await setVault()
+        if(!$vault){
+            await setVault()
+        }
     });
 
     async function setVault() {
-        let contract = await getContract($activeNetwork, TEST_CONTRACT_ADDRESS, contractAbi, signerOrProvider)
+        let contractAddress = localStorage.getItem("vaultAddress")
+        let contract = await getContract($activeNetwork, contractAddress, contractAbi, signerOrProvider)
         vault.set(contract)
     }
 

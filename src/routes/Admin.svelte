@@ -6,13 +6,17 @@
     import {toSentenceCase} from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
 
-    let executorRoles = $roles.filter(r => !r.roleName.includes('_ADMIN'))
+    let executorRoles = $roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let validAccount = true;
     let account = '';
     let roleName = '';
 
     function goBack() {
         navigateTo("/setup", {replace: false});
+    }
+
+    function goToMint() {
+        navigateTo("/mint", {replace: false});
     }
 
     function handleRoleSelect(event) {
@@ -49,6 +53,7 @@
   <div class="admin-header">
     <span>Admin</span>
     <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
+    <button class="btn-back btn-hover" on:click={()=>goToMint()}>Mint/Redeem</button>
   </div>
   Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`} class="contract-address btn-hover"
               target="_blank">{$vault.address}</a>

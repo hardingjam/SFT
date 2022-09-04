@@ -1,6 +1,5 @@
 import {ethers} from "ethers";
-import {ONE, QUERY} from "./consts.js";
-import {activeNetwork} from "./store.js";
+import {ONE} from "./consts.js";
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -48,7 +47,7 @@ export function toSentenceCase(text) {
     return (txtArr.join(' '))
 }
 
-export async function fetchSubgraphData(activeNetwork, offchainAssetVault, callback) {
+export async function fetchSubgraphData(activeNetwork, variables, query) {
     if (activeNetwork) {
         let req = await fetch(activeNetwork.subgraph_url, {
             method: "POST",
@@ -56,29 +55,25 @@ export async function fetchSubgraphData(activeNetwork, offchainAssetVault, callb
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                query: QUERY,
-                variables: {id: offchainAssetVault}
+                query,
+                variables
             })
         });
 
-        let data = await req.json()
-
-        return data.data
+        return await req.json()
     }
 
 }
 
-export function getSubgraphData(activeNetwork, offchainAssetVault) {
+export function getSubgraphData(activeNetwork, variables, query, param) {
     return new Promise(async (resolve, reject) => {
-        const showTime = await fetchSubgraphData(activeNetwork, offchainAssetVault.toLowerCase())
-        let interval = setInterval(function () {
-            showTime
-        }, 2000)
-        if (showTime.offchainAssetVault) {
+        async function showTime (){ return await fetchSubgraphData(activeNetwork, variables, query)}
+        let interval = setInterval(showTime, 2000)
+        let data = await showTime()
+        if (data.data[param]) {
             clearInterval(interval)
-            return resolve(showTime)
+            return resolve(data)
         }
-
     })
 }
 

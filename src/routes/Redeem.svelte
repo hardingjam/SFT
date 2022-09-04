@@ -2,6 +2,11 @@
 
 
     import MintInput from "../components/MintInput.svelte";
+    import {getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {account, activeNetwork, data, roles, vault} from "../scripts/store.js";
+    import {onMount} from "svelte";
+    import contractAbi from "../contract/OffchainAssetVaultAbi.json";
+    import {ONE} from "../scripts/consts.js";
 
     let shouldDisable = false;
     let balance = 1234567;
@@ -12,50 +17,49 @@
         console.log(4545)
     }
 
-    let receipts = [
-        {
-            id: 12345678,
-            amount: 12345,
-            minted: "11/07/2022",
-        }, {
-            id: 12345678,
-            amount: 12345,
-            minted: "11/07/2022",
-        }, {
-            id: 12345678,
-            amount: 12345,
-            minted: "11/07/2022",
-        }, {
-            id: 12345678,
-            amount: 12345,
-            minted: "11/07/2022",
-        }, {
-            id: 12345678,
-            amount: 12345,
-            minted: "11/07/2022",
-        }, {
-            id: 12345678,
-            amount: 12345,
-            minted: "11/07/2022",
-        }, {
-            id: 12345678,
-            amount: 12345,
-            minted: "11/07/2022",
-        }, {
-            id: 12345678,
-            amount: 12345,
-            minted: "11/07/2022",
-        }, {
-            id: 12345678,
-            amount: 12345,
-            minted: "11/07/2022",
-        }, {
-            id: 12345678,
-            amount: 12345,
-            minted: "11/07/2022",
-        }
 
-    ]
+    let depositWithReceipts = []
+
+    let query = `
+          query($id: ID!) {
+            account(id: $id) {
+              depositWithReceipts{
+                id,
+                timestamp,
+                amount
+              }
+            }
+          }
+         `
+
+    //test
+    export let ethersData;
+    let {signer, signerOrProvider, provider} = ethersData;
+
+    async function setVault() {
+        let contractAddress = localStorage.getItem("vaultAddress")
+        let contract = await getContract($activeNetwork, contractAddress, contractAbi, signerOrProvider)
+        vault.set(contract)
+    }
+
+    //end test
+
+    onMount(async () => {
+        if (!$vault.address) {
+            await setVault()
+        }
+        getData()
+    });
+
+
+    function getData() {
+        let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
+        getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
+            depositWithReceipts = res.data.account.depositWithReceipts
+        })
+    }
+
+
 </script>
 
 
@@ -69,11 +73,11 @@
           <td class="f-weight-700">Amount</td>
           <td class="f-weight-700">Minted</td>
         </tr>
-        {#each receipts as receipt}
+        {#each depositWithReceipts as receipt}
           <tr>
             <td class="receipt-id"><input type="checkbox" class="check-box"/>{receipt.id}</td>
-            <td class="value">{receipt.amount}</td>
-            <td class="value">{receipt.minted}</td>
+            <td class="value">{receipt.amount / ONE}</td>
+            <td class="value">{receipt.timestamp}</td>
           </tr>
         {/each}
 

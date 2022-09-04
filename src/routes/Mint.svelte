@@ -15,11 +15,14 @@
     let {signer, signerOrProvider, provider} = ethersData;
 
     onMount(async () => {
-        await setVault()
+        if(!$vault){
+            await setVault()
+        }
     });
 
     async function setVault() {
-        let contract = await getContract($activeNetwork, TEST_CONTRACT_ADDRESS, contractAbi, signerOrProvider)
+        let contractAddress = localStorage.getItem("vaultAddress")
+        let contract = await getContract($activeNetwork, contractAddress, contractAbi, signerOrProvider)
         vault.set(contract)
     }
 
@@ -53,26 +56,11 @@
 
     async function mint() {
         try {
-            let quotePrice = 170178000000
-            let basePrice = 82871700
-
-            let shareRatio = fixedPointDiv(ethers.BigNumber.from(basePrice), ethers.BigNumber.from(quotePrice))
-
-            let erc20Contract = await getContract($activeNetwork, $activeNetwork.erc20ContractAddress, contractAbi, signerOrProvider)
-            const mintAmount = ethers.utils.parseEther(amount.toString());
-            let approve = await erc20Contract.connect(signer).approve($vault.address, mintAmount);
-            await approve.wait();
-
-            const shares = fixedPointMul(mintAmount, shareRatio);
-
+            const shares = ethers.utils.parseEther(amount.toString());
             const tx = await $vault
                 .connect(signer)
-                ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, [], {
-                gasLimit: 100000
-            });
-
+                ["mint(uint256,address)"](shares, $account);
             await tx.wait();
-
             amount = "";
         } catch (error) {
             console.log(error);

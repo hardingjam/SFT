@@ -6,6 +6,6 @@ export const CONTRACT_FACTORY_ADDRESS = {
     rinkeby: "0xEE95D90fCBDcFCCA629D3C56D733373C7B0121Ac"
 };
 export const SUBGRAPH_URL = "https://api.thegraph.com/subgraphs/name/gild-lab/offchainassetvault"
-export const TEST_CONTRACT_ADDRESS = "0x00a203cb9582be0d04b7504fef1fb355e91b4ecd";
+export const TEST_CONTRACT_ADDRESS = "0xad68ac25a5c36a7fcc70e4f2521c74c386540443";
 
 export const ONE = ethers.BigNumber.from("1000000000000000000");

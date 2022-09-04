@@ -219,26 +219,24 @@
         {#if $activeNetwork}
           <Route path="/setup" component={SftSetup} ethersData={ethersData}/>
           <Route path="/admin" component={Admin}/>
-          {#if location === '/mint' || location === "/redeem"}
-            <div class="tabs">
-              <div class="tab-buttons">
-                <button class:selected="{selectedTab === 'mint'}" class="tab-button"
-                        on:click="{() =>  changeUrl('mint')}">
-                  Mint
-                </button>
-                <button class:selected="{selectedTab === 'redeem'}" class="redeem-tab tab-button"
-                        on:click="{() =>  changeUrl('redeem')}">
-                  Redeem
-                </button>
-              </div>
 
-              <div class="tab-panel-container">
-                <Route path="/mint" component={Mint} ethersData={ethersData}/>
-                <Route path="/redeem" component={Redeem}/>
-              </div>
+          <div class={location === '/mint' || location === "/redeem" ? 'tabs show' : 'tabs hide'}>
+            <div class="tab-buttons">
+              <button class:selected="{selectedTab === 'mint'}" class="tab-button"
+                      on:click="{() =>  changeUrl('mint')}">
+                Mint
+              </button>
+              <button class:selected="{selectedTab === 'redeem'}" class="redeem-tab tab-button"
+                      on:click="{() =>  changeUrl('redeem')}">
+                Redeem
+              </button>
             </div>
-          {/if}
 
+            <div class="tab-panel-container">
+              <Route path="/mint" component={Mint} ethersData={ethersData}/>
+              <Route path="/redeem" component={Redeem}/>
+            </div>
+          </div>
         {/if}
         {#if !$activeNetwork}
           <div class="invalid-network">
@@ -355,4 +353,11 @@
     font-weight: 700;
   }
 
+  .show {
+    display: flex;
+  }
+
+  .hide {
+    display: none;
+  }
 </style>

@@ -5,8 +5,7 @@
     import {activeNetwork, vault} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {onMount} from "svelte";
-    import {fixedPointDiv, fixedPointMul, getContract} from "../scripts/helpers.js";
-    import {TEST_CONTRACT_ADDRESS} from "../scripts/consts.js";
+    import {getContract} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
 
 
@@ -15,7 +14,7 @@
     let {signer, signerOrProvider, provider} = ethersData;
 
     onMount(async () => {
-        if(!$vault){
+        if (!$vault.address) {
             await setVault()
         }
     });

@@ -234,7 +234,7 @@
 
             <div class="tab-panel-container">
               <Route path="/mint" component={Mint} ethersData={ethersData}/>
-              <Route path="/redeem" component={Redeem}/>
+              <Route path="/redeem" component={Redeem} ethersData={ethersData}/>
             </div>
           </div>
         {/if}

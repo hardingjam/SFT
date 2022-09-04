@@ -52,8 +52,11 @@
 <div class="sft-admin-container">
   <div class="admin-header">
     <span>Admin</span>
-    <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
-    <button class="btn-back btn-hover" on:click={()=>goToMint()}>Mint/Redeem</button>
+    <div>
+      <button class="btn-back btn-hover" on:click={()=>goToMint()}>Mint/Redeem</button>
+      <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
+    </div>
+
   </div>
   Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`} class="contract-address btn-hover"
               target="_blank">{$vault.address}</a>

@@ -4,7 +4,7 @@
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {onMount} from "svelte";
-    import {ADDRESS_ZERO, CONTRACT_FACTORY_ADDRESS, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
+    import {ADDRESS_ZERO, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
     import {getEventArgs, getContract, getSubgraphData} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
 
@@ -18,7 +18,7 @@
     let factoryContract;
 
     onMount(async () => {
-        factoryContract = await getContract($activeNetwork, CONTRACT_FACTORY_ADDRESS[$activeNetwork.name], contractFactoryAbi, signerOrProvider)
+        factoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, contractFactoryAbi, signerOrProvider)
     });
 
     // async function createToken() {
@@ -70,28 +70,26 @@
         let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
         vault.set(newVault)
         //wait for sg data
-        setTimeout(async function () {
             await getSgData(newVault.address)
-            navigateTo("/admin", {replace: false});
-        }, 2000)
-
-
     }
 
     async function getSgData(vaultAddress) {
-        let sgData = await getSubgraphData($activeNetwork.chainId, vaultAddress.toLowerCase())
-        if (sgData) {
-            data.set(sgData)
-            roles.set($data.offchainAssetVault.roles)
+        getSubgraphData($activeNetwork, vaultAddress.toLowerCase()).then((res)=>{
+            if (res) {
+                data.set(res)
+                roles.set($data.offchainAssetVault.roles)
 
-            let rolesFiltered = $roles.map(role => {
-                let roleRevokes = $data.offchainAssetVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
-                let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
-                let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
-                return {roleName: role.roleName, roleHolders: filtered}
-            })
-            roles.set(rolesFiltered)
-        }
+                let rolesFiltered = $roles.map(role => {
+                    let roleRevokes = $data.offchainAssetVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
+                    let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
+                    let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
+                    return {roleName: role.roleName, roleHolders: filtered}
+                })
+                roles.set(rolesFiltered)
+                navigateTo("/admin", {replace: false});
+            }
+        })
+
     }
 
     function filterArray(arr1, arr2) {

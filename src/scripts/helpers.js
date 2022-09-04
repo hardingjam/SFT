@@ -1,5 +1,6 @@
 import {ethers} from "ethers";
-import {ONE, SUBGRAPH_URL} from "./consts.js";
+import {ONE, QUERY} from "./consts.js";
+import {activeNetwork} from "./store.js";
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -47,61 +48,37 @@ export function toSentenceCase(text) {
     return (txtArr.join(' '))
 }
 
-export async function getSubgraphData(activeNetwork, offchainAssetVault) {
-    let id = offchainAssetVault
-    let query = `
-          query($id: ID!) {
-            offchainAssetVault(id: $id) {
-                id
-                address,
-                deployer,
-                admin,
-                name,
-                roles{
-                    roleName,
-                    roleHolders{
-                      account{
-                        address
-                      }
-                    }
-                },
-                roleRevokes{
-                    role{
-                        roleName
-                    }
-                    roleHolder{
-                        account{
-                          address
-                        }
-                    }
-                }
-            }
-          }
-         `;
+export async function fetchSubgraphData(activeNetwork, offchainAssetVault, callback) {
     if (activeNetwork) {
-        let req = await fetch(SUBGRAPH_URL, {
+        let req = await fetch(activeNetwork.subgraph_url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                query,
-                variables: {id}
+                query: QUERY,
+                variables: {id: offchainAssetVault}
             })
         });
 
         let data = await req.json()
-        // //sg needs some time to be updated, so if it does not give response immediately
-        // //after creating vault, we need to repeat the action
-        // while (!data.data.offchainAssetVault) {
-        //     setTimeout(async function () {
-        //         console.log(55)
-        //         await getSubgraphData(activeNetwork, offchainAssetVault)
-        //     }, 2000)
-        // }
+
         return data.data
     }
 
+}
+
+export function getSubgraphData(activeNetwork, offchainAssetVault) {
+    return new Promise(async (resolve, reject) => {
+        const showTime = await fetchSubgraphData(activeNetwork, offchainAssetVault.toLowerCase())
+        let interval = setInterval(showTime, 2000)
+        if(showTime.offchainAssetVault){
+
+            clearInterval(interval)
+            return resolve(showTime)
+
+        }
+    })
 }
 
 export function fixedPointMul(a, b) {

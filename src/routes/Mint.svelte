@@ -13,24 +13,18 @@
 
     let auditInfo = [
         {
-            label: "Meta Score 1",
-            value: 550
+            label: "PIE Certificate",
+            value: 0
         }, {
-            label: "Meta Score 1",
-            value: 234
+            label: " Producer Wallet",
+            value: 0
         }, {
-            label: "Meta Score 1",
-            value: 234
+            label: "Total Score",
+            value: 0
         }, {
-            label: "Meta Score 1",
-            value: 23456
-        }, {
-            label: "Meta Score 1",
-            value: 233
-        }, {
-            label: "Meta Score 1",
-            value: 123123
-        },
+            label: "Max Options",
+            value: 0
+        }
     ]
 
     async function mint() {
@@ -58,20 +52,22 @@
     <div class="audit-info basic-frame">
       <span class="title f-weight-700">Audit info.</span>
       <table>
-        <tr>
-          <td>PIE Certificate Number</td>
-          <td class="value">12312312414</td>
-        </tr>
+        <!--        <tr>-->
+        <!--          <td>PIE Certificate Number</td>-->
+        <!--          <td class="value">12312312414</td>-->
+        <!--        </tr>-->
         {#each auditInfo as info}
-          <tr>
+          <tr class="info-row">
             <td>{info.label}</td>
-            <td class="value">{info.value}</td>
+            <td class="value">
+              <input type="text" class="default-input" bind:value={info.value}>
+            </td>
           </tr>
         {/each}
         <tr>
           <td>Upload PIE Certificate</td>
           <td>
-            <button class="default-btn">Upload</button>
+            <button class="default-btn value">Upload</button>
           </td>
         </tr>
 
@@ -137,6 +133,13 @@
         margin-top: 10px;
     }
 
+    .default-input {
+        width: 63px;
+    }
+
+    .info-row:hover input {
+        border: 2px solid #A0C7DD;
+    }
 
 </style>
 

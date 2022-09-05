@@ -138,6 +138,19 @@ button:focus, button:focus-visible {
     border-radius: 10px;
 }
 
+.default-input {
+    width: 370px;
+    height: 28px;
+    background: #ECECEC;
+    border-radius: 5px;
+    margin-bottom: 7px;
+    padding-left: 13px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 27px;
+}
+
 @media (prefers-color-scheme: light) {
 
 }

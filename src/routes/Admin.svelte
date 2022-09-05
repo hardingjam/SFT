@@ -103,7 +103,7 @@
           {/if}
         </div>
         <label class="f-weight-700">Address:</label>
-        <input type="text" class="{validAccount ? 'account-input' : 'account-input invalid-input'}"
+        <input type="text" class="{validAccount ? 'default-input' : 'default-input invalid-input'}"
                bind:value={account}>
         <br>
         <button class="default-btn" on:click={grantRole}>Enter</button>
@@ -206,18 +206,7 @@
 
     }
 
-    .account-input {
-        width: 370px;
-        height: 28px;
-        background: #ECECEC;
-        border-radius: 5px;
-        margin-bottom: 7px;
-        padding-left: 13px;
-        font-style: normal;
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 27px;
-    }
+
 
     table {
         width: 100%;

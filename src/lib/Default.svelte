@@ -61,6 +61,7 @@
             await setNetwork()
             connectedAccount = await getMetamaskConnectedAccount()
             if (connectedAccount) {
+                account.set(connectedAccount)
                 navigateTo(location || '#', {replace: false})
             } else {
                 localStorage.removeItem('account')

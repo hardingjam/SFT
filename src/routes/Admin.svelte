@@ -12,11 +12,11 @@
     let roleName = '';
 
     function goBack() {
-        navigateTo("/setup", {replace: false});
+        navigateTo("#setup", {replace: false});
     }
 
     function goToMint() {
-        navigateTo("/mint", {replace: false});
+        navigateTo("#mint", {replace: false});
     }
 
     function handleRoleSelect(event) {

@@ -92,7 +92,7 @@
                     return {roleName: role.roleName, roleHolders: filtered}
                 })
                 roles.set(rolesFiltered)
-                navigateTo("/admin", {replace: false});
+                navigateTo("#admin", {replace: false});
             }
         })
 

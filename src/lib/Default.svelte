@@ -22,11 +22,13 @@
         signerOrProvider: "",
     }
 
-    let location = window.location.pathname;
+    let location = window.location.hash;
+    let selectedTab = 'mint'
 
     router.subscribe(e => {
         if (!e.initial) {
             location = e.path
+            selectedTab = location.slice(1) || 'mint'
         }
     });
 
@@ -59,9 +61,7 @@
             await setNetwork()
             connectedAccount = await getMetamaskConnectedAccount()
             if (connectedAccount) {
-
-                account.set(connectedAccount)
-                navigateTo(location, {replace: false})
+                navigateTo(location || '#', {replace: false})
             } else {
                 localStorage.removeItem('account')
             }
@@ -75,11 +75,9 @@
                     localStorage.setItem('account', $account)
                 }
             });
-
-
         }
-        if (location === '/') {
-            navigateTo('/setup')
+        if (location === '') {
+            navigateTo('#setup')
         }
     });
 
@@ -167,10 +165,8 @@
         }
     }
 
-    let selectedTab = location.slice(1) || 'mint'
-
     function changeUrl(tab) {
-        navigateTo('/' + tab)
+        navigateTo('#' + tab)
         selectedTab = tab
     }
 
@@ -217,10 +213,10 @@
     {#if $account}
       <div class="main-card">
         {#if $activeNetwork}
-          <Route path="/setup" component={SftSetup} ethersData={ethersData}/>
-          <Route path="/admin" component={Admin}/>
+          <Route path="#setup" component={SftSetup} ethersData={ethersData}/>
+          <Route path="#admin" component={Admin}/>
 
-          <div class={location === '/mint' || location === "/redeem" ? 'tabs show' : 'tabs hide'}>
+          <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
               <button class:selected="{selectedTab === 'mint'}" class="tab-button"
                       on:click="{() =>  changeUrl('mint')}">
@@ -233,8 +229,8 @@
             </div>
 
             <div class="tab-panel-container">
-              <Route path="/mint" component={Mint} ethersData={ethersData}/>
-              <Route path="/redeem" component={Redeem} ethersData={ethersData}/>
+              <Route path="#mint" component={Mint} ethersData={ethersData}/>
+              <Route path="#redeem" component={Redeem} ethersData={ethersData}/>
             </div>
           </div>
         {/if}

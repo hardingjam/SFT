@@ -58,7 +58,9 @@
             const shares = ethers.utils.parseEther(amount.toString());
             const tx = await $vault
                 .connect(signer)
-                ["mint(uint256,address)"](shares, $account);
+                ["mint(uint256,address)"](shares, $account, {
+                gasLimit: 1000000
+            });
             await tx.wait();
             amount = "";
         } catch (error) {

@@ -4,6 +4,7 @@
     import Dropdown from 'sv-bootstrap-dropdown';
 
     export let options;
+    export let showExpand = true;
     export let label;
     export let staticLabel = '';
     export let className;
@@ -42,7 +43,9 @@
     >
       <slot name="icon"></slot>
       <span class="select-label">{selected && !staticLabel ? selected : label}</span>
-      <img class="expand" src={expandIcon} alt="expand"/>
+      {#if showExpand}
+        <img class="expand" src={expandIcon} alt="expand"/>
+      {/if}
     </button>
     <div slot="DropdownMenu" class={`${dropDownClass} dropdown`}>
       {#each options as option}

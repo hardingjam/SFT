@@ -68,6 +68,38 @@
             },
         }
     ]
+
+    let menuItems = [
+        {
+            id: "setup",
+            displayName: "SFT Setup",
+            action: () => {
+                navigateTo('#setup',{replace:false})
+            }
+        },
+        {
+            id: "admin",
+            displayName: "Token Admin",
+            action: () => {
+                navigateTo('#admin',{replace:false})
+            }
+        },
+        {
+            id: "mint",
+            displayName: "Mint/Redeem",
+            action: () => {
+                navigateTo('#mint',{replace:false})
+            }
+        },
+        {
+            id: "list",
+            displayName: "Token List",
+            action: () => {
+                navigateTo('#list',{replace:false})
+            }
+        },
+    ]
+
     onMount(async () => {
         await setVault()
         if (isMetamaskInstalled) {
@@ -205,6 +237,12 @@
                   label={$account.replace(/(.{6}).*(.{4})/, "$1…$2")}
                   staticLabel={true} dropDownClass={'nav-dropdown'}>
           </Select>
+
+          <Select className={'meinMenu'} options={menuItems}
+                  label="&#9776;"
+                  staticLabel={true} showExpand="{false}">
+          </Select>
+
         </div>
       {/if}
 
@@ -369,5 +407,9 @@
 
   .hide {
     display: none;
+  }
+
+  .burger-menu{
+
   }
 </style>

@@ -1,15 +1,24 @@
 <script>
-    import {vault, activeNetwork, roles} from "../scripts/store.js";
+    import {vault, activeNetwork, roles, data} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
-    import {toSentenceCase} from "../scripts/helpers.js";
+    import {filterArray, getSubgraphData, toSentenceCase} from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
+    import {QUERY} from "../scripts/consts.js";
+    import {onMount} from "svelte";
 
-    let executorRoles = $roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
+    let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let validAccount = true;
     let account = '';
     let roleName = '';
+
+    onMount(async () => {
+            if ($vault) {
+                await getSgData($vault.address)
+            }
+        }
+    )
 
     function goBack() {
         navigateTo("#setup", {replace: false});
@@ -48,6 +57,25 @@
             console.log(err)
         }
     }
+
+    async function getSgData(vaultAddress) {
+        let variables = {id: vaultAddress.toLowerCase()}
+
+        getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetVault').then((res) => {
+            if (res && res.data) {
+                data.set(res.data)
+                roles.set($data.offchainAssetVault.roles)
+                let rolesFiltered = $roles.map(role => {
+                    let roleRevokes = $data.offchainAssetVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
+                    let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
+                    let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
+                    return {roleName: role.roleName, roleHolders: filtered}
+                })
+                roles.set(rolesFiltered)
+                executorRoles = $roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
+            }
+        })
+    }
 </script>
 <div class="sft-admin-container">
   <div class="admin-header">
@@ -67,9 +95,12 @@
       <div>
         <div class="display-flex">
           <label class="f-weight-700">Role:</label>
-          <Select options={$roles.map(r=>r = {...r,displayName: toSentenceCase(r.roleName)})}
-                  on:select={handleRoleSelect}
-                  label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+          {#if $roles.length}
+            <Select options={$roles.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
+
+                    on:select={handleRoleSelect}
+                    label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+          {/if}
         </div>
         <label class="f-weight-700">Address:</label>
         <input type="text" class="{validAccount ? 'account-input' : 'account-input invalid-input'}"

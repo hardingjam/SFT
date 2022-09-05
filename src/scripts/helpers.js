@@ -84,3 +84,9 @@ export function fixedPointMul(a, b) {
 export function fixedPointDiv(a, b) {
     return a.mul(ONE).div(b);
 }
+
+export function filterArray(arr1, arr2) {
+    return arr1.filter(a => {
+        return arr2.indexOf(a.account.address) === -1
+    })
+}

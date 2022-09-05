@@ -5,7 +5,7 @@
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {onMount} from "svelte";
     import {ADDRESS_ZERO, QUERY, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
-    import {getEventArgs, getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
 
     let name = "";
@@ -79,9 +79,7 @@
         let variables = {id: vaultAddress.toLowerCase()}
 
         getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetVault').then((res) => {
-            console.log(45)
             if (res && res.data) {
-                console.log(res.data)
                 data.set(res.data)
                 roles.set($data.offchainAssetVault.roles)
 
@@ -98,11 +96,7 @@
 
     }
 
-    function filterArray(arr1, arr2) {
-        return arr1.filter(a => {
-            return arr2.indexOf(a.account.address) === -1
-        })
-    }
+
 
 
 </script>

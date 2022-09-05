@@ -2,10 +2,9 @@
 
 
     import MintInput from "../components/MintInput.svelte";
-    import {getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {getSubgraphData} from "../scripts/helpers.js";
     import {account, activeNetwork, data, roles, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
-    import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import {ONE} from "../scripts/consts.js";
 
     let shouldDisable = false;
@@ -32,22 +31,7 @@
           }
          `
 
-    //test
-    export let ethersData;
-    let {signer, signerOrProvider, provider} = ethersData;
-
-    async function setVault() {
-        let contractAddress = localStorage.getItem("vaultAddress")
-        let contract = await getContract($activeNetwork, contractAddress, contractAbi, signerOrProvider)
-        vault.set(contract)
-    }
-
-    //end test
-
     onMount(async () => {
-        if (!$vault.address) {
-            await setVault()
-        }
         getData()
     });
 

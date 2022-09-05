@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, account, data} from "../scripts/store.js";
+    import {activeNetwork, account, data, vault} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -10,6 +10,8 @@
     import {icons} from '../scripts/assets.js'
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
+    import {getContract} from "../scripts/helpers.js";
+    import contractAbi from "../contract/OffchainAssetVaultAbi.json";
 
     let connectedAccount;
     export let url = '';
@@ -25,13 +27,23 @@
     let location = window.location.hash;
     let selectedTab = 'mint'
 
-    router.subscribe(e => {
+    router.subscribe(async e => {
         if (!e.initial) {
+            await setVault()
             location = e.path
             selectedTab = location.slice(1) || 'mint'
         }
     });
 
+    async function setVault() {
+        let contractAddress = localStorage.getItem("vaultAddress")
+        let contract = await getContract($activeNetwork, contractAddress, contractAbi, ethersData.signerOrProvider)
+        if (contract) {
+            vault.set(contract)
+        } else {
+            navigateTo("#setup", {replace: false})
+        }
+    }
 
     let accountMenuOptions = [
         {
@@ -57,6 +69,7 @@
         }
     ]
     onMount(async () => {
+        await setVault()
         if (isMetamaskInstalled) {
             await setNetwork()
             connectedAccount = await getMetamaskConnectedAccount()

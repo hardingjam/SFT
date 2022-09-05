@@ -2,31 +2,11 @@
     import {icons} from "../scripts/assets.js";
     import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
-    import {activeNetwork, vault} from "../scripts/store.js";
+    import {vault} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
-    import {onMount} from "svelte";
-    import {getContract} from "../scripts/helpers.js";
-    import contractAbi from "../contract/OffchainAssetVaultAbi.json";
 
-
-    //test
     export let ethersData;
-    let {signer, signerOrProvider, provider} = ethersData;
-
-    onMount(async () => {
-        if (!$vault.address) {
-            await setVault()
-        }
-    });
-
-    async function setVault() {
-        let contractAddress = localStorage.getItem("vaultAddress")
-        let contract = await getContract($activeNetwork, contractAddress, contractAbi, signerOrProvider)
-        vault.set(contract)
-    }
-
-    //end test
-
+    let {signer} = ethersData;
 
     let amount = 0;
     let shouldDisable = false
@@ -60,7 +40,7 @@
                 .connect(signer)
                 ["mint(uint256,address)"](shares, $account);
             await tx.wait();
-            amount = "";
+            amount = 0;
         } catch (error) {
             console.log(error);
         }

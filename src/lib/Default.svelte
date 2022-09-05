@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, account, data, vault} from "../scripts/store.js";
+    import {activeNetwork, account, data, vault, tokens} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -10,8 +10,9 @@
     import {icons} from '../scripts/assets.js'
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import {getContract} from "../scripts/helpers.js";
+    import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
+    import Tokens from "../routes/Tokens.svelte";
 
     let connectedAccount;
     export let url = '';
@@ -74,28 +75,28 @@
             id: "setup",
             displayName: "SFT Setup",
             action: () => {
-                navigateTo('#setup',{replace:false})
+                navigateTo('#setup', {replace: false})
             }
         },
         {
             id: "admin",
             displayName: "Token Admin",
             action: () => {
-                navigateTo('#admin',{replace:false})
+                navigateTo('#admin', {replace: false})
             }
         },
         {
             id: "mint",
             displayName: "Mint/Redeem",
             action: () => {
-                navigateTo('#mint',{replace:false})
+                navigateTo('#mint', {replace: false})
             }
         },
         {
             id: "list",
             displayName: "Token List",
             action: () => {
-                navigateTo('#list',{replace:false})
+                navigateTo('#list', {replace: false})
             }
         },
     ]
@@ -124,6 +125,9 @@
         }
         if (location === '') {
             navigateTo('#setup')
+        }
+        if ($account) {
+            await getTokens()
         }
     });
 
@@ -216,6 +220,22 @@
         selectedTab = tab
     }
 
+    async function getTokens() {
+        let query = `
+        query {
+          offchainAssetVaults{
+            deployer,
+            name,
+            address
+          }
+        }`
+
+        getSubgraphData($activeNetwork, {}, query, 'offchainAssetVaults').then((res) => {
+            let temp = res.data.offchainAssetVaults.filter(token => token.deployer === $account.toLowerCase())
+            tokens.set(temp)
+        })
+    }
+
 </script>
 <Router url={url}>
 
@@ -267,6 +287,7 @@
         {#if $activeNetwork}
           <Route path="#setup" component={SftSetup} ethersData={ethersData}/>
           <Route path="#admin" component={Admin}/>
+          <Route path="#list" component={Tokens}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -409,7 +430,4 @@
     display: none;
   }
 
-  .burger-menu{
-
-  }
 </style>

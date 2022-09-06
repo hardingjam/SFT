@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, account, data, vault} from "../scripts/store.js";
+    import {activeNetwork, account, vault, tokens, ethersData} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -10,19 +10,15 @@
     import {icons} from '../scripts/assets.js'
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import {getContract} from "../scripts/helpers.js";
+    import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
+    import Tokens from "../routes/Tokens.svelte";
 
     let connectedAccount;
+    let tokenName = '';
     export let url = '';
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
-
-    let ethersData = {
-        provider: "",
-        signer: "",
-        signerOrProvider: "",
-    }
 
     let location = window.location.hash;
     let selectedTab = 'mint'
@@ -30,14 +26,20 @@
     router.subscribe(async e => {
         if (!e.initial) {
             await setVault()
+            if ($vault.address) {
+                tokenName = await $vault.name()
+            }
             location = e.path
             selectedTab = location.slice(1) || 'mint'
+            if (location === "#list" && $tokens.length) {
+                navigateTo("#list", {replace: false})
+            }
         }
     });
 
-    async function setVault() {
+    export async function setVault() {
         let contractAddress = localStorage.getItem("vaultAddress")
-        let contract = await getContract($activeNetwork, contractAddress, contractAbi, ethersData.signerOrProvider)
+        let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider)
         if (contract) {
             vault.set(contract)
         } else {
@@ -68,6 +70,38 @@
             },
         }
     ]
+
+    let menuItems = [
+        {
+            id: "setup",
+            displayName: "SFT Setup",
+            action: () => {
+                navigateTo('#setup', {replace: false})
+            }
+        },
+        {
+            id: "admin",
+            displayName: "Token Admin",
+            action: () => {
+                navigateTo('#admin', {replace: false})
+            }
+        },
+        {
+            id: "mint",
+            displayName: "Mint/Redeem",
+            action: () => {
+                navigateTo('#mint', {replace: false})
+            }
+        },
+        {
+            id: "list",
+            displayName: "Token List",
+            action: () => {
+                navigateTo('#list', {replace: false})
+            }
+        },
+    ]
+
     onMount(async () => {
         await setVault()
         if (isMetamaskInstalled) {
@@ -93,21 +127,27 @@
         if (location === '') {
             navigateTo('#setup')
         }
+        if ($account) {
+            await getTokens()
+        }
     });
 
 
     async function getEthersData() {
         if (window.ethereum) {
-            ethersData.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-            ethersData.signer = ethersData.provider.getSigner();
-            ethersData.signerOrProvider = ethersData.signer ? ethersData.signer : ethersData.provider;
+            let temp = {}
+            temp.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+            temp.signer = temp.provider.getSigner();
+            temp.signerOrProvider = temp.signer ? temp.signer : temp.provider;
+
+            ethersData.set(temp)
         }
     }
 
     getEthersData()
 
     async function setNetwork() {
-        let network = await ethersData.provider.getNetwork();
+        let network = await $ethersData.provider.getNetwork();
         let connectedChainId = parseInt(network.chainId);
         let temp = networks.find(
             (network) => network.chainId === connectedChainId
@@ -174,7 +214,7 @@
 
     async function getMetamaskConnectedAccount() {
         if (isMetamaskInstalled) {
-            const accounts = await ethersData.provider.listAccounts();
+            const accounts = await $ethersData.provider.listAccounts();
             return accounts.length > 0 ? accounts[0] : null;
         }
     }
@@ -184,14 +224,30 @@
         selectedTab = tab
     }
 
+    async function getTokens() {
+        let query = `
+        query {
+          offchainAssetVaults{
+            deployer,
+            name,
+            address
+          }
+        }`
+
+        getSubgraphData($activeNetwork, {}, query, 'offchainAssetVaults').then((res) => {
+            let temp = res.data.offchainAssetVaults.filter(token => token.deployer === $account.toLowerCase())
+            tokens.set(temp)
+        })
+    }
+
 </script>
 <Router url={url}>
 
   <div class="">
     <div class="default-header">
-      <div class="logo">
+      <div class="logo" on:click={()=>{window.location.href = '/'}}>
         <img src={icons.logo} alt="sft logo">
-        <div class="logo-label">{$data?.offchainAssetVault?.name || ''}</div>
+        <div class="logo-label">{tokenName}</div>
       </div>
       {#if $account}
         <div class="menu">
@@ -205,6 +261,12 @@
                   label={$account.replace(/(.{6}).*(.{4})/, "$1…$2")}
                   staticLabel={true} dropDownClass={'nav-dropdown'}>
           </Select>
+
+          <Select className={'meinMenu'} options={menuItems}
+                  label="&#9776;"
+                  staticLabel={true} showExpand="{false}">
+          </Select>
+
         </div>
       {/if}
 
@@ -227,8 +289,9 @@
     {#if $account}
       <div class="main-card">
         {#if $activeNetwork}
-          <Route path="#setup" component={SftSetup} ethersData={ethersData}/>
+          <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
           <Route path="#admin" component={Admin}/>
+          <Route path="#list" component={Tokens}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -243,8 +306,8 @@
             </div>
 
             <div class="tab-panel-container">
-              <Route path="#mint" component={Mint} ethersData={ethersData}/>
-              <Route path="#redeem" component={Redeem} ethersData={ethersData}/>
+              <Route path="#mint" component={Mint} ethersData={$ethersData}/>
+              <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
             </div>
           </div>
         {/if}
@@ -271,6 +334,10 @@
     padding-left: 167px;
     width: 100%;
     padding-right: 65px;
+  }
+
+  .logo {
+    cursor: pointer;
   }
 
   .logo-label {
@@ -370,4 +437,5 @@
   .hide {
     display: none;
   }
+
 </style>

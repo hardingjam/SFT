@@ -1,16 +1,16 @@
 <script>
-    import {tokens} from "../scripts/store.js";
+    import {activeNetwork, ethersData, tokens, vault} from "../scripts/store.js";
+    import {getContract} from "../scripts/helpers.js";
+    import contractAbi from "../contract/OffchainAssetVaultAbi.json";
+    import {navigateTo} from "yrv";
 
-    import {onMount} from "svelte";
-
-    let account = '';
-
-    onMount(async () => {
-        console.log(555)}
-    )
-
-    function handleTokenSelect(token) {
-        console.log(token)
+    async function handleTokenSelect(token) {
+        let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
+        if (contract) {
+            vault.set(contract)
+            localStorage.setItem("vaultAddress", token.address)
+            navigateTo("#admin")
+        }
     }
 
 </script>
@@ -20,9 +20,8 @@
   </div>
   <div class="tokens-container">
     <div class="tokens f-weight-700">
-
       {#each $tokens as token }
-        <div class="token btn-hover" >{token.name}</div>
+        <div class="token btn-hover" on:click={()=>{handleTokenSelect(token)}}>{token.name}</div>
       {/each}
     </div>
   </div>

@@ -14,7 +14,7 @@
     let roleName = '';
 
     onMount(async () => {
-            if ($vault) {
+            if ($vault && $vault.address) {
                 await getSgData($vault.address)
             }
         }
@@ -22,10 +22,6 @@
 
     function goBack() {
         navigateTo("#setup", {replace: false});
-    }
-
-    function goToMint() {
-        navigateTo("#mint", {replace: false});
     }
 
     function handleRoleSelect(event) {
@@ -81,7 +77,6 @@
   <div class="admin-header">
     <span>Admin</span>
     <div>
-      <button class="btn-back btn-hover" on:click={()=>goToMint()}>Mint/Redeem</button>
       <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
     </div>
 

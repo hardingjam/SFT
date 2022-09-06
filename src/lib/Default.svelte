@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, account, data, vault, tokens} from "../scripts/store.js";
+    import {activeNetwork, account, data, vault, tokens, ethersData} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -19,12 +19,6 @@
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
 
-    let ethersData = {
-        provider: "",
-        signer: "",
-        signerOrProvider: "",
-    }
-
     let location = window.location.hash;
     let selectedTab = 'mint'
 
@@ -33,12 +27,15 @@
             await setVault()
             location = e.path
             selectedTab = location.slice(1) || 'mint'
+            if (location === "#list" && $tokens.length) {
+                navigateTo("#list", {replace: false})
+            }
         }
     });
 
-    async function setVault() {
+    export async function setVault() {
         let contractAddress = localStorage.getItem("vaultAddress")
-        let contract = await getContract($activeNetwork, contractAddress, contractAbi, ethersData.signerOrProvider)
+        let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider)
         if (contract) {
             vault.set(contract)
         } else {
@@ -134,16 +131,19 @@
 
     async function getEthersData() {
         if (window.ethereum) {
-            ethersData.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-            ethersData.signer = ethersData.provider.getSigner();
-            ethersData.signerOrProvider = ethersData.signer ? ethersData.signer : ethersData.provider;
+            let temp = {}
+            temp.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+            temp.signer = temp.provider.getSigner();
+            temp.signerOrProvider = temp.signer ? temp.signer : temp.provider;
+
+            ethersData.set(temp)
         }
     }
 
     getEthersData()
 
     async function setNetwork() {
-        let network = await ethersData.provider.getNetwork();
+        let network = await $ethersData.provider.getNetwork();
         let connectedChainId = parseInt(network.chainId);
         let temp = networks.find(
             (network) => network.chainId === connectedChainId
@@ -210,7 +210,7 @@
 
     async function getMetamaskConnectedAccount() {
         if (isMetamaskInstalled) {
-            const accounts = await ethersData.provider.listAccounts();
+            const accounts = await $ethersData.provider.listAccounts();
             return accounts.length > 0 ? accounts[0] : null;
         }
     }
@@ -285,7 +285,7 @@
     {#if $account}
       <div class="main-card">
         {#if $activeNetwork}
-          <Route path="#setup" component={SftSetup} ethersData={ethersData}/>
+          <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
           <Route path="#admin" component={Admin}/>
           <Route path="#list" component={Tokens}/>
 
@@ -302,8 +302,8 @@
             </div>
 
             <div class="tab-panel-container">
-              <Route path="#mint" component={Mint} ethersData={ethersData}/>
-              <Route path="#redeem" component={Redeem} ethersData={ethersData}/>
+              <Route path="#mint" component={Mint} ethersData={$ethersData}/>
+              <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
             </div>
           </div>
         {/if}

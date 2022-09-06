@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, account, data, vault, tokens, ethersData} from "../scripts/store.js";
+    import {activeNetwork, account, vault, tokens, ethersData} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -15,6 +15,7 @@
     import Tokens from "../routes/Tokens.svelte";
 
     let connectedAccount;
+    let tokenName = '';
     export let url = '';
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
@@ -25,6 +26,9 @@
     router.subscribe(async e => {
         if (!e.initial) {
             await setVault()
+            if ($vault.address) {
+                tokenName = await $vault.name()
+            }
             location = e.path
             selectedTab = location.slice(1) || 'mint'
             if (location === "#list" && $tokens.length) {
@@ -241,9 +245,9 @@
 
   <div class="">
     <div class="default-header">
-      <div class="logo">
+      <div class="logo" on:click={()=>{window.location.href = '/'}}>
         <img src={icons.logo} alt="sft logo">
-        <div class="logo-label">{$data?.offchainAssetVault?.name || ''}</div>
+        <div class="logo-label">{tokenName}</div>
       </div>
       {#if $account}
         <div class="menu">
@@ -330,6 +334,10 @@
     padding-left: 167px;
     width: 100%;
     padding-right: 65px;
+  }
+
+  .logo {
+    cursor: pointer;
   }
 
   .logo-label {

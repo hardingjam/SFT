@@ -7,6 +7,7 @@
     import {icons} from "../scripts/assets.js";
     import {QUERY} from "../scripts/consts.js";
     import {onMount} from "svelte";
+    import DefaultFrame from "../components/DefaultFrame.svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let validAccount = true;
@@ -73,17 +74,11 @@
         })
     }
 </script>
-<div class="sft-admin-container default-frame">
-  <div class="admin-header">
-    <span>Admin</span>
-    <div>
-      <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
-    </div>
-
+<DefaultFrame header="Admin">
+  <div slot="header-buttons">
+    <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
   </div>
-  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`} class="contract-address btn-hover"
-              target="_blank">{$vault.address}</a>
-  <div class="roles-container">
+  <div slot="content">
     <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
     <div class="roles">
       <div class="grant-role-txt f-weight-700">Grant a role</div>
@@ -126,18 +121,10 @@
       </div>
     </div>
   </div>
-</div>
-<style>
-    .sft-admin-container {
-        width: 697px;
-    }
+</DefaultFrame>
 
-    .admin-header {
-        color: #ffffff;
-        display: flex;
-        justify-content: space-between;
-        padding: 5px 25px 10px 35px;
-    }
+
+<style>
 
     .btn-back {
         box-sizing: border-box;
@@ -151,24 +138,13 @@
         outline: none;
     }
 
-    .roles-container {
-        background: #FFFFFF;
-        border-radius: 10px;
-        color: #000000;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-
-    }
-
     .roles {
         text-align: left;
-        margin-left: 60px;
     }
 
     .roles-data {
         overflow: auto;
-        height: calc(100vh - 480px);
+        height: calc(100vh - 515px);
         display: flex;
         width: 100%;
         justify-content: space-between;
@@ -183,21 +159,13 @@
         line-height: 20px;
     }
 
-    .contract-address {
-        text-decoration: none;
-        color: #ffffff;
-    }
-
     .grant-role-txt {
         margin-bottom: 25px;
         margin-top: 5px;
         font-style: normal;
         font-size: 16px;
         line-height: 27px;
-
     }
-
-
 
     table {
         width: 100%;

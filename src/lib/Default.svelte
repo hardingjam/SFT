@@ -13,6 +13,7 @@
     import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
+    import Members from "../routes/Members.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -81,7 +82,7 @@
         },
         {
             id: "admin",
-            displayName: "Token Admin",
+            displayName: "Manage Token",
             action: () => {
                 navigateTo('#admin', {replace: false})
             }
@@ -98,6 +99,13 @@
             displayName: "Token List",
             action: () => {
                 navigateTo('#list', {replace: false})
+            }
+        },
+        {
+            id: "members",
+            displayName: "Members",
+            action: () => {
+                navigateTo('#members', {replace: false})
             }
         },
     ]
@@ -292,6 +300,7 @@
           <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
           <Route path="#admin" component={Admin}/>
           <Route path="#list" component={Tokens}/>
+          <Route path="#members" component={Members}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

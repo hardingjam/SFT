@@ -73,7 +73,7 @@
         })
     }
 </script>
-<div class="sft-admin-container">
+<div class="sft-admin-container default-frame">
   <div class="admin-header">
     <span>Admin</span>
     <div>
@@ -130,10 +130,6 @@
 <style>
     .sft-admin-container {
         width: 697px;
-        background: rgba(44, 44, 84, 0.33);
-        border-radius: 20px;
-        padding: 12px;
-        color: #ffffff;
     }
 
     .admin-header {

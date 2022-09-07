@@ -230,7 +230,9 @@
           offchainAssetVaults(orderBy:deployTimestamp orderDirection:desc){
             deployer,
             name,
-            address
+            address,
+            uri,
+            symbol
           }
         }`
 

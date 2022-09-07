@@ -44,6 +44,16 @@
     }
 
 
+    function timeStampToDate(timeStamp) {
+        if (timeStamp) {
+            let d = new Date(timeStamp * 1000)
+            let day = d.getDate();
+            let month = d.getMonth()+1;
+            let year = d.getFullYear()
+            return day+'/'+month+"/" + year
+        }
+    }
+
 </script>
 
 
@@ -61,7 +71,7 @@
           <tr>
             <td class="receipt-id"><input type="checkbox" class="check-box"/>{receipt.id}</td>
             <td class="value">{receipt.amount / ONE}</td>
-            <td class="value">{receipt.timestamp}</td>
+            <td class="value">{timeStampToDate(receipt.timestamp)}</td>
           </tr>
         {/each}
 

@@ -81,7 +81,7 @@
         },
         {
             id: "admin",
-            displayName: "Token Admin",
+            displayName: "Admin",
             action: () => {
                 navigateTo('#admin', {replace: false})
             }

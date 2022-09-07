@@ -57,7 +57,7 @@
 
 
 <div class="redeem-container">
-  <div class="title"><span class="f-weight-700">Total Supply: (FT):</span> {$data?.offchainAssetVault?.totalShares / ONE}</div>
+  <div class="title"><span class="f-weight-700">Total Supply: (FT):</span> {$data?.offchainAssetVault?.totalShares / ONE || 0}</div>
   <div class=" basic-frame-parent">
     <div class="receipts-table-container basic-frame">
       <table class="receipts-table">

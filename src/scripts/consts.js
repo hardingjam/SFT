@@ -8,7 +8,8 @@ export const ONE = ethers.BigNumber.from("1000000000000000000");
 export const QUERY = `
           query($id: ID!) {
             offchainAssetVault(id: $id) {
-                id
+                id,
+                totalShares,
                 address,
                 deployer,
                 admin,

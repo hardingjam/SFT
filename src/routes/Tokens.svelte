@@ -39,6 +39,7 @@
 </div>
 <style>
     .sft-tokens-container {
+        min-width: 550px;
         background: rgba(44, 44, 84, 0.33);
         border-radius: 20px;
         padding: 12px;

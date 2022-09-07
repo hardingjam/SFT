@@ -8,7 +8,6 @@
     import {ONE} from "../scripts/consts.js";
 
     let shouldDisable = false;
-    let balance = 1234567;
     let amount = 0;
 
 
@@ -37,7 +36,7 @@
 
 
     function getData() {
-        let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
+        let variables = {id: `${$vault.address.toLowerCase()}-${$data?.offchainAssetVault?.deployer.toLowerCase()}`}
         getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
             depositWithReceipts = res.data.account.depositWithReceipts
         })
@@ -58,7 +57,7 @@
 
 
 <div class="redeem-container">
-  <div class="title"><span class="f-weight-700">Token Balance (FT):</span> {balance}</div>
+  <div class="title"><span class="f-weight-700">Total Supply: (FT):</span> {$data?.offchainAssetVault?.totalShares / ONE}</div>
   <div class=" basic-frame-parent">
     <div class="receipts-table-container basic-frame">
       <table class="receipts-table">

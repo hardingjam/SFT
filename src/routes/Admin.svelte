@@ -6,12 +6,16 @@
     import {filterArray, getSubgraphData, toSentenceCase} from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
     import {QUERY} from "../scripts/consts.js";
-    import {onMount} from "svelte";
+    import {beforeUpdate, onMount} from "svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let validAccount = true;
     let account = '';
     let roleName = '';
+
+    beforeUpdate(() => {
+        executorRoles = $roles.length ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
+    });
 
     onMount(async () => {
             if ($vault && $vault.address) {

@@ -10,6 +10,7 @@
     let shouldDisable = false;
     let amount = 0;
     let selectedReceipt = []
+    let totalShares = 0
 
     export let ethersData;
     let {signer} = ethersData;
@@ -58,7 +59,8 @@
     let getVaultDeployer = `
           query($id: ID!) {
             offchainAssetVault(id: $id) {
-                deployer
+                deployer,
+                totalShares
             }
           }
          `
@@ -74,6 +76,7 @@
         let deployer = ""
         if (temp && temp.data.offchainAssetVault) {
             deployer = temp.data.offchainAssetVault.deployer
+            totalShares = temp.data.offchainAssetVault.totalShares
             let variables = {id: `${$vault.address.toLowerCase()}-${deployer.toLowerCase()}`}
             getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
                 depositWithReceipts = res.data.account.depositWithReceipts
@@ -98,7 +101,7 @@
 <div class="redeem-container">
   <div class="title"><span
       class="f-weight-700">Total Supply: (FT):</span>
-    {$data?.offchainAssetVault?.totalShares / ONE || 0}
+    {totalShares / ONE}
   </div>
   <div class=" basic-frame-parent">
     <div class="receipts-table-container basic-frame">

@@ -9,10 +9,36 @@
 
     let shouldDisable = false;
     let amount = 0;
+    let selectedReceipt = []
+
+    export let ethersData;
+    let {signer} = ethersData;
+
+    async function redeem() {
+        try {
+            if (selectedReceipt.length) {
+                const receiptBalance = await $vault["balanceOf(address,uint256)"](
+                    $account,
+                    selectedReceipt[0]
+                );
+
+                // await vault.setWithdrawId(selectedReceipt[0]);
 
 
-    function redeem() {
-        console.log(4545)
+                const tx = await $vault["redeem(uint256,address,address)"](
+                    receiptBalance,
+                    $account,
+                    $account
+                );
+                await tx.wait();
+                amount = 0;
+            }
+
+
+        } catch (error) {
+            console.log(error);
+        }
+        shouldDisable = false;
     }
 
 
@@ -29,17 +55,30 @@
             }
           }
          `
+    let getVaultDeployer = `
+          query($id: ID!) {
+            offchainAssetVault(id: $id) {
+                deployer
+            }
+          }
+         `
 
     onMount(async () => {
-        getData()
+        await getData()
     });
 
 
-    function getData() {
-        let variables = {id: `${$vault.address.toLowerCase()}-${$data?.offchainAssetVault?.deployer.toLowerCase()}`}
-        getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
-            depositWithReceipts = res.data.account.depositWithReceipts
-        })
+    async function getData() {
+        let variables = {id: $vault.address.toLowerCase()}
+        let temp = await getSubgraphData($activeNetwork, variables, getVaultDeployer, 'offchainAssetVault')
+        let deployer = ""
+        if (temp && temp.data.offchainAssetVault) {
+            deployer = temp.data.offchainAssetVault.deployer
+            let variables = {id: `${$vault.address.toLowerCase()}-${deployer.toLowerCase()}`}
+            getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
+                depositWithReceipts = res.data.account.depositWithReceipts
+            })
+        }
     }
 
 
@@ -47,9 +86,9 @@
         if (timeStamp) {
             let d = new Date(timeStamp * 1000)
             let day = d.getDate();
-            let month = d.getMonth()+1;
+            let month = d.getMonth() + 1;
             let year = d.getFullYear()
-            return day+'/'+month+"/" + year
+            return day + '/' + month + "/" + year
         }
     }
 
@@ -57,7 +96,10 @@
 
 
 <div class="redeem-container">
-  <div class="title"><span class="f-weight-700">Total Supply: (FT):</span> {$data?.offchainAssetVault?.totalShares / ONE || 0}</div>
+  <div class="title"><span
+      class="f-weight-700">Total Supply: (FT):</span>
+    {$data?.offchainAssetVault?.totalShares / ONE || 0}
+  </div>
   <div class=" basic-frame-parent">
     <div class="receipts-table-container basic-frame">
       <table class="receipts-table">
@@ -68,7 +110,10 @@
         </tr>
         {#each depositWithReceipts as receipt}
           <tr>
-            <td class="receipt-id"><input type="checkbox" class="check-box"/>{receipt.id}</td>
+            <td class="receipt-id">
+              <input type="checkbox" class="check-box" bind:group={selectedReceipt}
+                     value={receipt.id}/>{receipt.id}
+            </td>
             <td class="value">{receipt.amount / ONE}</td>
             <td class="value">{timeStampToDate(receipt.timestamp)}</td>
           </tr>

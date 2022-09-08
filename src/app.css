@@ -151,6 +151,66 @@ button:focus, button:focus-visible {
     line-height: 27px;
 }
 
+
+.check-container {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.check-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 19px;
+    width: 19px;
+    border: 1px solid #C1C1C1;
+    border-radius: 5px;
+}
+
+/* When the radio button is checked, add a blue background */
+.check-container input:checked ~ .checkmark {
+    background: #5B5B8A;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.check-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.check-container .checkmark:after {
+    position: absolute;
+    left: 22.42%;
+    top: -5px;
+    bottom: 0;
+    color: #ffffffff;
+    content: '\2714';
+}
+
+.check-box-label{
+    margin-left: 30px;
+}
+
 @media (prefers-color-scheme: light) {
 
 }

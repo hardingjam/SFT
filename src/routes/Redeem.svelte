@@ -12,7 +12,7 @@
     let amount;
     let selectedReceipt = []
     let totalShares = 0
-    let error = false
+    let error = ""
 
     export let ethersData;
     let {signer} = ethersData;
@@ -29,7 +29,12 @@
                 );
 
                 if ((receiptBalance.sub(redeemAmount)).isNegative()) {
-                    error = true
+                    error = "Not enough balance"
+                    return
+                }
+
+                if (redeemAmount.eq(0)) {
+                    error = "0 amount"
                     return
                 }
 
@@ -43,6 +48,9 @@
 
                 await getData()
                 amount = 0;
+            } else {
+                error = "Select receipt id"
+                return
             }
         } catch (error) {
             console.log(error);
@@ -125,15 +133,18 @@
     <div class="receipts-table-container basic-frame">
       <table class="receipts-table">
         <tr>
-          <td class="f-weight-700 receipt-id">Receipt ID (NFT)</td>
+          <td class="f-weight-700">Receipt ID (NFT)</td>
           <td class="f-weight-700">Amount</td>
           <td class="f-weight-700">Minted</td>
         </tr>
         {#each depositWithReceipts as receipt}
           <tr>
             <td class="receipt-id">
-              <input type="checkbox" class="check-box" bind:group={selectedReceipt}
-                     value={receipt.id}/>{receipt.id}
+              <label class="check-container">
+                <input type="radio" class="check-box" bind:group={selectedReceipt} value={receipt.id}/>
+                <span class="checkmark"></span>
+              </label>
+              <span class="check-box-label">{receipt.id}</span>
             </td>
             <td class="value">{receipt.amount / ONE}</td>
             <td class="value">{timeStampToDate(receipt.timestamp)}</td>
@@ -144,7 +155,7 @@
     </div>
   </div>
   {#if error}
-    <span class="error">Not enough balance</span>
+    <span class="error">{error}</span>
   {/if}
   <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
              on:setMax={()=>{setMaxValue()}}/>
@@ -171,7 +182,6 @@
     .receipts-table {
         width: 100%;
         font-size: 16px;
-        line-height: 30px;
     }
 
     .check-box {
@@ -180,6 +190,8 @@
 
     .receipt-id {
         width: 33%;
+        justify-content: center;
+        display: flex;
     }
 
     .redeem-btn {

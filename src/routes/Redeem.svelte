@@ -9,7 +9,7 @@
     import {ethers} from "ethers";
 
     let shouldDisable = false;
-    let amount = 0;
+    let amount;
     let selectedReceipt = []
     let totalShares = 0
     let error = false
@@ -20,6 +20,7 @@
     async function redeem() {
         try {
             if (selectedReceipt.length) {
+                error = false
                 const redeemAmount = ethers.utils.parseEther(amount.toString());
 
                 const receiptBalance = await $vault["balanceOf(address,uint256)"](
@@ -102,6 +103,16 @@
         }
     }
 
+    async function setMaxValue() {
+        if (selectedReceipt.length) {
+            const receiptBalance = await $vault["balanceOf(address,uint256)"](
+                $account,
+                selectedReceipt[0]
+            );
+            amount = ethers.utils.formatEther(receiptBalance)
+        }
+    }
+
 </script>
 
 
@@ -135,7 +146,8 @@
   {#if error}
     <span class="error">Not enough balance</span>
   {/if}
-  <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"}/>
+  <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
+             on:setMax={()=>{setMaxValue()}}/>
   <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => redeem()}>Redeem
     Options
   </button>

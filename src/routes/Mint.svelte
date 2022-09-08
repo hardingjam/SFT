@@ -8,7 +8,7 @@
     export let ethersData;
     let {signer} = ethersData;
 
-    let amount = 0;
+    let amount;
     let shouldDisable = false
 
     let auditInfo = [

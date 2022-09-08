@@ -52,8 +52,8 @@
                 error = "Select receipt id"
                 return
             }
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            error = err.reason
         }
         shouldDisable = false;
     }

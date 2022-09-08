@@ -6,11 +6,13 @@
     import {account, activeNetwork, data, roles, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ONE} from "../scripts/consts.js";
+    import {ethers} from "ethers";
 
     let shouldDisable = false;
     let amount = 0;
     let selectedReceipt = []
     let totalShares = 0
+    let error = false
 
     export let ethersData;
     let {signer} = ethersData;
@@ -18,24 +20,29 @@
     async function redeem() {
         try {
             if (selectedReceipt.length) {
+                const redeemAmount = ethers.utils.parseEther(amount.toString());
+
                 const receiptBalance = await $vault["balanceOf(address,uint256)"](
                     $account,
                     selectedReceipt[0]
                 );
 
-                // await vault.setWithdrawId(selectedReceipt[0]);
+                if ((receiptBalance.sub(redeemAmount)).isNegative()) {
+                    error = true
+                    return
+                }
 
-
-                const tx = await $vault["redeem(uint256,address,address)"](
-                    receiptBalance,
+                const tx = await $vault["redeem(uint256,address,address,uint256)"](
+                    redeemAmount,
                     $account,
-                    $account
+                    $account,
+                    selectedReceipt[0]
                 );
                 await tx.wait();
+
+                await getData()
                 amount = 0;
             }
-
-
         } catch (error) {
             console.log(error);
         }
@@ -125,6 +132,9 @@
       </table>
     </div>
   </div>
+  {#if error}
+    <span class="error">Not enough balance</span>
+  {/if}
   <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"}/>
   <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => redeem()}>Redeem
     Options
@@ -163,5 +173,9 @@
     .redeem-btn {
         margin-top: 33px;
         width: calc(100% - 50px);
+    }
+
+    .error {
+        color: #F11717;
     }
 </style>

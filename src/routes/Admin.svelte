@@ -6,13 +6,17 @@
     import {filterArray, getSubgraphData, toSentenceCase} from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
     import {QUERY} from "../scripts/consts.js";
-    import {onMount} from "svelte";
+    import {beforeUpdate, onMount} from "svelte";
     import DefaultFrame from "../components/DefaultFrame.svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let validAccount = true;
     let account = '';
     let roleName = '';
+
+    beforeUpdate(() => {
+        executorRoles = $roles.length ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
+    });
 
     onMount(async () => {
             if ($vault && $vault.address) {
@@ -78,6 +82,12 @@
   <div slot="header-buttons">
     <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
   </div>
+  <div slot="address">
+  <span>  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`}
+                    class="contract-address btn-hover"
+                    target="_blank">{$vault.address}</a></span>
+  </div>
+
   <div slot="content">
     <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
     <div class="roles">
@@ -180,6 +190,11 @@
         font-size: 16px;
         line-height: 27px;
         color: #000000;
+    }
+
+    .contract-address{
+        text-decoration: none;
+        color: inherit;
     }
 
 </style>

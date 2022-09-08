@@ -1,19 +1,58 @@
 <script>
-
-
     import MintInput from "../components/MintInput.svelte";
     import {getSubgraphData} from "../scripts/helpers.js";
     import {account, activeNetwork, data, roles, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ONE} from "../scripts/consts.js";
-
+    import {ethers} from "ethers";
     let shouldDisable = false;
-    let balance = 1234567;
-    let amount = 0;
+    let amount;
+    let selectedReceipt = []
+    let totalShares = 0
+    let error = ""
 
+    export let ethersData;
+    let {signer} = ethersData;
 
-    function redeem() {
-        console.log(4545)
+    async function redeem() {
+        try {
+            if (selectedReceipt.length) {
+                error = false
+                const redeemAmount = ethers.utils.parseEther(amount.toString());
+
+                const receiptBalance = await $vault["balanceOf(address,uint256)"](
+                    $account,
+                    selectedReceipt[0]
+                );
+
+                if ((receiptBalance.sub(redeemAmount)).isNegative()) {
+                    error = "Not enough balance"
+                    return
+                }
+
+                if (redeemAmount.eq(0)) {
+                    error = "0 amount"
+                    return
+                }
+
+                const tx = await $vault["redeem(uint256,address,address,uint256)"](
+                    redeemAmount,
+                    $account,
+                    $account,
+                    selectedReceipt[0]
+                );
+                await tx.wait();
+
+                await getData()
+                amount = 0;
+            } else {
+                error = "Select receipt id"
+                return
+            }
+        } catch (err) {
+            error = err.reason
+        }
+        shouldDisable = false;
     }
 
 
@@ -30,45 +69,93 @@
             }
           }
          `
+    let getVaultDeployer = `
+          query($id: ID!) {
+            offchainAssetVault(id: $id) {
+                deployer,
+                totalShares
+            }
+          }
+         `
 
     onMount(async () => {
-        getData()
+        await getData()
     });
 
 
-    function getData() {
-        let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
-        getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
-            depositWithReceipts = res.data.account.depositWithReceipts
-        })
+    async function getData() {
+        let variables = {id: $vault.address.toLowerCase()}
+        let temp = await getSubgraphData($activeNetwork, variables, getVaultDeployer, 'offchainAssetVault')
+        let deployer = ""
+        if (temp && temp.data.offchainAssetVault) {
+            deployer = temp.data.offchainAssetVault.deployer
+            totalShares = temp.data.offchainAssetVault.totalShares
+            let variables = {id: `${$vault.address.toLowerCase()}-${deployer.toLowerCase()}`}
+            getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
+                depositWithReceipts = res.data.account.depositWithReceipts
+            })
+        }
     }
 
+
+    function timeStampToDate(timeStamp) {
+        if (timeStamp) {
+            let d = new Date(timeStamp * 1000)
+            let day = d.getDate();
+            let month = d.getMonth() + 1;
+            let year = d.getFullYear()
+            return day + '/' + month + "/" + year
+        }
+    }
+
+    async function setMaxValue() {
+        if (selectedReceipt.length) {
+            const receiptBalance = await $vault["balanceOf(address,uint256)"](
+                $account,
+                selectedReceipt[0]
+            );
+            amount = ethers.utils.formatEther(receiptBalance)
+        }
+    }
 
 </script>
 
 
 <div class="redeem-container">
-  <div class="title"><span class="f-weight-700">Token Balance (FT):</span> {balance}</div>
+  <div class="title"><span
+      class="f-weight-700">Total Supply: (FT):</span>
+    {totalShares / ONE}
+  </div>
   <div class=" basic-frame-parent">
     <div class="receipts-table-container basic-frame">
       <table class="receipts-table">
         <tr>
-          <td class="f-weight-700 receipt-id">Receipt ID (NFT)</td>
+          <td class="f-weight-700">Receipt ID (NFT)</td>
           <td class="f-weight-700">Amount</td>
           <td class="f-weight-700">Minted</td>
         </tr>
         {#each depositWithReceipts as receipt}
           <tr>
-            <td class="receipt-id"><input type="checkbox" class="check-box"/>{receipt.id}</td>
+            <td class="receipt-id">
+              <label class="check-container">
+                <input type="radio" class="check-box" bind:group={selectedReceipt} value={receipt.id}/>
+                <span class="checkmark"></span>
+              </label>
+              <span class="check-box-label">{receipt.id}</span>
+            </td>
             <td class="value">{receipt.amount / ONE}</td>
-            <td class="value">{receipt.timestamp}</td>
+            <td class="value">{timeStampToDate(receipt.timestamp)}</td>
           </tr>
         {/each}
 
       </table>
     </div>
   </div>
-  <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"}/>
+  {#if error}
+    <span class="error">{error}</span>
+  {/if}
+  <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
+             on:setMax={()=>{setMaxValue()}}/>
   <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => redeem()}>Redeem
     Options
   </button>
@@ -92,7 +179,6 @@
     .receipts-table {
         width: 100%;
         font-size: 16px;
-        line-height: 30px;
     }
 
     .check-box {
@@ -101,10 +187,16 @@
 
     .receipt-id {
         width: 33%;
+        justify-content: center;
+        display: flex;
     }
 
     .redeem-btn {
         margin-top: 33px;
         width: calc(100% - 50px);
+    }
+
+    .error {
+        color: #F11717;
     }
 </style>

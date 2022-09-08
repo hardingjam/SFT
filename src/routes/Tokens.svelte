@@ -19,16 +19,27 @@
     <span>SFT Lists</span>
   </div>
   <div class="tokens-container">
-    <div class="tokens f-weight-700">
-      {#each $tokens as token }
-        <div class="token btn-hover" on:click={()=>{handleTokenSelect(token)}}>{token.name}</div>
-      {/each}
+    <div class="tokens">
+      <table>
+        <tr class="f-weight-700">
+          <th>Name</th>
+          <th>Symbol</th>
+          <th>URL</th>
+        </tr>
+        {#each $tokens as token }
+          <tr class="token btn-hover" on:click={()=>{handleTokenSelect(token)}}>
+            <td>{token.name}</td>
+            <td>{token.symbol}</td>
+            <td>{token.uri}</td>
+          </tr>
+        {/each}
+      </table>
     </div>
   </div>
 </div>
 <style>
     .sft-tokens-container {
-        width: 475px;
+        min-width: 550px;
     }
 
     .tokens-header {
@@ -56,8 +67,34 @@
         justify-content: space-between;
         margin-top: 15px;
         padding-left: 50px;
+        padding-right: 50px;
         font-size: 16px;
         line-height: 27px;
+    }
+
+    table tr {
+        border-top: 1px solid #625e91;
+    }
+
+    table tr:hover {
+        background: #625e91;
+        color: #ffffff
+    }
+
+    table tr:first-child {
+        background: #625e91;
+        color: #ffffff;
+    }
+
+    table td, table th {
+        padding: 5px 15px;
+    }
+
+    table th {
+        top: 0;
+        position: sticky;
+        z-index: 20;
+        background: #625e91;
     }
 
 </style>

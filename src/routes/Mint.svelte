@@ -8,7 +8,7 @@
     export let ethersData;
     let {signer} = ethersData;
 
-    let amount = 0;
+    let amount;
     let shouldDisable = false
 
     let auditInfo = [
@@ -36,7 +36,7 @@
             await tx.wait();
             amount = 0;
         } catch (error) {
-            console.log(error);
+            console.log(error.reason);
         }
         shouldDisable = false;
     }

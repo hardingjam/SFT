@@ -1,18 +1,29 @@
 <script>
-    export let amount;
+    import {createEventDispatcher} from "svelte";
+
+    export let amount = "0.0";
+    export let maxButton;
     export let amountLabel;
     export let label;
 
     function allowNumbersOnly(evt) {
         const charCode = evt.keyCode;
-        if (charCode !== 46
-            && charCode !== 110
-            && charCode !== 190
+        if (charCode !== 46 //del
+            && charCode !== 110 //period
+            && charCode !== 190 //period
+            && charCode !== 39 //right arrow
+            && charCode !== 37 //left arrow
             && charCode > 31
             && (charCode < 48 || charCode > 57)
             && (charCode < 96 || charCode > 105)) {
             evt.preventDefault();
         }
+    }
+
+    const dispatch = createEventDispatcher();
+
+    function setMaxValue() {
+        dispatch('setMax');
     }
 
 </script>
@@ -24,6 +35,9 @@
         <div class="txt-options">{label}</div>
       </div>
       <div class="options-input"><input type="text" bind:value={amount} autofocus on:keydown={(e)=>allowNumbersOnly(e)}>
+        {#if maxButton}
+          <button class="max-button btn-hover" on:click={(e)=>setMaxValue(e)}>Max</button>
+        {/if}
       </div>
     </div>
   </div>
@@ -43,7 +57,7 @@
     .options {
         width: 100%;
         background: #2C2C54;
-        padding: 15px 83px 15px 64px;
+        padding: 15px 53px 15px 64px;
         color: #ffffff;
         display: flex;
         justify-content: space-between;
@@ -69,6 +83,11 @@
         line-height: 53px;
     }
 
+    .options-input {
+        display: flex;
+        align-items: center;
+    }
+
     .options-input input {
         font-weight: 500;
         font-size: 32px;
@@ -77,5 +96,14 @@
         text-align: right;
         background: inherit;
         color: inherit;
+    }
+
+    .max-button {
+        border: 1px solid #FFFFFF;
+        border-radius: 5px;
+        background: transparent;
+        color: #ffffff;
+        height: fit-content;
+        margin-left: 5px;
     }
 </style>

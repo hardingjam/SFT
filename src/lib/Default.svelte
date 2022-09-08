@@ -96,7 +96,7 @@
         },
         {
             id: "list",
-            displayName: "Token List",
+            displayName: "SFT List",
             action: () => {
                 navigateTo('#list', {replace: false})
             }
@@ -235,15 +235,17 @@
     async function getTokens() {
         let query = `
         query {
-          offchainAssetVaults{
+          offchainAssetVaults(orderBy:deployTimestamp orderDirection:desc){
             deployer,
             name,
-            address
+            address,
+            uri,
+            symbol
           }
         }`
 
         getSubgraphData($activeNetwork, {}, query, 'offchainAssetVaults').then((res) => {
-            let temp = res.data.offchainAssetVaults.filter(token => token.deployer === $account.toLowerCase())
+            let temp = res.data.offchainAssetVaults
             tokens.set(temp)
         })
     }
@@ -316,7 +318,7 @@
 
             <div class="tab-panel-container">
               <Route path="#mint" component={Mint} ethersData={$ethersData}/>
-              <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
+              <Route path="#redeem" component={Redeem} ethersData={$ethersData} />
             </div>
           </div>
         {/if}

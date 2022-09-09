@@ -220,8 +220,9 @@
 
     .receipt-id {
         width: 33%;
-        justify-content: center;
+        justify-content: left;
         display: flex;
+        margin-left: 20px;
     }
 
     .redeem-btn {

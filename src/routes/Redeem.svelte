@@ -7,12 +7,15 @@
     import {onMount} from "svelte";
     import {ONE} from "../scripts/consts.js";
     import {ethers} from "ethers";
+    import Spinner from "../components/Spinner.svelte";
 
     let shouldDisable = false;
     let amount;
     let selectedReceipt = []
     let totalShares = 0
     let error = ""
+
+    let loading = false
 
     export let ethersData;
     let {signer} = ethersData;
@@ -109,6 +112,7 @@
 
 
     async function getData() {
+        loading = true;
         let variables = {id: $vault.address.toLowerCase()}
         let temp = await getSubgraphData($activeNetwork, variables, getVaultDeployer, 'offchainAssetVault')
         if (temp && temp.data.offchainAssetVault) {
@@ -116,6 +120,7 @@
             let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
             getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
                 depositWithReceipts = res.data.account.offchainAssetVault.deposits
+                loading = false
             })
         }
     }
@@ -149,29 +154,34 @@
       class="f-weight-700">Total Supply: (FT):</span>
     {totalShares / ONE}
   </div>
-  <div class=" basic-frame-parent">
+  <div class="basic-frame-parent">
     <div class="receipts-table-container basic-frame">
-      <table class="receipts-table">
-        <tr>
-          <td class="f-weight-700">Receipt ID (NFT)</td>
-          <td class="f-weight-700">Amount</td>
-          <td class="f-weight-700">Minted</td>
-        </tr>
-        {#each depositWithReceipts as receipt}
+      {#if loading}
+        <Spinner></Spinner>
+      {/if}
+      {#if !loading}
+        <table class="receipts-table">
           <tr>
-            <td class="receipt-id">
-              <label class="check-container">
-                <input type="radio" class="check-box" bind:group={selectedReceipt} value={receipt.receipt.receiptId}/>
-                <span class="checkmark"></span>
-              </label>
-              <span class="check-box-label">{receipt.receipt.receiptId}</span>
-            </td>
-            <td class="value">{receipt.amount / ONE}</td>
-            <td class="value">{timeStampToDate(receipt.timestamp)}</td>
+            <td class="f-weight-700">Receipt ID (NFT)</td>
+            <td class="f-weight-700">Amount</td>
+            <td class="f-weight-700">Minted</td>
           </tr>
-        {/each}
+          {#each depositWithReceipts as receipt}
+            <tr>
+              <td class="receipt-id">
+                <label class="check-container">
+                  <input type="radio" class="check-box" bind:group={selectedReceipt} value={receipt.receipt.receiptId}/>
+                  <span class="checkmark"></span>
+                </label>
+                <span class="check-box-label">{receipt.receipt.receiptId}</span>
+              </td>
+              <td class="value">{receipt.amount / ONE}</td>
+              <td class="value">{timeStampToDate(receipt.timestamp)}</td>
+            </tr>
+          {/each}
 
-      </table>
+        </table>
+      {/if}
     </div>
   </div>
   {#if error}

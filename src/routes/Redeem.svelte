@@ -63,14 +63,36 @@
 
     let query = `
           query($id: ID!) {
-            account(id: $id) {
-              depositWithReceipts{
-                id,
-                timestamp,
-                amount
+           account(id: $id)
+           {
+              id,
+              offchainAssetVault
+              {
+                name
+                deposits
+                {
+                  id,
+                  timestamp,
+                  amount,
+                  receipt
+                  {
+                    id,
+                    shares,
+                    receiptId
+                  }
+                },
+                withdraws
+                {
+                  id,
+                  amount,
+                  receipt
+                  {
+                    id
+                  }
+                }
               }
-            }
-          }
+           }
+        }
          `
     let getVaultDeployer = `
           query($id: ID!) {
@@ -89,13 +111,11 @@
     async function getData() {
         let variables = {id: $vault.address.toLowerCase()}
         let temp = await getSubgraphData($activeNetwork, variables, getVaultDeployer, 'offchainAssetVault')
-        let deployer = ""
         if (temp && temp.data.offchainAssetVault) {
-            deployer = temp.data.offchainAssetVault.deployer
             totalShares = temp.data.offchainAssetVault.totalShares
-            let variables = {id: `${$vault.address.toLowerCase()}-${deployer.toLowerCase()}`}
+            let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
             getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
-                depositWithReceipts = res.data.account.depositWithReceipts
+                depositWithReceipts = res.data.account.offchainAssetVault.deposits
             })
         }
     }
@@ -141,10 +161,10 @@
           <tr>
             <td class="receipt-id">
               <label class="check-container">
-                <input type="radio" class="check-box" bind:group={selectedReceipt} value={receipt.id}/>
+                <input type="radio" class="check-box" bind:group={selectedReceipt} value={receipt.receipt.receiptId}/>
                 <span class="checkmark"></span>
               </label>
-              <span class="check-box-label">{receipt.id}</span>
+              <span class="check-box-label">{receipt.receipt.receiptId}</span>
             </td>
             <td class="value">{receipt.amount / ONE}</td>
             <td class="value">{timeStampToDate(receipt.timestamp)}</td>

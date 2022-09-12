@@ -11,7 +11,7 @@
 
     let shouldDisable = false;
     let amount;
-    let selectedReceipt = []
+    let selectedReceipt = null;
     let totalShares = 0
     let error = ""
 
@@ -22,14 +22,11 @@
 
     async function redeem() {
         try {
-            if (selectedReceipt.length) {
-                error = false
+            if (selectedReceipt) {
+                error = ''
                 const redeemAmount = ethers.utils.parseEther(amount.toString());
 
-                const receiptBalance = await $vault["balanceOf(address,uint256)"](
-                    $account,
-                    selectedReceipt[0]
-                );
+                const receiptBalance = await getReceiptBalance()
 
                 if ((receiptBalance.sub(redeemAmount)).isNegative()) {
                     error = "Not enough balance"
@@ -45,7 +42,7 @@
                     redeemAmount,
                     $account,
                     $account,
-                    selectedReceipt[0]
+                    selectedReceipt
                 );
                 await tx.wait();
 
@@ -81,17 +78,12 @@
                   {
                     id,
                     shares,
-                    receiptId
-                  }
-                },
-                withdraws
-                {
-                  id,
-                  amount,
-                  receipt
-                  {
-                    id
-                  }
+                    receiptId,
+                    balances {
+                      value,
+                      valueExact
+                    }
+                  },
                 }
               }
            }
@@ -119,7 +111,7 @@
             totalShares = temp.data.offchainAssetVault.totalShares
             let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
             getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
-                depositWithReceipts = res.data.account.offchainAssetVault.deposits
+                depositWithReceipts = res.data.account.offchainAssetVault.deposits.filter(d => d.receipt.balances[0].value > 0)
                 loading = false
             })
         }
@@ -136,14 +128,21 @@
         }
     }
 
-    async function setMaxValue() {
+    async function getReceiptBalance() {
+        let receiptBalance
+
         if (selectedReceipt.length) {
-            const receiptBalance = await $vault["balanceOf(address,uint256)"](
+            receiptBalance = await $vault["balanceOf(address,uint256)"](
                 $account,
-                selectedReceipt[0]
+                selectedReceipt
             );
-            amount = ethers.utils.formatEther(receiptBalance)
         }
+        return ethers.BigNumber.from(receiptBalance)
+    }
+
+    async function setMaxValue() {
+        let balance = await getReceiptBalance()
+        amount = ethers.utils.formatEther(balance)
     }
 
 </script>

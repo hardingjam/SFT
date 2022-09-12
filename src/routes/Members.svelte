@@ -1,18 +1,19 @@
 <script>
-
-    import {tokens} from "../scripts/store.js";
-    import Select from "../components/Select.svelte";
-    import {icons} from "../scripts/assets.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
 
-    let minTier = ''
-    let address = ''
+    let minTierErc20 = ''
+    let addressErc20 = ''
+    let minTierErc1155 = ''
+    let addressErc1155 = ''
+    let tierErc20Contract = ''
+    let tierErc1155Contract = ''
 
-    function handleTokenSelect(event) {
-        console.log(event)
+
+    function checkAddressErc20() {
+        console.log(444)
     }
 
-    function checkAddress() {
+    function checkAddressErc1155() {
         console.log(444)
     }
 </script>
@@ -22,43 +23,35 @@
       <div class="erc20 tier">
         <div>ERC20</div>
         <div class="display-flex">
-          <label class="f-weight-700 contract">Contract Address:</label>
-          {#if $tokens.length}
-            <Select options={$tokens.map(t=>{return {...t,displayName: t.name}})}
-
-                    on:select={handleTokenSelect}
-                    label={'Select'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
-          {/if}
+          <label class="f-weight-700 contract">Contract address:</label>
+          <input type="text" class="default-input address" bind:value={tierErc20Contract}>
         </div>
         <div>
-          <label class="f-weight-700">Minimum Tier:</label>
-          <input type="text" class="default-input min-tier" bind:value={minTier}>
+          <label class="f-weight-700">Minimum tier:</label>
+          <input type="text" class="default-input min-tier" bind:value={minTierErc20}>
         </div>
         <label class="f-weight-700">Check address on the tier list:</label>
-        <input type="text" class="default-input address" bind:value={address}>
+        <input type="text" class="default-input address" bind:value={addressErc20}>
         <div>
-          <button class="default-btn" on:click={()=>{checkAddress()}}>Check</button>
+          <button class="default-btn" on:click={()=>{checkAddressErc20()}}>Check</button>
         </div>
       </div>
+
       <div class="erc1155 tier">
         <div>ERC1155</div>
         <div class="display-flex">
-          <label class="f-weight-700 contract">Contract Address:</label>
-          {#if $tokens.length}
-            <Select options={$tokens.map(t=>{return {...t,displayName: t.address}})}
+          <label class="f-weight-700 contract">Contract address:</label>
+          <input type="text" class="default-input address" bind:value={tierErc1155Contract}>
 
-                    on:select={handleTokenSelect}
-                    label={'Select'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
-          {/if}
         </div>
         <div>
-          <label class="f-weight-700">Minimum Tier:</label>
-          <input type="text" class="default-input min-tier" bind:value={minTier}>
+          <label class="f-weight-700">Minimum tier:</label>
+          <input type="text" class="default-input min-tier" bind:value={minTierErc1155}>
         </div>
         <label class="f-weight-700">Check address on the tier list:</label>
-        <input type="text" class="default-input address" bind:value={address}>
+        <input type="text" class="default-input address" bind:value={addressErc1155}>
         <div>
-          <button class="default-btn" on:click={()=>{checkAddress()}}>Check</button>
+          <button class="default-btn" on:click={()=>{checkAddressErc1155()}}>Check</button>
         </div>
       </div>
     </div>

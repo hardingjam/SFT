@@ -3,7 +3,7 @@
 
     import MintInput from "../components/MintInput.svelte";
     import {getSubgraphData} from "../scripts/helpers.js";
-    import {account, activeNetwork, data, roles, vault} from "../scripts/store.js";
+    import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ONE} from "../scripts/consts.js";
     import {ethers} from "ethers";
@@ -46,7 +46,9 @@
                 );
                 await tx.wait();
 
-                await getData()
+                await setTempData(amount, selectedReceipt)
+                selectedReceipt = null
+
                 amount = 0;
             } else {
                 error = "Select receipt id"
@@ -143,6 +145,26 @@
     async function setMaxValue() {
         let balance = await getReceiptBalance()
         amount = ethers.utils.formatEther(balance)
+    }
+
+
+    function setTempData(amount, receipt) {
+        //indexing takes time, so to show correct data, ui modifications is needed
+        let updatedReceipt = depositWithReceipts.find(d => d.receipt.receiptId === receipt)
+
+        let valueBef = updatedReceipt.receipt.balances[0].value
+        let valueExactBef = updatedReceipt.receipt.balances[0].valueExact
+
+        updatedReceipt.receipt.balances[0].value = valueBef - amount
+        updatedReceipt.receipt.balances[0].valueExact = Number(ethers.BigNumber.from(valueExactBef).sub(ethers.utils.parseEther(amount.toString())))
+
+        depositWithReceipts = depositWithReceipts.map(d => {
+            if (d.receipt.receiptId === receipt) {
+                return {...d, receipt: updatedReceipt.receipt}
+            } else {
+                return d
+            }
+        }).filter(d => d.receipt.balances[0].value > 0)
     }
 
 </script>

@@ -1,29 +1,30 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
     import {getSubgraphData} from "../scripts/helpers.js";
-    import {account, activeNetwork, data, roles, vault} from "../scripts/store.js";
+    import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ONE} from "../scripts/consts.js";
     import {ethers} from "ethers";
+    import Spinner from "../components/Spinner.svelte";
+
     let shouldDisable = false;
     let amount;
-    let selectedReceipt = []
+    let selectedReceipt = null;
     let totalShares = 0
     let error = ""
+
+    let loading = false
 
     export let ethersData;
     let {signer} = ethersData;
 
     async function redeem() {
         try {
-            if (selectedReceipt.length) {
-                error = false
+            if (selectedReceipt) {
+                error = ''
                 const redeemAmount = ethers.utils.parseEther(amount.toString());
 
-                const receiptBalance = await $vault["balanceOf(address,uint256)"](
-                    $account,
-                    selectedReceipt[0]
-                );
+                const receiptBalance = await getReceiptBalance()
 
                 if ((receiptBalance.sub(redeemAmount)).isNegative()) {
                     error = "Not enough balance"
@@ -39,11 +40,13 @@
                     redeemAmount,
                     $account,
                     $account,
-                    selectedReceipt[0]
+                    selectedReceipt
                 );
                 await tx.wait();
 
-                await getData()
+                await setTempData(amount, selectedReceipt)
+                selectedReceipt = null
+
                 amount = 0;
             } else {
                 error = "Select receipt id"
@@ -60,14 +63,31 @@
 
     let query = `
           query($id: ID!) {
-            account(id: $id) {
-              depositWithReceipts{
-                id,
-                timestamp,
-                amount
+           account(id: $id)
+           {
+              id,
+              offchainAssetVault
+              {
+                name
+                deposits
+                {
+                  id,
+                  timestamp,
+                  amount,
+                  receipt
+                  {
+                    id,
+                    shares,
+                    receiptId,
+                    balances {
+                      value,
+                      valueExact
+                    }
+                  },
+                }
               }
-            }
-          }
+           }
+        }
          `
     let getVaultDeployer = `
           query($id: ID!) {
@@ -84,15 +104,15 @@
 
 
     async function getData() {
+        loading = true;
         let variables = {id: $vault.address.toLowerCase()}
         let temp = await getSubgraphData($activeNetwork, variables, getVaultDeployer, 'offchainAssetVault')
-        let deployer = ""
         if (temp && temp.data.offchainAssetVault) {
-            deployer = temp.data.offchainAssetVault.deployer
             totalShares = temp.data.offchainAssetVault.totalShares
-            let variables = {id: `${$vault.address.toLowerCase()}-${deployer.toLowerCase()}`}
+            let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
             getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
-                depositWithReceipts = res.data.account.depositWithReceipts
+                depositWithReceipts = res.data.account.offchainAssetVault.deposits.filter(d => d.receipt.balances[0].value > 0)
+                loading = false
             })
         }
     }
@@ -108,14 +128,41 @@
         }
     }
 
-    async function setMaxValue() {
+    async function getReceiptBalance() {
+        let receiptBalance
+
         if (selectedReceipt.length) {
-            const receiptBalance = await $vault["balanceOf(address,uint256)"](
+            receiptBalance = await $vault["balanceOf(address,uint256)"](
                 $account,
-                selectedReceipt[0]
+                selectedReceipt
             );
-            amount = ethers.utils.formatEther(receiptBalance)
         }
+        return ethers.BigNumber.from(receiptBalance)
+    }
+
+    async function setMaxValue() {
+        let balance = await getReceiptBalance()
+        amount = ethers.utils.formatEther(balance)
+    }
+
+
+    function setTempData(amount, receipt) {
+        //indexing takes time, so to show correct data, ui modifications is needed
+        let updatedReceipt = depositWithReceipts.find(d => d.receipt.receiptId === receipt)
+
+        let valueBef = updatedReceipt.receipt.balances[0].value
+        let valueExactBef = updatedReceipt.receipt.balances[0].valueExact
+
+        updatedReceipt.receipt.balances[0].value = valueBef - amount
+        updatedReceipt.receipt.balances[0].valueExact = Number(ethers.BigNumber.from(valueExactBef).sub(ethers.utils.parseEther(amount.toString())))
+
+        depositWithReceipts = depositWithReceipts.map(d => {
+            if (d.receipt.receiptId === receipt) {
+                return {...d, receipt: updatedReceipt.receipt}
+            } else {
+                return d
+            }
+        }).filter(d => d.receipt.balances[0].value > 0)
     }
 
 </script>
@@ -126,29 +173,34 @@
       class="f-weight-700">Total Supply: (FT):</span>
     {totalShares / ONE}
   </div>
-  <div class=" basic-frame-parent">
+  <div class="basic-frame-parent">
     <div class="receipts-table-container basic-frame">
-      <table class="receipts-table">
-        <tr>
-          <td class="f-weight-700">Receipt ID (NFT)</td>
-          <td class="f-weight-700">Amount</td>
-          <td class="f-weight-700">Minted</td>
-        </tr>
-        {#each depositWithReceipts as receipt}
+      {#if loading}
+        <Spinner></Spinner>
+      {/if}
+      {#if !loading}
+        <table class="receipts-table">
           <tr>
-            <td class="receipt-id">
-              <label class="check-container">
-                <input type="radio" class="check-box" bind:group={selectedReceipt} value={receipt.id}/>
-                <span class="checkmark"></span>
-              </label>
-              <span class="check-box-label">{receipt.id}</span>
-            </td>
-            <td class="value">{receipt.amount / ONE}</td>
-            <td class="value">{timeStampToDate(receipt.timestamp)}</td>
+            <td class="f-weight-700">Receipt ID (NFT)</td>
+            <td class="f-weight-700">Amount</td>
+            <td class="f-weight-700">Minted</td>
           </tr>
-        {/each}
+          {#each depositWithReceipts as receipt}
+            <tr>
+              <td class="receipt-id">
+                <label class="check-container">
+                  <input type="radio" class="check-box" bind:group={selectedReceipt} value={receipt.receipt.receiptId}/>
+                  <span class="checkmark"></span>
+                </label>
+                <span class="check-box-label">{receipt.receipt.receiptId}</span>
+              </td>
+              <td class="value">{receipt.amount / ONE}</td>
+              <td class="value">{timeStampToDate(receipt.timestamp)}</td>
+            </tr>
+          {/each}
 
-      </table>
+        </table>
+      {/if}
     </div>
   </div>
   {#if error}
@@ -187,8 +239,9 @@
 
     .receipt-id {
         width: 33%;
-        justify-content: center;
+        justify-content: left;
         display: flex;
+        margin-left: 20px;
     }
 
     .redeem-btn {

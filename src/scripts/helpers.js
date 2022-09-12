@@ -49,28 +49,34 @@ export function toSentenceCase(text) {
 
 export async function fetchSubgraphData(activeNetwork, variables, query) {
     if (activeNetwork) {
-        let req = await fetch(activeNetwork.subgraph_url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                query,
-                variables
+        try {
+            let req = await fetch(activeNetwork.subgraph_url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    query,
+                    variables
+                })
             })
-        });
+            return await req.json()
 
-        return await req.json()
+        } catch (e) {
+            console.log(e.message)
+            return null
+        }
     }
-
 }
 
 export function getSubgraphData(activeNetwork, variables, query, param) {
     return new Promise(async (resolve, reject) => {
-        async function showTime (){ return await fetchSubgraphData(activeNetwork, variables, query)}
+        async function showTime() {
+            return await fetchSubgraphData(activeNetwork, variables, query)
+        }
         let interval = setInterval(showTime, 2000)
         let data = await showTime()
-        if (data.data[param]) {
+        if (!data || data.data[param]) {
             clearInterval(interval)
             return resolve(data)
         }

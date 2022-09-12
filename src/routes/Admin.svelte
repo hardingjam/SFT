@@ -7,12 +7,15 @@
     import {icons} from "../scripts/assets.js";
     import {QUERY} from "../scripts/consts.js";
     import {beforeUpdate, onMount} from "svelte";
+    import Spinner from "../components/Spinner.svelte";
     import DefaultFrame from "../components/DefaultFrame.svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let validAccount = true;
     let account = '';
     let roleName = '';
+
+    let loading = false
 
     beforeUpdate(() => {
         executorRoles = $roles.length ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
@@ -63,6 +66,7 @@
         let variables = {id: vaultAddress.toLowerCase()}
 
         getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetVault').then((res) => {
+            loading = true
             if (res && res.data) {
                 data.set(res.data)
                 roles.set($data.offchainAssetVault.roles)
@@ -74,6 +78,7 @@
                 })
                 roles.set(rolesFiltered)
                 executorRoles = $roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
+                loading = false
             }
         })
     }
@@ -108,27 +113,34 @@
         <br>
         <button class="default-btn" on:click={grantRole}>Enter</button>
       </div>
-      <div class="roles-data">
-        <table>
-          {#each executorRoles as role}
-            <tr>
-              <td>
-                <span class="title f-weight-700">{role.roleName}</span>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Role name={role.roleName}
-                      roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders} admin={false}></Role>
-              </td>
-              <td>
-                <Role roleHolders={$roles.find(r=>r.roleName===role.roleName+"_ADMIN").roleHolders}
-                      name={role.roleName+"_ADMIN"} admin={true}></Role>
-              </td>
-            </tr>
-          {/each}
-        </table>
-      </div>
+      {#if loading}
+        <Spinner></Spinner>
+      {/if}
+      {#if !loading}
+        <div class="roles-data">
+
+          <table>
+            {#each executorRoles as role}
+              <tr>
+                <td>
+                  <span class="title f-weight-700">{role.roleName}</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Role name={role.roleName}
+                        roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders} admin={false}></Role>
+                </td>
+                <td>
+                  <Role roleHolders={$roles.find(r=>r.roleName===role.roleName+"_ADMIN").roleHolders}
+                        name={role.roleName+"_ADMIN"} admin={true}></Role>
+                </td>
+              </tr>
+            {/each}
+          </table>
+        </div>
+
+      {/if}
     </div>
   </div>
 </DefaultFrame>
@@ -176,6 +188,8 @@
         font-size: 16px;
         line-height: 27px;
     }
+
+
 
     table {
         width: 100%;

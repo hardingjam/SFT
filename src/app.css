@@ -102,6 +102,7 @@ button:focus, button:focus-visible {
     border: 1px solid #000000;
     border-radius: 5px;
     background-color: #ffffff;
+    width: fit-content;
 }
 
 .default-btn:hover {
@@ -180,6 +181,10 @@ button:focus, button:focus-visible {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.error {
+    color: #F11717;
 }
 
 /* Hide the browser's default radio button */

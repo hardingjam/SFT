@@ -249,7 +249,5 @@
         width: calc(100% - 50px);
     }
 
-    .error {
-        color: #F11717;
-    }
+
 </style>

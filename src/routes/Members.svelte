@@ -12,10 +12,10 @@
 
     let minTierErc20 = mock.minTierErc20
     let addressErc20 = ''
-    let minTierErc1155 = ''
+    let minTierErc1155 = mock.minTierErc1155
     let addressErc1155 = ''
     let tierErc20Contract = mock.tierErc20Contract
-    let tierErc1155Contract = ''
+    let tierErc1155Contract = mock.tierErc1155Contract
     let editErc20 = {
         address: false,
         minTier: false
@@ -25,12 +25,20 @@
         minTier: false
     }
 
+    let isAddressErc20Valid = false
+    let isAddressErc1155Valid = false
+    let showCheck = false
+    let showCheckErc20 = false
+    let error = ''
+
     function checkAddressErc20() {
-        console.log(444)
+        showCheckErc20 = true
+        isAddressErc20Valid = !isAddressErc20Valid
     }
 
     function checkAddressErc1155() {
-        console.log(444)
+        showCheck = true
+        isAddressErc1155Valid = !isAddressErc1155Valid
     }
 
     function toggleEditAddress() {
@@ -79,7 +87,15 @@
           <img src={icons.edit} alt="edit" class="btn-hover" on:click={()=>toggleEditMinTier()}>
         </div>
         <div class="f-weight-700">Check address on the tier list:</div>
-        <input type="text" class="default-input" bind:value={addressErc20}>
+        <div class="check-address-input-container">
+          <input type="text" class="default-input" bind:value={addressErc20}>
+          {#if isAddressErc20Valid && showCheckErc20 && addressErc20}
+            <img src={icons.check} alt="check" class="check">
+          {/if}
+          {#if !isAddressErc20Valid && showCheckErc20 && addressErc20}
+            <img src={icons.reject} alt="reject" class="reject">
+          {/if}
+        </div>
         <div>
           <button class="default-btn" on:click={()=>{checkAddressErc20()}}>Check</button>
         </div>
@@ -109,13 +125,25 @@
           <img src={icons.edit} alt="edit" class="btn-hover" on:click={()=>toggleEditMinTier1155()}>
         </div>
         <div class="f-weight-700">Check address on the tier list:</div>
-        <input type="text" class="default-input" bind:value={addressErc1155}>
+        <div class="check-address-input-container">
+          <input type="text" class="default-input" bind:value={addressErc1155}>
+          {#if isAddressErc1155Valid && showCheck && addressErc1155}
+            <img src={icons.check} alt="check" class="check">
+          {/if}
+          {#if !isAddressErc1155Valid && showCheck && addressErc1155}
+            <img src={icons.reject} alt="reject" class="reject">
+          {/if}
+        </div>
         <div>
           <button class="default-btn" on:click={()=>{checkAddressErc1155()}}>Check</button>
         </div>
       </div>
-
     </div>
+    {#if error}
+      <div class="error">
+        This address can not send or receive tokens. Tokens held by this address can be confiscated by the confiscator
+      </div>
+    {/if}
   </div>
 </DefaultFrame>
 <style>
@@ -124,6 +152,7 @@
         text-align: left;
         display: flex;
         flex-direction: column;
+        max-width: 485px;
     }
 
     .tier {
@@ -137,10 +166,6 @@
 
     .min-tier {
         width: 80px;
-    }
-
-    .default-frame {
-        width: 490px;
     }
 
     .contract {
@@ -163,4 +188,26 @@
 
     }
 
+    .check-address-input-container {
+        position: relative;
+    }
+
+    .check {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+    }
+
+    .reject {
+        position: absolute;
+        right: 5px;
+        top: 2px;
+    }
+
+    .error {
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+        color: #F11717;
+    }
 </style>

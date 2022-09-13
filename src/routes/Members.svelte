@@ -1,21 +1,22 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {icons} from "../scripts/assets.js"
+    import {vault} from "../scripts/store.js";
 
 
     let mock = {
-        minTierErc20: 7,
-        tierErc20Contract: "0xc0D477556c25C9d67...",
-        minTierErc1155: 8,
-        tierErc1155Contract: "0xc9D477556c25C9d67..."
+        minTierErc20: '',
+        tierErc20Contract: "",
+        minTierErc1155: '',
+        tierErc1155Contract: ""
     }
 
-    let minTierErc20 = mock.minTierErc20
+    let minTierErc20 = ''
     let addressErc20 = ''
-    let minTierErc1155 = mock.minTierErc1155
+    let minTierErc1155 = ''
     let addressErc1155 = ''
-    let tierErc20Contract = mock.tierErc20Contract
-    let tierErc1155Contract = mock.tierErc1155Contract
+    let tierErc20Contract = ''
+    let tierErc1155Contract = ''
     let editErc20 = {
         address: false,
         minTier: false
@@ -63,6 +64,40 @@
         editErc1155.minTier = !editErc1155.minTier
     }
 
+    async function assignTierErc20() {
+        try {
+            if (!tierErc20Contract) {
+                return
+            }
+            //todo Check for role
+
+            let tx = await $vault.setERC20Tier(tierErc20Contract, minTierErc20, [])
+            await tx.wait()
+            editErc20.address = false
+            editErc20.minTier = false
+
+        } catch (e) {
+            error = e.message
+        }
+    }
+    async function assignTierErc1155() {
+        try {
+            if (!tierErc1155Contract) {
+                console.log(4)
+                return
+            }
+
+            //todo Check for role
+            let tx = await $vault.setERC1155Tier(tierErc1155Contract, minTierErc1155, [])
+            await tx.wait()
+            editErc1155.address = false
+            editErc1155.minTier = false
+
+        } catch (e) {
+            error = e.message
+        }
+    }
+
 
 </script>
 <DefaultFrame header="Members">
@@ -79,7 +114,7 @@
           {#if editErc20.address}
             <input type="text" class="default-input address" bind:value={tierErc20Contract}>
           {/if}
-          <img src={icons.edit} alt="edit" class="btn-hover" on:click={()=>toggleEditAddress()}>
+          <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditAddress()}>
         </div>
         <div class="display-flex address-container">
           <div class="f-weight-700 label">Minimum tier:
@@ -90,7 +125,10 @@
               {mock.minTierErc20}
             {/if}
           </div>
-          <img src={icons.edit} alt="edit" class="btn-hover" on:click={()=>toggleEditMinTier()}>
+          <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditMinTier()}>
+        </div>
+        <div class="assign-tier">
+          <button class="default-btn" on:click={()=>{assignTierErc20()}}>Assign tier</button>
         </div>
         <div class="f-weight-700">Check address on the tier list:</div>
         <div class="check-address-input-container">
@@ -117,7 +155,7 @@
           {#if editErc1155.address}
             <input type="text" class="default-input address" bind:value={tierErc1155Contract}>
           {/if}
-          <img src={icons.edit} alt="edit" class="btn-hover" on:click={()=>toggleEditAddress1155()}>
+          <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditAddress1155()}>
         </div>
         <div class="display-flex address-container">
           <div class="f-weight-700 label">Minimum tier:
@@ -128,10 +166,14 @@
               {mock.minTierErc1155}
             {/if}
           </div>
-          <img src={icons.edit} alt="edit" class="btn-hover" on:click={()=>toggleEditMinTier1155()}>
+          <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditMinTier1155()}>
+        </div>
+        <div class="assign-tier">
+          <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Assign tier</button>
         </div>
         <div class="f-weight-700">Check address on the tier list:</div>
         <div class="check-address-input-container">
+          {addressErc1155}
           <input type="text" class="default-input" bind:value={addressErc1155}>
           {#if isAddressErc1155Valid && showCheck && addressErc1155}
             <img src={icons.check} alt="check" class="check">
@@ -144,12 +186,14 @@
           <button class="default-btn" on:click={()=>{checkAddressErc1155()}}>Check</button>
         </div>
       </div>
+      {#if error}
+        <div class="error">
+          {error}
+          <!--        This address can not send or receive tokens. Tokens held by this address can be confiscated by the confiscator-->
+        </div>
+      {/if}
     </div>
-    {#if error}
-      <div class="error">
-        This address can not send or receive tokens. Tokens held by this address can be confiscated by the confiscator
-      </div>
-    {/if}
+
   </div>
 </DefaultFrame>
 <style>
@@ -179,7 +223,6 @@
     }
 
     .address-container {
-        align-items: baseline;
         justify-content: space-between;
         min-height: 36px;
     }
@@ -214,5 +257,13 @@
         font-weight: 400;
         font-size: 12px;
         line-height: 20px;
+    }
+
+    .edit {
+        margin-bottom: 13px;
+    }
+
+    .assign-tier button {
+        float: right;
     }
 </style>

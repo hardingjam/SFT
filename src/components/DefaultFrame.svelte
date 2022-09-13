@@ -1,15 +1,14 @@
 <script>
-    import {activeNetwork, vault} from "../scripts/store.js";
-
     export let header = ''
 </script>
 <div class="default-frame">
   <div class="header">
     <span>{header}</span>
     <slot name="address">
-
     </slot>
-    <slot name="header-buttons"></slot>
+    <div>
+      <slot name="header-buttons"></slot>
+    </div>
   </div>
   <div class="default-frame-container">
     <slot name="content"></slot>

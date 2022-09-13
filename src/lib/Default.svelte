@@ -14,6 +14,7 @@
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
+    import AuditHistory from "../routes/AuditHistory.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -106,6 +107,13 @@
             displayName: "Members",
             action: () => {
                 navigateTo('#members', {replace: false})
+            }
+        },
+        {
+            id: "audit-history",
+            displayName: "Audit History",
+            action: () => {
+                navigateTo('#audit-history', {replace: false})
             }
         },
     ]
@@ -303,6 +311,7 @@
           <Route path="#admin" component={Admin}/>
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
+          <Route path="#audit-history" component={AuditHistory}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -318,7 +327,7 @@
 
             <div class="tab-panel-container">
               <Route path="#mint" component={Mint} ethersData={$ethersData}/>
-              <Route path="#redeem" component={Redeem} ethersData={$ethersData} />
+              <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
             </div>
           </div>
         {/if}

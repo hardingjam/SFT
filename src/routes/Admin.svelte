@@ -85,12 +85,12 @@
 </script>
 <DefaultFrame header="Admin">
   <div slot="header-buttons">
-    <button class="btn-back btn-hover" on:click={()=>goBack()}>Back</button>
+    <button class="header-btn btn-hover" on:click={()=>goBack()}>Back</button>
   </div>
   <div slot="address">
   <span>  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`}
-                    class="contract-address btn-hover"
-                    target="_blank">{$vault.address}</a></span>
+                      class="contract-address btn-hover"
+                      target="_blank">{$vault.address}</a></span>
   </div>
 
   <div slot="content">
@@ -148,18 +148,6 @@
 
 <style>
 
-    .btn-back {
-        box-sizing: border-box;
-        border: 1px solid #FFFFFF;
-        border-radius: 5px;
-        background: transparent;
-        color: #ffffff;
-    }
-
-    .btn-back:focus {
-        outline: none;
-    }
-
     .roles {
         text-align: left;
     }
@@ -190,7 +178,6 @@
     }
 
 
-
     table {
         width: 100%;
     }
@@ -206,7 +193,7 @@
         color: #000000;
     }
 
-    .contract-address{
+    .contract-address {
         text-decoration: none;
         color: inherit;
     }

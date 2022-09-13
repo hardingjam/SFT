@@ -115,6 +115,19 @@ button:focus, button:focus-visible {
     border-radius: 5px;
 }
 
+.header-btn {
+    box-sizing: border-box;
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    background: transparent;
+    color: #ffffff;
+    margin-left: 15px;
+}
+
+.header-btn:focus {
+    outline: none;
+}
+
 .nav-dropdown {
     background-color: #ececec !important;
 }
@@ -214,7 +227,7 @@ button:focus, button:focus-visible {
     content: '\2714';
 }
 
-.check-box-label{
+.check-box-label {
     margin-left: 30px;
 }
 

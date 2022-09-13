@@ -32,11 +32,17 @@
     let error = ''
 
     function checkAddressErc20() {
+        if (!addressErc20) {
+            return
+        }
         showCheckErc20 = true
         isAddressErc20Valid = !isAddressErc20Valid
     }
 
     function checkAddressErc1155() {
+        if (!addressErc1155) {
+            return
+        }
         showCheck = true
         isAddressErc1155Valid = !isAddressErc1155Valid
     }

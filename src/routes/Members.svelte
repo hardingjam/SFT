@@ -1,5 +1,6 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
+    import {icons} from "../scripts/assets.js"
 
     let minTierErc20 = ''
     let addressErc20 = ''
@@ -22,38 +23,44 @@
     <div class="members f-weight-700">
       <div class="erc20 tier">
         <div>ERC20</div>
-        <div class="display-flex">
-          <label class="f-weight-700 contract">Contract address:</label>
+        <div class="display-flex address-container">
+          <div class="f-weight-700 contract label">Contract address:</div>
           <input type="text" class="default-input address" bind:value={tierErc20Contract}>
+          <img src={icons.edit} alt="edit" class="btn-hover">
         </div>
-        <div>
-          <label class="f-weight-700">Minimum tier:</label>
-          <input type="text" class="default-input min-tier" bind:value={minTierErc20}>
+        <div class="display-flex address-container">
+          <div class="f-weight-700 label">Minimum tier:
+            <input type="text" class="default-input min-tier" bind:value={minTierErc20}>
+          </div>
+          <img src={icons.edit} alt="edit" class="btn-hover">
         </div>
-        <label class="f-weight-700">Check address on the tier list:</label>
-        <input type="text" class="default-input address" bind:value={addressErc20}>
+        <div class="f-weight-700">Check address on the tier list:</div>
+        <input type="text" class="default-input" bind:value={addressErc20}>
         <div>
           <button class="default-btn" on:click={()=>{checkAddressErc20()}}>Check</button>
         </div>
       </div>
 
       <div class="erc1155 tier">
-        <div>ERC1155</div>
-        <div class="display-flex">
-          <label class="f-weight-700 contract">Contract address:</label>
+        <div>ERC20</div>
+        <div class="display-flex address-container">
+          <div class="f-weight-700 contract label">Contract address:</div>
           <input type="text" class="default-input address" bind:value={tierErc1155Contract}>
-
+          <img src={icons.edit} alt="edit" class="btn-hover">
         </div>
-        <div>
-          <label class="f-weight-700">Minimum tier:</label>
-          <input type="text" class="default-input min-tier" bind:value={minTierErc1155}>
+        <div class="display-flex address-container">
+          <div class="f-weight-700 label">Minimum tier:
+            <input type="text" class="default-input min-tier" bind:value={minTierErc1155}>
+          </div>
+          <img src={icons.edit} alt="edit" class="btn-hover">
         </div>
-        <label class="f-weight-700">Check address on the tier list:</label>
-        <input type="text" class="default-input address" bind:value={addressErc1155}>
+        <div class="f-weight-700">Check address on the tier list:</div>
+        <input type="text" class="default-input" bind:value={addressErc1155}>
         <div>
           <button class="default-btn" on:click={()=>{checkAddressErc1155()}}>Check</button>
         </div>
       </div>
+
     </div>
   </div>
 </DefaultFrame>
@@ -85,4 +92,20 @@
     .contract {
         white-space: nowrap;
     }
+
+    .address-container {
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    .address {
+        width: 80%;
+        margin-right: 20px;
+    }
+
+    .label{
+        margin-right: 5px;
+
+    }
+
 </style>

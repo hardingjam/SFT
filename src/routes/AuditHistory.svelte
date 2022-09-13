@@ -21,7 +21,45 @@
   </div>
   <div slot="content">
     <div class="history f-weight-700">
+      <div>
+        <table class="receipts">
+          <thead>
+          <tr>
+            <th>Receipt ID</th>
+            <th>Options</th>
+            <th>Last updated</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <table class="certify">
+          <thead>
+          <tr>
+            <th>Total amount</th>
+            <th>Certified on</th>
+            <th>Certified by</th>
+            <th>Certified until</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
 
+      </div>
     </div>
   </div>
 </DefaultFrame>
@@ -31,7 +69,26 @@
         text-align: left;
         display: flex;
         flex-direction: column;
-        min-width: 385px;
+        min-width: 678px;
+        height: 530px;
     }
+
+    table {
+        width: 100%;
+    }
+
+    thead {
+        text-align: center;
+    }
+
+    .receipts {
+        height: 300px;
+        border-bottom: 1px solid #D2D2D2;;
+    }
+
+    .certify {
+        margin-top: 30px;
+    }
+
 
 </style>

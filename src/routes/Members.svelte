@@ -1,7 +1,9 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {icons} from "../scripts/assets.js"
-    import {vault} from "../scripts/store.js";
+    import {account, activeNetwork, ethersData, vault} from "../scripts/store.js";
+    import {getContract, tierReport} from "../scripts/helpers.js";
+    import tierContractAbi from "../contract/TierContractAbi.json";
 
 
     let mock = {
@@ -32,10 +34,12 @@
     let showCheckErc20 = false
     let error = ''
 
-    function checkAddressErc20() {
+   async function checkAddressErc20() {
         if (!addressErc20) {
             return
         }
+        // await getTierContract()
+
         showCheckErc20 = true
         isAddressErc20Valid = !isAddressErc20Valid
     }
@@ -98,6 +102,13 @@
         }
     }
 
+    async function getTierContract(){
+        let contract = await getContract($activeNetwork, "0x540e62bfc810c00489bbc2233c4103c964e0136f", tierContractAbi, $ethersData.signerOrProvider)
+
+        if (contract) {
+            let bla =  await contract.report("0xc0d477556c25c9d67e1f57245c7453da776b51cf",[])
+        }
+    }
 
 </script>
 <DefaultFrame header="Members">

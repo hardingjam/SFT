@@ -109,13 +109,13 @@
                 navigateTo('#members', {replace: false})
             }
         },
-        {
-            id: "audit-history",
-            displayName: "Audit History",
-            action: () => {
-                navigateTo('#audit-history', {replace: false})
-            }
-        },
+        // {
+        //     id: "audit-history",
+        //     displayName: "Audit History",
+        //     action: () => {
+        //         navigateTo('#audit-history', {replace: false})
+        //     }
+        // },
     ]
 
     onMount(async () => {

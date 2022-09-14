@@ -36,7 +36,7 @@
             await tx.wait();
             amount = 0;
         } catch (error) {
-            console.log(error);
+            console.log(error.reason);
         }
         shouldDisable = false;
     }

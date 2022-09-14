@@ -13,6 +13,8 @@
     import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
+    import Members from "../routes/Members.svelte";
+    import AuditHistory from "../routes/AuditHistory.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -81,7 +83,7 @@
         },
         {
             id: "admin",
-            displayName: "Admin",
+            displayName: "Manage Token",
             action: () => {
                 navigateTo('#admin', {replace: false})
             }
@@ -100,6 +102,20 @@
                 navigateTo('#list', {replace: false})
             }
         },
+        {
+            id: "members",
+            displayName: "Members",
+            action: () => {
+                navigateTo('#members', {replace: false})
+            }
+        },
+        // {
+        //     id: "audit-history",
+        //     displayName: "Audit History",
+        //     action: () => {
+        //         navigateTo('#audit-history', {replace: false})
+        //     }
+        // },
     ]
 
     onMount(async () => {
@@ -294,6 +310,8 @@
           <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
           <Route path="#admin" component={Admin}/>
           <Route path="#list" component={Tokens}/>
+          <Route path="#members" component={Members}/>
+          <Route path="#audit-history" component={AuditHistory}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -309,7 +327,7 @@
 
             <div class="tab-panel-container">
               <Route path="#mint" component={Mint} ethersData={$ethersData}/>
-              <Route path="#redeem" component={Redeem} ethersData={$ethersData} />
+              <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
             </div>
           </div>
         {/if}

@@ -96,3 +96,23 @@ export function filterArray(arr1, arr2) {
         return arr2.indexOf(a.account.address) === -1
     })
 }
+
+export function tierReport(report) {
+
+    let parsedReport = [];
+    const arrStatus = [0, 1, 2, 3, 4, 5, 6, 7]
+        .map((i) =>
+            BigInt(report)
+                .toString(16)
+                .padStart(64, "0")
+                .slice(i * 8, i * 8 + 8)
+        )
+        .reverse();
+    //arrStatus = arrStatus.reverse();
+
+    for (const i in arrStatus) {
+        parsedReport.push(parseInt("0x" + arrStatus[i]));
+    }
+
+    return parsedReport;
+}

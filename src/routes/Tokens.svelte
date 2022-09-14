@@ -14,7 +14,7 @@
     }
 
 </script>
-<div class="sft-tokens-container">
+<div class="sft-tokens-container default-frame">
   <div class="tokens-header">
     <span>SFT Lists</span>
   </div>
@@ -40,10 +40,6 @@
 <style>
     .sft-tokens-container {
         min-width: 550px;
-        background: rgba(44, 44, 84, 0.33);
-        border-radius: 20px;
-        padding: 12px;
-        color: #ffffff;
     }
 
     .tokens-header {

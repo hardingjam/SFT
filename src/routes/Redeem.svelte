@@ -1,6 +1,4 @@
 <script>
-
-
     import MintInput from "../components/MintInput.svelte";
     import {getSubgraphData} from "../scripts/helpers.js";
     import {account, activeNetwork, vault} from "../scripts/store.js";
@@ -251,7 +249,5 @@
         width: calc(100% - 50px);
     }
 
-    .error {
-        color: #F11717;
-    }
+
 </style>

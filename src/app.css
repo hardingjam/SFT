@@ -102,6 +102,7 @@ button:focus, button:focus-visible {
     border: 1px solid #000000;
     border-radius: 5px;
     background-color: #ffffff;
+    width: fit-content;
 }
 
 .default-btn:hover {
@@ -113,6 +114,19 @@ button:focus, button:focus-visible {
     border: 1px solid #000000;
     box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
+}
+
+.header-btn {
+    box-sizing: border-box;
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    background: transparent;
+    color: #ffffff;
+    margin-left: 15px;
+}
+
+.header-btn:focus {
+    outline: none;
 }
 
 .nav-dropdown {
@@ -138,12 +152,19 @@ button:focus, button:focus-visible {
     border-radius: 10px;
 }
 
+.default-frame {
+    background: rgba(44, 44, 84, 0.33);
+    border-radius: 20px;
+    padding: 12px;
+    color: #ffffff;
+}
+
 .default-input {
     width: 370px;
     height: 28px;
     background: #ECECEC;
     border-radius: 5px;
-    margin-bottom: 7px;
+    margin-bottom: 8px;
     padding-left: 13px;
     font-style: normal;
     font-weight: 300;
@@ -160,6 +181,14 @@ button:focus, button:focus-visible {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.error {
+    color: #F11717;
+}
+
+.w-100 {
+    width: 100%;
 }
 
 /* Hide the browser's default radio button */
@@ -207,7 +236,7 @@ button:focus, button:focus-visible {
     content: '\2714';
 }
 
-.check-box-label{
+.check-box-label {
     margin-left: 30px;
 }
 

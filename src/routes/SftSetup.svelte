@@ -105,7 +105,7 @@
   <div class="form-box">
     <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
     </div>
-    <div class="space-between"><label class="f-weight-700">Admin ledger:</label> <input type="text"
+    <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
                                                                                         bind:value={admin_ledger}>
     </div>
     <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text" bind:value={symbol}>
@@ -156,7 +156,7 @@
     }
 
     .form-box input {
-        width: 370px;
+        width: 343px;
         height: 28px;
         background: #ECECEC;
         border-radius: 5px;

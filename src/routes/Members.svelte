@@ -6,19 +6,12 @@
     import tierContractAbi from "../contract/TierContractAbi.json";
 
 
-    let mock = {
-        minTierErc20: '',
-        tierErc20Contract: "",
-        minTierErc1155: '',
-        tierErc1155Contract: ""
-    }
-
-    let minTierErc20 = ''
+    let erc20MinTier = localStorage.getItem("erc20MinTier") || ''
     let addressErc20 = ''
-    let minTierErc1155 = ''
+    let erc1155MinTier = localStorage.getItem("erc1155MinTier") || ''
     let addressErc1155 = ''
-    let tierErc20Contract = ''
-    let tierErc1155Contract = ''
+    let erc20TierContract = localStorage.getItem("erc20TierContract") || ''
+    let erc1155TierContract = localStorage.getItem("erc1155TierContract") || ''
     let editErc20 = {
         address: false,
         minTier: false
@@ -78,7 +71,7 @@
 
     async function assignTierErc20() {
         try {
-            if (!tierErc20Contract) {
+            if (!erc20TierContract) {
                 return
             }
             const hasRoleErc20Tierer = await $vault.hasRole(
@@ -87,8 +80,10 @@
             );
 
             if (hasRoleErc20Tierer) {
-                let tx = await $vault.setERC20Tier(tierErc20Contract, minTierErc20, [])
+                let tx = await $vault.setERC20Tier(erc20TierContract, erc20MinTier, [])
                 await tx.wait()
+                localStorage.setItem("erc20TierContract", erc20TierContract)
+                localStorage.setItem("erc20MinTier", erc20MinTier)
             } else {
                 error = `AccessControl: account ${$account.toLowerCase()} is missing role ERC20TIERER`
             }
@@ -100,7 +95,7 @@
 
     async function assignTierErc1155() {
         try {
-            if (!tierErc1155Contract) {
+            if (!erc1155TierContract) {
                 return
             }
             const hasRoleErc1155Tierer = await $vault.hasRole(
@@ -109,8 +104,11 @@
             );
 
             if (hasRoleErc1155Tierer) {
-                let tx = await $vault.setERC1155Tier(tierErc1155Contract, minTierErc1155, [])
+                let tx = await $vault.setERC1155Tier(erc1155TierContract, erc1155MinTier, [])
                 await tx.wait()
+                localStorage.setItem("erc1155TierContract", erc1155TierContract)
+                localStorage.setItem("erc1155MinTier", erc1155MinTier)
+
             } else {
                 error = `AccessControl: account ${$account.toLowerCase()} is missing role ERC1155TIERER`
             }
@@ -129,10 +127,10 @@
         <div class="display-flex address-container">
           <div class="f-weight-700 contract label">Contract address:
             {#if !editErc20.address}
-              {mock.tierErc20Contract}
+              {erc20TierContract.replace(/(.{14}).*/, "$1…")}
             {/if}
             {#if editErc20.address}
-              <input type="text" class="default-input address" bind:value={tierErc20Contract} autofocus>
+              <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
             {/if}
           </div>
           <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditAddress()}>
@@ -140,10 +138,10 @@
         <div class="display-flex address-container">
           <div class="f-weight-700 label">Minimum tier:
             {#if editErc20.minTier}
-              <input type="text" class="default-input min-tier" bind:value={minTierErc20} autofocus>
+              <input type="text" class="default-input min-tier" bind:value={erc20MinTier} autofocus>
             {/if}
             {#if !editErc20.minTier}
-              {mock.minTierErc20}
+              {erc20MinTier}
             {/if}
           </div>
           <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditMinTier()}>
@@ -163,7 +161,7 @@
         </div>
         <div>
           <button class="default-btn"
-                  on:click={()=>{checkAddress(tierErc20Contract,addressErc20, minTierErc20, 'erc20')}}>
+                  on:click={()=>{checkAddress(erc20TierContract,addressErc20, erc20MinTier, 'erc20')}}>
             Check
           </button>
         </div>
@@ -176,10 +174,10 @@
             Contract address:
 
             {#if !editErc1155.address}
-              {mock.tierErc1155Contract}
+              {erc1155TierContract.replace(/(.{14}).*/, "$1…")}
             {/if}
             {#if editErc1155.address}
-              <input type="text" class="default-input address" bind:value={tierErc1155Contract} autofocus>
+              <input type="text" class="default-input address" bind:value={erc1155TierContract} autofocus>
             {/if}
 
           </div>
@@ -188,10 +186,10 @@
         <div class="display-flex address-container">
           <div class="f-weight-700 label">Minimum tier:
             {#if editErc1155.minTier}
-              <input type="text" class="default-input min-tier" bind:value={minTierErc1155} autofocus>
+              <input type="text" class="default-input min-tier" bind:value={erc1155MinTier} autofocus>
             {/if}
             {#if !editErc1155.minTier}
-              {mock.minTierErc1155}
+              {erc1155MinTier}
             {/if}
           </div>
           <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditMinTier1155()}>
@@ -212,7 +210,7 @@
         </div>
         <div>
           <button class="default-btn"
-                  on:click={()=>{checkAddress(tierErc1155Contract,addressErc1155, minTierErc1155, 'erc1155')}}>
+                  on:click={()=>{checkAddress(erc1155TierContract,addressErc1155, erc1155MinTier, 'erc1155')}}>
             Check
           </button>
         </div>

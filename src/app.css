@@ -187,6 +187,10 @@ button:focus, button:focus-visible {
     color: #F11717;
 }
 
+.w-100 {
+    width: 100%;
+}
+
 /* Hide the browser's default radio button */
 .check-container input {
     position: absolute;

@@ -28,28 +28,36 @@
         minTier: false
     }
 
-    let isAddressErc20Valid = false
-    let isAddressErc1155Valid = false
-    let showCheck = false
-    let showCheckErc20 = false
-    let error = ''
-
-   async function checkAddressErc20() {
-        if (!addressErc20) {
-            return
-        }
-        // await getTierContract()
-
-        showCheckErc20 = true
-        isAddressErc20Valid = !isAddressErc20Valid
+    let isAddressValid = {
+        erc20: false,
+        erc1155: false
+    }
+    let showCheck = {
+        erc20: false,
+        erc1155: false
     }
 
-    function checkAddressErc1155() {
-        if (!addressErc1155) {
+    let error = ''
+
+    async function checkAddress(contract, account, minTier, erc) {
+        if (!account || !minTier || !contract) {
             return
         }
-        showCheck = true
-        isAddressErc1155Valid = !isAddressErc1155Valid
+        let tierContract = await getContract($activeNetwork, contract.trim(), tierContractAbi, $ethersData.signerOrProvider)
+
+        if (tierContract) {
+            error = ''
+
+            try {
+                let report = await tierContract.report(account.trim(), [])
+                report = tierReport(report)
+                showCheck[erc] = true
+                isAddressValid[erc] = report[minTier - 1] === 0
+            } catch (e) {
+                error = e.message
+                console.log(e.message)
+            }
+        }
     }
 
     function toggleEditAddress() {
@@ -73,40 +81,42 @@
             if (!tierErc20Contract) {
                 return
             }
-            //todo Check for role
+            const hasRoleErc20Tierer = await $vault.hasRole(
+                await $vault.ERC20TIERER(),
+                $account
+            );
 
-            let tx = await $vault.setERC20Tier(tierErc20Contract, minTierErc20, [])
-            await tx.wait()
-            editErc20.address = false
-            editErc20.minTier = false
+            if (hasRoleErc20Tierer) {
+                let tx = await $vault.setERC20Tier(tierErc20Contract, minTierErc20, [])
+                await tx.wait()
+            } else {
+                error = `AccessControl: account ${$account.toLowerCase()} is missing role ERC20TIERER`
+            }
 
         } catch (e) {
             error = e.message
         }
     }
+
     async function assignTierErc1155() {
         try {
             if (!tierErc1155Contract) {
-                console.log(4)
                 return
             }
+            const hasRoleErc1155Tierer = await $vault.hasRole(
+                await $vault.ERC1155TIERER(),
+                $account
+            );
 
-            //todo Check for role
-            let tx = await $vault.setERC1155Tier(tierErc1155Contract, minTierErc1155, [])
-            await tx.wait()
-            editErc1155.address = false
-            editErc1155.minTier = false
+            if (hasRoleErc1155Tierer) {
+                let tx = await $vault.setERC1155Tier(tierErc1155Contract, minTierErc1155, [])
+                await tx.wait()
+            } else {
+                error = `AccessControl: account ${$account.toLowerCase()} is missing role ERC1155TIERER`
+            }
 
         } catch (e) {
             error = e.message
-        }
-    }
-
-    async function getTierContract(){
-        let contract = await getContract($activeNetwork, "0x540e62bfc810c00489bbc2233c4103c964e0136f", tierContractAbi, $ethersData.signerOrProvider)
-
-        if (contract) {
-            let bla =  await contract.report("0xc0d477556c25c9d67e1f57245c7453da776b51cf",[])
         }
     }
 
@@ -121,16 +131,16 @@
             {#if !editErc20.address}
               {mock.tierErc20Contract}
             {/if}
+            {#if editErc20.address}
+              <input type="text" class="default-input address" bind:value={tierErc20Contract} autofocus>
+            {/if}
           </div>
-          {#if editErc20.address}
-            <input type="text" class="default-input address" bind:value={tierErc20Contract}>
-          {/if}
           <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditAddress()}>
         </div>
         <div class="display-flex address-container">
           <div class="f-weight-700 label">Minimum tier:
             {#if editErc20.minTier}
-              <input type="text" class="default-input min-tier" bind:value={minTierErc20}>
+              <input type="text" class="default-input min-tier" bind:value={minTierErc20} autofocus>
             {/if}
             {#if !editErc20.minTier}
               {mock.minTierErc20}
@@ -143,35 +153,42 @@
         </div>
         <div class="f-weight-700">Check address on the tier list:</div>
         <div class="check-address-input-container">
-          <input type="text" class="default-input" bind:value={addressErc20}>
-          {#if isAddressErc20Valid && showCheckErc20 && addressErc20}
+          <input type="text" class="default-input w-100" bind:value={addressErc20}>
+          {#if isAddressValid.erc20 && showCheck.erc20 && addressErc20}
             <img src={icons.check} alt="check" class="check">
           {/if}
-          {#if !isAddressErc20Valid && showCheckErc20 && addressErc20}
+          {#if !isAddressValid.erc20 && showCheck.erc20 && addressErc20}
             <img src={icons.reject} alt="reject" class="reject">
           {/if}
         </div>
         <div>
-          <button class="default-btn" on:click={()=>{checkAddressErc20()}}>Check</button>
+          <button class="default-btn"
+                  on:click={()=>{checkAddress(tierErc20Contract,addressErc20, minTierErc20, 'erc20')}}>
+            Check
+          </button>
         </div>
       </div>
       <div class="erc1155 tier">
         <div>ERC1155</div>
         <div class="display-flex address-container">
-          <div class="f-weight-700 contract label">Contract address:
+
+          <div class="f-weight-700 contract label">
+            Contract address:
+
             {#if !editErc1155.address}
               {mock.tierErc1155Contract}
             {/if}
+            {#if editErc1155.address}
+              <input type="text" class="default-input address" bind:value={tierErc1155Contract} autofocus>
+            {/if}
+
           </div>
-          {#if editErc1155.address}
-            <input type="text" class="default-input address" bind:value={tierErc1155Contract}>
-          {/if}
           <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditAddress1155()}>
         </div>
         <div class="display-flex address-container">
           <div class="f-weight-700 label">Minimum tier:
             {#if editErc1155.minTier}
-              <input type="text" class="default-input min-tier" bind:value={minTierErc1155}>
+              <input type="text" class="default-input min-tier" bind:value={minTierErc1155} autofocus>
             {/if}
             {#if !editErc1155.minTier}
               {mock.minTierErc1155}
@@ -185,16 +202,19 @@
         <div class="f-weight-700">Check address on the tier list:</div>
         <div class="check-address-input-container">
           {addressErc1155}
-          <input type="text" class="default-input" bind:value={addressErc1155}>
-          {#if isAddressErc1155Valid && showCheck && addressErc1155}
+          <input type="text" class="default-input w-100" bind:value={addressErc1155}>
+          {#if isAddressValid.erc1155 && showCheck.erc1155 && addressErc1155}
             <img src={icons.check} alt="check" class="check">
           {/if}
-          {#if !isAddressErc1155Valid && showCheck && addressErc1155}
+          {#if !isAddressValid.erc1155 && showCheck.erc1155 && addressErc1155}
             <img src={icons.reject} alt="reject" class="reject">
           {/if}
         </div>
         <div>
-          <button class="default-btn" on:click={()=>{checkAddressErc1155()}}>Check</button>
+          <button class="default-btn"
+                  on:click={()=>{checkAddress(tierErc1155Contract,addressErc1155, minTierErc1155, 'erc1155')}}>
+            Check
+          </button>
         </div>
       </div>
       {#if error}
@@ -213,7 +233,7 @@
         text-align: left;
         display: flex;
         flex-direction: column;
-        max-width: 485px;
+        width: 385px;
     }
 
     .tier {
@@ -231,6 +251,7 @@
 
     .contract {
         white-space: nowrap;
+        width: 215px;
     }
 
     .address-container {
@@ -239,7 +260,7 @@
     }
 
     .address {
-        width: 80%;
+        width: 215px;
         margin-right: 20px;
     }
 
@@ -275,6 +296,8 @@
     }
 
     .assign-tier button {
-        float: right;
+        /*float: right;*/
+        margin-bottom: 10px;
     }
+
 </style>

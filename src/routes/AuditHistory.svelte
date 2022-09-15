@@ -1,7 +1,7 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
-    import {ethersData, vault, auditHistory, activeNetwork} from "../scripts/store";
+    import {vault, auditHistory, activeNetwork, account} from "../scripts/store";
     import {beforeUpdate, onMount} from "svelte";
     import {getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/consts.js";
@@ -80,7 +80,18 @@
 
     async function certify() {
         let until = new Date(certifyUntil).getTime()
-        await $vault.certify(until / 1000, [], false)
+
+        const hasRoleCertifier = await $vault.hasRole(
+            await $vault.CERTIFIER(),
+            $account
+        );
+
+        if (hasRoleCertifier) {
+            let tx = await $vault.certify(until / 1000, [], false)
+            await tx.wait()
+        } else {
+            error = `AccessControl: account ${$account.toLowerCase()} is missing role CERTIFIER`
+        }
     }
 </script>
 <DefaultFrame header="Audit History">
@@ -136,12 +147,12 @@
         <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
         <button class="default-btn" on:click={()=>{certify()}}>Certify</button>
       </div>
+      <div class="error">
+        {error}
+        <!--        System frozen until certified-->
+      </div>
+    </div>
 
-    </div>
-    <div class="error">
-      {error}
-      <!--        System frozen until certified-->
-    </div>
   </div>
 </DefaultFrame>
 <style>
@@ -150,8 +161,8 @@
         text-align: left;
         display: flex;
         flex-direction: column;
-        min-width: 678px;
-        height: 530px;
+        width: 678px;
+        min-height: 530px;
         position: relative;
 
     }
@@ -174,10 +185,6 @@
         margin-top: 30px;
         height: 180px;
         overflow: auto;
-    }
-
-    .error {
-        float: right;
     }
 
     .certify-btn-container {

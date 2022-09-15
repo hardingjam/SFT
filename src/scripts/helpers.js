@@ -116,3 +116,13 @@ export function tierReport(report) {
 
     return parsedReport;
 }
+
+export function timeStampToDate(timeStamp) {
+    if (timeStamp) {
+        let d = new Date(timeStamp * 1000)
+        let day = d.getDate();
+        let month = d.getMonth() + 1;
+        let year = d.getFullYear()
+        return day + '/' + month + "/" + year
+    }
+}

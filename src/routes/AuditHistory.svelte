@@ -3,9 +3,9 @@
     import {navigateTo} from "yrv";
     import {ethersData, vault, auditHistory, activeNetwork} from "../scripts/store";
     import {beforeUpdate, onMount} from "svelte";
-    import {getSubgraphData} from "../scripts/helpers.js";
+    import {getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/consts.js";
-
+    import {ethers} from "ethers";
 
 
     let certifyData = []
@@ -123,10 +123,10 @@
           <tbody>
           {#each certifyData as cert}
             <tr>
-              <td>{$auditHistory?.totalShares}</td>
-              <td>{cert?.timestamp}</td>
-              <td>{cert?.certifier.address}</td>
-              <td class="until">{cert?.certifiedUntil}</td>
+              <td>{ethers.utils.formatUnits($auditHistory?.totalShares, 18)}</td>
+              <td>{timeStampToDate(cert?.timestamp)}</td>
+              <td>{cert?.certifier.address.replace(/(.{9}).*/, "$1…")}</td>
+              <td class="until">{timeStampToDate(cert?.certifiedUntil)}</td>
             </tr>
           {/each}
           </tbody>

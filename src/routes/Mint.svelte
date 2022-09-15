@@ -4,6 +4,7 @@
     import {ethers} from "ethers";
     import {vault} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
+    import {navigateTo} from "yrv";
 
     export let ethersData;
     let {signer} = ethersData;
@@ -44,7 +45,7 @@
 </script>
 
 <div class="mint-container">
-  <div class="audit-history btn-hover">
+  <div class="audit-history btn-hover" on:click={()=>{navigateTo('#audit-history')}}>
     <span>Audit History </span><img src={icons.show} alt="go to audit">
   </div>
   <MintInput bind:amount={amount} amountLabel={"Mint Amount"} label={"Options"}/>

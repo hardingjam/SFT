@@ -159,6 +159,7 @@
     .certify-btn-container {
         display: flex;
         justify-content: end;
+        margin-top: 10px
     }
 
     .certify-date-input {

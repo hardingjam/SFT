@@ -6,8 +6,10 @@
     import {getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/consts.js";
     import {ethers} from "ethers";
+    import {formatDate} from "../scripts/helpers";
 
-
+    let error = ''
+    let certifyUntil = formatDate(new Date())
     let certifyData = []
     beforeUpdate(async () => {
         if (!$auditHistory.id) {
@@ -77,10 +79,8 @@
     ]
 
     async function certify() {
-        const blockNum = await $ethersData.provider.getBlockNumber();
-        const block = await $ethersData.provider.getBlock(blockNum);
-        const certifiedUntil = block.timestamp + 100;
-        await $vault.certify(certifiedUntil, [], false)
+        let until = new Date(certifyUntil).getTime()
+        await $vault.certify(until / 1000, [], false)
     }
 </script>
 <DefaultFrame header="Audit History">
@@ -132,8 +132,15 @@
           </tbody>
         </table>
       </div>
-      <button class="default-btn certify-btn" on:click={()=>{certify()}}>Certify</button>
-      <div class="error">System frozen until certified</div>
+      <div class="certify-btn-container">
+        <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
+        <button class="default-btn" on:click={()=>{certify()}}>Certify</button>
+      </div>
+
+    </div>
+    <div class="error">
+      {error}
+      <!--        System frozen until certified-->
     </div>
   </div>
 </DefaultFrame>
@@ -169,14 +176,40 @@
         overflow: auto;
     }
 
-    .certify-btn {
-        position: absolute;
-        right: 0;
-        bottom: 0;
+    .error {
+        float: right;
+    }
+
+    .certify-btn-container {
+        display: flex;
+        justify-content: end;
+    }
+
+    .certify-date-input {
+        margin-right: 5px;
+        width: 110px;
+        border: none;
+        box-sizing: border-box;
+        outline: 0;
+        padding: .75rem;
+        position: relative;
     }
 
     .until {
         color: #F11717;;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        background: transparent;
+        bottom: 0;
+        color: transparent;
+        cursor: pointer;
+        height: auto;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: auto;
     }
 
 </style>

@@ -12,8 +12,7 @@ export async function getEvent(tx, eventName, contract) {
     const events = (await tx.wait()).events || [];
     const filter = (contract.filters[eventName]().topics || [])[0];
     const eventObj = events.find(
-        (x) => x.topics[0] === filter && x.address === contract.address
-    );
+        (x) => x.topics[0] === filter && x.address.toLowerCase() === contract.address.toLowerCase())
 
     if (!eventObj) {
         throw new Error(`Could not find event with name ${eventName}`);

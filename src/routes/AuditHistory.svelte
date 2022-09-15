@@ -3,7 +3,7 @@
     import {navigateTo} from "yrv";
     import {vault, auditHistory, activeNetwork, account} from "../scripts/store";
     import {beforeUpdate, onMount} from "svelte";
-    import {getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
+    import {getEventArgs, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/consts.js";
     import {ethers} from "ethers";
     import {formatDate} from "../scripts/helpers";
@@ -27,7 +27,7 @@
 
 
     async function certify() {
-        let until = new Date(certifyUntil).getTime()
+        let untilToTime = new Date(certifyUntil).getTime()
 
         const hasRoleCertifier = await $vault.hasRole(
             await $vault.CERTIFIER(),
@@ -35,8 +35,17 @@
         );
 
         if (hasRoleCertifier) {
-            let tx = await $vault.certify(until / 1000, [], false)
-            await tx.wait()
+            let {caller, until} = await getEventArgs(
+                await $vault.certify(untilToTime / 1000, [], false),
+                "Certify",
+                $vault
+            )
+            certifyData = certifyData.push( {
+                timestamp: new Date().getTime() / 1000,
+                certifier: {address: caller},
+                certifiedUntil: until
+            })
+
         } else {
             error = `AccessControl: account ${$account.toLowerCase()} is missing role CERTIFIER`
         }

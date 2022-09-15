@@ -1,27 +1,24 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {icons} from "../scripts/assets.js"
     import {navigateTo} from "yrv";
-    import {ethersData, vault} from "../scripts/store";
-    import {getEventArgs} from "../scripts/helpers.js";
+    import {ethersData, vault, auditHistory, activeNetwork} from "../scripts/store";
+    import {beforeUpdate, onMount} from "svelte";
+    import {getSubgraphData} from "../scripts/helpers.js";
+    import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/consts.js";
 
 
-    function toggleEditAddress1155() {
 
-    }
-
-    async function certify() {
-        const blockNum = await $ethersData.provider.getBlockNumber();
-        const block = await $ethersData.provider.getBlock(blockNum);
-        const certifiedUntil = block.timestamp + 100;
-
-        const {until} = (await getEventArgs(
-            await $vault.certify(certifiedUntil, [], false),
-            "Certify",
-            $vault
-        ))
-
-    }
+    let certifyData = []
+    beforeUpdate(async () => {
+        if (!$auditHistory.id) {
+            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetVault')
+            if (data) {
+                let temp = data.data.offchainAssetVault
+                auditHistory.set(temp)
+            } else return {}
+        }
+        certifyData = $auditHistory?.certifications
+    })
 
     let receipts = [
         {
@@ -79,29 +76,12 @@
         },
     ]
 
-    let certifyData = [
-        {
-            total: "23.000",
-            certifiedOn: "2022-03-05",
-            certifiedBy: "0x4567789",
-            until: "2022-03-05"
-        }, {
-            total: "23.000",
-            certifiedOn: "2022-03-05",
-            certifiedBy: "0x4567789",
-            until: "2022-03-05"
-        }, {
-            total: "23.000",
-            certifiedOn: "2022-03-05",
-            certifiedBy: "0x4567789",
-            until: "2022-03-05"
-        }, {
-            total: "23.000",
-            certifiedOn: "2022-03-05",
-            certifiedBy: "0x4567789",
-            until: "2022-03-05"
-        },
-    ]
+    async function certify() {
+        const blockNum = await $ethersData.provider.getBlockNumber();
+        const block = await $ethersData.provider.getBlock(blockNum);
+        const certifiedUntil = block.timestamp + 100;
+        await $vault.certify(certifiedUntil, [], false)
+    }
 </script>
 <DefaultFrame header="Audit History">
   <div slot="header-buttons">
@@ -143,10 +123,10 @@
           <tbody>
           {#each certifyData as cert}
             <tr>
-              <td>{cert.total}</td>
-              <td>{cert.certifiedOn}</td>
-              <td>{cert.certifiedBy}</td>
-              <td class="until">{cert.until}</td>
+              <td>{$auditHistory?.totalShares}</td>
+              <td>{cert?.timestamp}</td>
+              <td>{cert?.certifier.address}</td>
+              <td class="until">{cert?.certifiedUntil}</td>
             </tr>
           {/each}
           </tbody>

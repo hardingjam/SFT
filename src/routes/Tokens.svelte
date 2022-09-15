@@ -1,17 +1,30 @@
 <script>
-    import {activeNetwork, ethersData, tokens, vault} from "../scripts/store.js";
-    import {getContract} from "../scripts/helpers.js";
+    import {activeNetwork, auditHistory, ethersData, tokens, vault} from "../scripts/store.js";
+    import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import {navigateTo} from "yrv";
+    import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/consts.js";
+
 
     async function handleTokenSelect(token) {
         let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
         if (contract) {
             vault.set(contract)
             localStorage.setItem("vaultAddress", token.address)
+            let auditHistoryData = await getAuditHistoryData(token.address)
+            auditHistory.set(auditHistoryData)
             navigateTo("#admin")
+
         }
     }
+
+    async function getAuditHistoryData(token) {
+        let data = await getSubgraphData($activeNetwork, {id: token.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetVault')
+        if (data) {
+            return data.data.offchainAssetVault
+        } else return {}
+    }
+
 
 </script>
 <div class="sft-tokens-container default-frame">

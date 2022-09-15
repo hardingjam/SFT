@@ -11,6 +11,8 @@
     let error = ''
     let certifyUntil = formatDate(new Date())
     let certifyData = []
+    let receipts = []
+
     beforeUpdate(async () => {
         if (!$auditHistory.id) {
             let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetVault')
@@ -20,63 +22,9 @@
             } else return {}
         }
         certifyData = $auditHistory?.certifications
+        receipts = $auditHistory?.deposits
     })
 
-    let receipts = [
-        {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        },
-    ]
 
     async function certify() {
         let until = new Date(certifyUntil).getTime()
@@ -113,9 +61,9 @@
           <tbody>
           {#each receipts as receipt}
             <tr>
-              <td>{receipt.receiptId}</td>
-              <td>{receipt.options}</td>
-              <td>{receipt.updated}</td>
+              <td>{receipt.receipt.receiptId}</td>
+              <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
+              <td>{timeStampToDate(receipt.timestamp)}</td>
             </tr>
           {/each}
           </tbody>
@@ -175,10 +123,18 @@
         text-align: center;
     }
 
+    th, td {
+        text-align: left;
+    }
+
     .receipts {
         height: 300px;
         border-bottom: 1px solid #D2D2D2;
         overflow: auto;
+    }
+
+    .receipts table th {
+        width: 33%;
     }
 
     .certify {

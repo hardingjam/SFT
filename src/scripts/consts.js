@@ -50,6 +50,15 @@ export const AUDIT_HISTORY_DATA_QUERY = `
                 address
               },
               certifiedUntil
+            },
+            deposits 
+            {
+              receipt
+              {
+                receiptId
+              },
+              timestamp,
+              amount
             }
           }
         }

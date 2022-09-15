@@ -1,110 +1,58 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {icons} from "../scripts/assets.js"
     import {navigateTo} from "yrv";
-    import {ethersData, vault} from "../scripts/store";
-    import {getEventArgs} from "../scripts/helpers.js";
+    import {vault, auditHistory, activeNetwork, account} from "../scripts/store";
+    import {beforeUpdate, onMount} from "svelte";
+    import {getEventArgs, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
+    import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/consts.js";
+    import {ethers} from "ethers";
+    import {formatDate} from "../scripts/helpers";
 
+    let error = ''
+    let certifyUntil = formatDate(new Date())
+    let certifyData = []
+    let receipts = []
 
-    function toggleEditAddress1155() {
+    beforeUpdate(async () => {
+        if (!$auditHistory.id) {
+            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetVault')
+            if (data) {
+                let temp = data.data.offchainAssetVault
+                auditHistory.set(temp)
+            } else return {}
+        }
+        certifyData = $auditHistory?.certifications
+        receipts = $auditHistory?.deposits
+    })
 
-    }
 
     async function certify() {
-        const blockNum = await $ethersData.provider.getBlockNumber();
-        const block = await $ethersData.provider.getBlock(blockNum);
-        const certifiedUntil = block.timestamp + 100;
+        let untilToTime = new Date(certifyUntil).getTime()
 
-        const {until} = (await getEventArgs(
-            await $vault.certify(certifiedUntil, [], false),
-            "Certify",
-            $vault
-        ))
+        const hasRoleCertifier = await $vault.hasRole(
+            await $vault.CERTIFIER(),
+            $account
+        );
 
+        if (hasRoleCertifier) {
+            let {caller, until} = await getEventArgs(
+                await $vault.certify(untilToTime / 1000, [], false),
+                "Certify",
+                $vault
+            )
+            certifyData = certifyData.push( {
+                timestamp: new Date().getTime() / 1000,
+                certifier: {address: caller},
+                certifiedUntil: until
+            })
+
+        } else {
+            error = `AccessControl: account ${$account.toLowerCase()} is missing role CERTIFIER`
+        }
     }
-
-    let receipts = [
-        {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        }, {
-            receiptId: 12345678,
-            options: "23.000",
-            updated: "2022-03-05"
-        },
-    ]
-
-    let certifyData = [
-        {
-            total: "23.000",
-            certifiedOn: "2022-03-05",
-            certifiedBy: "0x4567789",
-            until: "2022-03-05"
-        }, {
-            total: "23.000",
-            certifiedOn: "2022-03-05",
-            certifiedBy: "0x4567789",
-            until: "2022-03-05"
-        }, {
-            total: "23.000",
-            certifiedOn: "2022-03-05",
-            certifiedBy: "0x4567789",
-            until: "2022-03-05"
-        }, {
-            total: "23.000",
-            certifiedOn: "2022-03-05",
-            certifiedBy: "0x4567789",
-            until: "2022-03-05"
-        },
-    ]
 </script>
-<DefaultFrame header="Audit History">
-  <div slot="header-buttons">
+<DefaultFrame header="Audit History" backBtn={false}>
+  <div slot="header-buttons" class="display-flex">
     <button class="header-btn btn-hover" on:click={()=>{navigateTo("#members")}}>Members</button>
     <button class="header-btn btn-hover" on:click={()=>{navigateTo("#admin")}}>Admins</button>
   </div>
@@ -121,10 +69,10 @@
           </thead>
           <tbody>
           {#each receipts as receipt}
-            <tr>
-              <td>{receipt.receiptId}</td>
-              <td>{receipt.options}</td>
-              <td>{receipt.updated}</td>
+            <tr class="tb-row">
+              <td>{receipt.receipt.receiptId}</td>
+              <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
+              <td>{timeStampToDate(receipt.timestamp)}</td>
             </tr>
           {/each}
           </tbody>
@@ -143,18 +91,25 @@
           <tbody>
           {#each certifyData as cert}
             <tr>
-              <td>{cert.total}</td>
-              <td>{cert.certifiedOn}</td>
-              <td>{cert.certifiedBy}</td>
-              <td class="until">{cert.until}</td>
+              <td>{ethers.utils.formatUnits($auditHistory?.totalShares, 18)}</td>
+              <td>{timeStampToDate(cert?.timestamp)}</td>
+              <td>{cert?.certifier.address.replace(/(.{9}).*/, "$1…")}</td>
+              <td class="until">{timeStampToDate(cert?.certifiedUntil)}</td>
             </tr>
           {/each}
           </tbody>
         </table>
       </div>
-      <button class="default-btn certify-btn" on:click={()=>{certify()}}>Certify</button>
-      <div class="error">System frozen until certified</div>
+      <div class="certify-btn-container">
+        <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
+        <button class="default-btn" on:click={()=>{certify()}}>Certify</button>
+      </div>
+      <div class="error">
+        {error}
+        <!--        System frozen until certified-->
+      </div>
     </div>
+
   </div>
 </DefaultFrame>
 <style>
@@ -163,8 +118,8 @@
         text-align: left;
         display: flex;
         flex-direction: column;
-        min-width: 678px;
-        height: 530px;
+        width: 678px;
+        min-height: 530px;
         position: relative;
 
     }
@@ -177,10 +132,22 @@
         text-align: center;
     }
 
+    th, td {
+        text-align: left;
+    }
+
+    td {
+        padding-left: 10px;
+    }
+
     .receipts {
         height: 300px;
         border-bottom: 1px solid #D2D2D2;
         overflow: auto;
+    }
+
+    .receipts table th {
+        width: 33%;
     }
 
     .certify {
@@ -189,14 +156,37 @@
         overflow: auto;
     }
 
-    .certify-btn {
-        position: absolute;
-        right: 0;
-        bottom: 0;
+    .certify-btn-container {
+        display: flex;
+        justify-content: end;
+        margin-top: 10px
+    }
+
+    .certify-date-input {
+        margin-right: 5px;
+        width: 110px;
+        border: none;
+        box-sizing: border-box;
+        outline: 0;
+        padding: .75rem;
+        position: relative;
     }
 
     .until {
         color: #F11717;;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        background: transparent;
+        bottom: 0;
+        color: transparent;
+        cursor: pointer;
+        height: auto;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: auto;
     }
 
 </style>

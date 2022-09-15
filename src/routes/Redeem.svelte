@@ -1,6 +1,6 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
-    import {getSubgraphData} from "../scripts/helpers.js";
+    import {getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ONE} from "../scripts/consts.js";
@@ -114,17 +114,6 @@
                 depositWithReceipts = res.data.account.offchainAssetVault.deposits.filter(d => d.receipt.balances[0].value > 0)
                 loading = false
             })
-        }
-    }
-
-
-    function timeStampToDate(timeStamp) {
-        if (timeStamp) {
-            let d = new Date(timeStamp * 1000)
-            let day = d.getDate();
-            let month = d.getMonth() + 1;
-            let year = d.getFullYear()
-            return day + '/' + month + "/" + year
         }
     }
 

@@ -35,3 +35,31 @@ export const QUERY = `
             }
           }
          `
+
+export const AUDIT_HISTORY_DATA_QUERY = `
+        query($id: ID!) {
+          offchainAssetVault(id: $id) {
+            id,
+            address,
+            totalShares,
+            certifications
+            {
+              timestamp,
+              certifier
+              {
+                address
+              },
+              certifiedUntil
+            },
+            deposits 
+            {
+              receipt
+              {
+                receiptId
+              },
+              timestamp,
+              amount
+            }
+          }
+        }
+    `

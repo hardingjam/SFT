@@ -12,8 +12,7 @@ export async function getEvent(tx, eventName, contract) {
     const events = (await tx.wait()).events || [];
     const filter = (contract.filters[eventName]().topics || [])[0];
     const eventObj = events.find(
-        (x) => x.topics[0] === filter && x.address === contract.address
-    );
+        (x) => x.topics[0] === filter && x.address.toLowerCase() === contract.address.toLowerCase())
 
     if (!eventObj) {
         throw new Error(`Could not find event with name ${eventName}`);
@@ -74,6 +73,7 @@ export function getSubgraphData(activeNetwork, variables, query, param) {
         async function showTime() {
             return await fetchSubgraphData(activeNetwork, variables, query)
         }
+
         let interval = setInterval(showTime, 2000)
         let data = await showTime()
         if (!data || data.data[param]) {
@@ -115,4 +115,28 @@ export function tierReport(report) {
     }
 
     return parsedReport;
+}
+
+export function timeStampToDate(timeStamp) {
+    let {year, month, day} = getDateValues(new Date(timeStamp * 1000))
+    return [day, month, year].join('-');
+}
+
+export function formatDate(date) {
+    let {year, month, day} = getDateValues(date)
+    return [year, month, day].join('-');
+}
+
+function getDateValues(date) {
+    let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return {day, month, year};
 }

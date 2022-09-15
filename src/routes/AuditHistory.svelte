@@ -42,8 +42,8 @@
         }
     }
 </script>
-<DefaultFrame header="Audit History">
-  <div slot="header-buttons">
+<DefaultFrame header="Audit History" backBtn={false}>
+  <div slot="header-buttons" class="display-flex">
     <button class="header-btn btn-hover" on:click={()=>{navigateTo("#members")}}>Members</button>
     <button class="header-btn btn-hover" on:click={()=>{navigateTo("#admin")}}>Admins</button>
   </div>
@@ -60,7 +60,7 @@
           </thead>
           <tbody>
           {#each receipts as receipt}
-            <tr>
+            <tr class="tb-row">
               <td>{receipt.receipt.receiptId}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td>{timeStampToDate(receipt.timestamp)}</td>
@@ -125,6 +125,10 @@
 
     th, td {
         text-align: left;
+    }
+
+    td {
+        padding-left: 10px;
     }
 
     .receipts {

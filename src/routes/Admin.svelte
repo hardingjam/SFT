@@ -28,10 +28,6 @@
         }
     )
 
-    function goBack() {
-        navigateTo("#setup", {replace: false});
-    }
-
     function handleRoleSelect(event) {
         roleName = event.detail.selected.roleName
     }
@@ -84,9 +80,6 @@
     }
 </script>
 <DefaultFrame header="Admin">
-  <div slot="header-buttons">
-    <button class="header-btn btn-hover" on:click={()=>goBack()}>Back</button>
-  </div>
   <div slot="address">
   <span>  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`}
                       class="contract-address btn-hover"

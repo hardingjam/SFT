@@ -4,8 +4,10 @@
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ONE} from "../scripts/consts.js";
-    import {ethers} from "ethers";
+    import {Contract, ethers} from "ethers";
     import Spinner from "../components/Spinner.svelte";
+    import {Provider} from "ethers-multicall";
+    import contractAbi from "../contract/OffchainAssetVaultAbi.json";
 
     let shouldDisable = false;
     let amount;
@@ -18,34 +20,34 @@
     export let ethersData;
     let {signer} = ethersData;
 
-    async function redeem() {
+    async function redeem(receipt) {
         try {
             if (selectedReceipt.length) {
                 error = ''
                 const redeemAmount = ethers.utils.parseEther(amount.toString());
 
-                const receiptBalance = await getReceiptBalance(selectedReceipt[0])
+                const receiptBalance = await getReceiptBalance(receipt)
 
                 if ((receiptBalance.sub(redeemAmount)).isNegative()) {
                     error = "Not enough balance"
                     return
                 }
 
-                if (redeemAmount.eq(0)) {
-                    error = "0 amount"
-                    return
-                }
+                // if (redeemAmount.eq(0)) {
+                //     error = "0 amount"
+                //     return
+                // }
 
-                const tx = await $vault["redeem(uint256,address,address,uint256)"](
-                    redeemAmount,
+                const tx = $vault["redeem(uint256,address,address,uint256)"](
+                    receiptBalance,
                     $account,
                     $account,
-                    selectedReceipt[0]
+                    receipt
                 );
                 await tx.wait();
 
-                await setTempData(amount, selectedReceipt[0])
-                selectedReceipt = []
+                await setTempData(amount, receipt)
+                // selectedReceipt = []
 
                 amount = 0;
             } else {
@@ -111,6 +113,7 @@
             totalShares = temp.data.offchainAssetVault.totalShares
             let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
             getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
+                console.log(res.data.account.offchainAssetVault.deposits);
                 depositWithReceipts = res.data.account.offchainAssetVault.deposits.filter(d => d.receipt.balances[0].value > 0)
                 loading = false
             })
@@ -130,8 +133,11 @@
     }
 
     async function setMaxValue(receipt) {
+        console.log(receipt);
         let balance = await getReceiptBalance(receipt)
+        console.log(balance)
         amount = ethers.utils.formatEther(balance)
+        console.log(amount)
     }
 
 
@@ -153,6 +159,38 @@
             }
         }).filter(d => d.receipt.balances[0].value > 0)
     }
+
+    async function multiCall() {
+
+        const ethcallProvider = new Provider(ethersData.provider);
+        await ethcallProvider.init();
+
+        const contract = new Contract(
+            await $vault.address,
+            contractAbi,
+            ethersData.signer
+        )
+
+        console.log(contract);
+
+
+        const contractCalls = selectedReceipt.map(async receipt => {
+            const receiptBalance = await getReceiptBalance(receipt)
+            contract["redeem(uint256,address,address,uint256)"](
+                receiptBalance,
+                $account,
+                $account,
+                receipt
+            )
+        })
+
+        console.log(contractCalls)
+        const results = await ethcallProvider.all(contractCalls);
+        return results
+
+
+    }
+
 
 </script>
 
@@ -198,7 +236,7 @@
   {/if}
   <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
              on:setMax={()=>{setMaxValue(selectedReceipt[0])}}/>
-  <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => redeem()}>Redeem
+  <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => multiCall()}>Redeem
     Options
   </button>
 

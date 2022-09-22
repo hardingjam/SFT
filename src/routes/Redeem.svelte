@@ -191,6 +191,20 @@
 
     }
 
+    async function multiCall2() {
+
+        await $vault.multicall(selectedReceipt.map(async receipt => {
+            const receiptBalance = await getReceiptBalance(receipt)
+            $vault["redeem(uint256,address,address,uint256)"](
+                receiptBalance,
+                $account,
+                $account,
+                receipt
+            )
+        }), { from: $account });
+
+    }
+
 
 </script>
 

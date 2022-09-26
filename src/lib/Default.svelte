@@ -139,7 +139,7 @@
                     localStorage.setItem('account', $account)
                 }
             });
-            window.ethereum.on("chainChanged", setNetwork);
+            window.ethereum.on("chainChanged", networkChanged);
         }
         if (location === '') {
             navigateTo('#setup')
@@ -149,6 +149,10 @@
         }
     });
 
+    async function networkChanged(){
+        await setNetwork()
+        await getTokens()
+    }
 
     async function getEthersData() {
         if (window.ethereum) {

@@ -107,11 +107,11 @@
         loading = true;
         let variables = {id: $vault.address.toLowerCase()}
         let temp = await getSubgraphData($activeNetwork, variables, getVaultDeployer, 'offchainAssetVault')
-        if (temp && temp.data.offchainAssetVault) {
-            totalShares = temp.data.offchainAssetVault.totalShares
+        if (temp && temp.data) {
+            totalShares = temp.data?.offchainAssetVault.totalShares
             let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
             getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
-                depositWithReceipts = res.data.account.offchainAssetVault.deposits.filter(d => d.receipt.balances[0].value > 0)
+                depositWithReceipts = res.data.account?.offchainAssetVault.deposits.filter(d => d.receipt.balances[0].value > 0) || []
                 loading = false
             })
         }

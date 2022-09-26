@@ -3,7 +3,6 @@
     import {getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
-    import {ONE} from "../scripts/consts.js";
     import {ethers} from "ethers";
     import Spinner from "../components/Spinner.svelte";
 
@@ -160,7 +159,7 @@
 <div class="redeem-container">
   <div class="title"><span
       class="f-weight-700">Total Supply: (FT):</span>
-    {totalShares / ONE}
+    {ethers.utils.formatUnits(totalShares, 18)}
   </div>
   <div class="basic-frame-parent">
     <div class="receipts-table-container basic-frame">
@@ -183,7 +182,7 @@
                 </label>
                 <span class="check-box-label">{receipt.receipt.receiptId}</span>
               </td>
-              <td class="value">{receipt.amount / ONE}</td>
+              <td class="value"> {ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td class="value">{timeStampToDate(receipt.timestamp)}</td>
             </tr>
           {/each}

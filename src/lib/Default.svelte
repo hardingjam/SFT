@@ -139,6 +139,7 @@
                     localStorage.setItem('account', $account)
                 }
             });
+            window.ethereum.on("chainChanged", setNetwork);
         }
         if (location === '') {
             navigateTo('#setup')

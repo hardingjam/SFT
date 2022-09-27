@@ -139,6 +139,7 @@
                     localStorage.setItem('account', $account)
                 }
             });
+            window.ethereum.on("chainChanged", networkChanged);
         }
         if (location === '') {
             navigateTo('#setup')
@@ -148,6 +149,10 @@
         }
     });
 
+    async function networkChanged() {
+        await setNetwork()
+        await getTokens()
+    }
 
     async function getEthersData() {
         if (window.ethereum) {
@@ -253,8 +258,10 @@
         }`
 
         getSubgraphData($activeNetwork, {}, query, 'offchainAssetVaults').then((res) => {
-            let temp = res.data.offchainAssetVaults
-            tokens.set(temp)
+            if ($activeNetwork) {
+                let temp = res.data.offchainAssetVaults
+                tokens.set(temp)
+            }
         })
     }
 
@@ -306,7 +313,7 @@
     {/if}
     {#if $account}
       <div class="main-card">
-        {#if $activeNetwork}
+        <div class={$activeNetwork  ? 'show' : 'hide'}>
           <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
           <Route path="#admin" component={Admin}/>
           <Route path="#list" component={Tokens}/>
@@ -330,12 +337,10 @@
               <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
             </div>
           </div>
-        {/if}
-        {#if !$activeNetwork}
-          <div class="invalid-network">
-            <label>Choose a supported network from the list above</label>
-          </div>
-        {/if}
+        </div>
+        <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
+          <label>Choose a supported network from the list above</label>
+        </div>
       </div>
     {/if}
   </div>

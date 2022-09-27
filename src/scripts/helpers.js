@@ -70,13 +70,13 @@ export async function fetchSubgraphData(activeNetwork, variables, query) {
 
 export function getSubgraphData(activeNetwork, variables, query, param) {
     return new Promise(async (resolve, reject) => {
-        async function showTime() {
+        async function fetchData() {
             return await fetchSubgraphData(activeNetwork, variables, query)
         }
 
-        let interval = setInterval(showTime, 2000)
-        let data = await showTime()
-        if (!data || data.data[param]) {
+        let interval = setInterval(fetchData, 2000)
+        let data = await fetchData()
+        if (!data || data.data[param] || (data && data.data && data.data[param] === null)) {
             clearInterval(interval)
             return resolve(data)
         }

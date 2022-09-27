@@ -18,7 +18,9 @@
     let factoryContract;
 
     onMount(async () => {
-        factoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, contractFactoryAbi, signerOrProvider)
+        if($activeNetwork){
+            factoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, contractFactoryAbi, signerOrProvider)
+        }
     });
 
     // async function createToken() {
@@ -95,9 +97,6 @@
         })
 
     }
-
-
-
 
 </script>
 <div class="sft-setup-container">

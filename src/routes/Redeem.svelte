@@ -109,12 +109,11 @@
         loading = true;
         let variables = {id: $vault.address.toLowerCase()}
         let temp = await getSubgraphData($activeNetwork, variables, getVaultDeployer, 'offchainAssetVault')
-        if (temp && temp.data.offchainAssetVault) {
-            totalShares = temp.data.offchainAssetVault.totalShares
+        if (temp && temp.data) {
+            totalShares = temp.data?.offchainAssetVault.totalShares
             let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
             getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
-                console.log(res.data.account.offchainAssetVault.deposits);
-                depositWithReceipts = res.data.account.offchainAssetVault.deposits.filter(d => d.receipt.balances[0].value > 0)
+                depositWithReceipts = res.data.account?.offchainAssetVault.deposits.filter(d => d.receipt.balances[0].value > 0) || []
                 loading = false
             })
         }
@@ -212,7 +211,7 @@
 <div class="redeem-container">
   <div class="title"><span
       class="f-weight-700">Total Supply: (FT):</span>
-    {totalShares / ONE}
+    {ethers.utils.formatUnits(totalShares, 18)}
   </div>
   <div class="basic-frame-parent">
     <div class="receipts-table-container basic-frame">
@@ -236,7 +235,7 @@
                 </label>
                 <span class="check-box-label">{receipt.receipt.receiptId}</span>
               </td>
-              <td class="value">{receipt.amount / ONE}</td>
+              <td class="value"> {ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td class="value">{timeStampToDate(receipt.timestamp)}</td>
             </tr>
           {/each}

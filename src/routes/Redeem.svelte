@@ -3,7 +3,6 @@
     import {getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
-    import {ONE} from "../scripts/consts.js";
     import {Contract, ethers} from "ethers";
     import Spinner from "../components/Spinner.svelte";
     import {Provider} from "ethers-multicall";
@@ -200,7 +199,42 @@
                 $account,
                 receipt
             )
-        }), { from: $account });
+        }), {from: $account});
+
+    }
+
+
+    async function multiCall3() {
+        let ABI = [
+            "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_)",
+        ];
+        let iface = new ethers.utils.Interface(ABI);
+
+        let balance1 = await $vault["balanceOf(address,uint256)"]($account, 11)
+        let balance2 = await $vault["balanceOf(address,uint256)"]($account, 12)
+
+        try {
+            await $vault
+                .multicall(
+                    [
+                        iface.encodeFunctionData("redeem", [
+                            balance1,
+                            $account,
+                            $account,
+                            11,
+                        ]),
+                        iface.encodeFunctionData("redeem", [
+                            balance2,
+                            $account,
+                            $account,
+                            12,
+                        ]),
+                    ],
+                    {from: $account}
+                );
+        } catch (e) {
+            console.log(e);
+        }
 
     }
 
@@ -249,7 +283,7 @@
   {/if}
   <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
              on:setMax={()=>{setMaxValue(selectedReceipt[0])}}/>
-  <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => multiCall()}>Redeem
+  <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => multiCall3()}>Redeem
     Options
   </button>
 

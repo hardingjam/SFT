@@ -3,10 +3,8 @@
     import {getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
-    import {Contract, ethers} from "ethers";
+    import {ethers} from "ethers";
     import Spinner from "../components/Spinner.svelte";
-    import {Provider} from "ethers-multicall";
-    import contractAbi from "../contract/OffchainAssetVaultAbi.json";
 
     let shouldDisable = false;
     let amount;
@@ -21,7 +19,7 @@
 
     async function redeem(receipt) {
         try {
-            if (selectedReceipt.length) {
+            if (receipt) {
                 error = ''
                 const redeemAmount = ethers.utils.parseEther(amount.toString());
 
@@ -32,10 +30,10 @@
                     return
                 }
 
-                // if (redeemAmount.eq(0)) {
-                //     error = "0 amount"
-                //     return
-                // }
+                if (redeemAmount.eq(0)) {
+                    error = "0 amount"
+                    return
+                }
 
                 const tx = $vault["redeem(uint256,address,address,uint256)"](
                     receiptBalance,
@@ -131,11 +129,8 @@
     }
 
     async function setMaxValue(receipt) {
-        console.log(receipt);
         let balance = await getReceiptBalance(receipt)
-        console.log(balance)
         amount = ethers.utils.formatEther(balance)
-        console.log(amount)
     }
 
 
@@ -159,85 +154,45 @@
     }
 
     async function multiCall() {
+        error = ''
 
-        const ethcallProvider = new Provider(ethersData.provider);
-        await ethcallProvider.init();
-
-        const contract = new Contract(
-            await $vault.address,
-            contractAbi,
-            ethersData.signer
-        )
-
-        console.log(contract);
-
-
-        const contractCalls = selectedReceipt.map(async receipt => {
-            const receiptBalance = await getReceiptBalance(receipt)
-            contract["redeem(uint256,address,address,uint256)"](
-                receiptBalance,
-                $account,
-                $account,
-                receipt
-            )
-        })
-
-        console.log(contractCalls)
-        const results = await ethcallProvider.all(contractCalls);
-        return results
-
-
-    }
-
-    async function multiCall2() {
-
-        await $vault.multicall(selectedReceipt.map(async receipt => {
-            const receiptBalance = await getReceiptBalance(receipt)
-            $vault["redeem(uint256,address,address,uint256)"](
-                receiptBalance,
-                $account,
-                $account,
-                receipt
-            )
-        }), {from: $account});
-
-    }
-
-
-    async function multiCall3() {
+        if (!selectedReceipt.length) {
+            return
+        }
         let ABI = [
             "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_)",
         ];
         let iface = new ethers.utils.Interface(ABI);
 
-        let balance1 = await $vault["balanceOf(address,uint256)"]($account, 11)
-        let balance2 = await $vault["balanceOf(address,uint256)"]($account, 12)
+        let multicallArr = selectedReceipt.map(async receipt => {
+            const receiptBalance = await getReceiptBalance(receipt)
+            return iface.encodeFunctionData("redeem", [
+                receiptBalance,
+                $account,
+                $account,
+                receipt
+            ])
+        })
 
         try {
             await $vault
                 .multicall(
-                    [
-                        iface.encodeFunctionData("redeem", [
-                            balance1,
-                            $account,
-                            $account,
-                            11,
-                        ]),
-                        iface.encodeFunctionData("redeem", [
-                            balance2,
-                            $account,
-                            $account,
-                            12,
-                        ]),
-                    ],
+                    multicallArr,
                     {from: $account}
                 );
-        } catch (e) {
-            console.log(e);
+        } catch (err) {
+            error = err.reason
         }
 
     }
 
+    async function withdraw() {
+        if (selectedReceipt.length > 1) {
+            await multiCall()
+        } else {
+            await redeem(selectedReceipt[0])
+        }
+    }
 
 </script>
 
@@ -283,7 +238,7 @@
   {/if}
   <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
              on:setMax={()=>{setMaxValue(selectedReceipt[0])}}/>
-  <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => multiCall3()}>Redeem
+  <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => withdraw()}>Redeem
     Options
   </button>
 

@@ -8,7 +8,7 @@
 
     let shouldDisable = false;
     let amount;
-    let selectedReceipt = null;
+    let selectedReceipts = [];
     let totalShares = 0
     let error = ""
 
@@ -17,13 +17,13 @@
     export let ethersData;
     let {signer} = ethersData;
 
-    async function redeem() {
+    async function redeem(receipt) {
         try {
-            if (selectedReceipt) {
+            if (receipt) {
                 error = ''
                 const redeemAmount = ethers.utils.parseEther(amount.toString());
 
-                const receiptBalance = await getReceiptBalance()
+                const receiptBalance = await getReceiptBalance(receipt)
 
                 if ((receiptBalance.sub(redeemAmount)).isNegative()) {
                     error = "Not enough balance"
@@ -35,16 +35,16 @@
                     return
                 }
 
-                const tx = await $vault["redeem(uint256,address,address,uint256)"](
-                    redeemAmount,
+                const tx = $vault["redeem(uint256,address,address,uint256)"](
+                    receiptBalance,
                     $account,
                     $account,
-                    selectedReceipt
+                    receipt
                 );
                 await tx.wait();
 
-                await setTempData(amount, selectedReceipt)
-                selectedReceipt = null
+                await setTempData(amount, receipt)
+                // selectedReceipts = []
 
                 amount = 0;
             } else {
@@ -116,20 +116,23 @@
         }
     }
 
-    async function getReceiptBalance() {
+    async function getReceiptBalance(receipt) {
         let receiptBalance
 
-        if (selectedReceipt.length) {
+        if (selectedReceipts.length) {
             receiptBalance = await $vault["balanceOf(address,uint256)"](
                 $account,
-                selectedReceipt
+                receipt
             );
         }
         return ethers.BigNumber.from(receiptBalance)
     }
 
     async function setMaxValue() {
-        let balance = await getReceiptBalance()
+        if (selectedReceipts.length > 1) {
+            return
+        }
+        let balance = await getReceiptBalance(selectedReceipts[0])
         amount = ethers.utils.formatEther(balance)
     }
 
@@ -151,6 +154,47 @@
                 return d
             }
         }).filter(d => d.receipt.balances[0].value > 0)
+    }
+
+    async function multiCall() {
+        error = ''
+
+        if (!selectedReceipts.length) {
+            return
+        }
+        let ABI = [
+            "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_)",
+        ];
+        let iface = new ethers.utils.Interface(ABI);
+
+        let multicallArr = selectedReceipts.map(async receipt => {
+            const receiptBalance = await getReceiptBalance(receipt)
+            return iface.encodeFunctionData("redeem", [
+                receiptBalance,
+                $account,
+                $account,
+                receipt
+            ])
+        })
+
+        try {
+            await $vault
+                .multicall(
+                    multicallArr,
+                    {from: $account}
+                );
+        } catch (err) {
+            error = err.reason
+        }
+
+    }
+
+    async function withdraw() {
+        if (selectedReceipts.length > 1) {
+            await multiCall()
+        } else {
+            await redeem(selectedReceipts[0])
+        }
     }
 
 </script>
@@ -177,7 +221,8 @@
             <tr>
               <td class="receipt-id">
                 <label class="check-container">
-                  <input type="radio" class="check-box" bind:group={selectedReceipt} value={receipt.receipt.receiptId}/>
+                  <input type="checkbox" class="check-box" bind:group={selectedReceipts}
+                         value={receipt.receipt.receiptId}/>
                   <span class="checkmark"></span>
                 </label>
                 <span class="check-box-label">{receipt.receipt.receiptId}</span>
@@ -196,7 +241,7 @@
   {/if}
   <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
              on:setMax={()=>{setMaxValue()}}/>
-  <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => redeem()}>Redeem
+  <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => withdraw()}>Redeem
     Options
   </button>
 

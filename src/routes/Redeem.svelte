@@ -8,7 +8,7 @@
 
     let shouldDisable = false;
     let amount;
-    let selectedReceipt = [];
+    let selectedReceipts = [];
     let totalShares = 0
     let error = ""
 
@@ -44,7 +44,7 @@
                 await tx.wait();
 
                 await setTempData(amount, receipt)
-                // selectedReceipt = []
+                // selectedReceipts = []
 
                 amount = 0;
             } else {
@@ -119,7 +119,7 @@
     async function getReceiptBalance(receipt) {
         let receiptBalance
 
-        if (selectedReceipt.length) {
+        if (selectedReceipts.length) {
             receiptBalance = await $vault["balanceOf(address,uint256)"](
                 $account,
                 receipt
@@ -128,8 +128,11 @@
         return ethers.BigNumber.from(receiptBalance)
     }
 
-    async function setMaxValue(receipt) {
-        let balance = await getReceiptBalance(receipt)
+    async function setMaxValue() {
+        if (selectedReceipts.length > 1) {
+            return
+        }
+        let balance = await getReceiptBalance(selectedReceipts[0])
         amount = ethers.utils.formatEther(balance)
     }
 
@@ -156,7 +159,7 @@
     async function multiCall() {
         error = ''
 
-        if (!selectedReceipt.length) {
+        if (!selectedReceipts.length) {
             return
         }
         let ABI = [
@@ -164,7 +167,7 @@
         ];
         let iface = new ethers.utils.Interface(ABI);
 
-        let multicallArr = selectedReceipt.map(async receipt => {
+        let multicallArr = selectedReceipts.map(async receipt => {
             const receiptBalance = await getReceiptBalance(receipt)
             return iface.encodeFunctionData("redeem", [
                 receiptBalance,
@@ -187,10 +190,10 @@
     }
 
     async function withdraw() {
-        if (selectedReceipt.length > 1) {
+        if (selectedReceipts.length > 1) {
             await multiCall()
         } else {
-            await redeem(selectedReceipt[0])
+            await redeem(selectedReceipts[0])
         }
     }
 
@@ -218,7 +221,7 @@
             <tr>
               <td class="receipt-id">
                 <label class="check-container">
-                  <input type="checkbox" class="check-box" bind:group={selectedReceipt}
+                  <input type="checkbox" class="check-box" bind:group={selectedReceipts}
                          value={receipt.receipt.receiptId}/>
                   <span class="checkmark"></span>
                 </label>
@@ -237,7 +240,7 @@
     <span class="error">{error}</span>
   {/if}
   <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
-             on:setMax={()=>{setMaxValue(selectedReceipt[0])}}/>
+             on:setMax={()=>{setMaxValue()}}/>
   <button class="btn-hover redeem-btn btn-default btn-submit" on:click={() => withdraw()}>Redeem
     Options
   </button>

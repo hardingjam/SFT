@@ -130,7 +130,7 @@
                 localStorage.removeItem('account')
             }
 
-            window.ethereum.on("accountsChanged", (accounts) => {
+            window.ethereum.on("accountsChanged", async (accounts) => {
                 if (!accounts.length) {
                     account.set(null);
                     localStorage.removeItem('account')
@@ -144,9 +144,7 @@
         if (location === '') {
             navigateTo('#setup')
         }
-        if ($account) {
-            await getTokens()
-        }
+        await getTokens()
     });
 
     async function networkChanged() {

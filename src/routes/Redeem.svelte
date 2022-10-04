@@ -5,6 +5,7 @@
     import {onMount} from "svelte";
     import {ethers} from "ethers";
     import Spinner from "../components/Spinner.svelte";
+    import {DEPLOYER_QUERY, DEPOSITS_QUERY} from '../scripts/queries.js'
 
     let shouldDisable = false;
     let amount;
@@ -60,42 +61,6 @@
 
     let depositWithReceipts = []
 
-    let query = `
-          query($id: ID!) {
-           account(id: $id)
-           {
-              id,
-              offchainAssetVault
-              {
-                name
-                deposits
-                {
-                  id,
-                  timestamp,
-                  amount,
-                  receipt
-                  {
-                    id,
-                    shares,
-                    receiptId,
-                    balances {
-                      value,
-                      valueExact
-                    }
-                  },
-                }
-              }
-           }
-        }
-         `
-    let getVaultDeployer = `
-          query($id: ID!) {
-            offchainAssetVault(id: $id) {
-                deployer,
-                totalShares
-            }
-          }
-         `
 
     onMount(async () => {
         await getData()
@@ -105,11 +70,11 @@
     async function getData() {
         loading = true;
         let variables = {id: $vault.address.toLowerCase()}
-        let temp = await getSubgraphData($activeNetwork, variables, getVaultDeployer, 'offchainAssetVault')
+        let temp = await getSubgraphData($activeNetwork, variables, DEPLOYER_QUERY, 'offchainAssetVault')
         if (temp && temp.data) {
             totalShares = temp.data?.offchainAssetVault.totalShares
             let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
-            getSubgraphData($activeNetwork, variables, query, 'account').then((res) => {
+            getSubgraphData($activeNetwork, variables, DEPOSITS_QUERY, 'account').then((res) => {
                 depositWithReceipts = res.data.account?.offchainAssetVault.deposits.filter(d => d.receipt.balances[0].value > 0) || []
                 loading = false
             })

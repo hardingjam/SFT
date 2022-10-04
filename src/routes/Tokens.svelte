@@ -3,7 +3,7 @@
     import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import {navigateTo} from "yrv";
-    import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/consts.js";
+    import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
 
 

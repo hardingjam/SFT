@@ -4,7 +4,8 @@
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {onMount} from "svelte";
-    import {ADDRESS_ZERO, QUERY, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
+    import {ADDRESS_ZERO, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
+    import {QUERY} from "../scripts/queries.js";
     import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
 

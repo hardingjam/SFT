@@ -4,7 +4,7 @@
     import {vault, auditHistory, activeNetwork, account} from "../scripts/store";
     import {beforeUpdate, onMount} from "svelte";
     import {getEventArgs, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
-    import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/consts.js";
+    import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatDate} from "../scripts/helpers";
 

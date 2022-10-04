@@ -1,11 +1,10 @@
 <script>
     import {vault, activeNetwork, roles, data} from "../scripts/store.js";
-    import {navigateTo} from "yrv";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
     import {filterArray, getSubgraphData, toSentenceCase} from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
-    import {QUERY} from "../scripts/consts.js";
+    import {QUERY} from "../scripts/queries.js";
     import {beforeUpdate, onMount} from "svelte";
     import Spinner from "../components/Spinner.svelte";
     import DefaultFrame from "../components/DefaultFrame.svelte";

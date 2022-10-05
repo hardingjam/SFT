@@ -2,7 +2,12 @@
     import {vault, activeNetwork, roles, data} from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
-    import {filterArray, getSubgraphData, toSentenceCase} from "../scripts/helpers.js";
+    import {
+        filterArray,
+        getSubgraphData,
+        accessControlError,
+        toSentenceCase
+    } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
     import {QUERY} from "../scripts/queries.js";
     import {beforeUpdate, onMount} from "svelte";
@@ -13,6 +18,7 @@
     let validAccount = true;
     let account = '';
     let roleName = '';
+    let error = '';
 
     let loading = false
 
@@ -32,7 +38,8 @@
     }
 
     async function grantRole() {
-        let role = await $vault[roleName]()
+        let role = null
+        roleName ? role = await $vault[roleName]() : error = "Select role"
         try {
             if (account) {
                 validAccount = true;
@@ -53,7 +60,10 @@
             }
 
         } catch (err) {
-            console.log(err)
+            error = err.reason
+            if (error.includes('AccessControl')) {
+                error = accessControlError(error)
+            }
         }
     }
 
@@ -89,7 +99,8 @@
     <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
     <div class="roles">
       <div class="grant-role-txt f-weight-700">Grant a role</div>
-      <div>
+      <div class="error">{error}</div>
+      <div class="role-list">
         <div class="display-flex">
           <label class="f-weight-700">Role:</label>
           {#if $roles.length}
@@ -162,11 +173,14 @@
     }
 
     .grant-role-txt {
-        margin-bottom: 25px;
         margin-top: 5px;
         font-style: normal;
         font-size: 16px;
         line-height: 27px;
+    }
+
+    .role-list {
+        margin-top: 25px;
     }
 
 

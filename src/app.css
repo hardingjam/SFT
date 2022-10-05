@@ -185,6 +185,7 @@ button:focus, button:focus-visible {
 
 .error {
     color: #F11717;
+    max-width: fit-content;
 }
 
 .w-100 {

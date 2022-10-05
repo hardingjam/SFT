@@ -1,5 +1,5 @@
 import {ethers} from "ethers";
-import {ONE} from "./consts.js";
+import {ONE, ROLES} from "./consts.js";
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -139,4 +139,12 @@ function getDateValues(date) {
         day = '0' + day;
 
     return {day, month, year};
+}
+
+export function accessControlError(msg) {
+    let hash = msg.slice(-66)
+    let error = msg.slice(20, msg.length - 66)
+
+    let role = ROLES.find(r => r.hash === hash)
+    return error + " " + role?.name
 }

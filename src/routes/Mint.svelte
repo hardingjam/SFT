@@ -6,6 +6,7 @@
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
+    import * as FormData from 'form-data'
 
     let error = ""
 
@@ -47,14 +48,25 @@
 
     async function addToIpfs() {
 
-        let payload = {file: "avoieee.jpeg"};
+        let payload = {name: "Nino", surname: "Keldishvili", age: 17};
         let payloadJson = JSON.stringify(payload)
 
-        await axios.post('https://gildlab-ipfs.in.ngrok.io/api/v0/add', payloadJson).then((response) => {
-            console.log(response)
-        }).catch((err) => {
-            error = err//.response.data
-        });
+        let data = new FormData();
+        data.append('path', `{"file", ${payloadJson}`);
+
+        let config = {
+            method: 'post',
+            url: 'https://gildlab-ipfs.in.ngrok.io/api/v0/add',
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
 </script>

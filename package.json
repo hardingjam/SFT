@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^1.1.2",
     "ethers": "^5.6.9",
+    "form-data": "^4.0.0",
     "sv-bootstrap-dropdown": "^0.4.4",
     "yrv": "^0.0.57"
   }

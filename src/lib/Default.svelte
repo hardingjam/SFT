@@ -15,6 +15,7 @@
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
     import AuditHistory from "../routes/AuditHistory.svelte";
+    import NewSchema from "../routes/NewSchema.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -114,6 +115,13 @@
             displayName: "Audit History",
             action: () => {
                 navigateTo('#audit-history', {replace: false})
+            }
+        },
+        {
+            id: "new-schema",
+            displayName: "New Schema",
+            action: () => {
+                navigateTo('#new-schema', {replace: false})
             }
         },
     ]
@@ -317,6 +325,7 @@
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>
+          <Route path="#new-schema" component={NewSchema}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

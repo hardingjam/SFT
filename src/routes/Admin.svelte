@@ -13,6 +13,7 @@
     import {beforeUpdate, onMount} from "svelte";
     import Spinner from "../components/Spinner.svelte";
     import DefaultFrame from "../components/DefaultFrame.svelte";
+    import {navigateTo} from "yrv";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let validAccount = true;
@@ -93,6 +94,10 @@
   <span>  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`}
                       class="contract-address btn-hover"
                       target="_blank">{$vault.address}</a></span>
+  </div>
+
+  <div slot="header-buttons">
+    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-schema")}}>New schema</button>
   </div>
 
   <div slot="content">

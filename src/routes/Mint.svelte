@@ -5,6 +5,10 @@
     import {vault} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
+    import axios from "axios";
+    import * as FormData from 'form-data'
+
+    let error = ""
 
     export let ethersData;
     let {signer} = ethersData;
@@ -42,6 +46,28 @@
         shouldDisable = false;
     }
 
+    async function addToIpfs() {
+
+        let payloadJson = JSON.stringify(auditInfo)
+
+        let data = new FormData();
+        data.append('path', `{"file", ${payloadJson}`);
+
+        let config = {
+            method: 'post',
+            url: 'https://gildlab-ipfs.in.ngrok.io/api/v0/add',
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
 </script>
 
 <div class="mint-container">
@@ -68,7 +94,7 @@
         <tr>
           <td>Upload PIE Certificate</td>
           <td>
-            <button class="default-btn value">Upload</button>
+            <button class="default-btn value" on:click={()=>{addToIpfs()}}>Upload</button>
           </td>
         </tr>
 

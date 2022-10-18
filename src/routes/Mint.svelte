@@ -48,8 +48,7 @@
 
     async function addToIpfs() {
 
-        let payload = {name: "Nino", surname: "Keldishvili", age: 17};
-        let payloadJson = JSON.stringify(payload)
+        let payloadJson = JSON.stringify(auditInfo)
 
         let data = new FormData();
         data.append('path', `{"file", ${payloadJson}`);

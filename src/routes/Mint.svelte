@@ -1,5 +1,4 @@
 <script>
-    import {icons} from "../scripts/assets.js";
     import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
     import {vault} from "../scripts/store.js";
@@ -10,11 +9,13 @@
 
     let error = ""
 
+    let schemas = []
+
     export let ethersData;
     let {signer} = ethersData;
 
     let amount;
-    let shouldDisable = false
+    let shouldDisable = !schemas.length
 
     let auditInfo = [
         {
@@ -71,40 +72,55 @@
 </script>
 
 <div class="mint-container">
-  <div class="audit-history btn-hover" on:click={()=>{navigateTo('#audit-history')}}>
-    <span>Audit History </span><img src={icons.show} alt="go to audit">
+  <div class="header-buttons">
+    <button type="button" class="default-btn mr-2" disabled={shouldDisable} on:click={()=>{navigateTo('#schemas')}}>
+      Access Schemas
+    </button>
+    <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>
+      Audit History
+    </button>
   </div>
+
   <MintInput bind:amount={amount} amountLabel={"Mint Amount"} label={"Options"}/>
   <div class="audit-info-container basic-frame-parent">
     <div class="audit-info basic-frame">
-      <span class="title f-weight-700">Audit info.</span>
-      <table>
-        <!--        <tr>-->
-        <!--          <td>PIE Certificate Number</td>-->
-        <!--          <td class="value">12312312414</td>-->
-        <!--        </tr>-->
-        {#each auditInfo as info}
-          <tr class="info-row">
-            <td>{info.label}</td>
-            <td class="value">
-              <input type="text" class="default-input" bind:value={info.value}>
-            </td>
-          </tr>
-        {/each}
-        <tr>
-          <td>Upload PIE Certificate</td>
-          <td>
-            <button class="default-btn value" on:click={()=>{addToIpfs()}}>Upload</button>
-          </td>
-        </tr>
+      {#if schemas.length}
+        <div class="schema">
+          <span class="title f-weight-700">Audit info.</span>
+          <table>
 
-      </table>
+            {#each auditInfo as info}
+              <tr class="info-row">
+                <td>{info.label}</td>
+                <td class="value">
+                  <input type="text" class="default-input" bind:value={info.value}>
+                </td>
+              </tr>
+            {/each}
+            <tr>
+              <td>Upload PIE Certificate</td>
+              <td>
+                <button class="default-btn value" on:click={()=>{addToIpfs()}}>Upload</button>
+              </td>
+            </tr>
+
+          </table>
+        </div>
+      {/if}
+      {#if !schemas.length}
+        <div class="empty-schemas">
+          <span>Please create a new schema to mint </span>
+          <button class="default-btn" on:click={()=>{navigateTo("#new-schema")}}>New Schema</button>
+        </div>
+      {/if}
+
     </div>
   </div>
   <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>
-  <button class="btn-hover mint-btn btn-default btn-submit" disabled={shouldDisable} on:click={() => mint()}>Mint
+  {shouldDisable}
+  <button class="mint-btn btn-solid btn-submit" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
     Options
   </button>
 
@@ -119,16 +135,12 @@
         align-items: center;
     }
 
-    .audit-history {
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 27px;
-        color: #AE6E00;
-        text-align: right;
-        width: 100%;
-        padding-right: 40px;
+    .header-buttons {
         margin-bottom: 15px;
-        cursor: pointer;
+        display: flex;
+        width: 100%;
+        justify-content: right;
+        padding: 0 12px 0 12px;
     }
 
     .audit-info {
@@ -139,6 +151,7 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 27px;
+        min-height: 142px;
 
     }
 
@@ -166,6 +179,14 @@
 
     .info-row:hover input {
         border: 2px solid #A0C7DD;
+    }
+
+    .empty-schemas button {
+        margin-top: 5px;
+    }
+
+    .schema table {
+        width: 100%;
     }
 
 </style>

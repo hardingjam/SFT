@@ -46,7 +46,7 @@ body {
 }
 
 .btn-solid:disabled:active {
-    background: none;
+    background: #D2D2D2;
     box-shadow: none;
 }
 

@@ -108,10 +108,6 @@ button:focus, button:focus-visible {
 
 .default-btn {
     box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
     padding: 0 18px;
     gap: 10px;
     min-width: 73px;

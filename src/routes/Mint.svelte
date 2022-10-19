@@ -86,7 +86,7 @@
     <div class="audit-info basic-frame">
       {#if schemas.length}
         <div class="schema">
-          <span class="title f-weight-700">Audit info.</span>
+          <div class="title f-weight-700">Audit info.</div>
           <table>
 
             {#each auditInfo as info}
@@ -100,7 +100,7 @@
             <tr>
               <td>Upload PIE Certificate</td>
               <td>
-                <button class="default-btn value" on:click={()=>{addToIpfs()}}>Upload</button>
+                <button class="default-btn" on:click={()=>{addToIpfs()}}>Upload</button>
               </td>
             </tr>
 
@@ -119,7 +119,6 @@
   <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>
-  {shouldDisable}
   <button class="mint-btn btn-solid btn-submit" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
     Options
   </button>
@@ -129,7 +128,6 @@
 <style>
     .mint-container {
         padding-top: 17px;
-        padding-bottom: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -156,7 +154,7 @@
     }
 
     .audit-info .title {
-        margin-left: -5px;
+        text-align: center;
     }
 
     .value {
@@ -188,6 +186,11 @@
     .schema table {
         width: 100%;
     }
+
+    .schema table td:nth-child(2) {
+        text-align: right;
+    }
+
 
 </style>
 

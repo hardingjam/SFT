@@ -446,7 +446,7 @@
 
   .tab-panel-container {
     width: 492px;
-    min-height: 535px;
+    min-height: 460px;
     background: #FFFFFF;
     border-radius: 0 20px 20px 20px;
     padding-bottom: 20px;

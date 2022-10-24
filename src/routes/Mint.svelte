@@ -8,9 +8,9 @@
     import * as FormData from 'form-data'
 
 
-    import { SubmitForm } from '@restspace/svelte-schema-form';
-    import '@restspace/svelte-schema-form/css/layout.css';
-    import '@restspace/svelte-schema-form/css/basic-skin.css';
+    import { SubmitForm } from '../../node_modules/@restspace/svelte-schema-form';
+    import '../../node_modules/@restspace/svelte-schema-form/css/layout.css';
+    import '../../node_modules/@restspace/svelte-schema-form/css/basic-skin.css';
 
     let schema = {
         type: "object",

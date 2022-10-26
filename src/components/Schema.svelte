@@ -6,6 +6,8 @@
     $: schema && generateForm();
 
     function generateForm(){
+        //clear form html first so it shows new form after reselect
+        jq('#form').html('')
         jq('#form').jsonForm({
             schema: schema,
             onSubmit: function (errors, values) {

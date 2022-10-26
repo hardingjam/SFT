@@ -6,10 +6,23 @@
     import {navigateTo} from "yrv";
     import axios from "axios";
     import * as FormData from 'form-data'
+    import Schema from "../components/Schema.svelte";
 
     let error = ""
 
-    let schemas = []
+    let schemas = [1]
+
+    let selectedSchema = {
+        name: {
+            type: 'string',
+            title: 'Name',
+            required: true
+        },
+        age: {
+            type: 'number',
+            title: 'Age'
+        }
+    }
 
     export let ethersData;
     let {signer} = ethersData;
@@ -86,25 +99,26 @@
     <div class="audit-info basic-frame">
       {#if schemas.length}
         <div class="schema">
-          <div class="title f-weight-700">Audit info.</div>
-          <table>
+          <Schema schema={selectedSchema}></Schema>
+<!--          <div class="title f-weight-700">Audit info.</div>-->
+<!--          <table>-->
 
-            {#each auditInfo as info}
-              <tr class="info-row">
-                <td>{info.label}</td>
-                <td class="value">
-                  <input type="text" class="default-input" bind:value={info.value}>
-                </td>
-              </tr>
-            {/each}
-            <tr>
-              <td>Upload PIE Certificate</td>
-              <td>
-                <button class="default-btn" on:click={()=>{addToIpfs()}}>Upload</button>
-              </td>
-            </tr>
+<!--            {#each auditInfo as info}-->
+<!--              <tr class="info-row">-->
+<!--                <td>{info.label}</td>-->
+<!--                <td class="value">-->
+<!--                  <input type="text" class="default-input" bind:value={info.value}>-->
+<!--                </td>-->
+<!--              </tr>-->
+<!--            {/each}-->
+<!--            <tr>-->
+<!--              <td>Upload PIE Certificate</td>-->
+<!--              <td>-->
+<!--                <button class="default-btn" on:click={()=>{addToIpfs()}}>Upload</button>-->
+<!--              </td>-->
+<!--            </tr>-->
 
-          </table>
+<!--          </table>-->
         </div>
       {/if}
       {#if !schemas.length}

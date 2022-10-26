@@ -18,6 +18,7 @@
     "ethers": "^5.6.9",
     "form-data": "^4.0.0",
     "json-format-highlight": "^1.0.4",
+    "jsonform": "^2.2.5",
     "sv-bootstrap-dropdown": "^0.4.4",
     "yrv": "^0.0.57"
   }

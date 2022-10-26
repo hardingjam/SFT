@@ -1,9 +1,9 @@
 <script type="text/javascript">
     import {onMount} from "svelte";
+    const jq = window.$;
 
     onMount(() => {
-        console.log(document.getElementById('form'));
-        document.getElementById('form').jsonForm({
+        jq('#form').jsonForm({
             schema: {
                 name: {
                     type: 'string',
@@ -17,14 +17,14 @@
             },
             onSubmit: function (errors, values) {
                 if (errors) {
-                    document.getElementById('res').innerHTML = '<p>I beg your pardon?</p>';
+                    jq('#res').html('<p>I beg your pardon?</p>');
                 } else {
-                    document.getElementById('res').innerHTML = '<p>Hello ' + values.name + '.' +
+                    jq('#res').html('<p>Hello ' + values.name + '.' +
                         (values.age ? '<br/>You are ' + values.age + '.' : '') +
-                        '</p>';
+                        '</p>');
                 }
             }
-        });
+        })
     })
 </script>
 <div>

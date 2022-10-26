@@ -3,7 +3,9 @@
     const jq = window.$;
     export let schema;
 
-    onMount(() => {
+    $: schema && generateForm();
+
+    function generateForm(){
         jq('#form').jsonForm({
             schema: schema,
             onSubmit: function (errors, values) {
@@ -16,7 +18,7 @@
                 }
             }
         })
-    })
+    }
 </script>
 <div>
   <form id="form"></form>

@@ -7,23 +7,43 @@
     import axios from "axios";
     import * as FormData from 'form-data'
     import Schema from "../components/Schema.svelte";
+    import Select from "../components/Select.svelte";
+    import {icons} from "../scripts/assets.js";
 
     let error = ""
 
-    let schemas = [1]
-
-    let selectedSchema = {
-        name: {
-            type: 'string',
-            title: 'Name',
-            required: true
-        },
-        age: {
-            type: 'number',
-            title: 'Age'
+    let schemas = [{
+        displayName: 'schema1',
+        schema: {
+            name: {
+                type: 'string',
+                title: 'Name',
+                required: true
+            },
+            age: {
+                type: 'number',
+                title: 'Age'
+            }
         }
-    }
+    }, {
+        displayName: 'schema2',
+        schema: {
+            score1: {
+                type: 'string',
+                title: 'Meta Score 1',
+                required: true
+            },
+            score2: {
+                type: 'string',
+                title: 'Meta Score 2',
+                required: true
+            },
 
+        }
+    },
+    ]
+
+    let selectedSchema = {}
     export let ethersData;
     let {signer} = ethersData;
 
@@ -82,6 +102,10 @@
             });
     }
 
+    function handleSchemaSelect(event) {
+        selectedSchema = event.detail.selected
+    }
+
 </script>
 
 <div class="mint-container">
@@ -99,26 +123,34 @@
     <div class="audit-info basic-frame">
       {#if schemas.length}
         <div class="schema">
-          <Schema schema={selectedSchema}></Schema>
-<!--          <div class="title f-weight-700">Audit info.</div>-->
-<!--          <table>-->
+          <div class="schema-dropdown display-flex">
+            <label class="f-weight-700">Schema:</label>
+            <Select options={schemas}
 
-<!--            {#each auditInfo as info}-->
-<!--              <tr class="info-row">-->
-<!--                <td>{info.label}</td>-->
-<!--                <td class="value">-->
-<!--                  <input type="text" class="default-input" bind:value={info.value}>-->
-<!--                </td>-->
-<!--              </tr>-->
-<!--            {/each}-->
-<!--            <tr>-->
-<!--              <td>Upload PIE Certificate</td>-->
-<!--              <td>-->
-<!--                <button class="default-btn" on:click={()=>{addToIpfs()}}>Upload</button>-->
-<!--              </td>-->
-<!--            </tr>-->
+                    on:select={handleSchemaSelect}
+                    label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
 
-<!--          </table>-->
+          </div>
+          <Schema schema={selectedSchema.displayName? selectedSchema.schema : selectedSchema}></Schema>
+          <!--          <div class="title f-weight-700">Audit info.</div>-->
+          <!--          <table>-->
+
+          <!--            {#each auditInfo as info}-->
+          <!--              <tr class="info-row">-->
+          <!--                <td>{info.label}</td>-->
+          <!--                <td class="value">-->
+          <!--                  <input type="text" class="default-input" bind:value={info.value}>-->
+          <!--                </td>-->
+          <!--              </tr>-->
+          <!--            {/each}-->
+          <!--            <tr>-->
+          <!--              <td>Upload PIE Certificate</td>-->
+          <!--              <td>-->
+          <!--                <button class="default-btn" on:click={()=>{addToIpfs()}}>Upload</button>-->
+          <!--              </td>-->
+          <!--            </tr>-->
+
+          <!--          </table>-->
         </div>
       {/if}
       {#if !schemas.length}

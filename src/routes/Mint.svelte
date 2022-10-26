@@ -7,30 +7,6 @@
     import axios from "axios";
     import * as FormData from 'form-data'
 
-
-    import { SubmitForm } from '../../node_modules/@restspace/svelte-schema-form';
-    import '../../node_modules/@restspace/svelte-schema-form/css/layout.css';
-    import '../../node_modules/@restspace/svelte-schema-form/css/basic-skin.css';
-
-    let schema = {
-        type: "object",
-        properties: {
-            "x": { "type": "string" }
-        }
-    };
-    let value = {};
-
-    const submit = (e) => {
-        alert(JSON.stringify(e.detail.value, undefined, 2));
-    }
-
-
-
-
-
-
-
-
     let error = ""
 
     let schemas = []
@@ -146,11 +122,6 @@
   <button class="mint-btn btn-solid btn-submit" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
     Options
   </button>
-
-
-
-  <SubmitForm {schema} {value} on:submit={submit} />
-
 </div>
 
 <style>

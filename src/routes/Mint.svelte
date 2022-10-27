@@ -20,47 +20,83 @@
     let schemas = [
         {
             displayName: 'Test',
-            schema: {
-                name: {
-                    type: 'string',
-                    title: 'Name',
-                    required: true
-                },
-                age: {
-                    type: 'number',
-                    title: 'Age'
+            options: {
+                schema: {
+                    name: {
+                        type: 'string',
+                        title: 'Name',
+                        required: true
+                    },
+                    age: {
+                        type: 'number',
+                        title: 'Age'
+                    }
                 }
             }
         },
         {
             displayName: 'Love To',
-            schema: {
-                pie_certificate: {
-                    type: 'string',
-                    title: 'PIE Certificate',
-                    required: true
-                },
-                producer_wallet: {
-                    type: 'string',
-                    title: 'Producer Wallet',
-                    required: true
-                },
-                total_score: {
-                    type: 'string',
-                    title: 'Total Score',
-                    required: true
-                },
-                max_options: {
-                    type: 'string',
-                    title: 'Max Options',
-                    required: true
-                },
-                upload: {
-                    "type": 'file',
-                    "title": 'Upload PIE Certificate',
-                    "format": "date"
+            "options": {
+                schema: {
+                    pie_certificate: {
+                        type: 'string',
+                        title: 'PIE Certificate',
+                        required: true
+                    },
+                    producer_wallet: {
+                        type: 'string',
+                        title: 'Producer Wallet',
+                        required: true
+                    },
+                    total_score: {
+                        type: 'string',
+                        title: 'Total Score',
+                        required: true
+                    },
+                    max_options: {
+                        type: 'string',
+                        title: 'Max Options',
+                        required: true
+                    },
+                    upload: {
+                        "type": 'file',
+                        "title": 'Upload PIE Certificate',
+                        "format": "date"
+                    }
                 }
             }
+        },
+        {
+            displayName: "love",
+            "options": {
+                "schema": {
+                    "file_content": {
+                        "title": "File content",
+                        "type": "string"
+                    },
+                    "upload": {
+                        "type": "string"
+                    }
+                },
+                "form": [
+                    {
+                        "key": "file_content",
+                        "type": "textarea"
+                    },
+                    {
+                        "key": "upload",
+                        "type": "file",
+                        "name": "up1",
+                        "accept": ".txt,.md",
+                        "notitle": true
+                    },
+                    {
+                        "type": "submit",
+                        "title": "Submit"
+                    }
+                ]
+            }
+
         }
     ]
 
@@ -136,7 +172,7 @@
                     label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
 
           </div>
-          <Schema schema={selectedSchema.displayName? selectedSchema.schema : selectedSchema}></Schema>
+          <Schema options={selectedSchema.displayName? selectedSchema.options : selectedSchema}></Schema>
         </div>
       {/if}
       {#if !schemas.length}

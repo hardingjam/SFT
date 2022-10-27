@@ -12,11 +12,10 @@
             schema: schema,
             onSubmit: function (errors, values) {
                 if (errors) {
-                    jq('#res').html('<p>I beg your pardon?</p>');
+                    jq('#res').html('<p>Something went wrong</p>');
                 } else {
-                    jq('#res').html('<p>Hello ' + values.name + '.' +
-                        (values.age ? '<br/>You are ' + values.age + '.' : '') +
-                        '</p>');
+                    jq('#res').html('<p>Uploaded</p>');
+                    console.log(values.max_options)
                 }
             }
         })

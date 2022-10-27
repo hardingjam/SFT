@@ -17,21 +17,21 @@
 
     let error = ""
 
-    let schemas = [{
-        displayName: 'Test',
-        schema: {
-            name: {
-                type: 'string',
-                title: 'Name',
-                required: true
-            },
-            age: {
-                type: 'number',
-                title: 'Age'
+    let schemas = [
+        {
+            displayName: 'Test',
+            schema: {
+                name: {
+                    type: 'string',
+                    title: 'Name',
+                    required: true
+                },
+                age: {
+                    type: 'number',
+                    title: 'Age'
+                }
             }
-        }
-    },
-
+        },
         {
             displayName: 'Love To',
             schema: {
@@ -56,8 +56,9 @@
                     required: true
                 },
                 upload: {
-                    type: 'string',
-                    title: 'Upload PIE Certificate'
+                    "type": 'file',
+                    "title": 'Upload PIE Certificate',
+                    "format": "date"
                 }
             }
         }

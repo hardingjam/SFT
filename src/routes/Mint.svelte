@@ -9,6 +9,11 @@
     import Schema from "../components/Schema.svelte";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
+    import ImageDropZone from "../components/ImageDropZone.svelte";
+
+    let mediaUploadResp = null
+    let imageFile = null
+    let image = {}
 
     let error = ""
 
@@ -79,27 +84,27 @@
         shouldDisable = false;
     }
 
-    async function addToIpfs() {
-
-        let payloadJson = JSON.stringify(auditInfo)
-
-        let data = new FormData();
-        data.append('path', `{"file", ${payloadJson}`);
-
-        let config = {
-            method: 'post',
-            url: 'https://gildlab-ipfs.in.ngrok.io/api/v0/add',
-            data: data
-        };
-
-        axios(config)
-            .then(function (response) {
-                console.log(JSON.stringify(response.data));
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
+    // async function addToIpfs() {
+    //
+    //     let payloadJson = JSON.stringify(auditInfo)
+    //
+    //     let data = new FormData();
+    //     data.append('path', `{"file", ${payloadJson}`);
+    //
+    //     let config = {
+    //         method: 'post',
+    //         url: 'https://gildlab-ipfs.in.ngrok.io/api/v0/add',
+    //         data: data
+    //     };
+    //
+    //     axios(config)
+    //         .then(function (response) {
+    //             console.log(JSON.stringify(response.data));
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error);
+    //         });
+    // }
 
     function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
@@ -142,6 +147,11 @@
 
     </div>
   </div>
+
+  <ImageDropZone
+      bind:imageFile={imageFile}
+      bind:mediaUploadResp={mediaUploadResp}
+      bind:this={image}/>
   <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>

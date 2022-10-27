@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^1.1.2",
     "ethers": "^5.6.9",
+    "filedrop-svelte": "^0.1.2",
     "form-data": "^4.0.0",
     "json-format-highlight": "^1.0.4",
     "jsonform": "^2.2.5",

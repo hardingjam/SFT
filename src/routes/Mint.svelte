@@ -13,7 +13,7 @@
     let error = ""
 
     let schemas = [{
-        displayName: 'schema1',
+        displayName: 'Test',
         schema: {
             name: {
                 type: 'string',
@@ -25,22 +25,37 @@
                 title: 'Age'
             }
         }
-    }, {
-        displayName: 'schema2',
-        schema: {
-            score1: {
-                type: 'string',
-                title: 'Meta Score 1',
-                required: true
-            },
-            score2: {
-                type: 'string',
-                title: 'Meta Score 2',
-                required: true
-            },
-
-        }
     },
+
+        {
+            displayName: 'Love To',
+            schema: {
+                pie_certificate: {
+                    type: 'string',
+                    title: 'PIE Certificate',
+                    required: true
+                },
+                producer_wallet: {
+                    type: 'string',
+                    title: 'Producer Wallet',
+                    required: true
+                },
+                total_score: {
+                    type: 'string',
+                    title: 'Total Score',
+                    required: true
+                },
+                max_options: {
+                    type: 'string',
+                    title: 'Max Options',
+                    required: true
+                },
+                upload: {
+                    type: 'string',
+                    title: 'Upload PIE Certificate'
+                }
+            }
+        }
     ]
 
     let selectedSchema = {}
@@ -49,22 +64,6 @@
 
     let amount;
     let shouldDisable = !schemas.length
-
-    let auditInfo = [
-        {
-            label: "PIE Certificate",
-            value: 0
-        }, {
-            label: " Producer Wallet",
-            value: 0
-        }, {
-            label: "Total Score",
-            value: 0
-        }, {
-            label: "Max Options",
-            value: 0
-        }
-    ]
 
     async function mint() {
         try {
@@ -132,25 +131,6 @@
 
           </div>
           <Schema schema={selectedSchema.displayName? selectedSchema.schema : selectedSchema}></Schema>
-          <!--          <div class="title f-weight-700">Audit info.</div>-->
-          <!--          <table>-->
-
-          <!--            {#each auditInfo as info}-->
-          <!--              <tr class="info-row">-->
-          <!--                <td>{info.label}</td>-->
-          <!--                <td class="value">-->
-          <!--                  <input type="text" class="default-input" bind:value={info.value}>-->
-          <!--                </td>-->
-          <!--              </tr>-->
-          <!--            {/each}-->
-          <!--            <tr>-->
-          <!--              <td>Upload PIE Certificate</td>-->
-          <!--              <td>-->
-          <!--                <button class="default-btn" on:click={()=>{addToIpfs()}}>Upload</button>-->
-          <!--              </td>-->
-          <!--            </tr>-->
-
-          <!--          </table>-->
         </div>
       {/if}
       {#if !schemas.length}

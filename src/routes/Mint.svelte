@@ -28,7 +28,7 @@
                         required: true
                     },
                     age: {
-                        type: 'number',
+                        type: 'string',
                         title: 'Age'
                     }
                 }
@@ -63,32 +63,29 @@
                         "title": 'Upload PIE Certificate',
                         "format": "date"
                     }
-                }
-            }
-        },
-        {
-            displayName: "love",
-            "options": {
-                "schema": {
-                    "file_content": {
-                        "title": "File content",
-                        "type": "string"
-                    },
-                    "upload": {
-                        "type": "string"
-                    }
                 },
                 "form": [
                     {
-                        "key": "file_content",
-                        "type": "textarea"
+                        "key": "pie_certificate",
+                        "type": "text"
+                    },
+                    {
+                        "key": "producer_wallet",
+                        "type": "text"
+                    },
+                    {
+                        "key": "total_score",
+                        "type": "text"
+                    },
+                    {
+                        "key": "max_options",
+                        "type": "text"
                     },
                     {
                         "key": "upload",
                         "type": "file",
-                        "name": "up1",
-                        "accept": ".txt,.md",
-                        "notitle": true
+                        "name": "PIE",
+                        "notitle": true,
                     },
                     {
                         "type": "submit",
@@ -96,7 +93,6 @@
                     }
                 ]
             }
-
         }
     ]
 
@@ -120,6 +116,49 @@
         }
         shouldDisable = false;
     }
+
+    $: selectedSchema?.displayName && addOnChange();
+
+    function addOnChange() {
+        if (selectedSchema.displayName && selectedSchema.options.form) {
+            let fileTypeFields = selectedSchema.options?.form.filter(field => field.type === "file")
+            fileTypeFields.map(f => f.onChange = (e) => {
+                upload(e.target.files[0]);
+            })
+        }
+    }
+
+    const upload = async (data) => {
+        const url = `https://gildlab-ipfs.in.ngrok.io/api/v0/add`;
+        let formData = new FormData();
+        // if we're pinning metadata (objets)
+        if (data instanceof Array) {
+            data = data
+            for (const [i, d] of data.entries()) {
+                const blob = new Blob([JSON.stringify(d, null, 2)], {type: 'application/json'});
+                formData.append(`file`, blob, `dir/${i}.json`);
+            }
+        }
+        // or we're pinning the media file
+        else {
+            formData.append('file', data, data.name)
+        }
+
+        const response = await axios.request({
+            url,
+            method: 'post',
+            headers: {
+                "Content-Type": `multipart/form-data;`,
+            },
+            data: formData,
+            onUploadProgress: ((p) => {
+                console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+            }),
+        })
+
+        console.log(response)
+        return response.data
+    };
 
     // async function addToIpfs() {
     //

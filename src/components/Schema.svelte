@@ -1,11 +1,15 @@
 <script type="text/javascript">
-    import {onMount} from "svelte";
+    import * as FormData from "form-data";
+    import axios from "axios";
+    import {fileHash} from "../scripts/store.js";
+    import {IPFS_API, IPFS_GETWAY} from "../scripts/consts.js";
+
     const jq = window.$;
     export let options;
 
-    $: options.schema && generateForm();
+    $: options?.schema && generateForm();
 
-    function generateForm(){
+    function generateForm() {
         //clear form html first so it shows new form after reselect
         jq('#form').html('')
         jq('#form').jsonForm({
@@ -15,9 +19,33 @@
                 if (errors) {
                     jq('#res').html('<p>Something went wrong</p>');
                 } else {
+                    if ($fileHash) {
+                        values.fileHash = `${IPFS_GETWAY}/${$fileHash}`
+                    }
+                    addToIpfs(values)
+
                     jq('#res').html('<p>Uploaded</p>');
                 }
             }
+        })
+    }
+
+    async function addToIpfs(data) {
+        let formData = new FormData();
+        let payloadJson = JSON.stringify(data)
+
+        formData.append('path', payloadJson);
+
+        await axios.request({
+            url: IPFS_API,
+            method: 'post',
+            headers: {
+                "Content-Type": `multipart/form-data;`,
+            },
+            data: formData,
+            onUploadProgress: ((p) => {
+                console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+            }),
         })
     }
 </script>

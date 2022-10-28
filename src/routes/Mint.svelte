@@ -1,7 +1,7 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
-    import {vault} from "../scripts/store.js";
+    import {vault, fileHash} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
@@ -10,6 +10,7 @@
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
     import ImageDropZone from "../components/ImageDropZone.svelte";
+    import {IPFS_API} from "../scripts/consts.js";
 
     let mediaUploadResp = null
     let imageFile = null
@@ -35,30 +36,30 @@
             }
         },
         {
-            displayName: 'Love To',
+            "displayName": 'Love To',
             "options": {
-                schema: {
-                    pie_certificate: {
-                        type: 'string',
-                        title: 'PIE Certificate',
-                        required: true
+                "schema": {
+                    "pie_certificate": {
+                        "type": 'string',
+                        "title": 'PIE Certificate',
+                        "required": true
                     },
-                    producer_wallet: {
-                        type: 'string',
-                        title: 'Producer Wallet',
-                        required: true
+                    "producer_wallet": {
+                        "type": 'string',
+                        "title": 'Producer Wallet',
+                        "required": true
                     },
-                    total_score: {
-                        type: 'string',
-                        title: 'Total Score',
-                        required: true
+                    "total_score": {
+                        "type": 'string',
+                        "title": 'Total Score',
+                        "required": true
                     },
-                    max_options: {
-                        type: 'string',
-                        title: 'Max Options',
-                        required: true
+                    "max_options": {
+                        "type": 'string',
+                        "title": 'Max Options',
+                        "required": true
                     },
-                    upload: {
+                    "upload": {
                         "type": 'file',
                         "title": 'Upload PIE Certificate',
                         "format": "date"
@@ -84,7 +85,7 @@
                     {
                         "key": "upload",
                         "type": "file",
-                        "name": "PIE",
+                        "name": "Upload",
                         "notitle": true,
                     },
                     {
@@ -129,7 +130,7 @@
     }
 
     const upload = async (data) => {
-        const url = `https://gildlab-ipfs.in.ngrok.io/api/v0/add`;
+        const url = IPFS_API;
         let formData = new FormData();
         // if we're pinning metadata (objets)
         if (data instanceof Array) {
@@ -156,31 +157,9 @@
             }),
         })
 
-        console.log(response)
+        fileHash.set(response.data.Hash)
         return response.data
     };
-
-    // async function addToIpfs() {
-    //
-    //     let payloadJson = JSON.stringify(auditInfo)
-    //
-    //     let data = new FormData();
-    //     data.append('path', `{"file", ${payloadJson}`);
-    //
-    //     let config = {
-    //         method: 'post',
-    //         url: 'https://gildlab-ipfs.in.ngrok.io/api/v0/add',
-    //         data: data
-    //     };
-    //
-    //     axios(config)
-    //         .then(function (response) {
-    //             console.log(JSON.stringify(response.data));
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error);
-    //         });
-    // }
 
     function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected

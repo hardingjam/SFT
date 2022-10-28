@@ -9,32 +9,16 @@
     import Schema from "../components/Schema.svelte";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import ImageDropZone from "../components/ImageDropZone.svelte";
+    // import ImageDropZone from "../components/ImageDropZone.svelte";
     import {IPFS_API} from "../scripts/consts.js";
 
-    let mediaUploadResp = null
-    let imageFile = null
+    // let mediaUploadResp = null
+    // let imageFile = null
     let image = {}
 
     let error = ""
 
     let schemas = [
-        {
-            displayName: 'Test',
-            options: {
-                schema: {
-                    name: {
-                        type: 'string',
-                        title: 'Name',
-                        required: true
-                    },
-                    age: {
-                        type: 'string',
-                        title: 'Age'
-                    }
-                }
-            }
-        },
         {
             "displayName": 'Love To',
             "options": {
@@ -85,12 +69,8 @@
                     {
                         "key": "upload",
                         "type": "file",
-                        "name": "Upload",
+                        "name": "Upload PIE Certificate",
                         "notitle": true,
-                    },
-                    {
-                        "type": "submit",
-                        "title": "Submit"
                     }
                 ]
             }
@@ -106,6 +86,8 @@
 
     async function mint() {
         try {
+            submitForm()
+
             const shares = ethers.utils.parseEther(amount.toString());
             const tx = await $vault
                 .connect(signer)
@@ -117,6 +99,8 @@
         }
         shouldDisable = false;
     }
+
+    let progressPercent = null;
 
     $: selectedSchema?.displayName && addOnChange();
 
@@ -142,7 +126,7 @@
         }
         // or we're pinning the media file
         else {
-            formData.append('file', data, data.name)
+            formData.append('file', data)
         }
 
         const response = await axios.request({
@@ -154,15 +138,30 @@
             data: formData,
             onUploadProgress: ((p) => {
                 console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                progressPercent = `${Math.floor(p.loaded / p.total * 100)}%`
             }),
-        })
+        }).catch(function (err) {
+            error = err.toJSON().message
+        });
 
-        fileHash.set(response.data.Hash)
-        return response.data
+        if (response) {
+            fileHash.set(response.data.Hash)
+        }
+
+        return response?.data
     };
 
     function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
+    }
+
+    function submitForm(){
+        //get form data
+        let formDataArr = window.$("#form").serializeArray()
+        const json = {};
+        formDataArr.map(a=>{json[a.name] = a.value})
+
+        upload(JSON.stringify(json))
     }
 
 </script>
@@ -203,13 +202,16 @@
     </div>
   </div>
 
-  <ImageDropZone
-      bind:imageFile={imageFile}
-      bind:mediaUploadResp={mediaUploadResp}
-      bind:this={image}/>
+  <!--  <ImageDropZone-->
+  <!--      bind:imageFile={imageFile}-->
+  <!--      bind:mediaUploadResp={mediaUploadResp}-->
+  <!--      bind:this={image}/>-->
+
+  <div class="error">{error}</div>
   <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>
+  <div>{progressPercent || ''}</div>
   <button class="mint-btn btn-solid btn-submit" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
     Options
   </button>

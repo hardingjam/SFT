@@ -23,4 +23,4 @@ export const ROLES = [
     {name: "CONFISCATOR_ADMIN", hash: "0xc23bede8eabca44a15d0193051ac5429f3d014a7e297a4e78f67d06657d14269"}
 ]
 export const IPFS_API = "https://gildlab-ipfs.in.ngrok.io/api/v0/add"
-export const IPFS_GETWAY = "https://4baaa9812413.in.ngrok.io/ipfs/"
+export const IPFS_GETWAY = "https://gildlab-ipfs.in.ngrok.io/ipfs"

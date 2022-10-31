@@ -10,7 +10,7 @@
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
     // import ImageDropZone from "../components/ImageDropZone.svelte";
-    import {IPFS_API} from "../scripts/consts.js";
+    import {IPFS_API, IPFS_GETWAY} from "../scripts/consts.js";
 
     // let mediaUploadResp = null
     // let imageFile = null
@@ -86,7 +86,7 @@
 
     async function mint() {
         try {
-            submitForm()
+            await submitForm()
 
             const shares = ethers.utils.parseEther(amount.toString());
             const tx = await $vault
@@ -155,13 +155,20 @@
         selectedSchema = event.detail.selected
     }
 
-    function submitForm(){
+    async function submitForm() {
         //get form data
         let formDataArr = window.$("#form").serializeArray()
         const json = {};
-        formDataArr.map(a=>{json[a.name] = a.value})
 
-        upload(JSON.stringify(json))
+        formDataArr.map(a => {
+            json[a.name] = a.value
+        })
+
+        if ($fileHash) {
+            json.fileHash = `${IPFS_GETWAY}/${$fileHash}`
+        }
+
+        await upload(JSON.stringify(json))
     }
 
 </script>

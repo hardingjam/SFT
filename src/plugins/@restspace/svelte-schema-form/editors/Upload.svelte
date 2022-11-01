@@ -1,6 +1,8 @@
-<script>import { after, afterLast } from "../utilities";
-import { getContext } from "svelte";
-import { FileNone, ProgressContext } from "../types/CommonComponentParameters";
+<script>import {after, afterLast} from "../utilities";
+import {getContext} from "svelte";
+import {FileNone, ProgressContext} from "../types/CommonComponentParameters";
+import {fileDropped} from "../../../../scripts/store.js";
+
 export let params;
 export let schema;
 export let value;
@@ -51,6 +53,7 @@ const chooseFile = () => {
             mimeType: file.type,
             size: file.size
         };
+        fileDropped.set(file)
     }
 };
 const onInput = (ev) => {
@@ -80,10 +83,11 @@ const renderThumbnail = (file) => {
         dropArea.append(img);
         renderedThumbnails.push(img);
         const reader = new FileReader();
-        reader.onload = e => { img.src = e.target.result; };
+        reader.onload = e => {
+            img.src = e.target.result;
+        };
         reader.readAsDataURL(file);
-    }
-    else {
+    } else {
         const div = document.createElement("div");
         div.classList.add("sf-upload-file");
         div.title = file.name;
@@ -99,7 +103,7 @@ const drop = (ev) => {
     highlight = false;
     if (!ev.dataTransfer)
         return;
-    const { files } = ev.dataTransfer;
+    const {files} = ev.dataTransfer;
     inp.files = files;
     chooseFile();
 };
@@ -112,6 +116,7 @@ const deleteUploads = (ev) => {
     value = '';
     params.pathChanged(params.path, FileNone);
     params.pathChanged(params.path, value);
+    fileDropped.set(File)
 };
 const changeMode = (ev) => {
     ev.stopPropagation();
@@ -128,46 +133,46 @@ const isImage = (url) => {
 </script>
 
 <svelte:component this={params.components['fieldWrapper']} {params} {schema}>
-	<input bind:this={inp} id={params.path.join('.')} name={params.path.join('.')}
-		type="file"
-		readonly={readOnly}
-		on:input={onInput}
-		style="display: none" />
-	<div class="sf-drop-area {mode}"
-		class:highlight
-		tabIndex="0"
-		on:dragenter={dragEnter}
-		on:dragover={dragOver}
-		on:dragleave={dragLeave}
-		on:drop={drop}
-		on:click={openFile}
-		bind:this={dropArea}>
-		{#if mode === "uploader" && !readOnly}
-			<div class="sf-upload-caption">
-				Upload
-			</div>
-		{/if}
-		{#if value && isImage(value) && mode === "uploader"}
-			<img class="sf-upload-thumb" src={value} alt="upload file"/>
-		{/if}
-		{#if value && !isImage(value) && mode === "uploader"}
-			<div class="sf-upload-file" title={value}>{afterLast(value, ".")}</div>
-		{/if}
-		<div class="sf-upload-controls">
-			{#if !(readOnly)}
-				<button type="button" class="sf-upload-deleter" on:click={deleteUploads}></button>
-			{/if}
+  <input bind:this={inp} id={params.path.join('.')} name={params.path.join('.')}
+         type="file"
+         readonly={readOnly}
+         on:input={onInput}
+         style="display: none"/>
+  <div class="sf-drop-area {mode}"
+       class:highlight
+       tabIndex="0"
+       on:dragenter={dragEnter}
+       on:dragover={dragOver}
+       on:dragleave={dragLeave}
+       on:drop={drop}
+       on:click={openFile}
+       bind:this={dropArea}>
+    {#if mode === "uploader" && !readOnly && !$fileDropped.size}
+      <div class="sf-upload-caption">
+        Upload
+      </div>
+    {/if}
+    {#if value && isImage(value) && mode === "uploader"}
+      <img class="sf-upload-thumb" src={value} alt="upload file"/>
+    {/if}
+    {#if value && !isImage(value) && mode === "uploader"}
+      <div class="sf-upload-file" title={value}>{afterLast(value, ".")}</div>
+    {/if}
+    <div class="sf-upload-controls">
+      {#if !(readOnly)}
+        <button type="button" class="sf-upload-deleter" on:click={deleteUploads}></button>
+      {/if}
 
-		</div>
-	</div>
-	{#if Object.keys(progress).length > 0}
-	<div class="sf-progress-bars">
-		{#each Object.entries(progress) as [name, percent]}
-			<div class="sf-progress-bar">
-				<div class="sf-progress-done" style="width: {percent}%"></div>
-				{name}
-			</div>
-		{/each}
-	</div>
-	{/if}
+    </div>
+  </div>
+  {#if Object.keys(progress).length > 0}
+    <div class="sf-progress-bars">
+      {#each Object.entries(progress) as [name, percent]}
+        <div class="sf-progress-bar">
+          <div class="sf-progress-done" style="width: {percent}%"></div>
+          {name}
+        </div>
+      {/each}
+    </div>
+  {/if}
 </svelte:component>

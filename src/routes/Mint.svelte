@@ -1,19 +1,16 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
-    import {vault, fileHash} from "../scripts/store.js";
+    import {vault, fileHash, fileDropped} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
     import * as FormData from 'form-data'
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    // import ImageDropZone from "../components/ImageDropZone.svelte";
     import {IPFS_API, IPFS_GETWAY} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
 
-    // let mediaUploadResp = null
-    // let imageFile = null
     let image = {}
 
     let error = ""
@@ -75,18 +72,6 @@
         shouldDisable = false;
     }
 
-    let progressPercent = null;
-
-    // $: selectedSchema?.displayName && addOnChange();
-
-    // function addOnChange() {
-    //     if (selectedSchema.displayName && selectedSchema.options.form) {
-    //         let fileTypeFields = selectedSchema.options?.form.filter(field => field.type === "file")
-    //         fileTypeFields.map(f => f.onChange = (e) => {
-    //             upload(e.target.files[0]);
-    //         })
-    //     }
-    // }
 
     const upload = async (data) => {
         const url = IPFS_API;
@@ -113,18 +98,19 @@
             data: formData,
             onUploadProgress: ((p) => {
                 console.log(`Uploading...  ${p.loaded} / ${p.total}`);
-                progressPercent = `${Math.floor(p.loaded / p.total * 100)}%`
             }),
         }).catch(function (err) {
             error = err.toJSON().message
         });
 
-        if (response) {
+        if ($fileDropped.size && response) {
             fileHash.set(response.data.Hash)
         }
 
         return response?.data
     };
+
+    $: ($fileDropped && $fileDropped.size) && upload($fileDropped);
 
     function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
@@ -172,7 +158,7 @@
 
           </div>
           {#if selectedSchema?.displayName}
-            <SchemaForm schema= {selectedSchema.schema}></SchemaForm>
+            <SchemaForm schema={selectedSchema.schema}></SchemaForm>
           {/if}
         </div>
       {/if}
@@ -186,16 +172,10 @@
     </div>
   </div>
 
-  <!--  <ImageDropZone-->
-  <!--      bind:imageFile={imageFile}-->
-  <!--      bind:mediaUploadResp={mediaUploadResp}-->
-  <!--      bind:this={image}/>-->
-
   <div class="error">{error}</div>
   <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>
-  <div>{progressPercent || ''}</div>
   <button class="mint-btn btn-solid btn-submit" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
     Options
   </button>

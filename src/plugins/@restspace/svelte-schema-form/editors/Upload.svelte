@@ -1,9 +1,6 @@
 <script>import { after, afterLast } from "../utilities";
-import { entries, keys } from "lodash-es";
 import { getContext } from "svelte";
 import { FileNone, ProgressContext } from "../types/CommonComponentParameters";
-import Number from "./Number.svelte";
-import String from "./String.svelte";
 export let params;
 export let schema;
 export let value;
@@ -147,7 +144,7 @@ const isImage = (url) => {
 		bind:this={dropArea}>
 		{#if mode === "uploader" && !readOnly}
 			<div class="sf-upload-caption">
-				Drop files or click to upload
+				Upload
 			</div>
 		{/if}
 		{#if value && isImage(value) && mode === "uploader"}
@@ -156,25 +153,11 @@ const isImage = (url) => {
 		{#if value && !isImage(value) && mode === "uploader"}
 			<div class="sf-upload-file" title={value}>{afterLast(value, ".")}</div>
 		{/if}
-		{#if mode === "link"}
-			<input type="text"
-				id={params.path.join('.')}
-				name={params.path.join('.')}
-				disabled={readOnly}
-				class="sf-upload-input"
-				value={value || ''}
-				on:click|stopPropagation={() => {}}
-				on:input={ev => params.pathChanged(params.path, ev.currentTarget.value || undefined)} />
-		{/if}
 		<div class="sf-upload-controls">
 			{#if !(readOnly)}
 				<button type="button" class="sf-upload-deleter" on:click={deleteUploads}></button>
 			{/if}
-			<button type="button"
-				class:sf-upload-to-link={mode === "uploader"}
-				class:sf-upload-to-uploader={mode === "link"}
-				on:click={changeMode}>
-			</button>
+
 		</div>
 	</div>
 	{#if Object.keys(progress).length > 0}

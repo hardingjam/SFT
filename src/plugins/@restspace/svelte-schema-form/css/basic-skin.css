@@ -105,7 +105,7 @@ form.svelte-schema-form.dirty .submit-button {
   color: #777;
 }
 form.svelte-schema-form .sf-drop-area {
-  height: 4em;
+  height: 2em;
   border: var(--input-border);
   padding-right: 16px;
   position: relative;

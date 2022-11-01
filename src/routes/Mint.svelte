@@ -32,6 +32,7 @@
                 "properties": {
                     "pie_certificate": {
                         "type": "string",
+                        "editor": "upload",
                         "title": "PIE Certificate"
                     },
                     "producer_wallet": {

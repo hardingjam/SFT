@@ -59,8 +59,8 @@ form.svelte-schema-form .sf-drop-area .sf-upload-caption {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: -1;
 }
+
 form.svelte-schema-form .sf-drop-area .sf-upload-controls {
   position: absolute;
   right: 0;

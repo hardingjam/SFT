@@ -107,7 +107,6 @@ const pathChanged = (path, val) => {
     dispatch('value', {
         path, pathValue: val, value: params.value, errors: validationErrors
     });
-    console.log(`dispatch value path: ${path.join('.')} val: ${JSON.stringify(val)}, errors: ${JSON.stringify(validationErrors)}`);
     value = params.value;
     return val;
 };

@@ -22,22 +22,29 @@
         {
             "displayName": 'Love To',
             "schema": {
-                "$id": "https://example.com/geographical-location.schema.json",
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "Longitude and Latitude Values",
-                "description": "A geographical coordinate.",
-                "required": [ "latitude", "longitude" ],
                 "type": "object",
+                "required": [
+                    "pie_certificate",
+                    "producer_wallet",
+                    "total_score",
+                    "max_options"
+                ],
                 "properties": {
-                    "latitude": {
-                        "type": "number",
-                        "minimum": -90,
-                        "maximum": 90
+                    "pie_certificate": {
+                        "type": "string",
+                        "title": "PIE Certificate"
                     },
-                    "longitude": {
+                    "producer_wallet": {
+                        "type": "string",
+                        "title": "Producer Wallet",
+                    },
+                    "total_score": {
                         "type": "number",
-                        "minimum": -180,
-                        "maximum": 180
+                        "title": "Total Score"
+                    },
+                    "max_options": {
+                        "type": "string",
+                        "title": "number"
                     }
                 }
             }
@@ -124,7 +131,7 @@
 
     async function submitForm() {
         //get form data
-        let formDataArr = window.$("#form").serializeArray()
+        let formDataArr = window.$(".svelte-schema-form").serializeArray()
         const json = {};
 
         formDataArr.map(a => {
@@ -138,10 +145,6 @@
         await upload(JSON.stringify(json))
     }
 
-
-    function getFormData(event){
-        console.log(11,event.detail)
-    }
 </script>
 
 <div class="mint-container">

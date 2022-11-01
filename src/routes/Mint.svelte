@@ -6,11 +6,11 @@
     import {navigateTo} from "yrv";
     import axios from "axios";
     import * as FormData from 'form-data'
-    import Schema from "../components/Schema.svelte";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
     // import ImageDropZone from "../components/ImageDropZone.svelte";
     import {IPFS_API, IPFS_GETWAY} from "../scripts/consts.js";
+    import SchemaForm from "../components/SchemaForm.svelte"
 
     // let mediaUploadResp = null
     // let imageFile = null
@@ -21,58 +21,25 @@
     let schemas = [
         {
             "displayName": 'Love To',
-            "options": {
-                "schema": {
-                    "pie_certificate": {
-                        "type": 'string',
-                        "title": 'PIE Certificate',
-                        "required": true
+            "schema": {
+                "$id": "https://example.com/geographical-location.schema.json",
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "title": "Longitude and Latitude Values",
+                "description": "A geographical coordinate.",
+                "required": [ "latitude", "longitude" ],
+                "type": "object",
+                "properties": {
+                    "latitude": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90
                     },
-                    "producer_wallet": {
-                        "type": 'string',
-                        "title": 'Producer Wallet',
-                        "required": true
-                    },
-                    "total_score": {
-                        "type": 'string',
-                        "title": 'Total Score',
-                        "required": true
-                    },
-                    "max_options": {
-                        "type": 'string',
-                        "title": 'Max Options',
-                        "required": true
-                    },
-                    "upload": {
-                        "type": 'file',
-                        "title": 'Upload PIE Certificate',
-                        "format": "date"
+                    "longitude": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180
                     }
-                },
-                "form": [
-                    {
-                        "key": "pie_certificate",
-                        "type": "text"
-                    },
-                    {
-                        "key": "producer_wallet",
-                        "type": "text"
-                    },
-                    {
-                        "key": "total_score",
-                        "type": "text"
-                    },
-                    {
-                        "key": "max_options",
-                        "type": "text"
-                    },
-                    {
-                        "key": "upload",
-                        "type": "file",
-                        "name": "Upload PIE Certificate",
-                        "notitle": true,
-                    }
-                ]
+                }
             }
         }
     ]
@@ -102,16 +69,16 @@
 
     let progressPercent = null;
 
-    $: selectedSchema?.displayName && addOnChange();
+    // $: selectedSchema?.displayName && addOnChange();
 
-    function addOnChange() {
-        if (selectedSchema.displayName && selectedSchema.options.form) {
-            let fileTypeFields = selectedSchema.options?.form.filter(field => field.type === "file")
-            fileTypeFields.map(f => f.onChange = (e) => {
-                upload(e.target.files[0]);
-            })
-        }
-    }
+    // function addOnChange() {
+    //     if (selectedSchema.displayName && selectedSchema.options.form) {
+    //         let fileTypeFields = selectedSchema.options?.form.filter(field => field.type === "file")
+    //         fileTypeFields.map(f => f.onChange = (e) => {
+    //             upload(e.target.files[0]);
+    //         })
+    //     }
+    // }
 
     const upload = async (data) => {
         const url = IPFS_API;
@@ -171,6 +138,10 @@
         await upload(JSON.stringify(json))
     }
 
+
+    function getFormData(event){
+        console.log(11,event.detail)
+    }
 </script>
 
 <div class="mint-container">
@@ -196,7 +167,9 @@
                     label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
 
           </div>
-          <Schema options={selectedSchema.displayName? selectedSchema.options : selectedSchema}></Schema>
+          {#if selectedSchema?.displayName}
+            <SchemaForm schema= {selectedSchema.schema}></SchemaForm>
+          {/if}
         </div>
       {/if}
       {#if !schemas.length}

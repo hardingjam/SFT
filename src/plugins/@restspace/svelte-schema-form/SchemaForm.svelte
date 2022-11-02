@@ -17,7 +17,6 @@ import Upload from "./editors/Upload.svelte";
 import TextArea from "./editors/TextArea.svelte";
 import ArrayBlocks from "./editors/ArrayBlocks.svelte";
 import Autocomplete from "./editors/Autocomplete.svelte";
-import Hidden from "./editors/Hidden.svelte";
 export let schema;
 export let value;
 export let uploadFiles = {};
@@ -62,7 +61,6 @@ $: params = {
         enum: Enum,
         upload: Upload,
         textarea: TextArea,
-        hidden: Hidden,
         blocks: ArrayBlocks,
         autocomplete: Autocomplete
     }, components),

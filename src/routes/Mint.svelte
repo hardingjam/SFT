@@ -8,8 +8,9 @@
     import * as FormData from 'form-data'
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_API, IPFS_GETWAY} from "../scripts/consts.js";
+    import {IPFS_API, IPFS_GETWAY, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
+    import {toBytes} from "../scripts/helpers";
 
     let image = {}
 
@@ -58,12 +59,14 @@
 
     async function mint() {
         try {
-            await submitForm()
-
+            let formResponse = await submitForm()
+            let shareRatio = ONE
             const shares = ethers.utils.parseEther(amount.toString());
+            let dataBytes = toBytes(formResponse.Hash)
+
             const tx = await $vault
                 .connect(signer)
-                ["mint(uint256,address)"](shares, $account);
+                ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
             await tx.wait();
             amount = 0;
         } catch (error) {
@@ -132,7 +135,9 @@
             json.fileHash = `${IPFS_GETWAY}/${$fileHash}`
         }
 
-        await upload(JSON.stringify(json))
+        let response = await upload(JSON.stringify(json))
+
+        return response
     }
 
 </script>

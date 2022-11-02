@@ -148,3 +148,8 @@ export function accessControlError(msg) {
     let role = ROLES.find(r => r.hash === hash)
     return error + " " + role?.name
 }
+
+export function toBytes (string) {
+    const encoder = new TextEncoder('UTF-8');
+    return encoder.encode(string);
+}

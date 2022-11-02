@@ -92,18 +92,20 @@
         // }
         // or we're pinning the media file
         // else {
-            formData.append('file', data)
+        formData.append('file', data)
         // }
 
 
-        const response = await axios.post(IPFS_API, formData).catch(error)
+        axios.post(IPFS_API, formData).then((response) => {
+            if ($fileDropped.size && response) {
+                fileHash.set(response.data.Hash)
+            }
+            uploadBtnLoading.set(false)
+        })
+            .catch((err) => {
+                console.log(err);
+            });
 
-        if ($fileDropped.size && response) {
-            fileHash.set(response.data.Hash)
-        }
-        uploadBtnLoading.set(false)
-
-        return response?.data
     };
 
     $: ($fileDropped && $fileDropped.size) && upload($fileDropped);

@@ -27,11 +27,6 @@
                     "max_options"
                 ],
                 "properties": {
-                    "pie_certificate": {
-                        "type": "string",
-                        "editor": "upload",
-                        "title": "PIE Certificate"
-                    },
                     "producer_wallet": {
                         "type": "string",
                         "title": "Producer Wallet",
@@ -43,7 +38,12 @@
                     "max_options": {
                         "type": "string",
                         "title": "number"
-                    }
+                    },
+                    "pie_certificate": {
+                        "type": "string",
+                        "editor": "upload",
+                        "title": "PIE Certificate"
+                    },
                 }
             }
         }
@@ -74,6 +74,7 @@
 
 
     const upload = async (data) => {
+        error = ""
         const url = IPFS_API;
         let formData = new FormData();
         // if we're pinning metadata (objets)
@@ -158,9 +159,21 @@
 
           </div>
           {#if selectedSchema?.displayName}
-            <span class="title f-weight-700">Audit info.</span>
+            <span class="title f-weight-700">Asset info.</span>
 
             <SchemaForm schema={selectedSchema.schema}></SchemaForm>
+            {#if $fileHash}
+              <div class="file-uploaded">
+                <span class="file-load-success">Pie Certificate loaded successfully</span>
+                <div class="link-to-file">
+                  <span>To Link</span>
+                  <a href={IPFS_GETWAY+ '/' + $fileHash} target="_blank">
+                    <img src="{icons.show}" alt="view file" class="btn-hover">
+                  </a>
+<!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
+                </div>
+              </div>
+            {/if}
           {/if}
 
         </div>
@@ -209,15 +222,10 @@
         font-size: 16px;
         line-height: 27px;
         min-height: 142px;
-
     }
 
     .audit-info .title {
         text-align: center;
-    }
-
-    .value {
-        padding-left: 20px;
     }
 
     .info-text {
@@ -242,6 +250,14 @@
         text-align: right;
     }
 
+    .file-load-success {
+        color: #1EA51B
+    }
+
+    .file-uploaded {
+        display: flex;
+        justify-content: space-between;
+    }
 
 </style>
 

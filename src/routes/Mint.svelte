@@ -71,7 +71,7 @@
             await tx.wait();
             amount = 0;
         } catch (error) {
-            console.log(error || error.reason)
+            console.log(error.reason || error)
         }
         shouldDisable = false;
     }
@@ -83,17 +83,17 @@
         const url = IPFS_API;
         let formData = new FormData();
         // if we're pinning metadata (objets)
-        if (data instanceof Array) {
-            data = data
-            for (const [i, d] of data.entries()) {
-                const blob = new Blob([JSON.stringify(d, null, 2)], {type: 'application/json'});
-                formData.append(`file`, blob, `dir/${i}.json`);
-            }
-        }
+        // if (data instanceof Array) {
+        //     data = data
+        //     for (const [i, d] of data.entries()) {
+        //         const blob = new Blob([JSON.stringify(d, null, 2)], {type: 'application/json'});
+        //         formData.append(`file`, blob, `dir/${i}.json`);
+        //     }
+        // }
         // or we're pinning the media file
-        else {
+        // else {
             formData.append('file', data)
-        }
+        // }
 
         const response = await axios.request({
             url,

@@ -6,12 +6,14 @@
     import {ethers} from "ethers";
     import Spinner from "../components/Spinner.svelte";
     import {DEPLOYER_QUERY, DEPOSITS_QUERY} from '../scripts/queries.js'
+    import ReceiptInformation from "./ReceiptInformation.svelte";
 
     let shouldDisable = false;
     let amount;
     let selectedReceipts = [];
     let totalShares = 0
     let error = ""
+    let showReceiptInfo = false
 
     let loading = false
 
@@ -162,54 +164,67 @@
         }
     }
 
+    async function goToReceiptInfo(receipt) {
+        console.log(receipt)
+        showReceiptInfo = true
+    }
+
 </script>
 
 
 <div class="redeem-container">
-  <div class="title"><span
-      class="f-weight-700">Total Supply: (FT):</span>
-    {ethers.utils.formatUnits(totalShares, 18)}
-  </div>
-  <div class="basic-frame-parent">
-    <div class="receipts-table-container basic-frame">
-      {#if loading}
-        <Spinner></Spinner>
-      {/if}
-      {#if !loading}
-        <table class="receipts-table">
-          <tr>
-            <td class="f-weight-700">Receipt ID (NFT)</td>
-            <td class="f-weight-700">Amount</td>
-            <td class="f-weight-700">Minted</td>
-          </tr>
-          {#each depositWithReceipts as receipt}
-            <tr>
-              <td class="receipt-id">
-                <label class="check-container">
-                  <input type="checkbox" class="check-box" bind:group={selectedReceipts}
-                         value={receipt.receipt.receiptId}/>
-                  <span class="checkmark"></span>
-                </label>
-                <span class="check-box-label">{receipt.receipt.receiptId}</span>
-              </td>
-              <td class="value"> {ethers.utils.formatUnits(receipt.amount, 18)}</td>
-              <td class="value">{timeStampToDate(receipt.timestamp)}</td>
-            </tr>
-          {/each}
-
-        </table>
-      {/if}
+  {#if !showReceiptInfo}
+    <div class="title"><span
+        class="f-weight-700">Total Supply: (FT):</span>
+      {ethers.utils.formatUnits(totalShares, 18)}
     </div>
-  </div>
-  {#if error}
-    <span class="error">{error}</span>
+    <div class="basic-frame-parent">
+      <div class="receipts-table-container basic-frame">
+        {#if loading}
+          <Spinner></Spinner>
+        {/if}
+        {#if !loading}
+          <table class="receipts-table">
+            <tr>
+              <td class="f-weight-700">Receipt ID (NFT)</td>
+              <td class="f-weight-700">Amount</td>
+              <td class="f-weight-700">Minted</td>
+            </tr>
+            {#each depositWithReceipts as receipt}
+              <tr>
+                <td class="receipt-id">
+                  <label class="check-container">
+                    <input type="checkbox" class="check-box" bind:group={selectedReceipts}
+                           value={receipt.receipt.receiptId}/>
+                    <span class="checkmark"></span>
+                  </label>
+                  <span class="check-box-label"
+                        on:click={()=>{goToReceiptInfo(receipt)}}>{receipt.receipt.receiptId}</span>
+                </td>
+                <td class="value"> {ethers.utils.formatUnits(receipt.amount, 18)}</td>
+                <td class="value">{timeStampToDate(receipt.timestamp)}</td>
+              </tr>
+            {/each}
+
+          </table>
+        {/if}
+      </div>
+    </div>
+    {#if error}
+      <span class="error">{error}</span>
+    {/if}
+    <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
+               on:setMax={()=>{setMaxValue()}}/>
+    <button class="redeem-btn btn-solid btn-submit" disabled="{!selectedReceipts.length}" on:click={() => withdraw()}>
+      Redeem
+      Options
+    </button>
+
   {/if}
-  <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
-             on:setMax={()=>{setMaxValue()}}/>
-  <button class="redeem-btn btn-solid btn-submit" disabled="{!selectedReceipts.length}" on:click={() => withdraw()}>
-    Redeem
-    Options
-  </button>
+
+  {#if showReceiptInfo}
+    <ReceiptInformation/>
+  {/if}
 
 </div>
 

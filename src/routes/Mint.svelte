@@ -11,6 +11,7 @@
     import {IPFS_API, IPFS_GETWAY, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
     import {toBytes} from "../scripts/helpers";
+    import jQuery from 'jquery';
 
     let image = {}
 
@@ -70,7 +71,7 @@
             await tx.wait();
             amount = 0;
         } catch (error) {
-            console.log(error.reason);
+            console.log(error || error.reason)
         }
         shouldDisable = false;
     }
@@ -124,7 +125,7 @@
 
     async function submitForm() {
         //get form data
-        let formDataArr = window.$(".svelte-schema-form").serializeArray()
+        let formDataArr = jQuery(".svelte-schema-form").serializeArray()
         const json = {};
 
         formDataArr.map(a => {

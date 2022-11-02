@@ -202,8 +202,8 @@
                            value={receipt.receipt.receiptId}/>
                     <span class="checkmark"></span>
                   </label>
-                  <span class="check-box-label btn-hover"
-                        on:click={()=>{goToReceiptInfo(receipt)}}>{receipt.receipt.receiptId}</span>
+                  <div class="check-box-label btn-hover"
+                       on:click={()=>{goToReceiptInfo(receipt)}}>{receipt.receipt.receiptId}</div>
                 </td>
                 <td class="value"> {ethers.utils.formatUnits(receipt.amount, 18)}</td>
                 <td class="value">{timeStampToDate(receipt.timestamp)}</td>
@@ -256,7 +256,7 @@
     }
 
     .receipt-id {
-        width: 33%;
+        /*width: 33%;*/
         justify-content: left;
         display: flex;
         margin-left: 20px;
@@ -265,6 +265,16 @@
     .redeem-btn {
         margin-top: 33px;
         width: calc(100% - 50px);
+    }
+
+    .check-box-label{
+        width: 100%;
+        text-align: left;
+    }
+
+    .check-box-label:hover{
+        text-decoration: underline;
+
     }
 
 

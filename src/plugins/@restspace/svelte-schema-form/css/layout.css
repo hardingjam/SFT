@@ -94,15 +94,9 @@ form.svelte-schema-form .sf-drop-area.link .sf-upload-thumb, form.svelte-schema-
   display: none;
 }
 form.svelte-schema-form .sf-drop-area .sf-upload-file {
-  font-size: 1.4em;
-  font-weight: bold;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0.4em;
-  color: white;
-  background-color: #ddd;
+  color: #000000;
+  position: absolute;
+  left: -67px;
 }
 form.svelte-schema-form .sf-progress-bars {
   grid-column: 2;

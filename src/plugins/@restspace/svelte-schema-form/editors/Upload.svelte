@@ -76,25 +76,13 @@ const dragLeave = (ev) => {
     highlight = false;
 };
 const renderThumbnail = (file) => {
-    if (file.type.startsWith('image')) {
-        const img = document.createElement("img");
-        img.classList.add("sf-upload-thumb");
-        img.file = file;
-        dropArea.append(img);
-        renderedThumbnails.push(img);
-        const reader = new FileReader();
-        reader.onload = e => {
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    } else {
-        const div = document.createElement("div");
-        div.classList.add("sf-upload-file");
-        div.title = file.name;
-        div.innerText = afterLast(file.name, ".") || after(file.type, "/");
-        dropArea.append(div);
-        renderedThumbnails.push(div);
-    }
+    deleteUploads()
+    const div = document.createElement("div");
+    div.classList.add("sf-upload-file");
+    div.title = file.name;
+    div.innerText = file.name.replace(new RegExp('(^.{4}).+'), '$1' + '…') + afterLast(file.name, ".");
+    dropArea.append(div);
+    renderedThumbnails.push(div);
 };
 const drop = (ev) => {
     if (schema.readOnly)
@@ -107,8 +95,7 @@ const drop = (ev) => {
     inp.files = files;
     chooseFile();
 };
-const deleteUploads = (ev) => {
-    ev.stopPropagation();
+const deleteUploads = () => {
     inp.files = null;
     renderedThumbnails.forEach(n => n.remove());
     renderedThumbnails = [];
@@ -118,18 +105,13 @@ const deleteUploads = (ev) => {
     params.pathChanged(params.path, value);
     fileDropped.set(File)
 };
-const changeMode = (ev) => {
-    ev.stopPropagation();
-    mode = (mode === "uploader" ? "link" : "uploader");
-};
+
 const openFile = () => {
     if (readOnly)
         return;
     inp.click();
 };
-const isImage = (url) => {
-    return ["jpg", "jpeg", "png", "gif", "svg", "ico"].includes(afterLast(url, '.').toLowerCase());
-};
+
 </script>
 
 <svelte:component this={params.components['fieldWrapper']} {params} {schema}>
@@ -147,23 +129,9 @@ const isImage = (url) => {
        on:drop={drop}
        on:click={openFile}
        bind:this={dropArea}>
-    {#if mode === "uploader" && !readOnly && !$fileDropped.size}
-      <div class="sf-upload-caption">
-        Upload
-      </div>
-    {/if}
-    {#if value && isImage(value) && mode === "uploader"}
-      <img class="sf-upload-thumb" src={value} alt="upload file"/>
-    {/if}
-    {#if value && !isImage(value) && mode === "uploader"}
-      <div class="sf-upload-file" title={value}>{afterLast(value, ".")}</div>
-    {/if}
-<!--    <div class="sf-upload-controls">-->
-<!--      {#if !(readOnly)}-->
-<!--        <button type="button" class="sf-upload-deleter" on:click={deleteUploads}></button>-->
-<!--      {/if}-->
-
-<!--    </div>-->
+    <div class="sf-upload-caption">
+      Upload
+    </div>
   </div>
   {#if Object.keys(progress).length > 0}
     <div class="sf-progress-bars">

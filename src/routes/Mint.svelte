@@ -33,7 +33,7 @@
                         "title": "Producer Wallet",
                     },
                     "total_score": {
-                        "type": "number",
+                        "type": "string",
                         "title": "Total Score"
                     },
                     "max_options": {
@@ -144,7 +144,7 @@
 
 <div class="mint-container">
   <div class="header-buttons">
-    <button type="button" class="default-btn mr-2" disabled={shouldDisable} on:click={()=>{navigateTo('#schemas')}}>
+    <button type="button" class="default-btn mr-2" disabled on:click={()=>{navigateTo('#schemas')}}>
       Access Schemas
     </button>
     <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>

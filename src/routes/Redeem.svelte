@@ -165,11 +165,14 @@
         }
     }
 
-    async function goToReceiptInfo(receipt) {
+    function goToReceiptInfo(receipt) {
         receiptClicked = receipt
         showReceiptInfo = true
     }
 
+    function showReceiptsList(e){
+        showReceiptInfo = e.detail.showReceiptInfo
+    }
 </script>
 
 
@@ -199,7 +202,7 @@
                            value={receipt.receipt.receiptId}/>
                     <span class="checkmark"></span>
                   </label>
-                  <span class="check-box-label"
+                  <span class="check-box-label btn-hover"
                         on:click={()=>{goToReceiptInfo(receipt)}}>{receipt.receipt.receiptId}</span>
                 </td>
                 <td class="value"> {ethers.utils.formatUnits(receipt.amount, 18)}</td>
@@ -224,7 +227,7 @@
   {/if}
 
   {#if showReceiptInfo}
-    <ReceiptInformation receipt={receiptClicked}/>
+    <ReceiptInformation receipt={receiptClicked} on:back={showReceiptsList}/>
   {/if}
 
 </div>

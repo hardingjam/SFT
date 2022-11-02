@@ -161,3 +161,12 @@ export function hexToString(s) {
     }
     return r.join("");
 }
+
+export function isUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (err) {
+        return false;
+    }
+}

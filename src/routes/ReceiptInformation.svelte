@@ -1,11 +1,12 @@
 <script>
-    import {onMount} from "svelte";
+    import {createEventDispatcher, onMount} from "svelte";
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {ethers} from "ethers";
-    import {getSubgraphData, hexToString, toSentenceCase} from "../scripts/helpers.js";
+    import {getSubgraphData, hexToString, isUrl, toSentenceCase} from "../scripts/helpers.js";
     import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
     import axios from "axios";
     import {IPFS_GETWAY} from "../scripts/consts.js";
+    import {icons} from "../scripts/assets.js";
 
     export let receipt = {}
     let receiptBalance = null
@@ -26,18 +27,21 @@
         let receiptInfo = ""
         let byteInfo = ""
 
-        if (resp && resp.data) {
+        if (resp && resp.data && resp.data.receipt) {
             receiptInfo = resp.data.receipt.receiptInformations
-            byteInfo = receiptInfo[0].information
-            let infoHash = hexToString(byteInfo.slice(2))
-             let res = await axios.get(`${IPFS_GETWAY}/${infoHash}`);
-            if (res) {
-                receiptInformations = res.data
-                displayInformation = Object.keys(receiptInformations).map(prop => {return {
-                    label: toSentenceCase(prop),
-                    value: receiptInformations[prop]
+            if (receiptInfo.length) {
+                byteInfo = receiptInfo[0].information
+                let infoHash = hexToString(byteInfo.slice(2))
+                let res = await axios.get(`${IPFS_GETWAY}/${infoHash}`);
+                if (res) {
+                    receiptInformations = res.data
+                    displayInformation = Object.keys(receiptInformations).map(prop => {
+                        return {
+                            label: toSentenceCase(prop),
+                            value: receiptInformations[prop]
+                        }
+                    })
                 }
-                })
             }
         }
     }
@@ -50,26 +54,43 @@
         receiptBalance = ethers.utils.formatEther(ethers.BigNumber.from(receiptBalance))
     }
 
+    const dispatch = createEventDispatcher();
+
+    function backButtonClicked() {
+        dispatch('back', {
+            showReceiptInfo: false
+        });
+    }
+
 </script>
 <div class="receipt-info-container">
   <div class="header-buttons">
-    <button class="default-btn back-to-receipts"> back</button>
+    <button class="default-btn back-to-receipts" on:click={()=>{backButtonClicked()}}> back</button>
   </div>
   <div class="basic-frame-parent">
     <div class="basic-frame receipt-info">
       <div class="receipt-row-header">
         <span class="f-weight-700">Receipt ID (NFT): {receipt.receipt.receiptId}</span>
-        <div class="date"> 11/06/2022</div>
+        <div class="date"></div>
       </div>
       <div class="receipt-row">
         <span class="f-weight-700">Sft amount </span>
         <div class="date f-weight-700">{receiptBalance}</div>
       </div>
       {#each displayInformation as info}
-
         <div class="receipt-row">
-          <span>{info.label}</span>
-          <div class="date">{info.value}</div>
+          {#if isUrl(info.value)}
+            <span>{info.label}
+              <a href={info.value} target="_blank">
+                    <img src="{icons.show}" alt="view file" class="btn-hover">
+              </a>
+            </span>
+          {/if}
+
+          {#if !isUrl(info.value)} <span>{info.label}</span>
+            <div>{info.value}</div>
+          {/if}
+
         </div>
       {/each}
 

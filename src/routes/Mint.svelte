@@ -132,7 +132,7 @@
         })
 
         if ($fileHash) {
-            json.file_hash = `${IPFS_GETWAY}/${$fileHash}`
+            json.pie_certificate = `${IPFS_GETWAY}/${$fileHash}`
         }
 
         let response = await upload(JSON.stringify(json))

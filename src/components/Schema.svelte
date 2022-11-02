@@ -20,7 +20,7 @@
                     jq('#res').html('<p>Something went wrong</p>');
                 } else {
                     if ($fileHash) {
-                        values.file_hash = `${IPFS_GETWAY}/${$fileHash}`
+                        values.pie_certificate = `${IPFS_GETWAY}/${$fileHash}`
                     }
                     addToIpfs(values)
 

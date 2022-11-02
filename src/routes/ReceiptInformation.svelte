@@ -2,14 +2,15 @@
     import {onMount} from "svelte";
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {ethers} from "ethers";
-    import {getSubgraphData, hexToString} from "../scripts/helpers.js";
+    import {getSubgraphData, hexToString, toSentenceCase} from "../scripts/helpers.js";
     import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
     import axios from "axios";
     import {IPFS_GETWAY} from "../scripts/consts.js";
 
     export let receipt = {}
     let receiptBalance = null
-    let receiptInfo = {}
+    let receiptInformations = {}
+    let displayInformation = []
 
     let loading = false
 
@@ -29,10 +30,14 @@
             receiptInfo = resp.data.receipt.receiptInformations
             byteInfo = receiptInfo[0].information
             let infoHash = hexToString(byteInfo.slice(2))
-            console.log(infoHash)
              let res = await axios.get(`${IPFS_GETWAY}/${infoHash}`);
             if (res) {
-                console.log(res)
+                receiptInformations = res.data
+                displayInformation = Object.keys(receiptInformations).map(prop => {return {
+                    label: toSentenceCase(prop),
+                    value: receiptInformations[prop]
+                }
+                })
             }
         }
     }
@@ -57,9 +62,16 @@
         <div class="date"> 11/06/2022</div>
       </div>
       <div class="receipt-row">
-        <span class="f-weight-700">sft amount </span>
+        <span class="f-weight-700">Sft amount </span>
         <div class="date f-weight-700">{receiptBalance}</div>
       </div>
+      {#each displayInformation as info}
+
+        <div class="receipt-row">
+          <span>{info.label}</span>
+          <div class="date">{info.value}</div>
+        </div>
+      {/each}
 
     </div>
   </div>
@@ -92,7 +104,7 @@
     }
 
     .receipt-row {
-        padding: 0 20px;
+        padding: 2px 20px;
         display: flex;
         justify-content: space-between;
     }

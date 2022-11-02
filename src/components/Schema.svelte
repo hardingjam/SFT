@@ -20,7 +20,7 @@
                     jq('#res').html('<p>Something went wrong</p>');
                 } else {
                     if ($fileHash) {
-                        values.fileHash = `${IPFS_GETWAY}/${$fileHash}`
+                        values.file_hash = `${IPFS_GETWAY}/${$fileHash}`
                     }
                     addToIpfs(values)
 

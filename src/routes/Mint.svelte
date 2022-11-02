@@ -38,7 +38,7 @@
                     },
                     "max_options": {
                         "type": "string",
-                        "title": "number"
+                        "title": "Max Options"
                     },
                     "pie_certificate": {
                         "type": "string",
@@ -132,7 +132,7 @@
         })
 
         if ($fileHash) {
-            json.fileHash = `${IPFS_GETWAY}/${$fileHash}`
+            json.file_hash = `${IPFS_GETWAY}/${$fileHash}`
         }
 
         let response = await upload(JSON.stringify(json))

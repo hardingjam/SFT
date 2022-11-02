@@ -14,6 +14,7 @@
     let totalShares = 0
     let error = ""
     let showReceiptInfo = false
+    let receiptClicked = {}
 
     let loading = false
 
@@ -165,7 +166,7 @@
     }
 
     async function goToReceiptInfo(receipt) {
-        console.log(receipt)
+        receiptClicked = receipt
         showReceiptInfo = true
     }
 
@@ -223,7 +224,7 @@
   {/if}
 
   {#if showReceiptInfo}
-    <ReceiptInformation/>
+    <ReceiptInformation receipt={receiptClicked}/>
   {/if}
 
 </div>

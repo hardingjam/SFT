@@ -153,3 +153,11 @@ export function toBytes (string) {
     const encoder = new TextEncoder('UTF-8');
     return encoder.encode(string);
 }
+
+export function hexToString(s) {
+    let r = [];
+    for (let i = 0; i < s.length - 1; i += 2) {
+        r.push(String.fromCharCode(parseInt(s.charAt(i) + s.charAt(i + 1), 16)));
+    }
+    return r.join("");
+}

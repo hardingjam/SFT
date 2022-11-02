@@ -97,7 +97,7 @@
   </div>
 
   <div slot="header-buttons">
-    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-schema")}}>New schema</button>
+<!--    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-schema")}}>New schema</button>-->
   </div>
 
   <div slot="content">

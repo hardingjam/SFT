@@ -138,7 +138,7 @@ const isImage = (url) => {
          readonly={readOnly}
          on:input={onInput}
          style="display: none"/>
-  <div class="sf-drop-area {mode}"
+  <div class="sf-drop-area {mode} default-btn"
        class:highlight
        tabIndex="0"
        on:dragenter={dragEnter}
@@ -158,12 +158,12 @@ const isImage = (url) => {
     {#if value && !isImage(value) && mode === "uploader"}
       <div class="sf-upload-file" title={value}>{afterLast(value, ".")}</div>
     {/if}
-    <div class="sf-upload-controls">
-      {#if !(readOnly)}
-        <button type="button" class="sf-upload-deleter" on:click={deleteUploads}></button>
-      {/if}
+<!--    <div class="sf-upload-controls">-->
+<!--      {#if !(readOnly)}-->
+<!--        <button type="button" class="sf-upload-deleter" on:click={deleteUploads}></button>-->
+<!--      {/if}-->
 
-    </div>
+<!--    </div>-->
   </div>
   {#if Object.keys(progress).length > 0}
     <div class="sf-progress-bars">

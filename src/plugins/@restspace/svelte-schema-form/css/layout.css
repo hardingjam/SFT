@@ -1,29 +1,29 @@
 form.svelte-schema-form .subset {
-  display: grid;
-  grid-template-rows: auto;
-  grid-gap: 1em;
-  align-items: flex-start;
-  padding-left: 1em;
-  box-sizing: border-box;
-  border: none;
+  /*display: grid;*/
+  /*grid-template-rows: auto;*/
+  /*grid-gap: 1em;*/
+  /*align-items: flex-start;*/
+  /*padding-left: 1em;*/
+  /*box-sizing: border-box;*/
+  /*border: none;*/
 }
 form.svelte-schema-form .depth-0 {
   padding-left: 0;
 }
 form.svelte-schema-form .object {
-  grid-template-columns: max-content 1fr;
-  border-left: 1px solid #999;
-  grid-column: span 2;
+  /*grid-template-columns: max-content 1fr;*/
+  /*border-left: 1px solid #999;*/
+  /*grid-column: span 2;*/
 }
 form.svelte-schema-form .array > .object {
-  grid-column: span 1;
+  /*grid-column: span 1;*/
 }
 form.svelte-schema-form .object.depth-0 {
-  border-left: none;
+  /*border-left: none;*/
 }
 form.svelte-schema-form .array {
-  grid-column: span 2;
-  grid-template-columns: 1fr max-content;
+  /*grid-column: span 2;*/
+  /*grid-template-columns: 1fr max-content;*/
 }
 form.svelte-schema-form .subset > .subset-label {
   margin-bottom: 1em;
@@ -47,8 +47,8 @@ form.svelte-schema-form .error {
   grid-column: 1/span 2;
 }
 form.svelte-schema-form .sf-drop-area {
-  width: 100%;
   display: flex;
+  width: 84px;
 }
 form.svelte-schema-form .sf-drop-area .sf-upload-caption {
   position: absolute;
@@ -60,6 +60,7 @@ form.svelte-schema-form .sf-drop-area .sf-upload-caption {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  width: 100%;
 }
 
 form.svelte-schema-form .sf-drop-area .sf-upload-controls {

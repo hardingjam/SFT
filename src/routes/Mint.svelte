@@ -158,8 +158,11 @@
 
           </div>
           {#if selectedSchema?.displayName}
+            <span class="title f-weight-700">Audit info.</span>
+
             <SchemaForm schema={selectedSchema.schema}></SchemaForm>
           {/if}
+
         </div>
       {/if}
       {#if !schemas.length}
@@ -225,14 +228,6 @@
     .mint-btn {
         width: calc(100% - 70px);
         margin-top: 10px;
-    }
-
-    .default-input {
-        width: 63px;
-    }
-
-    .info-row:hover input {
-        border: 2px solid #A0C7DD;
     }
 
     .empty-schemas button {

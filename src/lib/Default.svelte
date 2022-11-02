@@ -117,13 +117,13 @@
                 navigateTo('#audit-history', {replace: false})
             }
         },
-        {
-            id: "new-schema",
-            displayName: "New Schema",
-            action: () => {
-                navigateTo('#new-schema', {replace: false})
-            }
-        },
+        // {
+        //     id: "new-schema",
+        //     displayName: "New Schema",
+        //     action: () => {
+        //         navigateTo('#new-schema', {replace: false})
+        //     }
+        // },
     ]
 
     onMount(async () => {

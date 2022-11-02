@@ -1,7 +1,8 @@
 <script>import {after, afterLast} from "../utilities";
 import {getContext} from "svelte";
 import {FileNone, ProgressContext} from "../types/CommonComponentParameters";
-import {fileDropped} from "../../../../scripts/store.js";
+import {fileDropped, uploadBtnLoading} from "../../../../scripts/store.js";
+import Spinner from "../../../../components/Spinner.svelte";
 
 export let params;
 export let schema;
@@ -119,7 +120,7 @@ const openFile = () => {
          type="file"
          readonly={readOnly}
          on:input={onInput}
-         style="display: none"/>
+         style="display: none" disabled={$uploadBtnLoading}/>
   <div class="sf-drop-area {mode} default-btn"
        class:highlight
        tabIndex="0"
@@ -129,9 +130,16 @@ const openFile = () => {
        on:drop={drop}
        on:click={openFile}
        bind:this={dropArea}>
-    <div class="sf-upload-caption">
-      Upload
-    </div>
+    {#if !$uploadBtnLoading}
+      <div class="sf-upload-caption">
+        Upload
+      </div>
+    {/if}
+    {#if $uploadBtnLoading}
+      <div class="sf-upload-spinner">
+        <Spinner></Spinner>
+      </div>
+    {/if}
   </div>
   {#if Object.keys(progress).length > 0}
     <div class="sf-progress-bars">

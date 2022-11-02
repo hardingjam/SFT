@@ -1,7 +1,7 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
-    import {vault, fileHash, fileDropped} from "../scripts/store.js";
+    import {vault, fileHash, fileDropped, uploadBtnLoading} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
@@ -75,6 +75,7 @@
 
     const upload = async (data) => {
         error = ""
+        uploadBtnLoading.set(true)
         const url = IPFS_API;
         let formData = new FormData();
         // if we're pinning metadata (objets)
@@ -107,6 +108,7 @@
         if ($fileDropped.size && response) {
             fileHash.set(response.data.Hash)
         }
+        uploadBtnLoading.set(false)
 
         return response?.data
     };
@@ -170,7 +172,7 @@
                   <a href={IPFS_GETWAY+ '/' + $fileHash} target="_blank">
                     <img src="{icons.show}" alt="view file" class="btn-hover">
                   </a>
-<!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
+                  <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
                 </div>
               </div>
             {/if}

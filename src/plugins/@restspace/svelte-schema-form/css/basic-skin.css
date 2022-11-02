@@ -148,6 +148,13 @@ form.svelte-schema-form .sf-drop-area.highlight {
 form.svelte-schema-form .sf-drop-area .sf-upload-caption {
 }
 
+form.svelte-schema-form .sf-drop-area .sf-upload-spinner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 form.svelte-schema-form .sf-drop-area .sf-upload-controls .sf-upload-deleter {
     background-image: url(../img/delete.svg);
     background-repeat: no-repeat;

@@ -95,19 +95,8 @@
             formData.append('file', data)
         // }
 
-        const response = await axios.request({
-            url,
-            method: 'post',
-            headers: {
-                "Content-Type": `multipart/form-data;`,
-            },
-            data: formData,
-            onUploadProgress: ((p) => {
-                console.log(`Uploading...  ${p.loaded} / ${p.total}`);
-            }),
-        }).catch(function (err) {
-            error = err.toJSON().message
-        });
+
+        const response = await axios.post(IPFS_API, formData).catch(error)
 
         if ($fileDropped.size && response) {
             fileHash.set(response.data.Hash)

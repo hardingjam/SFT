@@ -16,6 +16,7 @@
     import Members from "../routes/Members.svelte";
     import AuditHistory from "../routes/AuditHistory.svelte";
     import NewSchema from "../routes/NewSchema.svelte";
+    import SetVault from "../routes/SetVault.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -37,6 +38,9 @@
             if (location === "#list" && $tokens.length) {
                 navigateTo("#list", {replace: false})
             }
+            if (location === "#setup") {
+                navigateTo("#setup", {replace: false})
+            }
         }
     });
 
@@ -46,7 +50,7 @@
         if (contract) {
             vault.set(contract)
         } else {
-            navigateTo("#setup", {replace: false})
+            navigateTo("#set-vault", {replace: false})
         }
     }
 
@@ -150,7 +154,7 @@
             window.ethereum.on("chainChanged", networkChanged);
         }
         if (location === '') {
-            navigateTo('#setup')
+            navigateTo('#set-vault')
         }
         await getTokens()
     });
@@ -325,6 +329,7 @@
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>
+          <Route path="#set-vault" component={SetVault}/>
           <Route path="#new-schema" component={NewSchema}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>

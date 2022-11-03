@@ -5,7 +5,6 @@
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
-    import * as FormData from 'form-data'
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
     import {IPFS_API, IPFS_GETWAY, ONE} from "../scripts/consts.js";
@@ -92,20 +91,29 @@
         // }
         // or we're pinning the media file
         // else {
-        formData.append('file', data)
+            formData.append('file', data)
         // }
 
+        const response = await axios.request({
+            url,
+            method: 'post',
+            headers: {
+                "Content-Type": `multipart/form-data;`,
+            },
+            data: formData,
+            onUploadProgress: ((p) => {
+                console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+            }),
+        }).catch(function (err) {
+            error = err.toJSON().message
+        });
 
-        axios.post(IPFS_API, formData).then((response) => {
-            if ($fileDropped.size && response) {
-                fileHash.set(response.data.Hash)
-            }
-            uploadBtnLoading.set(false)
-        })
-            .catch((err) => {
-                console.log(err);
-            });
+        if ($fileDropped.size && response) {
+            fileHash.set(response.data.Hash)
+        }
+        uploadBtnLoading.set(false)
 
+        return response?.data
     };
 
     $: ($fileDropped && $fileDropped.size) && upload($fileDropped);

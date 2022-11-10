@@ -188,12 +188,14 @@
     }
 
     async function handleNetworkSelect(event) {
+        let activeNet = event.detail.selected
+        let chainId = ethers.utils.hexValue(activeNet.chainId)
         try {
             await window.ethereum.request({
                 method: "wallet_switchEthereumChain",
-                params: [{chainId: `0x${(event.detail.selected.chainId).toString(16)}`}]
+                params: [{chainId}]
             });
-            activeNetwork.set(event.detail.selected)
+
         } catch (switchError) {
             // This error code indicates that the chain has not been added to MetaMask.
             if (switchError.code === 4902) {
@@ -202,13 +204,13 @@
                         method: "wallet_addEthereumChain",
                         params: [
                             {
-                                chainId: `0x${($activeNetwork.chainId).toString(16)}`,
-                                chainName: $activeNetwork.displayName,
-                                rpcUrls: [$activeNetwork.rpcUrl],
-                                blockExplorerUrls: [$activeNetwork.scanURL],
+                                chainId: chainId,
+                                chainName: activeNet.displayName,
+                                rpcUrls: [activeNet.rpcUrl],
+                                blockExplorerUrls: [activeNet.blockExplorer],
                                 nativeCurrency: {
-                                    name: $activeNetwork.currencySymbol,
-                                    symbol: $activeNetwork.currencySymbol,
+                                    name: activeNet.currencySymbol,
+                                    symbol: activeNet.currencySymbol,
                                     decimals: 18
                                 }
                             }
@@ -220,6 +222,8 @@
             }
             // handle other "switch" errors
         }
+
+        activeNetwork.set(activeNet)
     }
 
     async function connect() {

@@ -114,7 +114,7 @@
   </div>
   <div class="form-after">
     <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
-    <button class="btn-hover create-token btn-default btn-submit" on:click={() => createToken()}>Create SFT</button>
+    <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url} on:click={() => createToken()}>Create SFT</button>
   </div>
 
 </div>

@@ -93,3 +93,13 @@ export const DEPLOYER_QUERY = `
             }
           }
          `
+export const RECEIPT_INFORMATION_QUERY = `
+          query($id: ID!) {
+            receipt(id: $id) {
+                id,
+                  receiptInformations{
+                    information
+                  }
+            }
+          }
+         `

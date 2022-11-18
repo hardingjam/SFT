@@ -15,6 +15,8 @@
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
     import AuditHistory from "../routes/AuditHistory.svelte";
+    import NewSchema from "../routes/NewSchema.svelte";
+    import SetVault from "../routes/SetVault.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -36,6 +38,9 @@
             if (location === "#list" && $tokens.length) {
                 navigateTo("#list", {replace: false})
             }
+            if (location === "#setup") {
+                navigateTo("#setup", {replace: false})
+            }
         }
     });
 
@@ -45,7 +50,7 @@
         if (contract) {
             vault.set(contract)
         } else {
-            navigateTo("#setup", {replace: false})
+            navigateTo("#set-vault", {replace: false})
         }
     }
 
@@ -116,6 +121,13 @@
                 navigateTo('#audit-history', {replace: false})
             }
         },
+        // {
+        //     id: "new-schema",
+        //     displayName: "New Schema",
+        //     action: () => {
+        //         navigateTo('#new-schema', {replace: false})
+        //     }
+        // },
     ]
 
     onMount(async () => {
@@ -142,7 +154,7 @@
             window.ethereum.on("chainChanged", networkChanged);
         }
         if (location === '') {
-            navigateTo('#setup')
+            navigateTo('#set-vault')
         }
         await getTokens()
     });
@@ -176,12 +188,14 @@
     }
 
     async function handleNetworkSelect(event) {
+        let activeNet = event.detail.selected
+        let chainId = ethers.utils.hexValue(activeNet.chainId)
         try {
             await window.ethereum.request({
                 method: "wallet_switchEthereumChain",
-                params: [{chainId: `0x${(event.detail.selected.chainId).toString(16)}`}]
+                params: [{chainId}]
             });
-            activeNetwork.set(event.detail.selected)
+
         } catch (switchError) {
             // This error code indicates that the chain has not been added to MetaMask.
             if (switchError.code === 4902) {
@@ -190,13 +204,13 @@
                         method: "wallet_addEthereumChain",
                         params: [
                             {
-                                chainId: `0x${($activeNetwork.chainId).toString(16)}`,
-                                chainName: $activeNetwork.displayName,
-                                rpcUrls: [$activeNetwork.rpcUrl],
-                                blockExplorerUrls: [$activeNetwork.scanURL],
+                                chainId: chainId,
+                                chainName: activeNet.displayName,
+                                rpcUrls: [activeNet.rpcUrl],
+                                blockExplorerUrls: [activeNet.blockExplorer],
                                 nativeCurrency: {
-                                    name: $activeNetwork.currencySymbol,
-                                    symbol: $activeNetwork.currencySymbol,
+                                    name: activeNet.currencySymbol,
+                                    symbol: activeNet.currencySymbol,
                                     decimals: 18
                                 }
                             }
@@ -208,6 +222,8 @@
             }
             // handle other "switch" errors
         }
+
+        activeNetwork.set(activeNet)
     }
 
     async function connect() {
@@ -317,6 +333,8 @@
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>
+          <Route path="#set-vault" component={SetVault}/>
+          <Route path="#new-schema" component={NewSchema}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -437,7 +455,7 @@
 
   .tab-panel-container {
     width: 492px;
-    min-height: 535px;
+    min-height: 460px;
     background: #FFFFFF;
     border-radius: 0 20px 20px 20px;
     padding-bottom: 20px;

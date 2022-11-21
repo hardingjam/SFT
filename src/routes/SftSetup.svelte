@@ -35,18 +35,22 @@
     async function createToken() {
         const constructionConfig = {
             admin: admin_ledger.trim(),
-            receiptVaultConfig: {
+            vaultConfig: {
                 asset: ADDRESS_ZERO,
                 name,
                 symbol,
-                uri: url,
             },
         };
 
-        const offChainAssetVaultTx =
-            await factoryContract.createChildTyped(
-                constructionConfig
-            );
+        const receiptConfig = {
+            uri: url,
+        };
+
+
+        const offChainAssetVaultTx = await factoryContract.createChildTyped(
+            receiptConfig,
+            constructionConfig
+        );
 
         let contract;
 

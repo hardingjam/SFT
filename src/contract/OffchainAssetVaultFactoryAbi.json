@@ -1,5 +1,16 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "receiptFactory_",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -23,6 +34,19 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "sender",
         "type": "address"
@@ -35,6 +59,25 @@
       }
     ],
     "name": "NewChild",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "receiptFactory",
+        "type": "address"
+      }
+    ],
+    "name": "SetReceiptFactory",
     "type": "event"
   },
   {
@@ -61,6 +104,18 @@
       {
         "components": [
           {
+            "internalType": "string",
+            "name": "uri",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct ReceiptConfig",
+        "name": "receiptConfig_",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
             "internalType": "address",
             "name": "admin",
             "type": "address"
@@ -81,32 +136,40 @@
                 "internalType": "string",
                 "name": "symbol",
                 "type": "string"
-              },
-              {
-                "internalType": "string",
-                "name": "uri",
-                "type": "string"
               }
             ],
-            "internalType": "struct ReceiptVaultConstructionConfig",
-            "name": "receiptVaultConfig",
+            "internalType": "struct VaultConfig",
+            "name": "vaultConfig",
             "type": "tuple"
           }
         ],
-        "internalType": "struct OffchainAssetVaultConstructionConfig",
-        "name": "config_",
+        "internalType": "struct OffchainAssetVaultConfig",
+        "name": "offchainAssetVaultConfig_",
         "type": "tuple"
       }
     ],
     "name": "createChildTyped",
     "outputs": [
       {
-        "internalType": "contract OffchainAssetVault",
+        "internalType": "contract OffchainAssetReceiptVault",
         "name": "",
         "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "implementation",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -123,6 +186,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "receiptFactory",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

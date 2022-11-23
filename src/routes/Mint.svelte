@@ -138,8 +138,11 @@
             json.pie_certificate = `${IPFS_GETWAY}/${$fileHash}`
         }
 
+        let formFields = Object.keys(json)
+        let isFormAllEmpty = formFields.some(f => json[f] !== "")
+
         let response;
-        if (Object.keys(json).length) {
+        if (isFormAllEmpty) {
             response = await upload(JSON.stringify(json))
         }
 

@@ -267,7 +267,6 @@
             deployer,
             name,
             address,
-            uri,
             symbol
           }
         }`

@@ -5,6 +5,7 @@
     import {navigateTo} from "yrv";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
+    import Spinner from "../components/Spinner.svelte";
 
 
     async function handleTokenSelect(token) {
@@ -31,20 +32,26 @@
 <DefaultFrame header="SFT Lists">
   <div slot="content">
     <div class="tokens">
-      <table>
+      <table class="w-100">
         <tr class="f-weight-700">
           <th>Name</th>
           <th>Symbol</th>
           <th>URL</th>
         </tr>
-        {#each $tokens as token }
-          <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
-            <td>{token.name}</td>
-            <td>{token.symbol}</td>
-            <td>{token.uri}</td>
-          </tr>
-        {/each}
+        {#if ($tokens.length)}
+          {#each $tokens as token }
+            <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
+              <td>{token.name}</td>
+              <td>{token.symbol}</td>
+              <td>{token.uri || ''}</td>
+            </tr>
+          {/each}
+        {/if}
+
       </table>
+      {#if !$tokens.length}
+        <Spinner></Spinner>
+      {/if}
     </div>
   </div>
 </DefaultFrame>

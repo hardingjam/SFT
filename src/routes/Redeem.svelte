@@ -85,13 +85,22 @@
     }
 
     async function getReceiptBalance(receipt) {
+        let query = `
+          query($id: ID!) {
+           receiptBalance(id: $id)
+           {
+              id,
+              value,
+              valueExact
+           }
+        }
+         `
+        let variables = {id: `${$vault.address.toLowerCase()}-${receipt}`}
         let receiptBalance
 
-        if (selectedReceipts.length) {
-            receiptBalance = await $vault["balanceOf(address,uint256)"](
-                $account,
-                receipt
-            );
+        let res = await getSubgraphData($activeNetwork, variables, query, 'receiptBalance')
+        if (res && res.data && res.data.receiptBalance) {
+            receiptBalance = res.data.receiptBalance.valueExact
         }
         return ethers.BigNumber.from(receiptBalance)
     }
@@ -170,7 +179,7 @@
         showReceiptInfo = true
     }
 
-    function showReceiptsList(e){
+    function showReceiptsList(e) {
         showReceiptInfo = e.detail.showReceiptInfo
     }
 </script>
@@ -267,12 +276,12 @@
         width: calc(100% - 50px);
     }
 
-    .check-box-label{
+    .check-box-label {
         width: 100%;
         text-align: left;
     }
 
-    .check-box-label:hover{
+    .check-box-label:hover {
         text-decoration: underline;
 
     }

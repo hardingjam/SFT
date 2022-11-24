@@ -24,33 +24,44 @@
     async function redeem(receipt) {
         try {
             if (receipt) {
-                error = ''
-                const redeemAmount = ethers.utils.parseEther(amount.toString());
 
-                const receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt)
-
-                if ((receiptBalance.sub(redeemAmount)).isNegative()) {
-                    error = "Not enough balance"
-                    return
-                }
-
-                if (redeemAmount.eq(0)) {
-                    error = "0 amount"
-                    return
-                }
-
-                const tx = $vault["redeem(uint256,address,address,uint256)"](
-                    receiptBalance,
-                    $account,
-                    $account,
-                    receipt
+                const hasRoleWithdrawer = await $vault.hasRole(
+                    await $vault.WITHDRAWER(),
+                    $account
                 );
-                await tx.wait();
 
-                await setTempData(amount, receipt)
-                // selectedReceipts = []
+                if (hasRoleWithdrawer) {
+                    error = ''
+                    const redeemAmount = ethers.utils.parseEther(amount.toString());
 
-                amount = 0;
+                    const receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt)
+
+                    if ((receiptBalance.sub(redeemAmount)).isNegative()) {
+                        error = "Not enough balance"
+                        return
+                    }
+
+                    if (redeemAmount.eq(0)) {
+                        error = "0 amount"
+                        return
+                    }
+
+                    const tx = $vault["redeem(uint256,address,address,uint256)"](
+                        receiptBalance,
+                        $account,
+                        $account,
+                        receipt
+                    );
+                    await tx.wait();
+
+                    await setTempData(amount, receipt)
+                    // selectedReceipts = []
+
+                    amount = 0;
+                } else {
+                    error = `AccessControl: account ${$account.toLowerCase()} is missing role WITHDRAWER`
+                }
+
             } else {
                 error = "Select receipt id"
                 return

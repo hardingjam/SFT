@@ -132,6 +132,8 @@
 
     onMount(async () => {
         await setVault()
+        await getEthersData()
+
         if (isMetamaskInstalled) {
             await setNetwork()
             connectedAccount = await getMetamaskConnectedAccount()
@@ -175,7 +177,6 @@
         }
     }
 
-    getEthersData()
 
     async function setNetwork() {
         let network = await $ethersData.provider.getNetwork();

@@ -6,6 +6,7 @@
     import axios from "axios";
     import {IPFS_GETWAY, ONE} from "../scripts/consts.js";
     import {icons} from "../scripts/assets.js";
+    import {ethers} from "ethers";
 
     export let receipt = {}
     let receiptBalance = null
@@ -16,6 +17,7 @@
 
     onMount(async () => {
         receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receipt.receiptId);
+        console.log(receiptBalance);
         await getReceiptData(receipt)
     })
 
@@ -66,7 +68,7 @@
       </div>
       <div class="receipt-row">
         <span class="f-weight-700">Sft amount </span>
-        <div class="date f-weight-700">{receiptBalance / ONE}</div>
+        <div class="date f-weight-700">{receiptBalance ? ethers.utils.formatUnits(receiptBalance) : ''}</div>
       </div>
       {#each displayInformation as info}
         <div class="receipt-row">

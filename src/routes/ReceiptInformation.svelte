@@ -1,11 +1,10 @@
 <script>
     import {createEventDispatcher, onMount} from "svelte";
-    import {account, activeNetwork, vault} from "../scripts/store.js";
-    import {ethers} from "ethers";
-    import {getSubgraphData, hexToString, isUrl, toSentenceCase} from "../scripts/helpers.js";
+    import {activeNetwork, vault} from "../scripts/store.js";
+    import {getReceiptBalance, getSubgraphData, hexToString, isUrl, toSentenceCase} from "../scripts/helpers.js";
     import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
     import axios from "axios";
-    import {IPFS_GETWAY} from "../scripts/consts.js";
+    import {IPFS_GETWAY, ONE} from "../scripts/consts.js";
     import {icons} from "../scripts/assets.js";
 
     export let receipt = {}
@@ -15,9 +14,9 @@
 
     let loading = false
 
-    onMount(() => {
-        getReceiptBalance(receipt);
-        getReceiptData(receipt)
+    onMount(async () => {
+        receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receipt.receiptId);
+        await getReceiptData(receipt)
     })
 
     async function getReceiptData(receipt) {
@@ -46,14 +45,6 @@
         }
     }
 
-    async function getReceiptBalance(receipt) {
-        receiptBalance = await $vault["balanceOf(address,uint256)"](
-            $account,
-            receipt.receipt.receiptId
-        );
-        receiptBalance = ethers.utils.formatEther(ethers.BigNumber.from(receiptBalance))
-    }
-
     const dispatch = createEventDispatcher();
 
     function backButtonClicked() {
@@ -75,7 +66,7 @@
       </div>
       <div class="receipt-row">
         <span class="f-weight-700">Sft amount </span>
-        <div class="date f-weight-700">{receiptBalance}</div>
+        <div class="date f-weight-700">{receiptBalance / ONE}</div>
       </div>
       {#each displayInformation as info}
         <div class="receipt-row">

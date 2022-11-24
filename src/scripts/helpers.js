@@ -170,3 +170,24 @@ export function isUrl(string) {
         return false;
     }
 }
+
+export async function getReceiptBalance(activeNetwork, vault, receipt ) {
+    let query = `
+          query($id: ID!) {
+           receiptBalance(id: $id)
+           {
+              id,
+              value,
+              valueExact
+           }
+        }
+         `
+    let variables = {id: `${vault.address.toLowerCase()}-${receipt}`}
+    let receiptBalance
+
+    let res = await getSubgraphData(activeNetwork, variables, query, 'receiptBalance')
+    if (res && res.data && res.data.receiptBalance) {
+        receiptBalance = res.data.receiptBalance.valueExact
+    }
+    return ethers.BigNumber.from(receiptBalance)
+}

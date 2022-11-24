@@ -1,6 +1,6 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
-    import {getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
+    import {getReceiptBalance, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ethers} from "ethers";
@@ -27,7 +27,7 @@
                 error = ''
                 const redeemAmount = ethers.utils.parseEther(amount.toString());
 
-                const receiptBalance = await getReceiptBalance(receipt)
+                const receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt)
 
                 if ((receiptBalance.sub(redeemAmount)).isNegative()) {
                     error = "Not enough balance"
@@ -84,32 +84,11 @@
         }
     }
 
-    async function getReceiptBalance(receipt) {
-        let query = `
-          query($id: ID!) {
-           receiptBalance(id: $id)
-           {
-              id,
-              value,
-              valueExact
-           }
-        }
-         `
-        let variables = {id: `${$vault.address.toLowerCase()}-${receipt}`}
-        let receiptBalance
-
-        let res = await getSubgraphData($activeNetwork, variables, query, 'receiptBalance')
-        if (res && res.data && res.data.receiptBalance) {
-            receiptBalance = res.data.receiptBalance.valueExact
-        }
-        return ethers.BigNumber.from(receiptBalance)
-    }
-
     async function setMaxValue() {
         if (selectedReceipts.length > 1) {
             return
         }
-        let balance = await getReceiptBalance(selectedReceipts[0])
+        let balance = await getReceiptBalance($activeNetwork, $vault, selectedReceipts[0])
         amount = ethers.utils.formatEther(balance)
     }
 
@@ -145,7 +124,7 @@
         let iface = new ethers.utils.Interface(ABI);
 
         let multicallArr = selectedReceipts.map(async receipt => {
-            const receiptBalance = await getReceiptBalance(receipt)
+            const receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt)
             return iface.encodeFunctionData("redeem", [
                 receiptBalance,
                 $account,

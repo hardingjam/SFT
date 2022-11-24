@@ -11,6 +11,7 @@
     import SchemaForm from "../components/SchemaForm.svelte"
     import {toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
+    import Spinner from "../components/Spinner.svelte";
 
     let image = {}
 
@@ -188,6 +189,11 @@
                   </a>
                   <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
                 </div>
+              </div>
+            {/if}
+            {#if $uploadBtnLoading}
+              <div class="sf-upload-spinner">
+                <Spinner></Spinner>
               </div>
             {/if}
           {/if}

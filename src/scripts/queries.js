@@ -35,7 +35,7 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             id,
             address,
             totalShares,
-            certifications
+            certifications(orderBy: timestamp)
             {
               timestamp,
               certifier

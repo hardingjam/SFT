@@ -27,6 +27,9 @@
 
 
     async function certify() {
+        //Set date to the nearest Midnight in the future
+        certifyUntil = new Date(certifyUntil).setHours(23, 59, 59, 0);
+
         let untilToTime = new Date(certifyUntil).getTime()
 
         const hasRoleCertifier = await $vault.hasRole(

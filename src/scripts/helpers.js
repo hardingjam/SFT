@@ -75,7 +75,11 @@ export function getSubgraphData(activeNetwork, variables, query, param) {
         }
         let interval = setInterval(fetchData, 2000)
         let data = await fetchData()
-        if (!data || data.errors.length || data.data[param] || (data && data.data && data.data[param] === null)) {
+        if (data.errors) {
+            clearInterval(interval)
+            console.log(data.errors)
+        }
+        if (!data || !!Object.keys(data.data[param]).length || (data && data.data && data.data[param] === null)) {
             clearInterval(interval)
             return resolve(data)
         }
@@ -148,7 +152,7 @@ export function accessControlError(msg) {
     return error + " " + role?.name
 }
 
-export function toBytes (string) {
+export function toBytes(string) {
     const encoder = new TextEncoder('UTF-8');
     return encoder.encode(string);
 }
@@ -170,7 +174,7 @@ export function isUrl(string) {
     }
 }
 
-export async function getReceiptBalance(activeNetwork, vault, receipt ) {
+export async function getReceiptBalance(activeNetwork, vault, receipt) {
     let query = `
           query($id: ID!) {
            receiptBalance(id: $id)

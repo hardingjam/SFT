@@ -35,18 +35,22 @@
     async function createToken() {
         const constructionConfig = {
             admin: admin_ledger.trim(),
-            receiptVaultConfig: {
+            vaultConfig: {
                 asset: ADDRESS_ZERO,
                 name,
                 symbol,
-                uri: url,
             },
         };
 
-        const offChainAssetVaultTx =
-            await factoryContract.createChildTyped(
-                constructionConfig
-            );
+        const receiptConfig = {
+            uri: url,
+        };
+
+
+        const offChainAssetVaultTx = await factoryContract.createChildTyped(
+            receiptConfig,
+            constructionConfig
+        );
 
         let contract;
 
@@ -81,13 +85,13 @@
     async function getSgData(vaultAddress) {
         let variables = {id: vaultAddress.toLowerCase()}
 
-        getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetVault').then((res) => {
+        getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
             if (res && res.data) {
                 data.set(res.data)
-                roles.set($data.offchainAssetVault.roles)
+                roles.set($data.offchainAssetReceiptVault.roles)
 
                 let rolesFiltered = $roles.map(role => {
-                    let roleRevokes = $data.offchainAssetVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
+                    let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
                     let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
                     let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
                     return {roleName: role.roleName, roleHolders: filtered}

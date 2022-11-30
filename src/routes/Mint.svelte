@@ -11,6 +11,7 @@
     import SchemaForm from "../components/SchemaForm.svelte"
     import {toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
+    import Spinner from "../components/Spinner.svelte";
 
     let image = {}
 
@@ -62,7 +63,11 @@
             let formResponse = await submitForm()
             let shareRatio = ONE
             const shares = ethers.utils.parseEther(amount.toString());
-            let dataBytes = toBytes(formResponse.Hash)
+
+            let dataBytes = []
+            if (formResponse) {
+                dataBytes = toBytes(formResponse.Hash)
+            }
 
             const tx = await $vault
                 .connect(signer)
@@ -91,7 +96,7 @@
         // }
         // or we're pinning the media file
         // else {
-            formData.append('file', data)
+        formData.append('file', data)
         // }
 
         const response = await axios.request({
@@ -126,7 +131,6 @@
         //get form data
         let formDataArr = jQuery(".svelte-schema-form").serializeArray()
         const json = {};
-
         formDataArr.map(a => {
             json[a.name] = a.value
         })
@@ -135,7 +139,13 @@
             json.pie_certificate = `${IPFS_GETWAY}/${$fileHash}`
         }
 
-        let response = await upload(JSON.stringify(json))
+        let formFields = Object.keys(json)
+        let isFormAllEmpty = formFields.some(f => json[f] !== "")
+
+        let response;
+        if (isFormAllEmpty) {
+            response = await upload(JSON.stringify(json))
+        }
 
         return response
     }
@@ -179,6 +189,11 @@
                   </a>
                   <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
                 </div>
+              </div>
+            {/if}
+            {#if $uploadBtnLoading}
+              <div class="sf-upload-spinner">
+                <Spinner></Spinner>
               </div>
             {/if}
           {/if}

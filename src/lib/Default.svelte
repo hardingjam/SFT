@@ -17,6 +17,7 @@
     import AuditHistory from "../routes/AuditHistory.svelte";
     import NewSchema from "../routes/NewSchema.svelte";
     import SetVault from "../routes/SetVault.svelte";
+    import ReceiptAudit from "../routes/ReceiptAudit.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -132,6 +133,8 @@
 
     onMount(async () => {
         await setVault()
+        await getEthersData()
+
         if (isMetamaskInstalled) {
             await setNetwork()
             connectedAccount = await getMetamaskConnectedAccount()
@@ -157,6 +160,11 @@
             navigateTo('#set-vault')
         }
         await getTokens()
+
+        // const grantRoleTx = await $vault.connect($ethersData.signer).grantRole(await $vault.connect($ethersData.signer).DEPOSITOR(), $account.trim());
+        // await grantRoleTx.wait()
+
+
     });
 
     async function networkChanged() {
@@ -175,7 +183,6 @@
         }
     }
 
-    getEthersData()
 
     async function setNetwork() {
         let network = await $ethersData.provider.getNetwork();
@@ -262,18 +269,17 @@
     async function getTokens() {
         let query = `
         query {
-          offchainAssetVaults(orderBy:deployTimestamp orderDirection:desc){
+          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
             deployer,
             name,
             address,
-            uri,
             symbol
           }
         }`
 
-        getSubgraphData($activeNetwork, {}, query, 'offchainAssetVaults').then((res) => {
+        getSubgraphData($activeNetwork, {}, query, 'offchainAssetReceiptVaults').then((res) => {
             if ($activeNetwork) {
-                let temp = res.data.offchainAssetVaults
+                let temp = res.data.offchainAssetReceiptVaults
                 tokens.set(temp)
             }
         })
@@ -335,6 +341,7 @@
           <Route path="#audit-history" component={AuditHistory}/>
           <Route path="#set-vault" component={SetVault}/>
           <Route path="#new-schema" component={NewSchema}/>
+          <Route path="#receipt/:id" component={ReceiptAudit}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

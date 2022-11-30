@@ -73,10 +73,13 @@ export function getSubgraphData(activeNetwork, variables, query, param) {
         async function fetchData() {
             return await fetchSubgraphData(activeNetwork, variables, query)
         }
-
         let interval = setInterval(fetchData, 2000)
         let data = await fetchData()
-        if (!data || data.data[param] || (data && data.data && data.data[param] === null)) {
+        if (data.errors) {
+            clearInterval(interval)
+            console.log(data.errors)
+        }
+        if (!data || !!Object.keys(data.data[param]).length || (data && data.data && data.data[param] === null)) {
             clearInterval(interval)
             return resolve(data)
         }
@@ -149,7 +152,7 @@ export function accessControlError(msg) {
     return error + " " + role?.name
 }
 
-export function toBytes (string) {
+export function toBytes(string) {
     const encoder = new TextEncoder('UTF-8');
     return encoder.encode(string);
 }
@@ -169,4 +172,25 @@ export function isUrl(string) {
     } catch (err) {
         return false;
     }
+}
+
+export async function getReceiptBalance(activeNetwork, vault, receipt) {
+    let query = `
+          query($id: ID!) {
+           receiptBalance(id: $id)
+           {
+              id,
+              value,
+              valueExact
+           }
+        }
+         `
+    let variables = {id: `${vault.address.toLowerCase()}-${receipt}`}
+    let receiptBalance
+
+    let res = await getSubgraphData(activeNetwork, variables, query, 'receiptBalance')
+    if (res && res.data && res.data.receiptBalance) {
+        receiptBalance = res.data.receiptBalance.valueExact
+    }
+    return ethers.BigNumber.from(receiptBalance)
 }

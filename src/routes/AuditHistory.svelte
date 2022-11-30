@@ -1,7 +1,7 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
-    import {vault, auditHistory, activeNetwork, account} from "../scripts/store";
+    import {vault, auditHistory, activeNetwork, account, selectedReceipt} from "../scripts/store";
     import {beforeUpdate, onMount} from "svelte";
     import {getEventArgs, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
@@ -15,9 +15,9 @@
 
     beforeUpdate(async () => {
         if (!$auditHistory.id) {
-            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetVault')
+            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
             if (data) {
-                let temp = data.data.offchainAssetVault
+                let temp = data.data.offchainAssetReceiptVault
                 auditHistory.set(temp)
             } else return {}
         }
@@ -27,6 +27,9 @@
 
 
     async function certify() {
+        //Set date to the nearest Midnight in the future
+        certifyUntil = new Date(certifyUntil).setHours(23, 59, 59, 0);
+
         let untilToTime = new Date(certifyUntil).getTime()
 
         const hasRoleCertifier = await $vault.hasRole(
@@ -40,7 +43,7 @@
                 "Certify",
                 $vault
             )
-            certifyData = certifyData.push( {
+            certifyData = certifyData.push({
                 timestamp: new Date().getTime() / 1000,
                 certifier: {address: caller},
                 certifiedUntil: until
@@ -49,6 +52,11 @@
         } else {
             error = `AccessControl: account ${$account.toLowerCase()} is missing role CERTIFIER`
         }
+    }
+
+    function goToReceiptAudit(receipt) {
+        selectedReceipt.set(receipt)
+        navigateTo(`#receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
     }
 </script>
 <DefaultFrame header="Audit History" backBtn={false}>
@@ -69,7 +77,7 @@
           </thead>
           <tbody>
           {#each receipts as receipt}
-            <tr class="tb-row">
+            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>
               <td>{receipt.receipt.receiptId}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td>{timeStampToDate(receipt.timestamp)}</td>

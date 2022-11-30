@@ -1,6 +1,6 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
-    import {getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
+    import {getReceiptBalance, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ethers} from "ethers";
@@ -24,33 +24,44 @@
     async function redeem(receipt) {
         try {
             if (receipt) {
-                error = ''
-                const redeemAmount = ethers.utils.parseEther(amount.toString());
 
-                const receiptBalance = await getReceiptBalance(receipt)
-
-                if ((receiptBalance.sub(redeemAmount)).isNegative()) {
-                    error = "Not enough balance"
-                    return
-                }
-
-                if (redeemAmount.eq(0)) {
-                    error = "0 amount"
-                    return
-                }
-
-                const tx = $vault["redeem(uint256,address,address,uint256)"](
-                    receiptBalance,
-                    $account,
-                    $account,
-                    receipt
+                const hasRoleWithdrawer = await $vault.hasRole(
+                    await $vault.WITHDRAWER(),
+                    $account
                 );
-                await tx.wait();
 
-                await setTempData(amount, receipt)
-                // selectedReceipts = []
+                if (hasRoleWithdrawer) {
+                    error = ''
+                    const redeemAmount = ethers.utils.parseEther(amount.toString());
 
-                amount = 0;
+                    const receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt)
+
+                    if ((receiptBalance.sub(redeemAmount)).isNegative()) {
+                        error = "Not enough balance"
+                        return
+                    }
+
+                    if (redeemAmount.eq(0)) {
+                        error = "0 amount"
+                        return
+                    }
+
+                    const tx = $vault["redeem(uint256,address,address,uint256)"](
+                        receiptBalance,
+                        $account,
+                        $account,
+                        receipt
+                    );
+                    await tx.wait();
+
+                    await setTempData(amount, receipt)
+                    // selectedReceipts = []
+
+                    amount = 0;
+                } else {
+                    error = `AccessControl: account ${$account.toLowerCase()} is missing role WITHDRAWER`
+                }
+
             } else {
                 error = "Select receipt id"
                 return
@@ -73,34 +84,22 @@
     async function getData() {
         loading = true;
         let variables = {id: $vault.address.toLowerCase()}
-        let temp = await getSubgraphData($activeNetwork, variables, DEPLOYER_QUERY, 'offchainAssetVault')
+        let temp = await getSubgraphData($activeNetwork, variables, DEPLOYER_QUERY, 'offchainAssetReceiptVault')
         if (temp && temp.data) {
-            totalShares = temp.data?.offchainAssetVault.totalShares
+            totalShares = temp.data?.offchainAssetReceiptVault.totalShares
             let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
             getSubgraphData($activeNetwork, variables, DEPOSITS_QUERY, 'account').then((res) => {
-                depositWithReceipts = res.data.account?.offchainAssetVault.deposits.filter(d => d.receipt.balances[0].value > 0) || []
+                depositWithReceipts = res.data.account?.offchainAssetReceiptVault.deposits.filter(d => d.receipt.balances[0].value > 0) || []
                 loading = false
             })
         }
-    }
-
-    async function getReceiptBalance(receipt) {
-        let receiptBalance
-
-        if (selectedReceipts.length) {
-            receiptBalance = await $vault["balanceOf(address,uint256)"](
-                $account,
-                receipt
-            );
-        }
-        return ethers.BigNumber.from(receiptBalance)
     }
 
     async function setMaxValue() {
         if (selectedReceipts.length > 1) {
             return
         }
-        let balance = await getReceiptBalance(selectedReceipts[0])
+        let balance = await getReceiptBalance($activeNetwork, $vault, selectedReceipts[0])
         amount = ethers.utils.formatEther(balance)
     }
 
@@ -136,7 +135,7 @@
         let iface = new ethers.utils.Interface(ABI);
 
         let multicallArr = selectedReceipts.map(async receipt => {
-            const receiptBalance = await getReceiptBalance(receipt)
+            const receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt)
             return iface.encodeFunctionData("redeem", [
                 receiptBalance,
                 $account,
@@ -170,7 +169,7 @@
         showReceiptInfo = true
     }
 
-    function showReceiptsList(e){
+    function showReceiptsList(e) {
         showReceiptInfo = e.detail.showReceiptInfo
     }
 </script>
@@ -267,12 +266,12 @@
         width: calc(100% - 50px);
     }
 
-    .check-box-label{
+    .check-box-label {
         width: 100%;
         text-align: left;
     }
 
-    .check-box-label:hover{
+    .check-box-label:hover {
         text-decoration: underline;
 
     }

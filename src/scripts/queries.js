@@ -48,7 +48,15 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             {
               receipt
               {
-                receiptId
+                receiptId,
+                  receiptInformations{
+                    information
+                  }
+                  deposits{
+                     amount
+                     timestamp
+                     id
+                  }
               },
               timestamp,
               amount

@@ -1,40 +1,33 @@
 <script>
 
-import DefaultFrame from "../components/DefaultFrame.svelte";
-import {navigateTo} from "yrv";
+    import DefaultFrame from "../components/DefaultFrame.svelte";
+    import {navigateTo} from "yrv";
 
-export let receipt = {};
-
-let mockInfo =
-{
-    "producer_wallet": "1123",
-    "total_score": "1233",
-    "max_options": "2222",
-    "pie_certificate": "https://gildlab-ipfs.in.ngrok.io/ipfs/Qmd3MFNKPy3v835bXSTMArZcpEtRa4dWyD4Rje6nAcACU9"
-}
-
-let mockInfoArr = Object.keys(mockInfo).map(k=>{
-    return { key : k, value: mockInfo[k] }
-})
+    export let receipt = {};
 
 </script>
-<DefaultFrame header="Audit History" >
+<DefaultFrame header="Audit History">
   <div slot="header-buttons" class="display-flex">
     <button class="header-btn btn-hover" on:click={()=>{navigateTo("#admin")}}>Admins</button>
   </div>
   <div slot="content">
     <div class="history">
       <div class="receipts">
-        <table>
-          <tbody>
-          {#each mockInfoArr as info}
-            <tr class="tb-row">
-              <td>{info.key}</td>
-              <td>{info.value}</td>
-            </tr>
-          {/each}
-          </tbody>
-        </table>
+        {#if (receipt.receipt.receiptInformations.length)}
+          <table>
+            <tbody>
+            {#each receipt.receipt.receiptInformations as info}
+              <tr class="tb-row">
+                <td>{info.key}</td>
+                <td>{info.value}</td>
+              </tr>
+            {/each}
+            </tbody>
+          </table>
+        {/if}
+        {#if (!receipt.receipt.receiptInformations.length)}
+          <div class="no-data">Nothing to show</div>
+        {/if}
       </div>
       <div class="error">
       </div>
@@ -71,7 +64,8 @@ let mockInfoArr = Object.keys(mockInfo).map(k=>{
     }
 
     .receipts {
-        height: 300px;
+        max-height: 300px;
+        min-height: 100px;
         border-bottom: 1px solid #D2D2D2;
         overflow: auto;
     }

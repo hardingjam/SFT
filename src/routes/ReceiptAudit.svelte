@@ -2,21 +2,30 @@
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
+    import Spinner from "../components/Spinner.svelte";
+    import {activeNetwork, selectedReceipt} from "../scripts/store.js";
+    import {ethers} from "ethers";
+    import {timeStampToDate} from "../scripts/helpers.js";
 
-    export let receipt = {};
+    let receipt = $selectedReceipt.receipt;
+    let loading = false
+    let checkedReceipts = []
 
+    function getHash(id) {
+        return id.split('-')[1]
+    }
 </script>
-<DefaultFrame header="Audit History">
+<DefaultFrame header={`Audit History > ${receipt.receiptId}`}>
   <div slot="header-buttons" class="display-flex">
     <button class="header-btn btn-hover" on:click={()=>{navigateTo("#admin")}}>Admins</button>
   </div>
   <div slot="content">
     <div class="history">
       <div class="receipts">
-        {#if (receipt.receipt.receiptInformations.length)}
+        {#if (receipt.receiptInformations.length)}
           <table>
             <tbody>
-            {#each receipt.receipt.receiptInformations as info}
+            {#each receipt.receiptInformations as info}
               <tr class="tb-row">
                 <td>{info.key}</td>
                 <td>{info.value}</td>
@@ -25,10 +34,47 @@
             </tbody>
           </table>
         {/if}
-        {#if (!receipt.receipt.receiptInformations.length)}
+        {#if (!receipt.receiptInformations.length)}
           <div class="no-data">Nothing to show</div>
         {/if}
       </div>
+      <div class="receipts-table-container">
+        {#if loading}
+          <Spinner></Spinner>
+        {/if}
+        {#if !loading}
+          <table class="receipts-table">
+            <tr>
+              <td class="f-weight-700"></td>
+              <td class="f-weight-700">Options</td>
+              <td class="f-weight-700">Date</td>
+              <td class="f-weight-700">Transaction Hash</td>
+            </tr>
+            {#each receipt.deposits as deposit}
+              <tr>
+                <td>
+                  <label class="check-container">
+                    <input type="checkbox" class="check-box" bind:group={checkedReceipts}
+                           value={deposit.id}/>
+                    <span class="checkmark"></span>
+                  </label>
+                </td>
+                <td class="receipt-id">
+                  <div class="check-box-label btn-hover">{ethers.utils.formatUnits(deposit.amount, 18)}</div>
+                </td>
+                <td class="value">{timeStampToDate(deposit.timestamp)} </td>
+                <td class="value">
+                  <a href="{`${$activeNetwork.blockExplorer}tx/${getHash(deposit.id)}`}" target="_blank">
+                    {getHash(deposit.id).replace(/(.{6}).*(.{6})/, "$1…$2") || ""}
+                  </a>
+                </td>
+              </tr>
+            {/each}
+
+          </table>
+        {/if}
+      </div>
+
       <div class="error">
       </div>
     </div>
@@ -85,6 +131,18 @@
         right: 0;
         top: 0;
         width: auto;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+    a:hover{
+        text-decoration: underline;
     }
 
 </style>

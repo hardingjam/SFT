@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, account, vault, tokens, ethersData, selectedReceipt} from "../scripts/store.js";
+    import {activeNetwork, account, vault, tokens, ethersData} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -341,7 +341,7 @@
           <Route path="#audit-history" component={AuditHistory}/>
           <Route path="#set-vault" component={SetVault}/>
           <Route path="#new-schema" component={NewSchema}/>
-          <Route path="#receipt/:id" component={ReceiptAudit} receipt={$selectedReceipt}/>
+          <Route path="#receipt/:id" component={ReceiptAudit}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

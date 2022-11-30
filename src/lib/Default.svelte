@@ -17,6 +17,7 @@
     import AuditHistory from "../routes/AuditHistory.svelte";
     import NewSchema from "../routes/NewSchema.svelte";
     import SetVault from "../routes/SetVault.svelte";
+    import ReceiptAudit from "../routes/ReceiptAudit.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -268,7 +269,7 @@
     async function getTokens() {
         let query = `
         query {
-          offchainAssetVaults(orderBy:deployTimestamp orderDirection:desc){
+          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
             deployer,
             name,
             address,
@@ -276,9 +277,9 @@
           }
         }`
 
-        getSubgraphData($activeNetwork, {}, query, 'offchainAssetVaults').then((res) => {
+        getSubgraphData($activeNetwork, {}, query, 'offchainAssetReceiptVaults').then((res) => {
             if ($activeNetwork) {
-                let temp = res.data.offchainAssetVaults
+                let temp = res.data.offchainAssetReceiptVaults
                 tokens.set(temp)
             }
         })
@@ -340,6 +341,7 @@
           <Route path="#audit-history" component={AuditHistory}/>
           <Route path="#set-vault" component={SetVault}/>
           <Route path="#new-schema" component={NewSchema}/>
+          <Route path="#receipt/:id" component={ReceiptAudit}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

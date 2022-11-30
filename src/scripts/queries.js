@@ -1,6 +1,6 @@
 export const QUERY = `
           query($id: ID!) {
-            offchainAssetVault(id: $id) {
+            offchainAssetReceiptVault(id: $id) {
                 id,
                 totalShares,
                 address,
@@ -31,7 +31,7 @@ export const QUERY = `
 
 export const AUDIT_HISTORY_DATA_QUERY = `
         query($id: ID!) {
-          offchainAssetVault(id: $id) {
+          offchainAssetReceiptVault(id: $id) {
             id,
             address,
             totalShares,
@@ -48,7 +48,15 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             {
               receipt
               {
-                receiptId
+                receiptId,
+                  receiptInformations{
+                    information
+                  }
+                  deposits{
+                     amount
+                     timestamp
+                     id
+                  }
               },
               timestamp,
               amount
@@ -62,7 +70,7 @@ export const DEPOSITS_QUERY = `
            account(id: $id)
            {
               id,
-              offchainAssetVault
+              offchainAssetReceiptVault
               {
                 name
                 deposits
@@ -87,7 +95,7 @@ export const DEPOSITS_QUERY = `
          `
 export const DEPLOYER_QUERY = `
           query($id: ID!) {
-            offchainAssetVault(id: $id) {
+            offchainAssetReceiptVault(id: $id) {
                 deployer,
                 totalShares
             }

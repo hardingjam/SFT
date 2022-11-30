@@ -21,9 +21,9 @@
     }
 
     async function getAuditHistoryData(token) {
-        let data = await getSubgraphData($activeNetwork, {id: token.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetVault')
+        let data = await getSubgraphData($activeNetwork, {id: token.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
         if (data) {
-            return data.data.offchainAssetVault
+            return data.data.offchainAssetReceiptVault
         } else return {}
     }
 

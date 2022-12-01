@@ -204,7 +204,7 @@ export async function getReceiptData(activeNetwork,receiptId) {
     let byteInfo = ""
 
     if (resp && resp.data && resp.data.receipt) {
-        let displayInformation = {};
+        let displayInformation = [];
         receiptInfo = resp.data.receipt.receiptInformations
         if (receiptInfo.length) {
             byteInfo = receiptInfo[0].information

@@ -5,14 +5,27 @@
     import Spinner from "../components/Spinner.svelte";
     import {activeNetwork, selectedReceipt} from "../scripts/store.js";
     import {ethers} from "ethers";
-    import {timeStampToDate} from "../scripts/helpers.js";
+    import {getReceiptData, isUrl, timeStampToDate} from "../scripts/helpers.js";
+    import {onMount} from "svelte";
+    import {icons} from "../scripts/assets.js";
 
     let receipt = $selectedReceipt.receipt;
     let loading = false
     let checkedReceipts = []
+    let receiptInformation = []
 
     function getHash(id) {
         return id.split('-')[1]
+    }
+
+    onMount(() => {
+        setReceiptData(receipt.id)
+    })
+
+    async function setReceiptData() {
+        loading = true
+        receiptInformation = await getReceiptData($activeNetwork, receipt.id)
+        loading = false
     }
 </script>
 <DefaultFrame header={`Audit History > ${receipt.receiptId}`}>
@@ -22,19 +35,26 @@
   <div slot="content">
     <div class="history">
       <div class="receipts">
-        {#if (receipt.receiptInformations.length)}
-          <table>
-            <tbody>
-            {#each receipt.receiptInformations as info}
-              <tr class="tb-row">
-                <td>{info.key}</td>
-                <td>{info.value}</td>
-              </tr>
+        {#if (receiptInformation.length)}
+            {#each receiptInformation as info}
+              <div class="receipt-info">
+                {#if isUrl(info.value)}
+                  <span>{info.label}
+                    <a href={info.value} target="_blank">
+                          <img src="{icons.show}" alt="view file" class="btn-hover">
+                    </a>
+                  </span>
+                {/if}
+
+                {#if !isUrl(info.value)}
+                  <span>{info.label}</span>
+                  <div>{info.value}</div>
+                {/if}
+              </div>
+
             {/each}
-            </tbody>
-          </table>
         {/if}
-        {#if (!receipt.receiptInformations.length)}
+        {#if (!receiptInformation.length)}
           <div class="no-data">Nothing to show</div>
         {/if}
       </div>
@@ -114,6 +134,8 @@
         min-height: 100px;
         border-bottom: 1px solid #D2D2D2;
         overflow: auto;
+        text-align: center;
+        padding: 0 25% 20px 25%;
     }
 
     .receipts table th {
@@ -141,8 +163,15 @@
         text-decoration: none;
         color: inherit;
     }
-    a:hover{
+
+    a:hover {
         text-decoration: underline;
+    }
+
+    .receipt-info {
+        padding: 2px 20px;
+        display: flex;
+        justify-content: space-between;
     }
 
 </style>

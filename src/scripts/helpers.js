@@ -1,5 +1,7 @@
 import {ethers} from "ethers";
-import {ONE, ROLES} from "./consts.js";
+import {IPFS_GETWAY, ONE, ROLES} from "./consts.js";
+import {RECEIPT_INFORMATION_QUERY} from "./queries.js";
+import axios from "axios";
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -193,4 +195,32 @@ export async function getReceiptBalance(activeNetwork, vault, receipt) {
         receiptBalance = res.data.receiptBalance.valueExact
     }
     return ethers.BigNumber.from(receiptBalance)
+}
+
+export async function getReceiptData(activeNetwork,receiptId) {
+    let variables = {id: receiptId}
+    let resp = await getSubgraphData(activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
+    let receiptInfo = ""
+    let byteInfo = ""
+
+    if (resp && resp.data && resp.data.receipt) {
+        let displayInformation = {};
+        receiptInfo = resp.data.receipt.receiptInformations
+        if (receiptInfo.length) {
+            byteInfo = receiptInfo[0].information
+            let infoHash = hexToString(byteInfo.slice(2))
+            let res = await axios.get(`${IPFS_GETWAY}/${infoHash}`);
+            if (res) {
+                let receiptInformations = res.data
+                displayInformation = Object.keys(receiptInformations).map(prop => {
+                    return {
+                        label: toSentenceCase(prop),
+                        value: receiptInformations[prop]
+                    }
+                })
+            }
+        }
+
+        return displayInformation
+    }
 }

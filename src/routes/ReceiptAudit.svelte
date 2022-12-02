@@ -3,9 +3,9 @@
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
     import Spinner from "../components/Spinner.svelte";
-    import {activeNetwork, selectedReceipt} from "../scripts/store.js";
+    import {activeNetwork, selectedReceipt, vault} from "../scripts/store.js";
     import {ethers} from "ethers";
-    import {formatReceiptData, isUrl, timeStampToDate} from "../scripts/helpers.js";
+    import {formatReceiptData, getReceiptBalance, isUrl, timeStampToDate} from "../scripts/helpers.js";
     import {onMount} from "svelte";
     import {icons} from "../scripts/assets.js";
 
@@ -13,13 +13,15 @@
     let loading = false
     let checkedReceipts = []
     let receiptInformation = []
+    let receiptBalance = ""
 
     function getHash(id) {
         return id.split('-')[1]
     }
 
-    onMount(() => {
-        setReceiptData(receipt.id)
+    onMount(async () => {
+        await setReceiptData(receipt.id)
+        receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receiptId);
     })
 
     async function setReceiptData() {
@@ -55,10 +57,12 @@
             </div>
 
           {/each}
+
         {/if}
-        {#if (!receiptInformation.length)}
-          <div class="no-data">Nothing to show</div>
-        {/if}
+        <div class="receipt-info" >
+          <span class="f-weight-700">Total token amount</span>
+          <div class="date f-weight-700">{receiptBalance ? ethers.utils.formatUnits(receiptBalance) : ''}</div>
+        </div>
       </div>
       <div class="receipts-table-container">
         {#if loading}

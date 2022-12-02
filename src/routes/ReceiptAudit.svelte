@@ -59,7 +59,7 @@
           {/each}
 
         {/if}
-        <div class="receipt-info" >
+        <div class="receipt-info">
           <span class="f-weight-700">Total token amount</span>
           <div class="date f-weight-700">{receiptBalance ? ethers.utils.formatUnits(receiptBalance) : ''}</div>
         </div>
@@ -68,6 +68,10 @@
         {#if loading}
           <Spinner></Spinner>
         {/if}
+        <div class="transactions">
+          <span class="f-weight-700">Transaction History</span>
+          <button class="default-btn">Compare Changes</button>
+        </div>
         {#if !loading}
           <table class="receipts-table">
             <tr>
@@ -180,4 +184,14 @@
         justify-content: space-between;
     }
 
+    .transactions {
+        margin-top: 25px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .checkmark {
+        top: -6px
+    }
 </style>

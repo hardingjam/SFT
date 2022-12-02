@@ -53,10 +53,15 @@ export const AUDIT_HISTORY_DATA_QUERY = `
                   receiptInformations{
                     information
                   }
-                  deposits{
+                  deposits(orderBy:timestamp){
                      amount
                      timestamp
                      id
+                  }
+                  withdraws(orderBy:timestamp){
+                    amount
+                    timestamp
+                    id
                   }
               },
               timestamp,

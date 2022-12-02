@@ -14,6 +14,7 @@
     let checkedReceipts = []
     let receiptInformation = []
     let receiptBalance = ""
+    let transactions = []
 
     function getHash(id) {
         return id.split('-')[1]
@@ -21,6 +22,7 @@
 
     onMount(async () => {
         await setReceiptData(receipt.id)
+        await mergeDepositsAndWithdraws()
         receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receiptId);
     })
 
@@ -30,6 +32,16 @@
             receiptInformation = await formatReceiptData(receipt.receiptInformations[0].information)
         }
         loading = false
+    }
+
+    async function mergeDepositsAndWithdraws() {
+        let deposits = receipt.deposits;
+        let withdraws = receipt.withdraws.map(w => {
+            return {...w, withdraw: true}
+        });
+
+        transactions = [...deposits,...withdraws]
+
     }
 </script>
 <DefaultFrame header={`Audit History > ${receipt.receiptId}`}>
@@ -80,22 +92,23 @@
               <td class="f-weight-700">Date</td>
               <td class="f-weight-700">Transaction Hash</td>
             </tr>
-            {#each receipt.deposits as deposit}
+            {#each transactions as transaction}
               <tr>
                 <td>
                   <label class="check-container">
                     <input type="checkbox" class="check-box" bind:group={checkedReceipts}
-                           value={deposit.id}/>
+                           value={transaction.id}/>
                     <span class="checkmark"></span>
                   </label>
                 </td>
                 <td class="receipt-id">
-                  <div class="check-box-label btn-hover">{ethers.utils.formatUnits(deposit.amount, 18)}</div>
+
+                  <div class="check-box-label btn-hover">{ethers.utils.formatUnits(transaction.amount, 18)}</div>
                 </td>
-                <td class="value">{timeStampToDate(deposit.timestamp)} </td>
+                <td class="value">{timeStampToDate(transaction.timestamp)} </td>
                 <td class="value">
-                  <a href="{`${$activeNetwork.blockExplorer}tx/${getHash(deposit.id)}`}" target="_blank">
-                    {getHash(deposit.id).replace(/(.{6}).*(.{6})/, "$1…$2") || ""}
+                  <a href="{`${$activeNetwork.blockExplorer}tx/${getHash(transaction.id)}`}" target="_blank">
+                    {getHash(transaction.id).replace(/(.{6}).*(.{6})/, "$1…$2") || ""}
                   </a>
                 </td>
               </tr>

@@ -5,7 +5,7 @@
     import Spinner from "../components/Spinner.svelte";
     import {activeNetwork, selectedReceipt} from "../scripts/store.js";
     import {ethers} from "ethers";
-    import {getReceiptData, isUrl, timeStampToDate} from "../scripts/helpers.js";
+    import {formatReceiptData, isUrl, timeStampToDate} from "../scripts/helpers.js";
     import {onMount} from "svelte";
     import {icons} from "../scripts/assets.js";
 
@@ -24,7 +24,9 @@
 
     async function setReceiptData() {
         loading = true
-        receiptInformation = await getReceiptData($activeNetwork, receipt.id)
+        if (receipt.receiptInformations.length) {
+            receiptInformation = await formatReceiptData(receipt.receiptInformations[0].information)
+        }
         loading = false
     }
 </script>
@@ -36,23 +38,23 @@
     <div class="history">
       <div class="receipts">
         {#if (receiptInformation.length)}
-            {#each receiptInformation as info}
-              <div class="receipt-info">
-                {#if isUrl(info.value)}
+          {#each receiptInformation as info}
+            <div class="receipt-info">
+              {#if isUrl(info.value)}
                   <span>{info.label}
                     <a href={info.value} target="_blank">
                           <img src="{icons.show}" alt="view file" class="btn-hover">
                     </a>
                   </span>
-                {/if}
+              {/if}
 
-                {#if !isUrl(info.value)}
-                  <span>{info.label}</span>
-                  <div>{info.value}</div>
-                {/if}
-              </div>
+              {#if !isUrl(info.value)}
+                <span>{info.label}</span>
+                <div>{info.value}</div>
+              {/if}
+            </div>
 
-            {/each}
+          {/each}
         {/if}
         {#if (!receiptInformation.length)}
           <div class="no-data">Nothing to show</div>

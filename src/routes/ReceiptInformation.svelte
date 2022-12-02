@@ -3,7 +3,7 @@
     import {activeNetwork, vault} from "../scripts/store.js";
     import {
         getReceiptBalance,
-        getReceiptData,
+        formatReceiptData,
         isUrl,
     } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
@@ -19,10 +19,11 @@
     onMount(async () => {
         receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receipt.receiptId);
         loading = true
-        displayInformation = await getReceiptData($activeNetwork, receipt.receipt.id)
+        if (receipt.receipt.receiptInformations.length) {
+            displayInformation = await formatReceiptData(receipt.receipt.receiptInformations[0].information)
+        }
         loading = false
     })
-
 
 
     const dispatch = createEventDispatcher();

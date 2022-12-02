@@ -87,6 +87,9 @@ export const DEPOSITS_QUERY = `
                     balances {
                       value,
                       valueExact
+                    },
+                    receiptInformations{
+                       information
                     }
                   },
                 }
@@ -99,16 +102,6 @@ export const DEPLOYER_QUERY = `
             offchainAssetReceiptVault(id: $id) {
                 deployer,
                 totalShares
-            }
-          }
-         `
-export const RECEIPT_INFORMATION_QUERY = `
-          query($id: ID!) {
-            receipt(id: $id) {
-                id,
-                  receiptInformations{
-                    information
-                  }
             }
           }
          `

@@ -47,7 +47,7 @@
                     }
 
                     const tx = $vault["redeem(uint256,address,address,uint256)"](
-                        receiptBalance,
+                        redeemAmount,
                         $account,
                         $account,
                         receipt

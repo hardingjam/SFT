@@ -79,7 +79,7 @@ export function getSubgraphData(activeNetwork, variables, query, param) {
             clearInterval(interval)
             console.log(data.errors)
         }
-        if (!data || !!Object.keys(data.data[param]).length || (data && data.data && data.data[param] === null)) {
+        if (!data || data.data[param] || (data && data.data && data.data[param] === null)) {
             clearInterval(interval)
             return resolve(data)
         }

@@ -286,6 +286,15 @@ button:focus, button:focus-visible {
     float: right;
 }
 
+.fail{
+    color: #DD1212;
+    font-weight: 300;
+}
+.success{
+    color: #1EA51B;
+    font-weight: 300;
+}
+
 @media (prefers-color-scheme: light) {
 
 }

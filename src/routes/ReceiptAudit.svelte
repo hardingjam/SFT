@@ -8,6 +8,7 @@
     import {formatReceiptData, getReceiptBalance, isUrl, timeStampToDate} from "../scripts/helpers.js";
     import {onMount} from "svelte";
     import {icons} from "../scripts/assets.js";
+    import _ from "lodash"
 
     let receipt = $selectedReceipt.receipt;
     let loading = false
@@ -40,8 +41,8 @@
             return {...w, withdraw: true}
         });
 
-        transactions = [...deposits,...withdraws]
-
+        transactions = [...deposits, ...withdraws]
+        transactions = _.orderBy(transactions, ['timestamp'], ['desc']);
     }
 </script>
 <DefaultFrame header={`Audit History > ${receipt.receiptId}`}>
@@ -102,8 +103,14 @@
                   </label>
                 </td>
                 <td class="receipt-id">
+                  {#if transaction.withdraw}
+                    <div class="fail">{`-${ethers.utils.formatUnits(transaction.amount, 18)}`}</div>
 
-                  <div class="check-box-label btn-hover">{ethers.utils.formatUnits(transaction.amount, 18)}</div>
+                  {/if}
+                  {#if !transaction.withdraw}
+                    <div class="success">{`+${ethers.utils.formatUnits(transaction.amount, 18)}`}</div>
+
+                  {/if}
                 </td>
                 <td class="value">{timeStampToDate(transaction.timestamp)} </td>
                 <td class="value">

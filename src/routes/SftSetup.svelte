@@ -8,18 +8,20 @@
     import {QUERY} from "../scripts/queries.js";
     import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
+    import SftLoader from "../components/SftLoader.svelte";
 
     let name = "";
     let admin_ledger = "";
     let symbol = "";
     let url = "";
+    let loading = false;
 
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
     let factoryContract;
 
     onMount(async () => {
-        if($activeNetwork){
+        if ($activeNetwork) {
             factoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, contractFactoryAbi, signerOrProvider)
         }
     });
@@ -33,6 +35,7 @@
     // }
 
     async function createToken() {
+        loading = true
         const constructionConfig = {
             admin: admin_ledger.trim(),
             vaultConfig: {
@@ -45,41 +48,45 @@
         const receiptConfig = {
             uri: url,
         };
+        let offChainAssetVaultTx;
+        try {
+            offChainAssetVaultTx = await factoryContract.createChildTyped(
+                receiptConfig,
+                constructionConfig
+            );
+            let contract;
 
-
-        const offChainAssetVaultTx = await factoryContract.createChildTyped(
-            receiptConfig,
-            constructionConfig
-        );
-
-        let contract;
-
-        contract = new ethers.Contract(
-            ethers.utils.hexZeroPad(
-                ethers.utils.hexStripZeros(
-                    (await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)).child
+            contract = new ethers.Contract(
+                ethers.utils.hexZeroPad(
+                    ethers.utils.hexStripZeros(
+                        (await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)).child
+                    ),
+                    20
                 ),
-                20
-            ),
-            contractAbi,
-            signer.address
-        );
+                contractAbi,
+                signer.address
+            );
 
-        name = null;
-        admin_ledger = null;
-        symbol = null;
-        url = null;
 
-        console.log(
-            "vault deployed to:",
-            contract.address
-        );
+            name = null;
+            admin_ledger = null;
+            symbol = null;
+            url = null;
 
-        let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
-        vault.set(newVault)
-        localStorage.setItem('vaultAddress', $vault.address)
-        //wait for sg data
-        await getSgData(newVault.address)
+            console.log(
+                "vault deployed to:",
+                contract.address
+            );
+
+            let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
+            vault.set(newVault)
+            localStorage.setItem('vaultAddress', $vault.address)
+            //wait for sg data
+            await getSgData(newVault.address)
+        } catch (er) {
+            console.log(er)
+        }
+        loading = false
     }
 
     async function getSgData(vaultAddress) {
@@ -99,29 +106,46 @@
                 roles.set(rolesFiltered)
                 navigateTo("#admin", {replace: false});
             }
+
         })
 
     }
 
 </script>
-<div class="sft-setup-container">
-  <label class="title f-weight-700">SFT Setup</label>
-  <div class="form-box">
-    <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
-    </div>
-    <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
-                                                                                        bind:value={admin_ledger}>
-    </div>
-    <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text" bind:value={symbol}>
-    </div>
-    <div class="space-between"><label class="f-weight-700">URL:</label> <input type="text" bind:value={url}></div>
-  </div>
-  <div class="form-after">
-    <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
-    <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url} on:click={() => createToken()}>Create SFT</button>
-  </div>
+{#if !loading}
 
-</div>
+  <div class="sft-setup-container">
+
+    <label class="title f-weight-700">SFT Setup</label>
+    <div class="form-box">
+
+      <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
+      </div>
+      <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
+                                                                                                 bind:value={admin_ledger}>
+      </div>
+      <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
+                                                                                          bind:value={symbol}>
+      </div>
+      <div class="space-between"><label class="f-weight-700">URL:</label> <input type="text" bind:value={url}></div>
+    </div>
+    <div class="form-after">
+      <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
+      <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url}
+              on:click={() => createToken()}>Create SFT
+      </button>
+    </div>
+
+
+  </div>
+{/if}
+
+{#if loading}
+  <div class="loader">
+
+    <SftLoader></SftLoader>
+  </div>
+{/if}
 <style>
     .sft-setup-container {
         max-width: 599px;
@@ -190,6 +214,18 @@
 
     .create-token {
         width: 413px;
+    }
+
+    .loader {
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        position: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
 </style>

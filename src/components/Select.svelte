@@ -120,9 +120,9 @@
 
 
     .nav-dropdown {
-        background-color: #5c558b !important;
-        border-radius: 0 0 5px 5px!important;
-        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        background-color: #2c2c5454 !important;
+        border-radius: 0 0 5px 5px !important;
+        box-shadow: 0 4px 4px #00000040;
         border: none !important;
     }
 
@@ -140,7 +140,7 @@
     .nav-dropdown .dropdown-item:hover {
         text-decoration: none;
         color: #FFFFFF;
-        background: rgba(217, 217, 217, 0.55)!important;
+        background: #d9d9d98c !important;
     }
 
 

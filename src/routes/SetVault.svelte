@@ -3,7 +3,7 @@
 </script>
 <div class="buttons-container">
   <button class=" btn-hover" on:click={()=>{navigateTo("#setup")}}>
-    setup new SFT
+    Setup new SFT
   </button>
   <button class=" btn-hover" on:click={()=>{navigateTo("#list")}}>
     Manage existing SFT
@@ -22,7 +22,7 @@
 
     button {
         width: 100%;
-        background: rgba(44, 44, 84, 0.33);
+        background: #2c2c5454;
         color: #ffffff;
         font-style: normal;
         font-weight: 700;

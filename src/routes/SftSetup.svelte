@@ -15,6 +15,7 @@
     let symbol = "";
     let url = "";
     let loading = false;
+    let error = ''
 
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
@@ -35,6 +36,13 @@
     // }
 
     async function createToken() {
+        error = ""
+        let addressValid = ethers.utils.isAddress(admin_ledger);
+
+        if (!addressValid) {
+            error = "Please check Super admin address"
+            return
+        }
         loading = true
         const constructionConfig = {
             admin: admin_ledger.trim(),
@@ -131,6 +139,7 @@
     </div>
     <div class="form-after">
       <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
+      <div class="error">{error}</div>
       <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url}
               on:click={() => createToken()}>Create SFT
       </button>
@@ -208,8 +217,7 @@
         font-size: 12px;
         line-height: 20px;
         margin-top: 21px;
-        margin-bottom: 10px;
-        height: 45px;
+        margin-bottom: 20px;
     }
 
     .create-token {
@@ -226,6 +234,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .error{
+        margin-bottom: 10px;
     }
 
 </style>

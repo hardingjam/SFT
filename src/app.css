@@ -35,6 +35,16 @@ body {
     border: none;
     cursor: pointer;
     padding: 0 30px;
+    background: #9D7334;
+}
+
+.btn-solid:hover {
+    background: #C98E36;
+}
+
+.btn-solid:active {
+    background: #C98E36;
+    box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .btn-solid:disabled {
@@ -52,10 +62,6 @@ body {
 
 .btn-solid:disabled {
     background: #D2D2D2;
-}
-
-.btn-submit {
-    background: #9D7334;
 }
 
 .btn-cancel {
@@ -82,7 +88,7 @@ button:focus, button:focus-visible {
     background-color: transparent !important;
     border-radius: 10px !important;
     border: none !important;
-    padding: 0!important;
+    padding: 0 !important;
 }
 
 .dropdown-item {

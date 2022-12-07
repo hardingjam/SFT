@@ -218,7 +218,7 @@
     {/if}
     <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
                on:setMax={()=>{setMaxValue()}}/>
-    <button class="redeem-btn btn-solid btn-submit" disabled="{!selectedReceipts.length}" on:click={() => withdraw()}>
+    <button class="redeem-btn btn-solid" disabled="{!selectedReceipts.length}" on:click={() => withdraw()}>
       Redeem
       Options
     </button>

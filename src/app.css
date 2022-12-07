@@ -82,6 +82,7 @@ button:focus, button:focus-visible {
     background-color: #ececec !important;
     border-radius: 5px !important;
     border: none !important;
+    padding: 0!important;
 }
 
 .dropdown-item {
@@ -161,17 +162,6 @@ button:focus, button:focus-visible {
 
 .header-btn:focus {
     outline: none;
-}
-
-.nav-dropdown {
-    background-color: #ececec !important;
-}
-
-.nav-dropdown .dropdown-item {
-    font-weight: 700 !important;
-    font-size: 18px !important;
-    line-height: 30px !important;
-    padding: 0 10px !important;
 }
 
 .basic-frame-parent {

@@ -1,11 +1,13 @@
 <script>
     import {navigateTo} from "yrv";
+    import {tokens} from "../scripts/store.js";
 </script>
 <div class="buttons-container">
   <button class=" btn-hover" on:click={()=>{navigateTo("#setup")}}>
     Setup new SFT
   </button>
-  <button class=" btn-hover" on:click={()=>{navigateTo("#list")}}>
+  <button class="{$tokens.length ? `btn-hover`: 'disabled'}" on:click={()=>{navigateTo("#list")}}
+          disabled="{!$tokens.length}">
     Manage existing SFT
   </button>
 </div>
@@ -33,5 +35,9 @@
         border: none;
         cursor: pointer;
         padding: 0 30px;
+    }
+
+    .disabled {
+        background: #d9d9d98c;
     }
 </style>

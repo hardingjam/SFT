@@ -35,7 +35,6 @@
     // }
 
     async function createToken() {
-        loading = true
         const constructionConfig = {
             admin: admin_ledger.trim(),
             vaultConfig: {
@@ -53,9 +52,12 @@
             offChainAssetVaultTx = await factoryContract.createChildTyped(
                 receiptConfig,
                 constructionConfig
-            );
-            let contract;
+            )
+            if (offChainAssetVaultTx.hash) {
+                loading = true
+            }
 
+            let contract;
             contract = new ethers.Contract(
                 ethers.utils.hexZeroPad(
                     ethers.utils.hexStripZeros(

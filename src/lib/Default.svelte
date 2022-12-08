@@ -288,7 +288,7 @@
 </script>
 <Router url={url}>
 
-  <div class="">
+  <div class="content">
     <div class="default-header">
       <div class="logo" on:click={()=>{window.location.href = '/'}}>
         <img src={icons.logo} alt="sft logo">
@@ -370,6 +370,16 @@
         </div>
       </div>
     {/if}
+  </div>
+
+  <div class="footer">
+    <div class="powered-by">
+      <span>Powered by</span>
+      <div><img src={icons.gild_lab} alt="Gild Lab"/></div>
+      <span>and Rain</span>
+      <div><img src={icons.rain} alt="Rain"/></div>
+    </div>
+
   </div>
 </Router>
 
@@ -488,6 +498,27 @@
 
   .hide {
     display: none;
+  }
+
+  .footer {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 40px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .powered-by{
+    width: 320px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .content {
+    height: 100vh;
   }
 
 </style>

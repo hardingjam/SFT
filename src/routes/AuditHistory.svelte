@@ -77,7 +77,8 @@
           </thead>
           <tbody>
           {#each receipts as receipt}
-            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>
+<!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
+            <tr class="tb-row">
               <td>{receipt.receipt.receiptId}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td>{timeStampToDate(receipt.timestamp)}</td>

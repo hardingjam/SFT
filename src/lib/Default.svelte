@@ -308,8 +308,12 @@
           </Select>
 
           <Select className={'meinMenu'} options={menuItems}
-                  label="&#9776;"
+                  label=""
                   staticLabel={true} showExpand="{false}">
+            <div slot="icon">
+              <img src={icons.burger}
+                   alt="menu"/>
+            </div>
           </Select>
 
         </div>

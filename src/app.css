@@ -3,8 +3,8 @@ body {
     display: flex;
     min-width: 320px;
     min-height: 100vh;
-    background: #6B5B9A;
-    background: linear-gradient(180deg, #6B5B9A 0%, #BCDAF5 100%);
+    background: rgb(181,220,255);
+    background: linear-gradient(0deg, #b5dcff 0%, #6f5ea1 100%);
 }
 
 #app {

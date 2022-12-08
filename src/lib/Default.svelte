@@ -375,9 +375,9 @@
   <div class="footer">
     <div class="powered-by">
       <span>Powered by</span>
-      <div><img src={icons.gild_lab} alt="Gild Lab"/></div>
+      <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>
       <span>and Rain</span>
-      <div><img src={icons.rain} alt="Rain"/></div>
+      <div><a href="https://www.rainprotocol.xyz/" target="_blank"><img src={icons.rain} alt="Rain"/></a></div>
     </div>
 
   </div>

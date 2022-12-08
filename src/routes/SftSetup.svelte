@@ -220,8 +220,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #000000;
-        opacity: 0.4;
+        /*background: #000000;*/
+        /*opacity: 0.4;*/
     }
 
 </style>

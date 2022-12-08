@@ -85,6 +85,7 @@
             await getSgData(newVault.address)
         } catch (er) {
             console.log(er)
+            console.log(er.message)
         }
         loading = false
     }
@@ -136,7 +137,6 @@
 </div>
 {#if loading}
   <div class="loader">
-
     <SftLoader></SftLoader>
   </div>
 {/if}

@@ -82,7 +82,7 @@ button:focus, button:focus-visible {
     background-color: transparent !important;
     border-radius: 10px !important;
     border: none !important;
-    padding: 0!important;
+    padding: 0 !important;
 }
 
 .dropdown-item {
@@ -210,6 +210,11 @@ button:focus, button:focus-visible {
 .error {
     color: #F11717;
     max-width: fit-content;
+}
+
+.success {
+    color: #1EA51B;
+    font-weight: 700;
 }
 
 .w-100 {

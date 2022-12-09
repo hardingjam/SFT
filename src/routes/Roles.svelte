@@ -97,7 +97,7 @@
   </div>
 
   <div slot="header-buttons">
-<!--    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-schema")}}>New schema</button>-->
+    <!--    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-schema")}}>New schema</button>-->
   </div>
 
   <div slot="content">
@@ -109,12 +109,10 @@
         <div class="display-flex row">
           <label class="f-weight-700 col-2">Role:</label>
           <div>
-            {#if $roles.length}
-              <Select options={$roles.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
+            <Select options={$roles.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
 
-                      on:select={handleRoleSelect}
-                      label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
-            {/if}
+                    on:select={handleRoleSelect}
+                    label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
           </div>
 
         </div>

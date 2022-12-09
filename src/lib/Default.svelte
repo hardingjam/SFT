@@ -309,7 +309,7 @@
 
           <Select className={'meinMenu'} options={menuItems}
                   label=""
-                  staticLabel={true} showExpand="{false}">
+                  staticLabel={true} showExpand="{false}" dropDownClass={'nav-dropdown'}>
             <div slot="icon">
               <img src={icons.burger}
                    alt="menu"/>

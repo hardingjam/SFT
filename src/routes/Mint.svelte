@@ -214,7 +214,7 @@
   <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>
-  <button class="mint-btn btn-solid btn-submit" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
+  <button class="mint-btn btn-solid" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
     Options
   </button>
 </div>

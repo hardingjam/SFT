@@ -17,6 +17,7 @@
     let url = "";
     let loading = false;
     let showSuccess = false
+    let error = ''
 
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
@@ -41,6 +42,13 @@
     }
 
     async function createToken() {
+        error = ""
+        let addressValid = ethers.utils.isAddress(admin_ledger);
+
+        if (!addressValid) {
+            error = "Please check Super admin address"
+            return
+        }
         const constructionConfig = {
             admin: admin_ledger.trim(),
             vaultConfig: {
@@ -125,40 +133,41 @@
 </script>
 {#if !loading}
   <div class="sft-setup-container">
-  <label class="title f-weight-700">{!showSuccess ? 'SFT Setup' : ""}</label>
-  {#if !showSuccess}
-    <div class="form-box">
-      <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
-      </div>
-      <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
-                                                                                                 bind:value={admin_ledger}>
-      </div>
-      <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
-                                                                                          bind:value={symbol}>
-      </div>
-      <div class="space-between"><label class="f-weight-700">URL:</label> <input type="text" bind:value={url}></div>
-    </div>
-  {/if}
-  {#if showSuccess}
-    <div class="success-container form-box">
-      <span class="success">Your SFT Setup was successful!</span>
-      <img src="{icons.success_circle}" alt="sft success"/>
-    </div>
-  {/if}
-  <div class="form-after">
-    <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
+    <label class="title f-weight-700">{!showSuccess ? 'SFT Setup' : ""}</label>
     {#if !showSuccess}
-      <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url}
-              on:click={() => createToken()}>Create SFT
-      </button>
+      <div class="form-box">
+        <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
+        </div>
+        <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
+                                                                                                   bind:value={admin_ledger}>
+        </div>
+        <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
+                                                                                            bind:value={symbol}>
+        </div>
+        <div class="space-between"><label class="f-weight-700">URL:</label> <input type="text" bind:value={url}></div>
+      </div>
     {/if}
     {#if showSuccess}
-      <button class="create-token btn-solid btn-submit"
-              on:click={() => goToRoles()}>Ok, take me to Roles
-      </button>
+      <div class="success-container form-box">
+        <span class="success">Your SFT Setup was successful!</span>
+        <img src="{icons.success_circle}" alt="sft success"/>
+      </div>
     {/if}
+    <div class="form-after">
+      <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
+      <div class="error">{error}</div>
+      {#if !showSuccess}
+        <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url}
+                on:click={() => createToken()}>Create SFT
+        </button>
+      {/if}
+      {#if showSuccess}
+        <button class="create-token btn-solid btn-submit"
+                on:click={() => goToRoles()}>Ok, take me to Roles
+        </button>
+      {/if}
+    </div>
   </div>
-</div>
 {/if}
 {#if loading}
   <div class="loader">
@@ -227,8 +236,7 @@
         font-size: 12px;
         line-height: 20px;
         margin-top: 21px;
-        margin-bottom: 10px;
-        height: 45px;
+        margin-bottom: 20px;
     }
 
     .create-token {
@@ -254,6 +262,10 @@
         align-items: center;
         justify-content: space-between;
         flex-direction: column;
+    }
+
+    .error {
+        margin-bottom: 10px;
     }
 
 </style>

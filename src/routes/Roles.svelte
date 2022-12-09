@@ -123,7 +123,6 @@
           <input type="text" class="{validAccount ? 'default-input' : 'default-input invalid-input'}"
                  bind:value={account}>
         </div>
-        <br>
         <button class="default-btn" on:click={grantRole}>Enter</button>
       </div>
       {#if loading}

@@ -89,7 +89,7 @@
         })
     }
 </script>
-<DefaultFrame header="Admin">
+<DefaultFrame header="Roles">
   <div slot="address">
   <span>  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`}
                       class="contract-address btn-hover"

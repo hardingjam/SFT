@@ -37,7 +37,7 @@
     // }
 
     function goToRoles() {
-        navigateTo("#admin", {replace: false});
+        navigateTo("#roles", {replace: false});
     }
 
     async function createToken() {

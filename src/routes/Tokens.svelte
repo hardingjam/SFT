@@ -15,7 +15,7 @@
             localStorage.setItem("vaultAddress", token.address)
             let auditHistoryData = await getAuditHistoryData(token.address)
             auditHistory.set(auditHistoryData)
-            navigateTo("#admin")
+            navigateTo("#roles")
 
         }
     }

@@ -6,7 +6,7 @@
     import {ethers} from "ethers";
     import {onMount} from 'svelte';
     import {Router, Route, navigateTo, router} from "yrv"
-    import Admin from "./../routes/Admin.svelte";
+    import Roles from "./../routes/Roles.svelte";
     import {icons} from '../scripts/assets.js'
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
@@ -88,10 +88,10 @@
             }
         },
         {
-            id: "admin",
-            displayName: "Manage Token",
+            id: "roles",
+            displayName: "Roles",
             action: () => {
-                navigateTo('#admin', {replace: false})
+                navigateTo('#roles', {replace: false})
             }
         },
         {
@@ -339,7 +339,7 @@
       <div class="main-card">
         <div class={$activeNetwork  ? 'show' : 'hide'}>
           <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
-          <Route path="#admin" component={Admin}/>
+          <Route path="#roles" component={Roles}/>
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>

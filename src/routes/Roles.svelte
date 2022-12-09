@@ -89,7 +89,7 @@
         })
     }
 </script>
-<DefaultFrame header="Admin">
+<DefaultFrame header="Roles">
   <div slot="address">
   <span>  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`}
                       class="contract-address btn-hover"
@@ -97,7 +97,7 @@
   </div>
 
   <div slot="header-buttons">
-<!--    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-schema")}}>New schema</button>-->
+    <!--    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-schema")}}>New schema</button>-->
   </div>
 
   <div slot="content">
@@ -106,19 +106,21 @@
       <div class="grant-role-txt f-weight-700">Grant a role</div>
       <div class="error">{error}</div>
       <div class="role-list">
-        <div class="display-flex">
-          <label class="f-weight-700">Role:</label>
-          {#if $roles.length}
+        <div class="display-flex row">
+          <label class="f-weight-700 col-2">Role:</label>
+          <div>
             <Select options={$roles.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
 
                     on:select={handleRoleSelect}
                     label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
-          {/if}
+          </div>
+
         </div>
-        <label class="f-weight-700">Address:</label>
-        <input type="text" class="{validAccount ? 'default-input' : 'default-input invalid-input'}"
-               bind:value={account}>
-        <br>
+        <div class="row">
+          <label class="f-weight-700 col-2  ">Address:</label>
+          <input type="text" class="{validAccount ? 'default-input' : 'default-input invalid-input'}"
+                 bind:value={account}>
+        </div>
         <button class="default-btn" on:click={grantRole}>Enter</button>
       </div>
       {#if loading}

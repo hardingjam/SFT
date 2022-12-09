@@ -9,12 +9,14 @@
     import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
     import SftLoader from "../components/SftLoader.svelte";
+    import {icons} from "../scripts/assets.js";
 
     let name = "";
     let admin_ledger = "";
     let symbol = "";
     let url = "";
     let loading = false;
+    let showSuccess = false
     let error = ''
 
     export let ethersData;
@@ -35,6 +37,10 @@
     //     localStorage.setItem('vaultAddress', $vault.address)
     // }
 
+    function goToRoles() {
+        navigateTo("#roles", {replace: false});
+    }
+
     async function createToken() {
         error = ""
         let addressValid = ethers.utils.isAddress(admin_ledger);
@@ -43,7 +49,6 @@
             error = "Please check Super admin address"
             return
         }
-        loading = true
         const constructionConfig = {
             admin: admin_ledger.trim(),
             vaultConfig: {
@@ -61,9 +66,12 @@
             offChainAssetVaultTx = await factoryContract.createChildTyped(
                 receiptConfig,
                 constructionConfig
-            );
-            let contract;
+            )
+            if (offChainAssetVaultTx.hash) {
+                loading = true
+            }
 
+            let contract;
             contract = new ethers.Contract(
                 ethers.utils.hexZeroPad(
                     ethers.utils.hexStripZeros(
@@ -91,8 +99,12 @@
             localStorage.setItem('vaultAddress', $vault.address)
             //wait for sg data
             await getSgData(newVault.address)
+
+            showSuccess = true;
+
         } catch (er) {
             console.log(er)
+            console.log(er.message)
         }
         loading = false
     }
@@ -112,7 +124,6 @@
                     return {roleName: role.roleName, roleHolders: filtered}
                 })
                 roles.set(rolesFiltered)
-                navigateTo("#admin", {replace: false});
             }
 
         })
@@ -120,32 +131,46 @@
     }
 
 </script>
-<div class="sft-setup-container">
-
-  <label class="title f-weight-700">SFT Setup</label>
-  <div class="form-box">
-
-    <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
+{#if !loading}
+  <div class="sft-setup-container">
+    <label class="title f-weight-700">{!showSuccess ? 'SFT Setup' : ""}</label>
+    {#if !showSuccess}
+      <div class="form-box">
+        <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
+        </div>
+        <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
+                                                                                                   bind:value={admin_ledger}>
+        </div>
+        <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
+                                                                                            bind:value={symbol}>
+        </div>
+        <div class="space-between"><label class="f-weight-700">URL:</label> <input type="text" bind:value={url}></div>
+      </div>
+    {/if}
+    {#if showSuccess}
+      <div class="success-container form-box">
+        <span class="success">Your SFT Setup was successful!</span>
+        <img src="{icons.success_circle}" alt="sft success"/>
+      </div>
+    {/if}
+    <div class="form-after">
+      <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
+      <div class="error">{error}</div>
+      {#if !showSuccess}
+        <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url}
+                on:click={() => createToken()}>Create SFT
+        </button>
+      {/if}
+      {#if showSuccess}
+        <button class="create-token btn-solid btn-submit"
+                on:click={() => goToRoles()}>Ok, take me to Roles
+        </button>
+      {/if}
     </div>
-    <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
-                                                                                               bind:value={admin_ledger}>
-    </div>
-    <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
-                                                                                        bind:value={symbol}>
-    </div>
-    <div class="space-between"><label class="f-weight-700">URL:</label> <input type="text" bind:value={url}></div>
   </div>
-  <div class="form-after">
-    <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
-    <div class="error">{error}</div>
-    <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url}
-            on:click={() => createToken()}>Create SFT
-    </button>
-  </div>
-</div>
+{/if}
 {#if loading}
   <div class="loader">
-
     <SftLoader></SftLoader>
   </div>
 {/if}
@@ -228,8 +253,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #000000;
-        opacity: 0.4;
+        /*background: #000000;*/
+        /*opacity: 0.4;*/
+    }
+
+    .success-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
     }
 
     .error {

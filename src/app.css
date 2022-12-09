@@ -241,6 +241,11 @@ button:focus, button:focus-visible {
     max-width: fit-content;
 }
 
+.success {
+    color: #1EA51B;
+    font-weight: 700;
+}
+
 .w-100 {
     width: 100%;
 }

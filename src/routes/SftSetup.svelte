@@ -123,8 +123,8 @@
     }
 
 </script>
-<div class="sft-setup-container">
-
+{#if !loading}
+  <div class="sft-setup-container">
   <label class="title f-weight-700">{!showSuccess ? 'SFT Setup' : ""}</label>
   {#if !showSuccess}
     <div class="form-box">
@@ -159,6 +159,7 @@
     {/if}
   </div>
 </div>
+{/if}
 {#if loading}
   <div class="loader">
     <SftLoader></SftLoader>

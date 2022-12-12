@@ -106,8 +106,8 @@
       <div class="grant-role-txt f-weight-700">Grant a role</div>
       <div class="error">{error}</div>
       <div class="role-list">
-        <div class="display-flex row">
-          <label class="f-weight-700 col-2">Role:</label>
+        <div class="row">
+          <label class="f-weight-700 custom-col col-2">Role:</label>
           <div>
             <Select options={$roles.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
 
@@ -117,7 +117,7 @@
 
         </div>
         <div class="row">
-          <label class="f-weight-700 col-2  ">Address:</label>
+          <label class="f-weight-700 custom-col col-2">Address:</label>
           <input type="text" class="{validAccount ? 'default-input' : 'default-input invalid-input'}"
                  bind:value={account}>
         </div>
@@ -209,6 +209,10 @@
     .contract-address {
         text-decoration: none;
         color: inherit;
+    }
+
+    .custom-col{
+        margin-right: -10px;
     }
 
 </style>

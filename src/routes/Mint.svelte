@@ -167,8 +167,8 @@
     <div class="audit-info basic-frame">
       {#if schemas.length}
         <div class="schema">
-          <div class="schema-dropdown display-flex">
-            <label class="f-weight-700">Schema:</label>
+          <div class="schema-dropdown row">
+            <label class="f-weight-700 custom-col col-2">Schema:</label>
             <Select options={schemas}
 
                     on:select={handleSchemaSelect}
@@ -280,6 +280,8 @@
         display: flex;
         justify-content: space-between;
     }
-
+    .custom-col{
+        margin-right: 25px;
+    }
 </style>
 

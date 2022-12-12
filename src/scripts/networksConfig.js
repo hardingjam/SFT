@@ -28,7 +28,7 @@ const networks = [
         erc20ContractAddress: "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889",
         icon: 'polygon',
         // factory_address: '0x954f09762672C97BFbb82519b1b74D48934ADc39',
-        factory_address: '0xe2c0C831319F90129216c1785F734E182F7f2aFC',
+        factory_address: '0x0f55e389F7ea2dd04eb2F6fA26448Ce054D8C7F6',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gild-lab/offchainassetvault"
     },
     // {

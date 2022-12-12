@@ -1,6 +1,6 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
-    import {getReceiptBalance, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
+    import {getReceiptBalance, getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ethers} from "ethers";
@@ -24,14 +24,11 @@
     async function redeem(receipt) {
         try {
             if (receipt) {
+                error = ''
 
-                const hasRoleWithdrawer = await $vault.hasRole(
-                    await $vault.WITHDRAWER(),
-                    $account
-                );
+                const hasRoleWithdrawer = await hasRole($vault, $account, "WITHDRAWER")
 
-                if (hasRoleWithdrawer) {
-                    error = ''
+                if (!hasRoleWithdrawer.error) {
                     const redeemAmount = ethers.utils.parseEther(amount.toString());
 
                     const receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt)
@@ -59,7 +56,7 @@
 
                     amount = 0;
                 } else {
-                    error = `AccessControl: account ${$account.toLowerCase()} is missing role WITHDRAWER`
+                    error = hasRoleWithdrawer.error;
                 }
 
             } else {
@@ -129,30 +126,37 @@
         if (!selectedReceipts.length) {
             return
         }
-        let ABI = [
-            "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_)",
-        ];
-        let iface = new ethers.utils.Interface(ABI);
 
-        let multicallArr = selectedReceipts.map(async receipt => {
-            const receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt)
-            return iface.encodeFunctionData("redeem", [
-                receiptBalance,
-                $account,
-                $account,
-                receipt
-            ])
-        })
+        const hasRoleWithdrawer = await hasRole($vault, $account, "WITHDRAWER")
+        if (!hasRoleWithdrawer.error) {
+            let ABI = [
+                "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_)",
+            ];
+            let iface = new ethers.utils.Interface(ABI);
 
-        try {
-            await $vault
-                .multicall(
-                    multicallArr,
-                    {from: $account}
-                );
-        } catch (err) {
-            error = err.reason
+            let multicallArr = selectedReceipts.map(async receipt => {
+                const receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt)
+                return iface.encodeFunctionData("redeem", [
+                    receiptBalance,
+                    $account,
+                    $account,
+                    receipt
+                ])
+            })
+
+            try {
+                await $vault
+                    .multicall(
+                        multicallArr,
+                        {from: $account}
+                    );
+            } catch (err) {
+                error = err.reason
+            }
+        } else {
+            error = hasRoleWithdrawer.error
         }
+
 
     }
 

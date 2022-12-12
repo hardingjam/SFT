@@ -9,7 +9,7 @@
     import {icons} from "../scripts/assets.js";
     import {IPFS_API, IPFS_GETWAY, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
-    import {toBytes} from "../scripts/helpers";
+    import {hasRole, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
     import Spinner from "../components/Spinner.svelte";
 
@@ -60,20 +60,27 @@
 
     async function mint() {
         try {
-            let formResponse = await submitForm()
-            let shareRatio = ONE
-            const shares = ethers.utils.parseEther(amount.toString());
+            error = ""
+            const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
+            if (!hasRoleDepositor.error) {
+                let formResponse = await submitForm()
+                let shareRatio = ONE
+                const shares = ethers.utils.parseEther(amount.toString());
 
-            let dataBytes = []
-            if (formResponse) {
-                dataBytes = toBytes(formResponse.Hash)
+                let dataBytes = []
+                if (formResponse) {
+                    dataBytes = toBytes(formResponse.Hash)
+                }
+
+                const tx = await $vault
+                    .connect(signer)
+                    ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
+                await tx.wait();
+                amount = 0;
+            } else {
+                error = hasRoleDepositor.error
             }
 
-            const tx = await $vault
-                .connect(signer)
-                ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
-            await tx.wait();
-            amount = 0;
         } catch (error) {
             console.log(error.reason || error)
         }
@@ -280,7 +287,8 @@
         display: flex;
         justify-content: space-between;
     }
-    .custom-col{
+
+    .custom-col {
         margin-right: 25px;
     }
 </style>

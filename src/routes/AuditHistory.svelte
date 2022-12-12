@@ -3,7 +3,7 @@
     import {navigateTo} from "yrv";
     import {vault, auditHistory, activeNetwork, account, selectedReceipt} from "../scripts/store";
     import {beforeUpdate, onMount} from "svelte";
-    import {getEventArgs, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
+    import {getEventArgs, getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatDate} from "../scripts/helpers";
@@ -32,12 +32,9 @@
 
         let untilToTime = new Date(certifyUntil).getTime()
 
-        const hasRoleCertifier = await $vault.hasRole(
-            await $vault.CERTIFIER(),
-            $account
-        );
+        const hasRoleCertifier = await hasRole($vault, $account, "CERTIFIER")
 
-        if (hasRoleCertifier) {
+        if (!hasRoleCertifier.error) {
             let {caller, until} = await getEventArgs(
                 await $vault.certify(untilToTime / 1000, [], false),
                 "Certify",
@@ -50,7 +47,7 @@
             })
 
         } else {
-            error = `AccessControl: account ${$account.toLowerCase()} is missing role CERTIFIER`
+            error = hasRoleCertifier.error
         }
     }
 
@@ -77,7 +74,7 @@
           </thead>
           <tbody>
           {#each receipts as receipt}
-<!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
+            <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
             <tr class="tb-row">
               <td>{receipt.receipt.receiptId}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>

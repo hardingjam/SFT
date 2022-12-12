@@ -73,6 +73,7 @@ export function getSubgraphData(activeNetwork, variables, query, param) {
         async function fetchData() {
             return await fetchSubgraphData(activeNetwork, variables, query)
         }
+
         let interval = setInterval(fetchData, 2000)
         let data = await fetchData()
         if (data.errors) {
@@ -193,4 +194,16 @@ export async function getReceiptBalance(activeNetwork, vault, receipt) {
         receiptBalance = res.data.receiptBalance.valueExact
     }
     return ethers.BigNumber.from(receiptBalance)
+}
+
+export async function hasRole(vault, account, role) {
+    let resp = await vault.hasRole(
+        await vault[role](),
+        account
+    );
+    if (resp) {
+        return resp
+    } else {
+        return {error: `AccessControl: account ${account.toLowerCase()} is missing role ${role}`}
+    }
 }

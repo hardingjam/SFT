@@ -2,7 +2,7 @@
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {icons} from "../scripts/assets.js"
     import {account, activeNetwork, ethersData, vault} from "../scripts/store.js";
-    import {getContract, tierReport} from "../scripts/helpers.js";
+    import {getContract, hasRole, tierReport} from "../scripts/helpers.js";
     import tierContractAbi from "../contract/TierContractAbi.json";
 
 
@@ -74,18 +74,16 @@
             if (!erc20TierContract) {
                 return
             }
-            const hasRoleErc20Tierer = await $vault.hasRole(
-                await $vault.ERC20TIERER(),
-                $account
-            );
 
-            if (hasRoleErc20Tierer) {
+            const hasRoleErc20Tierer = await hasRole($vault, $account, "ERC20TIERER")
+
+            if (!hasRoleErc20Tierer.error) {
                 let tx = await $vault.setERC20Tier(erc20TierContract, erc20MinTier, [])
                 await tx.wait()
                 localStorage.setItem("erc20TierContract", erc20TierContract)
                 localStorage.setItem("erc20MinTier", erc20MinTier)
             } else {
-                error = `AccessControl: account ${$account.toLowerCase()} is missing role ERC20TIERER`
+                error = hasRoleErc20Tierer.error
             }
 
         } catch (e) {
@@ -98,19 +96,16 @@
             if (!erc1155TierContract) {
                 return
             }
-            const hasRoleErc1155Tierer = await $vault.hasRole(
-                await $vault.ERC1155TIERER(),
-                $account
-            );
+            const hasRoleErc1155Tierer = await hasRole($vault, $account, "ERC1155TIERER")
 
-            if (hasRoleErc1155Tierer) {
+            if (!hasRoleErc1155Tierer.error) {
                 let tx = await $vault.setERC1155Tier(erc1155TierContract, erc1155MinTier, [])
                 await tx.wait()
                 localStorage.setItem("erc1155TierContract", erc1155TierContract)
                 localStorage.setItem("erc1155MinTier", erc1155MinTier)
 
             } else {
-                error = `AccessControl: account ${$account.toLowerCase()} is missing role ERC1155TIERER`
+                error = hasRoleErc1155Tierer.error
             }
 
         } catch (e) {

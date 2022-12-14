@@ -4,7 +4,7 @@
     import {account, activeNetwork, vault} from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ethers} from "ethers";
-    import Spinner from "../components/Spinner.svelte";
+    import SftLoader from "../components/SftLoader.svelte";
     import {DEPLOYER_QUERY, DEPOSITS_QUERY} from '../scripts/queries.js'
     import ReceiptInformation from "./ReceiptInformation.svelte";
 
@@ -188,7 +188,9 @@
     <div class="basic-frame-parent">
       <div class="receipts-table-container basic-frame">
         {#if loading}
-          <Spinner></Spinner>
+          <div class="loader">
+            <SftLoader width="50"></SftLoader>
+          </div>
         {/if}
         {#if !loading}
           <table class="receipts-table">
@@ -278,6 +280,11 @@
     .check-box-label:hover {
         text-decoration: underline;
 
+    }
+
+    .loader{
+      display: flex;
+        justify-content: center;
     }
 
 

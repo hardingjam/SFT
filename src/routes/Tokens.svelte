@@ -5,7 +5,7 @@
     import {navigateTo} from "yrv";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import Spinner from "../components/Spinner.svelte";
+    import SftLoader from "../components/SftLoader.svelte";
 
 
     async function handleTokenSelect(token) {
@@ -50,7 +50,7 @@
 
       </table>
       {#if !$tokens.length}
-        <Spinner></Spinner>
+        <SftLoader width="50"></SftLoader>
       {/if}
     </div>
   </div>

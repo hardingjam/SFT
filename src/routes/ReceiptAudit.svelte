@@ -39,10 +39,8 @@
         {/if}
       </div>
       <div class="receipts-table-container">
-        {#if loading}
-          <div class="loader">
-            <SftLoader width="50"></SftLoader>
-          </div>
+        {#if !loading}
+          <SftLoader width="50"></SftLoader>
         {/if}
         {#if !loading}
           <table class="receipts-table">
@@ -148,9 +146,9 @@
         text-decoration: underline;
     }
 
-    .loader {
-        display: flex;
-        justify-content: center;
-    }
+    /*.loader {*/
+    /*    display: flex;*/
+    /*    justify-content: center;*/
+    /*}*/
 
 </style>

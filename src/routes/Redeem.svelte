@@ -188,9 +188,7 @@
     <div class="basic-frame-parent">
       <div class="receipts-table-container basic-frame">
         {#if loading}
-          <div class="loader">
-            <SftLoader width="50"></SftLoader>
-          </div>
+          <SftLoader width="50"></SftLoader>
         {/if}
         {#if !loading}
           <table class="receipts-table">
@@ -279,13 +277,6 @@
 
     .check-box-label:hover {
         text-decoration: underline;
-
     }
-
-    .loader{
-      display: flex;
-        justify-content: center;
-    }
-
 
 </style>

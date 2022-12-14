@@ -11,7 +11,7 @@
     import SchemaForm from "../components/SchemaForm.svelte"
     import {hasRole, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
-    import Spinner from "../components/Spinner.svelte";
+    import SftLoader from "../components/SftLoader.svelte";
 
     let image = {}
 
@@ -200,7 +200,7 @@
             {/if}
             {#if $uploadBtnLoading}
               <div class="sf-upload-spinner">
-                <Spinner></Spinner>
+                <SftLoader width="50"></SftLoader>
               </div>
             {/if}
           {/if}

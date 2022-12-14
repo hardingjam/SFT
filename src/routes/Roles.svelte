@@ -11,9 +11,9 @@
     import {icons} from "../scripts/assets.js";
     import {QUERY} from "../scripts/queries.js";
     import {beforeUpdate, onMount} from "svelte";
-    import Spinner from "../components/Spinner.svelte";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
+    import SftLoader from "../components/SftLoader.svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let validAccount = true;
@@ -124,7 +124,7 @@
         <button class="default-btn" on:click={grantRole}>Enter</button>
       </div>
       {#if loading}
-        <Spinner></Spinner>
+        <SftLoader width="50"></SftLoader>
       {/if}
       {#if !loading}
         <div class="roles-data">

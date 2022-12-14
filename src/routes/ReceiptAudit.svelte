@@ -2,7 +2,7 @@
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
-    import Spinner from "../components/Spinner.svelte";
+    import SftLoader from "../components/SftLoader.svelte";
     import {activeNetwork, selectedReceipt} from "../scripts/store.js";
     import {ethers} from "ethers";
     import {timeStampToDate} from "../scripts/helpers.js";
@@ -40,7 +40,9 @@
       </div>
       <div class="receipts-table-container">
         {#if loading}
-          <Spinner></Spinner>
+          <div class="loader">
+            <SftLoader width="50"></SftLoader>
+          </div>
         {/if}
         {#if !loading}
           <table class="receipts-table">
@@ -141,8 +143,14 @@
         text-decoration: none;
         color: inherit;
     }
-    a:hover{
+
+    a:hover {
         text-decoration: underline;
+    }
+
+    .loader {
+        display: flex;
+        justify-content: center;
     }
 
 </style>

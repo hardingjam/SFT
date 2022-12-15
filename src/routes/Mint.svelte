@@ -7,7 +7,7 @@
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_API, IPFS_GETWAY, ONE} from "../scripts/consts.js";
+    import {IPFS_API, IPFS_API2, IPFS_GETWAY, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
     import {hasRole, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
@@ -91,7 +91,6 @@
     const upload = async (data) => {
         error = ""
         uploadBtnLoading.set(true)
-        const url = IPFS_API;
         let formData = new FormData();
         // if we're pinning metadata (objets)
         // if (data instanceof Array) {
@@ -106,26 +105,27 @@
         formData.append('file', data)
         // }
 
-        const response = await axios.request({
-            url,
-            method: 'post',
-            headers: {
-                "Content-Type": `multipart/form-data;`,
-            },
-            data: formData,
-            onUploadProgress: ((p) => {
-                console.log(`Uploading...  ${p.loaded} / ${p.total}`);
-            }),
-        }).catch(function (err) {
-            error = err.toJSON().message
+        const requestArr = [IPFS_API, IPFS_API2].map((url, i) => {
+            return axios.request({
+                url,
+                method: 'post',
+                headers: {
+                    "Content-Type": `multipart/form-data;`,
+                },
+                data: formData,
+                onUploadProgress: ((p) => {
+                    console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                }),
+            })
         });
+        let respAll = await Promise.all(requestArr)
 
-        if ($fileDropped.size && response) {
-            fileHash.set(response.data.Hash)
+        if ($fileDropped.size && respAll.length) {
+            fileHash.set(respAll[0].data.Hash)
         }
         uploadBtnLoading.set(false)
 
-        return response?.data
+        return respAll[0]?.data
     };
 
     $: ($fileDropped && $fileDropped.size) && upload($fileDropped);

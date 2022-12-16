@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, account, vault, tokens, ethersData} from "../scripts/store.js";
+    import {activeNetwork, account, vault, tokens, ethersData, db} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -164,6 +164,44 @@
         // const grantRoleTx = await $vault.connect($ethersData.signer).grantRole(await $vault.connect($ethersData.signer).DEPOSITOR(), $account.trim());
         // await grantRoleTx.wait()
 
+        if (!('indexedDB' in window)) {
+            console.log("This browser doesn't support IndexedDB");
+            return;
+        }
+        else {
+            const assetData = [
+                {
+                    "producer_wallet": "1111",
+                    "total_score": "11111",
+                    "max_options": "444",
+                    "pie_certificate": "https://gildlab-ipfs.in.ngrok.io/ipfs/QmXyewyJGuUs1wxRwVJm3uBiJiaB3ofjfj3nGYQWQD7XrB"
+                },
+                {
+                    "producer_wallet": "22",
+                    "total_score": "222",
+                    "max_options": "222222",
+                    "pie_certificate": "https://gildlab-ipfs.in.ngrok.io/ipfs/QmXyewyJGuUs1wxRwVJm3uBiJiaB3ofjfj3nGYQWQD7XrB"
+                }
+            ];
+            const request = window.indexedDB.open("AssetInfoDatabase");
+            request.onerror = (event) => {
+                console.log("error",event);
+
+                // Do something with request.errorCode!
+            };
+            request.onupgradeneeded  = (event) => {
+                console.log("success",event.target.result);
+                db.set(event.target.result);
+                const objectStore = $db.createObjectStore("assets", { autoIncrement : true });
+                objectStore.transaction.oncomplete = (event) => {
+                    // Store values in the newly created objectStore.
+                    const assetObjectStore = $db.transaction("assets", "readwrite").objectStore("assets");
+                    assetData.forEach((asset) => {
+                        assetObjectStore.add(asset);
+                    });
+                };
+            };
+        }
 
     });
 

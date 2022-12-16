@@ -107,7 +107,7 @@ form.svelte-schema-form button {
 form.svelte-schema-form .error {
     position: relative;
     top: -0.5em;
-    color: red;
+    color: #DD1212;
 }
 
 form.svelte-schema-form .button-container {

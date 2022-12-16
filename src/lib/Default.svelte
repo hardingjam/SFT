@@ -6,7 +6,7 @@
     import {ethers} from "ethers";
     import {onMount} from 'svelte';
     import {Router, Route, navigateTo, router} from "yrv"
-    import Admin from "./../routes/Admin.svelte";
+    import Roles from "./../routes/Roles.svelte";
     import {icons} from '../scripts/assets.js'
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
@@ -88,10 +88,10 @@
             }
         },
         {
-            id: "admin",
-            displayName: "Manage Token",
+            id: "roles",
+            displayName: "Roles",
             action: () => {
-                navigateTo('#admin', {replace: false})
+                navigateTo('#roles', {replace: false})
             }
         },
         {
@@ -288,7 +288,7 @@
 </script>
 <Router url={url}>
 
-  <div class="">
+  <div class="content">
     <div class="default-header">
       <div class="logo" on:click={()=>{window.location.href = '/'}}>
         <img src={icons.logo} alt="sft logo">
@@ -308,8 +308,12 @@
           </Select>
 
           <Select className={'meinMenu'} options={menuItems}
-                  label="&#9776;"
-                  staticLabel={true} showExpand="{false}">
+                  label=""
+                  staticLabel={true} showExpand="{false}" dropDownClass={'nav-dropdown'}>
+            <div slot="icon">
+              <img src={icons.burger}
+                   alt="menu"/>
+            </div>
           </Select>
 
         </div>
@@ -335,7 +339,7 @@
       <div class="main-card">
         <div class={$activeNetwork  ? 'show' : 'hide'}>
           <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
-          <Route path="#admin" component={Admin}/>
+          <Route path="#roles" component={Roles}/>
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>
@@ -366,6 +370,16 @@
         </div>
       </div>
     {/if}
+  </div>
+
+  <div class="footer">
+    <div class="powered-by">
+      <span>Powered by</span>
+      <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>
+      <span>and Rain</span>
+      <div><a href="https://www.rainprotocol.xyz/" target="_blank"><img src={icons.rain} alt="Rain"/></a></div>
+    </div>
+
   </div>
 </Router>
 
@@ -484,6 +498,27 @@
 
   .hide {
     display: none;
+  }
+
+  .footer {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 40px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .powered-by{
+    width: 320px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .content {
+    height: 100vh;
   }
 
 </style>

@@ -33,7 +33,7 @@
 
 </script>
 
-<div class="container">
+<div>
   <Dropdown triggerElement={dropdownTrigger}>
 
     <button

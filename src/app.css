@@ -1,10 +1,33 @@
+/* width */
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #D2D2D2;
+    box-shadow: inset 0 0 0 4px white;
+
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #D2D2D2;
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #b3b3b3;
+}
+
 body {
     margin: 0;
     display: flex;
     min-width: 320px;
     min-height: 100vh;
-    background: #6B5B9A;
-    background: linear-gradient(180deg, #6B5B9A 0%, #BCDAF5 100%);
+    background: rgb(181,220,255);
+    background: linear-gradient(0deg, #b5dcff 0%, #6f5ea1 100%);
 }
 
 #app {
@@ -35,6 +58,16 @@ body {
     border: none;
     cursor: pointer;
     padding: 0 30px;
+    background: #9D7334;
+}
+
+.btn-solid:hover {
+    background: #C98E36;
+}
+
+.btn-solid:active {
+    background: #C98E36;
+    box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .btn-solid:disabled {
@@ -52,10 +85,6 @@ body {
 
 .btn-solid:disabled {
     background: #D2D2D2;
-}
-
-.btn-submit {
-    background: #9D7334;
 }
 
 .btn-cancel {
@@ -82,7 +111,7 @@ button:focus, button:focus-visible {
     background-color: transparent !important;
     border-radius: 10px !important;
     border: none !important;
-    padding: 0!important;
+    padding: 0 !important;
 }
 
 .dropdown-item {
@@ -208,8 +237,13 @@ button:focus, button:focus-visible {
 }
 
 .error {
-    color: #F11717;
+    color: #DD1212;
     max-width: fit-content;
+}
+
+.success {
+    color: #1EA51B;
+    font-weight: 700;
 }
 
 .w-100 {

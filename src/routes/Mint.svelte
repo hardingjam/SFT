@@ -7,11 +7,11 @@
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_API, IPFS_GETWAY, ONE} from "../scripts/consts.js";
+    import {IPFS_API, IPFS_API2, IPFS_GETWAY, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
-    import {toBytes} from "../scripts/helpers";
+    import {hasRole, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
-    import Spinner from "../components/Spinner.svelte";
+    import SftLoader from "../components/SftLoader.svelte";
 
     let image = {}
 
@@ -60,20 +60,27 @@
 
     async function mint() {
         try {
-            let formResponse = await submitForm()
-            let shareRatio = ONE
-            const shares = ethers.utils.parseEther(amount.toString());
+            error = ""
+            const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
+            if (!hasRoleDepositor.error) {
+                let formResponse = await submitForm()
+                let shareRatio = ONE
+                const shares = ethers.utils.parseEther(amount.toString());
 
-            let dataBytes = []
-            if (formResponse) {
-                dataBytes = toBytes(formResponse.Hash)
+                let dataBytes = []
+                if (formResponse) {
+                    dataBytes = toBytes(formResponse.Hash)
+                }
+
+                const tx = await $vault
+                    .connect(signer)
+                    ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
+                await tx.wait();
+                amount = 0;
+            } else {
+                error = hasRoleDepositor.error
             }
 
-            const tx = await $vault
-                .connect(signer)
-                ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
-            await tx.wait();
-            amount = 0;
         } catch (error) {
             console.log(error.reason || error)
         }
@@ -84,7 +91,6 @@
     const upload = async (data) => {
         error = ""
         uploadBtnLoading.set(true)
-        const url = IPFS_API;
         let formData = new FormData();
         // if we're pinning metadata (objets)
         // if (data instanceof Array) {
@@ -99,26 +105,27 @@
         formData.append('file', data)
         // }
 
-        const response = await axios.request({
-            url,
-            method: 'post',
-            headers: {
-                "Content-Type": `multipart/form-data;`,
-            },
-            data: formData,
-            onUploadProgress: ((p) => {
-                console.log(`Uploading...  ${p.loaded} / ${p.total}`);
-            }),
-        }).catch(function (err) {
-            error = err.toJSON().message
+        const requestArr = [IPFS_API, IPFS_API2].map((url, i) => {
+            return axios.request({
+                url,
+                method: 'post',
+                headers: {
+                    "Content-Type": `multipart/form-data;`,
+                },
+                data: formData,
+                onUploadProgress: ((p) => {
+                    console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                }),
+            })
         });
+        let respAll = await Promise.all(requestArr)
 
-        if ($fileDropped.size && response) {
-            fileHash.set(response.data.Hash)
+        if ($fileDropped.size && respAll.length) {
+            fileHash.set(respAll[0].data.Hash)
         }
         uploadBtnLoading.set(false)
 
-        return response?.data
+        return respAll[0]?.data
     };
 
     $: ($fileDropped && $fileDropped.size) && upload($fileDropped);
@@ -167,8 +174,8 @@
     <div class="audit-info basic-frame">
       {#if schemas.length}
         <div class="schema">
-          <div class="schema-dropdown display-flex">
-            <label class="f-weight-700">Schema:</label>
+          <div class="schema-dropdown row">
+            <label class="f-weight-700 custom-col col-2">Schema:</label>
             <Select options={schemas}
 
                     on:select={handleSchemaSelect}
@@ -193,7 +200,7 @@
             {/if}
             {#if $uploadBtnLoading}
               <div class="sf-upload-spinner">
-                <Spinner></Spinner>
+                <SftLoader width="50"></SftLoader>
               </div>
             {/if}
           {/if}
@@ -214,7 +221,7 @@
   <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>
-  <button class="mint-btn btn-solid btn-submit" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
+  <button class="mint-btn btn-solid" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
     Options
   </button>
 </div>
@@ -281,5 +288,8 @@
         justify-content: space-between;
     }
 
+    .custom-col {
+        margin-right: 25px;
+    }
 </style>
 

@@ -1,17 +1,15 @@
 <script>
-import {onMount} from "svelte";
-export let width = "200px"
+export let width = "200"
 
-onMount(()=>{
-    bodymovin.loadAnimation({
-        container: document.getElementById("sft-loader"),
-        path: "sftLoader.json",
-        renderer: "svg",
-        loop:true,
-        autoplay:true,
-    })
-})
 </script>
-<div id="sft-loader" style="width: {width}">
+<div class="loader">
+  <lottie-player src="sftLoader.json" background="transparent"  speed="1"  style={`width: ${width}px; height: ${width}px;`} loop autoplay></lottie-player>
 </div>
+
+<style>
+  .loader{
+      display: flex;
+      justify-content: center;
+  }
+</style>
 

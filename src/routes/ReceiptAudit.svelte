@@ -2,7 +2,7 @@
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
-    import Spinner from "../components/Spinner.svelte";
+    import SftLoader from "../components/SftLoader.svelte";
     import {activeNetwork, selectedReceipt} from "../scripts/store.js";
     import {ethers} from "ethers";
     import {timeStampToDate} from "../scripts/helpers.js";
@@ -17,7 +17,7 @@
 </script>
 <DefaultFrame header={`Audit History > ${receipt.receiptId}`}>
   <div slot="header-buttons" class="display-flex">
-    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#admin")}}>Admins</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#roles")}}>Roles</button>
   </div>
   <div slot="content">
     <div class="history">
@@ -39,8 +39,8 @@
         {/if}
       </div>
       <div class="receipts-table-container">
-        {#if loading}
-          <Spinner></Spinner>
+        {#if !loading}
+          <SftLoader width="50"></SftLoader>
         {/if}
         {#if !loading}
           <table class="receipts-table">
@@ -141,8 +141,14 @@
         text-decoration: none;
         color: inherit;
     }
-    a:hover{
+
+    a:hover {
         text-decoration: underline;
     }
+
+    /*.loader {*/
+    /*    display: flex;*/
+    /*    justify-content: center;*/
+    /*}*/
 
 </style>

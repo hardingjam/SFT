@@ -5,7 +5,7 @@
     import {navigateTo} from "yrv";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import Spinner from "../components/Spinner.svelte";
+    import SftLoader from "../components/SftLoader.svelte";
 
 
     async function handleTokenSelect(token) {
@@ -15,7 +15,7 @@
             localStorage.setItem("vaultAddress", token.address)
             let auditHistoryData = await getAuditHistoryData(token.address)
             auditHistory.set(auditHistoryData)
-            navigateTo("#admin")
+            navigateTo("#roles")
 
         }
     }
@@ -50,7 +50,7 @@
 
       </table>
       {#if !$tokens.length}
-        <Spinner></Spinner>
+        <SftLoader width="50"></SftLoader>
       {/if}
     </div>
   </div>

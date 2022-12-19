@@ -118,14 +118,17 @@
                 }),
             })
         });
-        let respAll = await Promise.all(requestArr)
+        let respAll = await Promise.any(requestArr).catch((err)=>{
+                error = "Something went wrong"
+                uploadBtnLoading.set(false)
+        })
 
-        if ($fileDropped.size && respAll.length) {
-            fileHash.set(respAll[0].data.Hash)
+        if ($fileDropped.size && respAll.status === 200) {
+            fileHash.set(respAll.data.Hash)
         }
         uploadBtnLoading.set(false)
 
-        return respAll[0]?.data
+        return respAll?.data
     };
 
     $: ($fileDropped && $fileDropped.size) && upload($fileDropped);

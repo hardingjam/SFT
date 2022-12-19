@@ -81,8 +81,9 @@
                 error = hasRoleDepositor.error
             }
 
-        } catch (error) {
-            console.log(error.reason || error)
+        } catch (er) {
+            error = er.reason || er
+            console.log(er.reason || er)
         }
         shouldDisable = false;
     }

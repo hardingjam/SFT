@@ -88,7 +88,7 @@
     }
 
 
-    const upload = async (data) => {
+    const upload = async (data, type) => {
         error = ""
         uploadBtnLoading.set(true)
         let formData = new FormData();
@@ -118,12 +118,12 @@
                 }),
             })
         });
-        let respAll = await Promise.any(requestArr).catch((err)=>{
-                error = "Something went wrong"
-                uploadBtnLoading.set(false)
+        let respAll = await Promise.any(requestArr).catch((err) => {
+            error = "Something went wrong"
+            uploadBtnLoading.set(false)
         })
 
-        if ($fileDropped.size && respAll.status === 200) {
+        if (type === "file" && $fileDropped.size && respAll.status === 200) {
             fileHash.set(respAll.data.Hash)
         }
         uploadBtnLoading.set(false)
@@ -131,7 +131,7 @@
         return respAll?.data
     };
 
-    $: ($fileDropped && $fileDropped.size) && upload($fileDropped);
+    $: ($fileDropped && $fileDropped.size) && upload($fileDropped, "file");
 
     function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
@@ -154,7 +154,7 @@
 
         let response;
         if (isFormAllEmpty) {
-            response = await upload(JSON.stringify(json))
+            response = await upload(JSON.stringify(json), "data")
         }
 
         return response

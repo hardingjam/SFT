@@ -7,7 +7,7 @@
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_API, IPFS_API2, IPFS_GETWAY, ONE} from "../scripts/consts.js";
+    import {IPFS_APIS, IPFS_GETWAY, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
     import {hasRole, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
@@ -106,7 +106,7 @@
         formData.append('file', data)
         // }
 
-        const requestArr = [IPFS_API, IPFS_API2].map((url, i) => {
+        const requestArr = IPFS_APIS.map((url, i) => {
             return axios.request({
                 url,
                 method: 'post',

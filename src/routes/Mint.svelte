@@ -7,9 +7,9 @@
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_APIS, IPFS_GETWAY, ONE} from "../scripts/consts.js";
+    import {IPFS_APIS, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
-    import {hasRole, toBytes} from "../scripts/helpers";
+    import {getIpfsGetWay, hasRole, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
 
@@ -82,8 +82,7 @@
             }
 
         } catch (er) {
-            error = er.reason || er
-            console.log(er.reason || er)
+            error = er.reason || er.message|| er
         }
         shouldDisable = false;
     }
@@ -133,9 +132,14 @@
     };
 
     $: ($fileDropped && $fileDropped.size) && upload($fileDropped, "file");
+    $: $fileHash && getCertificateUrl($fileHash);
 
     function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
+    }
+    let certificateUrl = ''
+    async function getCertificateUrl(){
+        certificateUrl = await getIpfsGetWay($fileHash)
     }
 
     async function submitForm() {
@@ -147,7 +151,7 @@
         })
 
         if ($fileHash) {
-            json.pie_certificate = `${IPFS_GETWAY}/${$fileHash}`
+            json.pie_certificate = await getIpfsGetWay($fileHash)//`${IPFS_GETWAY}/${$fileHash}`
         }
 
         let formFields = Object.keys(json)
@@ -195,7 +199,7 @@
                 <span class="file-load-success">Pie Certificate loaded successfully</span>
                 <div class="link-to-file">
                   <span>To Link</span>
-                  <a href={IPFS_GETWAY+ '/' + $fileHash} target="_blank">
+                  <a href={certificateUrl} target="_blank">
                     <img src="{icons.show}" alt="view file" class="btn-hover">
                   </a>
                   <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->

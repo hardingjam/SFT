@@ -1,10 +1,16 @@
 <script>
     import {createEventDispatcher, onMount} from "svelte";
     import {activeNetwork, vault} from "../scripts/store.js";
-    import {getReceiptBalance, getSubgraphData, hexToString, isUrl, toSentenceCase} from "../scripts/helpers.js";
+    import {
+        getIpfsGetWay,
+        getReceiptBalance,
+        getSubgraphData,
+        hexToString,
+        isUrl,
+        toSentenceCase
+    } from "../scripts/helpers.js";
     import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
     import axios from "axios";
-    import {IPFS_GETWAY, ONE} from "../scripts/consts.js";
     import {icons} from "../scripts/assets.js";
     import {ethers} from "ethers";
 
@@ -33,7 +39,8 @@
             if (receiptInfo.length) {
                 byteInfo = receiptInfo[0].information
                 let infoHash = hexToString(byteInfo.slice(2))
-                let res = await axios.get(`${IPFS_GETWAY}/${infoHash}`);
+                let url = await getIpfsGetWay(infoHash)
+                let res = await axios.get(url);
                 if (res) {
                     receiptInformations = res.data
                     displayInformation = Object.keys(receiptInformations).map(prop => {

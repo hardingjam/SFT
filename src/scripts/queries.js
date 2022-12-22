@@ -93,6 +93,28 @@ export const DEPOSITS_QUERY = `
            }
         }
          `
+
+export const RECEIPTS_QUERY = `
+          query($id: ID!) {
+              account(id: $id) {
+                address
+                id
+                receiptBalances {
+                    receipt {
+                        id
+                        receiptId
+                        balances {
+                          valueExact
+                          value
+                        }
+                        deposits{
+                            timestamp
+                        }
+                    }
+                }
+              }
+          }
+         `
 export const DEPLOYER_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {

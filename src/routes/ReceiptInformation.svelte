@@ -23,7 +23,6 @@
 
     onMount(async () => {
         receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receipt.receiptId);
-        console.log(receiptBalance);
         await getReceiptData(receipt)
     })
 

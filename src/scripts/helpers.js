@@ -77,7 +77,7 @@ export function getSubgraphData(activeNetwork, variables, query, param) {
 
         let interval = setInterval(fetchData, 2000)
         let data = await fetchData()
-        if (data.errors) {
+        if (data && data.errors) {
             clearInterval(interval)
             console.log(data.errors)
         }

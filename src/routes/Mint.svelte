@@ -82,7 +82,7 @@
             }
 
         } catch (er) {
-            error = er.reason || er.message|| er
+            error = er.reason || er.message || er
         }
         shouldDisable = false;
     }
@@ -118,13 +118,23 @@
                 }),
             })
         });
-        let respAll = await Promise.any(requestArr).catch((err) => {
-            error = "Something went wrong"
-            uploadBtnLoading.set(false)
+
+        let respAll = await Promise.allSettled(requestArr)
+
+        respAll.map(response => {
+            if (response.status === "rejected") {
+                reportError(response.reason)
+            } else return response
         })
 
-        if (type === "file" && $fileDropped.size && respAll.status === 200) {
-            fileHash.set(respAll.data.Hash)
+        let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+
+        if (resolvedPromise) {
+            if (type === "file" && $fileDropped.size) {
+                fileHash.set(resolvedPromise.value.data.Hash)
+            }
+        } else {
+            error = "Something went wrong"
         }
         uploadBtnLoading.set(false)
 
@@ -138,7 +148,7 @@
         selectedSchema = event.detail.selected
     }
     let certificateUrl = ''
-    async function getCertificateUrl(){
+    async function getCertificateUrl() {
         certificateUrl = await getIpfsGetWay($fileHash)
     }
 

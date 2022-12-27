@@ -205,7 +205,7 @@ export async function hasRole(vault, account, role) {
     if (resp) {
         return resp
     } else {
-        return {error: `AccessControl: account ${account.toLowerCase()} is missing role ${role}`}
+        return {error: `Account ${account.toLowerCase()} is missing role ${role}`}
     }
 }
 

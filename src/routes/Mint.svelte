@@ -7,9 +7,9 @@
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_API, IPFS_API2, IPFS_GETWAY, ONE} from "../scripts/consts.js";
+    import {IPFS_APIS, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
-    import {hasRole, toBytes} from "../scripts/helpers";
+    import {getIpfsGetWay, hasRole, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
 
@@ -81,14 +81,14 @@
                 error = hasRoleDepositor.error
             }
 
-        } catch (error) {
-            console.log(error.reason || error)
+        } catch (er) {
+            error = er.reason || er.message || er
         }
         shouldDisable = false;
     }
 
 
-    const upload = async (data) => {
+    const upload = async (data, type) => {
         error = ""
         uploadBtnLoading.set(true)
         let formData = new FormData();
@@ -105,7 +105,7 @@
         formData.append('file', data)
         // }
 
-        const requestArr = [IPFS_API, IPFS_API2].map((url, i) => {
+        const requestArr = IPFS_APIS.map((url, i) => {
             return axios.request({
                 url,
                 method: 'post',
@@ -118,20 +118,38 @@
                 }),
             })
         });
-        let respAll = await Promise.all(requestArr)
 
-        if ($fileDropped.size && respAll.length) {
-            fileHash.set(respAll[0].data.Hash)
+        let respAll = await Promise.allSettled(requestArr)
+
+        respAll.map(response => {
+            if (response.status === "rejected") {
+                reportError(response.reason)
+            } else return response
+        })
+
+        let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+
+        if (resolvedPromise) {
+            if (type === "file" && $fileDropped.size) {
+                fileHash.set(resolvedPromise.value.data.Hash)
+            }
+        } else {
+            error = "Something went wrong"
         }
         uploadBtnLoading.set(false)
 
-        return respAll[0]?.data
+        return respAll?.data
     };
 
-    $: ($fileDropped && $fileDropped.size) && upload($fileDropped);
+    $: ($fileDropped && $fileDropped.size) && upload($fileDropped, "file");
+    $: $fileHash && getCertificateUrl($fileHash);
 
     function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
+    }
+    let certificateUrl = ''
+    async function getCertificateUrl() {
+        certificateUrl = await getIpfsGetWay($fileHash)
     }
 
     async function submitForm() {
@@ -143,7 +161,7 @@
         })
 
         if ($fileHash) {
-            json.pie_certificate = `${IPFS_GETWAY}/${$fileHash}`
+            json.pie_certificate = await getIpfsGetWay($fileHash)//`${IPFS_GETWAY}/${$fileHash}`
         }
 
         let formFields = Object.keys(json)
@@ -151,7 +169,7 @@
 
         let response;
         if (isFormAllEmpty) {
-            response = await upload(JSON.stringify(json))
+            response = await upload(JSON.stringify(json), "data")
         }
 
         return response
@@ -191,7 +209,7 @@
                 <span class="file-load-success">Pie Certificate loaded successfully</span>
                 <div class="link-to-file">
                   <span>To Link</span>
-                  <a href={IPFS_GETWAY+ '/' + $fileHash} target="_blank">
+                  <a href={certificateUrl} target="_blank">
                     <img src="{icons.show}" alt="view file" class="btn-hover">
                   </a>
                   <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->

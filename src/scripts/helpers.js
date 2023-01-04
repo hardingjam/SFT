@@ -1,5 +1,6 @@
 import {ethers} from "ethers";
-import {ONE, ROLES} from "./consts.js";
+import {IPFS_GETWAYS, ONE, ROLES} from "./consts.js";
+import axios from "axios";
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -76,7 +77,7 @@ export function getSubgraphData(activeNetwork, variables, query, param) {
 
         let interval = setInterval(fetchData, 2000)
         let data = await fetchData()
-        if (data.errors) {
+        if (data && data.errors) {
             clearInterval(interval)
             console.log(data.errors)
         }
@@ -204,6 +205,17 @@ export async function hasRole(vault, account, role) {
     if (resp) {
         return resp
     } else {
-        return {error: `AccessControl: account ${account.toLowerCase()} is missing role ${role}`}
+        return {error: `Account ${account.toLowerCase()} is missing role ${role}`}
     }
+}
+
+export async function getIpfsGetWay(hash) {
+    let err = ""
+    const requestArr = IPFS_GETWAYS.map((url, i) => {
+        return axios.get(`${url}/${hash}`);
+    });
+    let resp = await Promise.any(requestArr).catch((er) => {
+        err = er || "Something went wrong"
+    })
+    return resp.config.url || err
 }

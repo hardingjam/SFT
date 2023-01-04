@@ -5,7 +5,7 @@
     import {onMount} from "svelte";
     import {ethers} from "ethers";
     import SftLoader from "../components/SftLoader.svelte";
-    import {DEPLOYER_QUERY, DEPOSITS_QUERY} from '../scripts/queries.js'
+    import {DEPLOYER_QUERY, RECEIPTS_QUERY} from '../scripts/queries.js'
     import ReceiptInformation from "./ReceiptInformation.svelte";
 
     let shouldDisable = false;
@@ -70,7 +70,7 @@
     }
 
 
-    let depositWithReceipts = []
+    let receiptBalances = []
 
 
     onMount(async () => {
@@ -83,10 +83,10 @@
         let variables = {id: $vault.address.toLowerCase()}
         let temp = await getSubgraphData($activeNetwork, variables, DEPLOYER_QUERY, 'offchainAssetReceiptVault')
         if (temp && temp.data) {
-            totalShares = temp.data?.offchainAssetReceiptVault.totalShares
+            totalShares = temp.data?.offchainAssetReceiptVault?.totalShares
             let variables = {id: `${$vault.address.toLowerCase()}-${$account.toLowerCase()}`}
-            getSubgraphData($activeNetwork, variables, DEPOSITS_QUERY, 'account').then((res) => {
-                depositWithReceipts = res.data.account?.offchainAssetReceiptVault.deposits.filter(d => d.receipt.balances[0].value > 0) || []
+            getSubgraphData($activeNetwork, variables, RECEIPTS_QUERY, 'account').then((res) => {
+                receiptBalances = res.data.account?.receiptBalances.filter(d => d.receipt.balances[0].value > 0) || []
                 loading = false
             })
         }
@@ -103,7 +103,7 @@
 
     function setTempData(amount, receipt) {
         //indexing takes time, so to show correct data, ui modifications is needed
-        let updatedReceipt = depositWithReceipts.find(d => d.receipt.receiptId === receipt)
+        let updatedReceipt = receiptBalances.find(d => d.receipt.receiptId === receipt)
 
         let valueBef = updatedReceipt.receipt.balances[0].value
         let valueExactBef = updatedReceipt.receipt.balances[0].valueExact
@@ -111,7 +111,7 @@
         updatedReceipt.receipt.balances[0].value = valueBef - amount
         updatedReceipt.receipt.balances[0].valueExact = Number(ethers.BigNumber.from(valueExactBef).sub(ethers.utils.parseEther(amount.toString())))
 
-        depositWithReceipts = depositWithReceipts.map(d => {
+        receiptBalances = receiptBalances.map(d => {
             if (d.receipt.receiptId === receipt) {
                 return {...d, receipt: updatedReceipt.receipt}
             } else {
@@ -197,7 +197,7 @@
               <td class="f-weight-700">Amount</td>
               <td class="f-weight-700">Minted</td>
             </tr>
-            {#each depositWithReceipts as receipt}
+            {#each receiptBalances as receipt}
               <tr>
                 <td class="receipt-id">
                   <label class="check-container">
@@ -208,8 +208,8 @@
                   <div class="check-box-label btn-hover"
                        on:click={()=>{goToReceiptInfo(receipt)}}>{receipt.receipt.receiptId}</div>
                 </td>
-                <td class="value"> {ethers.utils.formatUnits(receipt.amount, 18)}</td>
-                <td class="value">{timeStampToDate(receipt.timestamp)}</td>
+                <td class="value"> {ethers.utils.formatUnits(receipt.receipt.balances[0].valueExact, 18)}</td>
+                <td class="value">{timeStampToDate(receipt.receipt.deposits[0].timestamp)}</td>
               </tr>
             {/each}
 

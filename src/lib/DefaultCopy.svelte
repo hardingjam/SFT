@@ -32,8 +32,9 @@
         let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider)
         if (contract) {
             vault.set(contract)
+            tokenName = await $vault.name()
         } else {
-            navigate("/", { replace: false });
+            navigate("/", {replace: false});
         }
     }
 
@@ -221,7 +222,6 @@
   <div class="default-header">
     <div class="logo" on:click={()=>{window.location.href = '/'}}>
       <img src={icons.logo} alt="sft logo">
-      <div class="logo-label">{tokenName}</div>
     </div>
     {#if $account}
       <div class="menu">
@@ -240,8 +240,12 @@
     {/if}
 
   </div>
-
-  <nav>
+<div class="display-flex">
+  <div class="app-navigation">
+    <div class="token" on:click={()=>{window.location.href = '/'}}>
+      <img src={icons.logo} alt="sft logo">
+      <div class="token-name">{tokenName}</div>
+    </div>
     <Link to="mint">Mint/Redeem</Link>
     <Link to="members">Members</Link>
     <Link to="roles">Roles</Link>
@@ -249,19 +253,16 @@
     <Link to="receipts">Receipt List</Link>
     <Link to="certificates">Certification Dates</Link>
     <Link to="tokens">Tokens</Link>
-  </nav>
-  <div>
+  </div>
+  <div class="routes">
     <Route path="mint" component="{Mint}" ethersData={$ethersData}/>
-    <Route path="members" component="{Members}" />
-    <Route path="roles" component="{Roles}" />
-    <Route path="audits" component="{AssetRegister}" />
-    <Route path="receipt/:id" component="{ReceiptAudit}" />
-    <Route path="tokens" component="{Tokens}" />
+    <Route path="members" component="{Members}"/>
+    <Route path="roles" component="{Roles}"/>
+    <Route path="audits" component="{AssetRegister}"/>
+    <Route path="receipt/:id" component="{ReceiptAudit}"/>
+    <Route path="tokens" component="{Tokens}"/>
     <Route path="/" component="{SetVault}"></Route>
   </div>
-
-
-
 
   {#if !$account}
     <div>
@@ -278,10 +279,34 @@
       </div>
     </div>
   {/if}
+</div>
+
 
 </Router>
 
 <style>
+
+    .app-navigation {
+        margin-top: 77px;
+        background: #FFFFFF;
+        flex-direction: column;
+        display: flex;
+        width: 185px;
+        height: calc(100vh - 130px);
+        padding: 0 25px;
+        color: #AE6E00;
+        border-radius:  0 20px 0 0 ;
+        line-height: 40px;
+        font-weight: 700;
+        font-size: 16px;
+        text-decoration: none;
+        /*transform: matrix(-1, 0, 0, 1, 0, 0);   */
+    }
+
+    .app-navigation a{
+        color: red;
+    }
+
     .default-header {
         justify-content: space-between;
         align-items: center;
@@ -297,18 +322,26 @@
         cursor: pointer;
     }
 
-    .logo img{
+    .logo img {
         width: 37px;
         height: 37px;
     }
 
-    .logo-label {
+    .token img{
+        width: 88px;
+        height: 88px;
+        margin-top: -39px;
+        border:6px solid #FFFFFF;
+        border-radius: 50%;
+    }
+
+    .token-name {
         font-family: 'Mukta', sans-serif;
         font-style: normal;
         font-weight: 600;
         font-size: 18px;
-        line-height: 30px;
-        color: #F9DFA0;
+        line-height: 27px;
+        color: #575757;
     }
 
     .menu {
@@ -317,5 +350,10 @@
 
     .select-icon {
         margin-right: 10px;
+    }
+
+    .routes{
+        display: flex;
+        justify-content: center;
     }
 </style>

@@ -24,7 +24,8 @@
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
 
-    let location = window.location.hash;
+    let location = window.location.pathname;
+
 
     export async function setVault() {
         let contractAddress = localStorage.getItem("vaultAddress")
@@ -60,6 +61,8 @@
         }
     ]
     onMount(async () => {
+        console.log(location)
+
         await setVault()
         await getEthersData()
 
@@ -68,7 +71,7 @@
             connectedAccount = await getMetamaskConnectedAccount()
             if (connectedAccount) {
                 account.set(connectedAccount)
-                navigateTo(location || '#', {replace: false})
+                navigate(location || '/', {replace: false})
             } else {
                 localStorage.removeItem('account')
             }
@@ -252,9 +255,9 @@
       <Link class="link" to="mint">Mint/Redeem</Link>
       <Link class="link" to="members">Members</Link>
       <Link class="link" to="roles">Roles</Link>
-<!--      <Link class="link" to="audits">Audits</Link>-->
+      <!--      <Link class="link" to="audits">Audits</Link>-->
       <Link class="link" to="asset-register">Asset Register</Link>
-<!--      <Link class="link" to="receipts">Receipt List</Link>-->
+      <!--      <Link class="link" to="receipts">Receipt List</Link>-->
       <Link class="link" to="certificates">Certification Dates</Link>
       <Link class="link" to="tokens">Tokens</Link>
     </div>
@@ -318,6 +321,7 @@
     :global(a) {
         color: #AE6E00;
     }
+
     :global(a):hover {
         color: #AE6E00;
         text-decoration: underline;

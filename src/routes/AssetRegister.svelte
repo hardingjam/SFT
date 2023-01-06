@@ -10,7 +10,7 @@
 
     beforeUpdate(async () => {
         if (!$auditHistory.id) {
-            let vaultAddress = await $vault.address
+            let vaultAddress = localStorage.getItem("vaultAddress")
             let data = await getSubgraphData($activeNetwork, {id: vaultAddress.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
             if (data) {
                 let temp = data.data.offchainAssetReceiptVault

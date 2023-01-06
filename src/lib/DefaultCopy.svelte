@@ -209,7 +209,7 @@
             if ($activeNetwork) {
                 let temp = res.data.offchainAssetReceiptVaults
                 tokens.set(temp)
-                let token = $tokens.find(t=>t.address === $vault.address)
+                let token = $tokens.find(t => t.address === $vault.address)
                 tokenName.set(token?.name)
             }
         })
@@ -240,46 +240,50 @@
     {/if}
 
   </div>
-<div class="display-flex">
-  <div class="app-navigation">
-    <div class="token" on:click={()=>{window.location.href = '/'}}>
-      <img src={icons.logo} alt="sft logo">
-      <div class="token-name">{$tokenName}</div>
-    </div>
-    <Link to="mint">Mint/Redeem</Link>
-    <Link to="members">Members</Link>
-    <Link to="roles">Roles</Link>
-    <Link to="audits">Audits</Link>
-    <Link to="receipts">Receipt List</Link>
-    <Link to="certificates">Certification Dates</Link>
-    <Link to="tokens">Tokens</Link>
-  </div>
-  <div class="routes">
-    <Route path="mint" component="{Mint}" ethersData={$ethersData}/>
-    <Route path="members" component="{Members}"/>
-    <Route path="roles" component="{Roles}"/>
-    <Route path="audits" component="{AssetRegister}"/>
-    <Route path="receipt/:id" component="{ReceiptAudit}"/>
-    <Route path="tokens" component="{Tokens}"/>
-    <Route path="/" component="{SetVault}"></Route>
-  </div>
-
-  {#if !$account}
-    <div>
-      <div class="invalid-network f-weight-700">
-        <label>To use the app:</label>
-        <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
-          {#if isMetamaskInstalled}
-            <span>Connect Metamask</span>
-          {/if}
-          {#if !isMetamaskInstalled}
-            <span>Install Metamask</span>
-          {/if}
-        </button>
+  <div class="display-flex">
+    <div class="app-navigation">
+      <div class="token">
+        <img src={icons.logo} alt="sft logo">
+        <div class="token-name">{$tokenName}</div>
       </div>
+      <div class="expand btn-hover">
+        <img src={icons.expand_double} alt="expand">
+      </div>
+      <Link class="link" to="mint">Mint/Redeem</Link>
+      <Link class="link" to="members">Members</Link>
+      <Link class="link" to="roles">Roles</Link>
+      <Link class="link" to="audits">Audits</Link>
+      <Link class="link" to="receipts">Receipt List</Link>
+      <Link class="link" to="certificates">Certification Dates</Link>
+      <Link class="link" to="tokens">Tokens</Link>
     </div>
-  {/if}
-</div>
+    <div class="routes">
+      <Route path="mint" component="{Mint}" ethersData={$ethersData}/>
+      <Route path="members" component="{Members}"/>
+      <Route path="roles" component="{Roles}"/>
+      <Route path="audits" component="{AssetRegister}"/>
+      <Route path="receipt/:id" component="{ReceiptAudit}"/>
+      <Route path="receipts" component="{ReceiptAudit}"/>
+      <Route path="tokens" component="{Tokens}"/>
+      <Route path="/" component="{SetVault}"></Route>
+    </div>
+
+    {#if !$account}
+      <div>
+        <div class="invalid-network f-weight-700">
+          <label>To use the app:</label>
+          <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
+            {#if isMetamaskInstalled}
+              <span>Connect Metamask</span>
+            {/if}
+            {#if !isMetamaskInstalled}
+              <span>Install Metamask</span>
+            {/if}
+          </button>
+        </div>
+      </div>
+    {/if}
+  </div>
 
 
 </Router>
@@ -287,6 +291,7 @@
 <style>
 
     .app-navigation {
+        position: relative;
         margin-top: 77px;
         background: #FFFFFF;
         flex-direction: column;
@@ -295,7 +300,7 @@
         height: calc(100vh - 130px);
         padding: 0 25px;
         color: #AE6E00;
-        border-radius:  0 20px 0 0 ;
+        border-radius: 0 20px 0 0;
         line-height: 40px;
         font-weight: 700;
         font-size: 16px;
@@ -303,8 +308,13 @@
         /*transform: matrix(-1, 0, 0, 1, 0, 0);   */
     }
 
-    .app-navigation a{
-        color: red;
+
+    .link > :global(a) {
+        text-decoration: none;
+    }
+
+    :global(a) {
+        color: #AE6E00;
     }
 
     .default-header {
@@ -327,21 +337,22 @@
         height: 37px;
     }
 
-    .token img{
+    .token img {
         width: 88px;
         height: 88px;
         margin-top: -39px;
-        border:6px solid #FFFFFF;
+        border: 6px solid #FFFFFF;
         border-radius: 50%;
     }
 
     .token-name {
         font-family: 'Mukta', sans-serif;
         font-style: normal;
-        font-weight: 600;
-        font-size: 18px;
+        font-weight: 700;
+        font-size: 16px;
         line-height: 27px;
         color: #575757;
+        margin-bottom: 25px;
     }
 
     .menu {
@@ -352,9 +363,15 @@
         margin-right: 10px;
     }
 
-    .routes{
+    .routes {
         display: flex;
         justify-content: center;
         width: calc(100% - 185px);
+    }
+
+    .expand {
+        right: 13px;
+        top: 1px;
+        position: absolute;
     }
 </style>

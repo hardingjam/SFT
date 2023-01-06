@@ -10,7 +10,7 @@
     import AssetRegister from "../routes/AssetRegister.svelte";
     import Roles from "../routes/Roles.svelte";
     import {icons} from "../scripts/assets.js";
-    import {account, activeNetwork, ethersData, tokens, vault} from "../scripts/store.js";
+    import {account, activeNetwork, ethersData, tokenName, tokens, vault} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import {getContract, getSubgraphData} from "../scripts/helpers.js";
@@ -21,7 +21,6 @@
 
     export let url = "";
     let connectedAccount;
-    let tokenName = '';
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
 
@@ -32,7 +31,6 @@
         let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider)
         if (contract) {
             vault.set(contract)
-            tokenName = await $vault.name()
         } else {
             navigate("/", {replace: false});
         }
@@ -211,6 +209,8 @@
             if ($activeNetwork) {
                 let temp = res.data.offchainAssetReceiptVaults
                 tokens.set(temp)
+                let token = $tokens.find(t=>t.address === $vault.address)
+                tokenName.set(token?.name)
             }
         })
     }
@@ -244,7 +244,7 @@
   <div class="app-navigation">
     <div class="token" on:click={()=>{window.location.href = '/'}}>
       <img src={icons.logo} alt="sft logo">
-      <div class="token-name">{tokenName}</div>
+      <div class="token-name">{$tokenName}</div>
     </div>
     <Link to="mint">Mint/Redeem</Link>
     <Link to="members">Members</Link>
@@ -355,5 +355,6 @@
     .routes{
         display: flex;
         justify-content: center;
+        width: calc(100% - 185px);
     }
 </style>

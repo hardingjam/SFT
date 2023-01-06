@@ -252,7 +252,8 @@
       <Link class="link" to="mint">Mint/Redeem</Link>
       <Link class="link" to="members">Members</Link>
       <Link class="link" to="roles">Roles</Link>
-      <Link class="link" to="audits">Audits</Link>
+<!--      <Link class="link" to="audits">Audits</Link>-->
+      <Link class="link" to="asset-register">Asset Register</Link>
       <Link class="link" to="receipts">Receipt List</Link>
       <Link class="link" to="certificates">Certification Dates</Link>
       <Link class="link" to="tokens">Tokens</Link>
@@ -262,6 +263,7 @@
       <Route path="members" component="{Members}"/>
       <Route path="roles" component="{Roles}"/>
       <Route path="audits" component="{AssetRegister}"/>
+      <Route path="asset-register" component="{AssetRegister}"/>
       <Route path="receipt/:id" component="{ReceiptAudit}"/>
       <Route path="receipts" component="{ReceiptAudit}"/>
       <Route path="tokens" component="{Tokens}"/>
@@ -315,6 +317,10 @@
 
     :global(a) {
         color: #AE6E00;
+    }
+    :global(a):hover {
+        color: #AE6E00;
+        text-decoration: underline;
     }
 
     .default-header {

@@ -302,10 +302,7 @@ button:focus, button:focus-visible {
 }
 
 .tb-row:hover {
-    background: #625e91;
-    color: #ffffff;
     cursor: pointer;
-    opacity: 0.7;
 }
 
 .right {

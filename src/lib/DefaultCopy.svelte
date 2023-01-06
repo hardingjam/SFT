@@ -254,7 +254,7 @@
       <Link class="link" to="roles">Roles</Link>
 <!--      <Link class="link" to="audits">Audits</Link>-->
       <Link class="link" to="asset-register">Asset Register</Link>
-      <Link class="link" to="receipts">Receipt List</Link>
+<!--      <Link class="link" to="receipts">Receipt List</Link>-->
       <Link class="link" to="certificates">Certification Dates</Link>
       <Link class="link" to="tokens">Tokens</Link>
     </div>

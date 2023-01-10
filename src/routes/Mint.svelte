@@ -12,6 +12,7 @@
     import {getIpfsGetWay, hasRole, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
+    import {beforeUpdate} from "svelte";
 
     let image = {}
 
@@ -58,6 +59,10 @@
     let amount;
     let shouldDisable = !schemas.length
 
+    beforeUpdate(() => {
+        fileDropped.set('')
+    })
+
     async function mint() {
         try {
             error = ""
@@ -77,6 +82,7 @@
                     ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
                 await tx.wait();
                 amount = 0;
+                fileDropped.set('')
             } else {
                 error = hasRoleDepositor.error
             }
@@ -92,20 +98,10 @@
         error = ""
         uploadBtnLoading.set(true)
         let formData = new FormData();
-        // if we're pinning metadata (objets)
-        // if (data instanceof Array) {
-        //     data = data
-        //     for (const [i, d] of data.entries()) {
-        //         const blob = new Blob([JSON.stringify(d, null, 2)], {type: 'application/json'});
-        //         formData.append(`file`, blob, `dir/${i}.json`);
-        //     }
-        // }
-        // or we're pinning the media file
-        // else {
-        formData.append('file', data)
-        // }
 
-        const requestArr = IPFS_APIS.map((url, i) => {
+        formData.append('file', data)
+
+        const requestArr = IPFS_APIS.map((url) => {
             return axios.request({
                 url,
                 method: 'post',
@@ -137,8 +133,7 @@
             error = "Something went wrong"
         }
         uploadBtnLoading.set(false)
-
-        return respAll?.data
+        return resolvedPromise?.value.data
     };
 
     $: ($fileDropped && $fileDropped.size) && upload($fileDropped, "file");

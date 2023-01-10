@@ -13,6 +13,7 @@
     import axios from "axios";
     import {icons} from "../scripts/assets.js";
     import {ethers} from "ethers";
+    import {IPFS_GETWAY} from "../scripts/consts.js";
 
     export let receipt = {}
     let receiptBalance = null
@@ -43,6 +44,13 @@
                 if (res) {
                     receiptInformations = res.data
                     displayInformation = Object.keys(receiptInformations).map(prop => {
+                        //bad solution
+                        if (prop === "pie_certificate") {
+                            return {
+                                label: toSentenceCase(prop),
+                                value: `${IPFS_GETWAY}/${receiptInformations[prop]} `
+                            }
+                        }
                         return {
                             label: toSentenceCase(prop),
                             value: receiptInformations[prop]

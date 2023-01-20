@@ -9,14 +9,12 @@
     import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
     import SftLoader from "../components/SftLoader.svelte";
-    import {icons} from "../scripts/assets.js";
 
     let name = "";
     let admin_ledger = "";
     let symbol = "";
     let url = "";
     let loading = false;
-    let showSuccess = false
     let error = ''
 
     export let ethersData;
@@ -35,11 +33,8 @@
     //     await getSgData(contract.address)
     //     console.log($vault.address)
     //     localStorage.setItem('vaultAddress', $vault.address)
+    //     navigateTo("#sft-create-success", {replace: false});
     // }
-
-    function goToRoles() {
-        navigateTo("#roles", {replace: false});
-    }
 
     async function createToken() {
         error = ""
@@ -100,8 +95,7 @@
             //wait for sg data
             await getSgData(newVault.address)
 
-            showSuccess = true;
-
+            navigateTo("#sft-create-success", {replace: false});
         } catch (er) {
             console.log(er)
             console.log(er.message)
@@ -115,7 +109,7 @@
         getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
             if (res && res.data) {
                 data.set(res.data)
-                roles.set($data.offchainAssetReceiptVault.roles)
+                roles.set(res.data.offchainAssetReceiptVault.roles)
 
                 let rolesFiltered = $roles.map(role => {
                     let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
@@ -133,39 +127,24 @@
 </script>
 {#if !loading}
   <div class="sft-setup-container">
-    <label class="title f-weight-700">{!showSuccess ? 'SFT Setup' : ""}</label>
-    {#if !showSuccess}
-      <div class="form-box">
-        <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
-        </div>
-        <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
-                                                                                                   bind:value={admin_ledger}>
-        </div>
-        <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
-                                                                                            bind:value={symbol}>
-        </div>
-        <div class="space-between"><label class="f-weight-700">URL:</label> <input type="text" bind:value={url}></div>
+    <label class="title f-weight-700">SFT Setup</label>
+    <div class="form-box">
+      <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
       </div>
-    {/if}
-    {#if showSuccess}
-      <div class="success-container form-box">
-        <span class="success">Your SFT Setup was successful!</span>
-        <img src="{icons.success_circle}" alt="sft success"/>
+      <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
+                                                                                                 bind:value={admin_ledger}>
       </div>
-    {/if}
+      <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
+                                                                                          bind:value={symbol}>
+      </div>
+      <div class="space-between"><label class="f-weight-700">URL:</label> <input type="text" bind:value={url}></div>
+    </div>
     <div class="form-after">
       <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
       <div class="error">{error}</div>
-      {#if !showSuccess}
-        <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url}
-                on:click={() => createToken()}>Create SFT
-        </button>
-      {/if}
-      {#if showSuccess}
-        <button class="create-token btn-solid btn-submit"
-                on:click={() => goToRoles()}>Ok, take me to Roles
-        </button>
-      {/if}
+      <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url}
+              on:click={() => createToken()}>Create SFT
+      </button>
     </div>
   </div>
 {/if}
@@ -255,13 +234,6 @@
         justify-content: center;
         /*background: #000000;*/
         /*opacity: 0.4;*/
-    }
-
-    .success-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-direction: column;
     }
 
     .error {

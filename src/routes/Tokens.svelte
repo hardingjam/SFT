@@ -59,7 +59,7 @@
 <style>
     .tokens {
         overflow: auto;
-        height: calc(100vh - 340px);
+        /*height: calc(100vh - 340px);*/
         text-align: left;
         width: 100%;
         min-width: 435px;

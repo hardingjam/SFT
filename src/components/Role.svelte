@@ -4,6 +4,7 @@
     export let name;
     export let admin;
     import {icons} from '../scripts/assets.js'
+    import {formatAddress} from "../scripts/helpers.js";
 
     let account = '';
 
@@ -48,7 +49,7 @@
       {#if roleHolders.length}
         {#each roleHolders as roleHolder}
           <div>
-            {roleHolder.account.address.replace(/(.{7}).*/, "$1…")}
+            {formatAddress(roleHolder.account.address)}
             <img class="btn-hover action-icon" src={icons.show} alt="show" on:click={()=>showAddress(roleHolder.account.address)}/>
             <img class="btn-hover action-icon" src={icons.delete_icon} on:click={()=>revokeRole(name,roleHolder.account.address)}
                  alt="delete"/>

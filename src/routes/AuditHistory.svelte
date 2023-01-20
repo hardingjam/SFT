@@ -127,7 +127,6 @@
         width: 678px;
         min-height: 530px;
         position: relative;
-
     }
 
     table {
@@ -170,16 +169,20 @@
 
     .certify-date-input {
         margin-right: 5px;
-        width: 110px;
+        width: 130px;
         border: none;
         box-sizing: border-box;
         outline: 0;
-        padding: .75rem;
         position: relative;
+        text-align: center;
     }
 
     .until {
         color: #F11717;;
+    }
+
+    .default-input {
+        padding-left: 0;
     }
 
     input[type="date"]::-webkit-calendar-picker-indicator {

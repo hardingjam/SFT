@@ -28,6 +28,7 @@ body {
     min-height: 100vh;
     background: rgb(181,220,255);
     background: linear-gradient(0deg, #b5dcff 0%, #6f5ea1 100%);
+    background-attachment:fixed;
 }
 
 #app {

@@ -508,6 +508,7 @@
     justify-content: center;
     align-items: center;
     padding-bottom: 40px;
+    padding-top: 10px;
     font-family: 'Inter', sans-serif;
   }
 
@@ -520,7 +521,9 @@
   }
 
   .content {
-    height: 100vh;
+    //height: 100vh;
+    height: fit-content;
+    min-height: 100vh;
   }
 
 </style>

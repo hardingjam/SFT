@@ -12,7 +12,6 @@
     import {QUERY} from "../scripts/queries.js";
     import {beforeUpdate, onMount} from "svelte";
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {navigateTo} from "yrv";
     import SftLoader from "../components/SftLoader.svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
@@ -164,7 +163,8 @@
 
     .roles-data {
         overflow: auto;
-        height: calc(100vh - 515px);
+        /*height: calc(100vh - 515px);*/
+        height: fit-content;
         display: flex;
         width: 100%;
         justify-content: space-between;

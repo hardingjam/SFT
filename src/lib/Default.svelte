@@ -10,7 +10,7 @@
     import {icons} from '../scripts/assets.js'
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import {getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {formatAddress, getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
@@ -304,7 +304,7 @@
                                                        alt={$activeNetwork?.displayName}/></span>
           </Select>
           <Select className={'meinMenu'} options={accountMenuOptions}
-                  label={$account.replace(/(.{6}).*(.{4})/, "$1…$2")}
+                  label={formatAddress($account)}
                   staticLabel={true} dropDownClass={'nav-dropdown'}>
           </Select>
 

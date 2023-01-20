@@ -18,6 +18,7 @@
     import NewSchema from "../routes/NewSchema.svelte";
     import SetVault from "../routes/SetVault.svelte";
     import ReceiptAudit from "../routes/ReceiptAudit.svelte";
+    import SftCreateSuccess from "../routes/SftCreateSuccess.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -346,6 +347,7 @@
           <Route path="#set-vault" component={SetVault}/>
           <Route path="#new-schema" component={NewSchema}/>
           <Route path="#receipt/:id" component={ReceiptAudit}/>
+          <Route path="#sft-create-success" component={SftCreateSuccess}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -509,7 +511,7 @@
     font-family: 'Inter', sans-serif;
   }
 
-  .powered-by{
+  .powered-by {
     width: 320px;
     display: flex;
     text-align: center;

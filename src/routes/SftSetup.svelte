@@ -13,7 +13,6 @@
     let name = "";
     let admin_ledger = "";
     let symbol = "";
-    let url = "";
     let loading = false;
     let error = ''
 
@@ -53,8 +52,9 @@
             },
         };
 
+        //should be removed after contract update
         const receiptConfig = {
-            uri: url,
+            uri: "",
         };
         let offChainAssetVaultTx;
         try {
@@ -82,7 +82,6 @@
             name = null;
             admin_ledger = null;
             symbol = null;
-            url = null;
 
             console.log(
                 "vault deployed to:",
@@ -137,12 +136,11 @@
       <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
                                                                                           bind:value={symbol}>
       </div>
-      <div class="space-between"><label class="f-weight-700">URL:</label> <input type="text" bind:value={url}></div>
     </div>
     <div class="form-after">
       <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
       <div class="error">{error}</div>
-      <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol || !url}
+      <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol}
               on:click={() => createToken()}>Create SFT
       </button>
     </div>
@@ -178,7 +176,6 @@
     .form-box {
         box-sizing: border-box;
         width: 577px;
-        height: 191px;
         border: 1px solid #D2D2D2;
         border-radius: 10px;
         padding: 28px;

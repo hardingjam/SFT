@@ -6,7 +6,7 @@
     import {getEventArgs, getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
-    import {formatDate} from "../scripts/helpers";
+    import {formatAddress, formatDate} from "../scripts/helpers";
 
     let error = ''
     let certifyUntil = formatDate(new Date())
@@ -14,15 +14,15 @@
     let receipts = []
 
     beforeUpdate(async () => {
-        if (!$auditHistory.id) {
+        if (!$auditHistory?.id) {
             let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
             if (data) {
                 let temp = data.data.offchainAssetReceiptVault
                 auditHistory.set(temp)
             } else return {}
         }
-        certifyData = $auditHistory?.certifications
-        receipts = $auditHistory?.deposits
+        certifyData = $auditHistory?.certifications || []
+        receipts = $auditHistory?.deposits || []
     })
 
 
@@ -99,7 +99,7 @@
             <tr>
               <td>{ethers.utils.formatUnits($auditHistory?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
-              <td>{cert?.certifier.address.replace(/(.{9}).*/, "$1…")}</td>
+              <td>{formatAddress(cert?.certifier.address)}</td>
               <td class="until">{timeStampToDate(cert?.certifiedUntil)}</td>
             </tr>
           {/each}
@@ -127,7 +127,6 @@
         width: 678px;
         min-height: 530px;
         position: relative;
-
     }
 
     table {
@@ -170,16 +169,20 @@
 
     .certify-date-input {
         margin-right: 5px;
-        width: 110px;
+        width: 130px;
         border: none;
         box-sizing: border-box;
         outline: 0;
-        padding: .75rem;
         position: relative;
+        text-align: center;
     }
 
     .until {
         color: #F11717;;
+    }
+
+    .default-input {
+        padding-left: 0;
     }
 
     input[type="date"]::-webkit-calendar-picker-indicator {

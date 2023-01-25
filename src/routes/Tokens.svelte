@@ -36,14 +36,12 @@
         <tr class="f-weight-700">
           <th>Name</th>
           <th>Symbol</th>
-          <th>URL</th>
         </tr>
         {#if ($tokens.length)}
           {#each $tokens as token }
             <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
               <td>{token.name}</td>
               <td>{token.symbol}</td>
-              <td>{token.uri || ''}</td>
             </tr>
           {/each}
         {/if}
@@ -59,7 +57,7 @@
 <style>
     .tokens {
         overflow: auto;
-        height: calc(100vh - 340px);
+        /*height: calc(100vh - 340px);*/
         text-align: left;
         width: 100%;
         min-width: 435px;

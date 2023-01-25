@@ -10,7 +10,7 @@
     import {icons} from '../scripts/assets.js'
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import {getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {formatAddress, getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
@@ -18,6 +18,7 @@
     import NewSchema from "../routes/NewSchema.svelte";
     import SetVault from "../routes/SetVault.svelte";
     import ReceiptAudit from "../routes/ReceiptAudit.svelte";
+    import SftCreateSuccess from "../routes/SftCreateSuccess.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -303,7 +304,7 @@
                                                        alt={$activeNetwork?.displayName}/></span>
           </Select>
           <Select className={'meinMenu'} options={accountMenuOptions}
-                  label={$account.replace(/(.{6}).*(.{4})/, "$1…$2")}
+                  label={formatAddress($account)}
                   staticLabel={true} dropDownClass={'nav-dropdown'}>
           </Select>
 
@@ -346,6 +347,7 @@
           <Route path="#set-vault" component={SetVault}/>
           <Route path="#new-schema" component={NewSchema}/>
           <Route path="#receipt/:id" component={ReceiptAudit}/>
+          <Route path="#sft-create-success" component={SftCreateSuccess}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -506,10 +508,11 @@
     justify-content: center;
     align-items: center;
     padding-bottom: 40px;
+    padding-top: 190px;
     font-family: 'Inter', sans-serif;
   }
 
-  .powered-by{
+  .powered-by {
     width: 320px;
     display: flex;
     text-align: center;
@@ -518,7 +521,7 @@
   }
 
   .content {
-    height: 100vh;
+    height: fit-content;
   }
 
 </style>

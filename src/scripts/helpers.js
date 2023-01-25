@@ -220,3 +220,10 @@ export async function getIpfsGetWay(hash) {
         return err
     }
 }
+
+export function formatAddress(address) {
+    if (address) {
+        return address.replace(/(.{6}).*(.{5})/, "$1…$2")
+    } else
+        return ''
+}

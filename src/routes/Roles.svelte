@@ -12,7 +12,6 @@
     import {QUERY} from "../scripts/queries.js";
     import {beforeUpdate, onMount} from "svelte";
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {navigateTo} from "yrv";
     import SftLoader from "../components/SftLoader.svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
@@ -75,7 +74,7 @@
             loading = true
             if (res && res.data) {
                 data.set(res.data)
-                roles.set($data.offchainAssetReceiptVault.roles)
+                roles.set(res.data.offchainAssetReceiptVault?.roles || [])
                 let rolesFiltered = $roles.map(role => {
                     let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
                     let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
@@ -164,7 +163,8 @@
 
     .roles-data {
         overflow: auto;
-        height: calc(100vh - 515px);
+        /*height: calc(100vh - 515px);*/
+        height: fit-content;
         display: flex;
         width: 100%;
         justify-content: space-between;

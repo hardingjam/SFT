@@ -103,7 +103,7 @@
         getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
             if (res && res.data) {
                 data.set(res.data)
-                roles.set(res.data.offchainAssetReceiptVault.roles)
+                roles.set(res.data.offchainAssetReceiptVault?.roles)
 
                 let rolesFiltered = $roles.map(role => {
                     let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)

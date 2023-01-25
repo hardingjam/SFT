@@ -74,7 +74,7 @@
             loading = true
             if (res && res.data) {
                 data.set(res.data)
-                roles.set($data.offchainAssetReceiptVault.roles)
+                roles.set(res.data.offchainAssetReceiptVault?.roles || [])
                 let rolesFiltered = $roles.map(role => {
                     let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
                     let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)

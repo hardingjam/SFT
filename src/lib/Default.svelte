@@ -169,6 +169,7 @@
     });
 
     async function networkChanged() {
+        localStorage.removeItem("vaultAddress")
         await setNetwork()
         await getTokens()
     }

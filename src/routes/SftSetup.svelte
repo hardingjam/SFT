@@ -222,15 +222,9 @@
     .loader {
         width: 100%;
         height: 100%;
-        z-index: 10;
-        top: 0;
-        left: 0;
-        position: fixed;
         display: flex;
         align-items: center;
         justify-content: center;
-        /*background: #000000;*/
-        /*opacity: 0.4;*/
     }
 
     .error {

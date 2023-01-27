@@ -88,7 +88,8 @@
             }
 
         } catch (er) {
-            error = er.reason || er.message || er
+            error = "Something Went Wrong"
+            console.log(er.reason || er.message || er)
         }
         shouldDisable = false;
     }

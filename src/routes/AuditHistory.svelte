@@ -14,12 +14,14 @@
     let receipts = []
 
     beforeUpdate(async () => {
-        if (!$auditHistory?.id) {
-            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-            if (data) {
-                let temp = data.data.offchainAssetReceiptVault
-                auditHistory.set(temp)
-            } else return {}
+        if ($vault.address) {
+            if (!$auditHistory?.id) {
+                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                if (data) {
+                    let temp = data.data.offchainAssetReceiptVault
+                    auditHistory.set(temp)
+                } else return {}
+            }
         }
         certifyData = $auditHistory?.certifications || []
         receipts = $auditHistory?.deposits || []

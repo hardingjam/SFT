@@ -52,14 +52,9 @@
             },
         };
 
-        //should be removed after contract update
-        const receiptConfig = {
-            uri: "",
-        };
         let offChainAssetVaultTx;
         try {
             offChainAssetVaultTx = await factoryContract.createChildTyped(
-                receiptConfig,
                 constructionConfig
             )
             if (offChainAssetVaultTx.hash) {
@@ -108,7 +103,7 @@
         getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
             if (res && res.data) {
                 data.set(res.data)
-                roles.set(res.data.offchainAssetReceiptVault.roles)
+                roles.set(res.data.offchainAssetReceiptVault?.roles)
 
                 let rolesFiltered = $roles.map(role => {
                     let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
@@ -124,6 +119,7 @@
     }
 
 </script>
+<div>
 {#if !loading}
   <div class="sft-setup-container">
     <label class="title f-weight-700">SFT Setup</label>
@@ -151,6 +147,7 @@
     <SftLoader></SftLoader>
   </div>
 {/if}
+</div>
 <style>
     .sft-setup-container {
         max-width: 599px;

@@ -32,7 +32,7 @@
     router.subscribe(async e => {
         if (!e.initial) {
             await setVault()
-            if ($vault.address) {
+            if ($vault?.address) {
                 tokenName = await $vault.name()
             }
             location = e.path
@@ -52,6 +52,8 @@
         if (contract) {
             vault.set(contract)
         } else {
+            vault.set({})
+            location = "#set-vault"
             navigateTo("#set-vault", {replace: false})
         }
     }
@@ -169,6 +171,7 @@
     });
 
     async function networkChanged() {
+        localStorage.setItem("vaultAddress", "")
         await setNetwork()
         await getTokens()
     }
@@ -230,8 +233,8 @@
             }
             // handle other "switch" errors
         }
-
-        activeNetwork.set(activeNet)
+        await networkChanged()
+        // activeNetwork.set(activeNet)
     }
 
     async function connect() {

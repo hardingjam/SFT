@@ -9,7 +9,7 @@ const networks = [
         rpcUrl: "https://polygon-rpc.com",
         icon: 'polygon',
         factory_address: '0xE9eB36Ceeea68fCBfc0B3723bD6B4966C12E35Eb',
-        subgraph_url: "https://api.thegraph.com/subgraphs/name/gild-lab/offchainassetvault"
+        subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-polygon"
     },
     {
         id: 80001,
@@ -21,7 +21,7 @@ const networks = [
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
         icon: 'polygon',
         factory_address: '0x893B08Fcc6958b7594730Ce5140A92644301d4b8',
-        subgraph_url: "https://api.thegraph.com/subgraphs/name/gild-lab/offchainassetvault"
+        subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
     },
     // {
     //     id: 4,

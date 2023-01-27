@@ -57,7 +57,7 @@
 <style>
     .tokens {
         overflow: auto;
-        /*height: calc(100vh - 340px);*/
+        min-height: 200px;
         text-align: left;
         width: 100%;
         min-width: 435px;

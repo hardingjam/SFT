@@ -48,13 +48,11 @@
 
     export async function setVault() {
         let contractAddress = localStorage.getItem("vaultAddress")
-        if(contractAddress){
-            let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider)
-            if (contract) {
-                vault.set(contract)
-            }
-        }
-         else {
+        let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider)
+        if (contract) {
+            vault.set(contract)
+        } else {
+            vault.set({})
             location = "#set-vault"
             navigateTo("#set-vault", {replace: false})
         }
@@ -173,7 +171,7 @@
     });
 
     async function networkChanged() {
-        localStorage.removeItem("vaultAddress")
+        localStorage.setItem("vaultAddress", "")
         await setNetwork()
         await getTokens()
     }

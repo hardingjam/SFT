@@ -58,6 +58,9 @@
 
     let amount;
     let shouldDisable = !schemas.length
+    let showAuth = false;
+    let userName = "";
+    let password = ""
 
     beforeUpdate(() => {
         fileDropped.set('')
@@ -96,6 +99,7 @@
 
 
     const upload = async (data, type) => {
+        showAuth = true;
         error = ""
         uploadBtnLoading.set(true)
         let formData = new FormData();
@@ -143,7 +147,9 @@
     function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
     }
+
     let certificateUrl = ''
+
     async function getCertificateUrl() {
         certificateUrl = await getIpfsGetWay($fileHash)
     }
@@ -171,6 +177,10 @@
         return response
     }
 
+    function acceptCredentials() {
+        showAuth = false;
+    }
+
 </script>
 
 <div class="mint-container">
@@ -182,62 +192,78 @@
       Audit History
     </button>
   </div>
+  {#if (!showAuth)}
 
-  <MintInput bind:amount={amount} amountLabel={"Mint Amount"} label={"Options"}/>
-  <div class="audit-info-container basic-frame-parent">
-    <div class="audit-info basic-frame">
-      {#if schemas.length}
-        <div class="schema">
-          <div class="schema-dropdown row">
-            <label class="f-weight-700 custom-col col-2">Schema:</label>
-            <Select options={schemas}
+    <MintInput bind:amount={amount} amountLabel={"Mint Amount"} label={"Options"}/>
+    <div class="audit-info-container basic-frame-parent">
+      <div class="audit-info basic-frame">
+        {#if schemas.length}
+          <div class="schema">
+            <div class="schema-dropdown row">
+              <label class="f-weight-700 custom-col col-2">Schema:</label>
+              <Select options={schemas}
 
-                    on:select={handleSchemaSelect}
-                    label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+                      on:select={handleSchemaSelect}
+                      label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+
+            </div>
+            {#if selectedSchema?.displayName}
+              <span class="title f-weight-700">Asset info.</span>
+
+              <SchemaForm schema={selectedSchema.schema}></SchemaForm>
+              {#if $fileHash}
+                <div class="file-uploaded">
+                  <span class="file-load-success">Pie Certificate loaded successfully</span>
+                  <div class="link-to-file">
+                    <span>To Link</span>
+                    <a href={certificateUrl} target="_blank">
+                      <img src="{icons.show}" alt="view file" class="btn-hover">
+                    </a>
+                    <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
+                  </div>
+                </div>
+              {/if}
+              {#if $uploadBtnLoading}
+                <div class="sf-upload-spinner">
+                  <SftLoader width="50"></SftLoader>
+                </div>
+              {/if}
+            {/if}
 
           </div>
-          {#if selectedSchema?.displayName}
-            <span class="title f-weight-700">Asset info.</span>
+        {/if}
+        {#if !schemas.length}
+          <div class="empty-schemas">
+            <span>Please create a new schema to mint </span>
+            <button class="default-btn" on:click={()=>{navigateTo("#new-schema")}}>New Schema</button>
+          </div>
+        {/if}
 
-            <SchemaForm schema={selectedSchema.schema}></SchemaForm>
-            {#if $fileHash}
-              <div class="file-uploaded">
-                <span class="file-load-success">Pie Certificate loaded successfully</span>
-                <div class="link-to-file">
-                  <span>To Link</span>
-                  <a href={certificateUrl} target="_blank">
-                    <img src="{icons.show}" alt="view file" class="btn-hover">
-                  </a>
-                  <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
-                </div>
-              </div>
-            {/if}
-            {#if $uploadBtnLoading}
-              <div class="sf-upload-spinner">
-                <SftLoader width="50"></SftLoader>
-              </div>
-            {/if}
-          {/if}
-
-        </div>
-      {/if}
-      {#if !schemas.length}
-        <div class="empty-schemas">
-          <span>Please create a new schema to mint </span>
-          <button class="default-btn" on:click={()=>{navigateTo("#new-schema")}}>New Schema</button>
-        </div>
-      {/if}
+      </div>
 
     </div>
-  </div>
 
-  <div class="error">{error}</div>
-  <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
-    (FT)
-  </div>
-  <button class="mint-btn btn-solid" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
-    Options
-  </button>
+    <div class="error">{error}</div>
+    <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
+      (FT)
+    </div>
+    <button class="mint-btn btn-solid" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
+      Options
+    </button>
+  {/if}
+  {#if showAuth}
+    <div class="auth">
+      <div class="display-flex space-between">
+        <label>Username:</label>
+        <input class="default-input" type="text" bind:value={userName} autofocus/>
+      </div>
+      <div class="display-flex space-between">
+        <label>Password:</label>
+        <input class="default-input" type="password" bind:value={password}/>
+      </div>
+      <button class="default-btn" on:click={() => acceptCredentials()}>OK</button>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -304,6 +330,21 @@
 
     .custom-col {
         margin-right: 25px;
+    }
+
+    .auth {
+        background: #FFFFFF;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        padding: 40px;
+        width: calc(100% - 80px);
+    }
+
+    .default-input {
+        width: 250px;
     }
 </style>
 

@@ -12,7 +12,7 @@
     import {getIpfsGetWay, hasRole, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
-    import {beforeUpdate} from "svelte";
+    import {beforeUpdate, onMount} from "svelte";
 
     let image = {}
 
@@ -58,6 +58,10 @@
 
     let amount;
     let shouldDisable = !schemas.length
+    let showAuth = false;
+    let username = "";
+    let password = "";
+    let promise;
 
     beforeUpdate(() => {
         fileDropped.set('')
@@ -66,23 +70,27 @@
     async function mint() {
         try {
             error = ""
+            if (!parseFloat(amount)) {
+                error = "Zero amount"
+                return;
+            }
             const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
             if (!hasRoleDepositor.error) {
                 let formResponse = await submitForm()
                 let shareRatio = ONE
                 const shares = ethers.utils.parseEther(amount.toString());
 
-                let dataBytes = []
+                let dataBytes = formResponse?.Hash ? toBytes(formResponse.Hash) : []
+
                 if (formResponse) {
-                    dataBytes = toBytes(formResponse.Hash)
+                    const tx = await $vault
+                        .connect(signer)
+                        ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
+                    await tx.wait();
+                    amount = 0;
+                    fileDropped.set('')
                 }
 
-                const tx = await $vault
-                    .connect(signer)
-                    ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
-                await tx.wait();
-                amount = 0;
-                fileDropped.set('')
             } else {
                 error = hasRoleDepositor.error
             }
@@ -96,8 +104,12 @@
 
 
     const upload = async (data, type) => {
+        showAuth = true;
         error = ""
         uploadBtnLoading.set(true)
+
+        await waitForCredentials()
+
         let formData = new FormData();
 
         formData.append('file', data)
@@ -105,6 +117,10 @@
         const requestArr = IPFS_APIS.map((url) => {
             return axios.request({
                 url,
+                auth: {
+                    username,
+                    password
+                },
                 method: 'post',
                 headers: {
                     "Content-Type": `multipart/form-data;`,
@@ -113,6 +129,7 @@
                 onUploadProgress: ((p) => {
                     console.log(`Uploading...  ${p.loaded} / ${p.total}`);
                 }),
+                withCredentials : true,
             })
         });
 
@@ -125,15 +142,16 @@
         })
 
         let resolvedPromise = respAll.find(r => r.status === "fulfilled")
-
         if (resolvedPromise) {
-            if (type === "file" && $fileDropped.size) {
+            if (type === "file" && data.size) {
                 fileHash.set(resolvedPromise.value.data.Hash)
             }
         } else {
             error = "Something went wrong"
         }
         uploadBtnLoading.set(false)
+        username = ""
+        password = ""
         return resolvedPromise?.value.data
     };
 
@@ -143,7 +161,9 @@
     function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
     }
+
     let certificateUrl = ''
+
     async function getCertificateUrl() {
         certificateUrl = await getIpfsGetWay($fileHash)
     }
@@ -161,14 +181,25 @@
         }
 
         let formFields = Object.keys(json)
-        let isFormAllEmpty = formFields.some(f => json[f] !== "")
-
-        let response;
-        if (isFormAllEmpty) {
+        let formNotEmpty = formFields.some(f => json[f] !== "")
+        let response = {};
+        if (formNotEmpty) {
             response = await upload(JSON.stringify(json), "data")
         }
 
         return response
+    }
+
+    async function waitForCredentials() {
+        const confirm = document.getElementById("ok-button")
+
+        promise = new Promise((resolve) => {
+            confirm.addEventListener('click', resolve)
+        })
+        return await promise.then(() => {
+                showAuth = false;
+            }
+        )
     }
 
 </script>
@@ -182,62 +213,78 @@
       Audit History
     </button>
   </div>
+  {#if (!showAuth)}
 
-  <MintInput bind:amount={amount} amountLabel={"Mint Amount"} label={"Options"}/>
-  <div class="audit-info-container basic-frame-parent">
-    <div class="audit-info basic-frame">
-      {#if schemas.length}
-        <div class="schema">
-          <div class="schema-dropdown row">
-            <label class="f-weight-700 custom-col col-2">Schema:</label>
-            <Select options={schemas}
+    <MintInput bind:amount={amount} amountLabel={"Mint Amount"} label={"Options"}/>
+    <div class="audit-info-container basic-frame-parent">
+      <div class="audit-info basic-frame">
+        {#if schemas.length}
+          <div class="schema">
+            <div class="schema-dropdown row">
+              <label class="f-weight-700 custom-col col-2">Schema:</label>
+              <Select options={schemas}
 
-                    on:select={handleSchemaSelect}
-                    label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+                      on:select={handleSchemaSelect}
+                      label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+
+            </div>
+            {#if selectedSchema?.displayName}
+              <span class="title f-weight-700">Asset info.</span>
+
+              <SchemaForm schema={selectedSchema.schema}></SchemaForm>
+              {#if $fileHash}
+                <div class="file-uploaded">
+                  <span class="file-load-success">Pie Certificate loaded successfully</span>
+                  <div class="link-to-file">
+                    <span>To Link</span>
+                    <a href={certificateUrl} target="_blank">
+                      <img src="{icons.show}" alt="view file" class="btn-hover">
+                    </a>
+                    <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
+                  </div>
+                </div>
+              {/if}
+              {#if $uploadBtnLoading}
+                <div class="sf-upload-spinner">
+                  <SftLoader width="50"></SftLoader>
+                </div>
+              {/if}
+            {/if}
 
           </div>
-          {#if selectedSchema?.displayName}
-            <span class="title f-weight-700">Asset info.</span>
+        {/if}
+        {#if !schemas.length}
+          <div class="empty-schemas">
+            <span>Please create a new schema to mint </span>
+            <button class="default-btn" on:click={()=>{navigateTo("#new-schema")}}>New Schema</button>
+          </div>
+        {/if}
 
-            <SchemaForm schema={selectedSchema.schema}></SchemaForm>
-            {#if $fileHash}
-              <div class="file-uploaded">
-                <span class="file-load-success">Pie Certificate loaded successfully</span>
-                <div class="link-to-file">
-                  <span>To Link</span>
-                  <a href={certificateUrl} target="_blank">
-                    <img src="{icons.show}" alt="view file" class="btn-hover">
-                  </a>
-                  <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
-                </div>
-              </div>
-            {/if}
-            {#if $uploadBtnLoading}
-              <div class="sf-upload-spinner">
-                <SftLoader width="50"></SftLoader>
-              </div>
-            {/if}
-          {/if}
-
-        </div>
-      {/if}
-      {#if !schemas.length}
-        <div class="empty-schemas">
-          <span>Please create a new schema to mint </span>
-          <button class="default-btn" on:click={()=>{navigateTo("#new-schema")}}>New Schema</button>
-        </div>
-      {/if}
+      </div>
 
     </div>
-  </div>
 
-  <div class="error">{error}</div>
-  <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
-    (FT)
+    <div class="error">{error}</div>
+    <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
+      (FT)
+    </div>
+    <button class="mint-btn btn-solid" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
+      Options
+    </button>
+  {/if}
+  <!--{#if showAuth}-->
+  <div class={showAuth  ? 'auth show' : 'auth hide'}>
+    <div class="display-flex space-between">
+      <label>Username:</label>
+      <input class="default-input" type="text" bind:value={username} autofocus/>
+    </div>
+    <div class="display-flex space-between">
+      <label>Password:</label>
+      <input class="default-input" type="password" bind:value={password}/>
+    </div>
+    <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
   </div>
-  <button class="mint-btn btn-solid" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
-    Options
-  </button>
+  <!--{/if}-->
 </div>
 
 <style>
@@ -305,5 +352,29 @@
     .custom-col {
         margin-right: 25px;
     }
+
+    .auth {
+        background: #FFFFFF;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        padding: 40px;
+        width: calc(100% - 80px);
+    }
+
+    .default-input {
+        width: 250px;
+    }
+
+    .show {
+        display: flex;
+    }
+
+    .hide {
+        display: none;
+    }
+
 </style>
 

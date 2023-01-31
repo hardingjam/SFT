@@ -12,7 +12,7 @@
     import {getIpfsGetWay, hasRole, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
-    import {beforeUpdate} from "svelte";
+    import {beforeUpdate, onMount} from "svelte";
 
     let image = {}
 
@@ -59,33 +59,46 @@
     let amount;
     let shouldDisable = !schemas.length
     let showAuth = false;
-    let userName = "";
-    let password = ""
+    let username = "";
+    let password = "";
+    let promise;
 
     beforeUpdate(() => {
         fileDropped.set('')
     })
 
+    onMount(() => {
+        const confirm = document.getElementById("ok-button")
+
+        promise = new Promise((resolve) => {
+            confirm.addEventListener('click', resolve)
+        })
+    })
+
     async function mint() {
         try {
             error = ""
+            if (!parseFloat(amount)) {
+                error = "Zero amount"
+                return;
+            }
             const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
             if (!hasRoleDepositor.error) {
                 let formResponse = await submitForm()
                 let shareRatio = ONE
                 const shares = ethers.utils.parseEther(amount.toString());
 
-                let dataBytes = []
+                let dataBytes = formResponse?.Hash ? toBytes(formResponse.Hash) : []
+
                 if (formResponse) {
-                    dataBytes = toBytes(formResponse.Hash)
+                    const tx = await $vault
+                        .connect(signer)
+                        ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
+                    await tx.wait();
+                    amount = 0;
+                    fileDropped.set('')
                 }
 
-                const tx = await $vault
-                    .connect(signer)
-                    ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
-                await tx.wait();
-                amount = 0;
-                fileDropped.set('')
             } else {
                 error = hasRoleDepositor.error
             }
@@ -100,6 +113,9 @@
 
     const upload = async (data, type) => {
         showAuth = true;
+
+        let bla = await waitForCredentials()
+
         error = ""
         uploadBtnLoading.set(true)
         let formData = new FormData();
@@ -109,6 +125,10 @@
         const requestArr = IPFS_APIS.map((url) => {
             return axios.request({
                 url,
+                auth: {
+                    username,
+                    password
+                },
                 method: 'post',
                 headers: {
                     "Content-Type": `multipart/form-data;`,
@@ -129,7 +149,6 @@
         })
 
         let resolvedPromise = respAll.find(r => r.status === "fulfilled")
-
         if (resolvedPromise) {
             if (type === "file" && $fileDropped.size) {
                 fileHash.set(resolvedPromise.value.data.Hash)
@@ -167,18 +186,25 @@
         }
 
         let formFields = Object.keys(json)
-        let isFormAllEmpty = formFields.some(f => json[f] !== "")
-
-        let response;
-        if (isFormAllEmpty) {
+        let formNotEmpty = formFields.some(f => json[f] !== "")
+        let response = {};
+        if (formNotEmpty) {
             response = await upload(JSON.stringify(json), "data")
         }
 
         return response
     }
 
-    function acceptCredentials() {
+    function onConfirm() {
         showAuth = false;
+    }
+
+    async function waitForCredentials() {
+        return await promise
+            .then((ev) => {
+                onConfirm()
+                window.console.log(ev)
+            })
     }
 
 </script>
@@ -251,19 +277,19 @@
       Options
     </button>
   {/if}
-  {#if showAuth}
-    <div class="auth">
-      <div class="display-flex space-between">
-        <label>Username:</label>
-        <input class="default-input" type="text" bind:value={userName} autofocus/>
-      </div>
-      <div class="display-flex space-between">
-        <label>Password:</label>
-        <input class="default-input" type="password" bind:value={password}/>
-      </div>
-      <button class="default-btn" on:click={() => acceptCredentials()}>OK</button>
+  <!--{#if showAuth}-->
+  <div class={showAuth  ? 'auth show' : 'auth hide'}>
+    <div class="display-flex space-between">
+      <label>Username:</label>
+      <input class="default-input" type="text" bind:value={username} autofocus/>
     </div>
-  {/if}
+    <div class="display-flex space-between">
+      <label>Password:</label>
+      <input class="default-input" type="password" bind:value={password}/>
+    </div>
+    <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
+  </div>
+  <!--{/if}-->
 </div>
 
 <style>
@@ -346,5 +372,14 @@
     .default-input {
         width: 250px;
     }
+
+    .show {
+        display: flex;
+    }
+
+    .hide {
+        display: none;
+    }
+
 </style>
 

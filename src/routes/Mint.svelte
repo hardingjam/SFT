@@ -129,6 +129,7 @@
                 onUploadProgress: ((p) => {
                     console.log(`Uploading...  ${p.loaded} / ${p.total}`);
                 }),
+                withCredentials : true,
             })
         });
 

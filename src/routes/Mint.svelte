@@ -67,14 +67,6 @@
         fileDropped.set('')
     })
 
-    onMount(() => {
-        const confirm = document.getElementById("ok-button")
-
-        promise = new Promise((resolve) => {
-            confirm.addEventListener('click', resolve)
-        })
-    })
-
     async function mint() {
         try {
             error = ""
@@ -113,11 +105,11 @@
 
     const upload = async (data, type) => {
         showAuth = true;
-
-        let bla = await waitForCredentials()
-
         error = ""
         uploadBtnLoading.set(true)
+
+        await waitForCredentials()
+
         let formData = new FormData();
 
         formData.append('file', data)
@@ -150,13 +142,15 @@
 
         let resolvedPromise = respAll.find(r => r.status === "fulfilled")
         if (resolvedPromise) {
-            if (type === "file" && $fileDropped.size) {
+            if (type === "file" && data.size) {
                 fileHash.set(resolvedPromise.value.data.Hash)
             }
         } else {
             error = "Something went wrong"
         }
         uploadBtnLoading.set(false)
+        username = ""
+        password = ""
         return resolvedPromise?.value.data
     };
 
@@ -195,16 +189,16 @@
         return response
     }
 
-    function onConfirm() {
-        showAuth = false;
-    }
-
     async function waitForCredentials() {
-        return await promise
-            .then((ev) => {
-                onConfirm()
-                window.console.log(ev)
-            })
+        const confirm = document.getElementById("ok-button")
+
+        promise = new Promise((resolve) => {
+            confirm.addEventListener('click', resolve)
+        })
+        return await promise.then(() => {
+                showAuth = false;
+            }
+        )
     }
 
 </script>

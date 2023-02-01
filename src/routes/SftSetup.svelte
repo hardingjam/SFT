@@ -3,7 +3,6 @@
     import {ethers} from "ethers";
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
-    import {onMount} from "svelte";
     import {ADDRESS_ZERO, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
     import {QUERY} from "../scripts/queries.js";
     import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
@@ -19,12 +18,6 @@
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
     let factoryContract;
-
-    onMount(async () => {
-        if ($activeNetwork) {
-            factoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, contractFactoryAbi, signerOrProvider)
-        }
-    });
 
     // async function createToken() {
     //     let contract = await getContract($activeNetwork, TEST_CONTRACT_ADDRESS, contractAbi, signerOrProvider)
@@ -54,6 +47,8 @@
 
         let offChainAssetVaultTx;
         try {
+            factoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, contractFactoryAbi, signerOrProvider)
+
             offChainAssetVaultTx = await factoryContract.createChildTyped(
                 constructionConfig
             )

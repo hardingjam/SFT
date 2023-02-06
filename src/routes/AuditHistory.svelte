@@ -35,16 +35,14 @@
 
         const hasRoleCertifier = await hasRole($vault, $account, "CERTIFIER")
         const _referenceBlockNumber = await $ethersData.provider.getBlockNumber();
-
         if (!hasRoleCertifier.error) {
             await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
 
-            certifyData.push({
-                timestamp: new Date().getTime() / 1000,
-                certifier: {address: $account.address},
-                certifiedUntil: untilToTime / 1000
-            })
-
+            certifyData = [...certifyData, {
+                timestamp: Math.floor(new Date().getTime() / 1000),
+                certifier: {address: $account},
+                certifiedUntil: Math.floor(untilToTime / 1000)
+            }]
         } else {
             error = hasRoleCertifier.error
         }
@@ -107,7 +105,7 @@
       </div>
       <div class="certify-btn-container">
         <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
-        <button class="default-btn" on:click={()=>{certify()}}>Certify</button>
+        <button class="default-btn" on:click={() => certify()}>Certify</button>
       </div>
       <div class="error">
         {error}

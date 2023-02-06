@@ -1,9 +1,9 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
-    import {vault, auditHistory, activeNetwork, account, selectedReceipt} from "../scripts/store";
-    import {beforeUpdate, onMount} from "svelte";
-    import {getEventArgs, getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
+    import {vault, auditHistory, activeNetwork, account, selectedReceipt, ethersData} from "../scripts/store";
+    import {beforeUpdate} from "svelte";
+    import {getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatAddress, formatDate} from "../scripts/helpers";
@@ -30,22 +30,19 @@
 
     async function certify() {
         //Set date to the nearest Midnight in the future
-        certifyUntil = new Date(certifyUntil).setHours(23, 59, 59, 0);
-
-        let untilToTime = new Date(certifyUntil).getTime()
+        let untilToTime = new Date(certifyUntil).setHours(23, 59, 59, 0)
+        untilToTime = new Date(untilToTime).getTime()
 
         const hasRoleCertifier = await hasRole($vault, $account, "CERTIFIER")
+        const _referenceBlockNumber = await $ethersData.provider.getBlockNumber();
 
         if (!hasRoleCertifier.error) {
-            let {caller, until} = await getEventArgs(
-                await $vault.certify(untilToTime / 1000, [], false),
-                "Certify",
-                $vault
-            )
-            certifyData = certifyData.push({
+            await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
+
+            certifyData.push({
                 timestamp: new Date().getTime() / 1000,
-                certifier: {address: caller},
-                certifiedUntil: until
+                certifier: {address: $account.address},
+                certifiedUntil: untilToTime / 1000
             })
 
         } else {

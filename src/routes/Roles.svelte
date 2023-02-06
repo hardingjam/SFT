@@ -13,6 +13,7 @@
     import {beforeUpdate, onMount} from "svelte";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
+    import {ROLES} from "../scripts/consts.js";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let validAccount = true;
@@ -108,7 +109,7 @@
         <div class="row">
           <label class="f-weight-700 custom-col col-2">Role:</label>
           <div>
-            <Select options={$roles.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
+            <Select options={ROLES.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
 
                     on:select={handleRoleSelect}
                     label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>

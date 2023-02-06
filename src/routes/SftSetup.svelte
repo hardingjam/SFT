@@ -3,7 +3,6 @@
     import {ethers} from "ethers";
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
-    import {onMount} from "svelte";
     import {ADDRESS_ZERO, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
     import {QUERY} from "../scripts/queries.js";
     import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
@@ -19,12 +18,6 @@
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
     let factoryContract;
-
-    onMount(async () => {
-        if ($activeNetwork) {
-            factoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, contractFactoryAbi, signerOrProvider)
-        }
-    });
 
     // async function createToken() {
     //     let contract = await getContract($activeNetwork, TEST_CONTRACT_ADDRESS, contractAbi, signerOrProvider)
@@ -52,14 +45,11 @@
             },
         };
 
-        //should be removed after contract update
-        const receiptConfig = {
-            uri: "",
-        };
         let offChainAssetVaultTx;
         try {
+            factoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, contractFactoryAbi, signerOrProvider)
+
             offChainAssetVaultTx = await factoryContract.createChildTyped(
-                receiptConfig,
                 constructionConfig
             )
             if (offChainAssetVaultTx.hash) {
@@ -108,7 +98,7 @@
         getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
             if (res && res.data) {
                 data.set(res.data)
-                roles.set(res.data.offchainAssetReceiptVault.roles)
+                roles.set(res.data.offchainAssetReceiptVault?.roles)
 
                 let rolesFiltered = $roles.map(role => {
                     let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
@@ -124,6 +114,7 @@
     }
 
 </script>
+<div>
 {#if !loading}
   <div class="sft-setup-container">
     <label class="title f-weight-700">SFT Setup</label>
@@ -151,6 +142,7 @@
     <SftLoader></SftLoader>
   </div>
 {/if}
+</div>
 <style>
     .sft-setup-container {
         max-width: 599px;
@@ -222,15 +214,9 @@
     .loader {
         width: 100%;
         height: 100%;
-        z-index: 10;
-        top: 0;
-        left: 0;
-        position: fixed;
         display: flex;
         align-items: center;
         justify-content: center;
-        /*background: #000000;*/
-        /*opacity: 0.4;*/
     }
 
     .error {

@@ -1,5 +1,163 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "certifiedUntil",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "CertificationExpired",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "referenceBlockNumber",
+        "type": "uint256"
+      }
+    ],
+    "name": "FutureReferenceBlock",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "InvalidId",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "minShareRatio",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "shareRatio",
+        "type": "uint256"
+      }
+    ],
+    "name": "MinShareRatio",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NonZeroAsset",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "reportTime",
+        "type": "uint256"
+      }
+    ],
+    "name": "UnauthorizedRecipientTier",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "reportTime",
+        "type": "uint256"
+      }
+    ],
+    "name": "UnauthorizedSenderTier",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "vault",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "receipt",
+        "type": "address"
+      }
+    ],
+    "name": "WrongOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroAdmin",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroAssetsAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "ZeroCertifyUntil",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroReceiver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroSharesAmount",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -30,14 +188,26 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "caller",
+        "name": "sender",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "until",
+        "name": "certifyUntil",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "referenceBlockNumber",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "forceUntil",
+        "type": "bool"
       },
       {
         "indexed": false,
@@ -55,7 +225,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "caller",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -75,6 +245,12 @@
         "internalType": "uint256",
         "name": "confiscated",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "justification",
+        "type": "bytes"
       }
     ],
     "name": "ConfiscateReceipt",
@@ -86,7 +262,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "caller",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -100,6 +276,12 @@
         "internalType": "uint256",
         "name": "confiscated",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "justification",
+        "type": "bytes"
       }
     ],
     "name": "ConfiscateShares",
@@ -111,7 +293,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "caller",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -142,13 +324,13 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "caller",
+        "name": "sender",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "receiver",
+        "name": "owner",
         "type": "address"
       },
       {
@@ -198,7 +380,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "caller",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -249,7 +431,7 @@
         "type": "tuple"
       }
     ],
-    "name": "OffchainAssetVaultInitialized",
+    "name": "OffchainAssetReceiptVaultInitialized",
     "type": "event"
   },
   {
@@ -333,7 +515,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "caller",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -353,6 +535,12 @@
         "internalType": "uint256[]",
         "name": "context",
         "type": "uint256[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
       }
     ],
     "name": "SetERC1155Tier",
@@ -364,7 +552,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "caller",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -384,6 +572,12 @@
         "internalType": "uint256[]",
         "name": "context",
         "type": "uint256[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
       }
     ],
     "name": "SetERC20Tier",
@@ -400,6 +594,31 @@
       }
     ],
     "name": "Snapshot",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "SnapshotWithData",
     "type": "event"
   },
   {
@@ -433,7 +652,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "caller",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -470,7 +689,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "caller",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -502,6 +721,12 @@
         "internalType": "uint256",
         "name": "id",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "receiptInformation",
+        "type": "bytes"
       }
     ],
     "name": "WithdrawWithReceipt",
@@ -782,33 +1007,10 @@
     "outputs": [
       {
         "internalType": "address",
-        "name": "assetTokenAddress_",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account_",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "id_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
         "name": "",
-        "type": "bytes"
+        "type": "address"
       }
     ],
-    "name": "authorizeReceiptInformation",
-    "outputs": [],
     "stateMutability": "view",
     "type": "function"
   },
@@ -876,42 +1078,28 @@
   {
     "inputs": [
       {
-        "internalType": "uint32",
-        "name": "until_",
-        "type": "uint32"
+        "internalType": "uint256",
+        "name": "certifyUntil_",
+        "type": "uint256"
       },
       {
-        "internalType": "bytes",
-        "name": "data_",
-        "type": "bytes"
+        "internalType": "uint256",
+        "name": "referenceBlockNumber_",
+        "type": "uint256"
       },
       {
         "internalType": "bool",
         "name": "forceUntil_",
         "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data_",
+        "type": "bytes"
       }
     ],
     "name": "certify",
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "confiscatee_",
-        "type": "address"
-      }
-    ],
-    "name": "confiscate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "confiscated_",
-        "type": "uint256"
-      }
-    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -926,13 +1114,42 @@
         "internalType": "uint256",
         "name": "id_",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data_",
+        "type": "bytes"
       }
     ],
-    "name": "confiscate",
+    "name": "confiscateReceipt",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "confiscated_",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "confiscatee_",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data_",
+        "type": "bytes"
+      }
+    ],
+    "name": "confiscateShares",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -951,7 +1168,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "assets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -970,7 +1187,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "shares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1028,7 +1245,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "minShareRatio_",
+        "name": "depositMinShareRatio_",
         "type": "uint256"
       },
       {
@@ -1041,7 +1258,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "shares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1065,7 +1282,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "shares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1223,7 +1440,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "maxAssets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1242,7 +1459,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "maxShares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1266,7 +1483,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "maxShares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1285,7 +1502,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "maxShares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1309,7 +1526,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "maxAssets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1328,7 +1545,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "maxAssets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1371,7 +1588,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "assets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1392,7 +1609,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "minShareRatio_",
+        "name": "mintMinShareRatio_",
         "type": "uint256"
       },
       {
@@ -1405,7 +1622,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "assets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1456,7 +1673,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "shares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1475,7 +1692,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "assets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1494,7 +1711,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "assets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1518,7 +1735,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "assets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1537,7 +1754,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "shares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1561,7 +1778,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "shares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1589,13 +1806,18 @@
         "internalType": "uint256",
         "name": "id_",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "receiptInformation_",
+        "type": "bytes"
       }
     ],
     "name": "redeem",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "assets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1624,7 +1846,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "assets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1658,7 +1880,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "shares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1717,6 +1939,11 @@
         "internalType": "uint256[]",
         "name": "context_",
         "type": "uint256[]"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data_",
+        "type": "bytes"
       }
     ],
     "name": "setERC1155Tier",
@@ -1740,6 +1967,11 @@
         "internalType": "uint256[]",
         "name": "context_",
         "type": "uint256[]"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data_",
+        "type": "bytes"
       }
     ],
     "name": "setERC20Tier",
@@ -1751,7 +1983,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "minShareRatio_",
+        "name": "senderMinShareRatio_",
         "type": "uint256"
       }
     ],
@@ -1774,7 +2006,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "data_",
+        "type": "bytes"
+      }
+    ],
     "name": "snapshot",
     "outputs": [
       {
@@ -1824,7 +2062,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "totalManagedAssets_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1937,13 +2175,18 @@
         "internalType": "uint256",
         "name": "id_",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "receiptInformation_",
+        "type": "bytes"
       }
     ],
     "name": "withdraw",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "shares_",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -1972,7 +2215,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "shares_",
+        "name": "",
         "type": "uint256"
       }
     ],

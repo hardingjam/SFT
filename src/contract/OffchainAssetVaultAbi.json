@@ -438,6 +438,25 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "vaultInformation",
+        "type": "bytes"
+      }
+    ],
+    "name": "ReceiptVaultInformation",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "bytes32",
         "name": "role",
@@ -1783,6 +1802,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "vaultInformation_",
+        "type": "bytes"
+      }
+    ],
+    "name": "receiptVaultInformation",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

@@ -8,7 +8,7 @@ const networks = [
         blockExplorer: "https://polygonscan.com/",
         rpcUrl: "https://polygon-rpc.com",
         icon: 'polygon',
-        factory_address: '0xE9eB36Ceeea68fCBfc0B3723bD6B4966C12E35Eb',
+        factory_address: '0x9329bf1b69a3CE69eC7694453eDC433800643B73',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-polygon"
     },
     {
@@ -20,7 +20,7 @@ const networks = [
         blockExplorer: "https://mumbai.polygonscan.com/",
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
         icon: 'polygon',
-        factory_address: '0x893B08Fcc6958b7594730Ce5140A92644301d4b8',
+        factory_address: '0x8707993CEE55bdeB8064D3883CFB17ebd81c7B1A',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
     },
     // {

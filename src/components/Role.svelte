@@ -14,7 +14,6 @@
     }
 
 
-
     async function revokeRole(roleName, account) {
         let role = await $vault[roleName]()
 
@@ -46,12 +45,14 @@
   <div class="role-list">
     <div class="role">
       <span>{admin ? 'Role Admin' : 'Executor'}</span>
-      {#if roleHolders.length}
+      {#if roleHolders?.length}
         {#each roleHolders as roleHolder}
           <div>
             {formatAddress(roleHolder.account.address)}
-            <img class="btn-hover action-icon" src={icons.show} alt="show" on:click={()=>showAddress(roleHolder.account.address)}/>
-            <img class="btn-hover action-icon" src={icons.delete_icon} on:click={()=>revokeRole(name,roleHolder.account.address)}
+            <img class="btn-hover action-icon" src={icons.show} alt="show"
+                 on:click={()=>showAddress(roleHolder.account.address)}/>
+            <img class="btn-hover action-icon" src={icons.delete_icon}
+                 on:click={()=>revokeRole(name,roleHolder.account.address)}
                  alt="delete"/>
           </div>
         {/each}

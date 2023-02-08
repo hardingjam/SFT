@@ -10,7 +10,6 @@
     } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
     import {QUERY} from "../scripts/queries.js";
-    import {beforeUpdate, onMount} from "svelte";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
     import {ROLES} from "../scripts/consts.js";
@@ -23,16 +22,14 @@
 
     let loading = false
 
-    beforeUpdate(() => {
-        executorRoles = ROLES.length ? ROLES.filter(r => !r.roleName.includes('_ADMIN')) : []
-    });
 
-    onMount(async () => {
-            if ($vault && $vault.address) {
-                await getSgData($vault.address)
-            }
-        }
-    )
+    async function getData() {
+        await getSgData($vault.address)
+        executorRoles = $roles.length ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
+    }
+
+    $: $vault && $vault.address && getData();
+
 
     function handleRoleSelect(event) {
         roleName = event.detail.selected.roleName

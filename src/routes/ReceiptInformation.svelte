@@ -2,6 +2,7 @@
     import {createEventDispatcher, onMount} from "svelte";
     import {activeNetwork, vault} from "../scripts/store.js";
     import {
+        formatAddress,
         getIpfsGetWay,
         getReceiptBalance,
         getSubgraphData,
@@ -69,6 +70,10 @@
         });
     }
 
+    function isAddress(value) {
+        return ethers.utils.isAddress(value)
+    }
+
 </script>
 <div class="receipt-info-container">
   <div class="header-buttons">
@@ -95,7 +100,12 @@
           {/if}
 
           {#if !isUrl(info.value)} <span>{info.label}</span>
-            <div>{info.value}</div>
+            {#if isAddress(info.value)}
+              <div>{formatAddress(info.value)}</div>
+            {/if}
+            {#if !isAddress(info.value)}
+              <div>{info.value}</div>
+            {/if}
           {/if}
 
         </div>

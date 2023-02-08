@@ -104,11 +104,19 @@
 
 
     const upload = async (data, type) => {
-        showAuth = true;
         error = ""
         uploadBtnLoading.set(true)
 
-        await waitForCredentials()
+        let savedUsername = localStorage.getItem('ipfsUsername');
+        let savedPassword = localStorage.getItem('ipfsPassword');
+        if (!savedPassword || !savedUsername) {
+            showAuth = true;
+            await waitForCredentials()
+        } else {
+            username = savedUsername;
+            password = savedPassword
+        }
+
 
         let formData = new FormData();
 
@@ -129,7 +137,7 @@
                 onUploadProgress: ((p) => {
                     console.log(`Uploading...  ${p.loaded} / ${p.total}`);
                 }),
-                withCredentials : true,
+                withCredentials: true,
             })
         });
 
@@ -143,6 +151,10 @@
 
         let resolvedPromise = respAll.find(r => r.status === "fulfilled")
         if (resolvedPromise) {
+
+            localStorage.setItem('ipfsUsername', username);
+            localStorage.setItem('ipfsPassword', password);
+
             if (type === "file" && data.size) {
                 fileHash.set(resolvedPromise.value.data.Hash)
             }

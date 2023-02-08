@@ -24,7 +24,7 @@
     let loading = false
 
     beforeUpdate(() => {
-        executorRoles = $roles.length ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
+        executorRoles = ROLES.length ? ROLES.filter(r => !r.roleName.includes('_ADMIN')) : []
     });
 
     onMount(async () => {
@@ -139,10 +139,10 @@
               <tr>
                 <td>
                   <Role name={role.roleName}
-                        roleHolders={$roles.find(r=>r.roleName===role.roleName).roleHolders} admin={false}></Role>
+                        roleHolders={$roles?.find(r=>r.roleName===role.roleName)?.roleHolders} admin={false}></Role>
                 </td>
                 <td>
-                  <Role roleHolders={$roles.find(r=>r.roleName===role.roleName+"_ADMIN").roleHolders}
+                  <Role roleHolders={$roles?.find(r=>r.roleName===role.roleName+"_ADMIN")?.roleHolders}
                         name={role.roleName+"_ADMIN"} admin={true}></Role>
                 </td>
               </tr>
@@ -212,7 +212,7 @@
         color: inherit;
     }
 
-    .custom-col{
+    .custom-col {
         margin-right: -10px;
     }
 

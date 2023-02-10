@@ -211,7 +211,7 @@ export async function hasRole(vault, account, role) {
 
 export async function getIpfsGetWay(hash) {
     try {
-        const response = await axios.get(`${IPFS_GETWAY}/${hash}`);
+        const response = await axios.get(`${IPFS_GETWAY}${hash}`);
         if (response) {
             return response?.config.url
         }

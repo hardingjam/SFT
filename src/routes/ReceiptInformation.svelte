@@ -161,7 +161,7 @@
     }
 
     .receipt-row {
-        padding: 2px 0px;
+        padding: 2px 0;
         display: flex;
         justify-content: space-between;
     }
@@ -169,7 +169,7 @@
     .ipfs-hash {
         display: flex;
         align-items: center;
-justify-content: space-between;
+        justify-content: space-between;
         width: 100%;
     }
 </style>

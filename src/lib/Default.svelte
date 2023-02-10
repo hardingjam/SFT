@@ -28,13 +28,14 @@
 
     let location = window.location.hash;
     let selectedTab = 'mint'
+    $: $vault && setTokenName()
+    async function setTokenName() {
+        tokenName = $vault && $vault.address ? await $vault.name() : ""
+    }
 
     router.subscribe(async e => {
         if (!e.initial) {
             await setVault()
-            if ($vault?.address) {
-                tokenName = await $vault.name()
-            }
             location = e.path
             selectedTab = location.slice(1) || 'mint'
             if (location === "#list" && $tokens.length) {
@@ -135,7 +136,6 @@
     ]
 
     onMount(async () => {
-        await setVault()
         await getEthersData()
 
         if (isMetamaskInstalled) {
@@ -172,8 +172,10 @@
 
     async function networkChanged() {
         localStorage.setItem("vaultAddress", "")
+        vault.set({})
         await setNetwork()
         await getTokens()
+        navigateTo('#set-vault')
     }
 
     async function getEthersData() {

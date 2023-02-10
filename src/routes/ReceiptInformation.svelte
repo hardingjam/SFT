@@ -49,7 +49,7 @@
                         if (prop === "pie_certificate") {
                             return {
                                 label: toSentenceCase(prop),
-                                value: `${IPFS_GETWAY}/${receiptInformations[prop]} `
+                                value: `${IPFS_GETWAY}${receiptInformations[prop]} `
                             }
                         }
                         return {

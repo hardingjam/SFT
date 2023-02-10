@@ -15,11 +15,14 @@
     import {icons} from "../scripts/assets.js";
     import {ethers} from "ethers";
     import {IPFS_GETWAY} from "../scripts/consts.js";
+    import SftLoader from "../components/SftLoader.svelte";
 
     export let receipt = {}
     let receiptBalance = null
     let receiptInformations = {}
     let displayInformation = []
+    let ipfsAddress = ""
+    let ipfsLoading = false
 
     let loading = false
 
@@ -36,28 +39,38 @@
         let byteInfo = ""
 
         if (resp && resp.data && resp.data.receipt) {
+            ipfsLoading = true;
             receiptInfo = resp.data.receipt.receiptInformations
+
             if (receiptInfo.length) {
                 byteInfo = receiptInfo[0].information
                 let infoHash = hexToString(byteInfo.slice(2))
+                ipfsAddress = `ipfs://${infoHash}`
                 let url = await getIpfsGetWay(infoHash)
-                let res = await axios.get(url);
-                if (res) {
-                    receiptInformations = res.data
-                    displayInformation = Object.keys(receiptInformations).map(prop => {
-                        //bad solution
-                        if (prop === "pie_certificate") {
+                try {
+                    let res = await axios.get(url)
+                    if (res) {
+                        receiptInformations = res.data
+                        console.log("receiptInformations", receiptInformations)
+                        displayInformation = Object.keys(receiptInformations).map(prop => {
+                            //bad solution
+                            if (prop === "pie_certificate") {
+                                return {
+                                    label: toSentenceCase(prop),
+                                    value: `${IPFS_GETWAY}${receiptInformations[prop]} `
+                                }
+                            }
                             return {
                                 label: toSentenceCase(prop),
-                                value: `${IPFS_GETWAY}${receiptInformations[prop]} `
+                                value: receiptInformations[prop]
                             }
-                        }
-                        return {
-                            label: toSentenceCase(prop),
-                            value: receiptInformations[prop]
-                        }
-                    })
+                        })
+                        ipfsLoading = false;
+                    }
+                } catch (err) {
+                    console.log(err)
                 }
+
             }
         }
     }
@@ -89,6 +102,12 @@
         <span class="f-weight-700">Sft amount </span>
         <div class="date f-weight-700">{receiptBalance ? ethers.utils.formatUnits(receiptBalance) : ''}</div>
       </div>
+      {#if (ipfsLoading)}
+        <div class="ipfs-hash">
+          <span class="f-weight-700">{ipfsAddress}</span>
+          <SftLoader width="50"></SftLoader>
+        </div>
+      {/if}
       {#each displayInformation as info}
         <div class="receipt-row">
           {#if isUrl(info.value)}
@@ -142,8 +161,15 @@
     }
 
     .receipt-row {
-        padding: 2px 20px;
+        padding: 2px 0;
         display: flex;
         justify-content: space-between;
+    }
+
+    .ipfs-hash {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
     }
 </style>

@@ -8,7 +8,7 @@ const networks = [
         blockExplorer: "https://etherscan.io",
         rpcUrl: "https://mainnet.infura.io/v3/",
         icon: 'ethereum',
-        factory_address: '0xf1A14e96977E8dE295Ba9612691D127B157d1371',
+        factory_address: '0x924D747B95CCdc82D4f4E15F04e69f4Eb1FB39D9',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-ethereum"
     },
     {

@@ -44,7 +44,7 @@ const networks = [
         blockExplorer: "https://mumbai.polygonscan.com/",
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
         icon: 'polygon',
-        factory_address: '0x968A732c967E0CacA0247FD88EB9589c2EA38Dd6',
+        factory_address: '0x94927792b88D518f9a429572dD3D40400b8BE906',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
     }
 ];

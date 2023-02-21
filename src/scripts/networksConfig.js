@@ -32,7 +32,7 @@ const networks = [
         blockExplorer: "https://polygonscan.com/",
         rpcUrl: "https://polygon-rpc.com",
         icon: 'polygon',
-        factory_address: '0x9329bf1b69a3CE69eC7694453eDC433800643B73',
+        factory_address: '0xFE259001e141A41f3bcCDBc315A8F0D23Ef84b0b',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-polygon"
     },
     {

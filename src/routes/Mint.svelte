@@ -19,37 +19,37 @@
     let error = ""
 
     let schemas = [
-        // {
-        //     "displayName": 'Love To',
-        //     "schema": {
-        //         "type": "object",
-        //         "required": [
-        //             "pie_certificate",
-        //             "producer_wallet",
-        //             "total_score",
-        //             "max_options"
-        //         ],
-        //         "properties": {
-        //             "producer_wallet": {
-        //                 "type": "string",
-        //                 "title": "Producer Wallet",
-        //             },
-        //             "total_score": {
-        //                 "type": "string",
-        //                 "title": "Total Score"
-        //             },
-        //             "max_options": {
-        //                 "type": "string",
-        //                 "title": "Max Options"
-        //             },
-        //             "pie_certificate": {
-        //                 "type": "string",
-        //                 "editor": "upload",
-        //                 "title": "PIE Certificate"
-        //             },
-        //         }
-        //     }
-        // }
+        {
+            "displayName": 'Love To',
+            "schema": {
+                "type": "object",
+                "required": [
+                    "pie_certificate",
+                    "producer_wallet",
+                    "total_score",
+                    "max_options"
+                ],
+                "properties": {
+                    "producer_wallet": {
+                        "type": "string",
+                        "title": "Producer Wallet",
+                    },
+                    "total_score": {
+                        "type": "string",
+                        "title": "Total Score"
+                    },
+                    "max_options": {
+                        "type": "string",
+                        "title": "Max Options"
+                    },
+                    "pie_certificate": {
+                        "type": "string",
+                        "editor": "upload",
+                        "title": "PIE Certificate"
+                    },
+                }
+            }
+        }
     ]
 
     let selectedSchema = {}

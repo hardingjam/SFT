@@ -19,37 +19,37 @@
     let error = ""
 
     let schemas = [
-        {
-            "displayName": 'Love To',
-            "schema": {
-                "type": "object",
-                "required": [
-                    "pie_certificate",
-                    "producer_wallet",
-                    "total_score",
-                    "max_options"
-                ],
-                "properties": {
-                    "producer_wallet": {
-                        "type": "string",
-                        "title": "Producer Wallet",
-                    },
-                    "total_score": {
-                        "type": "string",
-                        "title": "Total Score"
-                    },
-                    "max_options": {
-                        "type": "string",
-                        "title": "Max Options"
-                    },
-                    "pie_certificate": {
-                        "type": "string",
-                        "editor": "upload",
-                        "title": "PIE Certificate"
-                    },
-                }
-            }
-        }
+        // {
+        //     "displayName": 'Love To',
+        //     "schema": {
+        //         "type": "object",
+        //         "required": [
+        //             "pie_certificate",
+        //             "producer_wallet",
+        //             "total_score",
+        //             "max_options"
+        //         ],
+        //         "properties": {
+        //             "producer_wallet": {
+        //                 "type": "string",
+        //                 "title": "Producer Wallet",
+        //             },
+        //             "total_score": {
+        //                 "type": "string",
+        //                 "title": "Total Score"
+        //             },
+        //             "max_options": {
+        //                 "type": "string",
+        //                 "title": "Max Options"
+        //             },
+        //             "pie_certificate": {
+        //                 "type": "string",
+        //                 "editor": "upload",
+        //                 "title": "PIE Certificate"
+        //             },
+        //         }
+        //     }
+        // }
     ]
 
     let selectedSchema = {}
@@ -218,8 +218,12 @@
 
 <div class="mint-container">
   <div class="header-buttons">
-    <button type="button" class="default-btn mr-2" disabled on:click={()=>{navigateTo('#schemas')}}>
-      Access Schemas
+    <button type="button" class="default-btn mr-2" disabled={!schemas.length}
+            on:click={()=>{navigateTo('#asset-classes')}}>
+      Asset classes
+    </button>
+    <button type="button" class="default-btn mr-2" on:click={()=>{navigateTo('#new-asset-class')}}>
+      New Asset class
     </button>
     <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>
       Audit History
@@ -267,8 +271,7 @@
         {/if}
         {#if !schemas.length}
           <div class="empty-schemas">
-            <span>Please create a new schema to mint </span>
-            <button class="default-btn" on:click={()=>{navigateTo("#new-schema")}}>New Schema</button>
+            <span>Please create a new asset class to mint </span>
           </div>
         {/if}
 
@@ -386,6 +389,11 @@
 
     .hide {
         display: none;
+    }
+
+    .empty-schemas {
+        color: #DD1212;
+        text-align: center;
     }
 
 </style>

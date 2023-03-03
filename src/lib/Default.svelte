@@ -350,7 +350,8 @@
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>
           <Route path="#set-vault" component={SetVault}/>
-          <Route path="#new-schema" component={NewSchema}/>
+          <Route path="#asset-classes" component={NewSchema}/>
+          <Route path="#new-asset-class" component={NewSchema}/>
           <Route path="#receipt/:id" component={ReceiptAudit}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
 

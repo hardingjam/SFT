@@ -9,7 +9,7 @@
     let label = ""
     let schema = {}
     let error = "";
-    let showAuth = ""
+    let showAuth = false;
     let promise;
     let username = "";
     let password = "";
@@ -146,9 +146,9 @@
 
 </script>
 <DefaultFrame header="New Schema">
-  <div slot="content">
+  <div slot="content" class="schema-content">
     <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
-      <div class="display-flex">
+      <div class="label">
         <span class="f-weight-700">Schema label :</span>
         <input class="label-input" bind:value={label}/>
       </div>
@@ -164,7 +164,6 @@
     </div>
 
     <div class={showAuth  ? 'auth show' : 'auth hide'}>
-      <!--  <div class="dfssdf">-->
       <div class="display-flex space-between">
         <label>Username:</label>
         <input class="default-input" type="text" bind:value={username} autofocus/>
@@ -178,6 +177,12 @@
   </div>
 </DefaultFrame>
 <style>
+
+    .schema-content {
+        min-width: 660px;
+        min-height: 400px;
+    }
+
     .label-input {
         width: 560px;
         box-sizing: border-box;
@@ -244,5 +249,30 @@
     .deploy-btn {
         align-self: end;
     }
+
+    .auth {
+        background: #FFFFFF;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        padding: 40px;
+        width: calc(100% - 80px);
+    }
+
+    .show {
+        display: flex;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .label{
+        display: flex;
+        align-items: center;
+    }
+
 
 </style>

@@ -383,6 +383,13 @@
         width: 250px;
     }
 
+    .show {
+        display: flex;
+    }
+
+    .hide {
+        display: none;
+    }
 
     .empty-schemas {
         color: #DD1212;

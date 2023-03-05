@@ -311,13 +311,7 @@ button:focus, button:focus-visible {
     float: right;
 }
 
-.show {
-    display: flex;
-}
 
-.hide {
-    display: none;
-}
 
 @media (prefers-color-scheme: light) {
 

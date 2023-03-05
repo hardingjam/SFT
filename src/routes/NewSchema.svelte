@@ -27,7 +27,7 @@
     //     "properties": {
     //         "producer_wallet": {
     //             "type": "string",
-    //             "title": "Producer Wallet",
+    //             "title": "Producer Wallet"
     //         },
     //         "total_score": {
     //             "type": "string",
@@ -41,9 +41,10 @@
     //             "type": "string",
     //             "editor": "upload",
     //             "title": "PIE Certificate"
-    //         },
+    //         }
     //     }
     // }
+
     let colors = {
         keyColor: 'black',
         numberColor: 'blue',
@@ -64,9 +65,10 @@
         schema = document.getElementById("code").textContent
         schemaInformation = {
             displayName: label,
-            schema: schema,
+            schema: JSON.parse(schema),
         }
-        let uploadResult = await upload(schemaInformation)
+
+        let uploadResult = await upload(JSON.stringify(schemaInformation))
 
         let dataBytes = uploadResult?.Hash ? toBytes(uploadResult.Hash) : []
         try {
@@ -90,6 +92,11 @@
             password = savedPassword
         }
 
+        let formData = new FormData();
+
+        formData.append('file', data)
+
+
         const requestArr = IPFS_APIS.map((url) => {
             return axios.request({
                 url,
@@ -101,7 +108,7 @@
                 headers: {
                     "Content-Type": `multipart/form-data;`,
                 },
-                data: data,
+                data: formData,
                 onUploadProgress: ((p) => {
                     console.log(`Uploading...  ${p.loaded} / ${p.total}`);
                 }),
@@ -269,7 +276,7 @@
         display: none;
     }
 
-    .label{
+    .label {
         display: flex;
         align-items: center;
     }

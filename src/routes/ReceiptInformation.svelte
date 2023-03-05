@@ -51,7 +51,6 @@
                     let res = await axios.get(url)
                     if (res) {
                         receiptInformations = res.data
-                        console.log("receiptInformations", receiptInformations)
                         displayInformation = Object.keys(receiptInformations).map(prop => {
                             //bad solution
                             if (prop === "pie_certificate") {

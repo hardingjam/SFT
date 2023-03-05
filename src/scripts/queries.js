@@ -133,3 +133,15 @@ export const RECEIPT_INFORMATION_QUERY = `
             }
           }
          `
+export const VAULT_INFORMATION_QUERY = `
+          query($id: ID!) {
+            offchainAssetReceiptVault(id: $id) {
+                id,
+                  receiptVaultInformations{
+                    information
+                    id
+                    timestamp
+                  }
+            }
+          }
+         `

@@ -1,22 +1,24 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
-    import {vault, fileHash, fileDropped, uploadBtnLoading} from "../scripts/store.js";
+    import {vault, fileHash, fileDropped, uploadBtnLoading, activeNetwork} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_APIS, ONE} from "../scripts/consts.js";
+    import {IPFS_APIS, IPFS_GETWAY, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
-    import {getIpfsGetWay, hasRole, toBytes} from "../scripts/helpers";
+    import {getIpfsGetWay, getSubgraphData, hasRole, hexToString, toBytes, toSentenceCase} from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
     import {beforeUpdate, onMount} from "svelte";
+    import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
 
     let image = {}
 
     let error = ""
+    let ipfsLoading = false;
 
     let schemas = [
         {
@@ -65,6 +67,39 @@
 
     beforeUpdate(() => {
         fileDropped.set('')
+    })
+
+    onMount(async () => {
+        let variables = {id: $vault.address}
+        try {
+            let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
+            let vaultInfo = ""
+            let byteInfo = ""
+
+            if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
+                ipfsLoading = true
+                vaultInfo = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+
+                if (vaultInfo.length) {
+                    byteInfo = vaultInfo[0].information
+                    let infoHash = hexToString(byteInfo.slice(2))
+                    let url = await getIpfsGetWay(infoHash)
+                    try {
+                        let res = await axios.get(url)
+                        if (res) {
+                            schemas = res.data
+                            ipfsLoading = false;
+                        }
+                    } catch (err) {
+                        console.log(err)
+                    }
+
+                }
+            }
+
+        } catch (err) {
+            console.log(err)
+        }
     })
 
     async function mint() {
@@ -170,7 +205,7 @@
     $: ($fileDropped && $fileDropped.size) && upload($fileDropped, "file");
     $: $fileHash && getCertificateUrl($fileHash);
 
-    function handleSchemaSelect(event) {
+    async function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
     }
 

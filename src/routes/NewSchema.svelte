@@ -1,7 +1,49 @@
 <script>
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
+    import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
+    import {toBytes} from "../scripts/helpers.js";
+    import {IPFS_APIS} from "../scripts/consts.js";
+    import axios from "axios";
 
+    let label = ""
+    let schema = {}
+    let error = "";
+    let showAuth = ""
+    let promise;
+    let username = "";
+    let password = "";
+    let schemaInformation = {}
+
+
+    // let bla = {
+    //     "type": "object",
+    //     "required": [
+    //         "pie_certificate",
+    //         "producer_wallet",
+    //         "total_score",
+    //         "max_options"
+    //     ],
+    //     "properties": {
+    //         "producer_wallet": {
+    //             "type": "string",
+    //             "title": "Producer Wallet",
+    //         },
+    //         "total_score": {
+    //             "type": "string",
+    //             "title": "Total Score"
+    //         },
+    //         "max_options": {
+    //             "type": "string",
+    //             "title": "Max Options"
+    //         },
+    //         "pie_certificate": {
+    //             "type": "string",
+    //             "editor": "upload",
+    //             "title": "PIE Certificate"
+    //         },
+    //     }
+    // }
     let colors = {
         keyColor: 'black',
         numberColor: 'blue',
@@ -18,32 +60,122 @@
     }
 
 
-    let inputValue = ""
+    async function deploySchema() {
+        schema = document.getElementById("code").textContent
+        schemaInformation = {
+            displayName: label,
+            schema: schema,
+        }
+        let uploadResult = await upload(schemaInformation)
 
-    // $: inputValue && update(inputValue);
+        let dataBytes = uploadResult?.Hash ? toBytes(uploadResult.Hash) : []
+        try {
+            await $vault.connect($ethersData.signer).receiptVaultInformation(dataBytes)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
+    const upload = async (data) => {
+        error = ""
+        uploadBtnLoading.set(true)
 
-    function deploySchema(){
-        console.log(document.getElementById("code").textContent)
+        let savedUsername = localStorage.getItem('ipfsUsername');
+        let savedPassword = localStorage.getItem('ipfsPassword');
+        if (!savedPassword || !savedUsername) {
+            showAuth = true;
+            await waitForCredentials()
+        } else {
+            username = savedUsername;
+            password = savedPassword
+        }
+
+        const requestArr = IPFS_APIS.map((url) => {
+            return axios.request({
+                url,
+                auth: {
+                    username,
+                    password
+                },
+                method: 'post',
+                headers: {
+                    "Content-Type": `multipart/form-data;`,
+                },
+                data: data,
+                onUploadProgress: ((p) => {
+                    console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                }),
+                withCredentials: true,
+            })
+        });
+
+        let respAll = await Promise.allSettled(requestArr)
+
+        respAll.map(response => {
+            if (response.status === "rejected") {
+                reportError(response.reason)
+            } else return response
+        })
+
+        let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+        if (resolvedPromise) {
+
+            localStorage.setItem('ipfsUsername', username);
+            localStorage.setItem('ipfsPassword', password);
+
+        } else {
+            error = "Something went wrong"
+        }
+        uploadBtnLoading.set(false)
+        username = ""
+        password = ""
+        return resolvedPromise?.value.data
+    };
+
+    async function waitForCredentials() {
+        const confirm = document.getElementById("ok-button")
+
+        promise = new Promise((resolve) => {
+            confirm.addEventListener('click', resolve)
+        })
+        return await promise.then(() => {
+                showAuth = false;
+            }
+        )
     }
 
 </script>
 <DefaultFrame header="New Schema">
   <div slot="content">
-    <span class="f-weight-700">Schema label :</span> <input class="label-input"/>
+    <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
+      <div class="display-flex">
+        <span class="f-weight-700">Schema label :</span>
+        <input class="label-input" bind:value={label}/>
+      </div>
 
-    <div class="schema">
-      <div class="editing-top-color">1</div>
-      <span class="textarea" role="textbox" id="code" contenteditable ></span>
-      <pre id="highlighting">
-        <code id="highlighting-content"></code>
-      </pre>
-
+      <div class="schema">
+        <div class="editing-top-color">1</div>
+        <span class="textarea" role="textbox" id="code" contenteditable></span>
+        <pre id="highlighting">
+          <code id="highlighting-content"></code>
+        </pre>
+      </div>
+      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}>Deploy schema</button>
     </div>
 
-    <button class="default-btn btn-hover right" on:click={()=>{deploySchema()}}>Deploy schema</button>
+    <div class={showAuth  ? 'auth show' : 'auth hide'}>
+      <!--  <div class="dfssdf">-->
+      <div class="display-flex space-between">
+        <label>Username:</label>
+        <input class="default-input" type="text" bind:value={username} autofocus/>
+      </div>
+      <div class="display-flex space-between">
+        <label>Password:</label>
+        <input class="default-input" type="password" bind:value={password}/>
+      </div>
+      <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
+    </div>
   </div>
-
 </DefaultFrame>
 <style>
     .label-input {
@@ -80,8 +212,8 @@
         max-width: 675px;
     }
 
-    .textarea:focus-visible{
-        outline:none
+    .textarea:focus-visible {
+        outline: none
     }
 
     .textarea[contenteditable]:empty::before {
@@ -90,18 +222,27 @@
     }
 
 
-    .editing-top-color{
+    .editing-top-color {
         position: absolute;
         width: 35px;
         left: 0;
         top: 0;
         background: #DCDBDD;
-        border-radius:5px 0 0 0;
+        border-radius: 5px 0 0 0;
         text-align: center;
     }
 
     #highlighting {
         display: none;
+    }
+
+    .schema-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .deploy-btn {
+        align-self: end;
     }
 
 </style>

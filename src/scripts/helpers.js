@@ -211,13 +211,13 @@ export async function hasRole(vault, account, role) {
 
 export async function getIpfsGetWay(hash) {
     try {
+        //Todo Check hash is valid Ipfs hash
         const response = await axios.get(`${IPFS_GETWAY}${hash}`);
         if (response) {
             return response?.config.url
         }
     } catch (err) {
         console.log(err)
-        return err
     }
 }
 

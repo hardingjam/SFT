@@ -21,37 +21,31 @@
     let ipfsLoading = false;
 
     let schemas = [
-        {
-            "displayName": 'Love To',
-            "schema": {
-                "type": "object",
-                "required": [
-                    "pie_certificate",
-                    "producer_wallet",
-                    "total_score",
-                    "max_options"
-                ],
-                "properties": {
-                    "producer_wallet": {
-                        "type": "string",
-                        "title": "Producer Wallet",
-                    },
-                    "total_score": {
-                        "type": "string",
-                        "title": "Total Score"
-                    },
-                    "max_options": {
-                        "type": "string",
-                        "title": "Max Options"
-                    },
-                    "pie_certificate": {
-                        "type": "string",
-                        "editor": "upload",
-                        "title": "PIE Certificate"
-                    },
-                }
-            }
-        }
+        // {
+        //     "displayName": 'Love To',
+        //     "schema": {
+        //         "type": "object",
+        //         "required": [
+        //             "name",
+        //             "wallet",
+        //             "title"
+        //         ],
+        //         "properties": {
+        //             "name": {
+        //                 "type": "string",
+        //                 "title": "Name",
+        //             },
+        //             "wallet": {
+        //                 "type": "string",
+        //                 "title": "Wallet"
+        //             },
+        //             "title": {
+        //                 "type": "string",
+        //                 "title": "Title"
+        //             }
+        //         }
+        //     }
+        // }
     ]
 
     let selectedSchema = {}
@@ -70,37 +64,49 @@
     })
 
     onMount(async () => {
-        let variables = {id: $vault.address}
-        try {
-            let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
-            let vaultInfo = ""
-            let byteInfo = ""
-
-            if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
-                ipfsLoading = true
-                vaultInfo = resp.data.offchainAssetReceiptVault.receiptVaultInformations
-
-                if (vaultInfo.length) {
-                    byteInfo = vaultInfo[0].information
-                    let infoHash = hexToString(byteInfo.slice(2))
-                    let url = await getIpfsGetWay(infoHash)
-                    try {
-                        let res = await axios.get(url)
-                        if (res) {
-                            schemas = res.data
-                            ipfsLoading = false;
-                        }
-                    } catch (err) {
-                        console.log(err)
-                    }
-
-                }
-            }
-
-        } catch (err) {
-            console.log(err)
-        }
+        await getSchemas()
     })
+
+    async function getSchemas() {
+        let variables = {id: $vault.address}
+        if ($vault.address) {
+            try {
+                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
+                let vaultInfo = ""
+                let byteInfo = ""
+
+                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
+                    ipfsLoading = true
+                    vaultInfo = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+
+                    if (vaultInfo.length) {
+                        vaultInfo.map(async schema => {
+                            byteInfo = schema.information
+                            let infoHash = hexToString(byteInfo.slice(2))
+                            let url = await getIpfsGetWay(infoHash)
+                            try {
+                                if (url) {
+                                    let res = await axios.get(url)
+                                    if (res) {
+                                        schemas.push(res.data)
+                                        schemas = schemas.filter(d => d.displayName)
+                                        ipfsLoading = false;
+                                    }
+                                }
+                            } catch (err) {
+                                // console.log(err)
+                            }
+                        })
+
+                    }
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+    }
 
     async function mint() {
         try {

@@ -25,7 +25,7 @@ export const ROLES = [
 export const IPFS_APIS = [
     "https://gildlab-ipfs-0.in.ngrok.io/api/v0/add?pin=true&to-files=", //Vishal
     "https://gildlab-ipfs-2.eu.ngrok.io/api/v0/add?pin=true&to-files=", //David A Box1
-    "https://gildlab-ipfs-4.eu.ngrok.io/api/v0/add?pin=true&to-files=", //Nino
+    "https://ipfs.dragonflysun.ge/api/v0/add?pin=true&to-files=", //Nino
     "https://gildlab-ipfs-5.eu.ngrok.io/api/v0/add?pin=true&to-files=", //David A Box2
 ]
 export const IPFS_GETWAY = "https://ipfs.io/ipfs/"

@@ -1,7 +1,7 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
-    import {vault, fileHash, fileDropped, uploadBtnLoading, activeNetwork} from "../scripts/store.js";
+    import {vault, fileHash, fileDropped, uploadBtnLoading, activeNetwork, schemas} from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
@@ -20,7 +20,7 @@
     let error = ""
     let ipfsLoading = false;
 
-    let schemas = [
+    let loveToSchemas = [
         // {
         //     "displayName": 'Love To',
         //     "schema": {
@@ -53,7 +53,7 @@
     let {signer} = ethersData;
 
     let amount;
-    let shouldDisable = !schemas.length
+    let shouldDisable = !$schemas.length
     let showAuth = false;
     let username = "";
     let password = "";
@@ -74,6 +74,7 @@
                 let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
                 let vaultInfo = ""
                 let byteInfo = ""
+                let tempSchema = []
 
                 if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
                     ipfsLoading = true
@@ -88,8 +89,9 @@
                                 if (url) {
                                     let res = await axios.get(url)
                                     if (res) {
-                                        schemas.push(res.data)
-                                        schemas = schemas.filter(d => d.displayName)
+                                        tempSchema.push({...res.data, timestamp: schema.timestamp})
+                                        tempSchema = tempSchema.filter(d => d.displayName)
+                                        schemas.set(tempSchema)
                                         ipfsLoading = false;
                                     }
                                 }
@@ -105,7 +107,6 @@
                 console.log(err)
             }
         }
-
     }
 
     async function mint() {
@@ -259,7 +260,7 @@
 
 <div class="mint-container">
   <div class="header-buttons">
-    <button type="button" class="default-btn mr-2" disabled={!schemas.length}
+    <button type="button" class="default-btn mr-2" disabled={!$schemas.length}
             on:click={()=>{navigateTo('#asset-classes')}}>
       Asset classes
     </button>
@@ -275,11 +276,11 @@
     <MintInput bind:amount={amount} amountLabel={"Mint Amount"} label={"Options"}/>
     <div class="audit-info-container basic-frame-parent">
       <div class="audit-info basic-frame">
-        {#if schemas.length}
+        {#if $schemas.length}
           <div class="schema">
             <div class="schema-dropdown row">
               <label class="f-weight-700 custom-col col-2">Schema:</label>
-              <Select options={schemas}
+              <Select options={$schemas}
 
                       on:select={handleSchemaSelect}
                       label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
@@ -310,7 +311,7 @@
 
           </div>
         {/if}
-        {#if !schemas.length}
+        {#if !$schemas.length}
           <div class="empty-schemas">
             <span>Please create a new asset class to mint </span>
           </div>

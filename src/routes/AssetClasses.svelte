@@ -1,45 +1,13 @@
 <script>
 
-import DefaultFrame from "../components/DefaultFrame.svelte";
-import SftLoader from "../components/SftLoader.svelte";
+    import DefaultFrame from "../components/DefaultFrame.svelte";
+    import SftLoader from "../components/SftLoader.svelte";
+    import {schemas} from "../scripts/store.js";
+    import {timeStampToDate} from "../scripts/helpers";
 
-let schemas = [
-    {
-        "displayName": 'Love To',
-        "schema": {
-            "type": "object",
-            "required": [
-                "pie_certificate",
-                "producer_wallet",
-                "total_score",
-                "max_options"
-            ],
-            "properties": {
-                "producer_wallet": {
-                    "type": "string",
-                    "title": "Producer Wallet",
-                },
-                "total_score": {
-                    "type": "string",
-                    "title": "Total Score"
-                },
-                "max_options": {
-                    "type": "string",
-                    "title": "Max Options"
-                },
-                "pie_certificate": {
-                    "type": "string",
-                    "editor": "upload",
-                    "title": "PIE Certificate"
-                },
-            }
-        }
+    function handleSchemasSelect(schema) {
+        console.log(schema)
     }
-]
-
-function handleSchemasSelect(schema){
-    console.log(schema)
-}
 </script>
 
 <DefaultFrame header="Asset classes">
@@ -51,18 +19,18 @@ function handleSchemasSelect(schema){
           <th>date created</th>
           <th>Asset count</th>
         </tr>
-        {#if (schemas.length)}
-          {#each schemas as schema }
+        {#if ($schemas.length)}
+          {#each $schemas as schema }
             <tr class="schema" on:click={()=>{handleSchemasSelect(schema)}}>
               <td>{schema?.displayName}</td>
-              <td>{schema?.date}</td>
-              <td>{schema?.assetCount}</td>
+              <td>{timeStampToDate(schema?.timestamp)}</td>
+              <td>{schema?.assetCount || ""}</td>
             </tr>
           {/each}
         {/if}
 
       </table>
-      {#if !schemas.length}
+      {#if !$schemas.length}
         <SftLoader width="50"></SftLoader>
       {/if}
     </div>
@@ -80,7 +48,7 @@ function handleSchemasSelect(schema){
         line-height: 27px;
     }
 
-    .schema:hover{
+    .schema:hover {
         text-decoration: underline;
         cursor: pointer;
     }

@@ -62,7 +62,17 @@
 
 
     async function deploySchema() {
+        error = ""
+        if (!label) {
+            error = "Please enter Schema label";
+            return
+        }
+
         schema = document.getElementById("code").textContent
+        if (!schema) {
+            error = "Please paste your schema";
+            return
+        }
         schemaInformation = {
             displayName: label,
             schema: JSON.parse(schema),
@@ -181,6 +191,8 @@
       </div>
       <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
     </div>
+    <div class="error">{error}</div>
+
   </div>
 </DefaultFrame>
 <style>

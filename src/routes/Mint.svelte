@@ -97,7 +97,12 @@
                                 if (url) {
                                     let res = await axios.get(url)
                                     if (res) {
-                                        tempSchema.push({...res.data, timestamp: schema.timestamp, id: schema.id})
+                                        tempSchema.push({
+                                            ...res.data,
+                                            timestamp: schema.timestamp,
+                                            id: schema.id,
+                                            hash: infoHash
+                                        })
                                         tempSchema = tempSchema.filter(d => d.displayName)
                                         schemas.set(tempSchema)
                                         ipfsLoading = false;
@@ -222,6 +227,7 @@
 
     async function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
+        console.log(selectedSchema)
     }
 
     let certificateUrl = ''
@@ -243,6 +249,7 @@
             })
         }
         json.schema = selectedSchema.id
+        json.schemaHash = selectedSchema.hash
 
         let formFields = Object.keys(json)
         let formNotEmpty = formFields.some(f => json[f] !== "")

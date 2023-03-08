@@ -1,6 +1,6 @@
 <script>
     import {createEventDispatcher, onMount} from "svelte";
-    import {activeNetwork, editorUploads, vault} from "../scripts/store.js";
+    import {activeNetwork, editorUploads, schemas, vault} from "../scripts/store.js";
     import {
         formatAddress,
         getIpfsGetWay,
@@ -23,13 +23,52 @@
     let displayInformation = []
     let ipfsAddress = ""
     let ipfsLoading = false
-
+    let schema = {}
+    let schemaId = null;
     let loading = false
 
     onMount(async () => {
         receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receipt.receiptId);
         await getReceiptData(receipt)
     })
+
+    $: schemaId && getSchema()
+
+    async function getSchema() {
+        let variables = {id: schemaId}
+
+        let query = `
+          query($id: ID!) {
+            receiptVaultInformation(id: $id) {
+                id,
+                information
+            }
+          }
+         `
+        if ($vault.address) {
+            try {
+                let resp = await getSubgraphData($activeNetwork, variables, query, 'receiptVaultInformation')
+                let byteInfo = ""
+                if (resp && resp.data && resp.data.receiptVaultInformation) {
+                    byteInfo = resp.data.receiptVaultInformation.information
+                    let infoHash = hexToString(byteInfo.slice(2))
+                    let url = await getIpfsGetWay(infoHash)
+                    try {
+                        if (url) {
+                            let res = await axios.get(url)
+                            if (res) {
+                                schema = res.data
+                            }
+                        }
+                    } catch (err) {
+                        // console.log(err)
+                    }
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
 
     async function getReceiptData(receipt) {
         loading = true;
@@ -51,6 +90,7 @@
                     let res = await axios.get(url)
                     if (res) {
                         receiptInformations = res.data
+                        schemaId = res.data.schema
                         displayInformation = Object.keys(receiptInformations).map(prop => {
                             //bad solution
                             if ($editorUploads.includes(prop)) {
@@ -64,6 +104,7 @@
                                 value: receiptInformations[prop]
                             }
                         })
+                        displayInformation = displayInformation.filter(d => d.label !== "Schema")
                         ipfsLoading = false;
                     }
                 } catch (err) {

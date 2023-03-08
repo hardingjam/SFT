@@ -100,7 +100,7 @@
                                 if (url) {
                                     let res = await axios.get(url)
                                     if (res) {
-                                        tempSchema.push({...res.data, timestamp: schema.timestamp})
+                                        tempSchema.push({...res.data, timestamp: schema.timestamp, id: schema.id})
                                         tempSchema = tempSchema.filter(d => d.displayName)
                                         schemas.set(tempSchema)
                                         ipfsLoading = false;
@@ -225,6 +225,8 @@
 
     async function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
+
+        console.log(selectedSchema)
         let props = Object.keys(selectedSchema.schema.properties)
         fileUploadProperties = props.filter(p => {
             let value = selectedSchema.schema.properties[p]
@@ -253,6 +255,7 @@
                 json[data.prop] = data.hash
             })
         }
+        json.schema = selectedSchema.id
 
         let formFields = Object.keys(json)
         let formNotEmpty = formFields.some(f => json[f] !== "")

@@ -7,7 +7,6 @@
         getReceiptBalance,
         getSubgraphData,
         hexToString,
-        isUrl,
         toSentenceCase
     } from "../scripts/helpers.js";
     import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
@@ -23,13 +22,67 @@
     let displayInformation = []
     let ipfsAddress = ""
     let ipfsLoading = false
-
+    let schema = {}
+    let schemaId = null;
     let loading = false
+    let fileUploadProperties = []
 
     onMount(async () => {
         receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receipt.receiptId);
         await getReceiptData(receipt)
     })
+
+    $: schemaId && getSchemaFileProps()
+
+    async function getSchema() {
+        let variables = {id: schemaId}
+
+        let query = `
+          query($id: ID!) {
+            receiptVaultInformation(id: $id) {
+                id,
+                information
+            }
+          }
+         `
+        if ($vault.address) {
+            try {
+                let resp = await getSubgraphData($activeNetwork, variables, query, 'receiptVaultInformation')
+                let byteInfo = ""
+                if (resp && resp.data && resp.data.receiptVaultInformation) {
+                    byteInfo = resp.data.receiptVaultInformation.information
+                    let infoHash = hexToString(byteInfo.slice(2))
+                    let url = await getIpfsGetWay(infoHash)
+                    try {
+                        if (url) {
+                            let res = await axios.get(url)
+                            if (res) {
+                                schema = res.data
+                            }
+                        }
+                    } catch (err) {
+                        // console.log(err)
+                    }
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
+
+    async function getSchemaFileProps() {
+        await getSchema()
+        if (schema) {
+            let props = Object.keys(schema.schema.properties)
+            fileUploadProperties = props.filter(p => {
+                let value = schema.schema.properties[p]
+                if (value.editor === "upload") {
+                    return p
+                }
+            })
+            fileUploadProperties = fileUploadProperties.map(p=>toSentenceCase(p))
+        }
+    }
 
     async function getReceiptData(receipt) {
         loading = true;
@@ -51,20 +104,14 @@
                     let res = await axios.get(url)
                     if (res) {
                         receiptInformations = res.data
-                        console.log("receiptInformations", receiptInformations)
+                        schemaId = res.data.schema
                         displayInformation = Object.keys(receiptInformations).map(prop => {
-                            //bad solution
-                            if (prop === "pie_certificate") {
-                                return {
-                                    label: toSentenceCase(prop),
-                                    value: `${IPFS_GETWAY}${receiptInformations[prop]} `
-                                }
-                            }
                             return {
                                 label: toSentenceCase(prop),
                                 value: receiptInformations[prop]
                             }
                         })
+                        displayInformation = displayInformation.filter(d => d.label !== "Schema")
                         ipfsLoading = false;
                     }
                 } catch (err) {
@@ -110,15 +157,16 @@
       {/if}
       {#each displayInformation as info}
         <div class="receipt-row">
-          {#if isUrl(info.value)}
+
+          {#if fileUploadProperties.includes(info.label)}
             <span>{info.label}
-              <a href={info.value} target="_blank">
+              <a href={`${IPFS_GETWAY}${info.value}`} target="_blank">
                     <img src="{icons.show}" alt="view file" class="btn-hover">
               </a>
             </span>
           {/if}
 
-          {#if !isUrl(info.value)} <span>{info.label}</span>
+          {#if !fileUploadProperties.includes(info.label)} <span>{info.label}</span>
             {#if isAddress(info.value)}
               <div>{formatAddress(info.value)}</div>
             {/if}

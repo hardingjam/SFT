@@ -19,6 +19,7 @@
     import SetVault from "../routes/SetVault.svelte";
     import ReceiptAudit from "../routes/ReceiptAudit.svelte";
     import SftCreateSuccess from "../routes/SftCreateSuccess.svelte";
+    import AssetClasses from "../routes/AssetClasses.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -350,7 +351,8 @@
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>
           <Route path="#set-vault" component={SetVault}/>
-          <Route path="#new-schema" component={NewSchema}/>
+          <Route path="#asset-classes" component={AssetClasses}/>
+          <Route path="#new-asset-class" component={NewSchema}/>
           <Route path="#receipt/:id" component={ReceiptAudit}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
 

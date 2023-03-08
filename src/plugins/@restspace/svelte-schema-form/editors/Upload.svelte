@@ -53,7 +53,7 @@ const chooseFile = () => {
             mimeType: file.type,
             size: file.size
         };
-        fileDropped.set(file)
+        fileDropped.set({file, prop: params.path[0]})
     }
 };
 const onInput = (ev) => {
@@ -103,7 +103,7 @@ const deleteUploads = () => {
     value = '';
     params.pathChanged(params.path, FileNone);
     params.pathChanged(params.path, value);
-    fileDropped.set(File)
+    fileDropped.set({file:File,prop:params.path[0]})
 };
 
 const openFile = () => {

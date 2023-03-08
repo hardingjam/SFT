@@ -1,7 +1,15 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
-    import {vault, fileHash, fileDropped, uploadBtnLoading, activeNetwork, schemas} from "../scripts/store.js";
+    import {
+        vault,
+        fileHash,
+        fileDropped,
+        uploadBtnLoading,
+        activeNetwork,
+        schemas,
+        editorUploads
+    } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
@@ -19,6 +27,8 @@
 
     let error = ""
     let ipfsLoading = false;
+
+    let fileUploadProperties = []
 
     let loveToSchemas = [
         // {
@@ -58,9 +68,10 @@
     let username = "";
     let password = "";
     let promise;
+    let fileHashes = [];
 
     beforeUpdate(() => {
-        fileDropped.set('')
+        fileDropped.set({})
     })
 
     onMount(async () => {
@@ -130,7 +141,7 @@
                         ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
                     await tx.wait();
                     amount = 0;
-                    fileDropped.set('')
+                    fileDropped.set({})
                 }
 
             } else {
@@ -162,7 +173,7 @@
 
         let formData = new FormData();
 
-        formData.append('file', data)
+        type === "file" ? formData.append('file', data.file) : formData.append('file', data)
 
         const requestArr = IPFS_APIS.map((url) => {
             return axios.request({
@@ -196,9 +207,8 @@
 
             localStorage.setItem('ipfsUsername', username);
             localStorage.setItem('ipfsPassword', password);
-
-            if (type === "file" && data.size) {
-                fileHash.set(resolvedPromise.value.data.Hash)
+            if (type === "file" && data.file.size) {
+                fileHashes = [...fileHashes, {prop: data.prop, hash: resolvedPromise.value.data.Hash}]//.set(resolvedPromise.value.data.Hash)
             }
         } else {
             error = "Something went wrong"
@@ -209,11 +219,20 @@
         return resolvedPromise?.value.data
     };
 
-    $: ($fileDropped && $fileDropped.size) && upload($fileDropped, "file");
-    $: $fileHash && getCertificateUrl($fileHash);
+    $: ($fileDropped.file && $fileDropped.file.size) && upload($fileDropped, "file");
+
+    // $: $fileHash && getCertificateUrl($fileHash);
 
     async function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
+        let props = Object.keys(selectedSchema.schema.properties)
+        fileUploadProperties = props.filter(p => {
+            let value = selectedSchema.schema.properties[p]
+            if (value.editor === "upload") {
+                return p
+            }
+        })
+        editorUploads.set(fileUploadProperties)
     }
 
     let certificateUrl = ''
@@ -229,9 +248,10 @@
         formDataArr.map(a => {
             json[a.name] = a.value
         })
-
-        if ($fileHash) {
-            json.pie_certificate = $fileHash
+        if (fileHashes.length) {
+            fileHashes.map(data => {
+                json[data.prop] = data.hash
+            })
         }
 
         let formFields = Object.keys(json)
@@ -325,7 +345,7 @@
     <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
       (FT)
     </div>
-    <button class="mint-btn btn-solid" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
+    <button class="mint-btn btn-solid" on:click={() => mint()}>Mint
       Options
     </button>
   {/if}

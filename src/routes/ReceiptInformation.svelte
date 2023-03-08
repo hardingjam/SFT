@@ -1,6 +1,6 @@
 <script>
     import {createEventDispatcher, onMount} from "svelte";
-    import {activeNetwork, vault} from "../scripts/store.js";
+    import {activeNetwork, editorUploads, vault} from "../scripts/store.js";
     import {
         formatAddress,
         getIpfsGetWay,
@@ -53,7 +53,7 @@
                         receiptInformations = res.data
                         displayInformation = Object.keys(receiptInformations).map(prop => {
                             //bad solution
-                            if (prop === "pie_certificate") {
+                            if ($editorUploads.includes(prop)) {
                                 return {
                                     label: toSentenceCase(prop),
                                     value: `${IPFS_GETWAY}${receiptInformations[prop]} `

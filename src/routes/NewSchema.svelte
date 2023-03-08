@@ -69,6 +69,10 @@
         }
 
         schema = document.getElementById("code").textContent
+
+        //remove extra spaces to prevent parse error
+        schema = schema.replace(/\s/g,'')
+
         if (!schema) {
             error = "Please paste your schema";
             return

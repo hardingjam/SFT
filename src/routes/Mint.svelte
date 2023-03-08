@@ -7,17 +7,16 @@
         fileDropped,
         uploadBtnLoading,
         activeNetwork,
-        schemas,
-        editorUploads
+        schemas
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_APIS, IPFS_GETWAY, ONE} from "../scripts/consts.js";
+    import {IPFS_APIS, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
-    import {getIpfsGetWay, getSubgraphData, hasRole, hexToString, toBytes, toSentenceCase} from "../scripts/helpers";
+    import {getIpfsGetWay, getSubgraphData, hasRole, hexToString, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
     import {beforeUpdate, onMount} from "svelte";
@@ -27,8 +26,6 @@
 
     let error = ""
     let ipfsLoading = false;
-
-    let fileUploadProperties = []
 
     let loveToSchemas = [
         // {
@@ -225,16 +222,6 @@
 
     async function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
-
-        console.log(selectedSchema)
-        let props = Object.keys(selectedSchema.schema.properties)
-        fileUploadProperties = props.filter(p => {
-            let value = selectedSchema.schema.properties[p]
-            if (value.editor === "upload") {
-                return p
-            }
-        })
-        editorUploads.set(fileUploadProperties)
     }
 
     let certificateUrl = ''

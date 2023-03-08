@@ -1,13 +1,12 @@
 <script>
     import {createEventDispatcher, onMount} from "svelte";
-    import {activeNetwork, editorUploads, schemas, vault} from "../scripts/store.js";
+    import {activeNetwork, vault} from "../scripts/store.js";
     import {
         formatAddress,
         getIpfsGetWay,
         getReceiptBalance,
         getSubgraphData,
         hexToString,
-        isUrl,
         toSentenceCase
     } from "../scripts/helpers.js";
     import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
@@ -26,13 +25,14 @@
     let schema = {}
     let schemaId = null;
     let loading = false
+    let fileUploadProperties = []
 
     onMount(async () => {
         receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receipt.receiptId);
         await getReceiptData(receipt)
     })
 
-    $: schemaId && getSchema()
+    $: schemaId && getSchemaFileProps()
 
     async function getSchema() {
         let variables = {id: schemaId}
@@ -70,6 +70,20 @@
         }
     }
 
+    async function getSchemaFileProps() {
+        await getSchema()
+        if (schema) {
+            let props = Object.keys(schema.schema.properties)
+            fileUploadProperties = props.filter(p => {
+                let value = schema.schema.properties[p]
+                if (value.editor === "upload") {
+                    return p
+                }
+            })
+            fileUploadProperties = fileUploadProperties.map(p=>toSentenceCase(p))
+        }
+    }
+
     async function getReceiptData(receipt) {
         loading = true;
         let variables = {id: receipt.receipt.id}
@@ -92,13 +106,6 @@
                         receiptInformations = res.data
                         schemaId = res.data.schema
                         displayInformation = Object.keys(receiptInformations).map(prop => {
-                            //bad solution
-                            if ($editorUploads.includes(prop)) {
-                                return {
-                                    label: toSentenceCase(prop),
-                                    value: `${IPFS_GETWAY}${receiptInformations[prop]} `
-                                }
-                            }
                             return {
                                 label: toSentenceCase(prop),
                                 value: receiptInformations[prop]
@@ -150,15 +157,16 @@
       {/if}
       {#each displayInformation as info}
         <div class="receipt-row">
-          {#if isUrl(info.value)}
+
+          {#if fileUploadProperties.includes(info.label)}
             <span>{info.label}
-              <a href={info.value} target="_blank">
+              <a href={`${IPFS_GETWAY}${info.value}`} target="_blank">
                     <img src="{icons.show}" alt="view file" class="btn-hover">
               </a>
             </span>
           {/if}
 
-          {#if !isUrl(info.value)} <span>{info.label}</span>
+          {#if !fileUploadProperties.includes(info.label)} <span>{info.label}</span>
             {#if isAddress(info.value)}
               <div>{formatAddress(info.value)}</div>
             {/if}

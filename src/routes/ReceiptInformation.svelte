@@ -111,7 +111,7 @@
                                 value: receiptInformations[prop]
                             }
                         })
-                        displayInformation = displayInformation.filter(d => d.label !== "Schema")
+                        displayInformation = displayInformation.filter(d => d.label !== "Schema" && d.label !== "Schemahash")
                         ipfsLoading = false;
                     }
                 } catch (err) {

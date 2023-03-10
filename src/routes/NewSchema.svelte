@@ -71,25 +71,31 @@
         schema = document.getElementById("code").textContent
 
         //remove extra spaces to prevent parse error
-        schema = schema.replace(/\s/g,'')
+        schema = schema.replace(/\s/g, '')
 
         if (!schema) {
             error = "Please paste your schema";
             return
         }
-        schemaInformation = {
-            displayName: label,
-            schema: JSON.parse(schema),
-        }
 
-        let uploadResult = await upload(JSON.stringify(schemaInformation))
-
-        let dataBytes = uploadResult?.Hash ? toBytes(uploadResult.Hash) : []
         try {
-            await $vault.connect($ethersData.signer).receiptVaultInformation(dataBytes)
-        } catch (err) {
-            console.log(err)
+            schemaInformation = {
+                displayName: label,
+                schema: JSON.parse(schema),
+            }
+
+            try {
+                let uploadResult = await upload(JSON.stringify(schemaInformation))
+                let dataBytes = uploadResult?.Hash ? toBytes(uploadResult.Hash) : []
+                await $vault.connect($ethersData.signer).receiptVaultInformation(dataBytes)
+            } catch (err) {
+                console.log(err)
+            }
+        } catch (e) {
+            console.log(e.message)
+            error = "Schema is not valid JSON"
         }
+
     }
 
     const upload = async (data) => {

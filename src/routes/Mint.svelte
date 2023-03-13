@@ -132,18 +132,24 @@
             const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
             if (!hasRoleDepositor.error) {
                 let formResponse = await submitForm()
-                let shareRatio = ONE
-                const shares = ethers.utils.parseEther(amount.toString());
+                if (formResponse.Hash) {
+                    let shareRatio = ONE
+                    const shares = ethers.utils.parseEther(amount.toString());
 
-                let dataBytes = formResponse?.Hash ? toBytes(formResponse.Hash) : []
+                    let hashes = [...fileHashes.map(d => d.hash), formResponse?.Hash]
 
-                if (formResponse) {
-                    const tx = await $vault
-                        .connect(signer)
-                        ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
-                    await tx.wait();
-                    amount = 0;
-                    fileDropped.set({})
+                    let dataBytes = formResponse?.Hash ? toBytes(formResponse.Hash) : []
+
+                    // let dataBytes =  toBytes(hashes)
+
+                    if (formResponse) {
+                        const tx = await $vault
+                            .connect(signer)
+                            ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
+                        await tx.wait();
+                        amount = 0;
+                        fileDropped.set({})
+                    }
                 }
 
             } else {
@@ -248,11 +254,12 @@
                 json[data.prop] = data.hash
             })
         }
+        let formFields = Object.keys(json)
+        let formNotEmpty = formFields.some(f => json[f] !== "")
+
         json.schema = selectedSchema.id
         json.schemaHash = selectedSchema.hash
 
-        let formFields = Object.keys(json)
-        let formNotEmpty = formFields.some(f => json[f] !== "")
         let response = {};
         if (formNotEmpty) {
             response = await upload(JSON.stringify(json), "data")

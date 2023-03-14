@@ -80,7 +80,7 @@
                     return p
                 }
             })
-            fileUploadProperties = fileUploadProperties.map(p=>toSentenceCase(p))
+            fileUploadProperties = fileUploadProperties.map(p => toSentenceCase(p))
         }
     }
 
@@ -97,9 +97,11 @@
 
             if (receiptInfo.length) {
                 byteInfo = receiptInfo[0].information
-                let infoHash = hexToString(byteInfo.slice(2))
-                ipfsAddress = `ipfs://${infoHash}`
-                let url = await getIpfsGetWay(infoHash)
+                let infoHashes = hexToString(byteInfo.slice(2))
+                let hashes = infoHashes.split(",") || []
+                let schemaData = hashes[hashes.length - 1];
+                ipfsAddress = `ipfs://${schemaData}`
+                let url = await getIpfsGetWay(schemaData)
                 try {
                     let res = await axios.get(url)
                     if (res) {

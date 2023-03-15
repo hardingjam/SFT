@@ -250,10 +250,10 @@
         }
         json.schema = selectedSchema.id
         json.schemaHash = selectedSchema.hash
-
         let formFields = Object.keys(json)
+
         let formNotEmpty = formFields.some(f => json[f] !== "")
-        let response = {};
+        let response = null;
         if (formNotEmpty) {
             response = await upload(JSON.stringify(json), "data")
         }

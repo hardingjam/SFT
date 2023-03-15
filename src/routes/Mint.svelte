@@ -132,9 +132,8 @@
             const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
             if (!hasRoleDepositor.error) {
                 let formResponse = await submitForm()
-                if (formResponse.Hash) {
-                    let shareRatio = ONE
-                    const shares = ethers.utils.parseEther(amount.toString());
+                let shareRatio = ONE
+                const shares = ethers.utils.parseEther(amount.toString());
 
                     let hashes = [...fileHashes.map(d => d.hash), formResponse?.Hash]
 
@@ -150,7 +149,6 @@
                         amount = 0;
                         fileDropped.set({})
                     }
-                }
 
             } else {
                 error = hasRoleDepositor.error
@@ -254,13 +252,12 @@
                 json[data.prop] = data.hash
             })
         }
-        let formFields = Object.keys(json)
-        let formNotEmpty = formFields.some(f => json[f] !== "")
-
         json.schema = selectedSchema.id
         json.schemaHash = selectedSchema.hash
+        let formFields = Object.keys(json)
 
-        let response = {};
+        let formNotEmpty = formFields.some(f => json[f] !== "")
+        let response = null;
         if (formNotEmpty) {
             response = await upload(JSON.stringify(json), "data")
         }

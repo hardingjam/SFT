@@ -23,7 +23,9 @@
     "jquery": "^3.6.1",
     "json-format-highlight": "^1.0.4",
     "lodash-es": "^4.17.21",
+    "prettier": "^2.8.4",
     "sv-bootstrap-dropdown": "^0.4.4",
-    "yrv": "^0.0.57"
+    "yrv": "^0.0.57",
+    "zlib": "^1.0.5"
   }
 }

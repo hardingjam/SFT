@@ -1,6 +1,11 @@
 import {ethers} from "ethers";
 import {IPFS_GETWAY, ONE, ROLES} from "./consts.js";
 import axios from "axios";
+import {arrayify} from "ethers/lib/utils.js";
+import {format} from "prettier"
+import cbor from "cbor/types/lib/encoder.js";
+import {deflateSync} from "zlib";
+
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -227,3 +232,67 @@ export function formatAddress(address) {
     } else
         return ''
 }
+
+export function getMeta(magicNumber, data) {
+    const metaDocumentHex =
+        "0x" + magicNumber.toString(16).toLowerCase();
+
+    const contractMetaEncoded = encodeCBORMeta(data, magicNumber);
+
+    // Contract document magic number plus each encoded data
+    return metaDocumentHex + contractMetaEncoded;
+}
+
+export function encodeCBORMeta(data, magicNumber) {
+    // -- Encoding ContractMeta with CBOR
+    // Obtain Contract Meta as string (Deflated JSON) and parse it to an ArrayBuffer
+
+    const contractMeta = arrayify(getDataMetaBytes(data)).buffer;
+    return cborEncode(
+        contractMeta,
+        magicNumber
+    );
+}
+
+export function getDataMetaBytes(data) {
+    return deflateJson(data);
+}
+
+export const deflateJson = (data_: any): string => {
+    const content = format(JSON.stringify(data_, null, 4), {parser: "json"});
+    const bytes = Uint8Array.from(deflateSync(content));
+    let hex = "0x";
+    for (let i = 0; i < bytes.length; i++) {
+        hex = hex + bytes[i].toString(16).padStart(2, "0");
+    }
+    return hex;
+};
+
+export const cborEncode = (
+    payload_: string | number | Uint8Array | ArrayBuffer,
+    magicNumber_: bigint,
+    contentType_?: string,
+    options_?: {
+        contentEncoding?: string;
+        contentLanguage?: string;
+    }
+): string => {
+    const m = new Map();
+    m.set(0, payload_); // Payload
+    m.set(1, magicNumber_); // Magic number
+    if (contentType_) {
+        m.set(2, contentType_); // Content-Type
+    }
+
+    if (options_) {
+        if (options_.contentEncoding) {
+            m.set(3, options_.contentEncoding); // Content-Encoding
+        }
+
+        if (options_.contentLanguage) {
+            m.set(4, options_.contentLanguage); // Content-Language
+        }
+    }
+
+    return cbor.encodeCanonical(m).toString("hex").toLowerCase();
+};

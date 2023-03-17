@@ -239,14 +239,10 @@ export function getMeta(magicNumber, data) {
 
     const contractMetaEncoded = encodeCBORMeta(data, magicNumber);
 
-    // Contract document magic number plus each encoded data
     return metaDocumentHex + contractMetaEncoded;
 }
 
 export function encodeCBORMeta(data, magicNumber) {
-    // -- Encoding ContractMeta with CBOR
-    // Obtain Contract Meta as string (Deflated JSON) and parse it to an ArrayBuffer
-
     const contractMeta = arrayify(getDataMetaBytes(data)).buffer;
     return cborEncode(
         contractMeta,

@@ -38,4 +38,8 @@ export const MAGIC_NUMBERS = {
      * Prefixes oa schemas
      */
     OA_SCHEMA: BigInt(0xffa8e8a9b9cf4a31),
+    /**
+     * Prefixes oa information
+     */
+    OA_INFORMATION: BigInt(0xffc47a6299e8a911),
 };

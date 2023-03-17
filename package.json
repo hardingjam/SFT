@@ -18,6 +18,7 @@
     "@sentry/svelte": "^7.38.0",
     "@sentry/tracing": "^7.27.0",
     "axios": "^1.1.2",
+    "cbor": "^8.1.0",
     "ethers": "^5.6.9",
     "jquery": "^3.6.1",
     "json-format-highlight": "^1.0.4",

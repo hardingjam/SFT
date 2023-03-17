@@ -29,3 +29,13 @@ export const IPFS_APIS = [
     "https://gildlab-ipfs-5.eu.ngrok.io/api/v0/add?pin=true&to-files=", //David A Box2
 ]
 export const IPFS_GETWAY = "https://ipfs.io/ipfs/"
+export const MAGIC_NUMBERS = {
+    /**
+     * Prefixes oa meta documents
+     */
+    OA_META_DOCUMENT: BigInt(0xff688a46f9cf4594),
+    /**
+     * Prefixes oa schemas
+     */
+    OA_SCHEMA: BigInt(0xffa8e8a9b9cf4a31),
+};

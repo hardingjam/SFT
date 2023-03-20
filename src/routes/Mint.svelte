@@ -14,9 +14,9 @@
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_APIS, ONE} from "../scripts/consts.js";
+    import {IPFS_APIS, MAGIC_NUMBERS, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
-    import {getIpfsGetWay, getSubgraphData, hasRole, hexToString, toBytes} from "../scripts/helpers";
+    import {getIpfsGetWay, getMeta, getSubgraphData, hasRole, hexToString, toBytes} from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
     import {beforeUpdate, onMount} from "svelte";
@@ -137,14 +137,14 @@
 
                     let hashes = [...fileHashes.map(d => d.hash), formResponse?.Hash]
 
-                    let dataBytes = formResponse?.Hash ? toBytes(formResponse.Hash) : []
+                    let metaData = formResponse?.Hash ? getMeta(MAGIC_NUMBERS.OA_INFORMATION,formResponse.Hash) : []
 
                     // let dataBytes =  toBytes(hashes)
-
-                    if (formResponse) {
+                console.log(metaData);
+                if (formResponse) {
                         const tx = await $vault
                             .connect(signer)
-                            ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
+                            ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, metaData);
                         await tx.wait();
                         amount = 0;
                         fileDropped.set({})

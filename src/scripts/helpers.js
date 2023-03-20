@@ -3,8 +3,8 @@ import {IPFS_GETWAY, ONE, ROLES} from "./consts.js";
 import axios from "axios";
 import {arrayify} from "ethers/lib/utils.js";
 import {format} from "prettier"
-import cbor from "cbor/types/lib/encoder.js";
-import {deflateSync} from "zlib";
+import zlib from "zlib";
+import cbor from "cbor";
 
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -254,9 +254,9 @@ export function getDataMetaBytes(data) {
     return deflateJson(data);
 }
 
-export const deflateJson = (data_: any): string => {
+export function deflateJson (data_){
     const content = format(JSON.stringify(data_, null, 4), {parser: "json"});
-    const bytes = Uint8Array.from(deflateSync(content));
+    const bytes = Uint8Array.from(zlib.deflateSync(content));
     let hex = "0x";
     for (let i = 0; i < bytes.length; i++) {
         hex = hex + bytes[i].toString(16).padStart(2, "0");
@@ -264,15 +264,12 @@ export const deflateJson = (data_: any): string => {
     return hex;
 };
 
-export const cborEncode = (
-    payload_: string | number | Uint8Array | ArrayBuffer,
-    magicNumber_: bigint,
-    contentType_?: string,
-    options_?: {
-        contentEncoding?: string;
-        contentLanguage?: string;
-    }
-): string => {
+export function cborEncode (
+    payload_,
+    magicNumber_,
+    contentType_,
+    options_
+) {
     const m = new Map();
     m.set(0, payload_); // Payload
     m.set(1, magicNumber_); // Magic number

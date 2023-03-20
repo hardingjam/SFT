@@ -2,9 +2,10 @@
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
-    import {toBytes} from "../scripts/helpers.js";
-    import {IPFS_APIS} from "../scripts/consts.js";
+    import {cborEncode, deflateJson, toBytes} from "../scripts/helpers.js";
+    import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
+    import {arrayify} from "ethers/lib/utils.js";
 
     let label = ""
     let schema = {}
@@ -77,6 +78,9 @@
             error = "Please paste your schema";
             return
         }
+
+        console.log(encodeCBORSchema(schema))
+
 
         try {
             schemaInformation = {
@@ -169,6 +173,22 @@
                 showAuth = false;
             }
         )
+    }
+
+    export function encodeCBORSchema (data) {
+        // -- Encoding with CBOR
+        // Obtain (Deflated JSON) and parse it to an ArrayBuffer
+
+        const deflatedData = arrayify(deflateJson(data)).buffer;
+        return cborEncode(
+            deflatedData,
+            MAGIC_NUMBERS.OA_SCHEMA,
+            "application/json",
+            {
+                contentEncoding: "deflate",
+            }
+        );
+
     }
 
 </script>

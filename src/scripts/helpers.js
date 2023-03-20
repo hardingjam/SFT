@@ -1,6 +1,9 @@
 import {ethers} from "ethers";
 import {IPFS_GETWAY, ONE, ROLES} from "./consts.js";
 import axios from "axios";
+import {deflateSync} from "zlib";
+import {format} from "prettier";
+import CBOR from "cbor-js"
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -226,4 +229,41 @@ export function formatAddress(address) {
         return address.replace(/(.{6}).*(.{5})/, "$1…$2")
     } else
         return ''
+}
+
+
+export function deflateJson(data_) {
+    const content = format(JSON.stringify(data_, null, 4), {parser: "json"});
+    const bytes = Uint8Array.from(deflateSync(content));
+    let hex = "0x";
+    for (let i = 0; i < bytes.length; i++) {
+        hex = hex + bytes[i].toString(16).padStart(2, "0");
+    }
+    return hex;
+}
+
+export function cborEncode(
+    payload_,
+    magicNumber_,
+    contentType_,
+    options_
+) {
+    const m = new Map();
+    m.set(0, payload_); // Payload
+    m.set(1, magicNumber_); // Magic number
+    if (contentType_) {
+        m.set(2, contentType_); // Content-Type
+    }
+
+    if (options_) {
+        if (options_.contentEncoding) {
+            m.set(3, options_.contentEncoding); // Content-Encoding
+        }
+
+        if (options_.contentLanguage) {
+            m.set(4, options_.contentLanguage); // Content-Language
+        }
+    }
+    return CBOR.encode(m).toString("hex").toLowerCase();
+    // return cbor.encodeCanonical(m).toString("hex").toLowerCase();
 }

@@ -2,7 +2,7 @@
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
-    import {cborEncode, deflateJson, toBytes} from "../scripts/helpers.js";
+    import {cborDecode, cborEncode, deflateJson, toBytes} from "../scripts/helpers.js";
     import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
@@ -79,7 +79,8 @@
             return
         }
 
-        console.log(encodeCBORSchema(schema))
+        // let bla = encodeCBORSchema(JSON.stringify(schema))
+        // console.log(12, cborDecode(bla))
 
 
         try {

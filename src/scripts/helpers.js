@@ -292,13 +292,9 @@ export function encodeCBORSchema (data) {
 
 export function bytesToMeta(bytes){
     if (isBytesLike(bytes)) {
-        // let _schema;
-        // if (typeof schema === "string") _schema = JSON.parse(schema);
         const _bytesArr = arrayify(bytes, { allowMissingPrefix: true });
-        const _meta = format(
-            Buffer.from(pako.inflate(_bytesArr)).toString(),
-            { parser: "json", plugins: [babelParser] }
-        );
+        const _meta = pako.inflate(_bytesArr, { to: 'string' })
+
         return JSON.parse(_meta);
     }
     else throw new Error("invalid meta");

@@ -2,10 +2,9 @@
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
-    import {cborDecode, encodeCBORSchema} from "../scripts/helpers.js";
+    import {encodeCBORSchema} from "../scripts/helpers.js";
     import {IPFS_APIS} from "../scripts/consts.js";
     import axios from "axios";
-    import pako from "pako"
 
 
     let label = ""
@@ -51,37 +50,34 @@
             return
         }
 
-        let bla = encodeCBORSchema(schema)
 
-        let decoded = cborDecode(bla)
-        console.log(13, bla)
-        console.log(12, decoded)
 
-          let bytes = decoded[0][0][1]
+        try {
 
-        console.log(1,bytes
-        )
-        const _meta = pako.inflate(bytes,{ to: 'string' })
-        console.log(JSON.parse(_meta))
-        console.log(55,_meta)
+            schemaInformation = {
+                displayName: label,
+                schema: JSON.parse(schema),
+            }
 
-        // try {
-        //     schemaInformation = {
-        //         displayName: label,
-        //         schema: JSON.parse(schema),
-        //     }
-        //
-        //     try {
-        //         let uploadResult = await upload(JSON.stringify(schemaInformation))
-        //         let dataBytes = uploadResult?.Hash ? toBytes(uploadResult.Hash) : []
-        //         await $vault.connect($ethersData.signer).receiptVaultInformation(dataBytes)
-        //     } catch (err) {
-        //         console.log(err)
-        //     }
-        // } catch (e) {
-        //     console.log(e.message)
-        //     error = "Schema is not valid JSON"
-        // }
+            let encodedData = encodeCBORSchema(schemaInformation)
+            console.log(encodedData)
+            // let decoded = cborDecode(encodedData)
+            //
+            // let bytes = decoded[0][0][1]
+            // const _meta = bytesToMeta(bytes)
+            // console.log(_meta)
+
+            // try {
+            //     let uploadResult = await upload(JSON.stringify(schemaInformation))
+            //     let dataBytes = uploadResult?.Hash ? toBytes(uploadResult.Hash) : []
+            //     await $vault.connect($ethersData.signer).receiptVaultInformation(dataBytes)
+            // } catch (err) {
+            //     console.log(err)
+            // }
+        } catch (e) {
+            console.log(e.message)
+            error = "Schema is not valid JSON"
+        }
 
     }
 
@@ -157,7 +153,6 @@
             }
         )
     }
-
 
 
 </script>

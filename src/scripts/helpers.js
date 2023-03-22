@@ -2,13 +2,11 @@ import {ethers} from "ethers";
 import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES} from "./consts.js";
 import axios from "axios";
 import pako from "pako"
-import cbor from "cbor-web";
+import { encodeCanonical, decodeAllSync } from "cbor-web";
 import {arrayify, isBytesLike} from "ethers/lib/utils.js";
 import {format} from "prettier"
 import babelParser from "prettier/parser-babel.js";
 
-
-const { encodeCanonical, decodeAllSync } = cbor
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (

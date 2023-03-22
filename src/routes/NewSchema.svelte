@@ -2,7 +2,7 @@
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
-    import {encodeCBORSchema} from "../scripts/helpers.js";
+    import {encodeCBOR} from "../scripts/helpers.js";
     import {IPFS_APIS} from "../scripts/consts.js";
     import axios from "axios";
 
@@ -50,8 +50,6 @@
             return
         }
 
-
-
         try {
 
             schemaInformation = {
@@ -59,7 +57,7 @@
                 schema: JSON.parse(schema),
             }
 
-            let encodedData = encodeCBORSchema(schemaInformation)
+            let encodedData = encodeCBOR(schemaInformation)
             console.log(encodedData)
             // let decoded = cborDecode(encodedData)
             //

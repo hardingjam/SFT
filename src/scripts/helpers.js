@@ -2,7 +2,7 @@ import {ethers} from "ethers";
 import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES} from "./consts.js";
 import axios from "axios";
 import pako from "pako"
-import { encodeCanonical, decodeAllSync } from "cbor-web";
+import {encodeCanonical, decodeAllSync} from "cbor-web";
 import {arrayify, isBytesLike} from "ethers/lib/utils.js";
 import {format} from "prettier"
 import babelParser from "prettier/parser-babel.js";
@@ -236,7 +236,7 @@ export function formatAddress(address) {
 
 
 export function deflateJson(data_) {
-    const bytes = Uint8Array.from(pako.deflate(data_, { to: 'string' }));
+    const bytes = Uint8Array.from(pako.deflate(data_, {to: 'string'}));
     let hex = "0x";
     for (let i = 0; i < bytes.length; i++) {
         hex = hex + bytes[i].toString(16).padStart(2, "0");
@@ -270,15 +270,18 @@ export function cborEncode(
     // return cbor.encodeCanonical(m).toString("hex").toLowerCase();
 }
 
-export function cborDecode (dataEncoded_){
+export function cborDecode(dataEncoded_) {
     return decodeAllSync(dataEncoded_);
 }
 
-export function encodeCBORSchema (data) {
+export function encodeCBOR(data) {
+    console.log(typeof Object)
     // -- Encoding with CBOR
     // Obtain (Deflated JSON) and parse it to an ArrayBuffer
-
-    const deflatedData = arrayify(deflateJson(JSON.stringify(data))).buffer;
+    if (typeof data === 'object') {
+        data = JSON.stringify(data)
+    }
+    const deflatedData = arrayify(deflateJson(data)).buffer;
     return cborEncode(
         deflatedData,
         MAGIC_NUMBERS.OA_SCHEMA,
@@ -290,12 +293,16 @@ export function encodeCBORSchema (data) {
 
 }
 
-export function bytesToMeta(bytes){
+export function bytesToMeta(bytes) {
     if (isBytesLike(bytes)) {
-        const _bytesArr = arrayify(bytes, { allowMissingPrefix: true });
-        const _meta = pako.inflate(_bytesArr, { to: 'string' })
-
-        return JSON.parse(_meta);
-    }
-    else throw new Error("invalid meta");
+        const _bytesArr = arrayify(bytes, {allowMissingPrefix: true});
+        const _meta = pako.inflate(_bytesArr, {to: 'string'})
+        let res;
+        try {
+            res = JSON.parse(_meta)
+        } catch {
+            res = _meta
+        }
+        return res
+    } else throw new Error("invalid meta");
 }

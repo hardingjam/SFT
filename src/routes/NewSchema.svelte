@@ -6,6 +6,8 @@
     import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
+    import pako from "pako"
+
 
     let label = ""
     let schema = {}
@@ -80,9 +82,18 @@
         }
 
         let bla = encodeCBORSchema(JSON.stringify(schema))
-        console.log(13, bla)
-        console.log(12, cborDecode(bla))
 
+        let decoded = cborDecode(bla)
+        console.log(13, bla)
+        console.log(12, decoded)
+
+          let bytes = decoded[0][0][1]
+
+        console.log(1,bytes
+        )
+        const _meta = pako.inflate(bytes,{ to: 'string' })
+        console.log(JSON.parse(_meta))
+        console.log(55,_meta)
 
         // try {
         //     schemaInformation = {

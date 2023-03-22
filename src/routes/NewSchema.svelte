@@ -80,6 +80,7 @@
         }
 
         let bla = encodeCBORSchema(JSON.stringify(schema))
+        console.log(13, bla)
         console.log(12, cborDecode(bla))
 
 

@@ -4,7 +4,7 @@ import axios from "axios";
 // import {deflateSync} from "zlib";
 import {format} from "prettier";
 import pako from "pako"
-import CBOR from "cbor-web";
+import { encodeCanonical, decodeAllSync } from "cbor-web";
 
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -265,10 +265,10 @@ export function cborEncode(
             m.set(4, options_.contentLanguage); // Content-Language
         }
     }
-    return CBOR.encode([...m])
+    return encodeCanonical([...m])
     // return cbor.encodeCanonical(m).toString("hex").toLowerCase();
 }
 
 export function cborDecode (dataEncoded_){
-    return CBOR.decode(dataEncoded_);
+    return decodeAllSync(dataEncoded_);
 }

@@ -3,7 +3,10 @@ import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES} from "./consts.js";
 import axios from "axios";
 import pako from "pako"
 import cbor from "cbor-web";
-import {arrayify} from "ethers/lib/utils.js";
+import {arrayify, isBytesLike} from "ethers/lib/utils.js";
+import {format} from "prettier"
+import babelParser from "prettier/parser-babel.js";
+
 
 const { encodeCanonical, decodeAllSync } = cbor
 
@@ -287,4 +290,18 @@ export function encodeCBORSchema (data) {
         }
     );
 
+}
+
+export function bytesToMeta(bytes){
+    if (isBytesLike(bytes)) {
+        // let _schema;
+        // if (typeof schema === "string") _schema = JSON.parse(schema);
+        const _bytesArr = arrayify(bytes, { allowMissingPrefix: true });
+        const _meta = format(
+            Buffer.from(pako.inflate(_bytesArr)).toString(),
+            { parser: "json", plugins: [babelParser] }
+        );
+        return JSON.parse(_meta);
+    }
+    else throw new Error("invalid meta");
 }

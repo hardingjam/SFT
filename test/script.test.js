@@ -1,7 +1,6 @@
 import {describe, it} from 'mocha';
 import {expect} from 'chai';
-import {deflateJson, cborDecode, cborEncode, encodeCBORSchema} from '../src/scripts/helpers.js';
-import pako from "pako/dist/pako.esm.mjs";
+import {cborDecode, encodeCBORSchema, bytesToMeta} from '../src/scripts/helpers.js';
 
 describe('Encode', () => {
     describe('Encode', () => {
@@ -35,22 +34,14 @@ describe('Encode', () => {
                     }
                 }
             }
-            // let output = decode(encode(foo))
 
             let cborEncodedSchema = encodeCBORSchema(schema)
-
             let cborDecodedData = cborDecode(cborEncodedSchema)
-
             let bytes = cborDecodedData[0][0][1]
 
-            const _meta = pako.inflate(bytes,{ to: 'string' })
-            console.log(JSON.parse(_meta))
+            const _meta = bytesToMeta(bytes)
 
-
-            // assertEq(foo, output)
-
-            // expect(myScript.addNumbers(2, 3)).to.equal(5);
-            // expect(myScript.addNumbers(-5, 10)).to.equal(5);
+            expect(JSON.stringify(schema)).to.equal(JSON.stringify(_meta));
         });
     });
 });

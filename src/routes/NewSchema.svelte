@@ -79,27 +79,27 @@
             return
         }
 
-        // let bla = encodeCBORSchema(JSON.stringify(schema))
-        // console.log(12, cborDecode(bla))
+        let bla = encodeCBORSchema(JSON.stringify(schema))
+        console.log(12, cborDecode(bla))
 
 
-        try {
-            schemaInformation = {
-                displayName: label,
-                schema: JSON.parse(schema),
-            }
-
-            try {
-                let uploadResult = await upload(JSON.stringify(schemaInformation))
-                let dataBytes = uploadResult?.Hash ? toBytes(uploadResult.Hash) : []
-                await $vault.connect($ethersData.signer).receiptVaultInformation(dataBytes)
-            } catch (err) {
-                console.log(err)
-            }
-        } catch (e) {
-            console.log(e.message)
-            error = "Schema is not valid JSON"
-        }
+        // try {
+        //     schemaInformation = {
+        //         displayName: label,
+        //         schema: JSON.parse(schema),
+        //     }
+        //
+        //     try {
+        //         let uploadResult = await upload(JSON.stringify(schemaInformation))
+        //         let dataBytes = uploadResult?.Hash ? toBytes(uploadResult.Hash) : []
+        //         await $vault.connect($ethersData.signer).receiptVaultInformation(dataBytes)
+        //     } catch (err) {
+        //         console.log(err)
+        //     }
+        // } catch (e) {
+        //     console.log(e.message)
+        //     error = "Schema is not valid JSON"
+        // }
 
     }
 

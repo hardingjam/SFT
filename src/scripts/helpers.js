@@ -3,8 +3,9 @@ import {IPFS_GETWAY, ONE, ROLES} from "./consts.js";
 import axios from "axios";
 // import {deflateSync} from "zlib";
 import {format} from "prettier";
-import CBOR from "cbor-js"
 import pako from "pako"
+import CBOR from "cbor-web";
+
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (

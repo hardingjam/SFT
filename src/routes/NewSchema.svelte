@@ -2,10 +2,9 @@
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
-    import {cborDecode, cborEncode, deflateJson, toBytes} from "../scripts/helpers.js";
-    import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
+    import {cborDecode, encodeCBORSchema} from "../scripts/helpers.js";
+    import {IPFS_APIS} from "../scripts/consts.js";
     import axios from "axios";
-    import {arrayify} from "ethers/lib/utils.js";
     import pako from "pako"
 
 
@@ -18,35 +17,6 @@
     let password = "";
     let schemaInformation = {}
 
-
-    // let bla = {
-    //     "type": "object",
-    //     "required": [
-    //         "pie_certificate",
-    //         "producer_wallet",
-    //         "total_score",
-    //         "max_options"
-    //     ],
-    //     "properties": {
-    //         "producer_wallet": {
-    //             "type": "string",
-    //             "title": "Producer Wallet"
-    //         },
-    //         "total_score": {
-    //             "type": "string",
-    //             "title": "Total Score"
-    //         },
-    //         "max_options": {
-    //             "type": "string",
-    //             "title": "Max Options"
-    //         },
-    //         "pie_certificate": {
-    //             "type": "string",
-    //             "editor": "upload",
-    //             "title": "PIE Certificate"
-    //         }
-    //     }
-    // }
 
     let colors = {
         keyColor: 'black',
@@ -81,7 +51,7 @@
             return
         }
 
-        let bla = encodeCBORSchema(JSON.stringify(schema))
+        let bla = encodeCBORSchema(schema)
 
         let decoded = cborDecode(bla)
         console.log(13, bla)
@@ -188,21 +158,7 @@
         )
     }
 
-    export function encodeCBORSchema (data) {
-        // -- Encoding with CBOR
-        // Obtain (Deflated JSON) and parse it to an ArrayBuffer
 
-        const deflatedData = arrayify(deflateJson(data)).buffer;
-        return cborEncode(
-            deflatedData,
-            MAGIC_NUMBERS.OA_SCHEMA,
-            "application/json",
-            {
-                contentEncoding: "deflate",
-            }
-        );
-
-    }
 
 </script>
 <DefaultFrame header="New Schema">

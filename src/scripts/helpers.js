@@ -1,11 +1,11 @@
 import {ethers} from "ethers";
-import {IPFS_GETWAY, ONE, ROLES} from "./consts.js";
+import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES} from "./consts.js";
 import axios from "axios";
-// import {deflateSync} from "zlib";
-import {format} from "prettier";
 import pako from "pako"
-import { encodeCanonical, decodeAllSync } from "cbor-web";
+import cbor from "cbor-web";
+import {arrayify} from "ethers/lib/utils.js";
 
+const { encodeCanonical, decodeAllSync } = cbor
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -271,4 +271,20 @@ export function cborEncode(
 
 export function cborDecode (dataEncoded_){
     return decodeAllSync(dataEncoded_);
+}
+
+export function encodeCBORSchema (data) {
+    // -- Encoding with CBOR
+    // Obtain (Deflated JSON) and parse it to an ArrayBuffer
+
+    const deflatedData = arrayify(deflateJson(JSON.stringify(data))).buffer;
+    return cborEncode(
+        deflatedData,
+        MAGIC_NUMBERS.OA_SCHEMA,
+        "application/json",
+        {
+            contentEncoding: "deflate",
+        }
+    );
+
 }

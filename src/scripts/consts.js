@@ -37,5 +37,9 @@ export const MAGIC_NUMBERS = {
     /**
      * OA Schema
      */
-    OA_SCHEMA: BigInt(0xffa8e8a9b9cf4a31)
+    OA_SCHEMA: BigInt(0xffa8e8a9b9cf4a31),
+    /**
+     * OA Hash list
+     */
+    OA_HASH_LIST: BigInt(0xff9fae3cc645f463)
 };

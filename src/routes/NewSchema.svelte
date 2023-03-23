@@ -2,8 +2,8 @@
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
-    import {encodeCBOR} from "../scripts/helpers.js";
-    import {IPFS_APIS} from "../scripts/consts.js";
+    import {cborEncode, cborEncodeHashList, encodeCBOR} from "../scripts/helpers.js";
+    import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
 
 
@@ -57,21 +57,18 @@
                 schema: JSON.parse(schema),
             }
 
-            let encodedData = encodeCBOR(schemaInformation)
-            console.log(encodedData)
-            // let decoded = cborDecode(encodedData)
-            //
-            // let bytes = decoded[0][0][1]
-            // const _meta = bytesToMeta(bytes)
-            // console.log(_meta)
+            let encodedSchema = encodeCBOR(schemaInformation)
 
-            // try {
-            //     let uploadResult = await upload(JSON.stringify(schemaInformation))
-            //     let dataBytes = uploadResult?.Hash ? toBytes(uploadResult.Hash) : []
-            //     await $vault.connect($ethersData.signer).receiptVaultInformation(dataBytes)
-            // } catch (err) {
-            //     console.log(err)
-            // }
+            try {
+                let uploadResult = await upload(JSON.stringify(schemaInformation))
+                let encodedHashList = cborEncodeHashList([uploadResult?.Hash])
+
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
+
+                // await $vault.connect($ethersData.signer).receiptVaultInformation(meta)
+            } catch (err) {
+                console.log(err)
+            }
         } catch (e) {
             console.log(e.message)
             error = "Schema is not valid JSON"

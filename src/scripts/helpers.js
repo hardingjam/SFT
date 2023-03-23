@@ -275,7 +275,6 @@ export function cborDecode(dataEncoded_) {
 }
 
 export function encodeCBOR(data) {
-    console.log(typeof Object)
     // -- Encoding with CBOR
     // Obtain (Deflated JSON) and parse it to an ArrayBuffer
     if (typeof data === 'object') {

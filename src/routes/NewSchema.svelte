@@ -2,9 +2,10 @@
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
-    import {cborEncode, cborEncodeHashList, encodeCBOR} from "../scripts/helpers.js";
+    import {cborEncodeHashList, encodeCBOR} from "../scripts/helpers.js";
     import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
+    import {arrayify} from "ethers/lib/utils.js";
 
 
     let label = ""
@@ -64,8 +65,8 @@
                 let encodedHashList = cborEncodeHashList([uploadResult?.Hash])
 
                 const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
+                await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
 
-                // await $vault.connect($ethersData.signer).receiptVaultInformation(meta)
             } catch (err) {
                 console.log(err)
             }

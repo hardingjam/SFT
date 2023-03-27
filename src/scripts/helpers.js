@@ -265,6 +265,10 @@ export function cborEncode(
         if (options_.contentLanguage) {
             m.set(4, options_.contentLanguage); // Content-Language
         }
+
+        if (options_.schema) {
+            m.set(MAGIC_NUMBERS.OA_SCHEMA, options_.schema)
+        }
     }
     return encodeCanonical(m).toString("hex").toLowerCase();
 }
@@ -288,7 +292,24 @@ export function encodeCBOR(data) {
             contentEncoding: "deflate",
         }
     );
+}
 
+export function encodeCBORStructure(structure,schemaHash) {
+    // -- Encoding with CBOR
+    // Obtain (Deflated JSON) and parse it to an ArrayBuffer
+    if (typeof structure === 'object') {
+        structure = JSON.stringify(structure)
+    }
+    const deflatedData = arrayify(deflateJson(structure)).buffer;
+    return cborEncode(
+        deflatedData,
+        MAGIC_NUMBERS.OA_STRUCTURE,
+        "application/json",
+        {
+            contentEncoding: "deflate",
+            schema: schemaHash
+        }
+    );
 }
 
 export function bytesToMeta(bytes, type) {

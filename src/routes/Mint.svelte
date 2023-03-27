@@ -14,13 +14,21 @@
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_APIS, ONE} from "../scripts/consts.js";
+    import {IPFS_APIS, MAGIC_NUMBERS, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
-    import {getIpfsGetWay, getSubgraphData, hasRole, hexToString, toBytes} from "../scripts/helpers";
+    import {
+        cborEncodeHashList,
+        encodeCBORStructure,
+        getIpfsGetWay,
+        getSubgraphData,
+        hasRole,
+        hexToString,
+    } from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
     import {beforeUpdate, onMount} from "svelte";
     import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
+    import {arrayify} from "ethers/lib/utils.js";
 
     let image = {}
 
@@ -131,19 +139,31 @@
             }
             const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
             if (!hasRoleDepositor.error) {
-                let formResponse = await submitForm()
+                let structure = await submitForm()
+
+                let fileHashesList = fileHashes.map(f => f.hash)
+                let encodedStructure = encodeCBORStructure(structure, selectedSchema.hash)
+
                 let shareRatio = ONE
                 const shares = ethers.utils.parseEther(amount.toString());
 
-                let dataBytes = formResponse?.Hash ? toBytes(formResponse.Hash) : []
 
-                if (formResponse) {
-                    const tx = await $vault
-                        .connect(signer)
-                        ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
-                    await tx.wait();
-                    amount = 0;
-                    fileDropped.set({})
+                try {
+                    let structureIpfs = await upload(structure)
+                    let encodedHashList = cborEncodeHashList([...fileHashesList, structureIpfs?.Hash])
+
+                    const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedStructure + encodedHashList
+
+                    if (structure) {
+                        const tx = await $vault
+                            .connect(signer)
+                            ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
+                        await tx.wait();
+                        amount = 0;
+                        fileDropped.set({})
+                    }
+                } catch (err) {
+                    console.log(err)
                 }
 
             } else {
@@ -227,7 +247,6 @@
 
     async function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
-        console.log(selectedSchema)
     }
 
     let certificateUrl = ''
@@ -248,14 +267,12 @@
                 json[data.prop] = data.hash
             })
         }
-        json.schema = selectedSchema.id
-        json.schemaHash = selectedSchema.hash
         let formFields = Object.keys(json)
 
         let formNotEmpty = formFields.some(f => json[f] !== "")
         let response = null;
         if (formNotEmpty) {
-            response = await upload(JSON.stringify(json), "data")
+            response = JSON.stringify(json)
         }
 
         return response

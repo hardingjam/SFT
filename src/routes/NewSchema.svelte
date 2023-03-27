@@ -6,10 +6,14 @@
     import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
+    import {JSONEditor} from "svelte-jsoneditor";
 
 
     let label = ""
     let schema = {}
+    let content = {
+        text: ""
+    }
     let error = "";
     let showAuth = false;
     let promise;
@@ -41,11 +45,6 @@
             return
         }
 
-        schema = document.getElementById("code").textContent
-
-        //remove extra spaces to prevent parse error
-        schema = schema.replace(/\s/g, '')
-
         if (!schema) {
             error = "Please paste your schema";
             return
@@ -55,7 +54,7 @@
 
             schemaInformation = {
                 displayName: label,
-                schema: JSON.parse(schema),
+                schema: schema,
             }
 
             let encodedSchema = encodeCBOR(schemaInformation)
@@ -151,6 +150,13 @@
     }
 
 
+    $: content && getContent()
+
+    function getContent() {
+        if (content.text)
+            schema = JSON.parse(content.text)
+    }
+
 </script>
 <DefaultFrame header="New Schema">
   <div slot="content" class="schema-content">
@@ -161,11 +167,7 @@
       </div>
 
       <div class="schema">
-        <div class="editing-top-color">1</div>
-        <span class="textarea" role="textbox" id="code" contenteditable></span>
-        <pre id="highlighting">
-          <code id="highlighting-content"></code>
-        </pre>
+        <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
       <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}>Deploy schema</button>
     </div>

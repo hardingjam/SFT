@@ -291,10 +291,15 @@ export function encodeCBOR(data) {
 
 }
 
-export function bytesToMeta(bytes) {
+export function bytesToMeta(bytes, type) {
     if (isBytesLike(bytes)) {
         const _bytesArr = arrayify(bytes, {allowMissingPrefix: true});
-        const _meta = pako.inflate(_bytesArr, {to: 'string'})
+        let _meta;
+        if (type === "json") {
+            _meta = pako.inflate(_bytesArr, {to: 'string'})
+        } else {
+            _meta = new TextDecoder().decode(bytes).slice(3)
+        }
         let res;
         try {
             res = JSON.parse(_meta)

@@ -266,7 +266,7 @@ export function cborEncode(
             m.set(4, options_.contentLanguage); // Content-Language
         }
     }
-    return encodeCanonical([...m]).toString("hex").toLowerCase();
+    return encodeCanonical(m).toString("hex").toLowerCase();
 }
 
 export function cborDecode(dataEncoded_) {
@@ -305,7 +305,7 @@ export function bytesToMeta(bytes) {
     } else throw new Error("invalid meta");
 }
 
-export function cborEncodeHashList(hashList){
+export function cborEncodeHashList(hashList) {
     const cborHashes = encodeCanonical(hashList)
     return cborEncode(
         cborHashes,

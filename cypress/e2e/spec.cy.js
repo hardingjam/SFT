@@ -1,4 +1,4 @@
-import {cborDecode, encodeCBOR, bytesToMeta} from "../../src/scripts/helpers.js"
+import {cborDecode, encodeCBOR, bytesToMeta, cborEncodeHashList} from "../../src/scripts/helpers.js"
 import {it} from "mocha";
 import {expect} from "chai";
 
@@ -36,21 +36,21 @@ describe('Stepper', () => {
 
         let cborEncodedSchema = encodeCBOR(schema)
         let cborDecodedData = cborDecode(cborEncodedSchema)
-        let bytes = cborDecodedData[0][0][1]
+        let bytes = cborDecodedData[0].get(0)
 
         let _meta = bytesToMeta(bytes)
 
         expect(JSON.stringify(schema)).to.equal(JSON.stringify(_meta));
     })
     it('checks output after encode and decode where data is string', () => {
-            let string = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa"
+        let string = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa"
 
-            let cborEncoded = encodeCBOR(string)
-            let cborDecodedData = cborDecode(cborEncoded)
-            let bytes = cborDecodedData[0][0][1]
+        let cborEncoded = encodeCBOR(string)
+        let cborDecodedData = cborDecode(cborEncoded)
+        let bytes = cborDecodedData[0].get(0)
 
-            let _meta = bytesToMeta(bytes)
+        let _meta = bytesToMeta(bytes)
 
-            expect(string).to.equal(_meta);
-        })
+        expect(string).to.equal(_meta);
+    })
 })

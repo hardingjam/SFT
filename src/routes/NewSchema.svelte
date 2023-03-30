@@ -2,13 +2,11 @@
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
-    import {bytesToMeta, cborEncode, encodeCBOR} from "../scripts/helpers.js";
+    import {cborEncode, encodeCBOR} from "../scripts/helpers.js";
     import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
     import {JSONEditor} from "svelte-jsoneditor";
-    import {cborDecode} from "../scripts/helpers";
-    import {onMount} from "svelte";
 
 
     let label = ""
@@ -39,7 +37,6 @@
         document.getElementById("highlighting").style.display = "block"
     }
 
-
     async function deploySchema() {
         error = ""
         if (!label) {
@@ -64,7 +61,7 @@
             try {
                 let uploadResult = await upload(JSON.stringify(schemaInformation))
                 let encodedHashList = cborEncode(
-                    [uploadResult?.Hash],
+                    [uploadResult?.Hash].toString(),
                     MAGIC_NUMBERS.OA_HASH_LIST
                 );
                 const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList

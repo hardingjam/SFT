@@ -4,8 +4,6 @@ import axios from "axios";
 import pako from "pako"
 import {encodeCanonical, decodeAllSync} from "cbor-web";
 import {arrayify, isBytesLike} from "ethers/lib/utils.js";
-import {format} from "prettier"
-import babelParser from "prettier/parser-babel.js";
 
 
 export async function getEventArgs(tx, eventName, contract) {

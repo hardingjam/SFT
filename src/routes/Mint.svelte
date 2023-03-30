@@ -85,32 +85,32 @@
     })
 
     async function getSchemas() {
-        let variables = {id: $vault.address}
+        let variables = {id: $vault.address.toLowerCase()}
         if ($vault.address) {
             try {
                 let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
-                let vaultInfo = ""
-                let byteInfo = ""
+                let receiptVaultInformations = ""
                 let tempSchema = []
 
                 if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
                     ipfsLoading = true
-                    vaultInfo = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
 
-                    if (vaultInfo.length) {
-                        vaultInfo.map(async schema => {
-                            byteInfo = schema.information
-                            let infoHash = hexToString(byteInfo.slice(2))
-                            let url = await getIpfsGetWay(infoHash)
+                    if (receiptVaultInformations.length) {
+
+                        receiptVaultInformations.map(async data => {
+                            let cborDecodedInformation = cborDecode(data.information.slice(18))
+                            let schemaHash = cborDecodedInformation[1].get(0)
+                            let url = await getIpfsGetWay(schemaHash)
                             try {
                                 if (url) {
                                     let res = await axios.get(url)
                                     if (res) {
                                         tempSchema.push({
                                             ...res.data,
-                                            timestamp: schema.timestamp,
-                                            id: schema.id,
-                                            hash: infoHash
+                                            timestamp: data.timestamp,
+                                            id: data.id,
+                                            hash: schemaHash
                                         })
                                         tempSchema = tempSchema.filter(d => d.displayName)
                                         schemas.set(tempSchema)
@@ -121,7 +121,6 @@
                                 // console.log(err)
                             }
                         })
-
                     }
                 }
 

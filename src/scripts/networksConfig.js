@@ -44,8 +44,8 @@ const networks = [
         blockExplorer: "https://mumbai.polygonscan.com/",
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
         icon: 'polygon',
-        factory_address: '0x94927792b88D518f9a429572dD3D40400b8BE906',
-        subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
+        factory_address: '0xdDD6A23E4DE1A0a276d31Ea3D48d4b4BE3111829',
+        subgraph_url: "https://api.thegraph.com/subgraphs/name/ninokeldishvili/erc20-price-oracle-vault"
     }
 ];
 

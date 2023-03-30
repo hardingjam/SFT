@@ -38,6 +38,9 @@
     }
 
     async function deploySchema() {
+        if (error) {
+            return
+        }
         error = ""
         if (!label) {
             error = "Please enter Schema label";
@@ -150,12 +153,18 @@
         )
     }
 
-
     $: content && getContent()
 
     function getContent() {
-        if (content.text)
-            schema = JSON.parse(content.text)
+        error = ""
+        if (content.text) {
+            try {
+                schema = JSON.parse(content.text)
+            } catch (err) {
+                error = err
+                console.log("Invalid JSON:", error);
+            }
+        }
     }
 
 </script>
@@ -171,6 +180,7 @@
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
       <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}>Deploy schema</button>
+      <div class="error">{error}</div>
     </div>
 
     <div class={showAuth  ? 'auth show' : 'auth hide'}>
@@ -184,7 +194,6 @@
       </div>
       <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
     </div>
-    <div class="error">{error}</div>
 
   </div>
 </DefaultFrame>

@@ -330,11 +330,3 @@ export function bytesToMeta(bytes, type) {
         return res
     } else throw new Error("invalid meta");
 }
-
-export function cborEncodeHashList(hashList) {
-    const cborHashes = encodeCanonical(hashList)
-    return cborEncode(
-        cborHashes,
-        MAGIC_NUMBERS.OA_HASH_LIST
-    );
-}

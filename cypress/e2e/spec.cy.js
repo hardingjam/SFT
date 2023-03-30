@@ -47,13 +47,30 @@ describe('Stepper', () => {
 
         let schemaInformation =
             {
-                "displayName": "bb",
-                "schema": schema
+                "displayName": "Schema_test2",
+                "schema": {
+                    "type": "object",
+                    "required": [
+                        "pie_certificate",
+                        "producer_wallet"
+                    ],
+                    "properties": {
+                        "producer_wallet": {
+                            "type": "string",
+                            "title": "Producer Wallet"
+                        },
+                        "pie_certificate": {
+                            "type": "string",
+                            "editor": "upload",
+                            "title": "PIE Certificate"
+                        }
+                    }
+                }
             }
 
-        let hash = "QmVtXGgqpATBjp2NgC3vrPHUJSETtqSs5phnELTioVxE18"
+        let hash = "QmVps8SiBXHAGYFbEJcgcGVDGfGTNWMwdvchqznCmPojXt"
 
-        let exampleMeta = "0xff0a89c674ee7874a40058bb789c7d8fcb0ac2301045ff65d67e41b7e2c2850f50702112a6c9a8236913932956a4ff6e520b5a11b3bcf79ccccc030c476ff1bec48aa080b28409447da60aa17880dc7d4e5d79212da909746d389081620f9e49690ac247d628945a1f9c6952a46e682d655e9ca05551bb90fb0a5be5bcb0ab231c7adc679f621ef52dbfa747095c9ff26f2c3607eb01ddbdc86e3ce78fb8cdd8a6a7baf13a7fa405b6ab814ad2f7d53f44322c2ea4a4f1d6a1f95c7c3e9b7eb85d7a4f7ac287c4011bffa8e8a9b9cf4a3102706170706c69636174696f6e2f6a736f6e03676465666c617465a200583181782e516d567458476771704154426a70324e67433376725048554a534554747153733570686e454c54696f5678453138011bff9fae3cc645f463"
+        let exampleMeta = "0xff0a89c674ee7874a400589e789c6d8d310bc2301085ff4ab9b9936356717011c1c141a4a4c9a927a989c90529a5ffdd4b152cea6df7def7de1bc0520a4ef71bdd2128d8990b76ba614cbc801ad2f4821a80fb507cdf5ed1b03811ef99225a500708848dc1c87422a319c50dd1db2c52f3d0ce21c3719242613095ba6fe0b39038d2ed2c1d4cec8ab07da3d5fe858ef5cfe09f345a621f45c9c1796de77deb55b59c8547b927ee865cb6011bffa8e8a9b9cf4a3102706170706c69636174696f6e2f6a736f6e03676465666c617465a20081782e516d5670733853694258484147594662454a636763475644476647544e574d7764766368717a6e436d506f6a5874011bff9fae3cc645f463"
 
         let excludeRainMeta = exampleMeta.replace("0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase(), "")
 
@@ -68,7 +85,7 @@ describe('Stepper', () => {
 
         //check data
         let schemaData = bytesToMeta(schemaJson.get(0), "json");
-        let hashListData = bytesToMeta(hashList.get(0))
+        let hashListData = hashList.get(0)[0]
 
         expect(JSON.stringify(schemaInformation)).to.equal(JSON.stringify(schemaData))
         expect(hash).to.equal(hashListData)

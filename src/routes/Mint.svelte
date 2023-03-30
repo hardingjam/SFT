@@ -17,7 +17,8 @@
     import {IPFS_APIS, MAGIC_NUMBERS, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
     import {
-        cborEncodeHashList,
+        cborDecode,
+        cborEncode,
         encodeCBORStructure,
         getIpfsGetWay,
         getSubgraphData,
@@ -80,6 +81,7 @@
     })
 
     onMount(async () => {
+        console.log(cborDecode("a5005854789cab56ca2fca4ccfcc53b252323454d2514acf4c8c2f4a2dc82f2a018a04e64654a696577ab99786161b965704958779e51a973a657a65263a19e7a765a56519e7b947068607ba9847143929d50200f0f31a13011bffc47a6299e8a91102706170706c69636174696f6e2f6a736f6e03676465666c6174651bffa8e8a9b9cf4a31782e516d6575487a625479573753516579576f4d4a6b6e3172384563364134576234384648584c3472707a6d4350594da200785d516d58796577794a477555733177785277564a6d337542694a696142336f666a666a336e475951575144375872422c516d5271734552703651324d5a3263614e724762377461393133717657613256566370653143474879327676616a011bff9fae3cc645f463"))
         await getSchemas()
     })
 
@@ -150,10 +152,8 @@
 
                 try {
                     let structureIpfs = await upload(structure)
-                    let encodedHashList = cborEncodeHashList([...fileHashesList, structureIpfs?.Hash])
-
+                    let encodedHashList = cborEncode([...fileHashesList, structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
                     const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedStructure + encodedHashList
-
                     if (structure) {
                         const tx = await $vault
                             .connect(signer)

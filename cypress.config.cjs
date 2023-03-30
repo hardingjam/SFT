@@ -1,6 +1,7 @@
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
+  projectId: 'g1o5it',
   component: {
     devServer: {
       framework: "svelte",

@@ -2,12 +2,18 @@
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
-    import {toBytes} from "../scripts/helpers.js";
-    import {IPFS_APIS} from "../scripts/consts.js";
+    import {cborEncode, encodeCBOR} from "../scripts/helpers.js";
+    import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
+    import {arrayify} from "ethers/lib/utils.js";
+    import {JSONEditor} from "svelte-jsoneditor";
+
 
     let label = ""
     let schema = {}
+    let content = {
+        text: ""
+    }
     let error = "";
     let showAuth = false;
     let promise;
@@ -15,35 +21,6 @@
     let password = "";
     let schemaInformation = {}
 
-
-    // let bla = {
-    //     "type": "object",
-    //     "required": [
-    //         "pie_certificate",
-    //         "producer_wallet",
-    //         "total_score",
-    //         "max_options"
-    //     ],
-    //     "properties": {
-    //         "producer_wallet": {
-    //             "type": "string",
-    //             "title": "Producer Wallet"
-    //         },
-    //         "total_score": {
-    //             "type": "string",
-    //             "title": "Total Score"
-    //         },
-    //         "max_options": {
-    //             "type": "string",
-    //             "title": "Max Options"
-    //         },
-    //         "pie_certificate": {
-    //             "type": "string",
-    //             "editor": "upload",
-    //             "title": "PIE Certificate"
-    //         }
-    //     }
-    // }
 
     let colors = {
         keyColor: 'black',
@@ -60,18 +37,15 @@
         document.getElementById("highlighting").style.display = "block"
     }
 
-
     async function deploySchema() {
+        if (error) {
+            return
+        }
         error = ""
         if (!label) {
             error = "Please enter Schema label";
             return
         }
-
-        schema = document.getElementById("code").textContent
-
-        //remove extra spaces to prevent parse error
-        schema = schema.replace(/\s/g, '')
 
         if (!schema) {
             error = "Please paste your schema";
@@ -79,15 +53,23 @@
         }
 
         try {
+
             schemaInformation = {
                 displayName: label,
-                schema: JSON.parse(schema),
+                schema: schema,
             }
+
+            let encodedSchema = encodeCBOR(schemaInformation)
 
             try {
                 let uploadResult = await upload(JSON.stringify(schemaInformation))
-                let dataBytes = uploadResult?.Hash ? toBytes(uploadResult.Hash) : []
-                await $vault.connect($ethersData.signer).receiptVaultInformation(dataBytes)
+                let encodedHashList = cborEncode(
+                    [uploadResult?.Hash].toString(),
+                    MAGIC_NUMBERS.OA_HASH_LIST
+                );
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
+                await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+
             } catch (err) {
                 console.log(err)
             }
@@ -171,6 +153,20 @@
         )
     }
 
+    $: content && getContent()
+
+    function getContent() {
+        error = ""
+        if (content.text) {
+            try {
+                schema = JSON.parse(content.text)
+            } catch (err) {
+                error = err
+                console.log("Invalid JSON:", error);
+            }
+        }
+    }
+
 </script>
 <DefaultFrame header="New Schema">
   <div slot="content" class="schema-content">
@@ -181,13 +177,10 @@
       </div>
 
       <div class="schema">
-        <div class="editing-top-color">1</div>
-        <span class="textarea" role="textbox" id="code" contenteditable></span>
-        <pre id="highlighting">
-          <code id="highlighting-content"></code>
-        </pre>
+        <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
       <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}>Deploy schema</button>
+      <div class="error">{error}</div>
     </div>
 
     <div class={showAuth  ? 'auth show' : 'auth hide'}>
@@ -201,7 +194,6 @@
       </div>
       <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
     </div>
-    <div class="error">{error}</div>
 
   </div>
 </DefaultFrame>

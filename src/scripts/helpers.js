@@ -1,6 +1,10 @@
 import {ethers} from "ethers";
-import {IPFS_GETWAY, ONE, ROLES} from "./consts.js";
+import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES} from "./consts.js";
 import axios from "axios";
+import pako from "pako"
+import {encodeCanonical, decodeAllSync} from "cbor-web";
+import {arrayify, isBytesLike} from "ethers/lib/utils.js";
+
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -226,4 +230,101 @@ export function formatAddress(address) {
         return address.replace(/(.{6}).*(.{5})/, "$1…$2")
     } else
         return ''
+}
+
+
+export function deflateJson(data_) {
+    const bytes = Uint8Array.from(pako.deflate(data_, {to: 'string'}));
+    let hex = "0x";
+    for (let i = 0; i < bytes.length; i++) {
+        hex = hex + bytes[i].toString(16).padStart(2, "0");
+    }
+    return hex;
+}
+
+export function cborEncode(
+    payload_,
+    magicNumber_,
+    contentType_,
+    options_
+) {
+    const m = new Map();
+    m.set(0, payload_); // Payload
+    m.set(1, magicNumber_); // Magic number
+    if (contentType_) {
+        m.set(2, contentType_); // Content-Type
+    }
+
+    if (options_) {
+        if (options_.contentEncoding) {
+            m.set(3, options_.contentEncoding); // Content-Encoding
+        }
+
+        if (options_.contentLanguage) {
+            m.set(4, options_.contentLanguage); // Content-Language
+        }
+
+        if (options_.schema) {
+            m.set(MAGIC_NUMBERS.OA_SCHEMA, options_.schema)
+        }
+    }
+    return encodeCanonical(m).toString("hex").toLowerCase();
+}
+
+export function cborDecode(dataEncoded_) {
+    return decodeAllSync(dataEncoded_);
+}
+
+export function encodeCBOR(data) {
+    // -- Encoding with CBOR
+    // Obtain (Deflated JSON) and parse it to an ArrayBuffer
+    if (typeof data === 'object') {
+        data = JSON.stringify(data)
+    }
+    const deflatedData = arrayify(deflateJson(data)).buffer;
+    return cborEncode(
+        deflatedData,
+        MAGIC_NUMBERS.OA_SCHEMA,
+        "application/json",
+        {
+            contentEncoding: "deflate",
+        }
+    );
+}
+
+export function encodeCBORStructure(structure,schemaHash) {
+    // -- Encoding with CBOR
+    // Obtain (Deflated JSON) and parse it to an ArrayBuffer
+    if (typeof structure === 'object') {
+        structure = JSON.stringify(structure)
+    }
+    const deflatedData = arrayify(deflateJson(structure)).buffer;
+    return cborEncode(
+        deflatedData,
+        MAGIC_NUMBERS.OA_STRUCTURE,
+        "application/json",
+        {
+            contentEncoding: "deflate",
+            schema: schemaHash
+        }
+    );
+}
+
+export function bytesToMeta(bytes, type) {
+    if (isBytesLike(bytes)) {
+        const _bytesArr = arrayify(bytes, {allowMissingPrefix: true});
+        let _meta;
+        if (type === "json") {
+            _meta = pako.inflate(_bytesArr, {to: 'string'})
+        } else {
+            _meta = new TextDecoder().decode(bytes).slice(3)
+        }
+        let res;
+        try {
+            res = JSON.parse(_meta)
+        } catch {
+            res = _meta
+        }
+        return res
+    } else throw new Error("invalid meta");
 }

@@ -14,13 +14,22 @@
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_APIS, ONE} from "../scripts/consts.js";
+    import {IPFS_APIS, MAGIC_NUMBERS, ONE} from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
-    import {getIpfsGetWay, getSubgraphData, hasRole, hexToString, toBytes} from "../scripts/helpers";
+    import {
+        cborDecode,
+        cborEncode,
+        encodeCBORStructure,
+        getIpfsGetWay,
+        getSubgraphData,
+        hasRole,
+        hexToString,
+    } from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
     import {beforeUpdate, onMount} from "svelte";
     import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
+    import {arrayify} from "ethers/lib/utils.js";
 
     let image = {}
 
@@ -76,32 +85,32 @@
     })
 
     async function getSchemas() {
-        let variables = {id: $vault.address}
+        let variables = {id: $vault.address.toLowerCase()}
         if ($vault.address) {
             try {
                 let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
-                let vaultInfo = ""
-                let byteInfo = ""
+                let receiptVaultInformations = ""
                 let tempSchema = []
 
                 if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
                     ipfsLoading = true
-                    vaultInfo = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
 
-                    if (vaultInfo.length) {
-                        vaultInfo.map(async schema => {
-                            byteInfo = schema.information
-                            let infoHash = hexToString(byteInfo.slice(2))
-                            let url = await getIpfsGetWay(infoHash)
+                    if (receiptVaultInformations.length) {
+
+                        receiptVaultInformations.map(async data => {
+                            let cborDecodedInformation = cborDecode(data.information.slice(18))
+                            let schemaHash = cborDecodedInformation[1].get(0)
+                            let url = await getIpfsGetWay(schemaHash)
                             try {
                                 if (url) {
                                     let res = await axios.get(url)
                                     if (res) {
                                         tempSchema.push({
                                             ...res.data,
-                                            timestamp: schema.timestamp,
-                                            id: schema.id,
-                                            hash: infoHash
+                                            timestamp: data.timestamp,
+                                            id: data.id,
+                                            hash: schemaHash
                                         })
                                         tempSchema = tempSchema.filter(d => d.displayName)
                                         schemas.set(tempSchema)
@@ -112,7 +121,6 @@
                                 // console.log(err)
                             }
                         })
-
                     }
                 }
 
@@ -131,19 +139,29 @@
             }
             const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
             if (!hasRoleDepositor.error) {
-                let formResponse = await submitForm()
+                let structure = await submitForm()
+
+                let fileHashesList = fileHashes.map(f => f.hash)
+                let encodedStructure = encodeCBORStructure(structure, selectedSchema.hash)
+
                 let shareRatio = ONE
                 const shares = ethers.utils.parseEther(amount.toString());
 
-                let dataBytes = formResponse?.Hash ? toBytes(formResponse.Hash) : []
 
-                if (formResponse) {
-                    const tx = await $vault
-                        .connect(signer)
-                        ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
-                    await tx.wait();
-                    amount = 0;
-                    fileDropped.set({})
+                try {
+                    let structureIpfs = await upload(structure)
+                    let encodedHashList = cborEncode([...fileHashesList, structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
+                    const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedStructure + encodedHashList
+                    if (structure) {
+                        const tx = await $vault
+                            .connect(signer)
+                            ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
+                        await tx.wait();
+                        amount = 0;
+                        fileDropped.set({})
+                    }
+                } catch (err) {
+                    console.log(err)
                 }
 
             } else {
@@ -227,7 +245,6 @@
 
     async function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
-        console.log(selectedSchema)
     }
 
     let certificateUrl = ''
@@ -248,14 +265,12 @@
                 json[data.prop] = data.hash
             })
         }
-        json.schema = selectedSchema.id
-        json.schemaHash = selectedSchema.hash
         let formFields = Object.keys(json)
 
         let formNotEmpty = formFields.some(f => json[f] !== "")
         let response = null;
         if (formNotEmpty) {
-            response = await upload(JSON.stringify(json), "data")
+            response = JSON.stringify(json)
         }
 
         return response

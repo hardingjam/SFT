@@ -2,18 +2,19 @@
     import {createEventDispatcher, onMount} from "svelte";
     import {activeNetwork, vault} from "../scripts/store.js";
     import {
+        bytesToMeta,
+        cborDecode,
         formatAddress,
         getIpfsGetWay,
         getReceiptBalance,
         getSubgraphData,
-        hexToString,
         toSentenceCase
     } from "../scripts/helpers.js";
     import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
     import axios from "axios";
     import {icons} from "../scripts/assets.js";
     import {ethers} from "ethers";
-    import {IPFS_GETWAY} from "../scripts/consts.js";
+    import {IPFS_GETWAY, MAGIC_NUMBERS} from "../scripts/consts.js";
     import SftLoader from "../components/SftLoader.svelte";
 
     export let receipt = {}
@@ -23,7 +24,7 @@
     let ipfsAddress = ""
     let ipfsLoading = false
     let schema = {}
-    let schemaId = null;
+    let schemaHash = null;
     let loading = false
     let fileUploadProperties = []
 
@@ -32,41 +33,17 @@
         await getReceiptData(receipt)
     })
 
-    $: schemaId && getSchemaFileProps()
+    $: schemaHash && getSchemaFileProps()
 
     async function getSchema() {
-        let variables = {id: schemaId}
-
-        let query = `
-          query($id: ID!) {
-            receiptVaultInformation(id: $id) {
-                id,
-                information
+        let url = await getIpfsGetWay(schemaHash)
+        try {
+            let res = await axios.get(url)
+            if (res) {
+                schema = res.data
             }
-          }
-         `
-        if ($vault.address) {
-            try {
-                let resp = await getSubgraphData($activeNetwork, variables, query, 'receiptVaultInformation')
-                let byteInfo = ""
-                if (resp && resp.data && resp.data.receiptVaultInformation) {
-                    byteInfo = resp.data.receiptVaultInformation.information
-                    let infoHash = hexToString(byteInfo.slice(2))
-                    let url = await getIpfsGetWay(infoHash)
-                    try {
-                        if (url) {
-                            let res = await axios.get(url)
-                            if (res) {
-                                schema = res.data
-                            }
-                        }
-                    } catch (err) {
-                        // console.log(err)
-                    }
-                }
-            } catch (err) {
-                console.log(err)
-            }
+        } catch (err) {
+            console.log(err)
         }
     }
 
@@ -80,7 +57,7 @@
                     return p
                 }
             })
-            fileUploadProperties = fileUploadProperties.map(p=>toSentenceCase(p))
+            fileUploadProperties = fileUploadProperties.map(p => toSentenceCase(p))
         }
     }
 
@@ -89,31 +66,27 @@
         let variables = {id: receipt.receipt.id}
         let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
         let receiptInfo = ""
-        let byteInfo = ""
+        let information = ""
 
         if (resp && resp.data && resp.data.receipt) {
             ipfsLoading = true;
             receiptInfo = resp.data.receipt.receiptInformations
 
             if (receiptInfo.length) {
-                byteInfo = receiptInfo[0].information
-                let infoHash = hexToString(byteInfo.slice(2))
-                ipfsAddress = `ipfs://${infoHash}`
-                let url = await getIpfsGetWay(infoHash)
+                information = receiptInfo[0].information
+
+                let cborDecodedInformation = cborDecode(information.slice(18))
+                let structure = bytesToMeta(cborDecodedInformation[0].get(0), "json")
+                schemaHash = cborDecodedInformation[0].get(MAGIC_NUMBERS.OA_SCHEMA)
+
                 try {
-                    let res = await axios.get(url)
-                    if (res) {
-                        receiptInformations = res.data
-                        schemaId = res.data.schema
-                        displayInformation = Object.keys(receiptInformations).map(prop => {
-                            return {
-                                label: toSentenceCase(prop),
-                                value: receiptInformations[prop]
-                            }
-                        })
-                        displayInformation = displayInformation.filter(d => d.label !== "Schema" && d.label !== "Schemahash")
-                        ipfsLoading = false;
-                    }
+                    displayInformation = Object.keys(structure).map(prop => {
+                        return {
+                            label: toSentenceCase(prop),
+                            value: structure[prop]
+                        }
+                    })
+                    ipfsLoading = false;
                 } catch (err) {
                     console.log(err)
                 }

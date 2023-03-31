@@ -29,3 +29,21 @@ export const IPFS_APIS = [
     "https://gildlab-ipfs-5.eu.ngrok.io/api/v0/add?pin=true&to-files=", //David A Box2
 ]
 export const IPFS_GETWAY = "https://ipfs.io/ipfs/"
+export const MAGIC_NUMBERS = {
+    /**
+     * Prefixes every rain meta document
+     */
+    RAIN_META_DOCUMENT: BigInt(0xff0a89c674ee7874n),
+    /**S
+     * OA Schema
+     */
+    OA_SCHEMA: BigInt(0xffa8e8a9b9cf4a31n),
+    /**
+     * OA Hash list
+     */
+    OA_HASH_LIST: BigInt(0xff9fae3cc645f463n),
+    /**
+     * OA Structure
+     */
+    OA_STRUCTURE: BigInt(0xffc47a6299e8a911n)
+};

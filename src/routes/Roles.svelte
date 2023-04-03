@@ -1,5 +1,13 @@
 <script>
-    import {vault, activeNetwork, roles, data, transactionInProgress, transactionHash} from "../scripts/store.js";
+    import {
+        vault,
+        activeNetwork,
+        roles,
+        data,
+        transactionInProgress,
+        transactionHash,
+        transactionError, transactionSuccess, transactionInProgressShow
+    } from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
     import {
@@ -38,6 +46,8 @@
     }
 
     async function grantRole() {
+        transactionError.set(false)
+        transactionSuccess.set(false)
         let role = null
         roleName ? role = await $vault[roleName]() : error = "Select role"
         try {
@@ -46,9 +56,14 @@
                 const grantRoleTx = await $vault.grantRole(role, account.trim());
                 if (grantRoleTx.hash) {
                     transactionHash.set(grantRoleTx.hash)
+                    transactionInProgressShow.set(true)
                     transactionInProgress.set(true)
                 }
-                await grantRoleTx.wait()
+                let wait = await grantRoleTx.wait()
+                if (wait.status === 1) {
+                    transactionSuccess.set(true)
+                    transactionInProgress.set(false)
+                }
                 let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
                 updatedRoleHolders.push({account: {address: account}})
                 const newRoles = $roles.map(role => {
@@ -65,6 +80,7 @@
             }
 
         } catch (err) {
+            transactionError.set(true)
             error = err.reason
             if (error.includes('AccessControl')) {
                 error = accessControlError(error)

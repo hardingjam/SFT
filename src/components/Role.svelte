@@ -52,7 +52,6 @@
             // transactionInProgress.set(false)
         } catch (err) {
             transactionError.set(true)
-
             console.log(err)
         }
 

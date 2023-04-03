@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, account, vault, tokens, ethersData} from "../scripts/store.js";
+    import {activeNetwork, account, vault, tokens, ethersData, transactionInProgress} from "../scripts/store.js";
     import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -390,6 +390,9 @@
     </div>
 
   </div>
+  {#if $transactionInProgress}
+    <div class="blur"></div>
+  {/if}
 </Router>
 
 
@@ -529,6 +532,14 @@
 
   .content {
     height: fit-content;
+  }
+
+  .blur{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3.5px);
+    top:0
   }
 
 </style>

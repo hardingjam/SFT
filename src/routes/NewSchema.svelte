@@ -85,7 +85,6 @@
                     topText = TRANSACTION_IN_PROGRESS_TEXT;
                     bottomText = VIEW_ON_EXPLORER_TEXT
                     transactionHash.set(transaction.hash)
-                    console.log($transactionHash);
                     transactionInProgressShow.set(true)
                     transactionInProgress.set(true)
                 }
@@ -94,7 +93,6 @@
                     transactionSuccess.set(true)
                     transactionInProgress.set(false)
                 }
-                console.log(wait)
 
             } catch (err) {
                 transactionError.set(true)
@@ -230,7 +228,7 @@
 
   </div>
 </DefaultFrame>
-<TransactionInProgressBanner topText={topText} bottomText={bottomText} transactionHash={transactionHash}/>
+<TransactionInProgressBanner topText={topText} bottomText={bottomText} transactionHash={$transactionHash}/>
 
 <style>
 

@@ -199,18 +199,18 @@
     }
 
 </script>
-<DefaultFrame header="New Schema">
+<DefaultFrame header="New Asset Class Schema">
   <div slot="content" class="schema-content">
     <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
       <div class="label">
-        <span class="f-weight-700">Schema label :</span>
+        <span class="f-weight-700">Asset Class label :</span>
         <input class="label-input" bind:value={label}/>
       </div>
 
       <div class="schema">
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
-      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}>Deploy schema</button>
+      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}>Create new Asset Class</button>
       <div class="error">{error}</div>
     </div>
 

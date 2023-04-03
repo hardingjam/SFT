@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, vault, roles} from "../scripts/store.js";
+    import {activeNetwork, vault, roles, transactionInProgress} from "../scripts/store.js";
 
     export let name;
     export let admin;
@@ -19,6 +19,9 @@
 
         try {
             const revokeRoleTx = await $vault.revokeRole(role, account);
+            if (revokeRoleTx.hash) {
+                transactionInProgress.set(true)
+            }
             await revokeRoleTx.wait()
             let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
             let accountIndex = updatedRoleHolders.indexOf(account)
@@ -30,6 +33,7 @@
                 return role;
             });
             roles.set([...newRoles])
+            transactionInProgress.set(false)
         } catch (err) {
             console.log(err)
         }

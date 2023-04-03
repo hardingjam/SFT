@@ -15,6 +15,7 @@
     import {arrayify} from "ethers/lib/utils.js";
     import {JSONEditor} from "svelte-jsoneditor";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
+    import {navigateTo} from "yrv";
 
 
     let label = ""
@@ -198,6 +199,12 @@
         }
     }
 
+    function goToAssetClassList(event) {
+        if ($transactionSuccess && event.detail.close) {
+            navigateTo("#asset-classes", {replace: false});
+        }
+    }
+
 </script>
 <DefaultFrame header="New Asset Class Schema">
   <div slot="content" class="schema-content">
@@ -228,7 +235,8 @@
 
   </div>
 </DefaultFrame>
-<TransactionInProgressBanner topText={topText} bottomText={bottomText} transactionHash={$transactionHash}/>
+<TransactionInProgressBanner topText={topText} bottomText={bottomText} transactionHash={$transactionHash}
+                             on:close={goToAssetClassList}/>
 
 <style>
 

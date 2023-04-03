@@ -16,6 +16,17 @@
         window.open(`${$activeNetwork.blockExplorer}/tx/${hash}`);
         console.log(1, hash)
     }
+
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
+
+    function closeBtnClick() {
+        transactionInProgressShow.set(false)
+        dispatch('close', {
+            close: true
+        });
+    }
 </script>
 
 <div class={$transactionInProgressShow? "frame show": "frame hide" }>
@@ -24,7 +35,7 @@
       <div class="top-text">{topText}</div>
     {/if}
     {#if (!$transactionInProgress)}
-      <div class="close-btn" on:click={()=>{transactionInProgressShow.set(false)}}>
+      <div class="close-btn" on:click={closeBtnClick}>
         <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M14 14L28 28" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M28 14L14 28" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

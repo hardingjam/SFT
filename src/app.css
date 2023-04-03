@@ -26,9 +26,9 @@ body {
     display: flex;
     min-width: 320px;
     min-height: 100vh;
-    background: rgb(181,220,255);
+    background: rgb(181, 220, 255);
     background: linear-gradient(0deg, #b5dcff 0%, #6f5ea1 100%);
-    background-attachment:fixed;
+    background-attachment: fixed;
 }
 
 #app {
@@ -311,6 +311,13 @@ button:focus, button:focus-visible {
     float: right;
 }
 
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
 
 
 @media (prefers-color-scheme: light) {

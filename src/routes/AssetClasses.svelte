@@ -10,7 +10,7 @@
     }
 </script>
 
-<DefaultFrame header="Asset classes">
+<DefaultFrame header="Asset Class List">
   <div slot="content">
     <div class="schemas">
       <table class="w-100">

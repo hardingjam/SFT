@@ -1,5 +1,13 @@
 <script>
-    import {vault, activeNetwork, roles, data} from "../scripts/store.js";
+    import {
+        vault,
+        activeNetwork,
+        roles,
+        data,
+        transactionInProgress,
+        transactionHash,
+        transactionError, transactionSuccess, transactionInProgressShow
+    } from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
     import {
@@ -12,13 +20,15 @@
     import {QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
-    import {ROLES} from "../scripts/consts.js";
+    import {ROLES, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
+    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let validAccount = true;
     let account = '';
     let roleName = '';
     let error = '';
+    let transaction = null;
 
     let loading = false
 
@@ -36,13 +46,24 @@
     }
 
     async function grantRole() {
+        transactionError.set(false)
+        transactionSuccess.set(false)
         let role = null
         roleName ? role = await $vault[roleName]() : error = "Select role"
         try {
             if (account) {
                 validAccount = true;
                 const grantRoleTx = await $vault.grantRole(role, account.trim());
-                await grantRoleTx.wait()
+                if (grantRoleTx.hash) {
+                    transactionHash.set(grantRoleTx.hash)
+                    transactionInProgressShow.set(true)
+                    transactionInProgress.set(true)
+                }
+                let wait = await grantRoleTx.wait()
+                if (wait.status === 1) {
+                    transactionSuccess.set(true)
+                    transactionInProgress.set(false)
+                }
                 let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
                 updatedRoleHolders.push({account: {address: account}})
                 const newRoles = $roles.map(role => {
@@ -53,11 +74,13 @@
                 });
                 roles.set([...newRoles])
                 account = "";
+                // transactionInProgress.set(false)
             } else {
                 validAccount = false;
             }
 
         } catch (err) {
+            transactionError.set(true)
             error = err.reason
             if (error.includes('AccessControl')) {
                 error = accessControlError(error)
@@ -85,72 +108,77 @@
             }
         })
     }
+
 </script>
-<DefaultFrame header="Roles">
-  <div slot="address">
+<div class="roles-container">
+  <DefaultFrame header="Roles">
+
+    <div slot="address">
   <span>  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`}
                       class="contract-address btn-hover"
                       target="_blank">{$vault.address}</a></span>
-  </div>
+    </div>
 
-  <div slot="header-buttons">
-    <!--    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-schema")}}>New schema</button>-->
-  </div>
+    <div slot="header-buttons">
+      <!--    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-schema")}}>New schema</button>-->
+    </div>
 
-  <div slot="content">
-    <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
-    <div class="roles">
-      <div class="grant-role-txt f-weight-700">Grant a role</div>
-      <div class="error">{error}</div>
-      <div class="role-list">
-        <div class="row">
-          <label class="f-weight-700 custom-col col-2">Role:</label>
-          <div>
-            <Select options={ROLES.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
+    <div slot="content">
+      <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
+      <div class="roles">
+        <div class="grant-role-txt f-weight-700">Grant a role</div>
+        <div class="error">{error}</div>
+        <div class="role-list">
+          <div class="row">
+            <label class="f-weight-700 custom-col col-2">Role:</label>
+            <div>
+              <Select options={ROLES.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
 
-                    on:select={handleRoleSelect}
-                    label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+                      on:select={handleRoleSelect}
+                      label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+            </div>
+
+          </div>
+          <div class="row">
+            <label class="f-weight-700 custom-col col-2">Address:</label>
+            <input type="text" class="{validAccount ? 'default-input' : 'default-input invalid-input'}"
+                   bind:value={account}>
+          </div>
+          <button class="default-btn" on:click={grantRole}>Enter</button>
+        </div>
+        {#if loading}
+          <SftLoader width="50"></SftLoader>
+        {/if}
+        {#if !loading}
+          <div class="roles-data">
+
+            <table>
+              {#each executorRoles as role}
+                <tr>
+                  <td>
+                    <span class="title f-weight-700">{role.roleName}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <Role name={role.roleName}
+                          roleHolders={$roles?.find(r=>r.roleName===role.roleName)?.roleHolders} admin={false}></Role>
+                  </td>
+                  <td>
+                    <Role roleHolders={$roles?.find(r=>r.roleName===role.roleName+"_ADMIN")?.roleHolders}
+                          name={role.roleName+"_ADMIN"} admin={true}></Role>
+                  </td>
+                </tr>
+              {/each}
+            </table>
           </div>
 
-        </div>
-        <div class="row">
-          <label class="f-weight-700 custom-col col-2">Address:</label>
-          <input type="text" class="{validAccount ? 'default-input' : 'default-input invalid-input'}"
-                 bind:value={account}>
-        </div>
-        <button class="default-btn" on:click={grantRole}>Enter</button>
+        {/if}
       </div>
-      {#if loading}
-        <SftLoader width="50"></SftLoader>
-      {/if}
-      {#if !loading}
-        <div class="roles-data">
-
-          <table>
-            {#each executorRoles as role}
-              <tr>
-                <td>
-                  <span class="title f-weight-700">{role.roleName}</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Role name={role.roleName}
-                        roleHolders={$roles?.find(r=>r.roleName===role.roleName)?.roleHolders} admin={false}></Role>
-                </td>
-                <td>
-                  <Role roleHolders={$roles?.find(r=>r.roleName===role.roleName+"_ADMIN")?.roleHolders}
-                        name={role.roleName+"_ADMIN"} admin={true}></Role>
-                </td>
-              </tr>
-            {/each}
-          </table>
-        </div>
-
-      {/if}
     </div>
-  </div>
-</DefaultFrame>
+  </DefaultFrame>
+  <TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT} transactionHash={$transactionHash}/>
+</div>
 
 
 <style>
@@ -211,6 +239,10 @@
 
     .custom-col {
         margin-right: -10px;
+    }
+
+    .roles-container {
+        position: relative;
     }
 
 </style>

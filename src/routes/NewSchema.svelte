@@ -1,12 +1,21 @@
 <script>
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
+    import {
+        ethersData,
+        transactionError,
+        transactionHash,
+        transactionInProgress, transactionInProgressShow, transactionSuccess,
+        uploadBtnLoading,
+        vault
+    } from "../scripts/store.js";
     import {cborEncode, encodeCBOR} from "../scripts/helpers.js";
-    import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
+    import {IPFS_APIS, MAGIC_NUMBERS, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
     import {JSONEditor} from "svelte-jsoneditor";
+    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
+    import {navigateTo} from "yrv";
 
 
     let label = ""
@@ -21,6 +30,8 @@
     let password = "";
     let schemaInformation = {}
 
+    let topText = ""
+    let bottomText = ""
 
     let colors = {
         keyColor: 'black',
@@ -53,6 +64,8 @@
         }
 
         try {
+            transactionError.set(false)
+            transactionSuccess.set(false)
 
             schemaInformation = {
                 displayName: label,
@@ -68,9 +81,22 @@
                     MAGIC_NUMBERS.OA_HASH_LIST
                 );
                 const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
-                await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+                let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+                if (transaction.hash) {
+                    topText = TRANSACTION_IN_PROGRESS_TEXT;
+                    bottomText = VIEW_ON_EXPLORER_TEXT
+                    transactionHash.set(transaction.hash)
+                    transactionInProgressShow.set(true)
+                    transactionInProgress.set(true)
+                }
+                let wait = await transaction.wait()
+                if (wait.status === 1) {
+                    transactionSuccess.set(true)
+                    transactionInProgress.set(false)
+                }
 
             } catch (err) {
+                transactionError.set(true)
                 console.log(err)
             }
         } catch (e) {
@@ -82,6 +108,7 @@
 
     const upload = async (data) => {
         error = ""
+        topText = "Uploading to IPFS, please wait"
         uploadBtnLoading.set(true)
 
         let savedUsername = localStorage.getItem('ipfsUsername');
@@ -112,6 +139,8 @@
                 },
                 data: formData,
                 onUploadProgress: ((p) => {
+                    transactionInProgressShow.set(true)
+                    transactionInProgress.set(true)
                     console.log(`Uploading...  ${p.loaded} / ${p.total}`);
                 }),
                 withCredentials: true,
@@ -138,6 +167,9 @@
         uploadBtnLoading.set(false)
         username = ""
         password = ""
+        transactionInProgressShow.set(false)
+        transactionInProgress.set(false)
+
         return resolvedPromise?.value.data
     };
 
@@ -167,19 +199,25 @@
         }
     }
 
+    function goToAssetClassList(event) {
+        if ($transactionSuccess && event.detail.close) {
+            navigateTo("#asset-classes", {replace: false});
+        }
+    }
+
 </script>
-<DefaultFrame header="New Schema">
+<DefaultFrame header="New Asset Class Schema">
   <div slot="content" class="schema-content">
     <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
       <div class="label">
-        <span class="f-weight-700">Schema label :</span>
+        <span class="f-weight-700">Asset Class label :</span>
         <input class="label-input" bind:value={label}/>
       </div>
 
       <div class="schema">
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
-      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}>Deploy schema</button>
+      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}>Create new Asset Class</button>
       <div class="error">{error}</div>
     </div>
 
@@ -197,6 +235,9 @@
 
   </div>
 </DefaultFrame>
+<TransactionInProgressBanner topText={topText} bottomText={bottomText} transactionHash={$transactionHash}
+                             on:close={goToAssetClassList}/>
+
 <style>
 
     .schema-content {

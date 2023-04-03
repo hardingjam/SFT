@@ -220,11 +220,10 @@
     {#if error}
       <span class="error">{error}</span>
     {/if}
-    <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
+    <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} maxButton={true}
                on:setMax={()=>{setMaxValue()}}/>
     <button class="redeem-btn btn-solid" disabled="{!selectedReceipts.length}" on:click={() => withdraw()}>
       Redeem
-      Options
     </button>
 
   {/if}

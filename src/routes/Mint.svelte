@@ -23,7 +23,6 @@
         getIpfsGetWay,
         getSubgraphData,
         hasRole,
-        hexToString,
     } from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
@@ -37,31 +36,31 @@
     let ipfsLoading = false;
 
     let loveToSchemas = [
-        // {
-        //     "displayName": 'Love To',
-        //     "schema": {
-        //         "type": "object",
-        //         "required": [
-        //             "name",
-        //             "wallet",
-        //             "title"
-        //         ],
-        //         "properties": {
-        //             "name": {
-        //                 "type": "string",
-        //                 "title": "Name",
-        //             },
-        //             "wallet": {
-        //                 "type": "string",
-        //                 "title": "Wallet"
-        //             },
-        //             "title": {
-        //                 "type": "string",
-        //                 "title": "Title"
-        //             }
-        //         }
-        //     }
-        // }
+        {
+            "displayName": 'Love To',
+            "schema": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "wallet",
+                    "title"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "wallet": {
+                        "type": "string",
+                        "title": "Wallet"
+                    },
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    }
+                }
+            }
+        }
     ]
 
     let selectedSchema = {}
@@ -305,7 +304,7 @@
   </div>
   {#if (!showAuth)}
 
-    <MintInput bind:amount={amount} amountLabel={"Mint Amount"} label={"Options"}/>
+    <MintInput bind:amount={amount} amountLabel={"Mint Amount"} />
     <div class="audit-info-container basic-frame-parent">
       <div class="audit-info basic-frame">
         {#if $schemas.length}
@@ -357,9 +356,7 @@
     <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
       (FT)
     </div>
-    <button class="mint-btn btn-solid" on:click={() => mint()}>Mint
-      Options
-    </button>
+    <button class="mint-btn btn-solid" on:click={() => mint()}>Mint</button>
   {/if}
   <!--{#if showAuth}-->
   <div class={showAuth  ? 'auth show' : 'auth hide'}>

@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, vault, roles, transactionInProgress} from "../scripts/store.js";
+    import {activeNetwork, vault, roles, transactionInProgress, transactionHash} from "../scripts/store.js";
 
     export let name;
     export let admin;
@@ -20,6 +20,7 @@
         try {
             const revokeRoleTx = await $vault.revokeRole(role, account);
             if (revokeRoleTx.hash) {
+                transactionHash.set(revokeRoleTx.hash)
                 transactionInProgress.set(true)
             }
             await revokeRoleTx.wait()
@@ -41,7 +42,6 @@
     }
 
     export let roleHolders;
-
 
 </script>
 

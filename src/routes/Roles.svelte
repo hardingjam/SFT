@@ -1,5 +1,5 @@
 <script>
-    import {vault, activeNetwork, roles, data, transactionInProgress} from "../scripts/store.js";
+    import {vault, activeNetwork, roles, data, transactionInProgress, transactionHash} from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
     import {
@@ -20,6 +20,7 @@
     let account = '';
     let roleName = '';
     let error = '';
+    let transaction = null;
 
     let loading = false
 
@@ -44,6 +45,7 @@
                 validAccount = true;
                 const grantRoleTx = await $vault.grantRole(role, account.trim());
                 if (grantRoleTx.hash) {
+                    transactionHash.set(grantRoleTx.hash)
                     transactionInProgress.set(true)
                 }
                 await grantRoleTx.wait()
@@ -90,9 +92,11 @@
             }
         })
     }
+
 </script>
 <div class="roles-container">
   <DefaultFrame header="Roles">
+
     <div slot="address">
   <span>  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`}
                       class="contract-address btn-hover"
@@ -157,7 +161,7 @@
       </div>
     </div>
   </DefaultFrame>
-  <TransactionInProgressBanner topText="Transaction taking place, please wait">
+  <TransactionInProgressBanner topText="Transaction taking place, please wait" transactionHash={$transactionHash}>
      <span slot="icon" class="icon">
        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path

@@ -1,7 +1,14 @@
 <script>
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {ethersData, transactionHash, transactionInProgress, uploadBtnLoading, vault} from "../scripts/store.js";
+    import {
+        ethersData,
+        transactionError,
+        transactionHash,
+        transactionInProgress, transactionInProgressShow, transactionSuccess,
+        uploadBtnLoading,
+        vault
+    } from "../scripts/store.js";
     import {cborEncode, encodeCBOR} from "../scripts/helpers.js";
     import {IPFS_APIS, MAGIC_NUMBERS, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
     import axios from "axios";
@@ -56,6 +63,8 @@
         }
 
         try {
+            transactionError.set(false)
+            transactionSuccess.set(false)
 
             schemaInformation = {
                 displayName: label,
@@ -77,10 +86,18 @@
                     bottomText = VIEW_ON_EXPLORER_TEXT
                     transactionHash.set(transaction.hash)
                     console.log($transactionHash);
+                    transactionInProgressShow.set(true)
                     transactionInProgress.set(true)
                 }
+                let wait = await transaction.wait()
+                if (wait.status === 1) {
+                    transactionSuccess.set(true)
+                    transactionInProgress.set(false)
+                }
+                console.log(wait)
 
             } catch (err) {
+                transactionError.set(true)
                 console.log(err)
             }
         } catch (e) {
@@ -123,6 +140,7 @@
                 },
                 data: formData,
                 onUploadProgress: ((p) => {
+                    transactionInProgressShow.set(true)
                     transactionInProgress.set(true)
                     console.log(`Uploading...  ${p.loaded} / ${p.total}`);
                 }),
@@ -150,7 +168,9 @@
         uploadBtnLoading.set(false)
         username = ""
         password = ""
+        transactionInProgressShow.set(false)
         transactionInProgress.set(false)
+
         return resolvedPromise?.value.data
     };
 

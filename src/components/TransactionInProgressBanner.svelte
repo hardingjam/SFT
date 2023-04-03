@@ -1,5 +1,11 @@
 <script>
-    import {activeNetwork, transactionInProgress} from "../scripts/store.js";
+    import {
+        activeNetwork,
+        transactionError,
+        transactionInProgress,
+        transactionInProgressShow,
+        transactionSuccess
+    } from "../scripts/store.js";
     import SftLoader from "./SftLoader.svelte";
 
     export let topText = ""
@@ -12,20 +18,29 @@
     }
 </script>
 
-<div class={!$transactionInProgress? "frame show": "frame hide" }>
+<div class={$transactionInProgressShow? "frame show": "frame hide" }>
   <div class="content">
-    <div class="close-btn" on:click={()=>{transactionInProgress.set(false)}}>
-      <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14 14L28 28" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M28 14L14 28" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
 
-    <div class="top-text">{topText}</div>
-    <SftLoader></SftLoader>
-    {#if bottomText}
-      <div class="bottom-text">{bottomText}&nbsp; &nbsp;
-        <span class="icon" on:click={()=>viewInExplorer(transactionHash)}>
+    {#if (!$transactionInProgress)}
+      <div class="close-btn" on:click={()=>{transactionInProgressShow.set(false)}}>
+        <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 14L28 28" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M28 14L14 28" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      {#if $transactionError}
+        error
+      {/if}
+      {#if $transactionSuccess}
+        success
+      {/if}
+    {/if}
+    {#if ($transactionInProgress)}
+      <div class="top-text">{topText}</div>
+      <SftLoader></SftLoader>
+      {#if bottomText}
+        <div class="bottom-text">{bottomText}&nbsp; &nbsp;
+          <span class="icon" on:click={()=>viewInExplorer(transactionHash)}>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path
     d="M11.9813 1.16793C12.6529 1.16494 13.1143 1.16364 13.4658 1.20202C13.58 1.2145 13.6755 1.23057 13.7566 1.25L6.67094 8.33565C6.47567 8.53091 6.47567 8.84749 6.67094 9.04275C6.8662 9.23801 7.18278 9.23801 7.37804 9.04275L14.4637 1.95711C14.4831 2.03818 14.4992 2.13365 14.5117 2.24787C14.5501 2.59937 14.5487 3.0608 14.5458 3.73237L14.5384 5.38714C14.5371 5.66328 14.76 5.88813 15.0361 5.88936C15.3123 5.89059 15.5371 5.66774 15.5384 5.3916L15.5459 3.70704C15.5487 3.07256 15.551 2.554 15.5058 2.13931C15.4587 1.70809 15.355 1.32632 15.1007 0.997796C15.0457 0.92668 14.9863 0.859158 14.9229 0.795598C14.858 0.73042 14.7888 0.669415 14.7159 0.612977C14.3874 0.358736 14.0056 0.255023 13.5744 0.207931C13.1597 0.162645 12.6411 0.164968 12.0067 0.16781L10.3221 0.175327C10.0459 0.176559 9.82309 0.401413 9.82432 0.677552C9.82556 0.953692 10.0504 1.17655 10.3266 1.17532L11.9813 1.16793Z"
@@ -41,8 +56,10 @@
     stroke="white" stroke-linecap="round"/>
 </svg>
       </span>
-      </div>
+        </div>
+      {/if}
     {/if}
+
   </div>
 </div>
 

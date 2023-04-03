@@ -1,12 +1,13 @@
 <script>
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {ethersData, uploadBtnLoading, vault} from "../scripts/store.js";
+    import {ethersData, transactionHash, transactionInProgress, uploadBtnLoading, vault} from "../scripts/store.js";
     import {cborEncode, encodeCBOR} from "../scripts/helpers.js";
-    import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
+    import {IPFS_APIS, MAGIC_NUMBERS, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
     import {JSONEditor} from "svelte-jsoneditor";
+    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
 
 
     let label = ""
@@ -21,6 +22,8 @@
     let password = "";
     let schemaInformation = {}
 
+    let topText = ""
+    let bottomText = ""
 
     let colors = {
         keyColor: 'black',
@@ -68,7 +71,14 @@
                     MAGIC_NUMBERS.OA_HASH_LIST
                 );
                 const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
-                await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+                let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+                if (transaction.hash) {
+                    topText = TRANSACTION_IN_PROGRESS_TEXT;
+                    bottomText = VIEW_ON_EXPLORER_TEXT
+                    transactionHash.set(transaction.hash)
+                    console.log($transactionHash);
+                    transactionInProgress.set(true)
+                }
 
             } catch (err) {
                 console.log(err)
@@ -82,6 +92,7 @@
 
     const upload = async (data) => {
         error = ""
+        topText = "Uploading to IPFS, please wait"
         uploadBtnLoading.set(true)
 
         let savedUsername = localStorage.getItem('ipfsUsername');
@@ -112,6 +123,7 @@
                 },
                 data: formData,
                 onUploadProgress: ((p) => {
+                    transactionInProgress.set(true)
                     console.log(`Uploading...  ${p.loaded} / ${p.total}`);
                 }),
                 withCredentials: true,
@@ -138,6 +150,7 @@
         uploadBtnLoading.set(false)
         username = ""
         password = ""
+        transactionInProgress.set(false)
         return resolvedPromise?.value.data
     };
 
@@ -197,6 +210,8 @@
 
   </div>
 </DefaultFrame>
+<TransactionInProgressBanner topText={topText} bottomText={bottomText} transactionHash={transactionHash}/>
+
 <style>
 
     .schema-content {

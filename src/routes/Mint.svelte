@@ -36,31 +36,31 @@
     let ipfsLoading = false;
 
     let loveToSchemas = [
-        // {
-        //     "displayName": 'Love To',
-        //     "schema": {
-        //         "type": "object",
-        //         "required": [
-        //             "name",
-        //             "wallet",
-        //             "title"
-        //         ],
-        //         "properties": {
-        //             "name": {
-        //                 "type": "string",
-        //                 "title": "Name",
-        //             },
-        //             "wallet": {
-        //                 "type": "string",
-        //                 "title": "Wallet"
-        //             },
-        //             "title": {
-        //                 "type": "string",
-        //                 "title": "Title"
-        //             }
-        //         }
-        //     }
-        // }
+        {
+            "displayName": 'Love To',
+            "schema": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "wallet",
+                    "title"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "wallet": {
+                        "type": "string",
+                        "title": "Wallet"
+                    },
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    }
+                }
+            }
+        }
     ]
 
     let selectedSchema = {}

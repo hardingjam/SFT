@@ -34,7 +34,7 @@
                 return role;
             });
             roles.set([...newRoles])
-            transactionInProgress.set(false)
+            // transactionInProgress.set(false)
         } catch (err) {
             console.log(err)
         }

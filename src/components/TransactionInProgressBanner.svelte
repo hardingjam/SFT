@@ -6,7 +6,7 @@
     export let bottomText = "View on the block explorer"
 </script>
 
-{#if (!$transactionInProgress)}
+{#if ($transactionInProgress)}
   <div class="frame">
     <div class="content">
       <div class="top-text">{topText}</div>

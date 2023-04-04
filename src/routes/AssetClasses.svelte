@@ -2,12 +2,67 @@
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
-    import {schemas} from "../scripts/store.js";
-    import {timeStampToDate} from "../scripts/helpers";
+    import {activeNetwork, schemas, vault} from "../scripts/store.js";
+    import {cborDecode, getIpfsGetWay, getSubgraphData, timeStampToDate} from "../scripts/helpers";
+    import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
+    import axios from "axios";
+    import {onMount} from "svelte";
 
+    let ipfsLoading = false;
     function handleSchemasSelect(schema) {
         console.log(schema)
     }
+
+    onMount(()=>{
+        getSchemas()
+    })
+
+    async function getSchemas() {
+        let variables = {id: $vault.address.toLowerCase()}
+        if ($vault.address) {
+            try {
+                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
+                let receiptVaultInformations = ""
+                let tempSchema = []
+
+                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
+                    ipfsLoading = true
+                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+
+                    if (receiptVaultInformations.length) {
+
+                        receiptVaultInformations.map(async data => {
+                            let cborDecodedInformation = cborDecode(data.information.slice(18))
+                            let schemaHash = cborDecodedInformation[1].get(0)
+                            let url = await getIpfsGetWay(schemaHash)
+                            try {
+                                if (url) {
+                                    let res = await axios.get(url)
+                                    if (res) {
+                                        tempSchema.push({
+                                            ...res.data,
+                                            timestamp: data.timestamp,
+                                            id: data.id,
+                                            hash: schemaHash
+                                        })
+                                        tempSchema = tempSchema.filter(d => d.displayName)
+                                        schemas.set(tempSchema)
+                                        ipfsLoading = false;
+                                    }
+                                }
+                            } catch (err) {
+                                console.log(err)
+                            }
+                        })
+                    }
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
+
 </script>
 
 <DefaultFrame header="Asset Class List">
@@ -30,7 +85,7 @@
         {/if}
 
       </table>
-      {#if !$schemas.length}
+      {#if ipfsLoading}
         <SftLoader width="50"></SftLoader>
       {/if}
     </div>

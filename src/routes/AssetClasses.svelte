@@ -9,13 +9,19 @@
     import {onMount} from "svelte";
 
     let ipfsLoading = false;
+
     function handleSchemasSelect(schema) {
         console.log(schema)
     }
 
-    onMount(()=>{
-        getSchemas()
+    onMount(() => {
+        ipfsLoading = true
+        setTimeout(() => {
+            getSchemas()
+        }, 1500);
+
     })
+    let tempSchema = []
 
     async function getSchemas() {
         let variables = {id: $vault.address.toLowerCase()}
@@ -23,10 +29,8 @@
             try {
                 let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
                 let receiptVaultInformations = ""
-                let tempSchema = []
 
                 if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
-                    ipfsLoading = true
                     receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
 
                     if (receiptVaultInformations.length) {
@@ -74,8 +78,8 @@
           <th>date created</th>
           <th>Asset count</th>
         </tr>
-        {#if ($schemas.length)}
-          {#each $schemas as schema }
+        {#if (tempSchema.length)}
+          {#each tempSchema as schema }
             <tr class="schema" on:click={()=>{handleSchemasSelect(schema)}}>
               <td>{schema?.displayName}</td>
               <td>{timeStampToDate(schema?.timestamp)}</td>

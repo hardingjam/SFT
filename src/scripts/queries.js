@@ -137,11 +137,11 @@ export const VAULT_INFORMATION_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
                 id,
-                  receiptVaultInformations{
+                 receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
                     information
                     id
                     timestamp
-                  }
+                 }
             }
           }
          `

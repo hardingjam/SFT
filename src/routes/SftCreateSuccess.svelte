@@ -1,6 +1,9 @@
 <script>
     import {navigateTo} from "yrv";
     import {icons} from "../scripts/assets.js";
+    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
+    import {TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
+    import {transactionHash} from "../scripts/store.js";
 
     let error = ""
 
@@ -22,6 +25,7 @@
             on:click={() => goToRoles()}>Ok, take me to Roles
     </button>
   </div>
+  <TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT} transactionHash={$transactionHash}/>
 </div>
 <style>
     .sft-setup-container {

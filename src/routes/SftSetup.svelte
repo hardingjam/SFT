@@ -1,13 +1,26 @@
 <script>
-    import {activeNetwork, data, roles, vault} from '../scripts/store.js';
+    import {
+        activeNetwork,
+        data,
+        roles, transactionError,
+        transactionHash,
+        transactionInProgress,
+        transactionInProgressShow, transactionSuccess,
+        vault
+    } from '../scripts/store.js';
     import {ethers} from "ethers";
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
-    import {ADDRESS_ZERO, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
+    import {
+        ADDRESS_ZERO,
+        TEST_CONTRACT_ADDRESS,
+        TRANSACTION_IN_PROGRESS_TEXT,
+        VIEW_ON_EXPLORER_TEXT
+    } from "../scripts/consts.js"
     import {QUERY} from "../scripts/queries.js";
     import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
-    import SftLoader from "../components/SftLoader.svelte";
+    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
 
     let name = "";
     let admin_ledger = "";
@@ -29,6 +42,8 @@
     // }
 
     async function createToken() {
+        transactionError.set(false)
+        transactionSuccess.set(false)
         error = ""
         let addressValid = ethers.utils.isAddress(admin_ledger);
 
@@ -52,8 +67,16 @@
             offChainAssetVaultTx = await factoryContract.createChildTyped(
                 constructionConfig
             )
+
             if (offChainAssetVaultTx.hash) {
-                loading = true
+                transactionHash.set(offChainAssetVaultTx.hash)
+                transactionInProgressShow.set(true)
+                transactionInProgress.set(true)
+            }
+            let wait = await offChainAssetVaultTx.wait()
+            if (wait.status === 1) {
+                transactionSuccess.set(true)
+                transactionInProgress.set(false)
             }
 
             let contract;
@@ -86,6 +109,7 @@
 
             navigateTo("#sft-create-success", {replace: false});
         } catch (er) {
+            transactionError.set(true)
             console.log(er)
             console.log(er.message)
         }
@@ -115,7 +139,6 @@
 
 </script>
 <div>
-{#if !loading}
   <div class="sft-setup-container">
     <label class="title f-weight-700">SFT Setup</label>
     <div class="form-box">
@@ -136,12 +159,7 @@
       </button>
     </div>
   </div>
-{/if}
-{#if loading}
-  <div class="loader">
-    <SftLoader></SftLoader>
-  </div>
-{/if}
+  <TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT} transactionHash={$transactionHash}/>
 </div>
 <style>
     .sft-setup-container {
@@ -209,14 +227,6 @@
 
     .create-token {
         width: 413px;
-    }
-
-    .loader {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 
     .error {

@@ -241,8 +241,4 @@
         margin-right: -10px;
     }
 
-    .roles-container {
-        position: relative;
-    }
-
 </style>

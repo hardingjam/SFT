@@ -93,11 +93,11 @@
 
 <style>
     .frame {
-        position: absolute;
+        position: fixed;
         left: 50%;
-        -webkit-transform: translateX(-50%);
-        transform: translateX(-50%);
-        top: 150px;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        top: 50%;
         bottom: 0;
         background: rgba(88, 85, 90, 0.92);
         border-radius: 20px;

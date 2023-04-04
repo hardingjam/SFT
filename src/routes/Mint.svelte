@@ -7,7 +7,8 @@
         fileDropped,
         uploadBtnLoading,
         activeNetwork,
-        schemas
+        schemas,
+        schemaError
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -321,6 +322,7 @@
               <span class="title f-weight-700">Asset info.</span>
 
               <SchemaForm schema={selectedSchema.schema}></SchemaForm>
+              <div class="error">{$schemaError}</div>
               {#if $fileHash}
                 <div class="file-uploaded">
                   <span class="file-load-success">Pie Certificate loaded successfully</span>

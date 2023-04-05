@@ -230,7 +230,7 @@
       <div class="schema">
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
-      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}>Create new Asset Class</button>
+      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}} disabled={error}>Create new Asset Class</button>
       <div class="error">{error}</div>
     </div>
 

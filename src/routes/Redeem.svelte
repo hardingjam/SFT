@@ -182,7 +182,7 @@
 <div class="redeem-container">
   {#if !showReceiptInfo}
     <div class="title"><span
-        class="f-weight-700">Total Supply: (FT):</span>
+        class="f-weight-700">Total supply: (FT):</span>
       {ethers.utils.formatUnits(totalShares, 18)}
     </div>
     <div class="basic-frame-parent">
@@ -220,7 +220,7 @@
     {#if error}
       <span class="error">{error}</span>
     {/if}
-    <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} maxButton={true}
+    <MintInput bind:amount={amount} amountLabel={"Total to redeem"} maxButton={true}
                on:setMax={()=>{setMaxValue()}}/>
     <button class="redeem-btn btn-solid" disabled="{!selectedReceipts.length}" on:click={() => withdraw()}>
       Redeem

@@ -226,7 +226,7 @@
     }
 
 </script>
-<DefaultFrame header="New Asset Class Schema">
+<DefaultFrame header="New asset class schema">
   <div slot="content" class="schema-content">
     <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
       <div class="label">
@@ -238,7 +238,7 @@
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
       <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}} disabled={!content.text || error || invalidJson || labelError}>
-        Create new Asset Class
+        Create new asset class
       </button>
       <div class="error">{error || labelError}</div>
     </div>

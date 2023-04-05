@@ -16,6 +16,8 @@
     import {JSONEditor} from "svelte-jsoneditor";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import {navigateTo} from "yrv";
+    import {validator} from "@exodus/schemasafe";
+    import {nullOptionalsAllowed} from '../plugins/@restspace/svelte-schema-form/utilities';
 
 
     let label = ""
@@ -66,6 +68,17 @@
         try {
             transactionError.set(false)
             transactionSuccess.set(false)
+            try {
+                validator(nullOptionalsAllowed(schema), {
+                    includeErrors: true,
+                    allErrors: true,
+                    allowUnusedKeywords: true
+                });
+            } catch (er) {
+                error = "Form cannot be generated from schema"
+                return
+            }
+
 
             schemaInformation = {
                 displayName: label,

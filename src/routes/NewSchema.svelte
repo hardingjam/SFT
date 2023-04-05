@@ -30,7 +30,9 @@
     let promise;
     let username = "";
     let password = "";
-    let schemaInformation = {}
+    let schemaInformation = {};
+    let notValidSchemaError = false;
+
 
     let topText = ""
     let bottomText = ""
@@ -51,16 +53,13 @@
     }
 
     async function deploySchema() {
-        if (error) {
-            return
-        }
         error = ""
         if (!label) {
             error = "Please enter Schema label";
             return
         }
 
-        if (!schema) {
+        if (!content.text) {
             error = "Please paste your schema";
             return
         }
@@ -75,6 +74,7 @@
                     allowUnusedKeywords: true
                 });
             } catch (er) {
+                notValidSchemaError = true;
                 error = "Form cannot be generated from schema"
                 return
             }
@@ -202,6 +202,7 @@
 
     function getContent() {
         error = ""
+        notValidSchemaError = false
         if (content.text) {
             try {
                 schema = JSON.parse(content.text)
@@ -230,7 +231,9 @@
       <div class="schema">
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
-      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}} disabled={error}>Create new Asset Class</button>
+      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}} disabled={notValidSchemaError}>
+        Create new Asset Class
+      </button>
       <div class="error">{error}</div>
     </div>
 

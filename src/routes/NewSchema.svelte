@@ -31,7 +31,6 @@
     let username = "";
     let password = "";
     let schemaInformation = {};
-    let notValidSchemaError = false;
 
 
     let topText = ""
@@ -74,7 +73,6 @@
                     allowUnusedKeywords: true
                 });
             } catch (er) {
-                notValidSchemaError = true;
                 error = "Form cannot be generated from schema"
                 return
             }
@@ -199,10 +197,10 @@
     }
 
     $: content && getContent()
+    $: label && clearLabelError()
 
     function getContent() {
         error = ""
-        notValidSchemaError = false
         if (content.text) {
             try {
                 schema = JSON.parse(content.text)
@@ -211,6 +209,9 @@
                 console.log("Invalid JSON:", error);
             }
         }
+    }
+    function clearLabelError() {
+        error = ""
     }
 
     function goToAssetClassList(event) {
@@ -231,7 +232,7 @@
       <div class="schema">
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
-      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}} disabled={notValidSchemaError}>
+      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}} disabled={!content.text || error}>
         Create new Asset Class
       </button>
       <div class="error">{error}</div>

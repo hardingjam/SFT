@@ -32,6 +32,7 @@
     let password = "";
     let schemaInformation = {};
     let invalidJson = ""
+    let labelError = ""
 
 
     let topText = ""
@@ -54,8 +55,10 @@
 
     async function deploySchema() {
         error = ""
+        labelError = ""
+
         if (!label) {
-            error = "Please enter Schema label";
+            labelError = "Please enter Schema label";
             return
         }
 
@@ -67,17 +70,6 @@
         try {
             transactionError.set(false)
             transactionSuccess.set(false)
-            try {
-                validator(nullOptionalsAllowed(schema), {
-                    includeErrors: true,
-                    allErrors: true,
-                    allowUnusedKeywords: true
-                });
-            } catch (er) {
-                error = "Form cannot be generated from schema"
-                return
-            }
-
 
             schemaInformation = {
                 displayName: label,
@@ -209,10 +201,22 @@
             } catch (err) {
                 invalidJson = err
             }
+
+            try {
+                validator(nullOptionalsAllowed(schema), {
+                    includeErrors: true,
+                    allErrors: true,
+                    allowUnusedKeywords: true
+                });
+            } catch (er) {
+                if(!invalidJson){
+                    error = "Form cannot be generated from schema"
+                }
+            }
         }
     }
     function clearLabelError() {
-        error = ""
+        labelError = ""
     }
 
     function goToAssetClassList(event) {
@@ -233,10 +237,10 @@
       <div class="schema">
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
-      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}} disabled={!content.text || error || invalidJson}>
+      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}} disabled={!content.text || error || invalidJson || labelError}>
         Create new Asset Class
       </button>
-      <div class="error">{error}</div>
+      <div class="error">{error || labelError}</div>
     </div>
 
     <div class={showAuth  ? 'auth show' : 'auth hide'}>

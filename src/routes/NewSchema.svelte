@@ -202,6 +202,7 @@
 
     function getContent() {
         error = ""
+        invalidJson = ""
         if (content.text) {
             try {
                 schema = JSON.parse(content.text)

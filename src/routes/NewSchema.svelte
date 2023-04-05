@@ -208,7 +208,7 @@
                 schema = JSON.parse(content.text)
             } catch (err) {
                 invalidJson = err
-                console.log("Invalid JSON:", error);
+                error = err
             }
         }
     }

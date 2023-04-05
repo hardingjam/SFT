@@ -208,7 +208,6 @@
                 schema = JSON.parse(content.text)
             } catch (err) {
                 invalidJson = err
-                error = err
             }
         }
     }

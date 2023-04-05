@@ -202,12 +202,13 @@
 
     function getContent() {
         error = ""
+        invalidJson = ""
         if (content.text) {
             try {
                 schema = JSON.parse(content.text)
             } catch (err) {
                 invalidJson = err
-                console.log("Invalid JSON:", error);
+                error = err
             }
         }
     }
@@ -277,44 +278,6 @@
         overflow: auto;
         margin: 10px 0;
         position: relative;
-    }
-
-
-    .textarea {
-        width: 100%;
-        height: 100%;
-        border: none;
-        border-left: 35px solid #F0EFF1;
-        border-radius: 5px 5px 0 0;
-        border-bottom: 1px solid #D2D2D2;
-        background: #FBFBFB;
-        display: block;
-        overflow: hidden;
-        resize: both;
-        min-height: 300px;
-        line-height: 20px;
-        padding: 5px;
-        max-width: 675px;
-    }
-
-    .textarea:focus-visible {
-        outline: none
-    }
-
-    .textarea[contenteditable]:empty::before {
-        content: "Paste your schema here";
-        color: gray;
-    }
-
-
-    .editing-top-color {
-        position: absolute;
-        width: 35px;
-        left: 0;
-        top: 0;
-        background: #DCDBDD;
-        border-radius: 5px 0 0 0;
-        text-align: center;
     }
 
     #highlighting {

@@ -105,9 +105,9 @@
             <input type="text" class="default-input min-tier" bind:value={erc20MinTier} autofocus>
           </div>
         </div>
-        <div class="assign-tier">
-          <button class="default-btn" on:click={()=>{assignTierErc20()}}>Assign tier</button>
-        </div>
+<!--        <div class="assign-tier">-->
+<!--          <button class="default-btn" on:click={()=>{assignTierErc20()}}>Assign tier</button>-->
+<!--        </div>-->
         <div class="f-weight-700">Check address on the tier list:</div>
         <div class="check-address-input-container">
           <input type="text" class="default-input w-100" bind:value={addressErc20}>
@@ -139,9 +139,9 @@
             <input type="text" class="default-input min-tier" bind:value={erc1155MinTier} autofocus>
           </div>
         </div>
-        <div class="assign-tier">
-          <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Assign tier</button>
-        </div>
+<!--        <div class="assign-tier">-->
+<!--          <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Assign tier</button>-->
+<!--        </div>-->
         <div class="f-weight-700">Check address on the tier list:</div>
         <div class="check-address-input-container">
           {addressErc1155}

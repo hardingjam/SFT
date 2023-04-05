@@ -68,7 +68,7 @@
           <thead>
           <tr>
             <th>Receipt ID</th>
-            <th>Options</th>
+            <th>Amount</th>
             <th>Last updated</th>
           </tr>
           </thead>

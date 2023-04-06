@@ -70,7 +70,7 @@
     let accountMenuOptions = [
         {
             id: "copy",
-            displayName: "Copy Address",
+            displayName: "Copy address",
             action: () => {
                 if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
                     // this.showTooltip = true;
@@ -84,7 +84,7 @@
         },
         {
             id: "view",
-            displayName: "View on Explorer",
+            displayName: "View on explorer",
             action: () => {
                 window.open(`${$activeNetwork.blockExplorer}address/${$account}`);
             },

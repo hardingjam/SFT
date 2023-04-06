@@ -297,15 +297,15 @@
       Asset classes
     </button>
     <button type="button" class="default-btn mr-2" on:click={()=>{navigateTo('#new-asset-class')}}>
-      New Asset class
+      New asset class
     </button>
     <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>
-      Audit History
+      Audit history
     </button>
   </div>
   {#if (!showAuth)}
 
-    <MintInput bind:amount={amount} amountLabel={"Mint Amount"} />
+    <MintInput bind:amount={amount} amountLabel={"Mint amount"} />
     <div class="audit-info-container basic-frame-parent">
       <div class="audit-info basic-frame">
         {#if $schemas.length}

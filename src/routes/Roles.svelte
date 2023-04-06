@@ -156,7 +156,7 @@
             <input type="text" class="default-input"
                    bind:value={account}>
           </div>
-          <button class="default-btn" on:click={grantRole} disabled={!!error || !account}>Enter</button>
+          <button class="default-btn" on:click={grantRole} disabled={!!error || !account || !roleName}>Enter</button>
         </div>
         {#if loading}
           <SftLoader width="50"></SftLoader>

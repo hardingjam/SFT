@@ -270,7 +270,9 @@
     async function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
         const form = document.querySelector('.svelte-schema-form'); // select the form element
-        form.reset();
+        if (form) {
+            form.reset();
+        }
     }
 
     let certificateUrl = ''

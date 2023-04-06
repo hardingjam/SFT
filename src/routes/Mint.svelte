@@ -270,6 +270,8 @@
 
     async function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
+        const form = document.querySelector('.svelte-schema-form'); // select the form element
+        form.reset();
     }
 
     let certificateUrl = ''
@@ -330,7 +332,7 @@
   </div>
   {#if (!showAuth)}
 
-    <MintInput bind:amount={amount} amountLabel={"Mint amount"} />
+    <MintInput bind:amount={amount} amountLabel={"Mint amount"}/>
     <div class="audit-info-container basic-frame-parent">
       <div class="audit-info basic-frame">
         {#if $schemas.length}

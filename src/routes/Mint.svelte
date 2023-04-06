@@ -8,14 +8,25 @@
         uploadBtnLoading,
         activeNetwork,
         schemas,
-        schemaError
+        schemaError,
+        transactionError,
+        transactionSuccess,
+        transactionHash,
+        transactionInProgressShow,
+        transactionInProgress
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_APIS, MAGIC_NUMBERS, ONE} from "../scripts/consts.js";
+    import {
+        IPFS_APIS,
+        MAGIC_NUMBERS,
+        ONE,
+        TRANSACTION_IN_PROGRESS_TEXT,
+        VIEW_ON_EXPLORER_TEXT
+    } from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
     import {
         cborDecode,
@@ -30,6 +41,7 @@
     import {beforeUpdate, onMount} from "svelte";
     import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
     import {arrayify} from "ethers/lib/utils.js";
+    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
 
     let image = {}
 
@@ -133,6 +145,9 @@
     async function mint() {
         try {
             error = ""
+            transactionError.set(false)
+            transactionSuccess.set(false)
+
             if (!parseFloat(amount)) {
                 error = "Zero amount"
                 return;
@@ -156,11 +171,21 @@
                         const tx = await $vault
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
-                        await tx.wait();
+                        if (tx.hash) {
+                            transactionHash.set(tx.hash)
+                            transactionInProgressShow.set(true)
+                            transactionInProgress.set(true)
+                        }
+                        let wait = await tx.wait()
+                        if (wait.status === 1) {
+                            transactionSuccess.set(true)
+                            transactionInProgress.set(false)
+                        }
                         amount = 0;
                         fileDropped.set({})
                     }
                 } catch (err) {
+                    transactionError.set(true)
                     console.log(err)
                 }
 
@@ -374,6 +399,8 @@
   </div>
   <!--{/if}-->
 </div>
+<TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT}
+                             transactionHash={$transactionHash}/>
 
 <style>
     .mint-container {

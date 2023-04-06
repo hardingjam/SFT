@@ -22,37 +22,53 @@
     import SftLoader from "../components/SftLoader.svelte";
     import {ROLES, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
+      import {ethers} from "ethers";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
-    let validAccount = true;
     let account = '';
     let roleName = '';
     let error = '';
     let transaction = null;
 
     let loading = false
-
+    let accountValid = true;
 
     async function getData() {
         await getSgData($vault.address)
-        executorRoles = $roles.length ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
+        executorRoles = $roles.length ? $roles.filter(r => !r.roleName?.includes('_ADMIN')) : []
     }
 
     $: $vault && $vault.address && getData();
+    $: account && validateAccount();
 
+    function validateAccount() {
+        error = ""
+        accountValid = ethers.utils.isAddress(account)
+        if (!accountValid) {
+            error = "Address is not valid"
+        }
+    }
 
     function handleRoleSelect(event) {
         roleName = event.detail.selected.roleName
     }
 
     async function grantRole() {
+        error = ""
         transactionError.set(false)
         transactionSuccess.set(false)
         let role = null
         roleName ? role = await $vault[roleName]() : error = "Select role"
+
+        if (!account) {
+            error = "Enter address"
+        }
+
         try {
-            if (account) {
-                validAccount = true;
+            if (error) {
+                return
+            }
+            if (account && accountValid) {
                 const grantRoleTx = await $vault.grantRole(role, account.trim());
                 if (grantRoleTx.hash) {
                     transactionHash.set(grantRoleTx.hash)
@@ -73,16 +89,12 @@
                     return role;
                 });
                 roles.set([...newRoles])
-                account = "";
-                // transactionInProgress.set(false)
-            } else {
-                validAccount = false;
             }
 
         } catch (err) {
             transactionError.set(true)
-            error = err.reason
-            if (error.includes('AccessControl')) {
+            error = err.reason || ""
+            if (error && error?.includes('AccessControl')) {
                 error = accessControlError(error)
             }
         }
@@ -103,7 +115,7 @@
                     return {roleName: role.roleName, roleHolders: filtered}
                 })
                 roles.set(rolesFiltered)
-                executorRoles = $roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
+                executorRoles = $roles ? $roles.filter(r => !r.roleName?.includes('_ADMIN')) : []
                 loading = false
             }
         })
@@ -141,10 +153,10 @@
           </div>
           <div class="row">
             <label class="f-weight-700 custom-col col-2">Address:</label>
-            <input type="text" class="{validAccount ? 'default-input' : 'default-input invalid-input'}"
+            <input type="text" class="default-input"
                    bind:value={account}>
           </div>
-          <button class="default-btn" on:click={grantRole}>Enter</button>
+          <button class="default-btn" on:click={grantRole} disabled={!!error || !account}>Enter</button>
         </div>
         {#if loading}
           <SftLoader width="50"></SftLoader>
@@ -177,7 +189,8 @@
       </div>
     </div>
   </DefaultFrame>
-  <TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT} transactionHash={$transactionHash}/>
+  <TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT}
+                               transactionHash={$transactionHash}/>
 </div>
 
 
@@ -239,6 +252,10 @@
 
     .custom-col {
         margin-right: -10px;
+    }
+
+    .default-input {
+        padding-left: 13px;
     }
 
 </style>

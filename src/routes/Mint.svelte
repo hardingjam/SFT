@@ -297,10 +297,10 @@
       Asset classes
     </button>
     <button type="button" class="default-btn mr-2" on:click={()=>{navigateTo('#new-asset-class')}}>
-      New Asset class
+      New asset class
     </button>
     <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>
-      Audit History
+      Audit history
     </button>
   </div>
   {#if (!showAuth)}

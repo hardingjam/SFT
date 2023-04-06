@@ -42,13 +42,13 @@
                         error = "0 amount"
                         return
                     }
-
-                    const tx = $vault["redeem(uint256,address,address,uint256)"](
+                    const tx = await $vault.connect(signer)["redeem(uint256,address,address,uint256,bytes)"](
                         redeemAmount,
                         $account,
                         $account,
-                        receipt
-                    );
+                        receipt,
+                        []
+                   );
                     await tx.wait();
 
                     await setTempData(amount, receipt)
@@ -130,7 +130,7 @@
         const hasRoleWithdrawer = await hasRole($vault, $account, "WITHDRAWER")
         if (!hasRoleWithdrawer.error) {
             let ABI = [
-                "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_)",
+                "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_, bytes receiptInformation_)",
             ];
             let iface = new ethers.utils.Interface(ABI);
 
@@ -140,7 +140,8 @@
                     receiptBalance,
                     $account,
                     $account,
-                    receipt
+                    receipt,
+                    []
                 ])
             })
 

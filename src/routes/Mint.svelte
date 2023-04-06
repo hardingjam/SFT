@@ -155,19 +155,19 @@
             const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
             if (!hasRoleDepositor.error) {
                 let structure = await submitForm()
+                if (structure) {
 
-                let fileHashesList = fileHashes.map(f => f.hash)
-                let encodedStructure = encodeCBORStructure(structure, selectedSchema.hash)
+                    let fileHashesList = fileHashes.map(f => f.hash)
+                    let encodedStructure = encodeCBORStructure(structure, selectedSchema.hash)
 
-                let shareRatio = ONE
-                const shares = ethers.utils.parseEther(amount.toString());
+                    let shareRatio = ONE
+                    const shares = ethers.utils.parseEther(amount.toString());
 
 
-                try {
-                    let structureIpfs = await upload(structure)
-                    let encodedHashList = cborEncode([...fileHashesList, structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
-                    const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedStructure + encodedHashList
-                    if (structure) {
+                    try {
+                        let structureIpfs = await upload(structure)
+                        let encodedHashList = cborEncode([...fileHashesList, structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
+                        const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedStructure + encodedHashList
                         const tx = await $vault
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
@@ -183,12 +183,11 @@
                         }
                         amount = 0;
                         fileDropped.set({})
+                    } catch (err) {
+                        transactionError.set(true)
+                        console.log(err)
                     }
-                } catch (err) {
-                    transactionError.set(true)
-                    console.log(err)
                 }
-
             } else {
                 error = hasRoleDepositor.error
             }
@@ -385,7 +384,9 @@
     <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
       (FT)
     </div>
-    <button class="mint-btn btn-solid" on:click={() => mint()}>Mint</button>
+    <button class="mint-btn btn-solid" on:click={() => mint()} disabled="{!selectedSchema.hash || !parseFloat(amount)}">
+      Mint
+    </button>
   {/if}
   <!--{#if showAuth}-->
   <div class={showAuth  ? 'auth show' : 'auth hide'}>

@@ -153,9 +153,8 @@ function getDateValues(date) {
 export function accessControlError(msg) {
     let hash = msg.slice(-66)
     let error = msg.slice(20, msg.length - 66)
-
     let role = ROLES.find(r => r.hash === hash)
-    return error + " " + role?.name
+    return error + " " + role?.roleName
 }
 
 export function toBytes(string) {

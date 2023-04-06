@@ -230,7 +230,7 @@
   <div slot="content" class="schema-content">
     <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
       <div class="label">
-        <span class="f-weight-700">Asset Class label :</span>
+        <span class="f-weight-700">Asset class label :</span>
         <input class="label-input" bind:value={label}/>
       </div>
 

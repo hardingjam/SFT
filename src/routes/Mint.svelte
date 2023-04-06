@@ -305,7 +305,7 @@
   </div>
   {#if (!showAuth)}
 
-    <MintInput bind:amount={amount} amountLabel={"Mint Amount"} />
+    <MintInput bind:amount={amount} amountLabel={"Mint amount"} />
     <div class="audit-info-container basic-frame-parent">
       <div class="audit-info basic-frame">
         {#if $schemas.length}

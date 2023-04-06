@@ -69,7 +69,7 @@
 
 </script>
 
-<DefaultFrame header="Asset Class List">
+<DefaultFrame header="Asset class list">
   <div slot="content">
     <div class="schemas">
       <table class="w-100">

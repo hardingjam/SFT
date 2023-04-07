@@ -24,40 +24,49 @@
 
     let dropdownTrigger;
 
-    function commitAction(option) {
-        if (option.action) {
-            option.action()
+    function commitAction() {
+        if (selected.action) {
+            selected.action()
         }
-        selectOption(option)
+        selectOption(selected)
     }
 
 </script>
 
 <div>
-  <Dropdown triggerElement={dropdownTrigger}>
 
-    <button
-        type="button"
-        class={`${className} btn dropdown-toggle`}
-        bind:this={dropdownTrigger}
-    >
-      <slot name="icon"></slot>
-      <span class="select-label">{selected && !staticLabel ? selected : label}</span>
-      {#if showExpand}
-        <img class="expand" src={expandIcon} alt="expand"/>
-      {/if}
-    </button>
-    <div slot="DropdownMenu" class={`${dropDownClass} ${className} dropdown`}>
-      {#each options as option}
-        <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
-          {#if option.icon}
-            <img src={icons[option.icon]} alt={option?.displayName}/>
-          {/if}
-          <span class="select-label">{option.displayName}</span>
-        </button>
-      {/each}
-    </div>
-  </Dropdown>
+  <select bind:value={selected} on:change="{() =>commitAction()}">
+    {#each options as option}
+      <option value={option}>
+        {option.displayName}
+      </option>
+    {/each}
+  </select>
+
+<!--  <Dropdown triggerElement={dropdownTrigger}>-->
+
+<!--    <button-->
+<!--        type="button"-->
+<!--        class={`${className} btn dropdown-toggle`}-->
+<!--        bind:this={dropdownTrigger}-->
+<!--    >-->
+<!--      <slot name="icon"></slot>-->
+<!--      <span class="select-label">{selected && !staticLabel ? selected : label}</span>-->
+<!--      {#if showExpand}-->
+<!--        <img class="expand" src={expandIcon} alt="expand"/>-->
+<!--      {/if}-->
+<!--    </button>-->
+<!--    <div slot="DropdownMenu" class={`${dropDownClass} ${className} dropdown`}>-->
+<!--      {#each options as option}-->
+<!--        <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>-->
+<!--          {#if option.icon}-->
+<!--            <img src={icons[option.icon]} alt={option?.displayName}/>-->
+<!--          {/if}-->
+<!--          <span class="select-label">{option.displayName}</span>-->
+<!--        </button>-->
+<!--      {/each}-->
+<!--    </div>-->
+<!--  </Dropdown>-->
 </div>
 <style>
     @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");

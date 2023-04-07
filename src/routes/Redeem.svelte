@@ -1,12 +1,21 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
     import {getReceiptBalance, getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
-    import {account, activeNetwork, vault} from "../scripts/store.js";
+    import {
+        account,
+        activeNetwork,
+        transactionError,
+        transactionHash, transactionInProgress, transactionInProgressShow,
+        transactionSuccess,
+        vault
+    } from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ethers} from "ethers";
     import SftLoader from "../components/SftLoader.svelte";
     import {DEPLOYER_QUERY, RECEIPTS_QUERY} from '../scripts/queries.js'
     import ReceiptInformation from "./ReceiptInformation.svelte";
+    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
+    import {TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
 
     let shouldDisable = false;
     let amount;
@@ -25,7 +34,8 @@
         try {
             if (receipt) {
                 error = ''
-
+                transactionError.set(false)
+                transactionSuccess.set(false)
                 const hasRoleWithdrawer = await hasRole($vault, $account, "WITHDRAWER")
 
                 if (!hasRoleWithdrawer.error) {
@@ -42,15 +52,23 @@
                         error = "0 amount"
                         return
                     }
-
-                    const tx = $vault["redeem(uint256,address,address,uint256)"](
+                    const tx = await $vault.connect(signer)["redeem(uint256,address,address,uint256,bytes)"](
                         redeemAmount,
                         $account,
                         $account,
-                        receipt
-                    );
-                    await tx.wait();
-
+                        receipt,
+                        []
+                   );
+                    if (tx.hash) {
+                        transactionHash.set(tx.hash)
+                        transactionInProgressShow.set(true)
+                        transactionInProgress.set(true)
+                    }
+                    let wait = await tx.wait()
+                    if (wait.status === 1) {
+                        transactionSuccess.set(true)
+                        transactionInProgress.set(false)
+                    }
                     await setTempData(amount, receipt)
                     // selectedReceipts = []
 
@@ -64,6 +82,7 @@
                 return
             }
         } catch (err) {
+            transactionError.set(true)
             error = err.reason
         }
         shouldDisable = false;
@@ -122,6 +141,8 @@
 
     async function multiCall() {
         error = ''
+        transactionError.set(false)
+        transactionSuccess.set(false)
 
         if (!selectedReceipts.length) {
             return
@@ -130,7 +151,7 @@
         const hasRoleWithdrawer = await hasRole($vault, $account, "WITHDRAWER")
         if (!hasRoleWithdrawer.error) {
             let ABI = [
-                "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_)",
+                "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_, bytes receiptInformation_)",
             ];
             let iface = new ethers.utils.Interface(ABI);
 
@@ -140,17 +161,29 @@
                     receiptBalance,
                     $account,
                     $account,
-                    receipt
+                    receipt,
+                    []
                 ])
             })
 
             try {
-                await $vault
+              let tx =  await $vault
                     .multicall(
                         multicallArr,
                         {from: $account}
                     );
+                if (tx.hash) {
+                    transactionHash.set(tx.hash)
+                    transactionInProgressShow.set(true)
+                    transactionInProgress.set(true)
+                }
+                let wait = await tx.wait()
+                if (wait.status === 1) {
+                    transactionSuccess.set(true)
+                    transactionInProgress.set(false)
+                }
             } catch (err) {
+                transactionError.set(true)
                 error = err.reason
             }
         } else {
@@ -233,6 +266,8 @@
   {/if}
 
 </div>
+<TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT}
+                             transactionHash={$transactionHash}/>
 
 <style>
     .receipts-table-container {

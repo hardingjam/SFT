@@ -69,8 +69,8 @@
                         transactionSuccess.set(true)
                         transactionInProgress.set(false)
                     }
-                    await setTempData(amount, receipt)
                     // selectedReceipts = []
+                    await getData()
 
                     amount = 0;
                 } else {
@@ -119,25 +119,6 @@
         amount = ethers.utils.formatEther(balance)
     }
 
-
-    function setTempData(amount, receipt) {
-        //indexing takes time, so to show correct data, ui modifications is needed
-        let updatedReceipt = receiptBalances.find(d => d.receipt.receiptId === receipt)
-
-        let valueBef = updatedReceipt.receipt.balances[0].value
-        let valueExactBef = updatedReceipt.receipt.balances[0].valueExact
-
-        updatedReceipt.receipt.balances[0].value = valueBef - amount
-        updatedReceipt.receipt.balances[0].valueExact = Number(ethers.BigNumber.from(valueExactBef).sub(ethers.utils.parseEther(amount.toString())))
-
-        receiptBalances = receiptBalances.map(d => {
-            if (d.receipt.receiptId === receipt) {
-                return {...d, receipt: updatedReceipt.receipt}
-            } else {
-                return d
-            }
-        }).filter(d => d.receipt.balances[0].value > 0)
-    }
 
     async function multiCall() {
         error = ''

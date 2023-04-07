@@ -19,7 +19,7 @@
 
     let shouldDisable = false;
     let amount;
-    let selectedReceipts = [];
+    let selectedReceipts;
     let totalShares = 0
     let error = ""
     let showReceiptInfo = false
@@ -69,8 +69,8 @@
                         transactionSuccess.set(true)
                         transactionInProgress.set(false)
                     }
-                    await setTempData(amount, receipt)
                     // selectedReceipts = []
+                    await getData()
 
                     amount = 0;
                 } else {
@@ -112,32 +112,13 @@
     }
 
     async function setMaxValue() {
-        if (selectedReceipts.length > 1) {
-            return
-        }
-        let balance = await getReceiptBalance($activeNetwork, $vault, selectedReceipts[0])
+        // if (selectedReceipts.length > 1) {
+        //     return
+        // }
+        let balance = await getReceiptBalance($activeNetwork, $vault, selectedReceipts)
         amount = ethers.utils.formatEther(balance)
     }
 
-
-    function setTempData(amount, receipt) {
-        //indexing takes time, so to show correct data, ui modifications is needed
-        let updatedReceipt = receiptBalances.find(d => d.receipt.receiptId === receipt)
-
-        let valueBef = updatedReceipt.receipt.balances[0].value
-        let valueExactBef = updatedReceipt.receipt.balances[0].valueExact
-
-        updatedReceipt.receipt.balances[0].value = valueBef - amount
-        updatedReceipt.receipt.balances[0].valueExact = Number(ethers.BigNumber.from(valueExactBef).sub(ethers.utils.parseEther(amount.toString())))
-
-        receiptBalances = receiptBalances.map(d => {
-            if (d.receipt.receiptId === receipt) {
-                return {...d, receipt: updatedReceipt.receipt}
-            } else {
-                return d
-            }
-        }).filter(d => d.receipt.balances[0].value > 0)
-    }
 
     async function multiCall() {
         error = ''
@@ -234,7 +215,7 @@
               <tr>
                 <td class="receipt-id">
                   <label class="check-container">
-                    <input type="checkbox" class="check-box" bind:group={selectedReceipts}
+                    <input type="radio" class="check-box" bind:group={selectedReceipts}
                            value={receipt.receipt.receiptId}/>
                     <span class="checkmark"></span>
                   </label>
@@ -255,7 +236,7 @@
     {/if}
     <MintInput bind:amount={amount} amountLabel={"Total to redeem"} maxButton={true}
                on:setMax={()=>{setMaxValue()}}/>
-    <button class="redeem-btn btn-solid" disabled="{!selectedReceipts.length}" on:click={() => withdraw()}>
+    <button class="redeem-btn btn-solid" disabled="{!selectedReceipts || !parseFloat(amount)}" on:click={() => redeem(selectedReceipts)}>
       Redeem
     </button>
 

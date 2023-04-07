@@ -19,7 +19,7 @@
 
     let shouldDisable = false;
     let amount;
-    let selectedReceipts = [];
+    let selectedReceipts;
     let totalShares = 0
     let error = ""
     let showReceiptInfo = false
@@ -112,10 +112,10 @@
     }
 
     async function setMaxValue() {
-        if (selectedReceipts.length > 1) {
-            return
-        }
-        let balance = await getReceiptBalance($activeNetwork, $vault, selectedReceipts[0])
+        // if (selectedReceipts.length > 1) {
+        //     return
+        // }
+        let balance = await getReceiptBalance($activeNetwork, $vault, selectedReceipts)
         amount = ethers.utils.formatEther(balance)
     }
 
@@ -234,7 +234,7 @@
               <tr>
                 <td class="receipt-id">
                   <label class="check-container">
-                    <input type="checkbox" class="check-box" bind:group={selectedReceipts}
+                    <input type="radio" class="check-box" bind:group={selectedReceipts}
                            value={receipt.receipt.receiptId}/>
                     <span class="checkmark"></span>
                   </label>
@@ -255,7 +255,7 @@
     {/if}
     <MintInput bind:amount={amount} amountLabel={"Total to redeem"} maxButton={true}
                on:setMax={()=>{setMaxValue()}}/>
-    <button class="redeem-btn btn-solid" disabled="{!selectedReceipts.length}" on:click={() => withdraw()}>
+    <button class="redeem-btn btn-solid" disabled="{!selectedReceipts || !parseFloat(amount)}" on:click={() => redeem(selectedReceipts)}>
       Redeem
     </button>
 

@@ -10,6 +10,8 @@
 
     export let topText = ""
     export let bottomText = ""
+    export let errorText = "Transaction failed";
+    export let successText = "Transaction successful!";
     export let transactionHash = null;
 
     function viewInExplorer(hash) {
@@ -41,7 +43,7 @@
         </svg>
       </div>
       {#if $transactionError}
-        <div class="top-text">{topText}</div>
+        <div class="top-text">{errorText}</div>
         <svg width="138" height="138" viewBox="0 0 138 138" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="69" cy="69" r="62" fill="white"/>
           <path d="M51.75 51.75L86.25 86.25" stroke="#DD1212" stroke-width="6" stroke-linecap="round"
@@ -53,7 +55,7 @@
         </svg>
       {/if}
       {#if $transactionSuccess}
-        <div class="top-text">Transaction successful!</div>
+        <div class="top-text">{successText}</div>
         <svg width="138" height="138" viewBox="0 0 138 138" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="69" cy="69" r="62" fill="white"/>
           <path d="M40.25 74.75L57.5 92L97.75 51.75" stroke="#1EA51B" stroke-width="6" stroke-linecap="round"

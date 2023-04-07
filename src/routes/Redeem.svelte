@@ -167,7 +167,7 @@
             })
 
             try {
-              let tx =  await $vault
+                let tx = await $vault
                     .multicall(
                         multicallArr,
                         {from: $account}
@@ -267,7 +267,7 @@
 
 </div>
 <TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT}
-                             transactionHash={$transactionHash}/>
+                             transactionHash={$transactionHash} errorText="Redeem failed" successText="Redeem Successful!"/>
 
 <style>
     .receipts-table-container {

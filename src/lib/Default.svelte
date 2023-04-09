@@ -7,7 +7,6 @@
         ethersData,
         transactionInProgressShow
     } from "../scripts/store.js";
-    import Select from "../components/Select.svelte";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
     import {ethers} from "ethers";
@@ -17,7 +16,7 @@
     import {icons} from '../scripts/assets.js'
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import {formatAddress, getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
@@ -38,6 +37,7 @@
     let location = window.location.hash;
     let selectedTab = 'mint'
     $: $vault && setTokenName()
+
     async function setTokenName() {
         tokenName = $vault && $vault.address ? await $vault.name() : ""
     }
@@ -68,81 +68,6 @@
         }
     }
 
-    let accountMenuOptions = [
-        {
-            id: "copy",
-            displayName: "Copy address",
-            action: () => {
-                if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
-                    // this.showTooltip = true;
-                    // setTimeout(() => {
-                    //     this.showTooltip = false;
-                    // }, 1000);
-                    return navigator.clipboard.writeText($account);
-                }
-                return Promise.reject("The Clipboard API is not available.");
-            }
-        },
-        {
-            id: "view",
-            displayName: "View on explorer",
-            action: () => {
-                window.open(`${$activeNetwork.blockExplorer}address/${$account}`);
-            },
-        }
-    ]
-
-    let menuItems = [
-        {
-            id: "setup",
-            displayName: "SFT Setup",
-            action: () => {
-                navigateTo('#setup', {replace: false})
-            }
-        },
-        {
-            id: "roles",
-            displayName: "Roles",
-            action: () => {
-                navigateTo('#roles', {replace: false})
-            }
-        },
-        {
-            id: "mint",
-            displayName: "Mint/Redeem",
-            action: () => {
-                navigateTo('#mint', {replace: false})
-            }
-        },
-        {
-            id: "list",
-            displayName: "SFT List",
-            action: () => {
-                navigateTo('#list', {replace: false})
-            }
-        },
-        {
-            id: "members",
-            displayName: "Members",
-            action: () => {
-                navigateTo('#members', {replace: false})
-            }
-        },
-        {
-            id: "audit-history",
-            displayName: "Audit History",
-            action: () => {
-                navigateTo('#audit-history', {replace: false})
-            }
-        },
-        // {
-        //     id: "new-schema",
-        //     displayName: "New Schema",
-        //     action: () => {
-        //         navigateTo('#new-schema', {replace: false})
-        //     }
-        // },
-    ]
 
     onMount(async () => {
         await getEthersData()
@@ -311,31 +236,7 @@
       </div>
       {#if $account}
         <div class="menu">
-
-
           <Navigation on:networkSelect={handleNetworkSelect}></Navigation>
-
-
-          <Select options={networks} on:select={handleNetworkSelect}
-                  label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
-                  dropDownClass={'nav-dropdown'}>
-            <span slot="icon" class="select-icon"><img src={icons[$activeNetwork?.icon]}
-                                                       alt={$activeNetwork?.displayName}/></span>
-          </Select>
-          <Select className={'meinMenu'} options={accountMenuOptions}
-                  label={formatAddress($account)}
-                  staticLabel={true} dropDownClass={'nav-dropdown'}>
-          </Select>
-
-          <Select className={'meinMenu'} options={menuItems}
-                  label=""
-                  staticLabel={true} showExpand="{false}" dropDownClass={'nav-dropdown'}>
-            <div slot="icon">
-              <img src={icons.burger}
-                   alt="menu"/>
-            </div>
-          </Select>
-
         </div>
       {/if}
 
@@ -547,12 +448,12 @@
     height: fit-content;
   }
 
-  .blur{
+  .blur {
     position: fixed;
     width: 100%;
     height: 100%;
     backdrop-filter: blur(3.5px);
-    top:0
+    top: 0
   }
 
 </style>

@@ -32,6 +32,7 @@
     "prettier": "^2.8.5",
     "sv-bootstrap-dropdown": "^0.4.4",
     "svelte-jsoneditor": "^0.16.1",
+    "sveltestrap": "^5.10.0",
     "yrv": "^0.0.57"
   }
 }

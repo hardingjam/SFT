@@ -27,6 +27,7 @@
     import ReceiptAudit from "../routes/ReceiptAudit.svelte";
     import SftCreateSuccess from "../routes/SftCreateSuccess.svelte";
     import AssetClasses from "../routes/AssetClasses.svelte";
+    import Navigation from "../components/Navigation.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -310,6 +311,11 @@
       </div>
       {#if $account}
         <div class="menu">
+
+
+          <Navigation on:networkSelect={handleNetworkSelect}></Navigation>
+
+
           <Select options={networks} on:select={handleNetworkSelect}
                   label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
                   dropDownClass={'nav-dropdown'}>

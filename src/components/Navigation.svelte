@@ -19,6 +19,60 @@
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
     import {formatAddress} from "../scripts/helpers.js";
+    import {navigateTo} from "yrv";
+
+    let menuItems = [
+        {
+            id: "setup",
+            displayName: "SFT Setup",
+            action: () => {
+                navigateTo('#setup', {replace: false})
+            }
+        },
+        {
+            id: "roles",
+            displayName: "Roles",
+            action: () => {
+                navigateTo('#roles', {replace: false})
+            }
+        },
+        {
+            id: "mint",
+            displayName: "Mint/Redeem",
+            action: () => {
+                navigateTo('#mint', {replace: false})
+            }
+        },
+        {
+            id: "list",
+            displayName: "SFT List",
+            action: () => {
+                navigateTo('#list', {replace: false})
+            }
+        },
+        {
+            id: "members",
+            displayName: "Members",
+            action: () => {
+                navigateTo('#members', {replace: false})
+            }
+        },
+        {
+            id: "audit-history",
+            displayName: "Audit History",
+            action: () => {
+                navigateTo('#audit-history', {replace: false})
+            }
+        },
+        // {
+        //     id: "new-schema",
+        //     displayName: "New Schema",
+        //     action: () => {
+        //         navigateTo('#new-schema', {replace: false})
+        //     }
+        // },
+    ]
+
 
     let accountMenuOptions = [
         {
@@ -94,6 +148,19 @@
           <DropdownItem on:click={()=>accountOption.action()}>
             <div class="dropdown-item">
               <span class="network-name">{accountOption.displayName}</span>
+            </div>
+          </DropdownItem>
+        {/each}
+      </DropdownMenu>
+    </Dropdown>
+    <Dropdown>
+      <DropdownToggle nav>
+        <img src={icons.burger} alt="menu"/></DropdownToggle>
+      <DropdownMenu end>
+        {#each menuItems as menuItem}
+          <DropdownItem on:click={()=>menuItem.action()}>
+            <div class="dropdown-item">
+              <span class="network-name">{menuItem.displayName}</span>
             </div>
           </DropdownItem>
         {/each}

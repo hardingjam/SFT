@@ -14,10 +14,35 @@
     } from 'sveltestrap';
 
     import {Styles} from 'sveltestrap';
-    import {activeNetwork} from "../scripts/store.js";
+    import {account, activeNetwork} from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
+    import {formatAddress} from "../scripts/helpers.js";
+
+    let accountMenuOptions = [
+        {
+            id: "copy",
+            displayName: "Copy address",
+            action: () => {
+                if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+                    // this.showTooltip = true;
+                    // setTimeout(() => {
+                    //     this.showTooltip = false;
+                    // }, 1000);
+                    return navigator.clipboard.writeText($account);
+                }
+                return Promise.reject("The Clipboard API is not available.");
+            }
+        },
+        {
+            id: "view",
+            displayName: "View on explorer",
+            action: () => {
+                window.open(`${$activeNetwork.blockExplorer}address/${$account}`);
+            },
+        }
+    ]
 
     let isOpen = false;
 
@@ -32,6 +57,12 @@
             selected: option
         });
     }
+
+    // function handleAccountOptionClick(option) {
+    //     dispatch('accountOptionSelect', {
+    //         selected: option
+    //     });
+    // }
 </script>
 
 <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
@@ -55,12 +86,17 @@
       </DropdownMenu>
     </Dropdown>
     <Dropdown>
-      <DropdownToggle nav caret>Options</DropdownToggle>
+      <DropdownToggle nav>
+        <span class="network-name">{formatAddress($account)}</span>
+        <img src={ icons.expand} alt="expand"/></DropdownToggle>
       <DropdownMenu end>
-        <DropdownItem>Option 1 with long text leaking out of the view</DropdownItem>
-        <DropdownItem>Option 2</DropdownItem>
-        <DropdownItem divider/>
-        <DropdownItem>Reset</DropdownItem>
+        {#each accountMenuOptions as accountOption}
+          <DropdownItem on:click={()=>accountOption.action()}>
+            <div class="dropdown-item">
+              <span class="network-name">{accountOption.displayName}</span>
+            </div>
+          </DropdownItem>
+        {/each}
       </DropdownMenu>
     </Dropdown>
   </Nav>

@@ -128,7 +128,7 @@
         <span class="network-name">{$activeNetwork.displayName}</span>
         <img src={ icons.expand}
              alt="expand"/></DropdownToggle>
-      <DropdownMenu >
+      <DropdownMenu>
         {#each networks as network}
           <DropdownItem on:click={()=>handleNavItemClick(network)}>
             <div class="dropdown-item">
@@ -169,21 +169,22 @@
   </Nav>
 </Collapse>
 <style>
-  .network-name{
-      font-style: normal;
-      font-weight: 700;
-      font-size: 18px;
-      line-height: 39px;
-      color: #FFFFFF;
-      margin-left: 20px;
-      margin-right: 20px;
-  }
-  .dropdown-item{
-      padding: 0 50px 0 13px!important;
-  }
+    .network-name {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 39px;
+        color: #FFFFFF;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
 
-  .dropdown-item:hover{
-      background: #d9d9d98c!important;
-  }
+    .dropdown-item {
+        padding: 0 40px 0 13px !important;
+    }
+
+    .dropdown-item:hover {
+        background: #d9d9d98c !important;
+    }
 
 </style>

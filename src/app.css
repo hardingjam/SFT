@@ -108,11 +108,16 @@ button:focus, button:focus-visible {
     border: 1px solid #f11717;
 }
 
+.nav{
+    align-items: center;
+}
+
 .dropdown-menu {
-    background-color: transparent !important;
-    border-radius: 10px !important;
+    background-color: #2c2c5454 !important;
+    border-radius: 5px !important;
+    box-shadow: 0 4px 4px #00000040;
     border: none !important;
-    padding: 0 !important;
+    padding: 0!important;
 }
 
 .dropdown-item {

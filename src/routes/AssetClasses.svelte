@@ -7,18 +7,21 @@
     import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
     import axios from "axios";
     import {onMount} from "svelte";
+    import {ethers} from "ethers";
 
     let ipfsLoading = false;
 
     function handleSchemasSelect(schema) {
         console.log(schema)
     }
+    let deposits = []
 
     onMount(() => {
         ipfsLoading = true
         setTimeout(() => {
             getSchemas()
         }, 1500);
+        getDeposits()
 
     })
     let tempSchema = []
@@ -39,6 +42,8 @@
                             let cborDecodedInformation = cborDecode(data.information.slice(18))
                             let schemaHash = cborDecodedInformation[1].get(0)
                             let url = await getIpfsGetWay(schemaHash)
+                            let assetCount = getAssetCount(schemaHash)
+
                             try {
                                 if (url) {
                                     let res = await axios.get(url)
@@ -47,7 +52,8 @@
                                             ...res.data,
                                             timestamp: data.timestamp,
                                             id: data.id,
-                                            hash: schemaHash
+                                            hash: schemaHash,
+                                            assetCount,
                                         })
                                         tempSchema = tempSchema.filter(d => d.displayName)
                                         schemas.set(tempSchema)
@@ -67,6 +73,40 @@
         }
     }
 
+
+    async function getDeposits() {
+        let variables = {id: $vault.address.toLowerCase()}
+
+        let query =
+        `
+          query($id: ID!) {
+            offchainAssetReceiptVault(id: $id) {
+              deposits {
+                amount
+                receipt {
+                  receiptInformations {
+                    schema
+                  }
+                }
+              }
+            }
+          }
+         `
+
+        getSubgraphData($activeNetwork, variables, query, 'offchainAssetReceiptVault').then((res) => {
+            deposits = res.data.offchainAssetReceiptVault.deposits
+        })
+    }
+
+    function getAssetCount(hash){
+        let depositsWithSchema = deposits.filter(d=>d.receipt.receiptInformations[0]?.schema === hash)
+        let depositAmounts = depositsWithSchema.map(d=>d.amount);
+        let assetCount = depositAmounts.reduce(
+            (accumulator, currentValue) => ethers.BigNumber.from(accumulator).add(ethers.BigNumber.from(currentValue)) ,
+            0
+        );
+        return ethers.utils.formatUnits(assetCount, 18)
+    }
 </script>
 
 <DefaultFrame header="Asset class list">

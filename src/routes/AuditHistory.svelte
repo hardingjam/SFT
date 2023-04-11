@@ -2,18 +2,20 @@
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
     import {vault, auditHistory, activeNetwork, account, selectedReceipt, ethersData} from "../scripts/store";
-    import {beforeUpdate} from "svelte";
-    import {getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
+    import {onMount} from "svelte";
+    import {cborDecode, getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatAddress, formatDate} from "../scripts/helpers";
+    import {IPFS_GETWAY, MAGIC_NUMBERS} from "../scripts/consts.js";
+    import axios from "axios";
 
     let error = ''
     let certifyUntil = formatDate(new Date())
     let certifyData = []
     let receipts = []
 
-    beforeUpdate(async () => {
+    onMount(async () => {
         if ($vault.address) {
             if (!$auditHistory?.id) {
                 let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
@@ -25,8 +27,27 @@
         }
         certifyData = $auditHistory?.certifications || []
         receipts = $auditHistory?.deposits || []
-    })
 
+        //get schema
+        receipts = await Promise.all(receipts.map(async (r) => {
+            let information = r.receipt.receiptInformations[0]?.information ? cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) : null
+            let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
+            let schema;
+            if (schemaHash) {
+
+                try {
+                    let res = await axios.get(`${IPFS_GETWAY}${schemaHash}`)
+                    if (res) {
+                        schema = res.data.displayName
+                    }
+                } catch (err) {
+                    console.log(err)
+                }
+            }
+
+            return {...r, information, schema}
+        }))
+    })
 
     async function certify() {
         //Set date to the nearest Midnight in the future
@@ -68,6 +89,7 @@
           <thead>
           <tr>
             <th>Receipt ID</th>
+            <th>Asset class</th>
             <th>Amount</th>
             <th>Last updated</th>
           </tr>
@@ -77,6 +99,7 @@
             <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
             <tr class="tb-row">
               <td>{receipt.receipt.receiptId}</td>
+              <td>{receipt.schema || ""}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td>{timeStampToDate(receipt.timestamp)}</td>
             </tr>
@@ -135,6 +158,10 @@
 
     thead, tbody {
         text-align: center;
+    }
+
+    th {
+        white-space: nowrap;
     }
 
     th, td {

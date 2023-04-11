@@ -245,7 +245,7 @@
       <div>
         <div class="invalid-network f-weight-700">
           <label>To use the app:</label>
-          <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
+          <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()} id="connectButton">
             {#if isMetamaskInstalled}
               <span>Connect Metamask</span>
             {/if}

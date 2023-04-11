@@ -32,7 +32,7 @@ let schema = {
     }
 }
 
-describe('Stepper', () => {
+describe('CBOR encode/decode', () => {
     it('checks output after encode and decode where data is schema', () => {
 
         let cborEncodedSchema = encodeCBOR(schema)
@@ -112,5 +112,10 @@ describe('Stepper', () => {
         let structureData = bytesToMeta(structure, "json")
         expect(JSON.stringify(exampleStructure)).to.equal(JSON.stringify(structureData))
 
+    })
+})
+describe('XSS vulnerability', () => {
+    it('checks asset class json', () => {
+        cy.visit('https://example.cypress.io')
     })
 })

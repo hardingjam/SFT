@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "mocha test/**/*.test.js"
+    "test": "synpress run"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
@@ -21,9 +21,11 @@
     "@exodus/schemasafe": "^1.0.0-rc.7",
     "@sentry/svelte": "^7.38.0",
     "@sentry/tracing": "^7.27.0",
+    "@synthetixio/synpress": "^3.5.1",
     "axios": "^1.1.2",
     "cbor-js": "^0.1.0",
     "cbor-web": "^8.1.0",
+    "debug": "^4.3.4",
     "ethers": "^5.6.9",
     "jquery": "^3.6.1",
     "json-format-highlight": "^1.0.4",

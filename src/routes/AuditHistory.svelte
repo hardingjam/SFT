@@ -80,7 +80,6 @@
                 if (certifyTx.hash) {
                     transactionHash.set(certifyTx.hash)
                     transactionInProgressShow.set(true)
-                    console.log($transactionInProgressShow)
                     transactionInProgress.set(true)
                 }
                 let wait = await certifyTx.wait()
@@ -88,7 +87,8 @@
                     certifyData = [...certifyData, {
                         timestamp: Math.floor(new Date().getTime() / 1000),
                         certifier: {address: $account},
-                        certifiedUntil: Math.floor(untilToTime / 1000)
+                        certifiedUntil: Math.floor(untilToTime / 1000),
+                        totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
                     }]
                     transactionSuccess.set(true)
                     transactionInProgress.set(false)
@@ -153,7 +153,7 @@
           <tbody>
           {#each certifyData as cert}
             <tr>
-              <td>{ethers.utils.formatUnits($auditHistory?.totalShares, 18)}</td>
+              <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
               <td>{formatAddress(cert?.certifier.address)}</td>
               <td class="until">{timeStampToDate(cert?.certifiedUntil)}</td>

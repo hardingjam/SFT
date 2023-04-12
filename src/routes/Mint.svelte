@@ -338,8 +338,8 @@
       <div class="audit-info basic-frame">
         {#if $schemas.length}
           <div class="schema">
-            <div class="schema-dropdown row">
-              <label class="f-weight-700 custom-col col-2">Schema:</label>
+            <div class="schema-dropdown">
+              <label class="f-weight-700 custom-col">Asset class:</label>
               <Select options={$schemas}
 
                       on:select={handleSchemaSelect}
@@ -499,6 +499,11 @@
     .empty-schemas {
         color: #DD1212;
         text-align: center;
+    }
+
+    .schema-dropdown{
+        width: 100%;
+        display: flex;
     }
 
 </style>

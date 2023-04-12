@@ -230,10 +230,19 @@
   <div slot="content" class="schema-content">
     <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
       <div class="label">
-        <span class="f-weight-700">Asset class label :</span>
+        <span class="f-weight-700">Asset class label:</span>
         <input class="label-input" bind:value={label}/>
       </div>
-
+      <div class="label">
+<!--        <div class="info-icon">-->
+<!--          <a href="" target="_blank">-->
+<!--          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--            <path d="M9 10C9 9.40666 9.17595 8.82664 9.50559 8.33329C9.83524 7.83994 10.3038 7.45543 10.852 7.22836C11.4001 7.0013 12.0033 6.94189 12.5853 7.05765C13.1672 7.1734 13.7018 7.45912 14.1213 7.87868C14.5409 8.29824 14.8266 8.83279 14.9424 9.41473C15.0581 9.99667 14.9987 10.5999 14.7716 11.1481C14.5446 11.6962 14.1601 12.1648 13.6667 12.4944C13.1734 12.8241 12.5933 13 12 13V14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#AE6E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>-->
+<!--            <circle cx="12" cy="17" r="1" fill="#AE6E00"/>-->
+<!--          </svg></a>-->
+<!--        </div>-->
+        <span class="f-weight-700">Schema:</span>
+      </div>
       <div class="schema">
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
@@ -281,6 +290,7 @@
         overflow: auto;
         margin: 10px 0;
         position: relative;
+        border-radius: 5px 5px 0 0
     }
 
     #highlighting {
@@ -320,5 +330,10 @@
         align-items: center;
     }
 
+    .info-icon{
+        margin-left: -35px;
+        margin-right: 10px;
+        cursor: pointer;
+    }
 
 </style>

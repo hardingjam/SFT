@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "synpress run"
+    "test": "synpress run --headless"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",

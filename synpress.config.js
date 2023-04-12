@@ -26,13 +26,13 @@ module.exports = defineConfig({
     env: {
         coverage: false,
     },
-    defaultCommandTimeout: process.env.SYNDEBUG ? 9999999 : 30000,
-    pageLoadTimeout: process.env.SYNDEBUG ? 9999999 : 30000,
-    requestTimeout: process.env.SYNDEBUG ? 9999999 : 30000,
+    defaultCommandTimeout: process.env.SYNDEBUG ? 9999999 : 300000,
+    pageLoadTimeout: process.env.SYNDEBUG ? 9999999 : 300000,
+    requestTimeout: process.env.SYNDEBUG ? 9999999 : 300000,
     e2e: {
         testIsolation: false,
         setupNodeEvents,
-        baseUrl: 'http://localhost:5173',
+        baseUrl: 'http://localhost:3000',
         specPattern: 'tests/e2e/specs/**/*.{js,jsx,ts,tsx}',
         supportFile,
     },

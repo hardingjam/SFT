@@ -226,7 +226,7 @@
     }
 
 </script>
-<DefaultFrame header="New asset class schema">
+<DefaultFrame header="New asset class">
   <div slot="content" class="schema-content">
     <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
       <div class="label">

@@ -341,6 +341,8 @@ export async function showPrompt(transaction, options) {
     transactionError.set(false)
     transactionSuccess.set(false)
     promptTopText.set("")
+    promptErrorText.set("Transaction failed")
+    promptSuccessText.set("Transaction successful!")
     promptNoBottom.set(false)
     promptBottomText.set("")
     promptCloseAction.set(()=>{})

@@ -5,7 +5,11 @@
         vault,
         tokens,
         ethersData,
-        transactionInProgressShow
+        transactionInProgressShow,
+        transactionHash,
+        promptTopText,
+        promptBottomText,
+        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -27,6 +31,7 @@
     import SftCreateSuccess from "../routes/SftCreateSuccess.svelte";
     import AssetClasses from "../routes/AssetClasses.svelte";
     import Navigation from "../components/Navigation.svelte";
+    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -307,6 +312,13 @@
   {#if $transactionInProgressShow}
     <div class="blur"></div>
   {/if}
+  <TransactionInProgressBanner topText={$promptTopText}
+                               bottomText={$promptBottomText}
+                               transactionHash={$transactionHash}
+                               noBottomText={$promptNoBottom}
+                               errorText={$promptErrorText}
+                               successText={$promptSuccessText}
+                               on:close={$promptCloseAction}/>
 </Router>
 
 

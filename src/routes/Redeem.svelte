@@ -1,12 +1,10 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
-    import {getReceiptBalance, getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
+    import {getReceiptBalance, getSubgraphData, hasRole, showPrompt, timeStampToDate} from "../scripts/helpers.js";
     import {
         account,
         activeNetwork,
         transactionError,
-        transactionHash, transactionInProgress, transactionInProgressShow,
-        transactionSuccess,
         vault
     } from "../scripts/store.js";
     import {onMount} from "svelte";
@@ -14,8 +12,6 @@
     import SftLoader from "../components/SftLoader.svelte";
     import {DEPLOYER_QUERY, RECEIPTS_QUERY} from '../scripts/queries.js'
     import ReceiptInformation from "./ReceiptInformation.svelte";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
-    import {TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
 
     let shouldDisable = false;
     let amount;
@@ -34,8 +30,6 @@
         try {
             if (receipt) {
                 error = ''
-                transactionError.set(false)
-                transactionSuccess.set(false)
                 const hasRoleWithdrawer = await hasRole($vault, $account, "WITHDRAWER")
 
                 if (!hasRoleWithdrawer.error) {
@@ -59,16 +53,8 @@
                         receipt,
                         []
                    );
-                    if (tx.hash) {
-                        transactionHash.set(tx.hash)
-                        transactionInProgressShow.set(true)
-                        transactionInProgress.set(true)
-                    }
-                    let wait = await tx.wait()
-                    if (wait.status === 1) {
-                        transactionSuccess.set(true)
-                        transactionInProgress.set(false)
-                    }
+                    await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
+
                     // selectedReceipts = []
                     await getData()
 
@@ -122,8 +108,6 @@
 
     async function multiCall() {
         error = ''
-        transactionError.set(false)
-        transactionSuccess.set(false)
 
         if (!selectedReceipts.length) {
             return
@@ -153,16 +137,7 @@
                         multicallArr,
                         {from: $account}
                     );
-                if (tx.hash) {
-                    transactionHash.set(tx.hash)
-                    transactionInProgressShow.set(true)
-                    transactionInProgress.set(true)
-                }
-                let wait = await tx.wait()
-                if (wait.status === 1) {
-                    transactionSuccess.set(true)
-                    transactionInProgress.set(false)
-                }
+                await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
             } catch (err) {
                 transactionError.set(true)
                 error = err.reason
@@ -247,8 +222,6 @@
   {/if}
 
 </div>
-<TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT}
-                             transactionHash={$transactionHash} errorText="Redeem failed" successText="Redeem Successful!"/>
 
 <style>
     .receipts-table-container {

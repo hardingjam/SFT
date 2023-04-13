@@ -34,14 +34,13 @@
         encodeCBORStructure,
         getIpfsGetWay,
         getSubgraphData,
-        hasRole,
+        hasRole, showPrompt,
     } from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
     import {beforeUpdate, onMount} from "svelte";
     import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
     import {arrayify} from "ethers/lib/utils.js";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
 
     let image = {}
 
@@ -145,8 +144,6 @@
     async function mint() {
         try {
             error = ""
-            transactionError.set(false)
-            transactionSuccess.set(false)
 
             if (!parseFloat(amount)) {
                 error = "Zero amount"
@@ -171,16 +168,7 @@
                         const tx = await $vault
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
-                        if (tx.hash) {
-                            transactionHash.set(tx.hash)
-                            transactionInProgressShow.set(true)
-                            transactionInProgress.set(true)
-                        }
-                        let wait = await tx.wait()
-                        if (wait.status === 1) {
-                            transactionSuccess.set(true)
-                            transactionInProgress.set(false)
-                        }
+                        await showPrompt(tx)
                         amount = 0;
                         fileDropped.set({})
                     } catch (err) {
@@ -404,8 +392,6 @@
   </div>
   <!--{/if}-->
 </div>
-<TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT}
-                             transactionHash={$transactionHash}/>
 
 <style>
     .mint-container {

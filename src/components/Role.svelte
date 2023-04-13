@@ -3,16 +3,13 @@
         activeNetwork,
         vault,
         roles,
-        transactionInProgress,
-        transactionHash,
-        transactionInProgressShow, transactionSuccess, transactionError
+        transactionError
     } from "../scripts/store.js";
 
     export let name;
     export let admin;
     import {icons} from '../scripts/assets.js'
-    import {formatAddress} from "../scripts/helpers.js";
-    import {TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
+    import {formatAddress, showPrompt} from "../scripts/helpers.js";
 
     let account = '';
 
@@ -24,21 +21,11 @@
 
     async function revokeRole(roleName, account) {
         let role = await $vault[roleName]()
-        transactionError.set(false)
-        transactionSuccess.set(false)
 
         try {
             const revokeRoleTx = await $vault.revokeRole(role, account);
-            if (revokeRoleTx.hash) {
-                transactionHash.set(revokeRoleTx.hash)
-                transactionInProgressShow.set(true)
-                transactionInProgress.set(true)
-            }
-            let wait = await revokeRoleTx.wait()
-            if (wait.status === 1) {
-                transactionSuccess.set(true)
-                transactionInProgress.set(false)
-            }
+            await showPrompt(revokeRoleTx)
+
             let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
             let accountIndex = updatedRoleHolders.indexOf(account)
             updatedRoleHolders.splice(accountIndex, 1)

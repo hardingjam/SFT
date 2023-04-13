@@ -21,6 +21,7 @@
     import {formatAddress} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
 
+
     let menuItems = [
         {
             id: "setup",
@@ -125,7 +126,7 @@
       <DropdownToggle nav>
         <img src={  icons[$activeNetwork?.icon]}
              alt={$activeNetwork?.displayName}/>
-        <span class="network-name">{$activeNetwork.displayName}</span>
+        <span class="network-name">{$activeNetwork?.displayName || networks[0].displayName}</span>
         <img src={ icons.expand}
              alt="expand"/></DropdownToggle>
       <DropdownMenu>
@@ -133,7 +134,7 @@
           <DropdownItem on:click={()=>handleNavItemClick(network)}>
             <div class="dropdown-item">
               <img src={icons[network.icon]} alt={network?.displayName}/>
-              <span class="network-name">{network.displayName}</span>
+              <span class="network-name">{network?.displayName}</span>
             </div>
           </DropdownItem>
         {/each}
@@ -147,7 +148,7 @@
         {#each accountMenuOptions as accountOption}
           <DropdownItem on:click={()=>accountOption.action()}>
             <div class="dropdown-item">
-              <span class="network-name">{accountOption.displayName}</span>
+              <span class="network-name">{accountOption?.displayName}</span>
             </div>
           </DropdownItem>
         {/each}
@@ -160,7 +161,7 @@
         {#each menuItems as menuItem}
           <DropdownItem on:click={()=>menuItem.action()}>
             <div class="dropdown-item">
-              <span class="network-name">{menuItem.displayName}</span>
+              <span class="network-name">{menuItem?.displayName}</span>
             </div>
           </DropdownItem>
         {/each}

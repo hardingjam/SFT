@@ -1,8 +1,8 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {icons} from "../scripts/assets.js"
-    import {account, activeNetwork, ethersData, vault} from "../scripts/store.js";
-    import {getContract, hasRole, tierReport} from "../scripts/helpers.js";
+    import {account, activeNetwork, ethersData, transactionError, vault} from "../scripts/store.js";
+    import {getContract, hasRole, showPrompt, tierReport} from "../scripts/helpers.js";
     import tierContractAbi from "../contract/TierContractAbi.json";
 
 
@@ -55,7 +55,7 @@
 
             if (!hasRoleErc20Tierer.error) {
                 let tx = await $vault.setERC20Tier(erc20TierContract, erc20MinTier, [])
-                await tx.wait()
+                await showPrompt(tx)
                 localStorage.setItem("erc20TierContract", erc20TierContract)
                 localStorage.setItem("erc20MinTier", erc20MinTier)
             } else {
@@ -63,6 +63,7 @@
             }
 
         } catch (e) {
+            transactionError.set(true)
             error = e.message
         }
     }
@@ -76,7 +77,7 @@
 
             if (!hasRoleErc1155Tierer.error) {
                 let tx = await $vault.setERC1155Tier(erc1155TierContract, erc1155MinTier, [])
-                await tx.wait()
+                await showPrompt(tx)
                 localStorage.setItem("erc1155TierContract", erc1155TierContract)
                 localStorage.setItem("erc1155MinTier", erc1155MinTier)
 
@@ -85,6 +86,7 @@
             }
 
         } catch (e) {
+            transactionError.set(true)
             error = e.message
         }
     }

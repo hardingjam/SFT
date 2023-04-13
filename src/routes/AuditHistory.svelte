@@ -8,21 +8,18 @@
         account,
         selectedReceipt,
         ethersData,
-        transactionHash, transactionInProgressShow, transactionInProgress, transactionSuccess, transactionError
+        transactionError
     } from "../scripts/store";
     import {onMount} from "svelte";
-    import {cborDecode, getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
+    import {cborDecode, getSubgraphData, hasRole, showPrompt, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatAddress, formatDate} from "../scripts/helpers";
     import {
         IPFS_GETWAY,
         MAGIC_NUMBERS,
-        TRANSACTION_IN_PROGRESS_TEXT,
-        VIEW_ON_EXPLORER_TEXT
     } from "../scripts/consts.js";
     import axios from "axios";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
 
     let error = ''
     let certifyUntil = formatDate(new Date())
@@ -72,27 +69,16 @@
         const _referenceBlockNumber = await $ethersData.provider.getBlockNumber();
         if (!hasRoleCertifier.error) {
             try {
-                transactionError.set(false)
-                transactionSuccess.set(false)
 
                 let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
-
-                if (certifyTx.hash) {
-                    transactionHash.set(certifyTx.hash)
-                    transactionInProgressShow.set(true)
-                    transactionInProgress.set(true)
-                }
-                let wait = await certifyTx.wait()
-                if (wait.status === 1) {
-                    certifyData = [...certifyData, {
-                        timestamp: Math.floor(new Date().getTime() / 1000),
-                        certifier: {address: $account},
-                        certifiedUntil: Math.floor(untilToTime / 1000),
-                        totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
-                    }]
-                    transactionSuccess.set(true)
-                    transactionInProgress.set(false)
-                }
+                await showPrompt(certifyTx).then(()=>{
+                        certifyData = [...certifyData, {
+                            timestamp: Math.floor(new Date().getTime() / 1000),
+                            certifier: {address: $account},
+                            certifiedUntil: Math.floor(untilToTime / 1000),
+                            totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
+                        }]
+                })
 
             } catch (e) {
                 transactionError.set(true)
@@ -175,8 +161,6 @@
   </div>
 
 </DefaultFrame>
-<TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT}
-                             transactionHash={$transactionHash}/>
 <style>
 
     .history {

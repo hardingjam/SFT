@@ -9,7 +9,7 @@
         uploadBtnLoading,
         vault
     } from "../scripts/store.js";
-    import {cborEncode, encodeCBOR} from "../scripts/helpers.js";
+    import {cborEncode, encodeCBOR, showPrompt} from "../scripts/helpers.js";
     import {IPFS_APIS, MAGIC_NUMBERS, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
@@ -33,10 +33,6 @@
     let schemaInformation = {};
     let invalidJson = ""
     let labelError = ""
-
-
-    let topText = ""
-    let bottomText = ""
 
     let colors = {
         keyColor: 'black',
@@ -68,8 +64,6 @@
         }
 
         try {
-            transactionError.set(false)
-            transactionSuccess.set(false)
 
             schemaInformation = {
                 displayName: label,
@@ -86,18 +80,7 @@
                 );
                 const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
                 let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
-                if (transaction.hash) {
-                    topText = TRANSACTION_IN_PROGRESS_TEXT;
-                    bottomText = VIEW_ON_EXPLORER_TEXT
-                    transactionHash.set(transaction.hash)
-                    transactionInProgressShow.set(true)
-                    transactionInProgress.set(true)
-                }
-                let wait = await transaction.wait()
-                if (wait.status === 1) {
-                    transactionSuccess.set(true)
-                    transactionInProgress.set(false)
-                }
+                await showPrompt(transaction, {closeAction: goToAssetClassList})
 
             } catch (err) {
                 transactionError.set(true)
@@ -112,7 +95,6 @@
 
     const upload = async (data) => {
         error = ""
-        topText = "Uploading to IPFS, please wait"
         uploadBtnLoading.set(true)
 
         let savedUsername = localStorage.getItem('ipfsUsername');
@@ -142,9 +124,8 @@
                     "Content-Type": `multipart/form-data;`,
                 },
                 data: formData,
-                onUploadProgress: ((p) => {
-                    transactionInProgressShow.set(true)
-                    transactionInProgress.set(true)
+                onUploadProgress: (async (p) => {
+                    await showPrompt(null,{topText: "Uploading to IPFS, please wait", noBottomText:true})
                     console.log(`Uploading...  ${p.loaded} / ${p.total}`);
                 }),
                 withCredentials: true,
@@ -266,9 +247,6 @@
 
   </div>
 </DefaultFrame>
-<TransactionInProgressBanner topText={topText} bottomText={bottomText} transactionHash={$transactionHash}
-                             on:close={goToAssetClassList}/>
-
 <style>
 
     .schema-content {

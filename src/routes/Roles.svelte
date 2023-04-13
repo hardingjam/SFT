@@ -4,9 +4,7 @@
         activeNetwork,
         roles,
         data,
-        transactionInProgress,
-        transactionHash,
-        transactionError, transactionSuccess, transactionInProgressShow
+        transactionError,
     } from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
@@ -14,21 +12,19 @@
         filterArray,
         getSubgraphData,
         accessControlError,
-        toSentenceCase
+        toSentenceCase, showPrompt
     } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
     import {QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
-    import {ROLES, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
+    import {ROLES} from "../scripts/consts.js";
       import {ethers} from "ethers";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let account = '';
     let roleName = '';
     let error = '';
-    let transaction = null;
 
     let loading = false
     let accountValid = true;
@@ -55,8 +51,6 @@
 
     async function grantRole() {
         error = ""
-        transactionError.set(false)
-        transactionSuccess.set(false)
         let role = null
         roleName ? role = await $vault[roleName]() : error = "Select role"
 
@@ -70,16 +64,7 @@
             }
             if (account && accountValid) {
                 const grantRoleTx = await $vault.grantRole(role, account.trim());
-                if (grantRoleTx.hash) {
-                    transactionHash.set(grantRoleTx.hash)
-                    transactionInProgressShow.set(true)
-                    transactionInProgress.set(true)
-                }
-                let wait = await grantRoleTx.wait()
-                if (wait.status === 1) {
-                    transactionSuccess.set(true)
-                    transactionInProgress.set(false)
-                }
+                await showPrompt(grantRoleTx)
                 let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
                 updatedRoleHolders.push({account: {address: account}})
                 const newRoles = $roles.map(role => {
@@ -189,8 +174,6 @@
       </div>
     </div>
   </DefaultFrame>
-  <TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT}
-                               transactionHash={$transactionHash}/>
 </div>
 
 

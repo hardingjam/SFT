@@ -42,7 +42,8 @@ export const AUDIT_HISTORY_DATA_QUERY = `
               {
                 address
               },
-              certifiedUntil
+              certifiedUntil,
+              totalShares
             },
             deposits 
             {

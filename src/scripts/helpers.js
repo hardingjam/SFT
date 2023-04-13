@@ -5,7 +5,7 @@ import pako from "pako"
 import {encodeCanonical, decodeAllSync} from "cbor-web";
 import {arrayify, isBytesLike} from "ethers/lib/utils.js";
 import {
-    promptBottomText, promptCloseAction, promptNoBottom,
+    promptBottomText, promptCloseAction, promptErrorText, promptNoBottom, promptSuccessText,
     promptTopText, transactionError,
     transactionHash,
     transactionInProgress,
@@ -356,10 +356,16 @@ export async function showPrompt(transaction, options) {
         promptNoBottom.set(options.noBottomText)
     }
     if (options && options.bottomText) {
-        promptBottomText.set(options.topText)
+        promptBottomText.set(options.bottomText)
     }
     if (options && options.closeAction) {
         promptCloseAction.set(options.closeAction)
+    }
+    if (options && options.errorText) {
+        promptErrorText.set(options.errorText)
+    }
+    if (options && options.successText) {
+        promptSuccessText.set(options.successText)
     }
     if (transaction) {
 

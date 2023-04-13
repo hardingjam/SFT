@@ -9,7 +9,7 @@
         transactionHash,
         promptTopText,
         promptBottomText,
-        promptCloseAction, promptNoBottom
+        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -312,7 +312,13 @@
   {#if $transactionInProgressShow}
     <div class="blur"></div>
   {/if}
-  <TransactionInProgressBanner topText={$promptTopText} bottomText={$promptBottomText} transactionHash={$transactionHash} noBottomText={$promptNoBottom} on:close={$promptCloseAction}/>
+  <TransactionInProgressBanner topText={$promptTopText}
+                               bottomText={$promptBottomText}
+                               transactionHash={$transactionHash}
+                               noBottomText={$promptNoBottom}
+                               errorText={$promptErrorText}
+                               successText={$promptSuccessText}
+                               on:close={$promptCloseAction}/>
 </Router>
 
 

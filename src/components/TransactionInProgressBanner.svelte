@@ -11,8 +11,8 @@
     export let topText = ""
     export let bottomText = ""
     export let noBottomText = false
-    export let errorText = "Transaction failed";
-    export let successText = "Transaction successful!";
+    export let errorText = "";
+    export let successText = "";
     export let transactionHash = null;
 
     function viewInExplorer(hash) {

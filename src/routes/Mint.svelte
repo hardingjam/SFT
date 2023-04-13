@@ -97,7 +97,7 @@
     })
 
     async function getSchemas() {
-        let variables = {id: $vault.address.toLowerCase()}
+        let variables = {id: $vault?.address?.toLowerCase()}
         if ($vault.address) {
             try {
                 let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
@@ -501,7 +501,7 @@
         text-align: center;
     }
 
-    .schema-dropdown{
+    .schema-dropdown {
         width: 100%;
         display: flex;
     }

@@ -3,9 +3,7 @@
         activeNetwork,
         data,
         roles, transactionError,
-        transactionHash,
-        transactionInProgress,
-        transactionInProgressShow, transactionSuccess,
+        transactionSuccess,
         vault
     } from '../scripts/store.js';
     import {ethers} from "ethers";
@@ -14,13 +12,10 @@
     import {
         ADDRESS_ZERO,
         TEST_CONTRACT_ADDRESS,
-        TRANSACTION_IN_PROGRESS_TEXT,
-        VIEW_ON_EXPLORER_TEXT
     } from "../scripts/consts.js"
     import {QUERY} from "../scripts/queries.js";
-    import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
+    import {getEventArgs, getContract, getSubgraphData, filterArray, showPrompt} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
 
     let name = "";
     let admin_ledger = "";
@@ -68,16 +63,7 @@
                 constructionConfig
             )
 
-            if (offChainAssetVaultTx.hash) {
-                transactionHash.set(offChainAssetVaultTx.hash)
-                transactionInProgressShow.set(true)
-                transactionInProgress.set(true)
-            }
-            let wait = await offChainAssetVaultTx.wait()
-            if (wait.status === 1) {
-                transactionSuccess.set(true)
-                transactionInProgress.set(false)
-            }
+            await showPrompt(offChainAssetVaultTx)
 
             let contract;
             contract = new ethers.Contract(
@@ -159,7 +145,6 @@
       </button>
     </div>
   </div>
-  <TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT} transactionHash={$transactionHash}/>
 </div>
 <style>
     .sft-setup-container {

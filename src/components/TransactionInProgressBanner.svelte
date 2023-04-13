@@ -10,6 +10,7 @@
 
     export let topText = ""
     export let bottomText = ""
+    export let noBottomText = false
     export let errorText = "Transaction failed";
     export let successText = "Transaction successful!";
     export let transactionHash = null;
@@ -19,6 +20,7 @@
     }
 
     import {createEventDispatcher} from 'svelte';
+    import {TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
 
     const dispatch = createEventDispatcher();
 
@@ -33,7 +35,7 @@
 <div class={$transactionInProgressShow? "frame show": "frame hide" }>
   <div class="content">
     {#if ($transactionInProgress)}
-      <div class="top-text">{topText}</div>
+      <div class="top-text">{topText || TRANSACTION_IN_PROGRESS_TEXT}</div>
     {/if}
     {#if (!$transactionInProgress)}
       <div class="close-btn" on:click={closeBtnClick}>
@@ -69,8 +71,8 @@
     {#if ($transactionInProgress)}
       <SftLoader></SftLoader>
     {/if}
-    {#if bottomText}
-      <div class="bottom-text" on:click={()=>viewInExplorer(transactionHash)}>{bottomText}&nbsp; &nbsp;
+    {#if !noBottomText}
+      <div class="bottom-text" on:click={()=>viewInExplorer(transactionHash)}>{bottomText || VIEW_ON_EXPLORER_TEXT}&nbsp; &nbsp;
         <span class="icon">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path

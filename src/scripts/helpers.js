@@ -4,6 +4,14 @@ import axios from "axios";
 import pako from "pako"
 import {encodeCanonical, decodeAllSync} from "cbor-web";
 import {arrayify, isBytesLike} from "ethers/lib/utils.js";
+import {
+    promptBottomText, promptCloseAction, promptNoBottom,
+    promptTopText, transactionError,
+    transactionHash,
+    transactionInProgress,
+    transactionInProgressShow,
+    transactionSuccess
+} from "./store.js";
 
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -291,7 +299,7 @@ export function encodeCBOR(data) {
     );
 }
 
-export function encodeCBORStructure(structure,schemaHash) {
+export function encodeCBORStructure(structure, schemaHash) {
     // -- Encoding with CBOR
     // Obtain (Deflated JSON) and parse it to an ArrayBuffer
     if (typeof structure === 'object') {
@@ -326,4 +334,42 @@ export function bytesToMeta(bytes, type) {
         }
         return res
     } else throw new Error("invalid meta");
+}
+
+export async function showPrompt(transaction, options) {
+    //clear store
+    transactionError.set(false)
+    transactionSuccess.set(false)
+    promptTopText.set("")
+    promptNoBottom.set(false)
+    promptBottomText.set("")
+    promptCloseAction.set(()=>{})
+    transactionHash.set("false")
+
+    //show prompt
+    transactionInProgressShow.set(true)
+    transactionInProgress.set(true)
+    if (options && options.topText) {
+        promptTopText.set(options.topText)
+    }
+    if (options && options.noBottomText) {
+        promptNoBottom.set(options.noBottomText)
+    }
+    if (options && options.bottomText) {
+        promptBottomText.set(options.topText)
+    }
+    if (options && options.closeAction) {
+        promptCloseAction.set(options.closeAction)
+    }
+    if (transaction) {
+
+        if (transaction.hash) {
+            transactionHash.set(transaction.hash)
+        }
+        let wait = await transaction.wait()
+        if (wait.status === 1) {
+            transactionSuccess.set(true)
+            transactionInProgress.set(false)
+        }
+    }
 }

@@ -13,6 +13,8 @@ import {
     transactionSuccess
 } from "./store.js";
 
+import DOMPurify from 'dompurify'
+
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -345,7 +347,8 @@ export async function showPrompt(transaction, options) {
     promptSuccessText.set("Transaction successful!")
     promptNoBottom.set(false)
     promptBottomText.set("")
-    promptCloseAction.set(()=>{})
+    promptCloseAction.set(() => {
+    })
     transactionHash.set("false")
 
     //show prompt
@@ -380,4 +383,14 @@ export async function showPrompt(transaction, options) {
             transactionInProgress.set(false)
         }
     }
+}
+
+export function sanitizeJson(json) {
+    const jsonString = JSON.stringify(json);
+
+// Sanitize the JSON string using DOMPurify
+    const sanitizedJsonString = DOMPurify.sanitize(jsonString);
+
+// Parse the sanitized JSON string back into an object
+    return JSON.parse(sanitizedJsonString)
 }

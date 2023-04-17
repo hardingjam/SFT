@@ -76,7 +76,7 @@
     ]
 
     let selectedSchema = {}
-    export let ethersData;
+    export let ethersData = {signer: null, provider: null};
     let {signer} = ethersData;
 
     let amount;
@@ -272,6 +272,8 @@
     async function submitForm() {
         //get form data
         let formDataArr = jQuery(".svelte-schema-form").serializeArray()
+
+        console.log(formDataArr)
         const json = {};
         formDataArr.map(a => {
             json[a.name] = a.value

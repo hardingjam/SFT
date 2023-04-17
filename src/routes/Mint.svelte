@@ -34,7 +34,7 @@
         encodeCBORStructure,
         getIpfsGetWay,
         getSubgraphData,
-        hasRole, showPrompt,
+        hasRole, sanitizeJson, showPrompt,
     } from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
@@ -153,16 +153,16 @@
             if (!hasRoleDepositor.error) {
                 let structure = await submitForm()
                 if (structure) {
-
                     let fileHashesList = fileHashes.map(f => f.hash)
-                    let encodedStructure = encodeCBORStructure(structure, selectedSchema.hash)
+                    let sanitizedStructure = sanitizeJson(structure);
+                    let encodedStructure = encodeCBORStructure(sanitizedStructure, selectedSchema.hash)
 
                     let shareRatio = ONE
                     const shares = ethers.utils.parseEther(amount.toString());
 
 
                     try {
-                        let structureIpfs = await upload(structure)
+                        let structureIpfs = await upload(sanitizedStructure)
                         let encodedHashList = cborEncode([...fileHashesList, structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
                         const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedStructure + encodedHashList
                         const tx = await $vault

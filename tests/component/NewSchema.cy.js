@@ -54,6 +54,6 @@ describe('New asset class', () => {
         const scripts = htmlDoc.getElementsByTagName('script');
 
         // Use Cypress assertions to check if the JSON object is vulnerable to XSS attacks
-        expect(scripts.length).to.equal(0, 'JSON object is vulnerable to XSS attack!');
+        expect(scripts.length).to.equal(0, 'JSON object is safe from XSS attack!');
     });
 })

@@ -1,5 +1,4 @@
 <script>
-    import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {
         ethersData,

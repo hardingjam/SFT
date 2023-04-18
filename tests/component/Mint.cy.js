@@ -3,10 +3,10 @@ import {sanitizeJson} from "../../src/scripts/helpers.js";
 import jQuery from "jquery";
 
 describe('New asset class', () => {
-    it('mounts Mint component', () => {
+    it('Mounts Mint component', () => {
         cy.mount(Mint)
     })
-    it('should sanitize if a JSON object is vulnerable to XSS attacks', () => {
+    it('Should sanitize if a JSON object is vulnerable to XSS attacks', () => {
         // Create the JSON object with user input
         cy.mount(Mint)
 
@@ -24,7 +24,7 @@ describe('New asset class', () => {
         // Use Cypress assertions to check if the JSON object is vulnerable to XSS attacks
         expect(scripts.length).to.equal(0, 'JSON object is vulnerable from XSS attack!');
     });
-    it('should sanitize Json on body onload', () => {
+    it('Should sanitize Json on body onload', () => {
         // Create the JSON object with user input
         cy.mount(Mint)
 
@@ -36,5 +36,18 @@ describe('New asset class', () => {
 
         // Use Cypress assertions to check if the JSON object is vulnerable to XSS attacks
         expect(sanitizedJson).to.not.contain('<body', 'JSON object is vulnerable from XSS attack!');
+    });
+    it('Should sanitize Json on mouseOver', () => {
+        // Create the JSON object with user input
+        cy.mount(Mint)
+
+        const json = {"car":"<b onmouseover=alert('XSS testing!')></b>","train":"sdf"};
+        // Serialize the JSON object into a string
+        let sanitizedJson = sanitizeJson(json)
+
+        sanitizedJson = JSON.stringify(sanitizedJson)
+
+        // Use Cypress assertions to check if the JSON object is vulnerable to XSS attacks
+        expect(sanitizedJson).to.not.contain('onmouseover', 'JSON object is vulnerable from XSS attack!');
     });
 })

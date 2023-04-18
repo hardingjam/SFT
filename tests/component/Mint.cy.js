@@ -22,6 +22,19 @@ describe('New asset class', () => {
         const scripts = htmlDoc.getElementsByTagName('script');
 
         // Use Cypress assertions to check if the JSON object is vulnerable to XSS attacks
-        expect(scripts.length).to.equal(0, 'JSON object is safe from XSS attack!');
+        expect(scripts.length).to.equal(0, 'JSON object is vulnerable from XSS attack!');
+    });
+    it('should sanitize Json on body onload', () => {
+        // Create the JSON object with user input
+        cy.mount(Mint)
+
+        const json = {"car":"<body onload=alert('something')>;","train":"sdf"};
+        // Serialize the JSON object into a string
+        let sanitizedJson = sanitizeJson(json)
+
+        sanitizedJson = JSON.stringify(sanitizedJson)
+
+        // Use Cypress assertions to check if the JSON object is vulnerable to XSS attacks
+        expect(sanitizedJson).to.not.contain('<body', 'JSON object is vulnerable from XSS attack!');
     });
 })

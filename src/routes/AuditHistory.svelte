@@ -28,13 +28,11 @@
 
     onMount(async () => {
         if ($vault.address) {
-            if (!$auditHistory?.id) {
-                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                if (data) {
-                    let temp = data.data.offchainAssetReceiptVault
-                    auditHistory.set(temp)
-                } else return {}
-            }
+            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+            if (data) {
+                let temp = data.data.offchainAssetReceiptVault
+                auditHistory.set(temp)
+            } else return {}
         }
         certifyData = $auditHistory?.certifications || []
         receipts = $auditHistory?.deposits || []
@@ -71,13 +69,13 @@
             try {
 
                 let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
-                await showPrompt(certifyTx).then(()=>{
-                        certifyData = [...certifyData, {
-                            timestamp: Math.floor(new Date().getTime() / 1000),
-                            certifier: {address: $account},
-                            certifiedUntil: Math.floor(untilToTime / 1000),
-                            totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
-                        }]
+                await showPrompt(certifyTx).then(() => {
+                    certifyData = [...certifyData, {
+                        timestamp: Math.floor(new Date().getTime() / 1000),
+                        certifier: {address: $account},
+                        certifiedUntil: Math.floor(untilToTime / 1000),
+                        totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
+                    }]
                 })
 
             } catch (e) {

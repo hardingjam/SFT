@@ -45,7 +45,7 @@ export const AUDIT_HISTORY_DATA_QUERY = `
               certifiedUntil,
               totalShares
             },
-            deposits 
+            deposits(orderBy: timestamp orderDirection:desc) 
             {
               receipt
               {

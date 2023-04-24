@@ -27,22 +27,12 @@
     let certifyData = []
     let receipts = []
     let loading = false;
+    let tempReceipts = []
 
-    onMount(async () => {
-        loading = true;
+    $:tempReceipts && setAssetClasses()
 
-        if ($vault.address) {
-            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-            if (data) {
-                let temp = data.data.offchainAssetReceiptVault
-                auditHistory.set(temp)
-            } else return {}
-        }
-        certifyData = $auditHistory?.certifications || []
-        receipts = $auditHistory?.deposits || []
-
-        //get schema
-        receipts = await Promise.all(receipts.map(async (r) => {
+    async function setAssetClasses (){
+        receipts = await Promise.all(tempReceipts.map(async (r) => {
             let information = r.receipt.receiptInformations[0]?.information ? cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) : null
             let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
             let schema;
@@ -60,9 +50,28 @@
 
             return {...r, information, schema}
         }))
+    }
 
+    async function getAuditHistory() {
+        if ($vault.address) {
+            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+            if (data) {
+                let temp = data.data.offchainAssetReceiptVault
+                auditHistory.set(temp)
+            } else {
+                auditHistory.set({})
+            }
+        }
+        certifyData = $auditHistory?.certifications || []
+        tempReceipts = $auditHistory?.deposits || []
+    }
+
+
+    onMount(async () => {
+        loading = true;
+        await getAuditHistory()
+        setInterval(getAuditHistory, 5000)
         loading = false
-
     })
 
     async function certify() {

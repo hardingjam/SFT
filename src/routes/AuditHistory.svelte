@@ -20,21 +20,23 @@
         MAGIC_NUMBERS,
     } from "../scripts/consts.js";
     import axios from "axios";
+    import SftLoader from "../components/SftLoader.svelte";
 
     let error = ''
     let certifyUntil = formatDate(new Date())
     let certifyData = []
     let receipts = []
+    let loading = false;
 
     onMount(async () => {
+        loading = true;
+
         if ($vault.address) {
-            if (!$auditHistory?.id) {
-                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                if (data) {
-                    let temp = data.data.offchainAssetReceiptVault
-                    auditHistory.set(temp)
-                } else return {}
-            }
+            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+            if (data) {
+                let temp = data.data.offchainAssetReceiptVault
+                auditHistory.set(temp)
+            } else return {}
         }
         certifyData = $auditHistory?.certifications || []
         receipts = $auditHistory?.deposits || []
@@ -58,6 +60,9 @@
 
             return {...r, information, schema}
         }))
+
+        loading = false
+
     })
 
     async function certify() {
@@ -71,13 +76,13 @@
             try {
 
                 let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
-                await showPrompt(certifyTx).then(()=>{
-                        certifyData = [...certifyData, {
-                            timestamp: Math.floor(new Date().getTime() / 1000),
-                            certifier: {address: $account},
-                            certifiedUntil: Math.floor(untilToTime / 1000),
-                            totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
-                        }]
+                await showPrompt(certifyTx).then(() => {
+                    certifyData = [...certifyData, {
+                        timestamp: Math.floor(new Date().getTime() / 1000),
+                        certifier: {address: $account},
+                        certifiedUntil: Math.floor(untilToTime / 1000),
+                        totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
+                    }]
                 })
 
             } catch (e) {
@@ -104,27 +109,32 @@
   <div slot="content">
     <div class="history">
       <div class="receipts">
-        <table>
-          <thead>
-          <tr>
-            <th>Receipt ID</th>
-            <th>Asset class</th>
-            <th>Amount</th>
-            <th>Last updated</th>
-          </tr>
-          </thead>
-          <tbody>
-          {#each receipts as receipt}
-            <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
-            <tr class="tb-row">
-              <td>{receipt.receipt.receiptId}</td>
-              <td>{receipt.schema || ""}</td>
-              <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
-              <td>{timeStampToDate(receipt.timestamp)}</td>
+        {#if loading}
+          <SftLoader width="50"></SftLoader>
+        {/if}
+        {#if !loading}
+          <table>
+            <thead>
+            <tr>
+              <th>Receipt ID</th>
+              <th>Asset class</th>
+              <th>Amount</th>
+              <th>Last updated</th>
             </tr>
-          {/each}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            {#each receipts as receipt}
+              <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
+              <tr class="tb-row">
+                <td>{receipt.receipt.receiptId}</td>
+                <td>{receipt.schema || ""}</td>
+                <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
+                <td>{timeStampToDate(receipt.timestamp)}</td>
+              </tr>
+            {/each}
+            </tbody>
+          </table>
+        {/if}
       </div>
       <div class="certify">
         <table>

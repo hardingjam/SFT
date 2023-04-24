@@ -70,7 +70,7 @@
     onMount(async () => {
         loading = true;
         await getAuditHistory()
-        setInterval(getAuditHistory, 2000)
+        setInterval(getAuditHistory, 5000)
         loading = false
     })
 

@@ -56,7 +56,7 @@
         flex-direction: column;
         border: 1px solid #D2D2D2;
         border-radius: 10px;
-        padding: 45px;
+        padding: 45px 45px 20px 45px;
         font-weight: 500;
         font-size: 16px;
         line-height: 27px;
@@ -77,6 +77,7 @@
     .message {
         color: #26BE00;
         text-align: left;
+        height: 25px ;
     }
 
 </style>

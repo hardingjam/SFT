@@ -45,7 +45,4 @@
         line-height: 27px;
     }
 
-    .ok-button {
-
-    }
 </style>

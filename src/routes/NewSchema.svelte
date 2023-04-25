@@ -1,20 +1,17 @@
 <script>
-    import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {
         ethersData,
         transactionError,
-        transactionHash,
         transactionInProgress, transactionInProgressShow, transactionSuccess,
         uploadBtnLoading,
         vault
     } from "../scripts/store.js";
     import {cborEncode, encodeCBOR, showPrompt} from "../scripts/helpers.js";
-    import {IPFS_APIS, MAGIC_NUMBERS, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
+    import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
     import {JSONEditor} from "svelte-jsoneditor";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import {navigateTo} from "yrv";
     import {validator} from "@exodus/schemasafe";
     import {nullOptionalsAllowed} from '../plugins/@restspace/svelte-schema-form/utilities';
@@ -34,20 +31,6 @@
     let invalidJson = ""
     let labelError = ""
 
-    let colors = {
-        keyColor: 'black',
-        numberColor: 'blue',
-        stringColor: '#0B7500',
-        trueColor: '#00cc00',
-        falseColor: '#ff8080',
-        nullColor: 'cornflowerblue'
-    };
-
-    function update(text) {
-        document.getElementById("highlighting-content").innerHTML = formatHighlight(text, colors)
-        document.getElementById("editing").style.display = "none"
-        document.getElementById("highlighting").style.display = "block"
-    }
 
     async function deploySchema() {
         error = ""

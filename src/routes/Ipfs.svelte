@@ -96,7 +96,4 @@
         font-size: 16px;
         line-height: 27px;
     }
-    #PopupAutoComplete > richlistbox > richlistitem[originaltype="loginsFooter"] {
-        visibility: collapse !important;
-    }
 </style>

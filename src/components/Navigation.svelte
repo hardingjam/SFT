@@ -67,7 +67,7 @@
         },
         {
             id: "ipfs",
-            displayName: "IPFS",
+            displayName: "IPFS login",
             action: () => {
                 navigateTo('#ipfs', {replace: false})
             }

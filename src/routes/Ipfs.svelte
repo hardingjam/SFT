@@ -13,7 +13,7 @@
     }
 
 </script>
-<DefaultFrame header="IPFS">
+<DefaultFrame header="IPFS login">
   <div slot="content">
     <div class="credentials">
       <div class="display-flex space-between">

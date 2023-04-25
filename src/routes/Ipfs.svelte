@@ -12,7 +12,7 @@
         message = ""
         localStorage.setItem('ipfsUsername', username);
         localStorage.setItem('ipfsPassword', password);
-        message = "Username and password has been updated";
+        message = "Login successful!";
     }
 
     $:type && (show = !show)
@@ -43,7 +43,7 @@
       </div>
       <button class="default-btn ok-button" disabled={!password || !username} on:click={()=>{updateCredentials()}}>OK
       </button>
-      <div class="message error">{message}</div>
+      <div class="message">{message}</div>
     </div>
 
   </div>
@@ -72,6 +72,11 @@
         font-weight: 400;
         font-size: 14px;
         cursor: pointer;
+    }
+
+    .message {
+        color: #26BE00;
+        text-align: left;
     }
 
 </style>

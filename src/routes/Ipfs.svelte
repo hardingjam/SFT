@@ -3,6 +3,7 @@
 
     let username = localStorage.getItem('ipfsUsername') || "";
     let password = localStorage.getItem('ipfsPassword') || "";
+    let loggedIn = username && password
     let message = ""
     let passwordInput;
     let type = ""
@@ -12,6 +13,7 @@
         message = ""
         localStorage.setItem('ipfsUsername', username);
         localStorage.setItem('ipfsPassword', password);
+        loggedIn = true;
         message = "Login successful!";
     }
 
@@ -30,6 +32,7 @@
 <DefaultFrame header="IPFS login">
   <div slot="content">
     <div class="credentials">
+      <div class="logged-in-text">{loggedIn ? `You are currently logged in as: ${username}` : ''}</div>
       <div class="display-flex space-between">
         <label class="mr-2">Username:</label>
         <input class="default-input" type="text" bind:value={username} autofocus/>
@@ -56,7 +59,7 @@
         flex-direction: column;
         border: 1px solid #D2D2D2;
         border-radius: 10px;
-        padding: 45px 45px 20px 45px;
+        padding: 20px 45px 20px 45px;
         font-weight: 500;
         font-size: 16px;
         line-height: 27px;
@@ -77,7 +80,19 @@
     .message {
         color: #26BE00;
         text-align: left;
-        height: 25px ;
+        height: 25px;
+    }
+
+    .logged-in-text {
+        height: 25px;
+        color: #9D9D9D;
+        text-align: left;
+        margin-bottom: 10px;
+        font-family: 'Mukta', sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 27px;
     }
 
 </style>

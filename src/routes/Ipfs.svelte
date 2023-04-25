@@ -7,12 +7,14 @@
     let message = ""
     let passwordInput;
     let type = ""
-    let show = true
+    let show = true;
+    let loggedInUser = localStorage.getItem('ipfsUsername')
 
     function updateCredentials() {
         message = ""
         localStorage.setItem('ipfsUsername', username);
         localStorage.setItem('ipfsPassword', password);
+        loggedInUser = localStorage.getItem('ipfsUsername');
         loggedIn = true;
         message = "Login successful!";
     }
@@ -32,7 +34,7 @@
 <DefaultFrame header="IPFS login">
   <div slot="content">
     <div class="credentials">
-      <div class="logged-in-text">{loggedIn ? `You are currently logged in as: ${username}` : ''}</div>
+      <div class="logged-in-text">{loggedIn ? `You are currently logged in as: ${loggedInUser}` : ''}</div>
       <div class="display-flex space-between">
         <label class="mr-2">Username:</label>
         <input class="default-input" type="text" bind:value={username} autofocus/>

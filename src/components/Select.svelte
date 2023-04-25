@@ -1,5 +1,5 @@
 <script>
-    import {createEventDispatcher} from 'svelte';
+    import {createEventDispatcher, onMount} from 'svelte';
     import {icons} from "../scripts/assets.js";
     import Dropdown from 'sv-bootstrap-dropdown';
 
@@ -47,7 +47,7 @@
         <img class="expand" src={expandIcon} alt="expand"/>
       {/if}
     </button>
-    <div slot="DropdownMenu" class={`${dropDownClass} dropdown`}>
+    <div slot="DropdownMenu" class={`${dropDownClass} ${className} dropdown`}>
       {#each options as option}
         <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
           {#if option.icon}
@@ -103,14 +103,19 @@
         line-height: 25px;
         color: #000000;
         padding: 0;
-        min-width: 180px;
+        min-width: 230px;
+        max-width: 250px;
+        width: 100%;
     }
 
-    .dropdown {
+    .inputSelect.dropdown {
         max-height: 255px;
         height: auto;
         overflow: auto;
         background-color: #ececec;
+        padding-right: 50px;
+        min-width: 230px;
+        max-width: 250px;
     }
 
     .select-label {

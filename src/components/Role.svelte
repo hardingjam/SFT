@@ -1,10 +1,15 @@
 <script>
-    import {activeNetwork, vault, roles} from "../scripts/store.js";
+    import {
+        activeNetwork,
+        vault,
+        roles,
+        transactionError
+    } from "../scripts/store.js";
 
     export let name;
     export let admin;
     import {icons} from '../scripts/assets.js'
-    import {formatAddress} from "../scripts/helpers.js";
+    import {formatAddress, showPrompt} from "../scripts/helpers.js";
 
     let account = '';
 
@@ -19,7 +24,8 @@
 
         try {
             const revokeRoleTx = await $vault.revokeRole(role, account);
-            await revokeRoleTx.wait()
+            await showPrompt(revokeRoleTx)
+
             let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
             let accountIndex = updatedRoleHolders.indexOf(account)
             updatedRoleHolders.splice(accountIndex, 1)
@@ -30,14 +36,15 @@
                 return role;
             });
             roles.set([...newRoles])
+            // transactionInProgress.set(false)
         } catch (err) {
+            transactionError.set(true)
             console.log(err)
         }
 
     }
 
     export let roleHolders;
-
 
 </script>
 

@@ -2,19 +2,19 @@
     import {createEventDispatcher, onMount} from "svelte";
     import {activeNetwork, vault} from "../scripts/store.js";
     import {
+        bytesToMeta,
+        cborDecode,
         formatAddress,
         getIpfsGetWay,
         getReceiptBalance,
         getSubgraphData,
-        hexToString,
-        isUrl,
         toSentenceCase
     } from "../scripts/helpers.js";
     import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
     import axios from "axios";
     import {icons} from "../scripts/assets.js";
     import {ethers} from "ethers";
-    import {IPFS_GETWAY} from "../scripts/consts.js";
+    import {IPFS_GETWAY, MAGIC_NUMBERS} from "../scripts/consts.js";
     import SftLoader from "../components/SftLoader.svelte";
 
     export let receipt = {}
@@ -23,50 +23,70 @@
     let displayInformation = []
     let ipfsAddress = ""
     let ipfsLoading = false
-
+    let schema = {}
+    let schemaHash = null;
     let loading = false
+    let fileUploadProperties = []
 
     onMount(async () => {
         receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receipt.receiptId);
         await getReceiptData(receipt)
     })
 
+    $: schemaHash && getSchemaFileProps()
+
+    async function getSchema() {
+        let url = await getIpfsGetWay(schemaHash)
+        try {
+            let res = await axios.get(url)
+            if (res) {
+                schema = res.data
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    async function getSchemaFileProps() {
+        await getSchema()
+        if (schema) {
+            let props = Object.keys(schema.schema.properties)
+            fileUploadProperties = props.filter(p => {
+                let value = schema.schema.properties[p]
+                if (value.editor === "upload") {
+                    return p
+                }
+            })
+            fileUploadProperties = fileUploadProperties.map(p => toSentenceCase(p))
+        }
+    }
+
     async function getReceiptData(receipt) {
         loading = true;
         let variables = {id: receipt.receipt.id}
         let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
         let receiptInfo = ""
-        let byteInfo = ""
+        let information = ""
 
         if (resp && resp.data && resp.data.receipt) {
             ipfsLoading = true;
             receiptInfo = resp.data.receipt.receiptInformations
 
             if (receiptInfo.length) {
-                byteInfo = receiptInfo[0].information
-                let infoHash = hexToString(byteInfo.slice(2))
-                ipfsAddress = `ipfs://${infoHash}`
-                let url = await getIpfsGetWay(infoHash)
+                information = receiptInfo[0].information
+
+                let cborDecodedInformation = cborDecode(information.slice(18))
+                let structure = bytesToMeta(cborDecodedInformation[0].get(0), "json")
+                schemaHash = cborDecodedInformation[0].get(MAGIC_NUMBERS.OA_SCHEMA)
+
                 try {
-                    let res = await axios.get(url)
-                    if (res) {
-                        receiptInformations = res.data
-                        console.log("receiptInformations", receiptInformations)
-                        displayInformation = Object.keys(receiptInformations).map(prop => {
-                            //bad solution
-                            if (prop === "pie_certificate") {
-                                return {
-                                    label: toSentenceCase(prop),
-                                    value: `${IPFS_GETWAY}${receiptInformations[prop]} `
-                                }
-                            }
-                            return {
-                                label: toSentenceCase(prop),
-                                value: receiptInformations[prop]
-                            }
-                        })
-                        ipfsLoading = false;
-                    }
+                    displayInformation = Object.keys(structure).map(prop => {
+                        return {
+                            label: toSentenceCase(prop),
+                            value: structure[prop]
+                        }
+                    })
+                    ipfsLoading = false;
                 } catch (err) {
                     console.log(err)
                 }
@@ -110,15 +130,16 @@
       {/if}
       {#each displayInformation as info}
         <div class="receipt-row">
-          {#if isUrl(info.value)}
+
+          {#if fileUploadProperties.includes(info.label)}
             <span>{info.label}
-              <a href={info.value} target="_blank">
+              <a href={`${IPFS_GETWAY}${info.value}`} target="_blank">
                     <img src="{icons.show}" alt="view file" class="btn-hover">
               </a>
             </span>
           {/if}
 
-          {#if !isUrl(info.value)} <span>{info.label}</span>
+          {#if !fileUploadProperties.includes(info.label)} <span>{info.label}</span>
             {#if isAddress(info.value)}
               <div>{formatAddress(info.value)}</div>
             {/if}

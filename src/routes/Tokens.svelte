@@ -29,7 +29,7 @@
 
 
 </script>
-<DefaultFrame header="SFT Lists">
+<DefaultFrame header="SFT list">
   <div slot="content">
     <div class="tokens">
       <table class="w-100">

@@ -1,19 +1,32 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
-    import {vault, auditHistory, activeNetwork, account, selectedReceipt, ethersData} from "../scripts/store";
-    import {beforeUpdate} from "svelte";
-    import {getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
+    import {
+        vault,
+        auditHistory,
+        activeNetwork,
+        account,
+        selectedReceipt,
+        ethersData,
+        transactionError
+    } from "../scripts/store";
+    import {onMount} from "svelte";
+    import {cborDecode, getSubgraphData, hasRole, showPrompt, timeStampToDate} from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatAddress, formatDate} from "../scripts/helpers";
+    import {
+        IPFS_GETWAY,
+        MAGIC_NUMBERS,
+    } from "../scripts/consts.js";
+    import axios from "axios";
 
     let error = ''
     let certifyUntil = formatDate(new Date())
     let certifyData = []
     let receipts = []
 
-    beforeUpdate(async () => {
+    onMount(async () => {
         if ($vault.address) {
             if (!$auditHistory?.id) {
                 let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
@@ -25,8 +38,27 @@
         }
         certifyData = $auditHistory?.certifications || []
         receipts = $auditHistory?.deposits || []
-    })
 
+        //get schema
+        receipts = await Promise.all(receipts.map(async (r) => {
+            let information = r.receipt.receiptInformations[0]?.information ? cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) : null
+            let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
+            let schema;
+            if (schemaHash) {
+
+                try {
+                    let res = await axios.get(`${IPFS_GETWAY}${schemaHash}`)
+                    if (res) {
+                        schema = res.data.displayName
+                    }
+                } catch (err) {
+                    console.log(err)
+                }
+            }
+
+            return {...r, information, schema}
+        }))
+    })
 
     async function certify() {
         //Set date to the nearest Midnight in the future
@@ -36,15 +68,23 @@
         const hasRoleCertifier = await hasRole($vault, $account, "CERTIFIER")
         const _referenceBlockNumber = await $ethersData.provider.getBlockNumber();
         if (!hasRoleCertifier.error) {
-            let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
+            try {
 
-            certifyTx.wait().then(() => {
-                certifyData = certifyData.push({
-                    timestamp: Math.floor(new Date().getTime() / 1000),
-                    certifier: {address: $account},
-                    certifiedUntil: Math.floor(untilToTime / 1000)
+                let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
+                await showPrompt(certifyTx).then(()=>{
+                        certifyData = [...certifyData, {
+                            timestamp: Math.floor(new Date().getTime() / 1000),
+                            certifier: {address: $account},
+                            certifiedUntil: Math.floor(untilToTime / 1000),
+                            totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
+                        }]
                 })
-            });
+
+            } catch (e) {
+                transactionError.set(true)
+                console.log(e)
+            }
+
 
         } else {
             error = hasRoleCertifier.error
@@ -56,7 +96,7 @@
         navigateTo(`#receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
     }
 </script>
-<DefaultFrame header="Audit History" backBtn={false}>
+<DefaultFrame header="Audit history" backBtn={false}>
   <div slot="header-buttons" class="display-flex">
     <button class="header-btn btn-hover" on:click={()=>{navigateTo("#members")}}>Members</button>
     <button class="header-btn btn-hover" on:click={()=>{navigateTo("#roles")}}>Roles</button>
@@ -68,7 +108,8 @@
           <thead>
           <tr>
             <th>Receipt ID</th>
-            <th>Options</th>
+            <th>Asset class</th>
+            <th>Amount</th>
             <th>Last updated</th>
           </tr>
           </thead>
@@ -77,6 +118,7 @@
             <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
             <tr class="tb-row">
               <td>{receipt.receipt.receiptId}</td>
+              <td>{receipt.schema || ""}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td>{timeStampToDate(receipt.timestamp)}</td>
             </tr>
@@ -97,7 +139,7 @@
           <tbody>
           {#each certifyData as cert}
             <tr>
-              <td>{ethers.utils.formatUnits($auditHistory?.totalShares, 18)}</td>
+              <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
               <td>{formatAddress(cert?.certifier.address)}</td>
               <td class="until">{timeStampToDate(cert?.certifiedUntil)}</td>
@@ -117,6 +159,7 @@
     </div>
 
   </div>
+
 </DefaultFrame>
 <style>
 
@@ -135,6 +178,10 @@
 
     thead, tbody {
         text-align: center;
+    }
+
+    th {
+        white-space: nowrap;
     }
 
     th, td {

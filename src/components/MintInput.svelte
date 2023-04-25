@@ -4,7 +4,6 @@
     export let amount = "0.0";
     export let maxButton;
     export let amountLabel;
-    export let label;
 
     function allowNumbersOnly(evt) {
         const charCode = evt.keyCode;
@@ -32,7 +31,6 @@
     <div class="options">
       <div class="labels">
         <div class="txt">{amountLabel}</div>
-        <div class="txt-options">{label}</div>
       </div>
       <div class="options-input"><input type="text" bind:value={amount} autofocus on:keydown={(e)=>allowNumbersOnly(e)}>
         {#if maxButton}
@@ -57,11 +55,11 @@
     .options {
         width: 100%;
         background: #2C2C54;
-        padding: 15px 53px 15px 64px;
+        padding: 20px 53px 20px 64px;
         color: #ffffff;
         display: flex;
         justify-content: space-between;
-        align-items: end;
+        align-items: center;
     }
 
     .labels {
@@ -72,15 +70,9 @@
 
     .txt {
         font-weight: 300;
-        font-size: 16px;
+        font-size: 24px;
         line-height: 27px;
         white-space: nowrap;
-    }
-
-    .txt-options {
-        font-weight: 300;
-        font-size: 32px;
-        line-height: 53px;
     }
 
     .options-input {

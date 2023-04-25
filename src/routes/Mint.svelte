@@ -1,52 +1,75 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
-    import {vault, fileHash, fileDropped, uploadBtnLoading} from "../scripts/store.js";
+    import {
+        vault,
+        fileHash,
+        fileDropped,
+        uploadBtnLoading,
+        activeNetwork,
+        schemas,
+        schemaError,
+        transactionError,
+        transactionSuccess,
+        transactionHash,
+        transactionInProgressShow,
+        transactionInProgress
+    } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
     import axios from "axios";
     import Select from "../components/Select.svelte";
     import {icons} from "../scripts/assets.js";
-    import {IPFS_APIS, ONE} from "../scripts/consts.js";
+    import {
+        IPFS_APIS,
+        MAGIC_NUMBERS,
+        ONE,
+        TRANSACTION_IN_PROGRESS_TEXT,
+        VIEW_ON_EXPLORER_TEXT
+    } from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
-    import {getIpfsGetWay, hasRole, toBytes} from "../scripts/helpers";
+    import {
+        cborDecode,
+        cborEncode,
+        encodeCBORStructure,
+        getIpfsGetWay,
+        getSubgraphData,
+        hasRole, showPrompt,
+    } from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
     import {beforeUpdate, onMount} from "svelte";
+    import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
+    import {arrayify} from "ethers/lib/utils.js";
 
     let image = {}
 
     let error = ""
+    let ipfsLoading = false;
 
-    let schemas = [
+    let loveToSchemas = [
         {
             "displayName": 'Love To',
             "schema": {
                 "type": "object",
                 "required": [
-                    "pie_certificate",
-                    "producer_wallet",
-                    "total_score",
-                    "max_options"
+                    "name",
+                    "wallet",
+                    "title"
                 ],
                 "properties": {
-                    "producer_wallet": {
+                    "name": {
                         "type": "string",
-                        "title": "Producer Wallet",
+                        "title": "Name"
                     },
-                    "total_score": {
+                    "wallet": {
                         "type": "string",
-                        "title": "Total Score"
+                        "title": "Wallet"
                     },
-                    "max_options": {
+                    "title": {
                         "type": "string",
-                        "title": "Max Options"
-                    },
-                    "pie_certificate": {
-                        "type": "string",
-                        "editor": "upload",
-                        "title": "PIE Certificate"
-                    },
+                        "title": "Title"
+                    }
                 }
             }
         }
@@ -57,40 +80,102 @@
     let {signer} = ethersData;
 
     let amount;
-    let shouldDisable = !schemas.length
+    let shouldDisable = !$schemas.length
     let showAuth = false;
     let username = "";
     let password = "";
     let promise;
+    let fileHashes = [];
 
     beforeUpdate(() => {
-        fileDropped.set('')
+        fileDropped.set({})
     })
+
+    onMount(async () => {
+        await getSchemas()
+    })
+
+    async function getSchemas() {
+        let variables = {id: $vault?.address?.toLowerCase()}
+        if ($vault.address) {
+            try {
+                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
+                let receiptVaultInformations = ""
+                let tempSchema = []
+
+                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
+                    ipfsLoading = true
+                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+
+                    if (receiptVaultInformations.length) {
+
+                        receiptVaultInformations.map(async data => {
+                            let cborDecodedInformation = cborDecode(data.information.slice(18))
+                            let schemaHash = cborDecodedInformation[1].get(0)
+                            let url = await getIpfsGetWay(schemaHash)
+                            try {
+                                if (url) {
+                                    let res = await axios.get(url)
+                                    if (res) {
+                                        tempSchema.push({
+                                            ...res.data,
+                                            timestamp: data.timestamp,
+                                            id: data.id,
+                                            hash: schemaHash
+                                        })
+                                        tempSchema = tempSchema.filter(d => d.displayName)
+                                        schemas.set(tempSchema)
+                                        ipfsLoading = false;
+                                    }
+                                }
+                            } catch (err) {
+                                // console.log(err)
+                            }
+                        })
+                    }
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
 
     async function mint() {
         try {
             error = ""
+
             if (!parseFloat(amount)) {
                 error = "Zero amount"
                 return;
             }
             const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
             if (!hasRoleDepositor.error) {
-                let formResponse = await submitForm()
-                let shareRatio = ONE
-                const shares = ethers.utils.parseEther(amount.toString());
+                let structure = await submitForm()
+                if (structure) {
 
-                let dataBytes = formResponse?.Hash ? toBytes(formResponse.Hash) : []
+                    let fileHashesList = fileHashes.map(f => f.hash)
+                    let encodedStructure = encodeCBORStructure(structure, selectedSchema.hash)
 
-                if (formResponse) {
-                    const tx = await $vault
-                        .connect(signer)
-                        ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, dataBytes);
-                    await tx.wait();
-                    amount = 0;
-                    fileDropped.set('')
+                    let shareRatio = ONE
+                    const shares = ethers.utils.parseEther(amount.toString());
+
+
+                    try {
+                        let structureIpfs = await upload(structure)
+                        let encodedHashList = cborEncode([...fileHashesList, structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
+                        const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedStructure + encodedHashList
+                        const tx = await $vault
+                            .connect(signer)
+                            ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
+                        await showPrompt(tx)
+                        amount = 0;
+                        fileDropped.set({})
+                    } catch (err) {
+                        transactionError.set(true)
+                        console.log(err)
+                    }
                 }
-
             } else {
                 error = hasRoleDepositor.error
             }
@@ -120,7 +205,7 @@
 
         let formData = new FormData();
 
-        formData.append('file', data)
+        type === "file" ? formData.append('file', data.file) : formData.append('file', data)
 
         const requestArr = IPFS_APIS.map((url) => {
             return axios.request({
@@ -154,9 +239,8 @@
 
             localStorage.setItem('ipfsUsername', username);
             localStorage.setItem('ipfsPassword', password);
-
-            if (type === "file" && data.size) {
-                fileHash.set(resolvedPromise.value.data.Hash)
+            if (type === "file" && data.file.size) {
+                fileHashes = [...fileHashes, {prop: data.prop, hash: resolvedPromise.value.data.Hash}]//.set(resolvedPromise.value.data.Hash)
             }
         } else {
             error = "Something went wrong"
@@ -167,11 +251,16 @@
         return resolvedPromise?.value.data
     };
 
-    $: ($fileDropped && $fileDropped.size) && upload($fileDropped, "file");
-    $: $fileHash && getCertificateUrl($fileHash);
+    $: ($fileDropped.file && $fileDropped.file.size) && upload($fileDropped, "file");
 
-    function handleSchemaSelect(event) {
+    // $: $fileHash && getCertificateUrl($fileHash);
+
+    async function handleSchemaSelect(event) {
         selectedSchema = event.detail.selected
+        const form = document.querySelector('.svelte-schema-form'); // select the form element
+        if (form) {
+            form.reset();
+        }
     }
 
     let certificateUrl = ''
@@ -187,16 +276,17 @@
         formDataArr.map(a => {
             json[a.name] = a.value
         })
-
-        if ($fileHash) {
-            json.pie_certificate = $fileHash
+        if (fileHashes.length) {
+            fileHashes.map(data => {
+                json[data.prop] = data.hash
+            })
         }
-
         let formFields = Object.keys(json)
+
         let formNotEmpty = formFields.some(f => json[f] !== "")
-        let response = {};
+        let response = null;
         if (formNotEmpty) {
-            response = await upload(JSON.stringify(json), "data")
+            response = JSON.stringify(json)
         }
 
         return response
@@ -218,23 +308,27 @@
 
 <div class="mint-container">
   <div class="header-buttons">
-    <button type="button" class="default-btn mr-2" disabled on:click={()=>{navigateTo('#schemas')}}>
-      Access Schemas
+    <button type="button" class="default-btn mr-2" disabled={!$schemas.length}
+            on:click={()=>{navigateTo('#asset-classes')}}>
+      Asset classes
+    </button>
+    <button type="button" class="default-btn mr-2" on:click={()=>{navigateTo('#new-asset-class')}}>
+      New asset class
     </button>
     <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>
-      Audit History
+      Audit history
     </button>
   </div>
   {#if (!showAuth)}
 
-    <MintInput bind:amount={amount} amountLabel={"Mint Amount"} label={"Options"}/>
+    <MintInput bind:amount={amount} amountLabel={"Mint amount"}/>
     <div class="audit-info-container basic-frame-parent">
       <div class="audit-info basic-frame">
-        {#if schemas.length}
+        {#if $schemas.length}
           <div class="schema">
-            <div class="schema-dropdown row">
-              <label class="f-weight-700 custom-col col-2">Schema:</label>
-              <Select options={schemas}
+            <div class="schema-dropdown">
+              <label class="f-weight-700 custom-col">Asset class:</label>
+              <Select options={$schemas}
 
                       on:select={handleSchemaSelect}
                       label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
@@ -244,6 +338,7 @@
               <span class="title f-weight-700">Asset info.</span>
 
               <SchemaForm schema={selectedSchema.schema}></SchemaForm>
+              <div class="error">{$schemaError}</div>
               {#if $fileHash}
                 <div class="file-uploaded">
                   <span class="file-load-success">Pie Certificate loaded successfully</span>
@@ -265,10 +360,9 @@
 
           </div>
         {/if}
-        {#if !schemas.length}
+        {#if !$schemas.length}
           <div class="empty-schemas">
-            <span>Please create a new schema to mint </span>
-            <button class="default-btn" on:click={()=>{navigateTo("#new-schema")}}>New Schema</button>
+            <span>Please create a new asset class to mint </span>
           </div>
         {/if}
 
@@ -280,8 +374,8 @@
     <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
       (FT)
     </div>
-    <button class="mint-btn btn-solid" disabled={shouldDisable && amount} on:click={() => mint()}>Mint
-      Options
+    <button class="mint-btn btn-solid" on:click={() => mint()} disabled="{!selectedSchema.hash || !parseFloat(amount)}">
+      Mint
     </button>
   {/if}
   <!--{#if showAuth}-->
@@ -386,6 +480,16 @@
 
     .hide {
         display: none;
+    }
+
+    .empty-schemas {
+        color: #DD1212;
+        text-align: center;
+    }
+
+    .schema-dropdown {
+        width: 100%;
+        display: flex;
     }
 
 </style>

@@ -1,13 +1,21 @@
 <script>
-    import {activeNetwork, data, roles, vault} from '../scripts/store.js';
+    import {
+        activeNetwork,
+        data,
+        roles, transactionError,
+        transactionSuccess,
+        vault
+    } from '../scripts/store.js';
     import {ethers} from "ethers";
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
-    import {ADDRESS_ZERO, TEST_CONTRACT_ADDRESS} from "../scripts/consts.js"
+    import {
+        ADDRESS_ZERO,
+        TEST_CONTRACT_ADDRESS,
+    } from "../scripts/consts.js"
     import {QUERY} from "../scripts/queries.js";
-    import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
+    import {getEventArgs, getContract, getSubgraphData, filterArray, showPrompt} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
-    import SftLoader from "../components/SftLoader.svelte";
 
     let name = "";
     let admin_ledger = "";
@@ -29,6 +37,8 @@
     // }
 
     async function createToken() {
+        transactionError.set(false)
+        transactionSuccess.set(false)
         error = ""
         let addressValid = ethers.utils.isAddress(admin_ledger);
 
@@ -52,9 +62,8 @@
             offChainAssetVaultTx = await factoryContract.createChildTyped(
                 constructionConfig
             )
-            if (offChainAssetVaultTx.hash) {
-                loading = true
-            }
+
+            await showPrompt(offChainAssetVaultTx)
 
             let contract;
             contract = new ethers.Contract(
@@ -86,6 +95,7 @@
 
             navigateTo("#sft-create-success", {replace: false});
         } catch (er) {
+            transactionError.set(true)
             console.log(er)
             console.log(er.message)
         }
@@ -115,9 +125,8 @@
 
 </script>
 <div>
-{#if !loading}
   <div class="sft-setup-container">
-    <label class="title f-weight-700">SFT Setup</label>
+    <label class="title f-weight-700">SFT setup</label>
     <div class="form-box">
       <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
       </div>
@@ -136,12 +145,6 @@
       </button>
     </div>
   </div>
-{/if}
-{#if loading}
-  <div class="loader">
-    <SftLoader></SftLoader>
-  </div>
-{/if}
 </div>
 <style>
     .sft-setup-container {
@@ -209,14 +212,6 @@
 
     .create-token {
         width: 413px;
-    }
-
-    .loader {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 
     .error {

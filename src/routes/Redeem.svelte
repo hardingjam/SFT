@@ -1,7 +1,12 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
-    import {getReceiptBalance, getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
-    import {account, activeNetwork, vault} from "../scripts/store.js";
+    import {getReceiptBalance, getSubgraphData, hasRole, showPrompt, timeStampToDate} from "../scripts/helpers.js";
+    import {
+        account,
+        activeNetwork,
+        transactionError,
+        vault
+    } from "../scripts/store.js";
     import {onMount} from "svelte";
     import {ethers} from "ethers";
     import SftLoader from "../components/SftLoader.svelte";
@@ -10,7 +15,7 @@
 
     let shouldDisable = false;
     let amount;
-    let selectedReceipts = [];
+    let selectedReceipts;
     let totalShares = 0
     let error = ""
     let showReceiptInfo = false
@@ -25,7 +30,6 @@
         try {
             if (receipt) {
                 error = ''
-
                 const hasRoleWithdrawer = await hasRole($vault, $account, "WITHDRAWER")
 
                 if (!hasRoleWithdrawer.error) {
@@ -42,17 +46,17 @@
                         error = "0 amount"
                         return
                     }
-
-                    const tx = $vault["redeem(uint256,address,address,uint256)"](
+                    const tx = await $vault.connect(signer)["redeem(uint256,address,address,uint256,bytes)"](
                         redeemAmount,
                         $account,
                         $account,
-                        receipt
-                    );
-                    await tx.wait();
+                        receipt,
+                        []
+                   );
+                    await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
 
-                    await setTempData(amount, receipt)
                     // selectedReceipts = []
+                    await getData()
 
                     amount = 0;
                 } else {
@@ -64,6 +68,7 @@
                 return
             }
         } catch (err) {
+            transactionError.set(true)
             error = err.reason
         }
         shouldDisable = false;
@@ -93,32 +98,13 @@
     }
 
     async function setMaxValue() {
-        if (selectedReceipts.length > 1) {
-            return
-        }
-        let balance = await getReceiptBalance($activeNetwork, $vault, selectedReceipts[0])
+        // if (selectedReceipts.length > 1) {
+        //     return
+        // }
+        let balance = await getReceiptBalance($activeNetwork, $vault, selectedReceipts)
         amount = ethers.utils.formatEther(balance)
     }
 
-
-    function setTempData(amount, receipt) {
-        //indexing takes time, so to show correct data, ui modifications is needed
-        let updatedReceipt = receiptBalances.find(d => d.receipt.receiptId === receipt)
-
-        let valueBef = updatedReceipt.receipt.balances[0].value
-        let valueExactBef = updatedReceipt.receipt.balances[0].valueExact
-
-        updatedReceipt.receipt.balances[0].value = valueBef - amount
-        updatedReceipt.receipt.balances[0].valueExact = Number(ethers.BigNumber.from(valueExactBef).sub(ethers.utils.parseEther(amount.toString())))
-
-        receiptBalances = receiptBalances.map(d => {
-            if (d.receipt.receiptId === receipt) {
-                return {...d, receipt: updatedReceipt.receipt}
-            } else {
-                return d
-            }
-        }).filter(d => d.receipt.balances[0].value > 0)
-    }
 
     async function multiCall() {
         error = ''
@@ -130,7 +116,7 @@
         const hasRoleWithdrawer = await hasRole($vault, $account, "WITHDRAWER")
         if (!hasRoleWithdrawer.error) {
             let ABI = [
-                "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_)",
+                "function redeem(uint256 shares_, address receiver_, address owner_, uint256 id_, bytes receiptInformation_)",
             ];
             let iface = new ethers.utils.Interface(ABI);
 
@@ -140,17 +126,20 @@
                     receiptBalance,
                     $account,
                     $account,
-                    receipt
+                    receipt,
+                    []
                 ])
             })
 
             try {
-                await $vault
+                let tx = await $vault
                     .multicall(
                         multicallArr,
                         {from: $account}
                     );
+                await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
             } catch (err) {
+                transactionError.set(true)
                 error = err.reason
             }
         } else {
@@ -182,7 +171,7 @@
 <div class="redeem-container">
   {#if !showReceiptInfo}
     <div class="title"><span
-        class="f-weight-700">Total Supply: (FT):</span>
+        class="f-weight-700">Total supply: (FT):</span>
       {ethers.utils.formatUnits(totalShares, 18)}
     </div>
     <div class="basic-frame-parent">
@@ -201,7 +190,7 @@
               <tr>
                 <td class="receipt-id">
                   <label class="check-container">
-                    <input type="checkbox" class="check-box" bind:group={selectedReceipts}
+                    <input type="radio" class="check-box" bind:group={selectedReceipts}
                            value={receipt.receipt.receiptId}/>
                     <span class="checkmark"></span>
                   </label>
@@ -220,11 +209,10 @@
     {#if error}
       <span class="error">{error}</span>
     {/if}
-    <MintInput bind:amount={amount} amountLabel={"Total to Redeem"} label={"Options"} maxButton={true}
+    <MintInput bind:amount={amount} amountLabel={"Total to redeem"} maxButton={true}
                on:setMax={()=>{setMaxValue()}}/>
-    <button class="redeem-btn btn-solid" disabled="{!selectedReceipts.length}" on:click={() => withdraw()}>
+    <button class="redeem-btn btn-solid" disabled="{!selectedReceipts || !parseFloat(amount)}" on:click={() => redeem(selectedReceipts)}>
       Redeem
-      Options
     </button>
 
   {/if}

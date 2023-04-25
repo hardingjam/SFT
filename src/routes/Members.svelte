@@ -1,8 +1,8 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {icons} from "../scripts/assets.js"
-    import {account, activeNetwork, ethersData, vault} from "../scripts/store.js";
-    import {getContract, hasRole, tierReport} from "../scripts/helpers.js";
+    import {account, activeNetwork, ethersData, transactionError, vault} from "../scripts/store.js";
+    import {getContract, hasRole, showPrompt, tierReport} from "../scripts/helpers.js";
     import tierContractAbi from "../contract/TierContractAbi.json";
 
 
@@ -12,14 +12,6 @@
     let addressErc1155 = ''
     let erc20TierContract = localStorage.getItem("erc20TierContract") || ''
     let erc1155TierContract = localStorage.getItem("erc1155TierContract") || ''
-    let editErc20 = {
-        address: false,
-        minTier: false
-    }
-    let editErc1155 = {
-        address: false,
-        minTier: false
-    }
 
     let isAddressValid = {
         erc20: false,
@@ -53,22 +45,6 @@
         }
     }
 
-    function toggleEditAddress() {
-        editErc20.address = !editErc20.address
-    }
-
-    function toggleEditMinTier() {
-        editErc20.minTier = !editErc20.minTier
-    }
-
-    function toggleEditAddress1155() {
-        editErc1155.address = !editErc1155.address
-    }
-
-    function toggleEditMinTier1155() {
-        editErc1155.minTier = !editErc1155.minTier
-    }
-
     async function assignTierErc20() {
         try {
             if (!erc20TierContract) {
@@ -79,7 +55,7 @@
 
             if (!hasRoleErc20Tierer.error) {
                 let tx = await $vault.setERC20Tier(erc20TierContract, erc20MinTier, [])
-                await tx.wait()
+                await showPrompt(tx)
                 localStorage.setItem("erc20TierContract", erc20TierContract)
                 localStorage.setItem("erc20MinTier", erc20MinTier)
             } else {
@@ -87,6 +63,7 @@
             }
 
         } catch (e) {
+            transactionError.set(true)
             error = e.message
         }
     }
@@ -100,7 +77,7 @@
 
             if (!hasRoleErc1155Tierer.error) {
                 let tx = await $vault.setERC1155Tier(erc1155TierContract, erc1155MinTier, [])
-                await tx.wait()
+                await showPrompt(tx)
                 localStorage.setItem("erc1155TierContract", erc1155TierContract)
                 localStorage.setItem("erc1155MinTier", erc1155MinTier)
 
@@ -109,6 +86,7 @@
             }
 
         } catch (e) {
+            transactionError.set(true)
             error = e.message
         }
     }
@@ -121,29 +99,17 @@
         <div>ERC20</div>
         <div class="display-flex address-container">
           <div class="f-weight-700 contract label">Contract address:
-            {#if !editErc20.address}
-              {erc20TierContract.replace(/(.{14}).*/, "$1…")}
-            {/if}
-            {#if editErc20.address}
-              <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
-            {/if}
+            <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
           </div>
-          <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditAddress()}>
         </div>
         <div class="display-flex address-container">
           <div class="f-weight-700 label">Minimum tier:
-            {#if editErc20.minTier}
-              <input type="text" class="default-input min-tier" bind:value={erc20MinTier} autofocus>
-            {/if}
-            {#if !editErc20.minTier}
-              {erc20MinTier}
-            {/if}
+            <input type="text" class="default-input min-tier" bind:value={erc20MinTier} autofocus>
           </div>
-          <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditMinTier()}>
         </div>
-        <div class="assign-tier">
-          <button class="default-btn" on:click={()=>{assignTierErc20()}}>Assign tier</button>
-        </div>
+<!--        <div class="assign-tier">-->
+<!--          <button class="default-btn" on:click={()=>{assignTierErc20()}}>Assign tier</button>-->
+<!--        </div>-->
         <div class="f-weight-700">Check address on the tier list:</div>
         <div class="check-address-input-container">
           <input type="text" class="default-input w-100" bind:value={addressErc20}>
@@ -167,31 +133,17 @@
 
           <div class="f-weight-700 contract label">
             Contract address:
-
-            {#if !editErc1155.address}
-              {erc1155TierContract.replace(/(.{14}).*/, "$1…")}
-            {/if}
-            {#if editErc1155.address}
-              <input type="text" class="default-input address" bind:value={erc1155TierContract} autofocus>
-            {/if}
-
+            <input type="text" class="default-input address" bind:value={erc1155TierContract} autofocus>
           </div>
-          <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditAddress1155()}>
         </div>
         <div class="display-flex address-container">
           <div class="f-weight-700 label">Minimum tier:
-            {#if editErc1155.minTier}
-              <input type="text" class="default-input min-tier" bind:value={erc1155MinTier} autofocus>
-            {/if}
-            {#if !editErc1155.minTier}
-              {erc1155MinTier}
-            {/if}
+            <input type="text" class="default-input min-tier" bind:value={erc1155MinTier} autofocus>
           </div>
-          <img src={icons.edit} alt="edit" class="btn-hover edit" on:click={()=>toggleEditMinTier1155()}>
         </div>
-        <div class="assign-tier">
-          <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Assign tier</button>
-        </div>
+<!--        <div class="assign-tier">-->
+<!--          <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Assign tier</button>-->
+<!--        </div>-->
         <div class="f-weight-700">Check address on the tier list:</div>
         <div class="check-address-input-container">
           {addressErc1155}
@@ -253,7 +205,7 @@
     }
 
     .address {
-        width: 215px;
+        width: 258px;
         margin-right: 20px;
     }
 

@@ -1,6 +1,16 @@
 <script>
-    import {activeNetwork, account, vault, tokens, ethersData} from "../scripts/store.js";
-    import Select from "../components/Select.svelte";
+    import {
+        activeNetwork,
+        account,
+        vault,
+        tokens,
+        ethersData,
+        transactionInProgressShow,
+        transactionHash,
+        promptTopText,
+        promptBottomText,
+        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText
+    } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
     import {ethers} from "ethers";
@@ -10,7 +20,7 @@
     import {icons} from '../scripts/assets.js'
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import {formatAddress, getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
@@ -19,6 +29,9 @@
     import SetVault from "../routes/SetVault.svelte";
     import ReceiptAudit from "../routes/ReceiptAudit.svelte";
     import SftCreateSuccess from "../routes/SftCreateSuccess.svelte";
+    import AssetClasses from "../routes/AssetClasses.svelte";
+    import Navigation from "../components/Navigation.svelte";
+    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -29,6 +42,7 @@
     let location = window.location.hash;
     let selectedTab = 'mint'
     $: $vault && setTokenName()
+
     async function setTokenName() {
         tokenName = $vault && $vault.address ? await $vault.name() : ""
     }
@@ -59,81 +73,6 @@
         }
     }
 
-    let accountMenuOptions = [
-        {
-            id: "copy",
-            displayName: "Copy Address",
-            action: () => {
-                if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
-                    // this.showTooltip = true;
-                    // setTimeout(() => {
-                    //     this.showTooltip = false;
-                    // }, 1000);
-                    return navigator.clipboard.writeText($account);
-                }
-                return Promise.reject("The Clipboard API is not available.");
-            }
-        },
-        {
-            id: "view",
-            displayName: "View on Explorer",
-            action: () => {
-                window.open(`${$activeNetwork.blockExplorer}address/${$account}`);
-            },
-        }
-    ]
-
-    let menuItems = [
-        {
-            id: "setup",
-            displayName: "SFT Setup",
-            action: () => {
-                navigateTo('#setup', {replace: false})
-            }
-        },
-        {
-            id: "roles",
-            displayName: "Roles",
-            action: () => {
-                navigateTo('#roles', {replace: false})
-            }
-        },
-        {
-            id: "mint",
-            displayName: "Mint/Redeem",
-            action: () => {
-                navigateTo('#mint', {replace: false})
-            }
-        },
-        {
-            id: "list",
-            displayName: "SFT List",
-            action: () => {
-                navigateTo('#list', {replace: false})
-            }
-        },
-        {
-            id: "members",
-            displayName: "Members",
-            action: () => {
-                navigateTo('#members', {replace: false})
-            }
-        },
-        {
-            id: "audit-history",
-            displayName: "Audit History",
-            action: () => {
-                navigateTo('#audit-history', {replace: false})
-            }
-        },
-        // {
-        //     id: "new-schema",
-        //     displayName: "New Schema",
-        //     action: () => {
-        //         navigateTo('#new-schema', {replace: false})
-        //     }
-        // },
-    ]
 
     onMount(async () => {
         await getEthersData()
@@ -302,26 +241,7 @@
       </div>
       {#if $account}
         <div class="menu">
-          <Select options={networks} on:select={handleNetworkSelect}
-                  label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
-                  dropDownClass={'nav-dropdown'}>
-            <span slot="icon" class="select-icon"><img src={icons[$activeNetwork?.icon]}
-                                                       alt={$activeNetwork?.displayName}/></span>
-          </Select>
-          <Select className={'meinMenu'} options={accountMenuOptions}
-                  label={formatAddress($account)}
-                  staticLabel={true} dropDownClass={'nav-dropdown'}>
-          </Select>
-
-          <Select className={'meinMenu'} options={menuItems}
-                  label=""
-                  staticLabel={true} showExpand="{false}" dropDownClass={'nav-dropdown'}>
-            <div slot="icon">
-              <img src={icons.burger}
-                   alt="menu"/>
-            </div>
-          </Select>
-
+          <Navigation on:networkSelect={handleNetworkSelect}></Navigation>
         </div>
       {/if}
 
@@ -350,7 +270,8 @@
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>
           <Route path="#set-vault" component={SetVault}/>
-          <Route path="#new-schema" component={NewSchema}/>
+          <Route path="#asset-classes" component={AssetClasses}/>
+          <Route path="#new-asset-class" component={NewSchema}/>
           <Route path="#receipt/:id" component={ReceiptAudit}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
 
@@ -388,6 +309,16 @@
     </div>
 
   </div>
+  {#if $transactionInProgressShow}
+    <div class="blur"></div>
+  {/if}
+  <TransactionInProgressBanner topText={$promptTopText}
+                               bottomText={$promptBottomText}
+                               transactionHash={$transactionHash}
+                               noBottomText={$promptNoBottom}
+                               errorText={$promptErrorText}
+                               successText={$promptSuccessText}
+                               on:close={$promptCloseAction}/>
 </Router>
 
 
@@ -527,6 +458,14 @@
 
   .content {
     height: fit-content;
+  }
+
+  .blur {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3.5px);
+    top: 0
   }
 
 </style>

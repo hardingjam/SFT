@@ -1,6 +1,38 @@
 <script>
     import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
+    import {
+        ethersData,
+        transactionError,
+        transactionHash,
+        transactionInProgress, transactionInProgressShow, transactionSuccess,
+        uploadBtnLoading,
+        vault
+    } from "../scripts/store.js";
+    import {cborEncode, encodeCBOR, showPrompt} from "../scripts/helpers.js";
+    import {IPFS_APIS, MAGIC_NUMBERS, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
+    import axios from "axios";
+    import {arrayify} from "ethers/lib/utils.js";
+    import {JSONEditor} from "svelte-jsoneditor";
+    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
+    import {navigateTo} from "yrv";
+    import {validator} from "@exodus/schemasafe";
+    import {nullOptionalsAllowed} from '../plugins/@restspace/svelte-schema-form/utilities';
+
+
+    let label = ""
+    let schema = {}
+    let content = {
+        text: ""
+    }
+    let error = "";
+    let showAuth = false;
+    let promise;
+    let username = "";
+    let password = "";
+    let schemaInformation = {};
+    let invalidJson = ""
+    let labelError = ""
 
     let colors = {
         keyColor: 'black',
@@ -17,35 +49,211 @@
         document.getElementById("highlighting").style.display = "block"
     }
 
+    async function deploySchema() {
+        error = ""
+        labelError = ""
 
-    let inputValue = ""
+        if (!label) {
+            labelError = "Please enter Schema label";
+            return
+        }
 
-    // $: inputValue && update(inputValue);
+        if (!content.text) {
+            error = "Please paste your schema";
+            return
+        }
+
+        try {
+
+            schemaInformation = {
+                displayName: label,
+                schema: schema,
+            }
+
+            let encodedSchema = encodeCBOR(schemaInformation)
+
+            try {
+                let uploadResult = await upload(JSON.stringify(schemaInformation))
+                let encodedHashList = cborEncode(
+                    [uploadResult?.Hash].toString(),
+                    MAGIC_NUMBERS.OA_HASH_LIST
+                );
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
+                let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+                await showPrompt(transaction, {closeAction: goToAssetClassList})
+
+            } catch (err) {
+                transactionError.set(true)
+                console.log(err)
+            }
+        } catch (e) {
+            console.log(e.message)
+            error = "Schema is not valid JSON"
+        }
+
+    }
+
+    const upload = async (data) => {
+        error = ""
+        uploadBtnLoading.set(true)
+
+        let savedUsername = localStorage.getItem('ipfsUsername');
+        let savedPassword = localStorage.getItem('ipfsPassword');
+        if (!savedPassword || !savedUsername) {
+            showAuth = true;
+            await waitForCredentials()
+        } else {
+            username = savedUsername;
+            password = savedPassword
+        }
+
+        let formData = new FormData();
+
+        formData.append('file', data)
 
 
-    function deploySchema(){
-        console.log(document.getElementById("code").textContent)
+        const requestArr = IPFS_APIS.map((url) => {
+            return axios.request({
+                url,
+                auth: {
+                    username,
+                    password
+                },
+                method: 'post',
+                headers: {
+                    "Content-Type": `multipart/form-data;`,
+                },
+                data: formData,
+                onUploadProgress: (async (p) => {
+                    await showPrompt(null,{topText: "Uploading to IPFS, please wait", noBottomText:true})
+                    console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                }),
+                withCredentials: true,
+            })
+        });
+
+        let respAll = await Promise.allSettled(requestArr)
+
+        respAll.map(response => {
+            if (response.status === "rejected") {
+                reportError(response.reason)
+            } else return response
+        })
+
+        let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+        if (resolvedPromise) {
+
+            localStorage.setItem('ipfsUsername', username);
+            localStorage.setItem('ipfsPassword', password);
+
+        } else {
+            error = "Something went wrong"
+        }
+        uploadBtnLoading.set(false)
+        username = ""
+        password = ""
+        transactionInProgressShow.set(false)
+        transactionInProgress.set(false)
+
+        return resolvedPromise?.value.data
+    };
+
+    async function waitForCredentials() {
+        const confirm = document.getElementById("ok-button")
+
+        promise = new Promise((resolve) => {
+            confirm.addEventListener('click', resolve)
+        })
+        return await promise.then(() => {
+                showAuth = false;
+            }
+        )
+    }
+
+    $: content && getContent()
+    $: label && clearLabelError()
+
+    function getContent() {
+        error = ""
+        invalidJson = ""
+        if (content.text) {
+            try {
+                schema = JSON.parse(content.text)
+            } catch (err) {
+                invalidJson = err
+            }
+
+            try {
+                validator(nullOptionalsAllowed(schema), {
+                    includeErrors: true,
+                    allErrors: true,
+                    allowUnusedKeywords: true
+                });
+            } catch (er) {
+                if(!invalidJson){
+                    error = "Form cannot be generated from schema"
+                }
+            }
+        }
+    }
+    function clearLabelError() {
+        labelError = ""
+    }
+
+    function goToAssetClassList(event) {
+        if ($transactionSuccess && event.detail.close) {
+            navigateTo("#asset-classes", {replace: false});
+        }
     }
 
 </script>
-<DefaultFrame header="New Schema">
-  <div slot="content">
-    <span class="f-weight-700">Schema label :</span> <input class="label-input"/>
-
-    <div class="schema">
-      <div class="editing-top-color">1</div>
-      <span class="textarea" role="textbox" id="code" contenteditable ></span>
-      <pre id="highlighting">
-        <code id="highlighting-content"></code>
-      </pre>
-
+<DefaultFrame header="New asset class">
+  <div slot="content" class="schema-content">
+    <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
+      <div class="label">
+        <span class="f-weight-700">Asset class label:</span>
+        <input class="label-input" bind:value={label}/>
+      </div>
+      <div class="label">
+<!--        <div class="info-icon">-->
+<!--          <a href="" target="_blank">-->
+<!--          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--            <path d="M9 10C9 9.40666 9.17595 8.82664 9.50559 8.33329C9.83524 7.83994 10.3038 7.45543 10.852 7.22836C11.4001 7.0013 12.0033 6.94189 12.5853 7.05765C13.1672 7.1734 13.7018 7.45912 14.1213 7.87868C14.5409 8.29824 14.8266 8.83279 14.9424 9.41473C15.0581 9.99667 14.9987 10.5999 14.7716 11.1481C14.5446 11.6962 14.1601 12.1648 13.6667 12.4944C13.1734 12.8241 12.5933 13 12 13V14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#AE6E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>-->
+<!--            <circle cx="12" cy="17" r="1" fill="#AE6E00"/>-->
+<!--          </svg></a>-->
+<!--        </div>-->
+        <span class="f-weight-700">Schema:</span>
+      </div>
+      <div class="schema">
+        <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
+      </div>
+      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}} disabled={!content.text || error || invalidJson || labelError}>
+        Create new asset class
+      </button>
+      <div class="error">{error || labelError}</div>
     </div>
 
-    <button class="default-btn btn-hover right" on:click={()=>{deploySchema()}}>Deploy schema</button>
-  </div>
+    <div class={showAuth  ? 'auth show' : 'auth hide'}>
+      <div class="display-flex space-between">
+        <label>Username:</label>
+        <input class="default-input" type="text" bind:value={username} autofocus/>
+      </div>
+      <div class="display-flex space-between">
+        <label>Password:</label>
+        <input class="default-input" type="password" bind:value={password}/>
+      </div>
+      <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
+    </div>
 
+  </div>
 </DefaultFrame>
 <style>
+
+    .schema-content {
+        min-width: 660px;
+        min-height: 400px;
+    }
+
     .label-input {
         width: 560px;
         box-sizing: border-box;
@@ -60,48 +268,50 @@
         overflow: auto;
         margin: 10px 0;
         position: relative;
-    }
-
-
-    .textarea {
-        width: 100%;
-        height: 100%;
-        border: none;
-        border-left: 35px solid #F0EFF1;
-        border-radius: 5px 5px 0 0;
-        border-bottom: 1px solid #D2D2D2;
-        background: #FBFBFB;
-        display: block;
-        overflow: hidden;
-        resize: both;
-        min-height: 300px;
-        line-height: 20px;
-        padding: 5px;
-        max-width: 675px;
-    }
-
-    .textarea:focus-visible{
-        outline:none
-    }
-
-    .textarea[contenteditable]:empty::before {
-        content: "Paste your schema here";
-        color: gray;
-    }
-
-
-    .editing-top-color{
-        position: absolute;
-        width: 35px;
-        left: 0;
-        top: 0;
-        background: #DCDBDD;
-        border-radius:5px 0 0 0;
-        text-align: center;
+        border-radius: 5px 5px 0 0
     }
 
     #highlighting {
         display: none;
+    }
+
+    .schema-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .deploy-btn {
+        align-self: end;
+    }
+
+    .auth {
+        background: #FFFFFF;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        padding: 40px;
+        width: calc(100% - 80px);
+    }
+
+    .show {
+        display: flex;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .label {
+        display: flex;
+        align-items: center;
+    }
+
+    .info-icon{
+        margin-left: -35px;
+        margin-right: 10px;
+        cursor: pointer;
     }
 
 </style>

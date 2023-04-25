@@ -1,6 +1,18 @@
 import {ethers} from "ethers";
-import {IPFS_GETWAY, ONE, ROLES} from "./consts.js";
+import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES} from "./consts.js";
 import axios from "axios";
+import pako from "pako"
+import {encodeCanonical, decodeAllSync} from "cbor-web";
+import {arrayify, isBytesLike} from "ethers/lib/utils.js";
+import {
+    promptBottomText, promptCloseAction, promptErrorText, promptNoBottom, promptSuccessText,
+    promptTopText, transactionError,
+    transactionHash,
+    transactionInProgress,
+    transactionInProgressShow,
+    transactionSuccess
+} from "./store.js";
+
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -149,9 +161,8 @@ function getDateValues(date) {
 export function accessControlError(msg) {
     let hash = msg.slice(-66)
     let error = msg.slice(20, msg.length - 66)
-
     let role = ROLES.find(r => r.hash === hash)
-    return error + " " + role?.name
+    return error + " " + role?.roleName
 }
 
 export function toBytes(string) {
@@ -211,13 +222,13 @@ export async function hasRole(vault, account, role) {
 
 export async function getIpfsGetWay(hash) {
     try {
+        //Todo Check hash is valid Ipfs hash
         const response = await axios.get(`${IPFS_GETWAY}${hash}`);
         if (response) {
             return response?.config.url
         }
     } catch (err) {
         console.log(err)
-        return err
     }
 }
 
@@ -226,4 +237,147 @@ export function formatAddress(address) {
         return address.replace(/(.{6}).*(.{5})/, "$1…$2")
     } else
         return ''
+}
+
+
+export function deflateJson(data_) {
+    const bytes = Uint8Array.from(pako.deflate(data_, {to: 'string'}));
+    let hex = "0x";
+    for (let i = 0; i < bytes.length; i++) {
+        hex = hex + bytes[i].toString(16).padStart(2, "0");
+    }
+    return hex;
+}
+
+export function cborEncode(
+    payload_,
+    magicNumber_,
+    contentType_,
+    options_
+) {
+    const m = new Map();
+    m.set(0, payload_); // Payload
+    m.set(1, magicNumber_); // Magic number
+    if (contentType_) {
+        m.set(2, contentType_); // Content-Type
+    }
+
+    if (options_) {
+        if (options_.contentEncoding) {
+            m.set(3, options_.contentEncoding); // Content-Encoding
+        }
+
+        if (options_.contentLanguage) {
+            m.set(4, options_.contentLanguage); // Content-Language
+        }
+
+        if (options_.schema) {
+            m.set(MAGIC_NUMBERS.OA_SCHEMA, options_.schema)
+        }
+    }
+    return encodeCanonical(m).toString("hex").toLowerCase();
+}
+
+export function cborDecode(dataEncoded_) {
+    return decodeAllSync(dataEncoded_);
+}
+
+export function encodeCBOR(data) {
+    // -- Encoding with CBOR
+    // Obtain (Deflated JSON) and parse it to an ArrayBuffer
+    if (typeof data === 'object') {
+        data = JSON.stringify(data)
+    }
+    const deflatedData = arrayify(deflateJson(data)).buffer;
+    return cborEncode(
+        deflatedData,
+        MAGIC_NUMBERS.OA_SCHEMA,
+        "application/json",
+        {
+            contentEncoding: "deflate",
+        }
+    );
+}
+
+export function encodeCBORStructure(structure, schemaHash) {
+    // -- Encoding with CBOR
+    // Obtain (Deflated JSON) and parse it to an ArrayBuffer
+    if (typeof structure === 'object') {
+        structure = JSON.stringify(structure)
+    }
+    const deflatedData = arrayify(deflateJson(structure)).buffer;
+    return cborEncode(
+        deflatedData,
+        MAGIC_NUMBERS.OA_STRUCTURE,
+        "application/json",
+        {
+            contentEncoding: "deflate",
+            schema: schemaHash
+        }
+    );
+}
+
+export function bytesToMeta(bytes, type) {
+    if (isBytesLike(bytes)) {
+        const _bytesArr = arrayify(bytes, {allowMissingPrefix: true});
+        let _meta;
+        if (type === "json") {
+            _meta = pako.inflate(_bytesArr, {to: 'string'})
+        } else {
+            _meta = new TextDecoder().decode(bytes).slice(3)
+        }
+        let res;
+        try {
+            res = JSON.parse(_meta)
+        } catch {
+            res = _meta
+        }
+        return res
+    } else throw new Error("invalid meta");
+}
+
+export async function showPrompt(transaction, options) {
+    //clear store
+    transactionError.set(false)
+    transactionSuccess.set(false)
+    promptTopText.set("")
+    promptErrorText.set("Transaction failed")
+    promptSuccessText.set("Transaction successful!")
+    promptNoBottom.set(false)
+    promptBottomText.set("")
+    promptCloseAction.set(()=>{})
+    transactionHash.set("false")
+
+    //show prompt
+    transactionInProgressShow.set(true)
+    transactionInProgress.set(true)
+    if (options && options.topText) {
+        promptTopText.set(options.topText)
+    }
+    if (options && options.noBottomText) {
+        promptNoBottom.set(options.noBottomText)
+    }
+    if (options && options.bottomText) {
+        promptBottomText.set(options.bottomText)
+    }
+    if (options && options.closeAction) {
+        promptCloseAction.set(options.closeAction)
+    }
+    if (options && options.errorText) {
+        promptErrorText.set(options.errorText)
+    }
+    if (options && options.successText) {
+        promptSuccessText.set(options.successText)
+    }
+    if (transaction) {
+
+        if (transaction.hash) {
+            transactionHash.set(transaction.hash)
+        }
+        let wait = await transaction.wait()
+        if (wait.status === 1) {
+            transactionSuccess.set(true)
+            transactionInProgress.set(false)
+        }
+    }
 }

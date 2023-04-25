@@ -42,7 +42,8 @@ export const AUDIT_HISTORY_DATA_QUERY = `
               {
                 address
               },
-              certifiedUntil
+              certifiedUntil,
+              totalShares
             },
             deposits 
             {
@@ -130,6 +131,18 @@ export const RECEIPT_INFORMATION_QUERY = `
                   receiptInformations{
                     information
                   }
+            }
+          }
+         `
+export const VAULT_INFORMATION_QUERY = `
+          query($id: ID!) {
+            offchainAssetReceiptVault(id: $id) {
+                id,
+                 receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
+                    information
+                    id
+                    timestamp
+                 }
             }
           }
          `

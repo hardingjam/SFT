@@ -59,6 +59,9 @@
             if (location === "#setup") {
                 navigateTo("#setup", {replace: false})
             }
+            if (location === "#ipfs") {
+                navigateTo("#ipfs", {replace: false})
+            }
         }
     });
 

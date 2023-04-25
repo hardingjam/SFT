@@ -32,6 +32,7 @@
     import AssetClasses from "../routes/AssetClasses.svelte";
     import Navigation from "../components/Navigation.svelte";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
+    import Ipfs from "../routes/Ipfs.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -274,6 +275,7 @@
           <Route path="#new-asset-class" component={NewSchema}/>
           <Route path="#receipt/:id" component={ReceiptAudit}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
+          <Route path="#ipfs" component={Ipfs}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

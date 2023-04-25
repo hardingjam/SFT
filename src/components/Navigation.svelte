@@ -65,6 +65,13 @@
                 navigateTo('#audit-history', {replace: false})
             }
         },
+        {
+            id: "ipfs",
+            displayName: "IPFS",
+            action: () => {
+                navigateTo('#ipfs', {replace: false})
+            }
+        },
         // {
         //     id: "new-schema",
         //     displayName: "New Schema",

@@ -101,7 +101,7 @@
             id: "view",
             displayName: "View on explorer",
             action: () => {
-                window.open(`${$activeNetwork.blockExplorer}address/${$account}`);
+                window.open(`${$activeNetwork.blockExplorer}/address/${$account}`);
             },
         }
     ]

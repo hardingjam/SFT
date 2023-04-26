@@ -64,7 +64,7 @@
                 </td>
                 <td class="value">{timeStampToDate(deposit.timestamp)} </td>
                 <td class="value">
-                  <a href="{`${$activeNetwork.blockExplorer}tx/${getHash(deposit.id)}`}" target="_blank">
+                  <a href="{`${$activeNetwork.blockExplorer}/tx/${getHash(deposit.id)}`}" target="_blank">
                     {getHash(deposit.id).replace(/(.{6}).*(.{6})/, "$1…$2") || ""}
                   </a>
                 </td>

@@ -331,7 +331,7 @@
   .default-header {
     justify-content: space-between;
     display: flex;
-    padding-left: 167px;
+    padding-left: 107px;
     width: 100%;
     padding-right: 65px;
   }

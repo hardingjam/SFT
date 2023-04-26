@@ -111,7 +111,7 @@
   <DefaultFrame header="Roles">
 
     <div slot="address">
-  <span>  Address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`}
+  <span>Token address: <a href={`${$activeNetwork.blockExplorer}address/${$vault.address}`}
                       class="contract-address btn-hover"
                       target="_blank">{$vault.address}</a></span>
     </div>

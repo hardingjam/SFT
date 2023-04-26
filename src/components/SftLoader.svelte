@@ -1,12 +1,7 @@
 <script>
-    import {onMount} from "svelte";
 
     export let width = "200"
     import sftLoader from "../../public/sftLoader.json"
-
-    onMount(async () => {
-        console.log(sftLoader)
-    });
 
 </script>
 <div class="loader">

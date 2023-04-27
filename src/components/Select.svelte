@@ -105,6 +105,43 @@
         background: #d9d9d98c !important;
     }
 
+    /*important styles for select*/
+
+    .dropdown-toggle::after {
+        display: inline-block;
+        content: '';
+        border: none;
+    }
+
+    .meinMenu {
+        color: #FFFFFF;
+    }
+
+    .inputSelect {
+        background: #ECECEC;
+        border-radius: 5px;
+        height: 26px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 25px;
+        color: #000000;
+        padding: 0;
+        min-width: 230px;
+        max-width: 250px;
+        width: 100%;
+    }
+
+    .inputSelect.dropdown {
+        max-height: 255px;
+        height: auto;
+        overflow: auto;
+        background-color: #ececec;
+        padding-right: 50px;
+        min-width: 230px;
+        max-width: 250px;
+    }
+
     .dropdown-item {
         color: #000000;
         font-style: normal;

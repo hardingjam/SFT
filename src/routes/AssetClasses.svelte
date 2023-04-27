@@ -152,11 +152,6 @@
         cursor: pointer;
     }
 
-    /*table tr:first-child {*/
-    /*    background: #625e91;*/
-    /*    color: #ffffff;*/
-    /*}*/
-
     table td, table th {
         padding: 5px 15px;
     }

@@ -4,17 +4,15 @@
     import {
         ethersData,
         transactionError,
-        transactionHash,
         transactionInProgress, transactionInProgressShow, transactionSuccess,
         uploadBtnLoading,
         vault
     } from "../scripts/store.js";
     import {cborEncode, encodeCBOR, showPrompt} from "../scripts/helpers.js";
-    import {IPFS_APIS, MAGIC_NUMBERS, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
+    import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
     import {JSONEditor} from "svelte-jsoneditor";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import {navigateTo} from "yrv";
     import {validator} from "@exodus/schemasafe";
     import {nullOptionalsAllowed} from '../plugins/@restspace/svelte-schema-form/utilities';

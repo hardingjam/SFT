@@ -1,5 +1,5 @@
 <script>
-    import {createEventDispatcher, onMount} from 'svelte';
+    import {createEventDispatcher} from 'svelte';
     import {icons} from "../scripts/assets.js";
     import Dropdown from 'sv-bootstrap-dropdown';
 
@@ -83,52 +83,9 @@
         margin-left: 17px;
     }
 
-    .dropdown-toggle::after {
-        display: inline-block;
-        content: '';
-        border: none;
-    }
-
-    .meinMenu {
-        color: #FFFFFF;
-    }
-
-    .inputSelect {
-        background: #ECECEC;
-        border-radius: 5px;
-        height: 26px;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 25px;
-        color: #000000;
-        padding: 0;
-        min-width: 230px;
-        max-width: 250px;
-        width: 100%;
-    }
-
-    .inputSelect.dropdown {
-        max-height: 255px;
-        height: auto;
-        overflow: auto;
-        background-color: #ececec;
-        padding-right: 50px;
-        min-width: 230px;
-        max-width: 250px;
-    }
-
     .select-label {
         margin-left: 10px;
         width: calc(100% - 15px);
-    }
-
-
-    .nav-dropdown {
-        background-color: #2c2c5454 !important;
-        border-radius: 0 0 5px 5px !important;
-        box-shadow: 0 4px 4px #00000040;
-        border: none !important;
     }
 
     .nav-dropdown .dropdown-item {
@@ -147,7 +104,6 @@
         color: #FFFFFF;
         background: #d9d9d98c !important;
     }
-
 
     .dropdown-item {
         color: #000000;

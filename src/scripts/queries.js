@@ -13,7 +13,8 @@ export const QUERY = `
                       account{
                         address
                       }
-                    }
+                    },
+                    roleHash
                 },
                 roleRevokes{
                     role{

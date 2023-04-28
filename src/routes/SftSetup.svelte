@@ -2,7 +2,7 @@
     import {
         activeNetwork,
         data,
-        roles, transactionError,
+        transactionError,
         transactionSuccess,
         vault
     } from '../scripts/store.js';
@@ -10,11 +10,10 @@
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {
-        ADDRESS_ZERO,
-        TEST_CONTRACT_ADDRESS,
+        ADDRESS_ZERO
     } from "../scripts/consts.js"
     import {QUERY} from "../scripts/queries.js";
-    import {getEventArgs, getContract, getSubgraphData, filterArray, showPrompt} from "../scripts/helpers.js";
+    import {getEventArgs, getContract, getSubgraphData, showPrompt} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
 
     let name = "";
@@ -108,15 +107,6 @@
         getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
             if (res && res.data) {
                 data.set(res.data)
-                roles.set(res.data.offchainAssetReceiptVault?.roles)
-
-                let rolesFiltered = $roles.map(role => {
-                    let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
-                    let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
-                    let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
-                    return {roleName: role.roleName, roleHolders: filtered}
-                })
-                roles.set(rolesFiltered)
             }
 
         })

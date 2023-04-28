@@ -161,7 +161,7 @@ function getDateValues(date) {
 export function accessControlError(msg) {
     let hash = msg.slice(-66)
     let error = msg.slice(20, msg.length - 66)
-    let role = ROLES.find(r => r.hash === hash)
+    let role = ROLES.find(r => r.roleHash === hash)
     return error + " " + role?.roleName
 }
 
@@ -399,3 +399,19 @@ export async function addMissingHashesToSubGraph(hashes, vault, signer){
         console.log(err)
     }
 }
+
+export function mapOrder (array, order, key) {
+
+    array.sort( function (a, b) {
+        let A = a[key], B = b[key];
+
+        if (order.indexOf(A) > order.indexOf(B)) {
+            return 1;
+        } else {
+            return -1;
+        }
+
+    });
+
+    return array;
+};

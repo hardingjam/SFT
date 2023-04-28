@@ -73,6 +73,10 @@
         margin-bottom: 25px;
     }
 
+    .role {
+        min-width: 150px;
+    }
+
 
     .role-list {
         display: flex;

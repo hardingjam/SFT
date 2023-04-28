@@ -20,7 +20,7 @@ const networks = [
         blockExplorer: "https://goerli.etherscan.io",
         rpcUrl: "https://goerli.infura.io/v3/",
         icon: 'ethereum',
-        factory_address: '0xf1A14e96977E8dE295Ba9612691D127B157d1371',
+        factory_address: '0x6DB9F75C0B79E0351B09311c4856F556b09F67a5',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-goerli"
     },
     {

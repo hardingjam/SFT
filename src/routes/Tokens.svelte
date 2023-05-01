@@ -6,11 +6,18 @@
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
-    import {onMount} from "svelte";
+    import {onDestroy, onMount} from "svelte";
 
+    let interval;
     onMount(() => {
-        getTokens()
+        interval = setInterval(() => {
+            getTokens()
+        }, 2000)
     })
+
+    onDestroy(() => {
+        clearInterval(interval);
+    });
 
     async function getTokens() {
         let query = `

@@ -6,7 +6,30 @@
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
+    import {onMount} from "svelte";
 
+    onMount(() => {
+        getTokens()
+    })
+
+    async function getTokens() {
+        let query = `
+        query {
+          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
+            deployer,
+            name,
+            address,
+            symbol
+          }
+        }`
+
+        getSubgraphData($activeNetwork, {}, query, 'offchainAssetReceiptVaults').then((res) => {
+            if ($activeNetwork) {
+                let temp = res.data.offchainAssetReceiptVaults
+                tokens.set(temp)
+            }
+        })
+    }
 
     async function handleTokenSelect(token) {
         let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)

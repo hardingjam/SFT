@@ -1,7 +1,7 @@
 <script>
     import {
         activeNetwork,
-        data,
+        data, tokens,
         transactionError,
         transactionSuccess,
         vault
@@ -91,6 +91,7 @@
             localStorage.setItem('vaultAddress', $vault.address)
             //wait for sg data
             await getSgData(newVault.address)
+            await getTokens()
 
             navigateTo("#sft-create-success", {replace: false});
         } catch (er) {
@@ -111,6 +112,25 @@
 
         })
 
+    }
+
+    async function getTokens() {
+        let query = `
+        query {
+          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
+            deployer,
+            name,
+            address,
+            symbol
+          }
+        }`
+
+        getSubgraphData($activeNetwork, {}, query, 'offchainAssetReceiptVaults').then((res) => {
+            if ($activeNetwork) {
+                let temp = res.data.offchainAssetReceiptVaults
+                tokens.set(temp)
+            }
+        })
     }
 
 </script>

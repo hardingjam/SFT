@@ -19,7 +19,7 @@
     <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
     <div class="error">{error}</div>
     <button class="create-token btn-solid btn-submit"
-            on:click={() => goToRoles()}>Ok, take me to Roles
+            on:click={() => goToRoles()}>Ok, take me to roles
     </button>
   </div>
 </div>

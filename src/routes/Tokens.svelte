@@ -8,8 +8,13 @@
     import SftLoader from "../components/SftLoader.svelte";
     import {onDestroy, onMount} from "svelte";
 
+    let loading = false;
     let interval;
     onMount(() => {
+        loading = true
+        setTimeout(() => {
+            loading = false;
+        }, 1500)
         interval = setInterval(() => {
             getTokens()
         }, 2000)
@@ -67,7 +72,7 @@
           <th>Name</th>
           <th>Symbol</th>
         </tr>
-        {#if ($tokens.length)}
+        {#if !loading}
           {#each $tokens as token }
             <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
               <td>{token.name}</td>
@@ -77,7 +82,7 @@
         {/if}
 
       </table>
-      {#if !$tokens.length}
+      {#if loading}
         <SftLoader width="50"></SftLoader>
       {/if}
     </div>

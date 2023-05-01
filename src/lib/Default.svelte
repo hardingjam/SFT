@@ -105,6 +105,7 @@
         if (location === '') {
             navigateTo('#set-vault')
         }
+        await getTokens()
 
         // const grantRoleTx = await $vault.connect($ethersData.signer).grantRole(await $vault.connect($ethersData.signer).DEPOSITOR(), $account.trim());
         // await grantRoleTx.wait()

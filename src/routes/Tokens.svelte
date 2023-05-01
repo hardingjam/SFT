@@ -3,7 +3,7 @@
     import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import {navigateTo} from "yrv";
-    import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
+    import {AUDIT_HISTORY_DATA_QUERY, VAULTS_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
     import {onDestroy, onMount} from "svelte";
@@ -25,17 +25,7 @@
     });
 
     async function getTokens() {
-        let query = `
-        query {
-          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
-            deployer,
-            name,
-            address,
-            symbol
-          }
-        }`
-
-        getSubgraphData($activeNetwork, {}, query, 'offchainAssetReceiptVaults').then((res) => {
+        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, 'offchainAssetReceiptVaults').then((res) => {
             if ($activeNetwork) {
                 let temp = res.data.offchainAssetReceiptVaults
                 tokens.set(temp)

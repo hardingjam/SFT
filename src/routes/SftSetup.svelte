@@ -12,7 +12,7 @@
     import {
         ADDRESS_ZERO
     } from "../scripts/consts.js"
-    import {QUERY} from "../scripts/queries.js";
+    import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
     import {getEventArgs, getContract, getSubgraphData, showPrompt} from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
 
@@ -115,17 +115,7 @@
     }
 
     async function getTokens() {
-        let query = `
-        query {
-          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
-            deployer,
-            name,
-            address,
-            symbol
-          }
-        }`
-
-        getSubgraphData($activeNetwork, {}, query, 'offchainAssetReceiptVaults').then((res) => {
+        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, 'offchainAssetReceiptVaults').then((res) => {
             if ($activeNetwork) {
                 let temp = res.data.offchainAssetReceiptVaults
                 tokens.set(temp)

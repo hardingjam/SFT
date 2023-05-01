@@ -82,7 +82,7 @@ export async function fetchSubgraphData(activeNetwork, variables, query) {
 }
 
 export function getSubgraphData(activeNetwork, variables, query, param) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         async function fetchData() {
             return await fetchSubgraphData(activeNetwork, variables, query)
         }
@@ -382,7 +382,7 @@ export async function showPrompt(transaction, options) {
     }
 }
 
-export async function addMissingHashesToSubGraph(hashes, vault, signer){
+export async function addMissingHashesToSubGraph(hashes, vault, signer) {
     let schemaInformation = {}
 
     let encodedSchema = encodeCBOR(schemaInformation)
@@ -400,9 +400,9 @@ export async function addMissingHashesToSubGraph(hashes, vault, signer){
     }
 }
 
-export function mapOrder (array, order, key) {
+export function mapOrder(array, order, key) {
 
-    array.sort( function (a, b) {
+    array.sort(function (a, b) {
         let A = a[key], B = b[key];
 
         if (order.indexOf(A) > order.indexOf(B)) {

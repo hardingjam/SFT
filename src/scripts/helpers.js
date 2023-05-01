@@ -336,7 +336,7 @@ export function bytesToMeta(bytes, type) {
     } else throw new Error("invalid meta");
 }
 
-export async function showPromptSFTCreate(transaction, options) {
+export async function showPrompt(transaction, options) {
     //clear store
     transactionError.set(false)
     transactionSuccess.set(false)
@@ -380,7 +380,7 @@ export async function showPromptSFTCreate(transaction, options) {
             transactionInProgress.set(false)
         }
     }
-}export async function showPrompt(transaction) {
+}export async function showPromptSFTCreate(transaction) {
     //clear store
     transactionError.set(false)
     transactionSuccess.set(false)

@@ -108,7 +108,7 @@ button:focus, button:focus-visible {
     border: 1px solid #f11717;
 }
 
-.nav{
+.nav {
     align-items: center;
 }
 
@@ -117,7 +117,7 @@ button:focus, button:focus-visible {
     border-radius: 5px !important;
     box-shadow: 0 4px 4px #00000040;
     border: none !important;
-    padding: 0!important;
+    padding: 0 !important;
 }
 
 .dropdown-item {
@@ -249,7 +249,6 @@ button:focus, button:focus-visible {
 
 .success {
     color: #1EA51B;
-    font-weight: 700;
 }
 
 .w-100 {

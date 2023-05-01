@@ -12,7 +12,7 @@
 <div class="sft-setup-container">
   <label class="title f-weight-700"></label>
   <div class="success-container form-box">
-    <span class="success">Your SFT Setup was successful!</span>
+    <span class="success f-weight-700">Your SFT Setup was successful!</span>
     <img src="{icons.success_circle}" alt="sft success"/>
   </div>
   <div class="form-after">

@@ -136,9 +136,9 @@
       <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
                                                                                           bind:value={symbol}>
       </div>
+      <div class="success info-text">The ‘Super admin address’ will need to assign roles to manage this token</div>
     </div>
     <div class="form-after">
-      <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
       <div class="error">{error}</div>
       <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol}
               on:click={() => createToken()}>Create SFT
@@ -203,15 +203,14 @@
     }
 
     .info-text {
-        font-style: normal;
-        font-size: 12px;
+        font-size: 15px;
         line-height: 20px;
-        margin-top: 21px;
-        margin-bottom: 20px;
+        text-align: center;
     }
 
     .create-token {
         width: 413px;
+        margin-top: 20px;
     }
 
     .error {

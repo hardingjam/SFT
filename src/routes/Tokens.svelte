@@ -6,32 +6,14 @@
     import {AUDIT_HISTORY_DATA_QUERY, VAULTS_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
-    import {onDestroy, onMount} from "svelte";
+    import {onDestroy} from "svelte";
 
     let loading = false;
     let interval;
-    onMount(() => {
-        loading = true
-        setTimeout(() => {
-            loading = false;
-        }, 1500)
-        interval = setInterval(() => {
-            getTokens()
-        }, 2000)
-    })
 
     onDestroy(() => {
         clearInterval(interval);
     });
-
-    async function getTokens() {
-        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, 'offchainAssetReceiptVaults').then((res) => {
-            if ($activeNetwork) {
-                let temp = res.data.offchainAssetReceiptVaults
-                tokens.set(temp)
-            }
-        })
-    }
 
     async function handleTokenSelect(token) {
         let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
@@ -62,7 +44,7 @@
           <th>Name</th>
           <th>Symbol</th>
         </tr>
-        {#if !loading}
+        {#if $tokens.length}
           {#each $tokens as token }
             <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
               <td>{token.name}</td>
@@ -72,7 +54,7 @@
         {/if}
 
       </table>
-      {#if loading}
+      {#if !$tokens.length}
         <SftLoader width="50"></SftLoader>
       {/if}
     </div>

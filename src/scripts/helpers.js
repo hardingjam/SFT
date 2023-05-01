@@ -336,7 +336,7 @@ export function bytesToMeta(bytes, type) {
     } else throw new Error("invalid meta");
 }
 
-export async function showPrompt(transaction, options) {
+export async function showPromptSFTCreate(transaction, options) {
     //clear store
     transactionError.set(false)
     transactionSuccess.set(false)
@@ -378,6 +378,26 @@ export async function showPrompt(transaction, options) {
         if (wait.status === 1) {
             transactionSuccess.set(true)
             transactionInProgress.set(false)
+        }
+    }
+}export async function showPrompt(transaction) {
+    //clear store
+    transactionError.set(false)
+    transactionSuccess.set(false)
+    promptTopText.set("")
+    promptErrorText.set("Transaction failed")
+    promptSuccessText.set("Transaction successful!")
+    promptNoBottom.set(false)
+    promptBottomText.set("")
+    promptCloseAction.set(()=>{})
+    transactionHash.set("false")
+
+    //show prompt
+    transactionInProgressShow.set(true)
+    transactionInProgress.set(true)
+    if (transaction) {
+        if (transaction.hash) {
+            transactionHash.set(transaction.hash)
         }
     }
 }

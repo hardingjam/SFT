@@ -2,7 +2,7 @@
     import {
         activeNetwork,
         data, tokens,
-        transactionError,
+        transactionError, transactionInProgress,
         transactionSuccess,
         vault
     } from '../scripts/store.js';
@@ -13,7 +13,13 @@
         ADDRESS_ZERO
     } from "../scripts/consts.js"
     import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
-    import {getEventArgs, getContract, getSubgraphData, showPrompt} from "../scripts/helpers.js";
+    import {
+        getEventArgs,
+        getContract,
+        getSubgraphData,
+        getEvent,
+        showPromptSFTCreate
+    } from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
 
     let name = "";
@@ -62,13 +68,14 @@
                 constructionConfig
             )
 
-            await showPrompt(offChainAssetVaultTx)
+            await showPromptSFTCreate(offChainAssetVaultTx)
 
+            let eventArgs = await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)
             let contract;
             contract = new ethers.Contract(
                 ethers.utils.hexZeroPad(
                     ethers.utils.hexStripZeros(
-                        (await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)).child
+                        (eventArgs).child
                     ),
                     20
                 ),
@@ -76,28 +83,34 @@
                 signer.address
             );
 
-
-            name = null;
-            admin_ledger = null;
-            symbol = null;
-
-            console.log(
-                "vault deployed to:",
-                contract.address
-            );
+            console.log("vault deployed to:", contract.address);
 
             let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
-            vault.set(newVault)
-            localStorage.setItem('vaultAddress', $vault.address)
-            //wait for sg data
-            await getSgData(newVault.address)
-            await getTokens()
 
-            navigateTo("#sft-create-success", {replace: false});
+            let createChildEvent = await getEvent(offChainAssetVaultTx, "OffchainAssetReceiptVaultInitialized", newVault)
+            let deployBlockNumber = createChildEvent.blockNumber
+
+            let wait = await offChainAssetVaultTx.wait()
+            if (wait.status === 1) {
+                let interval = setInterval(async () => {
+                    await getTokens()
+                    if (deployBlockNumber.toString() === $tokens[0].deployBlock) {
+                        transactionSuccess.set(true)
+                        transactionInProgress.set(false)
+                        clearInterval(interval)
+                        vault.set(newVault)
+                        localStorage.setItem('vaultAddress', $vault.address)
+                        //wait for sg data
+                        await getSgData(newVault.address)
+                        navigateTo("#sft-create-success", {replace: false});
+                    }
+                }, 2000)
+            } else {
+                transactionError.set(true)
+            }
+
         } catch (er) {
-            transactionError.set(true)
-            console.log(er)
-            console.log(er.message)
+            console.log(er.message || er.message)
         }
         loading = false
     }

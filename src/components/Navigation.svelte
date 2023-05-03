@@ -1,19 +1,13 @@
 <script>
     import {
         Collapse,
-        Navbar,
-        NavbarToggler,
-        NavbarBrand,
         Nav,
-        NavItem,
-        NavLink,
         Dropdown,
         DropdownToggle,
         DropdownMenu,
         DropdownItem
     } from 'sveltestrap';
 
-    import {Styles} from 'sveltestrap';
     import {account, activeNetwork} from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
@@ -120,11 +114,6 @@
         });
     }
 
-    // function handleAccountOptionClick(option) {
-    //     dispatch('accountOptionSelect', {
-    //         selected: option
-    //     });
-    // }
 </script>
 
 <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>

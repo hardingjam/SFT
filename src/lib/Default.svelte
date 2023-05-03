@@ -33,6 +33,7 @@
     import Navigation from "../components/Navigation.svelte";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
+    import {VAULTS_QUERY} from "../scripts/queries.js";
 
     let connectedAccount;
     let tokenName = '';
@@ -216,17 +217,7 @@
     }
 
     async function getTokens() {
-        let query = `
-        query {
-          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
-            deployer,
-            name,
-            address,
-            symbol
-          }
-        }`
-
-        getSubgraphData($activeNetwork, {}, query, 'offchainAssetReceiptVaults').then((res) => {
+        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, 'offchainAssetReceiptVaults').then((res) => {
             if ($activeNetwork) {
                 let temp = res.data.offchainAssetReceiptVaults
                 tokens.set(temp)

@@ -1,6 +1,6 @@
 <script>
     import {activeNetwork, auditHistory, ethersData, tokens, vault} from "../scripts/store.js";
-    import {getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {formatAddress, getContract, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import {navigateTo} from "yrv";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
@@ -43,12 +43,16 @@
         <tr class="f-weight-700">
           <th>Name</th>
           <th>Symbol</th>
+          <th>Deployer</th>
+          <th>Date created</th>
         </tr>
         {#if $tokens.length}
           {#each $tokens as token }
             <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
               <td>{token.name}</td>
               <td>{token.symbol}</td>
+              <td>{formatAddress(token.deployer)}</td>
+              <td>{timeStampToDate(token.deployTimestamp)}</td>
             </tr>
           {/each}
         {/if}

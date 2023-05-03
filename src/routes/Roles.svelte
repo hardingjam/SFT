@@ -122,8 +122,8 @@
 
     <div slot="address">
   <span>Token address: <a href={`${$activeNetwork.blockExplorer}/address/${$vault.address}`}
-                      class="contract-address underline"
-                      target="_blank">{$vault.address}</a></span>
+                          class="contract-address underline"
+                          target="_blank">{$vault.address}</a></span>
     </div>
 
     <div slot="header-buttons">

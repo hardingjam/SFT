@@ -328,7 +328,6 @@ button:focus, button:focus-visible {
 }
 
 a {
-    text-decoration: none!important;
     color: inherit!important;
 }
 

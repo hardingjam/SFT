@@ -13,7 +13,8 @@ export const QUERY = `
                       account{
                         address
                       }
-                    }
+                    },
+                    roleHash
                 },
                 roleRevokes{
                     role{
@@ -66,34 +67,6 @@ export const AUDIT_HISTORY_DATA_QUERY = `
         }
     `
 
-export const DEPOSITS_QUERY = `
-          query($id: ID!) {
-           account(id: $id)
-           {
-              id,
-              offchainAssetReceiptVault
-              {
-                name
-                deposits
-                {
-                  id,
-                  timestamp,
-                  amount,
-                  receipt
-                  {
-                    id,
-                    shares,
-                    receiptId,
-                    balances {
-                      value,
-                      valueExact
-                    }
-                  },
-                }
-              }
-           }
-        }
-         `
 
 export const RECEIPTS_QUERY = `
           query($id: ID!) {
@@ -134,6 +107,15 @@ export const RECEIPT_INFORMATION_QUERY = `
             }
           }
          `
+export const RECEIPT_VAULT_INFORMATION_QUERY = `
+          query {
+             receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
+               transaction {
+                 blockNumber
+               }
+            }
+          }
+         `
 export const VAULT_INFORMATION_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
@@ -146,3 +128,30 @@ export const VAULT_INFORMATION_QUERY = `
             }
           }
          `
+
+export const VAULTS_QUERY = `
+        query {
+          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
+            deployer,
+            name,
+            address,
+            symbol,
+            deployBlock
+          }
+        }`
+
+export const DEPOSITS_QUERY = `
+          query($id: ID!) {
+            offchainAssetReceiptVault(id: $id) {
+              deposits {
+                amount
+                receipt {
+                  receiptInformations {
+                    schema
+                  }
+                }
+              }
+            }
+          }
+         `
+

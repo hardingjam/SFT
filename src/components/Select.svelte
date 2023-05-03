@@ -1,5 +1,5 @@
 <script>
-    import {createEventDispatcher, onMount} from 'svelte';
+    import {createEventDispatcher} from 'svelte';
     import {icons} from "../scripts/assets.js";
     import Dropdown from 'sv-bootstrap-dropdown';
 
@@ -83,6 +83,30 @@
         margin-left: 17px;
     }
 
+    .select-label {
+        margin-left: 10px;
+        width: calc(100% - 15px);
+    }
+
+    .nav-dropdown .dropdown-item {
+        font-weight: 700 !important;
+        font-size: 18px !important;
+        line-height: 30px !important;
+        padding: 0 50px 0 13px !important;
+        background: transparent;
+        color: #FFFFFF;
+        height: 39px;
+    }
+
+    .nav-dropdown .dropdown-item:focus,
+    .nav-dropdown .dropdown-item:hover {
+        text-decoration: none;
+        color: #FFFFFF;
+        background: #d9d9d98c !important;
+    }
+
+    /*important styles for select*/
+
     .dropdown-toggle::after {
         display: inline-block;
         content: '';
@@ -117,37 +141,6 @@
         max-width: 250px;
         overflow-x: hidden;
     }
-
-    .select-label {
-        margin-left: 10px;
-        width: calc(100% - 15px);
-    }
-
-
-    .nav-dropdown {
-        background-color: #2c2c5454 !important;
-        border-radius: 0 0 5px 5px !important;
-        box-shadow: 0 4px 4px #00000040;
-        border: none !important;
-    }
-
-    .nav-dropdown .dropdown-item {
-        font-weight: 700 !important;
-        font-size: 18px !important;
-        line-height: 30px !important;
-        padding: 0 50px 0 13px !important;
-        background: transparent;
-        color: #FFFFFF;
-        height: 39px;
-    }
-
-    .nav-dropdown .dropdown-item:focus,
-    .nav-dropdown .dropdown-item:hover {
-        text-decoration: none;
-        color: #FFFFFF;
-        background: #d9d9d98c !important;
-    }
-
 
     .dropdown-item {
         color: #000000;

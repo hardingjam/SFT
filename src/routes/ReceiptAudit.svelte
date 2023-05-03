@@ -145,10 +145,4 @@
     a:hover {
         text-decoration: underline;
     }
-
-    /*.loader {*/
-    /*    display: flex;*/
-    /*    justify-content: center;*/
-    /*}*/
-
 </style>

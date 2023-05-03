@@ -36,7 +36,6 @@
                 return role;
             });
             roles.set([...newRoles])
-            // transactionInProgress.set(false)
         } catch (err) {
             transactionError.set(true)
             console.log(err)
@@ -72,6 +71,10 @@
     .role-container {
         text-align: left;
         margin-bottom: 25px;
+    }
+
+    .role {
+        min-width: 150px;
     }
 
 

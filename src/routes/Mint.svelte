@@ -9,7 +9,7 @@
         activeNetwork,
         schemas,
         schemaError,
-        transactionError,
+        transactionError
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";

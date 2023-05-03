@@ -89,7 +89,7 @@
                 );
                 const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
                 let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
-                await showPromptSFTCreate(transaction, {closeAction: goToAssetClassList})
+                await showPromptSFTCreate(transaction)
 
                 let wait = await transaction.wait()
                 if (wait.status === 1) {
@@ -100,6 +100,7 @@
                             if (wait.blockNumber.toString() === assetClassesResp[0].transaction.blockNumber) {
                                 await getDeposits()
                                 getSchemas().then(() => {
+                                    goToAssetClassList()
                                     transactionSuccess.set(true)
                                     transactionInProgress.set(false)
                                     clearInterval(interval)
@@ -232,10 +233,10 @@
         labelError = ""
     }
 
-    function goToAssetClassList(event) {
-        if ($transactionSuccess && event.detail.close) {
+    function goToAssetClassList() {
+        // if ($transactionSuccess && event.detail.close) {
             navigateTo("#asset-classes", {replace: false});
-        }
+        // }
     }
 
     async function getSchemas() {

@@ -141,9 +141,9 @@
     }
 
     table th {
-        top: 0;
-        position: sticky;
-        z-index: 20;
+        /*top: 0;*/
+        /*position: sticky;*/
+        /*z-index: 20;*/
     }
 
 </style>

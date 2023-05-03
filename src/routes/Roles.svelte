@@ -12,14 +12,15 @@
         filterArray,
         getSubgraphData,
         accessControlError,
-        toSentenceCase, showPrompt
+        toSentenceCase, showPrompt, mapOrder
     } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
     import {QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
     import {ROLES} from "../scripts/consts.js";
-      import {ethers} from "ethers";
+    import {ethers} from "ethers";
+    import {onMount} from "svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let account = '';
@@ -34,7 +35,11 @@
         executorRoles = $roles.length ? $roles.filter(r => !r.roleName?.includes('_ADMIN')) : []
     }
 
-    $: $vault && $vault.address && getData();
+    onMount(() => {
+        getSgData($vault.address)
+    })
+
+    $: ($vault && $vault.address) && getData();
     $: account && validateAccount();
 
     function validateAccount() {
@@ -92,13 +97,18 @@
             loading = true
             if (res && res.data) {
                 data.set(res.data)
-                roles.set(res.data.offchainAssetReceiptVault?.roles || [])
+                roles.set(res.data.offchainAssetReceiptVault?.roles?.length ? res.data.offchainAssetReceiptVault?.roles : ROLES)
                 let rolesFiltered = $roles.map(role => {
                     let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
                     let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
                     let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
-                    return {roleName: role.roleName, roleHolders: filtered}
+                    return {roleName: role.roleName, roleHolders: filtered, roleHash: role.roleHash}
                 })
+
+                //Order roles from subgraph as in contract
+                let rolesOrder = ROLES.map(r => r.roleHash)
+                rolesFiltered = mapOrder(rolesFiltered, rolesOrder, 'roleHash')
+
                 roles.set(rolesFiltered)
                 executorRoles = $roles ? $roles.filter(r => !r.roleName?.includes('_ADMIN')) : []
                 loading = false

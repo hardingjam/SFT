@@ -26,7 +26,6 @@
     "cbor-web": "^8.1.0",
     "ethers": "^5.6.9",
     "jquery": "^3.6.1",
-    "json-format-highlight": "^1.0.4",
     "lodash-es": "^4.17.21",
     "pako": "^2.1.0",
     "prettier": "^2.8.5",

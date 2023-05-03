@@ -9,11 +9,7 @@
         activeNetwork,
         schemas,
         schemaError,
-        transactionError,
-        transactionSuccess,
-        transactionHash,
-        transactionInProgressShow,
-        transactionInProgress
+        transactionError
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -24,8 +20,6 @@
         IPFS_APIS,
         MAGIC_NUMBERS,
         ONE,
-        TRANSACTION_IN_PROGRESS_TEXT,
-        VIEW_ON_EXPLORER_TEXT
     } from "../scripts/consts.js";
     import SchemaForm from "../components/SchemaForm.svelte"
     import {

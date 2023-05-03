@@ -121,7 +121,7 @@
     </div>
 
     <div slot="content">
-      <span class="warning">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
+      <span class="warning error">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
       <div class="roles">
         <div class="grant-role-txt f-weight-700">Grant a role</div>
         <div class="error">{error}</div>
@@ -195,7 +195,6 @@
 
     .warning {
         font-style: normal;
-        color: #000000;
         font-weight: 400;
         font-size: 12px;
         line-height: 20px;

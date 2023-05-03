@@ -1,5 +1,4 @@
 <script>
-    import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {
         activeNetwork, deposits,
@@ -42,21 +41,6 @@
     let invalidJson = ""
     let labelError = ""
     let tempSchema = []
-
-    let colors = {
-        keyColor: 'black',
-        numberColor: 'blue',
-        stringColor: '#0B7500',
-        trueColor: '#00cc00',
-        falseColor: '#ff8080',
-        nullColor: 'cornflowerblue'
-    };
-
-    function update(text) {
-        document.getElementById("highlighting-content").innerHTML = formatHighlight(text, colors)
-        document.getElementById("editing").style.display = "none"
-        document.getElementById("highlighting").style.display = "block"
-    }
 
     async function deploySchema() {
         error = ""
@@ -369,10 +353,6 @@
         margin: 10px 0;
         position: relative;
         border-radius: 5px 5px 0 0
-    }
-
-    #highlighting {
-        display: none;
     }
 
     .schema-container {

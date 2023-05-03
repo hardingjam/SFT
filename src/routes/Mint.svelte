@@ -343,7 +343,7 @@
               {#if $fileHash}
                 <div class="file-uploaded">
                   <span class="file-load-success">Pie Certificate loaded successfully</span>
-                  <div class="link-to-file">
+                  <div class="link-to-file underline">
                     <span>To Link</span>
                     <a href={certificateUrl} target="_blank">
                       <img src="{icons.show}" alt="view file" class="btn-hover">

@@ -132,9 +132,9 @@
         <div class="receipt-row">
 
           {#if fileUploadProperties.includes(info.label)}
-            <span>{info.label}
+            <span class="underline btn-hover">
               <a href={`${IPFS_GETWAY}${info.value}`} target="_blank">
-                    <img src="{icons.show}" alt="view file" class="btn-hover">
+                    {info.label} <img src="{icons.show}" alt="view file">
               </a>
             </span>
           {/if}

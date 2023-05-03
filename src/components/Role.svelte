@@ -55,9 +55,10 @@
       {#if roleHolders?.length}
         {#each roleHolders as roleHolder}
           <div>
-            {formatAddress(roleHolder.account.address)}
-            <img class="btn-hover action-icon" src={icons.show} alt="show"
-                 on:click={()=>showAddress(roleHolder.account.address)}/>
+            <span class="underline btn-hover" on:click={()=>showAddress(roleHolder.account.address)}>
+                          {formatAddress(roleHolder.account.address)}
+              <img class="action-icon" src={icons.show} alt="show"/>
+            </span>
             <img class="btn-hover action-icon" src={icons.delete_icon}
                  on:click={()=>revokeRole(name,roleHolder.account.address)}
                  alt="delete"/>

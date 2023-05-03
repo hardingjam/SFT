@@ -327,6 +327,11 @@ button:focus, button:focus-visible {
     text-decoration: underline;
 }
 
+a {
+    text-decoration: none!important;
+    color: inherit!important;
+}
+
 
 @media (prefers-color-scheme: light) {
 

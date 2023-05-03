@@ -9,22 +9,20 @@
         vault
     } from "../scripts/store.js";
     import {
-        cborDecode,
         cborEncode,
-        encodeCBOR,
+        encodeCBOR, getSchemas,
         getSubgraphData,
         showPrompt,
         showPromptSFTCreate
     } from "../scripts/helpers.js";
-    import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from "../scripts/consts.js";
+    import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
     import {JSONEditor} from "svelte-jsoneditor";
     import {navigateTo} from "yrv";
     import {validator} from "@exodus/schemasafe";
     import {nullOptionalsAllowed} from '../plugins/@restspace/svelte-schema-form/utilities';
-    import {DEPOSITS_QUERY, RECEIPT_VAULT_INFORMATION_QUERY, VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
-    import {ethers} from "ethers";
+    import {DEPOSITS_QUERY, RECEIPT_VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
 
 
     let label = ""
@@ -40,7 +38,6 @@
     let schemaInformation = {};
     let invalidJson = ""
     let labelError = ""
-    let tempSchema = []
 
     async function deploySchema() {
         error = ""
@@ -83,14 +80,12 @@
                         if (assetClassesResp && assetClassesResp.length) {
                             if (wait.blockNumber.toString() === assetClassesResp[0].transaction.blockNumber) {
                                 await getDeposits()
-                                getSchemas().then(() => {
-                                    goToAssetClassList()
-                                    transactionSuccess.set(true)
-                                    transactionInProgress.set(false)
-                                    clearInterval(interval)
-                                }).catch((reason) => {
-                                    console.log(reason)
-                                })
+                                schemas.set(await getSchemas($activeNetwork, $vault, $deposits))
+
+                                goToAssetClassList()
+                                transactionSuccess.set(true)
+                                transactionInProgress.set(false)
+                                clearInterval(interval)
                             }
                         }
                     }, 2000)
@@ -218,58 +213,8 @@
     }
 
     function goToAssetClassList() {
-        // if ($transactionSuccess && event.detail.close) {
-            navigateTo("#asset-classes", {replace: false});
-        // }
+        navigateTo("#asset-classes", {replace: false});
     }
-
-    async function getSchemas() {
-        let variables = {id: $vault.address.toLowerCase()}
-        if ($vault.address) {
-            try {
-                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
-                let receiptVaultInformations = []
-
-                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
-                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
-
-                    if (receiptVaultInformations.length) {
-
-                        receiptVaultInformations.map(async data => {
-                            let cborDecodedInformation = cborDecode(data.information.slice(18))
-                            let schemaHash = cborDecodedInformation[1].get(0)
-                            let url = `${IPFS_GETWAY}${schemaHash}`
-                            let assetCount = getAssetCount(schemaHash)
-
-                            try {
-                                if (url) {
-                                    let res = await axios.get(url)
-                                    if (res) {
-                                        tempSchema = [...tempSchema, {
-                                            ...res.data,
-                                            timestamp: data.timestamp,
-                                            id: data.id,
-                                            hash: schemaHash,
-                                            assetCount,
-                                        }]
-                                        tempSchema = tempSchema.filter(d => d.displayName)
-                                        // tempSchema = tempSchema.sort('timestamp')
-                                        schemas.set(tempSchema)
-                                    }
-                                }
-                            } catch (err) {
-                                console.log(err)
-                            }
-                        })
-                    }
-                }
-
-            } catch (err) {
-                console.log(err)
-            }
-        }
-    }
-
 
     async function getDeposits() {
         let variables = {id: $vault.address.toLowerCase()}
@@ -277,16 +222,6 @@
         getSubgraphData($activeNetwork, variables, DEPOSITS_QUERY, 'offchainAssetReceiptVault').then((res) => {
             deposits.set(res.data.offchainAssetReceiptVault.deposits)
         })
-    }
-
-    function getAssetCount(hash) {
-        let depositsWithSchema = $deposits.filter(d => d.receipt.receiptInformations[0]?.schema === hash)
-        let depositAmounts = depositsWithSchema.map(d => d.amount);
-        let assetCount = depositAmounts.reduce(
-            (accumulator, currentValue) => ethers.BigNumber.from(accumulator).add(ethers.BigNumber.from(currentValue)),
-            0
-        );
-        return ethers.utils.formatUnits(assetCount, 18)
     }
 
 </script>

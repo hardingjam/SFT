@@ -3,12 +3,9 @@
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
     import {activeNetwork, schemas, vault, deposits} from "../scripts/store.js";
-    import {cborDecode, getSubgraphData, timeStampToDate} from "../scripts/helpers";
-    import {DEPOSITS_QUERY, VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
-    import axios from "axios";
+    import {getSchemas, getSubgraphData, timeStampToDate} from "../scripts/helpers";
+    import {DEPOSITS_QUERY} from "../scripts/queries.js";
     import {onMount} from "svelte";
-    import {ethers} from "ethers";
-    import {IPFS_GETWAY} from "../scripts/consts.js";
 
     let ipfsLoading = false;
 
@@ -16,63 +13,12 @@
         console.log(schema)
     }
 
-    onMount(() => {
+    onMount(async () => {
         if (!$schemas.length) {
-            ipfsLoading = true
-            getDeposits()
-            getSchemas()
+            await getDeposits()
+            schemas.set(await getSchemas($activeNetwork, $vault, $deposits))
         }
     })
-
-    async function getSchemas() {
-        let tempSchema = []
-
-        let variables = {id: $vault.address.toLowerCase()}
-        if ($vault.address) {
-            try {
-                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
-                let receiptVaultInformations = []
-
-                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
-                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
-
-                    if (receiptVaultInformations.length) {
-
-                        receiptVaultInformations.map(async data => {
-                            let cborDecodedInformation = cborDecode(data.information.slice(18))
-                            let schemaHash = cborDecodedInformation[1].get(0)
-                            let url = `${IPFS_GETWAY}${schemaHash}`
-                            let assetCount = getAssetCount(schemaHash)
-
-                            try {
-                                if (url) {
-                                    let res = await axios.get(url)
-                                    if (res) {
-                                        tempSchema = [...tempSchema, {
-                                            ...res.data,
-                                            timestamp: data.timestamp,
-                                            id: data.id,
-                                            hash: schemaHash,
-                                            assetCount,
-                                        }]
-                                        tempSchema = tempSchema.filter(d => d.displayName)
-                                        schemas.set(tempSchema)
-                                        ipfsLoading = false;
-                                    }
-                                }
-                            } catch (err) {
-                                console.log(err)
-                            }
-                        })
-                    }
-                }
-
-            } catch (err) {
-                console.log(err)
-            }
-        }
-    }
-
 
     async function getDeposits() {
         let variables = {id: $vault.address.toLowerCase()}
@@ -82,15 +28,7 @@
         })
     }
 
-    function getAssetCount(hash) {
-        let depositsWithSchema = $deposits.filter(d => d.receipt.receiptInformations[0]?.schema === hash)
-        let depositAmounts = depositsWithSchema.map(d => d.amount);
-        let assetCount = depositAmounts.reduce(
-            (accumulator, currentValue) => ethers.BigNumber.from(accumulator).add(ethers.BigNumber.from(currentValue)),
-            0
-        );
-        return ethers.utils.formatUnits(assetCount, 18)
-    }
+
 </script>
 
 <DefaultFrame header="Asset class list">

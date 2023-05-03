@@ -50,7 +50,6 @@
 
     router.subscribe(async e => {
         if (!e.initial) {
-            await setVault()
             location = e.path
             selectedTab = location.slice(1) || 'mint'
             if (location === "#list" && $tokens.length) {
@@ -80,6 +79,7 @@
 
     onMount(async () => {
         await getEthersData()
+        await setVault()
 
         if (isMetamaskInstalled) {
             await setNetwork()

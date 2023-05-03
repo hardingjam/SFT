@@ -136,7 +136,7 @@
       <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
                                                                                                  bind:value={admin_ledger}>
       </div>
-      <div class="success info-text">The ‘super admin address’ will need to assign roles to manage this token</div>
+      <div class="success info-text">The ‘super admin address’ will need to assign roles to manage this token.</div>
     </div>
     <div class="form-after">
       <div class="error">{error}</div>

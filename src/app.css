@@ -323,6 +323,10 @@ button:focus, button:focus-visible {
     display: block;
 }
 
+.underline {
+    text-decoration: underline;
+}
+
 
 @media (prefers-color-scheme: light) {
 

@@ -72,7 +72,8 @@
       <SftLoader></SftLoader>
     {/if}
     {#if !noBottomText}
-      <div class="bottom-text" on:click={()=>viewInExplorer(transactionHash)}>{bottomText || VIEW_ON_EXPLORER_TEXT}&nbsp; &nbsp;
+      <div class="bottom-text underline"
+           on:click={()=>viewInExplorer(transactionHash)}>{bottomText || VIEW_ON_EXPLORER_TEXT}&nbsp; &nbsp;
         <span class="icon">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path

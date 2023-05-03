@@ -3,10 +3,17 @@
     import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import {navigateTo} from "yrv";
-    import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
+    import {AUDIT_HISTORY_DATA_QUERY, VAULTS_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
+    import {onDestroy} from "svelte";
 
+    let loading = false;
+    let interval;
+
+    onDestroy(() => {
+        clearInterval(interval);
+    });
 
     async function handleTokenSelect(token) {
         let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
@@ -37,7 +44,7 @@
           <th>Name</th>
           <th>Symbol</th>
         </tr>
-        {#if ($tokens.length)}
+        {#if $tokens.length}
           {#each $tokens as token }
             <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
               <td>{token.name}</td>

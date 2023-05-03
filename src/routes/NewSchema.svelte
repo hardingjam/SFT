@@ -1,23 +1,28 @@
 <script>
-    import formatHighlight from 'json-format-highlight'
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {
-        ethersData,
+        activeNetwork, deposits,
+        ethersData, schemas,
         transactionError,
-        transactionHash,
         transactionInProgress, transactionInProgressShow, transactionSuccess,
         uploadBtnLoading,
         vault
     } from "../scripts/store.js";
-    import {cborEncode, encodeCBOR, showPrompt} from "../scripts/helpers.js";
-    import {IPFS_APIS, MAGIC_NUMBERS, TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
+    import {
+        cborEncode,
+        encodeCBOR, getSchemas,
+        getSubgraphData,
+        showPrompt,
+        showPromptSFTCreate
+    } from "../scripts/helpers.js";
+    import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
     import {JSONEditor} from "svelte-jsoneditor";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import {navigateTo} from "yrv";
     import {validator} from "@exodus/schemasafe";
     import {nullOptionalsAllowed} from '../plugins/@restspace/svelte-schema-form/utilities';
+    import {DEPOSITS_QUERY, RECEIPT_VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
 
 
     let label = ""
@@ -33,21 +38,6 @@
     let schemaInformation = {};
     let invalidJson = ""
     let labelError = ""
-
-    let colors = {
-        keyColor: 'black',
-        numberColor: 'blue',
-        stringColor: '#0B7500',
-        trueColor: '#00cc00',
-        falseColor: '#ff8080',
-        nullColor: 'cornflowerblue'
-    };
-
-    function update(text) {
-        document.getElementById("highlighting-content").innerHTML = formatHighlight(text, colors)
-        document.getElementById("editing").style.display = "none"
-        document.getElementById("highlighting").style.display = "block"
-    }
 
     async function deploySchema() {
         error = ""
@@ -80,7 +70,28 @@
                 );
                 const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
                 let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
-                await showPrompt(transaction, {closeAction: goToAssetClassList})
+                await showPromptSFTCreate(transaction)
+
+                let wait = await transaction.wait()
+                if (wait.status === 1) {
+                    let interval = setInterval(async () => {
+                        let assetClassesResp = await getSubgraphData($activeNetwork, {}, RECEIPT_VAULT_INFORMATION_QUERY, 'receiptVaultInformations')
+                        assetClassesResp = assetClassesResp?.data?.receiptVaultInformations
+                        if (assetClassesResp && assetClassesResp.length) {
+                            if (wait.blockNumber.toString() === assetClassesResp[0].transaction.blockNumber) {
+                                await getDeposits()
+                                schemas.set(await getSchemas($activeNetwork, $vault, $deposits))
+
+                                goToAssetClassList()
+                                transactionSuccess.set(true)
+                                transactionInProgress.set(false)
+                                clearInterval(interval)
+                            }
+                        }
+                    }, 2000)
+                } else {
+                    transactionError.set(true)
+                }
 
             } catch (err) {
                 transactionError.set(true)
@@ -125,7 +136,7 @@
                 },
                 data: formData,
                 onUploadProgress: (async (p) => {
-                    await showPrompt(null,{topText: "Uploading to IPFS, please wait", noBottomText:true})
+                    await showPrompt(null, {topText: "Uploading to IPFS, please wait", noBottomText: true})
                     console.log(`Uploading...  ${p.loaded} / ${p.total}`);
                 }),
                 withCredentials: true,
@@ -190,20 +201,27 @@
                     allowUnusedKeywords: true
                 });
             } catch (er) {
-                if(!invalidJson){
+                if (!invalidJson) {
                     error = "Form cannot be generated from schema"
                 }
             }
         }
     }
+
     function clearLabelError() {
         labelError = ""
     }
 
-    function goToAssetClassList(event) {
-        if ($transactionSuccess && event.detail.close) {
-            navigateTo("#asset-classes", {replace: false});
-        }
+    function goToAssetClassList() {
+        navigateTo("#asset-classes", {replace: false});
+    }
+
+    async function getDeposits() {
+        let variables = {id: $vault.address.toLowerCase()}
+
+        getSubgraphData($activeNetwork, variables, DEPOSITS_QUERY, 'offchainAssetReceiptVault').then((res) => {
+            deposits.set(res.data.offchainAssetReceiptVault.deposits)
+        })
     }
 
 </script>
@@ -215,19 +233,20 @@
         <input class="label-input" bind:value={label}/>
       </div>
       <div class="label">
-<!--        <div class="info-icon">-->
-<!--          <a href="" target="_blank">-->
-<!--          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-<!--            <path d="M9 10C9 9.40666 9.17595 8.82664 9.50559 8.33329C9.83524 7.83994 10.3038 7.45543 10.852 7.22836C11.4001 7.0013 12.0033 6.94189 12.5853 7.05765C13.1672 7.1734 13.7018 7.45912 14.1213 7.87868C14.5409 8.29824 14.8266 8.83279 14.9424 9.41473C15.0581 9.99667 14.9987 10.5999 14.7716 11.1481C14.5446 11.6962 14.1601 12.1648 13.6667 12.4944C13.1734 12.8241 12.5933 13 12 13V14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#AE6E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>-->
-<!--            <circle cx="12" cy="17" r="1" fill="#AE6E00"/>-->
-<!--          </svg></a>-->
-<!--        </div>-->
+        <!--        <div class="info-icon">-->
+        <!--          <a href="" target="_blank">-->
+        <!--          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+        <!--            <path d="M9 10C9 9.40666 9.17595 8.82664 9.50559 8.33329C9.83524 7.83994 10.3038 7.45543 10.852 7.22836C11.4001 7.0013 12.0033 6.94189 12.5853 7.05765C13.1672 7.1734 13.7018 7.45912 14.1213 7.87868C14.5409 8.29824 14.8266 8.83279 14.9424 9.41473C15.0581 9.99667 14.9987 10.5999 14.7716 11.1481C14.5446 11.6962 14.1601 12.1648 13.6667 12.4944C13.1734 12.8241 12.5933 13 12 13V14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#AE6E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>-->
+        <!--            <circle cx="12" cy="17" r="1" fill="#AE6E00"/>-->
+        <!--          </svg></a>-->
+        <!--        </div>-->
         <span class="f-weight-700">Schema:</span>
       </div>
       <div class="schema">
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
-      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}} disabled={!content.text || error || invalidJson || labelError}>
+      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}
+              disabled={!content.text || error || invalidJson || labelError}>
         Create new asset class
       </button>
       <div class="error">{error || labelError}</div>
@@ -271,10 +290,6 @@
         border-radius: 5px 5px 0 0
     }
 
-    #highlighting {
-        display: none;
-    }
-
     .schema-container {
         display: flex;
         flex-direction: column;
@@ -308,7 +323,7 @@
         align-items: center;
     }
 
-    .info-icon{
+    .info-icon {
         margin-left: -35px;
         margin-right: 10px;
         cursor: pointer;

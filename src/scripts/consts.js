@@ -23,10 +23,9 @@ export const ROLES = [
     {roleName: "CONFISCATOR_ADMIN", hash: "0xc23bede8eabca44a15d0193051ac5429f3d014a7e297a4e78f67d06657d14269", roleHolders:[]}
 ]
 export const IPFS_APIS = [
-    "https://gildlab-ipfs-0.in.ngrok.io/api/v0/add?pin=true&to-files=", //Vishal
+    "https://vb1.gildlab.xyz/api/v0/add?pin=true&to-files=", //Vishal
     "https://db1.gildlab.xyz/api/v0/add?pin=true&to-files=", //David A Box1
     "https://ipfs.dragonflysun.ge/api/v0/add?pin=true&to-files=", //Nino
-    "https://gildlab-ipfs-5.eu.ngrok.io/api/v0/add?pin=true&to-files=", //David A Box2
 ]
 export const IPFS_GETWAY = "https://ipfs.io/ipfs/"
 export const MAGIC_NUMBERS = {

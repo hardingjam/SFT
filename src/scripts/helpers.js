@@ -381,3 +381,21 @@ export async function showPrompt(transaction, options) {
         }
     }
 }
+
+export async function addMissingHashesToSubGraph(hashes, vault, signer){
+    let schemaInformation = {}
+
+    let encodedSchema = encodeCBOR(schemaInformation)
+
+    try {
+        let encodedHashList = cborEncode(
+            hashes.toString(),
+            MAGIC_NUMBERS.OA_HASH_LIST
+        );
+        const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
+        await vault.connect(signer).receiptVaultInformation(arrayify(meta))
+
+    } catch (err) {
+        console.log(err)
+    }
+}

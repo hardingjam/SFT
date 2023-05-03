@@ -15,7 +15,7 @@
 
 
     function showAddress(account) {
-        window.open(`${$activeNetwork.blockExplorer}address/${account}`);
+        window.open(`${$activeNetwork.blockExplorer}/address/${account}`);
     }
 
 

@@ -110,7 +110,7 @@
         navigateTo(`#receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
     }
 </script>
-<DefaultFrame header="Audit history" backBtn={false}>
+<DefaultFrame header="Audit history">
   <div slot="header-buttons" class="display-flex">
     <button class="header-btn btn-hover" on:click={()=>{navigateTo("#members")}}>Members</button>
     <button class="header-btn btn-hover" on:click={()=>{navigateTo("#roles")}}>Roles</button>

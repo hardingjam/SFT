@@ -65,6 +65,13 @@
                 navigateTo('#audit-history', {replace: false})
             }
         },
+        {
+            id: "ipfs",
+            displayName: "IPFS login",
+            action: () => {
+                navigateTo('#ipfs', {replace: false})
+            }
+        },
         // {
         //     id: "new-schema",
         //     displayName: "New Schema",
@@ -94,7 +101,7 @@
             id: "view",
             displayName: "View on explorer",
             action: () => {
-                window.open(`${$activeNetwork.blockExplorer}address/${$account}`);
+                window.open(`${$activeNetwork.blockExplorer}/address/${$account}`);
             },
         }
     ]

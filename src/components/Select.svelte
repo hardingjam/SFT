@@ -137,9 +137,9 @@
         height: auto;
         overflow: auto;
         background-color: #ececec;
-        padding-right: 50px;
         min-width: 230px;
         max-width: 250px;
+        overflow-x: hidden;
     }
 
     .dropdown-item {

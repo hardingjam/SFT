@@ -39,12 +39,12 @@
 <DefaultFrame header="SFT list">
   <div slot="content">
     <div class="tokens">
-      <table class="w-100">
+      <table>
         <tr class="f-weight-700">
-          <th>Name</th>
-          <th>Symbol</th>
-          <th>Deployer</th>
-          <th>Date created</th>
+          <th style="width: 25%">Name</th>
+          <th style="width: 25%">Symbol</th>
+          <th style="width: 25%">Deployer</th>
+          <th style="width: 25%">Date created</th>
         </tr>
         {#if $tokens.length}
           {#each $tokens as token }
@@ -71,7 +71,7 @@
         min-height: 200px;
         text-align: left;
         width: 100%;
-        min-width: 435px;
+        min-width: 550px;
         justify-content: space-between;
         line-height: 27px;
     }

@@ -143,8 +143,11 @@ export const VAULTS_QUERY = `
 export const DEPOSITS_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
-              deposits {
+              deposits(orderBy: timestamp, orderDirection: desc) {
                 amount
+                transaction {
+                 blockNumber
+                }
                 receipt {
                   receiptInformations {
                     schema

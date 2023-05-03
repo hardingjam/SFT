@@ -9,7 +9,7 @@
         activeNetwork,
         schemas,
         schemaError,
-        transactionError
+        transactionError, transactionSuccess, transactionInProgress, auditHistory
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -28,12 +28,16 @@
         encodeCBORStructure,
         getIpfsGetWay,
         getSubgraphData,
-        hasRole, showPrompt,
+        hasRole, showPromptSFTCreate,
     } from "../scripts/helpers";
     import jQuery from 'jquery';
     import SftLoader from "../components/SftLoader.svelte";
     import {beforeUpdate, onMount} from "svelte";
-    import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
+    import {
+        AUDIT_HISTORY_DATA_QUERY,
+        DEPOSITS_QUERY,
+        VAULT_INFORMATION_QUERY
+    } from "../scripts/queries.js";
     import {arrayify} from "ethers/lib/utils.js";
 
     let image = {}
@@ -163,11 +167,34 @@
                         const tx = await $vault
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
-                        await showPrompt(tx)
-                        amount = 0;
+                        await showPromptSFTCreate(tx)
+                        let wait = await tx.wait()
+                        if (wait.status === 1) {
+                            let interval = setInterval(async () => {
+                                let deposits = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, DEPOSITS_QUERY, 'offchainAssetReceiptVault')
+                                deposits = deposits?.data?.offchainAssetReceiptVault.deposits
+
+                                if (deposits && deposits.length) {
+                                    if (wait.blockNumber.toString() === deposits[0].transaction.blockNumber) {
+                                        let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                                        if (auditHistory) {
+                                            let temp = data.data.offchainAssetReceiptVault
+                                            auditHistory.set(temp)
+                                        } else {
+                                            auditHistory.set({})
+                                        }
+                                        transactionSuccess.set(true)
+                                        transactionInProgress.set(false)
+                                        clearInterval(interval)
+                                        amount = 0;
+                                    }
+                                }
+                            }, 2000)
+                        } else {
+                            transactionError.set(true)
+                        }
                         fileDropped.set({})
                     } catch (err) {
-                        transactionError.set(true)
                         console.log(err)
                     }
                 }

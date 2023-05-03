@@ -31,7 +31,7 @@
 
     $:tempReceipts && setAssetClasses()
 
-    async function setAssetClasses (){
+    async function setAssetClasses() {
         receipts = await Promise.all(tempReceipts.map(async (r) => {
             let information = r.receipt.receiptInformations[0]?.information ? cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) : null
             let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
@@ -68,10 +68,16 @@
 
 
     onMount(async () => {
-        loading = true;
-        await getAuditHistory()
-        setInterval(getAuditHistory, 5000)
-        loading = false
+        if (!$auditHistory.id) {
+            loading = true;
+            await getAuditHistory()
+            setInterval(getAuditHistory, 5000)
+            loading = false
+        } else {
+            certifyData = $auditHistory?.certifications || []
+            tempReceipts = $auditHistory?.deposits || []
+        }
+
     })
 
     async function certify() {

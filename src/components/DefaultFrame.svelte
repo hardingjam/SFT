@@ -1,6 +1,5 @@
 <script>
     export let header = ''
-    export let backBtn = true
 </script>
 <div class="default-frame">
   <div class="header">
@@ -9,9 +8,6 @@
     </slot>
     <div class="display-flex">
       <slot name="header-buttons"></slot>
-      {#if backBtn}
-        <button class="header-btn btn-hover" on:click={()=>{history.back()}}>Back</button>
-      {/if}
     </div>
   </div>
   <div class="default-frame-container">

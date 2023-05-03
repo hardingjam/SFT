@@ -376,11 +376,11 @@ export async function showPrompt(transaction, options) {
         if (transaction.hash) {
             transactionHash.set(transaction.hash)
         }
-        // let wait = await transaction.wait()
-        // if (wait.status === 1) {
-        //     transactionSuccess.set(true)
-        //     transactionInProgress.set(false)
-        // }
+        let wait = await transaction.wait()
+        if (wait.status === 1) {
+            transactionSuccess.set(true)
+            transactionInProgress.set(false)
+        }
     }
 }
 

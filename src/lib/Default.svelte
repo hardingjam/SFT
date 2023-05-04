@@ -105,7 +105,7 @@
             });
             window.ethereum.on("chainChanged", networkChanged);
         }
-        if (location === "") {
+        if (location === "/" || location === "") {
             navigateTo("#set-vault");
         }
         await getTokens();

@@ -13,14 +13,14 @@
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
-    import {ethers} from "ethers";
-    import {onMount} from 'svelte';
-    import {Router, Route, navigateTo, router} from "yrv"
+    import { ethers } from "ethers";
+    import { onMount } from "svelte";
+    import { Router, Route, navigateTo, router } from "yrv";
     import Roles from "./../routes/Roles.svelte";
-    import {icons} from '../scripts/assets.js'
+    import { icons } from "../scripts/assets.js";
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import {getContract, getSubgraphData} from "../scripts/helpers.js";
+    import { getContract, getSubgraphData } from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
@@ -33,82 +33,82 @@
     import Navigation from "../components/Navigation.svelte";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
-    import {VAULTS_QUERY} from "../scripts/queries.js";
-    import {ROLES} from "../scripts/consts.js";
+    import { VAULTS_QUERY, ACTIVE_ROLES_QUERY } from "../scripts/queries.js";
+    import { ROLES } from "../scripts/consts.js";
 
     let connectedAccount;
-    let tokenName = '';
-    export let url = '';
+    let tokenName = "";
+    export let url = "";
 
-    let isMetamaskInstalled = typeof window.ethereum !== "undefined"
+    let isMetamaskInstalled = typeof window.ethereum !== "undefined";
 
     let location = window.location.hash;
-    let selectedTab = 'mint'
-    $: $vault && setTokenName()
+    let selectedTab = "mint";
+    $: $vault && setTokenName();
 
     async function setTokenName() {
-        tokenName = $vault && $vault.address ? await $vault.name() : ""
+        tokenName = $vault && $vault.address ? await $vault.name() : "";
     }
 
     router.subscribe(async e => {
         if (!e.initial) {
-            location = e.path
-            selectedTab = location.slice(1) || 'mint'
+            location = e.path;
+            selectedTab = location.slice(1) || "mint";
             if (location === "#list" && $tokens.length) {
-                navigateTo("#list", {replace: false})
+                navigateTo("#list", { replace: false });
             }
             if (location === "#setup") {
-                navigateTo("#setup", {replace: false})
+                navigateTo("#setup", { replace: false });
             }
             if (location === "#ipfs") {
-                navigateTo("#ipfs", {replace: false})
+                navigateTo("#ipfs", { replace: false });
             }
         }
     });
 
     export async function setVault() {
-        let contractAddress = localStorage.getItem("vaultAddress")
-        let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider)
+        let contractAddress = localStorage.getItem("vaultAddress");
+        let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider);
         if (contract) {
-            vault.set(contract)
+            vault.set(contract);
         } else {
-            vault.set({})
-            location = "#set-vault"
-            navigateTo("#set-vault", {replace: false})
+            vault.set({});
+            location = "#set-vault";
+            navigateTo("#set-vault", { replace: false });
         }
     }
 
     onMount(async () => {
-        await getEthersData()
-        await setVault()
+        await getEthersData();
+        await setVault();
 
         if (isMetamaskInstalled) {
-            await setNetwork()
-            connectedAccount = await getMetamaskConnectedAccount()
+            await setNetwork();
+            connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
-                account.set(connectedAccount)
-                await setAccountRoles()
-                navigateTo(location || '#', {replace: false})
+                account.set(connectedAccount);
+                await setAccountRoles();
+                navigateTo(location || "#", { replace: false });
             } else {
-                localStorage.removeItem('account')
+                localStorage.removeItem("account");
             }
 
             window.ethereum.on("accountsChanged", async (accounts) => {
                 if (!accounts.length) {
                     account.set(null);
-                    localStorage.removeItem('account')
+                    localStorage.removeItem("account");
                 } else {
                     account.set(accounts[0]);
-                    localStorage.setItem('account', $account)
-                    await setAccountRoles()
+                    localStorage.setItem("account", $account);
+                    await setAccountRoles();
                 }
             });
             window.ethereum.on("chainChanged", networkChanged);
         }
-        if (location === '') {
-            navigateTo('#set-vault')
+        if (location === "") {
+            navigateTo("#set-vault");
         }
-        await getTokens()
+        await getTokens();
 
         // const grantRoleTx = await $vault.connect($ethersData.signer).grantRole(await $vault.connect($ethersData.signer).DEPOSITOR(), $account.trim());
         // await grantRoleTx.wait()
@@ -116,21 +116,21 @@
     });
 
     async function networkChanged() {
-        localStorage.setItem("vaultAddress", "")
-        vault.set({})
-        await setNetwork()
-        await getTokens()
-        navigateTo('#set-vault')
+        localStorage.setItem("vaultAddress", "");
+        vault.set({});
+        await setNetwork();
+        await getTokens();
+        navigateTo("#set-vault");
     }
 
     async function getEthersData() {
         if (window.ethereum) {
-            let temp = {}
+            let temp = {};
             temp.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
             temp.signer = temp.provider.getSigner();
             temp.signerOrProvider = temp.signer ? temp.signer : temp.provider;
 
-            ethersData.set(temp)
+            ethersData.set(temp);
         }
     }
 
@@ -139,18 +139,18 @@
         let connectedChainId = parseInt(network.chainId);
         let temp = networks.find(
             (network) => network.chainId === connectedChainId
-        )
-        activeNetwork.set(temp)
-        return temp
+        );
+        activeNetwork.set(temp);
+        return temp;
     }
 
     async function handleNetworkSelect(event) {
-        let activeNet = event.detail.selected
-        let chainId = ethers.utils.hexValue(activeNet.chainId)
+        let activeNet = event.detail.selected;
+        let chainId = ethers.utils.hexValue(activeNet.chainId);
         try {
             await window.ethereum.request({
                 method: "wallet_switchEthereumChain",
-                params: [{chainId}]
+                params: [{ chainId }]
             });
 
         } catch (switchError) {
@@ -179,7 +179,7 @@
             }
             // handle other "switch" errors
         }
-        await networkChanged()
+        await networkChanged();
         // activeNetwork.set(activeNet)
     }
 
@@ -197,8 +197,8 @@
                     method: "eth_requestAccounts"
                 }));
                 account.set(accounts[0]);
-                await setAccountRoles()
-                localStorage.setItem('account', $account)
+                await setAccountRoles();
+                localStorage.setItem("account", $account);
             } catch (error) {
                 console.log(error);
             }
@@ -213,30 +213,44 @@
     }
 
     function changeUrl(tab) {
-        navigateTo('#' + tab)
-        selectedTab = tab
+        navigateTo("#" + tab);
+        selectedTab = tab;
     }
 
     async function getTokens() {
-        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, 'offchainAssetReceiptVaults').then((res) => {
+        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
             if ($activeNetwork) {
-                let temp = res.data.offchainAssetReceiptVaults
-                tokens.set(temp)
+                let temp = res.data.offchainAssetReceiptVaults;
+                tokens.set(temp);
             }
-        })
+        });
     }
 
     async function setAccountRoles() {
-        let roles = {};
-        ROLES
-        for (let i = 0; i < ROLES.length; i++) {
-            roles[ROLES[i].roleName] = await $vault.hasRole(
-                ROLES[i].roleHash,
-                $account
-            );
+        try {
+            let variables = { id: $vault.address.toLowerCase() };
+            let roles = {};
+            let resp = await getSubgraphData($activeNetwork, variables, ACTIVE_ROLES_QUERY, "offchainAssetReceiptVault");
+            if (resp && resp.data) {
+                //If there is no holder in role, we get empty array for roleHolders
+                let allRoleHolders = resp.data.offchainAssetReceiptVault.roleHolders.filter(r => r.activeRoles.length);
+                let activeRoles = allRoleHolders.map(r => r.activeRoles[0]);
+                for (let i = 0; i < ROLES.length; i++) {
+                    let role = activeRoles.find(r => r.roleHash === ROLES[i].roleHash);
+                    if (role) {
+                        //Active roles either includes connected account or not.
+                        roles[ROLES[i].roleName] = role.roleHolders.some(h => h.account.address.toLowerCase() === $account.toLowerCase());
+                    } else {
+                        //If role does not have any holder, it will not be in active roles. It means the connected account does not have that role either
+                        //This is to set that not-active-role as 'false' for the connected account
+                        roles[ROLES[i].roleName] = false;
+                    }
+                }
+                accountRoles.set(roles);
+            }
+        } catch (e) {
+            console.log(e);
         }
-        accountRoles.set(roles)
-        console.log(12,$accountRoles)
     }
 
 </script>

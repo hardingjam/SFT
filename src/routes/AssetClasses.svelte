@@ -37,7 +37,7 @@
       <table class="w-100">
         <tr class="f-weight-700">
           <th>Asset class label</th>
-          <th>date created</th>
+          <th>Date created</th>
           <th>Asset count</th>
         </tr>
         {#if ($schemas.length)}

@@ -46,7 +46,7 @@ export const AUDIT_HISTORY_DATA_QUERY = `
               certifiedUntil,
               totalShares
             },
-            deposits 
+            deposits(orderBy: timestamp orderDirection:desc) 
             {
               receipt
               {
@@ -136,15 +136,19 @@ export const VAULTS_QUERY = `
             name,
             address,
             symbol,
-            deployBlock
+            deployBlock,
+            deployTimestamp
           }
         }`
 
 export const DEPOSITS_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
-              deposits {
+              deposits(orderBy: timestamp, orderDirection: desc) {
                 amount
+                transaction {
+                 blockNumber
+                }
                 receipt {
                   receiptInformations {
                     schema

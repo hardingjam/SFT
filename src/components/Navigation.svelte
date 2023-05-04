@@ -97,6 +97,7 @@
             action: () => {
                 window.open(`${$activeNetwork.blockExplorer}/address/${$account}`);
             },
+            class: 'underline'
         }
     ]
 
@@ -144,7 +145,7 @@
         {#each accountMenuOptions as accountOption}
           <DropdownItem on:click={()=>accountOption.action()}>
             <div class="dropdown-item">
-              <span class="network-name">{accountOption?.displayName}</span>
+              <span class={`network-name ${accountOption?.class}`}>{accountOption?.displayName}</span>
             </div>
           </DropdownItem>
         {/each}

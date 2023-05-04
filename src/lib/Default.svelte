@@ -9,7 +9,7 @@
         transactionHash,
         promptTopText,
         promptBottomText,
-        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText
+        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText, accountRoles
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -34,6 +34,7 @@
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
     import {VAULTS_QUERY} from "../scripts/queries.js";
+    import {ROLES} from "../scripts/consts.js";
 
     let connectedAccount;
     let tokenName = '';
@@ -77,7 +78,6 @@
         }
     }
 
-
     onMount(async () => {
         await getEthersData()
         await setVault()
@@ -87,6 +87,7 @@
             connectedAccount = await getMetamaskConnectedAccount()
             if (connectedAccount) {
                 account.set(connectedAccount)
+                await setAccountRoles()
                 navigateTo(location || '#', {replace: false})
             } else {
                 localStorage.removeItem('account')
@@ -99,6 +100,7 @@
                 } else {
                     account.set(accounts[0]);
                     localStorage.setItem('account', $account)
+                    await setAccountRoles()
                 }
             });
             window.ethereum.on("chainChanged", networkChanged);
@@ -110,7 +112,6 @@
 
         // const grantRoleTx = await $vault.connect($ethersData.signer).grantRole(await $vault.connect($ethersData.signer).DEPOSITOR(), $account.trim());
         // await grantRoleTx.wait()
-
 
     });
 
@@ -132,7 +133,6 @@
             ethersData.set(temp)
         }
     }
-
 
     async function setNetwork() {
         let network = await $ethersData.provider.getNetwork();
@@ -197,6 +197,7 @@
                     method: "eth_requestAccounts"
                 }));
                 account.set(accounts[0]);
+                await setAccountRoles()
                 localStorage.setItem('account', $account)
             } catch (error) {
                 console.log(error);
@@ -223,6 +224,19 @@
                 tokens.set(temp)
             }
         })
+    }
+
+    async function setAccountRoles() {
+        let roles = {};
+        ROLES
+        for (let i = 0; i < ROLES.length; i++) {
+            roles[ROLES[i].roleName] = await $vault.hasRole(
+                ROLES[i].roleHash,
+                $account
+            );
+        }
+        accountRoles.set(roles)
+        console.log(12,$accountRoles)
     }
 
 </script>

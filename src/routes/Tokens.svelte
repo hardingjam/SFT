@@ -1,6 +1,6 @@
 <script>
     import {activeNetwork, auditHistory, ethersData, schemas, tokens, vault} from "../scripts/store.js";
-    import {getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {formatAddress, getContract, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import {navigateTo} from "yrv";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
@@ -40,16 +40,20 @@
 <DefaultFrame header="SFT list">
   <div slot="content">
     <div class="tokens">
-      <table class="w-100">
+      <table>
         <tr class="f-weight-700">
-          <th>Name</th>
-          <th>Symbol</th>
+          <th style="width: 25%">Name</th>
+          <th style="width: 25%">Symbol</th>
+          <th style="width: 25%">Deployer</th>
+          <th style="width: 25%">Date created</th>
         </tr>
         {#if $tokens.length}
           {#each $tokens as token }
             <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
               <td>{token.name}</td>
               <td>{token.symbol}</td>
+              <td>{formatAddress(token.deployer)}</td>
+              <td>{timeStampToDate(token.deployTimestamp)}</td>
             </tr>
           {/each}
         {/if}
@@ -68,7 +72,7 @@
         min-height: 200px;
         text-align: left;
         width: 100%;
-        min-width: 435px;
+        min-width: 550px;
         justify-content: space-between;
         line-height: 27px;
     }

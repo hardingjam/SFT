@@ -136,7 +136,8 @@ export const VAULTS_QUERY = `
             name,
             address,
             symbol,
-            deployBlock
+            deployBlock,
+            deployTimestamp
           }
         }`
 

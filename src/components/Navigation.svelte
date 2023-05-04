@@ -8,7 +8,7 @@
         DropdownItem
     } from 'sveltestrap';
 
-    import {account, activeNetwork} from "../scripts/store.js";
+    import {account, accountRoles, activeNetwork} from '../scripts/store.js';
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
@@ -36,7 +36,8 @@
             displayName: "Mint/Redeem",
             action: () => {
                 navigateTo('#mint', {replace: false})
-            }
+            },
+            class: 'show'
         },
         {
             id: "list",
@@ -103,9 +104,20 @@
 
     let isOpen = false;
 
-    function handleUpdate(event) {
-        isOpen = event.detail.isOpen;
+  $: $accountRoles && hideMint();
+
+  function hideMint() {
+    let indexOfMint = menuItems.findIndex(i => i.id === 'mint');
+    if (Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR) {
+      menuItems[indexOfMint].class = 'hide';
+    } else {
+      menuItems[indexOfMint].class = 'show';
     }
+  }
+
+  function handleUpdate(event) {
+    isOpen = event.detail.isOpen;
+  }
 
     const dispatch = createEventDispatcher();
 
@@ -131,7 +143,7 @@
           <DropdownItem on:click={()=>handleNavItemClick(network)}>
             <div class="dropdown-item">
               <img src={icons[network.icon]} alt={network?.displayName}/>
-              <span class="network-name">{network?.displayName}</span>
+              <span class={`network-name ${network?.class}`}>{network?.displayName}</span>
             </div>
           </DropdownItem>
         {/each}
@@ -158,7 +170,7 @@
         {#each menuItems as menuItem}
           <DropdownItem on:click={()=>menuItem.action()}>
             <div class="dropdown-item">
-              <span class="network-name">{menuItem?.displayName}</span>
+              <span class={`network-name ${menuItem?.class}`}>{menuItem?.displayName}</span>
             </div>
           </DropdownItem>
         {/each}

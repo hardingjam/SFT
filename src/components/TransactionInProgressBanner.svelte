@@ -30,9 +30,37 @@
             close: true
         });
     }
+
+    function clickOutside(node) {
+
+        const handleClick = event => {
+            if (node && !node.contains(event.target) && !event.defaultPrevented) {
+                node.dispatchEvent(
+                    new CustomEvent('click_outside', node)
+                )
+            }
+        }
+
+        document.addEventListener('click', handleClick, true);
+
+        return {
+            destroy() {
+                document.removeEventListener('click', handleClick, true);
+            }
+        }
+    }
+
+    let name = 'world';
+
+    function handleClickOutside(event) {
+        if ($transactionInProgressShow && !$transactionInProgress) {
+            closeBtnClick()
+        }
+    }
 </script>
 
-<div class={$transactionInProgressShow? "frame show": "frame hide" }>
+<div class={$transactionInProgressShow? "frame show": "frame hide" } use:clickOutside
+     on:click_outside={handleClickOutside}>
   <div class="content">
     {#if ($transactionInProgress)}
       <div class="top-text">{topText || TRANSACTION_IN_PROGRESS_TEXT}</div>

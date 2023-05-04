@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, auditHistory, ethersData, tokens, vault} from "../scripts/store.js";
+    import {activeNetwork, auditHistory, ethersData, schemas, tokens, vault} from "../scripts/store.js";
     import {formatAddress, getContract, getSubgraphData, timeStampToDate} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import {navigateTo} from "yrv";
@@ -19,6 +19,7 @@
         let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
         if (contract) {
             vault.set(contract)
+            schemas.set([])
             localStorage.setItem("vaultAddress", token.address)
             let auditHistoryData = await getAuditHistoryData(token.address)
             auditHistory.set(auditHistoryData)

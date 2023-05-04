@@ -113,7 +113,7 @@
     }
 
     .content {
-        border-radius: 20px;
+        border-radius: 16px;
         border: 1px solid rgba(255, 255, 255, 0.8);
         display: flex;
         align-items: center;

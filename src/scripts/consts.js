@@ -47,5 +47,5 @@ export const MAGIC_NUMBERS = {
     OA_STRUCTURE: BigInt(0xffc47a6299e8a911n)
 };
 
-export const TRANSACTION_IN_PROGRESS_TEXT = "Transaction taking place, please wait"
+export const TRANSACTION_IN_PROGRESS_TEXT = "Transaction taking place, please wait."
 export const VIEW_ON_EXPLORER_TEXT = "View on the block explorer"

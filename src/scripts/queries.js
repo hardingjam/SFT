@@ -158,20 +158,3 @@ export const DEPOSITS_QUERY = `
             }
           }
          `;
-export const ACTIVE_ROLES_QUERY = `
-          query($id: ID!) {
-            offchainAssetReceiptVault(id: $id) {
-              roleHolders {
-                activeRoles {
-                  roleHash
-                  roleName
-                  roleHolders {
-                    account {
-                      address
-                    }
-                  }
-                }
-              }
-            }
-          }
-         `;

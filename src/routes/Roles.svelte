@@ -9,18 +9,14 @@
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
     import {
-        filterArray,
-        getSubgraphData,
         accessControlError,
-        toSentenceCase, showPrompt, mapOrder, setAccountRoles
+        toSentenceCase, showPrompt, setAccountRoles
     } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
-    import {QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
     import {ROLES} from "../scripts/consts.js";
     import {ethers} from "ethers";
-    import {onMount} from "svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let account = '';
@@ -52,7 +48,7 @@
     async function grantRole() {
         error = ""
         let role = null
-        roleName ? role = await $vault[roleName]() : error = "Select role"
+        roleName ? role = ROLES.find(r => r.roleName === roleName).roleHash : error = "Select role"
 
         if (!account) {
             error = "Enter address"
@@ -65,16 +61,25 @@
             if (account && accountValid) {
                 const grantRoleTx = await $vault.grantRole(role, account.trim());
                 await showPrompt(grantRoleTx)
-                let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
-                updatedRoleHolders.push({account: {address: account}})
-                const newRoles = $roles.map(role => {
-                    if (role.roleName === roleName) {
-                        return {...role, roleHolders: updatedRoleHolders};
-                    }
-                    return role;
-                });
-                roles.set([...newRoles])
-                accountRoles.set(await setAccountRoles($roles, account.trim()));
+                let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes;
+                let revokedAccounts = []
+                if (roleRevokes.length) {
+                    roleRevokes = roleRevokes.filter(r => r.role.roleName === roleName)
+                    revokedAccounts = roleRevokes.map(r => r.roleHolder.account.address)
+                }
+                if (revokedAccounts.indexOf(account.toLowerCase()) < 0) {
+                    let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
+                    updatedRoleHolders.push({account: {address: account.toLowerCase()}})
+                    const newRoles = $roles.map(role => {
+                        if (role.roleName === roleName) {
+                            return {...role, roleHolders: updatedRoleHolders};
+                        }
+                        return role;
+                    });
+                    roles.set([...newRoles])
+                    accountRoles.set(await setAccountRoles($roles, account.trim()));
+                }
+
             }
 
         } catch (err) {

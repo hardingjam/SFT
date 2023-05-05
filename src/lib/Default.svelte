@@ -280,7 +280,8 @@
                       on:click="{() =>  changeUrl('mint')}">
                 Mint
               </button>
-              <button class:selected="{selectedTab === 'redeem'}" class="redeem-tab tab-button"
+              <button class:selected="{selectedTab === 'redeem'}" disabled={!$accountRoles.WITHDRAWER}
+                      class="redeem-tab tab-button"
                       on:click="{() =>  changeUrl('redeem')}">
                 Redeem
               </button>
@@ -422,6 +423,11 @@
   .redeem-tab {
     border-radius: 10px 10px 0 0 !important;
     margin-left: 2px;
+  }
+
+  .redeem-tab:disabled {
+    color: #9D9D9D;
+    opacity: 0.8;
   }
 
   .selected {

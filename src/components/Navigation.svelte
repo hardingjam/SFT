@@ -104,20 +104,20 @@
 
     let isOpen = false;
 
-  $: $accountRoles && hideMint();
+    $: $accountRoles && hideMint();
 
-  function hideMint() {
-    let indexOfMint = menuItems.findIndex(i => i.id === 'mint');
-    if ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR) || !$vault.address) {
-      menuItems[indexOfMint].class = 'hide';
-    } else {
-      menuItems[indexOfMint].class = 'show';
+    function hideMint() {
+        let indexOfMint = menuItems.findIndex(i => i.id === 'mint');
+        if ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR) || !$vault.address) {
+            menuItems[indexOfMint].class = 'hide';
+        } else {
+            menuItems[indexOfMint].class = 'show';
+        }
     }
-  }
 
-  function handleUpdate(event) {
-    isOpen = event.detail.isOpen;
-  }
+    function handleUpdate(event) {
+        isOpen = event.detail.isOpen;
+    }
 
     const dispatch = createEventDispatcher();
 

@@ -13,14 +13,14 @@
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
-    import { ethers } from "ethers";
-    import { onMount } from "svelte";
-    import { Router, Route, navigateTo, router } from "yrv";
+    import {ethers} from "ethers";
+    import {onMount} from "svelte";
+    import {Router, Route, navigateTo, router} from "yrv";
     import Roles from "./../routes/Roles.svelte";
-    import { icons } from "../scripts/assets.js";
+    import {icons} from "../scripts/assets.js";
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import { getContract, getSubgraphData } from "../scripts/helpers.js";
+    import {getContract, getSubgraphData, setAccountRoles} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
@@ -33,8 +33,7 @@
     import Navigation from "../components/Navigation.svelte";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
-    import { VAULTS_QUERY, ACTIVE_ROLES_QUERY } from "../scripts/queries.js";
-    import { ROLES } from "../scripts/consts.js";
+    import {VAULTS_QUERY} from "../scripts/queries.js";
 
     let connectedAccount;
     let tokenName = "";
@@ -55,13 +54,13 @@
             location = e.path;
             selectedTab = location.slice(1) || "mint";
             if (location === "#list" && $tokens.length) {
-                navigateTo("#list", { replace: false });
+                navigateTo("#list", {replace: false});
             }
             if (location === "#setup") {
-                navigateTo("#setup", { replace: false });
+                navigateTo("#setup", {replace: false});
             }
             if (location === "#ipfs") {
-                navigateTo("#ipfs", { replace: false });
+                navigateTo("#ipfs", {replace: false});
             }
         }
     });
@@ -74,7 +73,7 @@
         } else {
             vault.set({});
             location = "#set-vault";
-            navigateTo("#set-vault", { replace: false });
+            navigateTo("#set-vault", {replace: false});
         }
     }
 
@@ -87,8 +86,8 @@
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
                 account.set(connectedAccount);
-                await setAccountRoles();
-                navigateTo(location || "#", { replace: false });
+                accountRoles.set(await setAccountRoles($vault, $activeNetwork, $account));
+                navigateTo(location || "#", {replace: false});
             } else {
                 localStorage.removeItem("account");
             }
@@ -100,7 +99,8 @@
                 } else {
                     account.set(accounts[0]);
                     localStorage.setItem("account", $account);
-                    await setAccountRoles();
+                    accountRoles.set(await setAccountRoles($vault, $activeNetwork, $account));
+
                     if ((location === '#mint' || location === '#redeem') && !$accountRoles.DEPOSITOR) {
                         navigateTo('#set-vault');
                     }
@@ -153,7 +153,7 @@
         try {
             await window.ethereum.request({
                 method: "wallet_switchEthereumChain",
-                params: [{ chainId }]
+                params: [{chainId}]
             });
 
         } catch (switchError) {
@@ -200,7 +200,7 @@
                     method: "eth_requestAccounts"
                 }));
                 account.set(accounts[0]);
-                await setAccountRoles();
+                accountRoles.set(await setAccountRoles($vault, $activeNetwork, $account));
                 localStorage.setItem("account", $account);
             } catch (error) {
                 console.log(error);
@@ -228,34 +228,6 @@
             }
         });
     }
-
-    async function setAccountRoles() {
-        try {
-            let variables = { id: $vault.address.toLowerCase() };
-            let roles = {};
-            let resp = await getSubgraphData($activeNetwork, variables, ACTIVE_ROLES_QUERY, "offchainAssetReceiptVault");
-            if (resp && resp.data) {
-                //If there is no holder in role, we get empty array for roleHolders
-                let allRoleHolders = resp.data.offchainAssetReceiptVault.roleHolders.filter(r => r.activeRoles.length);
-                let activeRoles = allRoleHolders.map(r => r.activeRoles[0]);
-                for (let i = 0; i < ROLES.length; i++) {
-                    let role = activeRoles.find(r => r.roleHash === ROLES[i].roleHash);
-                    if (role) {
-                        //Active roles either includes connected account or not.
-                        roles[ROLES[i].roleName] = role.roleHolders.some(h => h.account.address.toLowerCase() === $account.toLowerCase());
-                    } else {
-                        //If role does not have any holder, it will not be in active roles. It means the connected account does not have that role either
-                        //This is to set that not-active-role as 'false' for the connected account
-                        roles[ROLES[i].roleName] = false;
-                    }
-                }
-                accountRoles.set(roles);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
 </script>
 <Router url={url}>
 

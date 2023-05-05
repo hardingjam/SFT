@@ -4,7 +4,7 @@
         activeNetwork,
         roles,
         data,
-        transactionError,
+        transactionError, accountRoles,
     } from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
@@ -12,7 +12,7 @@
         filterArray,
         getSubgraphData,
         accessControlError,
-        toSentenceCase, showPrompt, mapOrder
+        toSentenceCase, showPrompt, mapOrder, setAccountRoles
     } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
     import {QUERY} from "../scripts/queries.js";
@@ -79,6 +79,7 @@
                     return role;
                 });
                 roles.set([...newRoles])
+                accountRoles.set(await setAccountRoles($vault, $activeNetwork, account.trim().toLowerCase()));
             }
 
         } catch (err) {

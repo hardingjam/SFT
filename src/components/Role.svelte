@@ -3,13 +3,13 @@
         activeNetwork,
         vault,
         roles,
-        transactionError
+        transactionError, accountRoles
     } from "../scripts/store.js";
 
     export let name;
     export let admin;
     import {icons} from '../scripts/assets.js'
-    import {formatAddress, showPrompt} from "../scripts/helpers.js";
+    import {formatAddress, setAccountRoles, showPrompt} from "../scripts/helpers.js";
 
     let account = '';
 
@@ -36,6 +36,8 @@
                 return role;
             });
             roles.set([...newRoles])
+            accountRoles.set(await setAccountRoles($vault, $activeNetwork, account.trim().toLowerCase()));
+
         } catch (err) {
             transactionError.set(true)
             console.log(err)

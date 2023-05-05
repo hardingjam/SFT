@@ -39,7 +39,6 @@
             accountRoles.set(await setAccountRoles($vault, $activeNetwork, account.trim().toLowerCase()));
 
         } catch (err) {
-            transactionError.set(true)
             console.log(err)
         }
 

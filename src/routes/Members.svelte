@@ -63,7 +63,6 @@
             }
 
         } catch (e) {
-            transactionError.set(true)
             error = e.message
         }
     }
@@ -86,7 +85,6 @@
             }
 
         } catch (e) {
-            transactionError.set(true)
             error = e.message
         }
     }

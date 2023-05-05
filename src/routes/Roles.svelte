@@ -83,7 +83,6 @@
             }
 
         } catch (err) {
-            transactionError.set(true)
             error = err.reason || ""
             if (error && error?.includes('AccessControl')) {
                 error = accessControlError(error)

@@ -380,6 +380,8 @@ export async function showPrompt(transaction, options) {
         if (wait.status === 1) {
             transactionSuccess.set(true)
             transactionInProgress.set(false)
+        } else {
+            transactionError.set(true)
         }
     }
 }

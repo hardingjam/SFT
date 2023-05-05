@@ -102,7 +102,6 @@
                 })
 
             } catch (e) {
-                transactionError.set(true)
                 console.log(e)
             }
 

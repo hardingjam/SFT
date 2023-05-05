@@ -101,6 +101,9 @@
                     account.set(accounts[0]);
                     localStorage.setItem("account", $account);
                     await setAccountRoles();
+                    if ((location === '#mint' || location === '#redeem') && !$accountRoles.DEPOSITOR) {
+                        navigateTo('#set-vault');
+                    }
                 }
             });
             window.ethereum.on("chainChanged", networkChanged);

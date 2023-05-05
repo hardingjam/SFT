@@ -8,7 +8,7 @@
         DropdownItem
     } from 'sveltestrap';
 
-    import {account, accountRoles, activeNetwork} from '../scripts/store.js';
+    import {account, accountRoles, activeNetwork, vault} from '../scripts/store.js';
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
@@ -108,7 +108,7 @@
 
   function hideMint() {
     let indexOfMint = menuItems.findIndex(i => i.id === 'mint');
-    if (Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR) {
+    if ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR) || !$vault.address) {
       menuItems[indexOfMint].class = 'hide';
     } else {
       menuItems[indexOfMint].class = 'show';

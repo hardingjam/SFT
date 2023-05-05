@@ -91,29 +91,33 @@
     }
 
     async function getSgData(vaultAddress) {
-        let variables = {id: vaultAddress.toLowerCase()}
+        if (vaultAddress) {
+            let variables = {id: vaultAddress.toLowerCase()}
+            getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
+                loading = true
+                if (res && res.data) {
+                    data.set(res.data)
+                    roles.set(res.data.offchainAssetReceiptVault?.roles?.length ?
+                        res.data.offchainAssetReceiptVault?.roles :
+                        ROLES)
+                    let rolesFiltered = $roles.map(role => {
+                        let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName ===
+                            role.roleName)
+                        let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
+                        let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
+                        return {roleName: role.roleName, roleHolders: filtered, roleHash: role.roleHash}
+                    })
 
-        getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
-            loading = true
-            if (res && res.data) {
-                data.set(res.data)
-                roles.set(res.data.offchainAssetReceiptVault?.roles?.length ? res.data.offchainAssetReceiptVault?.roles : ROLES)
-                let rolesFiltered = $roles.map(role => {
-                    let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
-                    let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
-                    let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
-                    return {roleName: role.roleName, roleHolders: filtered, roleHash: role.roleHash}
-                })
+                    //Order roles from subgraph as in contract
+                    let rolesOrder = ROLES.map(r => r.roleHash)
+                    rolesFiltered = mapOrder(rolesFiltered, rolesOrder, 'roleHash')
 
-                //Order roles from subgraph as in contract
-                let rolesOrder = ROLES.map(r => r.roleHash)
-                rolesFiltered = mapOrder(rolesFiltered, rolesOrder, 'roleHash')
-
-                roles.set(rolesFiltered)
-                executorRoles = $roles ? $roles.filter(r => !r.roleName?.includes('_ADMIN')) : []
-                loading = false
-            }
-        })
+                    roles.set(rolesFiltered)
+                    executorRoles = $roles ? $roles.filter(r => !r.roleName?.includes('_ADMIN')) : []
+                    loading = false
+                }
+            })
+        }
     }
 
 </script>

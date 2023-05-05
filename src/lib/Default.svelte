@@ -43,10 +43,13 @@
 
     let location = window.location.hash;
     let selectedTab = "mint";
-    $: $vault && setTokenName();
+    $: $vault && vaultChanged();
 
-    async function setTokenName() {
+    async function vaultChanged() {
         tokenName = $vault && $vault.address ? await $vault.name() : "";
+        if ($vault.address && $activeNetwork.id && $account) {
+            accountRoles.set(await setAccountRoles($vault, $activeNetwork, $account));
+        }
     }
 
     router.subscribe(async e => {
@@ -86,7 +89,6 @@
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
                 account.set(connectedAccount);
-                accountRoles.set(await setAccountRoles($vault, $activeNetwork, $account));
                 navigateTo(location || "#", {replace: false});
             } else {
                 localStorage.removeItem("account");

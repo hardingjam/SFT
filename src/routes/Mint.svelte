@@ -9,7 +9,7 @@
         activeNetwork,
         schemas,
         schemaError,
-        transactionError, transactionSuccess, transactionInProgress, auditHistory
+        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -90,7 +90,11 @@
     })
 
     onMount(async () => {
-        await getSchemas()
+        if (!$accountRoles.DEPOSITOR) {
+            navigateTo('#set-vault');
+        } else {
+            await getSchemas()
+        }
     })
 
     async function getSchemas() {
@@ -162,8 +166,10 @@
 
                     try {
                         let structureIpfs = await upload(structure)
-                        let encodedHashList = cborEncode([...fileHashesList, structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
-                        const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedStructure + encodedHashList
+                        let encodedHashList = cborEncode([...fileHashesList,
+                            structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
+                        const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() +
+                            encodedStructure + encodedHashList
                         const tx = await $vault
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));

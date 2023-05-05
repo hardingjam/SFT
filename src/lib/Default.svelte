@@ -9,7 +9,7 @@
         transactionHash,
         promptTopText,
         promptBottomText,
-        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText, accountRoles
+        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText, accountRoles, data, roles
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -20,7 +20,7 @@
     import {icons} from "../scripts/assets.js";
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import {getContract, getSubgraphData, setAccountRoles} from "../scripts/helpers.js";
+    import {filterArray, getContract, getSubgraphData, mapOrder, setAccountRoles} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
@@ -33,7 +33,8 @@
     import Navigation from "../components/Navigation.svelte";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
-    import {VAULTS_QUERY} from "../scripts/queries.js";
+    import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
+    import {ROLES} from '../scripts/consts.js';
 
     let connectedAccount;
     let tokenName = "";
@@ -46,9 +47,10 @@
     $: $vault && vaultChanged();
 
     async function vaultChanged() {
-        tokenName = $vault && $vault.address ? await $vault.name() : "";
         if ($vault.address && $activeNetwork.id && $account) {
-            accountRoles.set(await setAccountRoles($vault, $activeNetwork, $account));
+            tokenName = $vault && $vault.address ? await $vault.name() : "";
+            await getRoles($vault.address)
+            accountRoles.set(await setAccountRoles($roles, $account));
         }
     }
 
@@ -101,7 +103,7 @@
                 } else {
                     account.set(accounts[0]);
                     localStorage.setItem("account", $account);
-                    accountRoles.set(await setAccountRoles($vault, $activeNetwork, $account));
+                    accountRoles.set(await setAccountRoles($roles, $account));
 
                     if ((location === '#mint' || location === '#redeem') && !$accountRoles.DEPOSITOR) {
                         navigateTo('#set-vault');
@@ -202,7 +204,7 @@
                     method: "eth_requestAccounts"
                 }));
                 account.set(accounts[0]);
-                accountRoles.set(await setAccountRoles($vault, $activeNetwork, $account));
+                accountRoles.set(await setAccountRoles($roles, $account));
                 localStorage.setItem("account", $account);
             } catch (error) {
                 console.log(error);
@@ -229,6 +231,36 @@
                 tokens.set(temp);
             }
         });
+    }
+
+    async function getRoles(vaultAddress) {
+        if (vaultAddress) {
+            try {
+                let variables = {id: vaultAddress.toLowerCase()}
+                let res = await getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault')
+                if (res && res.data) {
+                    data.set(res.data)
+                    roles.set(res.data.offchainAssetReceiptVault?.roles?.length ?
+                        res.data.offchainAssetReceiptVault?.roles :
+                        ROLES)
+                    let rolesFiltered = $roles.map(role => {
+                        let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName ===
+                            role.roleName)
+                        let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
+                        let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
+                        return {roleName: role.roleName, roleHolders: filtered, roleHash: role.roleHash}
+                    })
+
+                    //Order roles from subgraph as in contract
+                    let rolesOrder = ROLES.map(r => r.roleHash)
+                    rolesFiltered = mapOrder(rolesFiltered, rolesOrder, 'roleHash')
+                    roles.set(rolesFiltered)
+                }
+            } catch (e) {
+                console.log(e)
+            }
+
+        }
     }
 </script>
 <Router url={url}>

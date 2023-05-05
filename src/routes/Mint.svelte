@@ -90,11 +90,11 @@
     })
 
     onMount(async () => {
-        if ($vault.address && !$accountRoles.DEPOSITOR) {
+        if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
             navigateTo('#set-vault');
-        } else {
-            await getSchemas()
         }
+        await getSchemas()
+
     })
 
     async function getSchemas() {

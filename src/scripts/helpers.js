@@ -12,7 +12,7 @@ import {
     transactionInProgressShow,
     transactionSuccess
 } from "./store.js";
-import {ACTIVE_ROLES_QUERY, VAULT_INFORMATION_QUERY} from "./queries.js";
+import {VAULT_INFORMATION_QUERY} from "./queries.js";
 
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -521,33 +521,15 @@ function getAssetCount(hash, deposits) {
     return ethers.utils.formatUnits(assetCount, 18)
 }
 
-export async function setAccountRoles(vault, activeNetwork, account) {
-    try {
-        if (vault.address && activeNetwork.id && account) {
-            let variables = {id: vault.address.toLowerCase()};
-            let roles = {};
-            let resp = await getSubgraphData(activeNetwork, variables, ACTIVE_ROLES_QUERY, "offchainAssetReceiptVault");
-            if (resp && resp.data) {
-                //If there is no holder in role, we get empty array for roleHolders
-                let allRoleHolders = resp.data.offchainAssetReceiptVault.roleHolders.filter(r => r.activeRoles.length);
-                let activeRoles = allRoleHolders.map(r => r.activeRoles[0]);
-                for (let i = 0; i < ROLES.length; i++) {
-                    let role = activeRoles.find(r => r.roleHash === ROLES[i].roleHash);
-                    if (role) {
-                        //Active roles either includes connected account or not.
-                        roles[ROLES[i].roleName] = role.roleHolders.some(h => h.account.address.toLowerCase() ===
-                            account.toLowerCase());
-                    } else {
-                        //If role does not have any holder, it will not be in active roles. It means the connected account does not have that role either
-                        //This is to set that not-active-role as 'false' for the connected account
-                        roles[ROLES[i].roleName] = false;
-                    }
-                }
-                return roles
-            }
+export async function setAccountRoles(roles, account) {
+    let accountRoles = []
+    for (let i = 0; i < ROLES.length; i++) {
+        let role = roles.find(r => r.roleHash === ROLES[i].roleHash);
+        if (role) {
+            accountRoles[ROLES[i].roleName] = role.roleHolders.some(h => h.account.address.toLowerCase() ===
+                account.toLowerCase());
         }
-
-    } catch (e) {
-        console.log(e);
     }
+    return accountRoles
+
 }

@@ -31,13 +31,8 @@
     let accountValid = true;
 
     async function getData() {
-        await getSgData($vault.address)
         executorRoles = $roles.length ? $roles.filter(r => !r.roleName?.includes('_ADMIN')) : []
     }
-
-    onMount(() => {
-        getSgData($vault.address)
-    })
 
     $: ($vault && $vault.address) && getData();
     $: account && validateAccount();
@@ -79,7 +74,7 @@
                     return role;
                 });
                 roles.set([...newRoles])
-                accountRoles.set(await setAccountRoles($vault, $activeNetwork, account.trim().toLowerCase()));
+                accountRoles.set(await setAccountRoles($roles, account.trim()));
             }
 
         } catch (err) {
@@ -90,35 +85,6 @@
         }
     }
 
-    async function getSgData(vaultAddress) {
-        if (vaultAddress) {
-            let variables = {id: vaultAddress.toLowerCase()}
-            getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
-                loading = true
-                if (res && res.data) {
-                    data.set(res.data)
-                    roles.set(res.data.offchainAssetReceiptVault?.roles?.length ?
-                        res.data.offchainAssetReceiptVault?.roles :
-                        ROLES)
-                    let rolesFiltered = $roles.map(role => {
-                        let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName ===
-                            role.roleName)
-                        let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
-                        let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
-                        return {roleName: role.roleName, roleHolders: filtered, roleHash: role.roleHash}
-                    })
-
-                    //Order roles from subgraph as in contract
-                    let rolesOrder = ROLES.map(r => r.roleHash)
-                    rolesFiltered = mapOrder(rolesFiltered, rolesOrder, 'roleHash')
-
-                    roles.set(rolesFiltered)
-                    executorRoles = $roles ? $roles.filter(r => !r.roleName?.includes('_ADMIN')) : []
-                    loading = false
-                }
-            })
-        }
-    }
 
 </script>
 <div class="roles-container">

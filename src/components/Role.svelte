@@ -36,7 +36,7 @@
                 return role;
             });
             roles.set([...newRoles])
-            accountRoles.set(await setAccountRoles($vault, $activeNetwork, account.trim().toLowerCase()));
+            accountRoles.set(await setAccountRoles($roles, account));
 
         } catch (err) {
             console.log(err)

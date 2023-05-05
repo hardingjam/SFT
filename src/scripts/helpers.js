@@ -523,7 +523,7 @@ function getAssetCount(hash, deposits) {
 
 export async function setAccountRoles(vault, activeNetwork, account) {
     try {
-        if (vault && activeNetwork.id && account) {
+        if (vault.address && activeNetwork.id && account) {
             let variables = {id: vault.address.toLowerCase()};
             let roles = {};
             let resp = await getSubgraphData(activeNetwork, variables, ACTIVE_ROLES_QUERY, "offchainAssetReceiptVault");

@@ -523,27 +523,30 @@ function getAssetCount(hash, deposits) {
 
 export async function setAccountRoles(vault, activeNetwork, account) {
     try {
-        let variables = {id: vault.address.toLowerCase()};
-        let roles = {};
-        let resp = await getSubgraphData(activeNetwork, variables, ACTIVE_ROLES_QUERY, "offchainAssetReceiptVault");
-        if (resp && resp.data) {
-            //If there is no holder in role, we get empty array for roleHolders
-            let allRoleHolders = resp.data.offchainAssetReceiptVault.roleHolders.filter(r => r.activeRoles.length);
-            let activeRoles = allRoleHolders.map(r => r.activeRoles[0]);
-            for (let i = 0; i < ROLES.length; i++) {
-                let role = activeRoles.find(r => r.roleHash === ROLES[i].roleHash);
-                if (role) {
-                    //Active roles either includes connected account or not.
-                    roles[ROLES[i].roleName] = role.roleHolders.some(h => h.account.address.toLowerCase() ===
-                        account.toLowerCase());
-                } else {
-                    //If role does not have any holder, it will not be in active roles. It means the connected account does not have that role either
-                    //This is to set that not-active-role as 'false' for the connected account
-                    roles[ROLES[i].roleName] = false;
+        if (vault) {
+            let variables = {id: vault.address.toLowerCase()};
+            let roles = {};
+            let resp = await getSubgraphData(activeNetwork, variables, ACTIVE_ROLES_QUERY, "offchainAssetReceiptVault");
+            if (resp && resp.data) {
+                //If there is no holder in role, we get empty array for roleHolders
+                let allRoleHolders = resp.data.offchainAssetReceiptVault.roleHolders.filter(r => r.activeRoles.length);
+                let activeRoles = allRoleHolders.map(r => r.activeRoles[0]);
+                for (let i = 0; i < ROLES.length; i++) {
+                    let role = activeRoles.find(r => r.roleHash === ROLES[i].roleHash);
+                    if (role) {
+                        //Active roles either includes connected account or not.
+                        roles[ROLES[i].roleName] = role.roleHolders.some(h => h.account.address.toLowerCase() ===
+                            account.toLowerCase());
+                    } else {
+                        //If role does not have any holder, it will not be in active roles. It means the connected account does not have that role either
+                        //This is to set that not-active-role as 'false' for the connected account
+                        roles[ROLES[i].roleName] = false;
+                    }
                 }
+                return roles
             }
-            return roles
         }
+
     } catch (e) {
         console.log(e);
     }

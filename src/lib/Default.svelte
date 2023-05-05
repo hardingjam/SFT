@@ -280,7 +280,7 @@
                       on:click="{() =>  changeUrl('mint')}">
                 Mint
               </button>
-              <button class:selected="{selectedTab === 'redeem'}" disabled={!$accountRoles.WITHDRAWER}
+              <button class:selected="{selectedTab === 'redeem'}" disabled={!$accountRoles?.WITHDRAWER}
                       class="redeem-tab tab-button"
                       on:click="{() =>  changeUrl('redeem')}">
                 Redeem

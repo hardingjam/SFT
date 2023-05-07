@@ -6,6 +6,7 @@
     import {getSchemas, getSubgraphData, timeStampToDate} from "../scripts/helpers";
     import {DEPOSITS_QUERY} from "../scripts/queries.js";
     import {onMount} from "svelte";
+    import {navigateTo} from 'yrv';
 
     let ipfsLoading = false;
 
@@ -32,6 +33,10 @@
 </script>
 
 <DefaultFrame header="Asset class list">
+  <div slot="header-buttons" class="display-flex">
+    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#mint")}}>Mint</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-asset-class")}}>New asset class</button>
+  </div>
   <div slot="content">
     <div class="schemas">
       <table class="w-100">

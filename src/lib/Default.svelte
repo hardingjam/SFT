@@ -44,11 +44,15 @@
 
     let location = window.location.hash;
     let selectedTab = "mint";
-    $: $vault && vaultChanged();
+    $: $vault.address && vaultChanged();
+    $: $data && setVaultName()
+
+    function setVaultName() {
+        tokenName = $data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : ""
+    }
 
     async function vaultChanged() {
         if ($vault.address && $activeNetwork.id && $account) {
-            tokenName = $vault && $vault.address ? await $vault.name() : "";
             await getRoles($vault.address)
             accountRoles.set(await setAccountRoles($roles, $account));
         }
@@ -76,6 +80,7 @@
         let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider);
         if (contract) {
             vault.set(contract);
+
         } else {
             vault.set({});
             location = "#set-vault";

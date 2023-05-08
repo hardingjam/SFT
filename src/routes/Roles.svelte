@@ -4,23 +4,19 @@
         activeNetwork,
         roles,
         data,
-        transactionError,
+        transactionError, accountRoles,
     } from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
     import {
-        filterArray,
-        getSubgraphData,
         accessControlError,
-        toSentenceCase, showPrompt, mapOrder
+        toSentenceCase, showPrompt, setAccountRoles
     } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
-    import {QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
     import {ROLES} from "../scripts/consts.js";
     import {ethers} from "ethers";
-    import {onMount} from "svelte";
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let account = '';
@@ -31,13 +27,8 @@
     let accountValid = true;
 
     async function getData() {
-        await getSgData($vault.address)
         executorRoles = $roles.length ? $roles.filter(r => !r.roleName?.includes('_ADMIN')) : []
     }
-
-    onMount(() => {
-        getSgData($vault.address)
-    })
 
     $: ($vault && $vault.address) && getData();
     $: account && validateAccount();
@@ -57,7 +48,7 @@
     async function grantRole() {
         error = ""
         let role = null
-        roleName ? role = await $vault[roleName]() : error = "Select role"
+        roleName ? role = ROLES.find(r => r.roleName === roleName).roleHash : error = "Select role"
 
         if (!account) {
             error = "Enter address"
@@ -70,19 +61,28 @@
             if (account && accountValid) {
                 const grantRoleTx = await $vault.grantRole(role, account.trim());
                 await showPrompt(grantRoleTx)
-                let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
-                updatedRoleHolders.push({account: {address: account}})
-                const newRoles = $roles.map(role => {
-                    if (role.roleName === roleName) {
-                        return {...role, roleHolders: updatedRoleHolders};
-                    }
-                    return role;
-                });
-                roles.set([...newRoles])
+                let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes;
+                let revokedAccounts = []
+                if (roleRevokes.length) {
+                    roleRevokes = roleRevokes.filter(r => r.role.roleName === roleName)
+                    revokedAccounts = roleRevokes.map(r => r.roleHolder.account.address)
+                }
+                if (revokedAccounts.indexOf(account.toLowerCase()) < 0) {
+                    let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
+                    updatedRoleHolders.push({account: {address: account.toLowerCase()}})
+                    const newRoles = $roles.map(role => {
+                        if (role.roleName === roleName) {
+                            return {...role, roleHolders: updatedRoleHolders};
+                        }
+                        return role;
+                    });
+                    roles.set([...newRoles])
+                    accountRoles.set(await setAccountRoles($roles, account.trim()));
+                }
+
             }
 
         } catch (err) {
-            transactionError.set(true)
             error = err.reason || ""
             if (error && error?.includes('AccessControl')) {
                 error = accessControlError(error)
@@ -90,31 +90,6 @@
         }
     }
 
-    async function getSgData(vaultAddress) {
-        let variables = {id: vaultAddress.toLowerCase()}
-
-        getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
-            loading = true
-            if (res && res.data) {
-                data.set(res.data)
-                roles.set(res.data.offchainAssetReceiptVault?.roles?.length ? res.data.offchainAssetReceiptVault?.roles : ROLES)
-                let rolesFiltered = $roles.map(role => {
-                    let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
-                    let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
-                    let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
-                    return {roleName: role.roleName, roleHolders: filtered, roleHash: role.roleHash}
-                })
-
-                //Order roles from subgraph as in contract
-                let rolesOrder = ROLES.map(r => r.roleHash)
-                rolesFiltered = mapOrder(rolesFiltered, rolesOrder, 'roleHash')
-
-                roles.set(rolesFiltered)
-                executorRoles = $roles ? $roles.filter(r => !r.roleName?.includes('_ADMIN')) : []
-                loading = false
-            }
-        })
-    }
 
 </script>
 <div class="roles-container">

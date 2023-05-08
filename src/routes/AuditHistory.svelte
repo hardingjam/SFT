@@ -21,6 +21,7 @@
     } from "../scripts/consts.js";
     import axios from "axios";
     import SftLoader from "../components/SftLoader.svelte";
+    import {accountRoles} from "../scripts/store.js";
 
     let error = ''
     let certifyUntil = formatDate(new Date())
@@ -101,7 +102,6 @@
                 })
 
             } catch (e) {
-                transactionError.set(true)
                 console.log(e)
             }
 
@@ -173,10 +173,12 @@
           </tbody>
         </table>
       </div>
-      <div class="certify-btn-container">
-        <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
-        <button class="default-btn" on:click={() => certify()}>Certify</button>
-      </div>
+      {#if ($accountRoles.CERTIFIER)}
+        <div class="certify-btn-container">
+          <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
+          <button class="default-btn" on:click={() => certify()}>Certify</button>
+        </div>
+      {/if}
       <div class="error">
         {error}
         <!--        System frozen until certified-->

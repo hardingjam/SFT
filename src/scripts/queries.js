@@ -28,7 +28,7 @@ export const QUERY = `
                 }
             }
           }
-         `
+         `;
 
 export const AUDIT_HISTORY_DATA_QUERY = `
         query($id: ID!) {
@@ -65,7 +65,7 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             }
           }
         }
-    `
+    `;
 
 
 export const RECEIPTS_QUERY = `
@@ -88,7 +88,7 @@ export const RECEIPTS_QUERY = `
                 }
               }
           }
-         `
+         `;
 export const DEPLOYER_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
@@ -96,7 +96,7 @@ export const DEPLOYER_QUERY = `
                 totalShares
             }
           }
-         `
+         `;
 export const RECEIPT_INFORMATION_QUERY = `
           query($id: ID!) {
             receipt(id: $id) {
@@ -106,7 +106,7 @@ export const RECEIPT_INFORMATION_QUERY = `
                   }
             }
           }
-         `
+         `;
 export const RECEIPT_VAULT_INFORMATION_QUERY = `
           query {
              receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
@@ -115,7 +115,7 @@ export const RECEIPT_VAULT_INFORMATION_QUERY = `
                }
             }
           }
-         `
+         `;
 export const VAULT_INFORMATION_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
@@ -127,7 +127,7 @@ export const VAULT_INFORMATION_QUERY = `
                  }
             }
           }
-         `
+         `;
 
 export const VAULTS_QUERY = `
         query {
@@ -139,7 +139,7 @@ export const VAULTS_QUERY = `
             deployBlock,
             deployTimestamp
           }
-        }`
+        }`;
 
 export const DEPOSITS_QUERY = `
           query($id: ID!) {
@@ -157,5 +157,4 @@ export const DEPOSITS_QUERY = `
               }
             }
           }
-         `
-
+         `;

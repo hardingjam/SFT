@@ -380,6 +380,8 @@ export async function showPrompt(transaction, options) {
         if (wait.status === 1) {
             transactionSuccess.set(true)
             transactionInProgress.set(false)
+        } else {
+            transactionError.set(true)
         }
     }
 }
@@ -435,7 +437,8 @@ export async function addMissingHashesToSubGraph(hashes, vault, signer) {
             hashes.toString(),
             MAGIC_NUMBERS.OA_HASH_LIST
         );
-        const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
+        const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema +
+            encodedHashList
         await vault.connect(signer).receiptVaultInformation(arrayify(meta))
 
     } catch (err) {
@@ -516,4 +519,17 @@ function getAssetCount(hash, deposits) {
         0
     );
     return ethers.utils.formatUnits(assetCount, 18)
+}
+
+export async function setAccountRoles(roles, account) {
+    let accountRoles = []
+    for (let i = 0; i < ROLES.length; i++) {
+        let role = roles.find(r => r.roleHash === ROLES[i].roleHash);
+        if (role) {
+            accountRoles[ROLES[i].roleName] = role.roleHolders.some(h => h.account.address.toLowerCase() ===
+                account.toLowerCase());
+        }
+    }
+    return accountRoles
+
 }

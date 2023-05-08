@@ -9,18 +9,18 @@
         transactionHash,
         promptTopText,
         promptBottomText,
-        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText
+        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText, accountRoles, data, roles
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
     import {ethers} from "ethers";
-    import {onMount} from 'svelte';
-    import {Router, Route, navigateTo, router} from "yrv"
+    import {onMount} from "svelte";
+    import {Router, Route, navigateTo, router} from "yrv";
     import Roles from "./../routes/Roles.svelte";
-    import {icons} from '../scripts/assets.js'
+    import {icons} from "../scripts/assets.js";
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import {getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {filterArray, getContract, getSubgraphData, mapOrder, setAccountRoles} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
@@ -33,21 +33,31 @@
     import Navigation from "../components/Navigation.svelte";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
-    import {VAULTS_QUERY} from "../scripts/queries.js";
+    import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
+    import {ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
 
-    let connectedAccount;
-    let tokenName = '';
-    export let url = '';
 
-    let isMetamaskInstalled = typeof window.ethereum !== "undefined"
+    let connectedAccount;
+    let tokenName = "";
+    export let url = "";
+
+    let isMetamaskInstalled = typeof window.ethereum !== "undefined";
 
     let location = window.location.pathname;
-    let selectedTab = '/mint'
-    $: $vault && setTokenName()
+    let selectedTab = "/mint";
+    $: $vault.address && vaultChanged();
+    $: $data && setVaultName()
 
-    async function setTokenName() {
-        tokenName = $vault && $vault.address ? await $vault.name() : ""
+    function setVaultName() {
+        tokenName = $data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : ""
+    }
+
+    async function vaultChanged() {
+        if ($vault.address && $activeNetwork.id && $account) {
+            await getRoles($vault.address)
+            accountRoles.set(await setAccountRoles($roles, $account));
+        }
     }
 
     router.subscribe(async e => {
@@ -68,10 +78,11 @@
     });
 
     export async function setVault() {
-        let contractAddress = localStorage.getItem("vaultAddress")
-        let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider)
+        let contractAddress = localStorage.getItem("vaultAddress");
+        let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider);
         if (contract) {
-            vault.set(contract)
+            vault.set(contract);
+
         } else {
             vault.set({})
             location = "/set-vault"
@@ -79,75 +90,77 @@
         }
     }
 
-
     onMount(async () => {
-        await getEthersData()
+        await getEthersData();
 
         if (isMetamaskInstalled) {
-            await setNetwork()
-            connectedAccount = await getMetamaskConnectedAccount()
+            await setNetwork();
+            connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
                 account.set(connectedAccount)
                 navigateTo(location || '/', {replace: false})
             } else {
-                localStorage.removeItem('account')
+                localStorage.removeItem("account");
             }
 
             window.ethereum.on("accountsChanged", async (accounts) => {
                 if (!accounts.length) {
                     account.set(null);
-                    localStorage.removeItem('account')
+                    localStorage.removeItem("account");
                 } else {
                     account.set(accounts[0]);
-                    localStorage.setItem('account', $account)
+                    localStorage.setItem("account", $account);
+                    accountRoles.set(await setAccountRoles($roles, $account));
+
+                    if ((location === '#mint' || location === '#redeem') && !$accountRoles.DEPOSITOR) {
+                        navigateTo('#set-vault');
+                    }
                 }
             });
             window.ethereum.on("chainChanged", networkChanged);
         }
-        if (location === '') {
-            navigateTo('/set-vault')
+        if (location === "/" || location === "") {
+            navigateTo("/set-vault");
         }
-        await getTokens()
+        await getTokens();
 
         // const grantRoleTx = await $vault.connect($ethersData.signer).grantRole(await $vault.connect($ethersData.signer).DEPOSITOR(), $account.trim());
         // await grantRoleTx.wait()
 
-
     });
 
     async function networkChanged() {
-        localStorage.setItem("vaultAddress", "")
-        vault.set({})
-        await setNetwork()
-        await getTokens()
-        navigateTo('/set-vault')
+        localStorage.setItem("vaultAddress", "");
+        vault.set({});
+        await setNetwork();
+        await getTokens();
+        navigateTo("/set-vault");
     }
 
     async function getEthersData() {
         if (window.ethereum) {
-            let temp = {}
+            let temp = {};
             temp.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
             temp.signer = temp.provider.getSigner();
             temp.signerOrProvider = temp.signer ? temp.signer : temp.provider;
 
-            ethersData.set(temp)
+            ethersData.set(temp);
         }
     }
-
 
     async function setNetwork() {
         let network = await $ethersData.provider.getNetwork();
         let connectedChainId = parseInt(network.chainId);
         let temp = networks.find(
             (network) => network.chainId === connectedChainId
-        )
-        activeNetwork.set(temp)
-        return temp
+        );
+        activeNetwork.set(temp);
+        return temp;
     }
 
     async function handleNetworkSelect(event) {
-        let activeNet = event.detail.selected
-        let chainId = ethers.utils.hexValue(activeNet.chainId)
+        let activeNet = event.detail.selected;
+        let chainId = ethers.utils.hexValue(activeNet.chainId);
         try {
             await window.ethereum.request({
                 method: "wallet_switchEthereumChain",
@@ -180,7 +193,7 @@
             }
             // handle other "switch" errors
         }
-        await networkChanged()
+        await networkChanged();
         // activeNetwork.set(activeNet)
     }
 
@@ -198,7 +211,8 @@
                     method: "eth_requestAccounts"
                 }));
                 account.set(accounts[0]);
-                localStorage.setItem('account', $account)
+                accountRoles.set(await setAccountRoles($roles, $account));
+                localStorage.setItem("account", $account);
             } catch (error) {
                 console.log(error);
             }
@@ -218,14 +232,43 @@
     }
 
     async function getTokens() {
-        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, 'offchainAssetReceiptVaults').then((res) => {
+        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
             if ($activeNetwork) {
-                let temp = res.data.offchainAssetReceiptVaults
-                tokens.set(temp)
+                let temp = res.data.offchainAssetReceiptVaults;
+                tokens.set(temp);
             }
-        })
+        });
     }
 
+    async function getRoles(vaultAddress) {
+        if (vaultAddress) {
+            try {
+                let variables = {id: vaultAddress.toLowerCase()}
+                let res = await getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault')
+                if (res && res.data) {
+                    data.set(res.data)
+                    roles.set(res.data.offchainAssetReceiptVault?.roles?.length ?
+                        res.data.offchainAssetReceiptVault?.roles :
+                        ROLES)
+                    let rolesFiltered = $roles.map(role => {
+                        let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName ===
+                            role.roleName)
+                        let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
+                        let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
+                        return {roleName: role.roleName, roleHolders: filtered, roleHash: role.roleHash}
+                    })
+
+                    //Order roles from subgraph as in contract
+                    let rolesOrder = ROLES.map(r => r.roleHash)
+                    rolesFiltered = mapOrder(rolesFiltered, rolesOrder, 'roleHash')
+                    roles.set(rolesFiltered)
+                }
+            } catch (e) {
+                console.log(e)
+            }
+
+        }
+    }
 </script>
 <Router url={url}>
 
@@ -252,17 +295,18 @@
             <Route path="/sft-create-success" component={SftCreateSuccess}/>
             <Route path="/ipfs" component={Ipfs}/>
 
-            <div class={location === '/mint' || location === "/redeem" ? 'tabs show' : 'tabs hide'}>
-              <div class="tab-buttons">
-                <button class:selected="{selectedTab === '/mint'}" class="tab-button"
-                        on:click="{() =>  changeUrl('/mint')}">
-                  Mint
-                </button>
-                <button class:selected="{selectedTab === '/redeem'}" class="redeem-tab tab-button"
-                        on:click="{() =>  changeUrl('/redeem')}">
-                  Redeem
-                </button>
-              </div>
+          <div class={location === '/mint' || location === "/redeem" ? 'tabs show' : 'tabs hide'}>
+            <div class="tab-buttons">
+              <button class:selected="{selectedTab === '/mint'}" class="tab-button"
+                      on:click="{() =>  changeUrl('/mint')}">
+                Mint
+              </button>
+              <button class:selected="{selectedTab === '/redeem'}" disabled={!$accountRoles?.WITHDRAWER}
+                      class="redeem-tab tab-button"
+                      on:click="{() =>  changeUrl('/redeem')}">
+                Redeem
+              </button>
+            </div>
 
               <div class="tab-panel-container">
                 <Route path="/mint" component={Mint} ethersData={$ethersData}/>
@@ -274,7 +318,6 @@
             <label>Choose a supported network from the list above</label>
           </div>
         </div>
-
       </div>
     {/if}
     {#if !$account}
@@ -412,6 +455,11 @@
   .redeem-tab {
     border-radius: 10px 10px 0 0 !important;
     margin-left: 2px;
+  }
+
+  .redeem-tab:disabled {
+    color: #9D9D9D;
+    opacity: 0.8;
   }
 
   .selected {

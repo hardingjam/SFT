@@ -68,7 +68,6 @@
                 return
             }
         } catch (err) {
-            transactionError.set(true)
             error = err.reason
         }
         shouldDisable = false;
@@ -139,7 +138,6 @@
                     );
                 await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
             } catch (err) {
-                transactionError.set(true)
                 error = err.reason
             }
         } else {

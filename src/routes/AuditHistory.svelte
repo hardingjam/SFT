@@ -113,13 +113,13 @@
 
     function goToReceiptAudit(receipt) {
         selectedReceipt.set(receipt)
-        navigateTo(`#receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
+        navigateTo(`/receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
     }
 </script>
 <DefaultFrame header="Audit history">
   <div slot="header-buttons" class="display-flex">
-    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#members")}}>Members</button>
-    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#roles")}}>Roles</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigateTo("/members")}}>Members</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigateTo("/roles")}}>Roles</button>
   </div>
   <div slot="content">
     <div class="history">

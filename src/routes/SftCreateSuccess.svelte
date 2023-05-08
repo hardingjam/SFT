@@ -5,7 +5,7 @@
     let error = ""
 
     function goToRoles() {
-        navigateTo("#roles", {replace: false});
+        navigateTo("/roles", {replace: false});
     }
 
 </script>

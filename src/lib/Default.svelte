@@ -34,6 +34,7 @@
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
     import {VAULTS_QUERY} from "../scripts/queries.js";
+    import Header from '../components/Header.svelte';
 
     let connectedAccount;
     let tokenName = '';
@@ -41,8 +42,8 @@
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined"
 
-    let location = window.location.hash;
-    let selectedTab = 'mint'
+    let location = window.location.pathname;
+    let selectedTab = '/mint'
     $: $vault && setTokenName()
 
     async function setTokenName() {
@@ -53,15 +54,15 @@
         if (!e.initial) {
             await setVault()
             location = e.path
-            selectedTab = location.slice(1) || 'mint'
-            if (location === "#list" && $tokens.length) {
-                navigateTo("#list", {replace: false})
+            selectedTab = location || '/mint'
+            if (location === "/list" && $tokens.length) {
+                navigateTo("/list", {replace: false})
             }
-            if (location === "#setup") {
-                navigateTo("#setup", {replace: false})
+            if (location === "/setup") {
+                navigateTo("/setup", {replace: false})
             }
-            if (location === "#ipfs") {
-                navigateTo("#ipfs", {replace: false})
+            if (location === "/ipfs") {
+                navigateTo("/ipfs", {replace: false})
             }
         }
     });
@@ -73,8 +74,8 @@
             vault.set(contract)
         } else {
             vault.set({})
-            location = "#set-vault"
-            navigateTo("#set-vault", {replace: false})
+            location = "/set-vault"
+            navigateTo("/set-vault", {replace: false})
         }
     }
 
@@ -87,7 +88,7 @@
             connectedAccount = await getMetamaskConnectedAccount()
             if (connectedAccount) {
                 account.set(connectedAccount)
-                navigateTo(location || '#', {replace: false})
+                navigateTo(location || '/', {replace: false})
             } else {
                 localStorage.removeItem('account')
             }
@@ -104,7 +105,7 @@
             window.ethereum.on("chainChanged", networkChanged);
         }
         if (location === '') {
-            navigateTo('#set-vault')
+            navigateTo('/set-vault')
         }
         await getTokens()
 
@@ -119,7 +120,7 @@
         vault.set({})
         await setNetwork()
         await getTokens()
-        navigateTo('#set-vault')
+        navigateTo('/set-vault')
     }
 
     async function getEthersData() {
@@ -212,7 +213,7 @@
     }
 
     function changeUrl(tab) {
-        navigateTo('#' + tab)
+        navigateTo(tab)
         selectedTab = tab
     }
 
@@ -229,18 +230,53 @@
 <Router url={url}>
 
   <div class="content">
-    <div class="default-header">
-      <div class="logo" on:click={()=>{window.location.href = '/'}}>
-        <img src={icons.logo} alt="sft logo">
-        <div class="logo-label">{tokenName}</div>
-      </div>
-      {#if $account}
-        <div class="menu">
-          <Navigation on:networkSelect={handleNetworkSelect}></Navigation>
+    {#if $account}
+      <div class="header flex w-full h-14 justify-end">
+        <div class="flex pr-20 text-white items-center font-bold">
+          <Header on:networkSelect={handleNetworkSelect}></Header>
         </div>
-      {/if}
+      </div>
+      <div class="menu">
+        <Navigation path={location}/>
+        <div class="main-card">
+          <div class={$activeNetwork  ? 'show' : 'hide'}>
+            <Route path="/setup" component={SftSetup} ethersData={$ethersData}/>
+            <Route path="/roles" component={Roles}/>
+            <Route path="/list" component={Tokens}/>
+            <Route path="/members" component={Members}/>
+            <Route path="/audit-history" component={AuditHistory}/>
+            <Route path="/set-vault" component={SetVault}/>
+            <Route path="/asset-classes" component={AssetClasses}/>
+            <Route path="/new-asset-class" component={NewSchema}/>
+            <Route path="/receipt/:id" component={ReceiptAudit}/>
+            <Route path="/sft-create-success" component={SftCreateSuccess}/>
+            <Route path="/ipfs" component={Ipfs}/>
 
-    </div>
+            <div class={location === '/mint' || location === "/redeem" ? 'tabs show' : 'tabs hide'}>
+              <div class="tab-buttons">
+                <button class:selected="{selectedTab === '/mint'}" class="tab-button"
+                        on:click="{() =>  changeUrl('/mint')}">
+                  Mint
+                </button>
+                <button class:selected="{selectedTab === '/redeem'}" class="redeem-tab tab-button"
+                        on:click="{() =>  changeUrl('/redeem')}">
+                  Redeem
+                </button>
+              </div>
+
+              <div class="tab-panel-container">
+                <Route path="/mint" component={Mint} ethersData={$ethersData}/>
+                <Route path="/redeem" component={Redeem} ethersData={$ethersData}/>
+              </div>
+            </div>
+          </div>
+          <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
+            <label>Choose a supported network from the list above</label>
+          </div>
+        </div>
+
+      </div>
+    {/if}
     {#if !$account}
       <div>
         <div class="invalid-network f-weight-700">
@@ -253,44 +289,6 @@
               <span>Install Metamask</span>
             {/if}
           </button>
-        </div>
-      </div>
-    {/if}
-    {#if $account}
-      <div class="main-card">
-        <div class={$activeNetwork  ? 'show' : 'hide'}>
-          <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
-          <Route path="#roles" component={Roles}/>
-          <Route path="#list" component={Tokens}/>
-          <Route path="#members" component={Members}/>
-          <Route path="#audit-history" component={AuditHistory}/>
-          <Route path="#set-vault" component={SetVault}/>
-          <Route path="#asset-classes" component={AssetClasses}/>
-          <Route path="#new-asset-class" component={NewSchema}/>
-          <Route path="#receipt/:id" component={ReceiptAudit}/>
-          <Route path="#sft-create-success" component={SftCreateSuccess}/>
-          <Route path="#ipfs" component={Ipfs}/>
-
-          <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
-            <div class="tab-buttons">
-              <button class:selected="{selectedTab === 'mint'}" class="tab-button"
-                      on:click="{() =>  changeUrl('mint')}">
-                Mint
-              </button>
-              <button class:selected="{selectedTab === 'redeem'}" class="redeem-tab tab-button"
-                      on:click="{() =>  changeUrl('redeem')}">
-                Redeem
-              </button>
-            </div>
-
-            <div class="tab-panel-container">
-              <Route path="#mint" component={Mint} ethersData={$ethersData}/>
-              <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
-            </div>
-          </div>
-        </div>
-        <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
-          <label>Choose a supported network from the list above</label>
         </div>
       </div>
     {/if}

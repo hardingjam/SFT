@@ -59,8 +59,8 @@
     </div>
   </Dropdown>
 </div>
-<style>
-    @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");
+<style >
+    /*@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");*/
 
     .btn:focus {
         outline: none;

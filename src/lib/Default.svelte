@@ -236,9 +236,9 @@
           <Header on:networkSelect={handleNetworkSelect}></Header>
         </div>
       </div>
-      <div class="menu">
+      <div class="display-flex items-start">
         <Navigation path={location}/>
-        <div class="main-card">
+        <div class="main-card ml-5 mt-12">
           <div class={$activeNetwork  ? 'show' : 'hide'}>
             <Route path="/setup" component={SftSetup} ethersData={$ethersData}/>
             <Route path="/roles" component={Roles}/>
@@ -294,7 +294,7 @@
     {/if}
   </div>
 
-  <div class="footer">
+  <div class="footer fixed bottom-0 bg-white w-full p-2">
     <div class="powered-by">
       <span>Powered by</span>
       <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>
@@ -347,7 +347,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: -45px;
   }
 
   .invalid-network {
@@ -372,10 +371,6 @@
     color: #FFFFFF;
     cursor: pointer;
     border: none;
-  }
-
-  .menu {
-    display: flex;
   }
 
   .select-icon {
@@ -437,8 +432,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 40px;
-    padding-top: 190px;
     font-family: 'Inter', sans-serif;
   }
 
@@ -460,6 +453,11 @@
     height: 100%;
     backdrop-filter: blur(3.5px);
     top: 0
+  }
+
+  .header{
+    background: #6F5EA1;
+    background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
   }
 
 </style>

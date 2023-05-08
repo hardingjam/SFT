@@ -27,15 +27,13 @@ body {
   display: flex;
   min-width: 320px;
   min-height: 100vh;
-  background: rgb(181, 220, 255);
-  background: linear-gradient(0deg, #b5dcff 0%, #6f5ea1 100%);
+  background-color: #DCDBDD;
   background-attachment: fixed;
 }
 
 #app {
   text-align: center;
   width: 100%;
-  margin-top: 52px;
   font-family: "Mukta", sans-serif;
 }
 

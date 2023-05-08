@@ -12,8 +12,7 @@
 
     export let path = "/"
 </script>
-<div id="Main"
-     class="{$sftInfo ? 'flex justify-start items-start h-screen bg-white flex-col navigation relative'
+<div class="{$sftInfo ? 'flex justify-start items-start h-screen bg-white flex-col navigation relative'
      : 'flex justify-start items-start h-screen bg-white flex-col navigation relative rounded-tr-3xl'}">
   <div class="flex justify-center items-center w-full space-x-3 logo-container ">
     <a href="/"><img src={logo} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>

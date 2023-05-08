@@ -1,4 +1,4 @@
-import "./app.postcss";
+import "./app.css";
 import App from "./App.svelte";
 
 import * as Sentry from "@sentry/svelte";

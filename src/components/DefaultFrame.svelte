@@ -2,7 +2,7 @@
     export let header = ''
 </script>
 <div class="default-frame">
-  <div class="header">
+  <div class="frame-header">
     <span>{header}</span>
     <slot name="address">
     </slot>
@@ -15,7 +15,7 @@
   </div>
 </div>
 <style>
-    .header {
+    .frame-header {
         color: #ffffff;
         display: flex;
         justify-content: space-between;

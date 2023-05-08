@@ -12,9 +12,9 @@
 
     export let path = "/"
 </script>
-<div class="flex">
-  <div class="{$sftInfo ? 'flex justify-start items-start h-screen bg-white flex-col navigation relative'
-     : 'flex justify-start items-start h-screen bg-white flex-col navigation relative rounded-tr-3xl'}">
+<div class="flex navigation-container">
+  <div class="{$sftInfo ? 'flex justify-start items-start bg-white flex-col navigation relative'
+     : 'flex justify-start items-start bg-white flex-col navigation relative rounded-tr-3xl'}">
     <div class="flex justify-center items-center w-full space-x-3 logo-container ">
       <a href="/"><img src={logo} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>
       {#if !$sftInfo}
@@ -247,5 +247,9 @@
 
     .sft-info{
         width: 350px;
+    }
+
+    .navigation-container{
+        height: calc(100vh - 60px);
     }
 </style>

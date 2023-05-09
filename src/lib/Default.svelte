@@ -9,7 +9,7 @@
         transactionHash,
         promptTopText,
         promptBottomText,
-        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText, accountRoles, data, roles
+        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText, accountRoles, data, roles, sftInfo
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -281,7 +281,7 @@
       </div>
       <div class="display-flex items-start">
         <Navigation path={location}/>
-        <div class="main-card mt-12">
+        <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
           <div class={$activeNetwork  ? 'show' : 'hide'}>
             <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
             <Route path="#roles" component={Roles}/>
@@ -392,6 +392,10 @@
     justify-content: center;
     margin-left: 14rem;
     margin-top: 5rem;
+  }
+
+  .sft-info-opened{
+    margin-left: 36rem;
   }
 
   .invalid-network {

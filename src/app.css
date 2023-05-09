@@ -197,6 +197,7 @@ button:focus-visible {
   background: transparent;
   color: #ffffff;
   margin-left: 15px;
+  padding: 0 10px;
 }
 
 .header-btn:focus {

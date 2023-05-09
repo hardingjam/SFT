@@ -7,7 +7,7 @@ export const QUERY = `
                 deployer,
                 admin,
                 name,
-                roles{
+                roles(orderBy: roleName){
                     roleName,
                     roleHolders{
                       account{

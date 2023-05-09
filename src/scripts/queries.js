@@ -1,19 +1,24 @@
 export const QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
-                id,
-                totalShares,
-                address,
-                deployer,
-                admin,
-                name,
+                id
+                totalShares
+                address
+                deployer
+                admin
+                name
+                symbol
+                deployTimestamp
+                shareHolders{
+                    address
+                }
                 roles{
-                    roleName,
+                    roleName
                     roleHolders{
                       account{
                         address
                       }
-                    },
+                    }
                     roleHash
                 },
                 roleRevokes{

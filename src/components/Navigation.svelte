@@ -2,7 +2,9 @@
     import logo from "../assets/sft_logo.svg"
     import {sftInfo} from "../scripts/store.js";
     import {navigateTo} from 'yrv';
-    import { fade, fly } from 'svelte/transition';
+    import {fly} from 'svelte/transition';
+    import {timeStampToDate} from '../scripts/helpers.js';
+    import {ethers} from 'ethers';
 
     function showSftInfo() {
         sftInfo.set(true)
@@ -13,6 +15,8 @@
     }
 
     export let path = "/"
+    export let token = {}
+
 </script>
 <div class="navigation-container  relative h-full">
   <div class="{$sftInfo ? 'flex justify-start items-start bg-white top-14 flex-col navigation fixed h-full'
@@ -37,7 +41,7 @@
     <div class="mt-6 flex flex-col justify-start items-center w-full">
       <a href=""
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
-        <p class="text-base leading-5">SFT</p>
+        <p class="text-base leading-5 menu-header">SFT</p>
       </a>
       <button on:click={()=>navigateTo("#set-vault")}
               class:active={path==='#set-vault'}
@@ -130,7 +134,7 @@
     <div class="mt-6 flex flex-col justify-start items-center w-full">
       <a href=""
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
-        <p class="text-base leading-5">Web 3</p>
+        <p class="text-base leading-5 menu-header">Web 3</p>
       </a>
       <button on:click={()=>navigateTo("#ipfs")}
               class:active={path==='#ipfs'}
@@ -164,7 +168,8 @@
   </div>
 
   {#if ($sftInfo)}
-    <div class="bg-white w-5/12 rounded-tr-3xl relative border-l sft-info" in:fly="{{ x: -200, duration: 500 }}" out:fly="{{ x: -200, duration: 500 }}">
+    <div class="bg-white w-5/12 rounded-tr-3xl relative border-l sft-info" in:fly="{{ x: -200, duration: 500 }}"
+         out:fly="{{ x: -200, duration: 500 }}">
       <div class="cursor-pointer absolute right-2 top-2" on:click={()=>hideSftInfo()}>
         <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5.96387 5L10.9731 10M10.9731 10V5M10.9731 10H5.96387" stroke="#9D9D9D" stroke-width="2"
@@ -177,39 +182,42 @@
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <div class="flex flex-col pt-10 px-9 ">
+      <div class="flex flex-col pt-10 px-9 sft-info-table">
         <span class="font-bold self-center">Token Overview</span>
-        <table class="w-8/12 leading-8 w-full mt-5 leading-10">
+        <table class="w-8/12 leading-8 w-full mt-5 leading-10 text-left">
           <tr>
             <td class="font-bold">Token Name</td>
-            <td class="sft-name">OPUS</td>
+            <td class="sft-name">{token.name}</td>
           </tr>
           <tr>
             <td class="font-bold">Token Symbol</td>
-            <td class="">OPS</td>
+            <td class="">{token.symbol}</td>
           </tr>
           <tr>
             <td class="font-bold">Creation Date</td>
-            <td class="">30/09/2022</td>
+            <td class="">{timeStampToDate(token.deployTimestamp)}</td>
           </tr>
           <tr>
             <td class="font-bold">Number of holders</td>
-            <td class="">3,000,000</td>
+            <td class="">{token.shareHolders.length}</td>
           </tr>
           <tr>
             <td class="font-bold">Token Supply</td>
-            <td class="">123,000,000</td>
+            <td class="">{ethers.utils.formatUnits(token.totalShares, 18)}</td>
           </tr>
+          <!--          <tr>-->
+          <!--            <td class="font-bold">Name of Auditor(s)</td>-->
+          <!--            <td class="">KPMG</td>-->
+          <!--          </tr>-->
+          <!--          <tr>-->
+          <!--            <td class="font-bold">Name of issuer</td>-->
+          <!--            <td class="">British Land</td>-->
+          <!--          </tr>    -->
           <tr>
-            <td class="font-bold">Name of Auditor(s)</td>
-            <td class="">KPMG</td>
-          </tr>
-          <tr>
-            <td class="font-bold">Name of issuer</td>
-            <td class="">British Land</td>
+            <td class="font-bold">About</td>
+            <td class=""></td>
           </tr>
         </table>
-        <span class="font-bold">About</span>
 
       </div>
     </div>
@@ -256,6 +264,14 @@
         height: 100%;
         position: fixed;
         transition: 0.5s ease;
+    }
+
+    .menu-header {
+        color: #5F9AD1;
+    }
+
+    .sft-info-table {
+        color: #575757;
     }
 
 </style>

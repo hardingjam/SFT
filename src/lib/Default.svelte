@@ -9,7 +9,14 @@
         transactionHash,
         promptTopText,
         promptBottomText,
-        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText, accountRoles, data, roles, sftInfo
+        promptCloseAction,
+        promptNoBottom,
+        promptErrorText,
+        promptSuccessText,
+        accountRoles,
+        data,
+        roles,
+        sftInfo
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -280,7 +287,7 @@
         </div>
       </div>
       <div class="display-flex items-start">
-        <Navigation path={location}/>
+        <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
         <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
           <div class={$activeNetwork  ? 'show' : 'hide'}>
             <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
@@ -393,6 +400,7 @@
     margin-left: 14rem;
     margin-top: 5rem;
     transition: 0.5s ease;
+    margin-bottom: 5rem;
   }
 
   .sft-info-opened{

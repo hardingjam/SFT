@@ -8,10 +8,16 @@
         account,
         selectedReceipt,
         ethersData,
-        transactionError
+        transactionError, transactionSuccess, transactionInProgress
     } from "../scripts/store";
     import {onMount} from "svelte";
-    import {cborDecode, getSubgraphData, hasRole, showPrompt, timeStampToDate} from "../scripts/helpers.js";
+    import {
+        cborDecode,
+        getSubgraphData,
+        hasRole,
+        showPromptSFTCreate,
+        timeStampToDate
+    } from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatAddress, formatDate} from "../scripts/helpers";
@@ -73,13 +79,11 @@
         if (!$auditHistory.id) {
             loading = true;
             await getAuditHistory()
-            setInterval(getAuditHistory, 5000)
             loading = false
         } else {
             certifyData = $auditHistory?.certifications || []
             tempReceipts = $auditHistory?.deposits || []
         }
-
     })
 
     async function certify() {
@@ -93,14 +97,30 @@
             try {
 
                 let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
-                await showPrompt(certifyTx).then(() => {
-                    certifyData = [...certifyData, {
-                        timestamp: Math.floor(new Date().getTime() / 1000),
-                        certifier: {address: $account},
-                        certifiedUntil: Math.floor(untilToTime / 1000),
-                        totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
-                    }]
-                })
+                await showPromptSFTCreate(certifyTx)
+
+                let wait = await certifyTx.wait()
+                if (wait.status === 1) {
+                    let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                    let lastElementBlockNumber = preData.data.offchainAssetReceiptVault.certifications.slice(-1)[0].transaction.blockNumber
+                    let interval = setInterval(async () => {
+                        if (wait.blockNumber.toString() === lastElementBlockNumber) {
+                            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                            if (auditHistory) {
+                                let temp = data.data.offchainAssetReceiptVault
+                                auditHistory.set(temp)
+                                certifyData = $auditHistory?.certifications || []
+                            } else {
+                                auditHistory.set({})
+                            }
+                            transactionSuccess.set(true)
+                            transactionInProgress.set(false)
+                            clearInterval(interval)
+                        }
+                    }, 2000)
+                } else {
+                    transactionError.set(true)
+                }
 
             } catch (e) {
                 transactionError.set(true)

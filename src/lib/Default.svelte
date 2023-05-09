@@ -281,7 +281,7 @@
       </div>
       <div class="display-flex items-start">
         <Navigation path={location}/>
-        <div class="main-card ml-5 mt-12">
+        <div class="main-card mt-12">
           <div class={$activeNetwork  ? 'show' : 'hide'}>
             <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
             <Route path="#roles" component={Roles}/>
@@ -295,18 +295,18 @@
             <Route path="#sft-create-success" component={SftCreateSuccess}/>
             <Route path="#ipfs" component={Ipfs}/>
 
-          <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
-            <div class="tab-buttons">
-              <button class:selected="{selectedTab === '#mint'}" class="tab-button"
-                      on:click="{() =>  changeUrl('#mint')}">
-                Mint
-              </button>
-              <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
-                      class="redeem-tab tab-button"
-                      on:click="{() =>  changeUrl('#redeem')}">
-                Redeem
-              </button>
-            </div>
+            <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
+              <div class="tab-buttons">
+                <button class:selected="{selectedTab === '#mint'}" class="tab-button"
+                        on:click="{() =>  changeUrl('#mint')}">
+                  Mint
+                </button>
+                <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
+                        class="redeem-tab tab-button"
+                        on:click="{() =>  changeUrl('#redeem')}">
+                  Redeem
+                </button>
+              </div>
 
               <div class="tab-panel-container">
                 <Route path="#mint" component={Mint} ethersData={$ethersData}/>
@@ -390,6 +390,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: 14rem;
+    margin-top: 5rem;
   }
 
   .invalid-network {
@@ -503,7 +505,10 @@
     top: 0
   }
 
-  .header{
+  .header {
+    z-index: 2;
+    position: fixed;
+    top: 0;
     background: #6F5EA1;
     background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
   }

@@ -13,10 +13,10 @@
 
     export let path = "/"
 </script>
-<div class="flex navigation-container">
-  <div class="{$sftInfo ? 'flex justify-start items-start bg-white flex-col navigation relative'
-     : 'flex justify-start items-start bg-white flex-col navigation relative rounded-tr-3xl'}">
-    <div class="flex justify-center items-center w-full space-x-3 logo-container ">
+<div class="navigation-container  relative h-full">
+  <div class="{$sftInfo ? 'flex justify-start items-start bg-white top-14 flex-col navigation fixed h-full'
+     : 'flex justify-start items-start bg-white flex-col top-14 navigation fixed h-full rounded-tr-3xl'}">
+    <div class="flex justify-center items-center w-full space-x-3 logo-container">
       <a href="/"><img src={logo} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>
       {#if !$sftInfo}
         <div class="cursor-pointer absolute right-2 top-2" on:click={()=>showSftInfo()}>
@@ -245,13 +245,11 @@
     .navigation {
         min-width: 203px;
         max-width: 203px;
+        z-index: 3;
     }
 
     .sft-info {
         width: 350px;
     }
 
-    .navigation-container {
-        height: calc(100vh - 60px);
-    }
 </style>

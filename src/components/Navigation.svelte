@@ -38,9 +38,9 @@
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <p class="text-base leading-5">SFT</p>
       </a>
-      <div on:click={()=>navigateTo("#set-vault")}
-         class:active={path==='#set-vault'}
-         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
+      <button on:click={()=>navigateTo("#set-vault")}
+              class:active={path==='#set-vault'}
+              class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -49,10 +49,10 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">Home</p>
-      </div>
-       <div on:click={()=>navigateTo("#mint")}
-         class:active={path==='#mint'}
-         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
+      </button>
+      <button on:click={()=>navigateTo("#mint")}
+              class:active={path==='#mint'}
+              class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="19" height="10" viewBox="0 0 19 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -61,10 +61,10 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">Mint/Redeem</p>
-      </div>
-      <div on:click={()=>navigateTo("#members")}
-         class:active={path==='#members'}
-         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
+      </button>
+      <button on:click={()=>navigateTo("#members")}
+              class:active={path==='#members'}
+              class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -73,10 +73,10 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">Members</p>
-      </div>
-      <div on:click={()=>navigateTo("#roles")}
-         class:active={path==='#roles'}
-         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
+      </button>
+      <button on:click={()=>navigateTo("#roles")}
+              class:active={path==='#roles'}
+              class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -84,11 +84,11 @@
               stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <p class="text-base leading-5  ">SFT Roles</p>
-      </div>
-      <div on:click={()=>navigateTo("#audit-history")}
-         class:active={path==='#audit-history'}
-         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
+        <p class="text-base leading-5  ">SFT roles</p>
+      </button>
+      <button on:click={()=>navigateTo("#audit-history")}
+              class:active={path==='#audit-history'}
+              class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -97,10 +97,10 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">Audits</p>
-      </div>
-      <div on:click={()=>navigateTo("#asset-register")}
-         class:active={path==='#asset-register'}
-         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
+      </button>
+      <button on:click={()=>navigateTo("#list")}
+              class:active={path==='#list'}
+              class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="16" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="4 2 16 20">
             <path
@@ -110,20 +110,20 @@
             <path d="M9 17H15" stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <p class="text-base leading-5  ">Asset Register</p>
-      </div>
-      <div on:click={()=>navigateTo("#manual")}
-      class:active={path==='#manual'}
-         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
-        <div class="w-3">
-          <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M11 4.05337V18.3025M4 6.25464C5.26578 6.45067 6.67778 6.77657 8 7.28788M4 10.2546C4.63949 10.3537 5.3163 10.4859 6 10.6584M2.99433 1.01127C5.21271 1.26195 8.19313 1.93632 10.3168 3.42445C10.725 3.71045 11.275 3.71045 11.6832 3.42445C13.8069 1.93632 16.7873 1.26195 19.0057 1.01127C20.1036 0.887209 21 1.80402 21 2.93518V14.2C21 15.3311 20.1036 16.2483 19.0057 16.3723C16.7873 16.623 13.8069 17.2974 11.6832 18.7855C11.275 19.0715 10.725 19.0715 10.3168 18.7855C8.19313 17.2974 5.21271 16.623 2.99433 16.3723C1.89642 16.2483 1 15.3311 1 14.2V2.93518C1 1.80402 1.89642 0.887209 2.99433 1.01127Z"
-              stroke="#575757" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <p class="text-base leading-5  ">Manual</p>
-      </div>
+        <p class="text-base leading-5  ">SFT list</p>
+      </button>
+      <!--      <button on:click={()=>navigateTo("#manual")} disabled-->
+      <!--      class:active={path==='#manual'}-->
+      <!--         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">-->
+      <!--        <div class="w-3">-->
+      <!--          <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+      <!--            <path-->
+      <!--              d="M11 4.05337V18.3025M4 6.25464C5.26578 6.45067 6.67778 6.77657 8 7.28788M4 10.2546C4.63949 10.3537 5.3163 10.4859 6 10.6584M2.99433 1.01127C5.21271 1.26195 8.19313 1.93632 10.3168 3.42445C10.725 3.71045 11.275 3.71045 11.6832 3.42445C13.8069 1.93632 16.7873 1.26195 19.0057 1.01127C20.1036 0.887209 21 1.80402 21 2.93518V14.2C21 15.3311 20.1036 16.2483 19.0057 16.3723C16.7873 16.623 13.8069 17.2974 11.6832 18.7855C11.275 19.0715 10.725 19.0715 10.3168 18.7855C8.19313 17.2974 5.21271 16.623 2.99433 16.3723C1.89642 16.2483 1 15.3311 1 14.2V2.93518C1 1.80402 1.89642 0.887209 2.99433 1.01127Z"-->
+      <!--              stroke="#575757" stroke-width="2" stroke-linecap="round"/>-->
+      <!--          </svg>-->
+      <!--        </div>-->
+      <!--        <p class="text-base leading-5  ">Manual</p>-->
+      <!--      </button>-->
     </div>
     <div class="items-center pt-16 border-b w-11/12 self-center"></div>
     <div class="mt-6 flex flex-col justify-start items-center w-full">
@@ -131,9 +131,9 @@
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <p class="text-base leading-5">Web 3</p>
       </a>
-      <div on:click={()=>navigateTo("#ipfs")}
-      class:active={path==='#ipfs'}
-         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
+      <button on:click={()=>navigateTo("#ipfs")}
+              class:active={path==='#ipfs'}
+              class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -144,11 +144,11 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">IPFS</p>
-      </div>
-      <div on:click={()=>navigateTo("#setup")}
+      </button>
+      <button on:click={()=>navigateTo("#setup")}
 
-      class:active={path==='#setup'}
-         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
+              class:active={path==='#setup'}
+              class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="9" cy="9" r="8" stroke="#575757" stroke-width="2" stroke-linecap="round"
@@ -156,7 +156,7 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">SFT Setup</p>
-      </div>
+      </button>
     </div>
 
 
@@ -247,11 +247,11 @@
         max-width: 203px;
     }
 
-    .sft-info{
+    .sft-info {
         width: 350px;
     }
 
-    .navigation-container{
+    .navigation-container {
         height: calc(100vh - 60px);
     }
 </style>

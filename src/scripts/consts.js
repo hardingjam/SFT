@@ -5,7 +5,6 @@ export const TEST_CONTRACT_ADDRESS = "0x1cf0ab6cf30a8aea01e82cd6d831845fec4363a3
 
 export const ONE = ethers.BigNumber.from("1000000000000000000");
 export const ROLES = [
-
     {roleName: "CERTIFIER", roleHash: "0xd646ae07eb0d0f77457502a65e7407930dff4cd4fd99abc6aac87a753f4c8a42", roleHolders:[]},
     {roleName: "CERTIFIER_ADMIN", roleHash: "0x4bbeb6fd3e5222e55f2f8b0c35bc228e0a06a25d0da772fdb02c3b92fa004f88", roleHolders:[]},
     {roleName: "CONFISCATOR", roleHash: "0xa49d0f1c9ff1006cadfa9c5663622056113f1b69c0f273e4a1e170ee907cde94", roleHolders:[]},

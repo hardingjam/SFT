@@ -54,8 +54,8 @@
       <span>{admin ? 'Role Admin' : 'Executor'}</span>
       {#if roleHolders?.length}
         {#each roleHolders as roleHolder}
-          <div>
-            <span class="underline btn-hover" on:click={()=>showAddress(roleHolder.account.address)}>
+          <div class="display-flex">
+            <span class="underline btn-hover display-flex" on:click={()=>showAddress(roleHolder.account.address)}>
                           {formatAddress(roleHolder.account.address)}
               <img class="action-icon" src={icons.show} alt="show"/>
             </span>

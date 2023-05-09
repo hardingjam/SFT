@@ -33,7 +33,9 @@
 
     async function setAssetClasses() {
         receipts = await Promise.all(tempReceipts.map(async (r) => {
-            let information = r.receipt.receiptInformations[0]?.information ? cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) : null
+            let information = r.receipt.receiptInformations[0]?.information ?
+                cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) :
+                null
             let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
             let schema;
             if (schemaHash) {
@@ -116,11 +118,11 @@
         navigateTo(`#receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
     }
 
-    function inFuture(date){
+    function inFuture(date) {
         let day = date.split('-')[0]
         let month = date.split('-')[1]
         let year = date.split('-')[2]
-        return new Date(`${month}-${day}-${year}`) > new Date()
+        return new Date(`${month}/${day}/${year}`) > new Date()
     }
 </script>
 <DefaultFrame header="Audit history">
@@ -174,7 +176,8 @@
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
               <td>{formatAddress(cert?.certifier.address)}</td>
-              <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>{timeStampToDate(cert?.certifiedUntil)}</td>
+              <td
+                class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>{timeStampToDate(cert?.certifiedUntil)}</td>
             </tr>
           {/each}
           </tbody>

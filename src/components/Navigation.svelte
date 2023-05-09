@@ -2,6 +2,7 @@
     import logo from "../assets/sft_logo.svg"
     import {sftInfo} from "../scripts/store.js";
     import {navigateTo} from 'yrv';
+    import { fade, fly } from 'svelte/transition';
 
     function showSftInfo() {
         sftInfo.set(true)
@@ -163,7 +164,7 @@
   </div>
 
   {#if ($sftInfo)}
-    <div class="bg-white w-5/12 rounded-tr-3xl relative border-l sft-info">
+    <div class="bg-white w-5/12 rounded-tr-3xl relative border-l sft-info" in:fly="{{ x: -200, duration: 500 }}" out:fly="{{ x: -200, duration: 500 }}">
       <div class="cursor-pointer absolute right-2 top-2" on:click={()=>hideSftInfo()}>
         <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5.96387 5L10.9731 10M10.9731 10V5M10.9731 10H5.96387" stroke="#9D9D9D" stroke-width="2"
@@ -254,6 +255,7 @@
         margin-top: 3.5rem;
         height: 100%;
         position: fixed;
+        transition: 0.5s ease;
     }
 
 </style>

@@ -392,10 +392,12 @@
     justify-content: center;
     margin-left: 14rem;
     margin-top: 5rem;
+    transition: 0.5s ease;
   }
 
   .sft-info-opened{
     margin-left: 36rem;
+    transition: 0.5s ease;
   }
 
   .invalid-network {

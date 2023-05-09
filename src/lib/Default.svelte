@@ -51,7 +51,7 @@
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined";
 
-    let location = window.location.pathname;
+    let location = window.location.hash;
     let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
     $: $data && setVaultName()

@@ -337,13 +337,13 @@
 <div class="mint-container">
   <div class="header-buttons">
     <button type="button" class="default-btn mr-2" disabled={!$schemas.length}
-            on:click={()=>{navigateTo('/asset-classes')}}>
+            on:click={()=>{navigateTo('#asset-classes')}}>
       Asset classes
     </button>
-    <button type="button" class="default-btn mr-2" on:click={()=>{navigateTo('/new-asset-class')}}>
+    <button type="button" class="default-btn mr-2" on:click={()=>{navigateTo('#new-asset-class')}}>
       New asset class
     </button>
-    <button class="default-btn" on:click={()=>{navigateTo('/audit-history')}}>
+    <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>
       Audit history
     </button>
   </div>

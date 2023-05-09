@@ -1,6 +1,7 @@
 <script>
     import logo from "../assets/sft_logo.svg"
     import {sftInfo} from "../scripts/store.js";
+    import {navigateTo} from 'yrv';
 
     function showSftInfo() {
         sftInfo.set(true)
@@ -37,8 +38,8 @@
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <p class="text-base leading-5">SFT</p>
       </a>
-      <a href="/set-vault"
-         class:active={path==='/set-vault'}
+      <div on:click={()=>navigateTo("#set-vault")}
+         class:active={path==='#set-vault'}
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -48,9 +49,9 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">Home</p>
-      </a>
-      <a href="/mint"
-         class:active={path==='/mint'}
+      </div>
+       <div on:click={()=>navigateTo("#mint")}
+         class:active={path==='#mint'}
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="19" height="10" viewBox="0 0 19 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -60,9 +61,9 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">Mint/Redeem</p>
-      </a>
-      <a href="/members"
-         class:active={path==='/members'}
+      </div>
+      <div on:click={()=>navigateTo("#members")}
+         class:active={path==='#members'}
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -72,9 +73,9 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">Members</p>
-      </a>
-      <a href="/roles"
-         class:active={path==='/roles'}
+      </div>
+      <div on:click={()=>navigateTo("#roles")}
+         class:active={path==='#roles'}
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,9 +85,9 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">SFT Roles</p>
-      </a>
-      <a href="/audit-history"
-         class:active={path==='/audit-history'}
+      </div>
+      <div on:click={()=>navigateTo("#audit-history")}
+         class:active={path==='#audit-history'}
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,9 +97,9 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">Audits</p>
-      </a>
-      <a href="/asset-register"
-         class:active={path==='/asset-register'}
+      </div>
+      <div on:click={()=>navigateTo("#asset-register")}
+         class:active={path==='#asset-register'}
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="16" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="4 2 16 20">
@@ -110,9 +111,9 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">Asset Register</p>
-      </a>
-      <a href="/manual"
-         class:active={path==='/manual'}
+      </div>
+      <div on:click={()=>navigateTo("#manual")}
+      class:active={path==='#manual'}
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -122,7 +123,7 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">Manual</p>
-      </a>
+      </div>
     </div>
     <div class="items-center pt-16 border-b w-11/12 self-center"></div>
     <div class="mt-6 flex flex-col justify-start items-center w-full">
@@ -130,8 +131,8 @@
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <p class="text-base leading-5">Web 3</p>
       </a>
-      <a href="/ipfs"
-         class:active={path==='/ipfs'}
+      <div on:click={()=>navigateTo("#ipfs")}
+      class:active={path==='#ipfs'}
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,9 +144,10 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">IPFS</p>
-      </a>
-      <a href="/setup"
-         class:active={path==='/setup'}
+      </div>
+      <div on:click={()=>navigateTo("#setup")}
+
+      class:active={path==='#setup'}
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400  nav-item rounded py-2 font-bold pl-5">
         <div class="w-3">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -154,7 +156,7 @@
           </svg>
         </div>
         <p class="text-base leading-5  ">SFT Setup</p>
-      </a>
+      </div>
     </div>
 
 

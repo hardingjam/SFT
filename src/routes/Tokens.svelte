@@ -33,7 +33,7 @@
             let auditHistoryData = await getAuditHistoryData(token.address)
             auditHistory.set(auditHistoryData)
             accountRoles.set(await setAccountRoles($roles, $account));
-            navigateTo("/roles")
+            navigateTo("#roles")
         }
     }
 

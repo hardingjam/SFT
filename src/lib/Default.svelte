@@ -45,7 +45,7 @@
     let isMetamaskInstalled = typeof window.ethereum !== "undefined";
 
     let location = window.location.pathname;
-    let selectedTab = "/mint";
+    let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
     $: $data && setVaultName()
 
@@ -64,15 +64,15 @@
         if (!e.initial) {
             await setVault()
             location = e.path
-            selectedTab = location || '/mint'
-            if (location === "/list" && $tokens.length) {
-                navigateTo("/list", {replace: false})
+            selectedTab = location || '#mint'
+            if (location === "#list" && $tokens.length) {
+                navigateTo("#list", {replace: false})
             }
-            if (location === "/setup") {
-                navigateTo("/setup", {replace: false})
+            if (location === "#setup") {
+                navigateTo("#setup", {replace: false})
             }
-            if (location === "/ipfs") {
-                navigateTo("/ipfs", {replace: false})
+            if (location === "#ipfs") {
+                navigateTo("#ipfs", {replace: false})
             }
         }
     });
@@ -85,8 +85,8 @@
 
         } else {
             vault.set({})
-            location = "/set-vault"
-            navigateTo("/set-vault", {replace: false})
+            location = "#set-vault"
+            navigateTo("#set-vault", {replace: false})
         }
     }
 
@@ -98,7 +98,7 @@
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
                 account.set(connectedAccount)
-                navigateTo(location || '/', {replace: false})
+                navigateTo(location || '', {replace: false})
             } else {
                 localStorage.removeItem("account");
             }
@@ -120,7 +120,7 @@
             window.ethereum.on("chainChanged", networkChanged);
         }
         if (location === "/" || location === "") {
-            navigateTo("/set-vault");
+            navigateTo("#set-vault");
         }
         await getTokens();
 
@@ -134,7 +134,7 @@
         vault.set({});
         await setNetwork();
         await getTokens();
-        navigateTo("/set-vault");
+        navigateTo("#set-vault");
     }
 
     async function getEthersData() {
@@ -283,34 +283,34 @@
         <Navigation path={location}/>
         <div class="main-card ml-5 mt-12">
           <div class={$activeNetwork  ? 'show' : 'hide'}>
-            <Route path="/setup" component={SftSetup} ethersData={$ethersData}/>
-            <Route path="/roles" component={Roles}/>
-            <Route path="/list" component={Tokens}/>
-            <Route path="/members" component={Members}/>
-            <Route path="/audit-history" component={AuditHistory}/>
-            <Route path="/set-vault" component={SetVault}/>
-            <Route path="/asset-classes" component={AssetClasses}/>
-            <Route path="/new-asset-class" component={NewSchema}/>
-            <Route path="/receipt/:id" component={ReceiptAudit}/>
-            <Route path="/sft-create-success" component={SftCreateSuccess}/>
-            <Route path="/ipfs" component={Ipfs}/>
+            <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
+            <Route path="#roles" component={Roles}/>
+            <Route path="#list" component={Tokens}/>
+            <Route path="#members" component={Members}/>
+            <Route path="#audit-history" component={AuditHistory}/>
+            <Route path="#set-vault" component={SetVault}/>
+            <Route path="#asset-classes" component={AssetClasses}/>
+            <Route path="#new-asset-class" component={NewSchema}/>
+            <Route path="#receipt/:id" component={ReceiptAudit}/>
+            <Route path="#sft-create-success" component={SftCreateSuccess}/>
+            <Route path="#ipfs" component={Ipfs}/>
 
-          <div class={location === '/mint' || location === "/redeem" ? 'tabs show' : 'tabs hide'}>
+          <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
-              <button class:selected="{selectedTab === '/mint'}" class="tab-button"
-                      on:click="{() =>  changeUrl('/mint')}">
+              <button class:selected="{selectedTab === '#mint'}" class="tab-button"
+                      on:click="{() =>  changeUrl('#mint')}">
                 Mint
               </button>
-              <button class:selected="{selectedTab === '/redeem'}" disabled={!$accountRoles?.WITHDRAWER}
+              <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
                       class="redeem-tab tab-button"
-                      on:click="{() =>  changeUrl('/redeem')}">
+                      on:click="{() =>  changeUrl('#redeem')}">
                 Redeem
               </button>
             </div>
 
               <div class="tab-panel-container">
-                <Route path="/mint" component={Mint} ethersData={$ethersData}/>
-                <Route path="/redeem" component={Redeem} ethersData={$ethersData}/>
+                <Route path="#mint" component={Mint} ethersData={$ethersData}/>
+                <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
               </div>
             </div>
           </div>

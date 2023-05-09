@@ -212,7 +212,7 @@
     }
 
     function goToAssetClassList() {
-        navigateTo("/asset-classes", {replace: false});
+        navigateTo("#asset-classes", {replace: false});
     }
 
     async function getDeposits() {

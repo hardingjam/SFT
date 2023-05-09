@@ -105,7 +105,7 @@
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
                 account.set(connectedAccount)
-                navigateTo(location || '', {replace: false})
+                navigateTo(location || '#', {replace: false})
             } else {
                 localStorage.removeItem("account");
             }
@@ -403,7 +403,7 @@
     margin-bottom: 5rem;
   }
 
-  .sft-info-opened{
+  .sft-info-opened {
     margin-left: 36rem;
     transition: 0.5s ease;
   }

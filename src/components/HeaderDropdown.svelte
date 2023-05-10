@@ -64,7 +64,7 @@
           {#if item.icon}
             <img src={icons[item.icon]} alt={item?.displayName}/>
           {/if}
-          <span class="network-name">{item?.displayName} </span>
+          <span class={`${item.class} network-name`}>{item?.displayName} </span>
         </li>
       {/each}
     </ul>

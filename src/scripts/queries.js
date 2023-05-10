@@ -45,6 +45,9 @@ export const AUDIT_HISTORY_DATA_QUERY = `
               },
               certifiedUntil,
               totalShares
+                transaction {
+                  blockNumber
+                }
             },
             deposits(orderBy: timestamp orderDirection:desc) 
             {

@@ -1,6 +1,6 @@
 <script>
     import logo from "../assets/sft_logo.svg"
-    import {sftInfo, tokens, vault} from "../scripts/store.js";
+    import {account, accountRoles, sftInfo, tokens, vault} from "../scripts/store.js";
     import {navigateTo} from 'yrv';
     import {fly} from 'svelte/transition';
     import {timeStampToDate} from '../scripts/helpers.js';
@@ -55,18 +55,21 @@
         </span>
         <label class="text-base leading-5  ">Home</label>
       </button>
-      <button on:click={()=>navigateTo("#mint")}
-              class:active={path==='#mint'}
-              class="nav-item space-x-6" disabled={$vault.address? '' : 'disabled'}>
+      {#if $accountRoles.DEPOSITOR}
+        <button on:click={()=>navigateTo("#mint")}
+                class:active={path==='#mint'}
+                class="nav-item space-x-6" disabled={$vault.address? '' : 'disabled'}>
         <span class="w-3">
           <svg width="19" height="10" viewBox="0 0 19 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M9.62695 9L9.62695 5M9.62695 1L9.62695 5M9.62695 5L1.62696 5M9.62695 5L17.627 5M1.62696 5L4.12696 7.5M1.62696 5L4.12695 2.5M17.627 5L15.127 2.5M17.627 5L15.127 7.5"
-              stroke={$vault.address? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              stroke={$vault.address? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round"/>
           </svg>
         </span>
-        <label class="text-base leading-5  ">Mint/Redeem</label>
-      </button>
+          <label class="text-base leading-5  ">Mint/Redeem</label>
+        </button>
+      {/if}
       <button on:click={()=>navigateTo("#members")}
               class:active={path==='#members'}
               class="nav-item space-x-6" disabled={$vault.address? '' : 'disabled'}>
@@ -74,7 +77,8 @@
           <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M1 18V17C1 14.2386 3.23858 12 6 12H10C12.7614 12 15 14.2386 15 17V18M12 5C12 7.20914 10.2091 9 8 9C5.79086 9 4 7.20914 4 5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5Z"
-              stroke={$vault.address? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              stroke={$vault.address? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round"/>
           </svg>
         </span>
         <label class="text-base leading-5  ">Members</label>
@@ -86,7 +90,8 @@
           <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M1 18V17C1 14.2386 3.23858 12 6 12H9.75M14.5355 11.9645V15.5M14.5355 15.5V19.0355M14.5355 15.5H18.0711M14.5355 15.5H11M12 5C12 7.20914 10.2091 9 8 9C5.79086 9 4 7.20914 4 5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5Z"
-              stroke={$vault.address? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              stroke={$vault.address? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round"/>
           </svg>
         </span>
         <label class="text-base leading-5  ">SFT roles</label>
@@ -98,7 +103,8 @@
           <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M5.34876 9.50002L7.34876 11.5L11.5 7.34878M7.72528 1.07852L1.72528 2.7928C1.29598 2.91546 1 3.30784 1 3.75432L1 8.85384C1 12.0834 2.55966 15.1141 5.18762 16.9912L7.41876 18.5849C7.76646 18.8332 8.23354 18.8332 8.58124 18.5849L10.8124 16.9912C13.4403 15.1141 15 12.0834 15 8.85384V3.75432C15 3.30784 14.704 2.91546 14.2747 2.7928L8.27472 1.07852C8.09517 1.02721 7.90483 1.02721 7.72528 1.07852Z"
-              stroke={$vault.address? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              stroke={$vault.address? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round"/>
           </svg>
         </span>
         <label class="text-base leading-5  ">Audits</label>
@@ -111,9 +117,12 @@
           <svg width="16" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="4 2 16 20">
             <path
               d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H16C17.6569 21 19 19.6569 19 18V8.625M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19"
-              stroke={$tokens.length? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M9 13H15" stroke={$tokens.length? '#575757' : '#B7B7B7'}  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M9 17H15" stroke={$tokens.length? '#575757' : '#B7B7B7'}  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              stroke={$tokens.length? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round"/>
+            <path d="M9 13H15" stroke={$tokens.length? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <path d="M9 17H15" stroke={$tokens.length? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
           </svg>
         </span>
         <label class="text-base leading-5  ">SFT list</label>
@@ -254,7 +263,7 @@
         outline-offset: 2px;
     }
 
-    .nav-item:disabled{
+    .nav-item:disabled {
         color: #B7B7B7;
     }
 

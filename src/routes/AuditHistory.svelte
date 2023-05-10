@@ -8,9 +8,16 @@
         account,
         selectedReceipt,
         ethersData,
+        transactionError, transactionSuccess, transactionInProgress
     } from "../scripts/store";
     import {onMount} from "svelte";
-    import {cborDecode, getSubgraphData, hasRole, showPrompt, timeStampToDate} from "../scripts/helpers.js";
+    import {
+        cborDecode,
+        getSubgraphData,
+        hasRole,
+        showPromptSFTCreate,
+        timeStampToDate
+    } from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatAddress, formatDate} from "../scripts/helpers";
@@ -33,7 +40,9 @@
 
     async function setAssetClasses() {
         receipts = await Promise.all(tempReceipts.map(async (r) => {
-            let information = r.receipt.receiptInformations[0]?.information ? cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) : null
+            let information = r.receipt.receiptInformations[0]?.information ?
+                cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) :
+                null
             let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
             let schema;
             if (schemaHash) {
@@ -71,13 +80,11 @@
         if (!$auditHistory.id) {
             loading = true;
             await getAuditHistory()
-            setInterval(getAuditHistory, 5000)
             loading = false
         } else {
             certifyData = $auditHistory?.certifications || []
             tempReceipts = $auditHistory?.deposits || []
         }
-
     })
 
     async function certify() {
@@ -91,14 +98,30 @@
             try {
 
                 let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
-                await showPrompt(certifyTx).then(() => {
-                    certifyData = [...certifyData, {
-                        timestamp: Math.floor(new Date().getTime() / 1000),
-                        certifier: {address: $account},
-                        certifiedUntil: Math.floor(untilToTime / 1000),
-                        totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
-                    }]
-                })
+                await showPromptSFTCreate(certifyTx)
+
+                let wait = await certifyTx.wait()
+                if (wait.status === 1) {
+                    let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                    let lastElementBlockNumber = preData.data.offchainAssetReceiptVault.certifications.slice(-1)[0].transaction.blockNumber
+                    let interval = setInterval(async () => {
+                        if (wait.blockNumber.toString() === lastElementBlockNumber) {
+                            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                            if (auditHistory) {
+                                let temp = data.data.offchainAssetReceiptVault
+                                auditHistory.set(temp)
+                                certifyData = $auditHistory?.certifications || []
+                            } else {
+                                auditHistory.set({})
+                            }
+                            transactionSuccess.set(true)
+                            transactionInProgress.set(false)
+                            clearInterval(interval)
+                        }
+                    }, 2000)
+                } else {
+                    transactionError.set(true)
+                }
 
             } catch (e) {
                 console.log(e)
@@ -112,7 +135,14 @@
 
     function goToReceiptAudit(receipt) {
         selectedReceipt.set(receipt)
-        navigateTo(`/receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
+        navigateTo(`#receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
+    }
+
+    function inFuture(date) {
+        let day = date.split('-')[0]
+        let month = date.split('-')[1]
+        let year = date.split('-')[2]
+        return new Date(`${month}/${day}/${year}`) > new Date()
     }
 </script>
 <DefaultFrame header="Audit history">
@@ -166,7 +196,8 @@
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
               <td>{formatAddress(cert?.certifier.address)}</td>
-              <td class="until">{timeStampToDate(cert?.certifiedUntil)}</td>
+              <td
+                class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>{timeStampToDate(cert?.certifiedUntil)}</td>
             </tr>
           {/each}
           </tbody>

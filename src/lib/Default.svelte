@@ -283,7 +283,7 @@
     {#if $account}
       <div class="header flex w-full h-14 justify-end">
         <div class="flex pr-20 text-white items-center font-bold">
-          <Header on:networkSelect={handleNetworkSelect}></Header>
+          <Header on:select={handleNetworkSelect}></Header>
         </div>
       </div>
       <div class="display-flex items-start">

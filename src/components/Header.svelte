@@ -4,6 +4,7 @@
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
     import {formatAddress} from "../scripts/helpers.js";
+    import HeaderDropdown from './HeaderDropdown.svelte';
 
     let accountMenuOptions = [
         {
@@ -32,66 +33,20 @@
 
     const dispatch = createEventDispatcher();
 
-    function handleNavItemClick(option) {
-        dispatch('networkSelect', {
-            selected: option
+    function handleNetworkSelect(event) {
+        dispatch('select', {
+            selected: event.detail.selected
         });
+    }
+
+    function handleAccountMenuOptionsSelect(event){
+        event.detail.selected.action()
     }
 
 </script>
 
+<HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]} triggerLabel={$activeNetwork?.displayName}
+          items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
 
-<button id="networks-dropdown" data-dropdown-toggle="networks"
-        class="text-white focus:outline-none items-center display-flex mr-10" type="button">
-  <img src={  icons[$activeNetwork?.icon]}
-       alt={$activeNetwork?.displayName}/>
-  <span class="network-name">{$activeNetwork?.displayName || networks[0].displayName}</span>
-  <img src={ icons.expand} alt="expand"/>
-</button>
-<!-- Dropdown menu -->
-<div id="networks" class="hidden">
-  <ul class="dropdown-menu" aria-labelledby="dropdownDefaultButton">
-    {#each networks as network}
-      <li on:click={()=>handleNavItemClick(network)} class="dropdown-item cursor-pointer display-flex">
-        <img src={icons[network.icon]} alt={network?.displayName}/>
-        <span class="network-name">{network?.displayName}</span>
-      </li>
-    {/each}
-  </ul>
-</div>
-
-<button id="account-options-dropdown" data-dropdown-toggle="account-options"
-        class="text-white focus:outline-none items-center display-flex" type="button">
-  <span class="network-name">{formatAddress($account)}</span>
-  <img src={ icons.expand} alt="expand"/>
-</button>
-
-<div id="account-options" class="hidden">
-  <ul class="dropdown-menu" aria-labelledby="dropdownDefaultButton">
-    {#each accountMenuOptions as accountOption}
-      <li on:click={()=>accountOption.action()} class="dropdown-item cursor-pointer display-flex">
-        <span class={`network-name ${accountOption?.class}`}>{accountOption?.displayName}</span>
-      </li>
-    {/each}
-  </ul>
-</div>
-<style>
-    .network-name {
-        font-style: normal;
-        font-weight: 700;
-        font-size: 18px;
-        line-height: 39px;
-        color: #FFFFFF;
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-
-    .dropdown-item {
-        padding: 0 40px 0 13px !important;
-    }
-
-    .dropdown-item:hover {
-        background: #d9d9d98c !important;
-    }
-
-</style>
+<HeaderDropdown triggerLabel={formatAddress($account)}
+          items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}></HeaderDropdown>

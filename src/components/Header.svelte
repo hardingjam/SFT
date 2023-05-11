@@ -51,7 +51,7 @@
   </div>
   {#if $account}
     <div class="flex justify-end w-full">
-      <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]} triggerLabel={$activeNetwork?.displayName}
+      <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]} triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
 
       <HeaderDropdown triggerLabel={formatAddress($account)}

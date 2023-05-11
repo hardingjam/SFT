@@ -167,7 +167,7 @@
 
     async function handleNetworkSelect(event) {
         let activeNet = event.detail.selected;
-        if (activeNet.chainId === $activeNetwork.chainId) {
+        if ($activeNetwork && activeNet.chainId === $activeNetwork.chainId) {
             return;
         }
         let chainId = ethers.utils.hexValue(activeNet.chainId);

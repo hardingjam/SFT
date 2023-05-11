@@ -283,9 +283,9 @@
 <Router url={url}>
 
   <div class={$account ? "content" : "content-not-connected"}>
+    <Header on:select={handleNetworkSelect}></Header>
     {#if $account}
-          <Header on:select={handleNetworkSelect}></Header>
-      <div class="display-flex items-start">
+      <div class="display-flex">
         <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
         <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
           <div class={$activeNetwork  ? 'show' : 'hide'}>
@@ -328,7 +328,6 @@
     {/if}
     {#if !$account}
       <div>
-
         <div class="invalid-network f-weight-700">
           <label>To use the app:</label>
           <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
@@ -344,7 +343,7 @@
     {/if}
   </div>
 
-  <div class="footer fixed bottom-0 bg-white w-full p-2">
+  <div class="footer fixed bottom-0 w-full p-2 {$account ? 'bg-white' :'' }">
     <div class="powered-by">
       <span>Powered by</span>
       <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>

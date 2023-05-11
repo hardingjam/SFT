@@ -45,18 +45,19 @@
 
 </script>
 
-<div class="header flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
+<div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
   <div class="logo-container ml-14 flex items-center justify-center fixed">
-    <a href="/"><img src={icons['logo']} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>
+    <a href="/"><img src={icons['logo']} alt="logo" class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/></a>
   </div>
-  <div class="flex justify-end w-full">
-    <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]} triggerLabel={$activeNetwork?.displayName}
-                    items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
+  {#if $account}
+    <div class="flex justify-end w-full">
+      <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]} triggerLabel={$activeNetwork?.displayName}
+                      items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
 
-    <HeaderDropdown triggerLabel={formatAddress($account)}
-                    items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}></HeaderDropdown>
-  </div>
-
+      <HeaderDropdown triggerLabel={formatAddress($account)}
+                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}></HeaderDropdown>
+    </div>
+  {/if}
 </div>
 
 

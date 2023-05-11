@@ -212,7 +212,7 @@
           </tr>
           <tr>
             <td class="font-bold">Token Supply</td>
-            <td class="">{ethers.utils.formatUnits(token.totalShares, 18)}</td>
+            <td class="">{token?.totalShares ? ethers.utils.formatUnits(token?.totalShares, 18) : 0}</td>
           </tr>
           <!--          <tr>-->
           <!--            <td class="font-bold">Name of Auditor(s)</td>-->

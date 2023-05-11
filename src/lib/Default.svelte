@@ -282,13 +282,9 @@
 </script>
 <Router url={url}>
 
-  <div class="content">
+  <div class={$account ? "content" : "content-not-connected"}>
     {#if $account}
-      <div class="header flex w-full h-14 justify-end">
-        <div class="flex pr-20 text-white items-center font-bold">
           <Header on:select={handleNetworkSelect}></Header>
-        </div>
-      </div>
       <div class="display-flex items-start">
         <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
         <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
@@ -332,6 +328,7 @@
     {/if}
     {#if !$account}
       <div>
+
         <div class="invalid-network f-weight-700">
           <label>To use the app:</label>
           <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
@@ -416,7 +413,8 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    margin-top: 6rem;
+    justify-content: center;
+    height: calc(100vh - 200px);
     font-style: normal;
     font-size: 40px;
     line-height: 66px;
@@ -511,7 +509,17 @@
   }
 
   .content {
+    background: #DCDBDD;
     height: fit-content;
+    min-height: 100vh;
+  }
+
+  .content-not-connected {
+    min-height: 100vh;
+    height: fit-content;
+    background: rgb(181, 220, 255);
+    background: linear-gradient(0deg, #b5dcff 0%, #6f5ea1 100%);
+    background-attachment: fixed;
   }
 
   .blur {
@@ -522,12 +530,5 @@
     top: 0
   }
 
-  .header {
-    z-index: 2;
-    position: fixed;
-    top: 0;
-    background: #6F5EA1;
-    background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
-  }
 
 </style>

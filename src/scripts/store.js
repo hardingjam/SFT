@@ -6,6 +6,7 @@ export const activeNetwork = writable({});
 export const data = writable({});
 export const roles = writable(ROLES)
 export const account = writable("")
+export const accountRoles = writable({})
 export const tokens = writable([])
 export const ethersData = writable([])
 export const auditHistory = writable({})
@@ -27,3 +28,4 @@ export const promptNoBottom = writable(false)
 export const schemaError = writable("")
 export const promptCloseAction = writable(()=>{})
 export const deposits = writable([])
+export const sftInfo = writable(false)

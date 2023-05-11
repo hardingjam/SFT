@@ -1,19 +1,24 @@
 export const QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
-                id,
-                totalShares,
-                address,
-                deployer,
-                admin,
-                name,
+                id
+                totalShares
+                address
+                deployer
+                admin
+                name
+                symbol
+                deployTimestamp
+                shareHolders{
+                    address
+                }
                 roles{
-                    roleName,
+                    roleName
                     roleHolders{
                       account{
                         address
                       }
-                    },
+                    }
                     roleHash
                 },
                 roleRevokes{
@@ -28,7 +33,7 @@ export const QUERY = `
                 }
             }
           }
-         `
+         `;
 
 export const AUDIT_HISTORY_DATA_QUERY = `
         query($id: ID!) {
@@ -45,6 +50,9 @@ export const AUDIT_HISTORY_DATA_QUERY = `
               },
               certifiedUntil,
               totalShares
+                transaction {
+                  blockNumber
+                }
             },
             deposits(orderBy: timestamp orderDirection:desc) 
             {
@@ -65,7 +73,7 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             }
           }
         }
-    `
+    `;
 
 
 export const RECEIPTS_QUERY = `
@@ -88,7 +96,7 @@ export const RECEIPTS_QUERY = `
                 }
               }
           }
-         `
+         `;
 export const DEPLOYER_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
@@ -96,7 +104,7 @@ export const DEPLOYER_QUERY = `
                 totalShares
             }
           }
-         `
+         `;
 export const RECEIPT_INFORMATION_QUERY = `
           query($id: ID!) {
             receipt(id: $id) {
@@ -106,7 +114,7 @@ export const RECEIPT_INFORMATION_QUERY = `
                   }
             }
           }
-         `
+         `;
 export const RECEIPT_VAULT_INFORMATION_QUERY = `
           query {
              receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
@@ -115,7 +123,7 @@ export const RECEIPT_VAULT_INFORMATION_QUERY = `
                }
             }
           }
-         `
+         `;
 export const VAULT_INFORMATION_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
@@ -127,7 +135,7 @@ export const VAULT_INFORMATION_QUERY = `
                  }
             }
           }
-         `
+         `;
 
 export const VAULTS_QUERY = `
         query {
@@ -139,7 +147,7 @@ export const VAULTS_QUERY = `
             deployBlock,
             deployTimestamp
           }
-        }`
+        }`;
 
 export const DEPOSITS_QUERY = `
           query($id: ID!) {
@@ -157,5 +165,4 @@ export const DEPOSITS_QUERY = `
               }
             }
           }
-         `
-
+         `;

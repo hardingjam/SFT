@@ -32,7 +32,7 @@
       <div class="labels">
         <div class="txt">{amountLabel}</div>
       </div>
-      <div class="options-input"><input type="text" bind:value={amount} autofocus on:keydown={(e)=>allowNumbersOnly(e)}>
+      <div class="options-input"><input class="focus:shadow-none focus:ring-0" autofocus type="text" bind:value={amount} on:keydown={(e)=>allowNumbersOnly(e)}>
         {#if maxButton}
           <button class="max-button btn-hover" on:click={(e)=>setMaxValue(e)}>Max</button>
         {/if}

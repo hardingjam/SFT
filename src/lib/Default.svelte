@@ -9,7 +9,14 @@
         transactionHash,
         promptTopText,
         promptBottomText,
-        promptCloseAction, promptNoBottom, promptErrorText, promptSuccessText, accountRoles, data, roles
+        promptCloseAction,
+        promptNoBottom,
+        promptErrorText,
+        promptSuccessText,
+        accountRoles,
+        data,
+        roles,
+        sftInfo
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -35,6 +42,8 @@
     import Ipfs from "../routes/Ipfs.svelte";
     import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
     import {ROLES} from '../scripts/consts.js';
+    import Header from '../components/Header.svelte';
+
 
     let connectedAccount;
     let tokenName = "";
@@ -43,7 +52,7 @@
     let isMetamaskInstalled = typeof window.ethereum !== "undefined";
 
     let location = window.location.hash;
-    let selectedTab = "mint";
+    let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
     $: $data && setVaultName()
 
@@ -60,17 +69,17 @@
 
     router.subscribe(async e => {
         if (!e.initial) {
-            await setVault();
-            location = e.path;
-            selectedTab = location.slice(1) || "mint";
+            await setVault()
+            location = e.path
+            selectedTab = location || '#mint'
             if (location === "#list" && $tokens.length) {
-                navigateTo("#list", {replace: false});
+                navigateTo("#list", {replace: false})
             }
             if (location === "#setup") {
-                navigateTo("#setup", {replace: false});
+                navigateTo("#setup", {replace: false})
             }
             if (location === "#ipfs") {
-                navigateTo("#ipfs", {replace: false});
+                navigateTo("#ipfs", {replace: false})
             }
         }
     });
@@ -82,9 +91,9 @@
             vault.set(contract);
 
         } else {
-            vault.set({});
-            location = "#set-vault";
-            navigateTo("#set-vault", {replace: false});
+            vault.set({})
+            location = "#set-vault"
+            navigateTo("#set-vault", {replace: false})
         }
     }
 
@@ -95,8 +104,8 @@
             await setNetwork();
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
-                account.set(connectedAccount);
-                navigateTo(location || "#", {replace: false});
+                account.set(connectedAccount)
+                navigateTo(location || '#', {replace: false})
             } else {
                 localStorage.removeItem("account");
             }
@@ -158,6 +167,9 @@
 
     async function handleNetworkSelect(event) {
         let activeNet = event.detail.selected;
+        if (activeNet.chainId === $activeNetwork.chainId) {
+            return;
+        }
         let chainId = ethers.utils.hexValue(activeNet.chainId);
         try {
             await window.ethereum.request({
@@ -225,8 +237,8 @@
     }
 
     function changeUrl(tab) {
-        navigateTo("#" + tab);
-        selectedTab = tab;
+        navigateTo(tab)
+        selectedTab = tab
     }
 
     async function getTokens() {
@@ -271,18 +283,53 @@
 <Router url={url}>
 
   <div class="content">
-    <div class="default-header">
-      <div class="logo" on:click={()=>{window.location.href = '/'}}>
-        <img src={icons.logo} alt="sft logo">
-        <div class="logo-label">{tokenName}</div>
-      </div>
-      {#if $account}
-        <div class="menu">
-          <Navigation on:networkSelect={handleNetworkSelect}></Navigation>
+    {#if $account}
+      <div class="header flex w-full h-14 justify-end">
+        <div class="flex pr-20 text-white items-center font-bold">
+          <Header on:select={handleNetworkSelect}></Header>
         </div>
-      {/if}
+      </div>
+      <div class="display-flex items-start">
+        <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
+        <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
+          <div class={$activeNetwork  ? 'show' : 'hide'}>
+            <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
+            <Route path="#roles" component={Roles}/>
+            <Route path="#list" component={Tokens}/>
+            <Route path="#members" component={Members}/>
+            <Route path="#audit-history" component={AuditHistory}/>
+            <Route path="#set-vault" component={SetVault}/>
+            <Route path="#asset-classes" component={AssetClasses}/>
+            <Route path="#new-asset-class" component={NewSchema}/>
+            <Route path="#receipt/:id" component={ReceiptAudit}/>
+            <Route path="#sft-create-success" component={SftCreateSuccess}/>
+            <Route path="#ipfs" component={Ipfs}/>
 
-    </div>
+            <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
+              <div class="tab-buttons">
+                <button class:selected="{selectedTab === '#mint'}" class="tab-button"
+                        on:click="{() =>  changeUrl('#mint')}">
+                  Mint
+                </button>
+                <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
+                        class="redeem-tab tab-button"
+                        on:click="{() =>  changeUrl('#redeem')}">
+                  Redeem
+                </button>
+              </div>
+
+              <div class="tab-panel-container">
+                <Route path="#mint" component={Mint} ethersData={$ethersData}/>
+                <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
+              </div>
+            </div>
+          </div>
+          <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
+            <label>Choose a supported network from the list above</label>
+          </div>
+        </div>
+      </div>
+    {/if}
     {#if !$account}
       <div>
         <div class="invalid-network f-weight-700">
@@ -298,48 +345,9 @@
         </div>
       </div>
     {/if}
-    {#if $account}
-      <div class="main-card">
-        <div class={$activeNetwork  ? 'show' : 'hide'}>
-          <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
-          <Route path="#roles" component={Roles}/>
-          <Route path="#list" component={Tokens}/>
-          <Route path="#members" component={Members}/>
-          <Route path="#audit-history" component={AuditHistory}/>
-          <Route path="#set-vault" component={SetVault}/>
-          <Route path="#asset-classes" component={AssetClasses}/>
-          <Route path="#new-asset-class" component={NewSchema}/>
-          <Route path="#receipt/:id" component={ReceiptAudit}/>
-          <Route path="#sft-create-success" component={SftCreateSuccess}/>
-          <Route path="#ipfs" component={Ipfs}/>
-
-          <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
-            <div class="tab-buttons">
-              <button class:selected="{selectedTab === 'mint'}" class="tab-button"
-                      on:click="{() =>  changeUrl('mint')}">
-                Mint
-              </button>
-              <button class:selected="{selectedTab === 'redeem'}" disabled={!$accountRoles?.WITHDRAWER}
-                      class="redeem-tab tab-button"
-                      on:click="{() =>  changeUrl('redeem')}">
-                Redeem
-              </button>
-            </div>
-
-            <div class="tab-panel-container">
-              <Route path="#mint" component={Mint} ethersData={$ethersData}/>
-              <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
-            </div>
-          </div>
-        </div>
-        <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
-          <label>Choose a supported network from the list above</label>
-        </div>
-      </div>
-    {/if}
   </div>
 
-  <div class="footer">
+  <div class="footer fixed bottom-0 bg-white w-full p-2">
     <div class="powered-by">
       <span>Powered by</span>
       <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>
@@ -392,7 +400,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: -45px;
+    margin-left: 14rem;
+    margin-top: 5rem;
+    transition: 0.5s ease;
+    margin-bottom: 5rem;
+  }
+
+  .sft-info-opened {
+    margin-left: 36rem;
+    transition: 0.5s ease;
   }
 
   .invalid-network {
@@ -417,10 +433,6 @@
     color: #FFFFFF;
     cursor: pointer;
     border: none;
-  }
-
-  .menu {
-    display: flex;
   }
 
   .select-icon {
@@ -487,8 +499,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 40px;
-    padding-top: 190px;
     font-family: 'Inter', sans-serif;
   }
 
@@ -510,6 +520,14 @@
     height: 100%;
     backdrop-filter: blur(3.5px);
     top: 0
+  }
+
+  .header {
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    background: #6F5EA1;
+    background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
   }
 
 </style>

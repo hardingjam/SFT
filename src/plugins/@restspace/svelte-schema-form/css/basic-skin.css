@@ -94,6 +94,7 @@ form.svelte-schema-form input, form.svelte-schema-form select, form.svelte-schem
     background: #ECECEC;
     width: 84px;
     height: 27px;
+    margin-top: 8px;
 }
 
 form.svelte-schema-form input:hover, form.svelte-schema-form select:hover, form.svelte-schema-form .input:hover {

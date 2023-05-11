@@ -1,0 +1,93 @@
+<script>
+    import {icons} from '../scripts/assets.js';
+    import {createEventDispatcher} from 'svelte';
+
+    export let triggerIcon;
+    export let triggerLabel;
+    export let items;
+
+    let dropdown;
+    let dropdownHidden = true;
+
+    const dispatch = createEventDispatcher();
+
+    function handleNavItemClick(option) {
+        dropdownHidden = true
+        dispatch('select', {
+            selected: option
+        });
+    }
+
+    function toggleDropdown() {
+        dropdownHidden = !dropdownHidden
+    }
+
+    function handleClickOutside() {
+        dropdownHidden = true
+    }
+
+    function clickOutside(node) {
+
+        const handleClick = event => {
+            if (node && !node.contains(event.target) && !event.defaultPrevented) {
+                node.dispatchEvent(
+                    new CustomEvent('click_outside', node)
+                )
+            }
+        }
+
+        document.addEventListener('click', handleClick, true);
+
+        return {
+            destroy() {
+                document.removeEventListener('click', handleClick, true);
+            }
+        }
+    }
+
+</script>
+<div class="dropdown-container" on:click_outside={handleClickOutside} use:clickOutside>
+  <button id="networks-dropdown" data-dropdown-toggle="networks" on:click={()=>toggleDropdown()}
+          class="text-white focus:outline-none items-center display-flex mr-10 relative" type="button">
+    {#if triggerIcon}
+      <img src={triggerIcon}
+           alt={triggerLabel}/>
+    {/if}
+    <span class="network-name">{triggerLabel}</span>
+    <img src={ icons.expand} alt="expand"/>
+  </button>
+  <!-- Dropdown menu -->
+  <div id="networks" class="absolute top-14" class:hidden={dropdownHidden} bind:this={dropdown}>
+    <ul class="dropdown-menu" aria-labelledby="dropdownDefaultButton">
+      {#each items as item}
+        <li on:click={()=>handleNavItemClick(item)} class="dropdown-item cursor-pointer display-flex">
+          {#if item.icon}
+            <img src={icons[item.icon]} alt={item?.displayName}/>
+          {/if}
+          <span class={`${item.class} network-name`}>{item?.displayName} </span>
+        </li>
+      {/each}
+    </ul>
+  </div>
+</div>
+
+<style>
+    .network-name {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 39px;
+        color: #FFFFFF;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .dropdown-item {
+        padding: 0 40px 0 13px !important;
+    }
+
+    .dropdown-item:hover {
+        background: #d9d9d98c !important;
+    }
+
+</style>

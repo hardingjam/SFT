@@ -284,8 +284,7 @@
 
   <div class={$account ? "content" : "content-not-connected"}>
     <Header on:select={handleNetworkSelect}></Header>
-    {#if $account}
-      <div class="display-flex">
+      <div class="{ $account ? 'show' : 'hide'}">
         <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
         <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
           <div class={$activeNetwork  ? 'show' : 'hide'}>
@@ -325,7 +324,6 @@
           </div>
         </div>
       </div>
-    {/if}
     {#if !$account}
       <div>
         <div class="invalid-network f-weight-700">

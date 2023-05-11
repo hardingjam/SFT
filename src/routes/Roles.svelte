@@ -111,21 +111,25 @@
         <div class="grant-role-txt f-weight-700">Grant a role</div>
         <div class="error">{error}</div>
         <div class="role-list">
-          <div class="row">
-            <label class="f-weight-700 custom-col col-2">Role:</label>
-            <div>
-              <Select options={ROLES.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
+          <table>
+            <tr>
+              <td><label class="f-weight-700">Role:</label></td>
+              <td>
+                <div>
+                  <Select options={ROLES.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
 
-                      on:select={handleRoleSelect}
-                      label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
-            </div>
+                          on:select={handleRoleSelect}
+                          label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><label class="f-weight-700">Address:</label></td>
+              <td><input type="text" class="default-input"
+                         bind:value={account}></td>
+            </tr>
+          </table>
 
-          </div>
-          <div class="row">
-            <label class="f-weight-700 custom-col col-2">Address:</label>
-            <input type="text" class="default-input"
-                   bind:value={account}>
-          </div>
           <button class="default-btn" on:click={grantRole} disabled={!!error || !account || !roleName}>Enter</button>
         </div>
         {#if loading}
@@ -214,10 +218,6 @@
 
     .contract-address {
         color: inherit;
-    }
-
-    .custom-col {
-        margin-right: -10px;
     }
 
     .default-input {

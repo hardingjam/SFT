@@ -96,9 +96,6 @@
     }
 
     table th {
-        top: 0;
-        position: sticky;
-        z-index: 20;
         background: #625e91;
     }
 

@@ -49,6 +49,7 @@ form.svelte-schema-form .error {
 form.svelte-schema-form .sf-drop-area {
   display: flex;
   width: 84px;
+  margin-top: 8px;
 }
 form.svelte-schema-form .sf-drop-area .sf-upload-caption {
   position: absolute;

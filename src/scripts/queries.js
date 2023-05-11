@@ -12,7 +12,7 @@ export const QUERY = `
                 shareHolders{
                     address
                 }
-                roles{
+                roles(orderBy: roleName){
                     roleName
                     roleHolders{
                       account{

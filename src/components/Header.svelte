@@ -2,7 +2,7 @@
     import {account, activeNetwork} from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
-    import {createEventDispatcher} from "svelte";
+    import {beforeUpdate, createEventDispatcher} from "svelte";
     import {formatAddress} from "../scripts/helpers.js";
     import HeaderDropdown from './HeaderDropdown.svelte';
 
@@ -43,15 +43,22 @@
         event.detail.selected.action()
     }
 
+    let logo;
+    beforeUpdate(() => {
+        logo = icons.logo
+    })
+
 </script>
 
 <div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
   <div class="logo-container ml-14 flex items-center justify-center fixed">
-    <a href="/"><img src={icons['logo']} alt="logo" class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/></a>
+    <a href="/"><img src={logo} alt=""
+                     class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/></a>
   </div>
   {#if $account}
     <div class="flex justify-end w-full">
-      <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]} triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
+      <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
+                      triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
 
       <HeaderDropdown triggerLabel={formatAddress($account)}

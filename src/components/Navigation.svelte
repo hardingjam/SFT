@@ -1,5 +1,4 @@
 <script>
-    import logo from "../assets/sft_logo.svg"
     import {accountRoles, sftInfo, tokens, vault} from "../scripts/store.js";
     import {navigateTo} from 'yrv';
     import {fly} from 'svelte/transition';

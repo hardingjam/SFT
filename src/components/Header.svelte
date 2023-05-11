@@ -43,38 +43,14 @@
         event.detail.selected.action()
     }
 
-    const loaded = new Map();
-
-    function lazy(node, data) {
-        if (loaded.has(data.src)) {
-            node.setAttribute('src', data.src);
-        } else {
-            // simulate slow loading network
-            setTimeout(() => {
-                const img = new Image();
-                img.src = data.src;
-                img.onload = () => {
-                    loaded.set(data.src, img);
-                    node.setAttribute('src', data.src);
-                };
-            }, 1000);
-        }
-
-        return {
-            destroy() {
-            } // noop
-        };
-    }
-
 
 </script>
 
 <div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
   <div class="logo-container ml-14 flex items-center justify-center fixed">
     <a href="/">
-      <img src={icons.logo_low} alt="sft"
-           class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"
-           use:lazy="{{src: icons.logo}}"/>
+      <img src={icons.logo || icons.logo_low} alt=""
+           class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
     </a>
   </div>
   {#if $account}

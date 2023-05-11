@@ -1,4 +1,5 @@
 import logo from '../../public/SFT.svg';
+import logo_low from '../../public/SFT_low.png';
 import ethereum from '../assets/networks/ethereum.svg'
 import polygon from '../assets/networks/polygon.svg'
 import show from '../assets/icons/show.svg'
@@ -29,5 +30,6 @@ export const icons = {
     success_circle,
     burger,
     gild_lab,
-    rain
+    rain,
+    logo_low
 }

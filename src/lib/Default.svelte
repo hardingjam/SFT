@@ -286,7 +286,7 @@
 
   <div class={$account ? "content" : "content-not-connected"}>
     <Header on:select={handleNetworkSelect}></Header>
-    <div class="{ $account ? 'show' : 'hide'}">
+    <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
       <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
         <div class={$activeNetwork  ? 'show' : 'hide'}>
@@ -397,9 +397,9 @@
     align-items: center;
     justify-content: center;
     margin-left: 14rem;
-    margin-top: 5rem;
+    padding-top: 5rem;
     transition: 0.5s ease;
-    margin-bottom: 5rem;
+    padding-bottom: 5rem;
   }
 
   .sft-info-opened {

@@ -21,7 +21,7 @@
   <div
     class="flex justify-start items-start bg-white top-14 flex-col navigation fixed h-full {$sftInfo ? '' :'rounded-tr-3xl'}">
     <div class="flex justify-center items-center w-full space-x-3">
-<!--      <a href="/"><img src={logo} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>-->
+      <!--      <a href="/"><img src={logo} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>-->
       {#if !$sftInfo && $vault.address}
         <div class="cursor-pointer absolute right-2 top-2 z-10" on:click={()=>showSftInfo()}>
           <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -278,7 +278,7 @@
     .sft-info {
         width: 22rem;
         margin-left: 12.71rem;
-        margin-top: 3.5rem;
+        margin-top: 0.5rem;
         height: 100%;
         position: fixed;
         transition: 0.5s ease;

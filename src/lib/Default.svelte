@@ -281,9 +281,8 @@
     }
 </script>
 <Router url={url}>
-
   <div class="content">
-    {#if $account}
+    <div class="{ $account ? 'show' : 'hide'}">
       <div class="header flex w-full h-14 justify-end">
         <div class="flex pr-20 text-white items-center font-bold">
           <Header on:select={handleNetworkSelect}></Header>
@@ -329,7 +328,8 @@
           </div>
         </div>
       </div>
-    {/if}
+    </div>
+
     {#if !$account}
       <div>
         <div class="invalid-network f-weight-700">

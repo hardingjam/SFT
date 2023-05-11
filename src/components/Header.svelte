@@ -49,7 +49,7 @@
 <div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
   <div class="logo-container ml-14 flex items-center justify-center fixed">
     <a href="/">
-      <img src={icons.logo || icons.logo_low} alt=""
+      <img src={icons.logo} alt=""
            class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
     </a>
   </div>

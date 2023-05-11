@@ -246,6 +246,8 @@
             if ($activeNetwork) {
                 let temp = res.data.offchainAssetReceiptVaults;
                 tokens.set(temp);
+            } else {
+                tokens.set([])
             }
         });
     }
@@ -284,46 +286,46 @@
 
   <div class={$account ? "content" : "content-not-connected"}>
     <Header on:select={handleNetworkSelect}></Header>
-      <div class="{ $account ? 'show' : 'hide'}">
-        <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-        <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
-          <div class={$activeNetwork  ? 'show' : 'hide'}>
-            <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
-            <Route path="#roles" component={Roles}/>
-            <Route path="#list" component={Tokens}/>
-            <Route path="#members" component={Members}/>
-            <Route path="#audit-history" component={AuditHistory}/>
-            <Route path="#set-vault" component={SetVault}/>
-            <Route path="#asset-classes" component={AssetClasses}/>
-            <Route path="#new-asset-class" component={NewSchema}/>
-            <Route path="#receipt/:id" component={ReceiptAudit}/>
-            <Route path="#sft-create-success" component={SftCreateSuccess}/>
-            <Route path="#ipfs" component={Ipfs}/>
+    <div class="{ $account ? 'show' : 'hide'}">
+      <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
+      <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
+        <div class={$activeNetwork  ? 'show' : 'hide'}>
+          <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
+          <Route path="#roles" component={Roles}/>
+          <Route path="#list" component={Tokens}/>
+          <Route path="#members" component={Members}/>
+          <Route path="#audit-history" component={AuditHistory}/>
+          <Route path="#set-vault" component={SetVault}/>
+          <Route path="#asset-classes" component={AssetClasses}/>
+          <Route path="#new-asset-class" component={NewSchema}/>
+          <Route path="#receipt/:id" component={ReceiptAudit}/>
+          <Route path="#sft-create-success" component={SftCreateSuccess}/>
+          <Route path="#ipfs" component={Ipfs}/>
 
-            <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
-              <div class="tab-buttons">
-                <button class:selected="{selectedTab === '#mint'}" class="tab-button"
-                        on:click="{() =>  changeUrl('#mint')}">
-                  Mint
-                </button>
-                <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
-                        class="redeem-tab tab-button"
-                        on:click="{() =>  changeUrl('#redeem')}">
-                  Redeem
-                </button>
-              </div>
+          <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
+            <div class="tab-buttons">
+              <button class:selected="{selectedTab === '#mint'}" class="tab-button"
+                      on:click="{() =>  changeUrl('#mint')}">
+                Mint
+              </button>
+              <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
+                      class="redeem-tab tab-button"
+                      on:click="{() =>  changeUrl('#redeem')}">
+                Redeem
+              </button>
+            </div>
 
-              <div class="tab-panel-container">
-                <Route path="#mint" component={Mint} ethersData={$ethersData}/>
-                <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
-              </div>
+            <div class="tab-panel-container">
+              <Route path="#mint" component={Mint} ethersData={$ethersData}/>
+              <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
             </div>
           </div>
-          <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
-            <label>Choose a supported network from the list above</label>
-          </div>
+        </div>
+        <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
+          <label>Choose a supported network from the list above</label>
         </div>
       </div>
+    </div>
     {#if !$account}
       <div>
         <div class="invalid-network f-weight-700">

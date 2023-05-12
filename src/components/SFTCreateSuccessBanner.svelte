@@ -42,7 +42,7 @@
 
 </script>
 
-<div class={!$SFTCreated? "frame show": "frame hide" } use:clickOutside
+<div class={$SFTCreated? "frame show": "frame hide" } use:clickOutside
      on:click_outside={closeBtnClick}>
   <div class="content">
     <div class="close-btn" on:click={closeBtnClick}>

@@ -43,6 +43,7 @@
     import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
     import {ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
+    import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
 
 
     let connectedAccount;
@@ -366,6 +367,7 @@
                                errorText={$promptErrorText}
                                successText={$promptSuccessText}
                                on:close={$promptCloseAction}/>
+  <SFTCreateSuccessBanner/>
 </Router>
 
 

@@ -396,7 +396,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 14rem;
     padding-top: 5rem;
     transition: 0.5s ease;
     padding-bottom: 5rem;

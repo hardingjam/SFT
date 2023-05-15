@@ -12,6 +12,7 @@
     import {navigateTo} from 'yrv';
 
     function goToRoles() {
+        closeBtnClick()
         navigateTo("#roles", {replace: false});
     }
 

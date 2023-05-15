@@ -1,6 +1,5 @@
 <script>
-    import logo from "../assets/sft_logo.svg"
-    import {account, accountRoles, sftInfo, tokens, vault} from "../scripts/store.js";
+    import {accountRoles, sftInfo, tokens, vault} from "../scripts/store.js";
     import {navigateTo} from 'yrv';
     import {fly} from 'svelte/transition';
     import {timeStampToDate} from '../scripts/helpers.js';
@@ -19,12 +18,12 @@
 
 </script>
 <div class="navigation-container  relative h-full">
-  <div class="{$sftInfo ? 'flex justify-start items-start bg-white top-14 flex-col navigation fixed h-full'
-     : 'flex justify-start items-start bg-white flex-col top-14 navigation fixed h-full rounded-tr-3xl'}">
-    <div class="flex justify-center items-center w-full space-x-3 logo-container">
-      <a href="/"><img src={logo} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>
+  <div
+    class="flex justify-start items-start bg-white top-14 flex-col navigation fixed h-full {$sftInfo ? '' :'rounded-tr-3xl'}">
+    <div class="flex justify-center items-center w-full space-x-3">
+      <!--      <a href="/"><img src={logo} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>-->
       {#if !$sftInfo && $vault.address}
-        <div class="cursor-pointer absolute right-2 top-2" on:click={()=>showSftInfo()}>
+        <div class="cursor-pointer absolute right-2 top-2 z-10" on:click={()=>showSftInfo()}>
           <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14 10.3999L19 5.1999M19 5.1999L19 10.3999M19 5.1999L14 5.1999" stroke="#9D9D9D" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round"/>
@@ -38,7 +37,7 @@
         </div>
       {/if}
     </div>
-    <div class="mt-6 flex flex-col justify-start items-center w-full">
+    <div class="mt-14 flex flex-col justify-start items-center w-full">
       <a href=""
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <p class="text-base leading-5 menu-header">SFT</p>
@@ -213,7 +212,7 @@
           </tr>
           <tr>
             <td class="font-bold">Token Supply</td>
-            <td class="">{ethers.utils.formatUnits(token.totalShares, 18)}</td>
+            <td class="">{token?.totalShares ? ethers.utils.formatUnits(token?.totalShares, 18) : 0}</td>
           </tr>
           <!--          <tr>-->
           <!--            <td class="font-bold">Name of Auditor(s)</td>-->
@@ -271,23 +270,15 @@
         background: #CAE6FF;
     }
 
-    .logo-container {
-        margin-top: -30px;
-        width: 85px;
-        height: 85px;
-        align-self: center;
-    }
-
     .navigation {
         min-width: 203px;
         max-width: 203px;
-        z-index: 3;
     }
 
     .sft-info {
         width: 22rem;
         margin-left: 12.71rem;
-        margin-top: 3.5rem;
+        margin-top: 0.5rem;
         height: 100%;
         position: fixed;
         transition: 0.5s ease;

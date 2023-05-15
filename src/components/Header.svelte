@@ -39,14 +39,50 @@
         });
     }
 
-    function handleAccountMenuOptionsSelect(event){
+    function handleAccountMenuOptionsSelect(event) {
         event.detail.selected.action()
     }
 
+
 </script>
 
-<HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]} triggerLabel={$activeNetwork?.displayName || 'Supported networks'}
-          items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
+<div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
+  <div class="logo-container ml-14 flex items-center justify-center fixed">
+    <a href="/">
+      <img src={icons.logo} alt=""
+           class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
+    </a>
+  </div>
+  {#if $account}
+    <div class="flex justify-end w-full">
+      <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
+                      triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
+                      items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
 
-<HeaderDropdown triggerLabel={formatAddress($account)}
-          items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}></HeaderDropdown>
+      <HeaderDropdown triggerLabel={formatAddress($account)}
+                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}></HeaderDropdown>
+    </div>
+  {/if}
+</div>
+
+
+<style>
+
+    .header {
+        z-index: 2;
+        position: fixed;
+        top: 0;
+        background: #6F5EA1;
+        background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
+    }
+
+    .logo-container {
+        top: 26px;
+    }
+
+    .logo-container img {
+        height: 85px;
+        width: 85px;
+    }
+</style>
+

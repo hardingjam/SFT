@@ -247,6 +247,8 @@
             if ($activeNetwork) {
                 let temp = res.data.offchainAssetReceiptVaults;
                 tokens.set(temp);
+            } else {
+                tokens.set([])
             }
         });
     }
@@ -282,55 +284,49 @@
     }
 </script>
 <Router url={url}>
-  <div class="content">
-    <div class="{ $account ? 'show' : 'hide'}">
-      <div class="header flex w-full h-14 justify-end">
-        <div class="flex pr-20 text-white items-center font-bold">
-          <Header on:select={handleNetworkSelect}></Header>
-        </div>
-      </div>
-      <div class="display-flex items-start">
-        <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-        <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
-          <div class={$activeNetwork  ? 'show' : 'hide'}>
-            <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
-            <Route path="#roles" component={Roles}/>
-            <Route path="#list" component={Tokens}/>
-            <Route path="#members" component={Members}/>
-            <Route path="#audit-history" component={AuditHistory}/>
-            <Route path="#set-vault" component={SetVault}/>
-            <Route path="#asset-classes" component={AssetClasses}/>
-            <Route path="#new-asset-class" component={NewSchema}/>
-            <Route path="#receipt/:id" component={ReceiptAudit}/>
-            <Route path="#sft-create-success" component={SftCreateSuccess}/>
-            <Route path="#ipfs" component={Ipfs}/>
 
-            <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
-              <div class="tab-buttons">
-                <button class:selected="{selectedTab === '#mint'}" class="tab-button"
-                        on:click="{() =>  changeUrl('#mint')}">
-                  Mint
-                </button>
-                <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
-                        class="redeem-tab tab-button"
-                        on:click="{() =>  changeUrl('#redeem')}">
-                  Redeem
-                </button>
-              </div>
+  <div class={$account ? "content" : "content-not-connected"}>
+    <Header on:select={handleNetworkSelect}></Header>
+    <div class="{ $account ? 'block' : 'hide'}">
+      <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
+      <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
+        <div class={$activeNetwork  ? 'show' : 'hide'}>
+          <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
+          <Route path="#roles" component={Roles}/>
+          <Route path="#list" component={Tokens}/>
+          <Route path="#members" component={Members}/>
+          <Route path="#audit-history" component={AuditHistory}/>
+          <Route path="#set-vault" component={SetVault}/>
+          <Route path="#asset-classes" component={AssetClasses}/>
+          <Route path="#new-asset-class" component={NewSchema}/>
+          <Route path="#receipt/:id" component={ReceiptAudit}/>
+          <Route path="#sft-create-success" component={SftCreateSuccess}/>
+          <Route path="#ipfs" component={Ipfs}/>
 
-              <div class="tab-panel-container">
-                <Route path="#mint" component={Mint} ethersData={$ethersData}/>
-                <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
-              </div>
+          <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
+            <div class="tab-buttons">
+              <button class:selected="{selectedTab === '#mint'}" class="tab-button"
+                      on:click="{() =>  changeUrl('#mint')}">
+                Mint
+              </button>
+              <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
+                      class="redeem-tab tab-button"
+                      on:click="{() =>  changeUrl('#redeem')}">
+                Redeem
+              </button>
+            </div>
+
+            <div class="tab-panel-container">
+              <Route path="#mint" component={Mint} ethersData={$ethersData}/>
+              <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
             </div>
           </div>
-          <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
-            <label>Choose a supported network from the list above</label>
-          </div>
+        </div>
+        <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
+          <label>Choose a supported network from the list above</label>
         </div>
       </div>
     </div>
-
     {#if !$account}
       <div>
         <div class="invalid-network f-weight-700">
@@ -348,7 +344,7 @@
     {/if}
   </div>
 
-  <div class="footer fixed bottom-0 bg-white w-full p-2">
+  <div class="footer fixed bottom-0 w-full p-2 {$account ? 'bg-white' :'' }">
     <div class="powered-by">
       <span>Powered by</span>
       <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>
@@ -402,10 +398,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 14rem;
-    margin-top: 5rem;
+    padding-top: 5rem;
     transition: 0.5s ease;
-    margin-bottom: 5rem;
+    padding-bottom: 5rem;
   }
 
   .sft-info-opened {
@@ -418,7 +413,8 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    margin-top: 6rem;
+    justify-content: center;
+    height: calc(100vh - 200px);
     font-style: normal;
     font-size: 40px;
     line-height: 66px;
@@ -513,7 +509,17 @@
   }
 
   .content {
+    background: #DCDBDD;
     height: fit-content;
+    min-height: 100vh;
+  }
+
+  .content-not-connected {
+    min-height: 100vh;
+    height: fit-content;
+    background: rgb(181, 220, 255);
+    background: linear-gradient(0deg, #b5dcff 0%, #6f5ea1 100%);
+    background-attachment: fixed;
   }
 
   .blur {
@@ -524,12 +530,5 @@
     top: 0
   }
 
-  .header {
-    z-index: 2;
-    position: fixed;
-    top: 0;
-    background: #6F5EA1;
-    background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
-  }
 
 </style>

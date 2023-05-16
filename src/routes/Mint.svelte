@@ -334,14 +334,14 @@
 
 </script>
 
-<div class="mint-container">
+<div class="mint-container relative">
   <div class="header-buttons">
+    <button type="button" class="default-btn mr-2" on:click={()=>{navigateTo('#new-asset-class')}}>
+      New asset class
+    </button>
     <button type="button" class="default-btn mr-2" disabled={!$schemas.length}
             on:click={()=>{navigateTo('#asset-classes')}}>
       Asset classes
-    </button>
-    <button type="button" class="default-btn mr-2" on:click={()=>{navigateTo('#new-asset-class')}}>
-      New asset class
     </button>
     <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>
       Audit history
@@ -349,10 +349,10 @@
   </div>
   {#if (!showAuth)}
 
-<!--    <MintInput bind:amount={amount} amountLabel={"Mint amount"}/>-->
+    <!--    <MintInput bind:amount={amount} amountLabel={"Mint amount"}/>-->
     <div class="audit-info-container basic-frame-parent">
       <div class="form-frame basic-frame">
-        <label class="f-weight-700 custom-col">{$tokenName || ""}</label>
+        <label class="f-weight-700">{$tokenName || ""}</label>
         {#if $schemas.length}
           <div class="schema">
             <div class="schema-dropdown">
@@ -403,7 +403,9 @@
     <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
       (FT)
     </div>
-    <button class="mint-btn btn-solid" on:click={() => mint()} disabled="{!selectedSchema.hash || !parseFloat(amount)}">
+
+    <button class="mint-btn btn-solid absolute bottom-0" on:click={() => mint()}
+            disabled="{!selectedSchema.hash || !parseFloat(amount)}">
       Mint
     </button>
   {/if}
@@ -428,6 +430,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        height: 100%;
     }
 
     .header-buttons {
@@ -439,7 +442,7 @@
     }
 
     .form-frame {
-        padding: 20px 60px;
+        padding: 20px;
         display: flex;
         text-align: left;
         flex-direction: column;
@@ -459,7 +462,7 @@
     }
 
     .mint-btn {
-        width: calc(100% - 70px);
+        width: 413px;
         margin-top: 10px;
     }
 

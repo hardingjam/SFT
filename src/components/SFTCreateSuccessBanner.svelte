@@ -83,7 +83,7 @@
         background: rgba(88, 85, 90, 0.92);
         border-radius: 20px;
         width: 616px;
-        height: 450px;
+        height: 445px;
         z-index: 2;
         padding: 10px;
     }

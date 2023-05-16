@@ -93,8 +93,6 @@
         if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
             navigateTo('#set-vault');
         }
-        await getSchemas()
-
     })
 
     async function getSchemas() {
@@ -280,6 +278,7 @@
     };
 
     $: ($fileDropped.file && $fileDropped.file.size) && upload($fileDropped, "file");
+    $: $activeNetwork.chainId && getSchemas()
 
     // $: $fileHash && getCertificateUrl($fileHash);
 

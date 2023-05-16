@@ -52,7 +52,7 @@
       <img src={icons.logo} alt=""
            class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
     </a>
-    <div class="sft-name">{$tokenName}</div>
+    <div class="sft-name">{$account ? $tokenName : ""}</div>
   </div>
   {#if $account}
     <div class="flex justify-end w-full">

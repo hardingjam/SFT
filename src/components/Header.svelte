@@ -47,12 +47,6 @@
 </script>
 
 <div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
-  <div class="logo-container flex items-center justify-center fixed flex-col f-weight-600">
-    <a href="/">
-      <img src={icons.logo} alt=""
-           class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
-    </a>
-  </div>
   {#if $account}
     <div class="flex justify-end w-full">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
@@ -74,16 +68,6 @@
         top: 0;
         background: #6F5EA1;
         background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
-    }
-
-    .logo-container {
-        top: 26px;
-        width: 203px;
-    }
-
-    .logo-container img {
-        height: 85px;
-        width: 85px;
     }
 
 </style>

@@ -47,12 +47,11 @@
 </script>
 
 <div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
-  <div class="logo-container ml-14 flex items-center justify-center fixed flex-col f-weight-600">
+  <div class="logo-container flex items-center justify-center fixed flex-col f-weight-600">
     <a href="/">
       <img src={icons.logo} alt=""
            class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
     </a>
-    <div class="sft-name">{$account ? $tokenName : ""}</div>
   </div>
   {#if $account}
     <div class="flex justify-end w-full">
@@ -79,6 +78,7 @@
 
     .logo-container {
         top: 26px;
+        width: 203px;
     }
 
     .logo-container img {
@@ -86,8 +86,5 @@
         width: 85px;
     }
 
-    .sft-name {
-        color: #5F9AD1;
-    }
 </style>
 

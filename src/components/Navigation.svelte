@@ -1,5 +1,5 @@
 <script>
-    import {accountRoles, sftInfo, tokens, vault} from "../scripts/store.js";
+    import {account, accountRoles, sftInfo, tokenName, tokens, vault} from "../scripts/store.js";
     import {navigateTo} from 'yrv';
     import {fly} from 'svelte/transition';
     import {timeStampToDate} from '../scripts/helpers.js';
@@ -19,7 +19,7 @@
 </script>
 <div class="navigation-container  relative h-full">
   <div
-    class="flex justify-start items-start bg-white flex-col navigation pt-7 top-14 fixed h-full {$sftInfo ? '' :'rounded-tr-3xl'}">
+    class="flex justify-start items-start bg-white flex-col navigation top-14 fixed h-full {$sftInfo ? '' :'rounded-tr-3xl'}">
     <div class="flex justify-center items-center w-full space-x-3">
       <!--      <a href="/"><img src={logo} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>-->
       {#if !$sftInfo && $vault.address}
@@ -38,6 +38,8 @@
       {/if}
     </div>
     <div class="mt-14 flex flex-col justify-start items-center w-full">
+      <div class="sft-name f-weight-600 menu-header mb-3">{$account ? $tokenName : ""}</div>
+
       <a href=""
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <p class="text-base leading-5 menu-header">SFT</p>

@@ -58,7 +58,7 @@
   </button>
   <!-- Dropdown menu -->
   <div id="networks" class="absolute top-14" class:hidden={dropdownHidden} bind:this={dropdown}>
-    <ul class="dropdown-menu" aria-labelledby="dropdownDefaultButton">
+    <ul class="dropdown-items" aria-labelledby="dropdownDefaultButton">
       {#each items as item}
         <li on:click={()=>handleNavItemClick(item)} class="dropdown-item cursor-pointer display-flex">
           {#if item.icon}

@@ -9,7 +9,7 @@
         activeNetwork,
         schemas,
         schemaError,
-        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles
+        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, data, tokenName
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -349,13 +349,14 @@
   </div>
   {#if (!showAuth)}
 
-    <MintInput bind:amount={amount} amountLabel={"Mint amount"}/>
+<!--    <MintInput bind:amount={amount} amountLabel={"Mint amount"}/>-->
     <div class="audit-info-container basic-frame-parent">
-      <div class="audit-info basic-frame">
+      <div class="form-frame basic-frame">
+        <label class="f-weight-700 custom-col">{$tokenName || ""}</label>
         {#if $schemas.length}
           <div class="schema">
             <div class="schema-dropdown">
-              <label class="f-weight-700 custom-col">Asset class:</label>
+              <label class="f-weight-700 custom-col">Asset class</label>
               <Select options={$schemas}
 
                       on:select={handleSchemaSelect}
@@ -437,7 +438,7 @@
         padding: 0 12px 0 12px;
     }
 
-    .audit-info {
+    .form-frame {
         padding: 20px 60px;
         display: flex;
         text-align: left;
@@ -445,10 +446,10 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 27px;
-        min-height: 142px;
+        min-height: 325px;
     }
 
-    .audit-info .title {
+    .form-frame .title {
         text-align: center;
     }
 
@@ -518,6 +519,7 @@
     .schema-dropdown {
         width: 100%;
         display: flex;
+        align-items: center;
     }
 
 </style>

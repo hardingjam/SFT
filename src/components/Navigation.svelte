@@ -19,12 +19,6 @@
 
 </script>
 <div class="navigation-container  relative h-full">
-  <div class="logo-container">
-    <a href="/">
-      <img src={icons.logo} alt=""
-           class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
-    </a>
-  </div>
   <div
     class="flex justify-start items-start bg-white flex-col navigation top-14 fixed h-full {$sftInfo ? '' :'rounded-tr-3xl'}">
     <div class="flex justify-center items-center w-full space-x-3">
@@ -245,18 +239,6 @@
 </div>
 
 <style lang="postcss">
-    .logo-container {
-        z-index: 2;
-        position: fixed;
-        display: flex;
-        top: 20px;
-        left: 60px;
-    }
-    .logo-container img {
-        height: 85px;
-        width: 85px;
-    }
-
     .text-nav {
         color: #5F9AD1;
     }

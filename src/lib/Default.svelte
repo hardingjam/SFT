@@ -283,6 +283,12 @@
 
   <div class={$account ? "content" : "content-not-connected"}>
     <Header on:select={handleNetworkSelect}></Header>
+    <div class="logo-container">
+      <a href="/">
+        <img src={icons.logo} alt=""
+             class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
+      </a>
+    </div>
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
       <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
@@ -363,6 +369,19 @@
 
 
 <style lang="scss">
+  .logo-container {
+    z-index: 2;
+    position: fixed;
+    display: flex;
+    top: 20px;
+    left: 60px;
+  }
+
+  .logo-container img {
+    height: 85px;
+    width: 85px;
+  }
+
   .container {
     display: flex;
     flex-direction: column;

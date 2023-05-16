@@ -112,6 +112,10 @@
         content: '';
         border: none;
     }
+    .dropdown-toggle{
+        padding: 5px 0;
+
+    }
 
     .meinMenu {
         color: #FFFFFF;
@@ -120,13 +124,11 @@
     .inputSelect {
         background: #ECECEC;
         border-radius: 5px;
-        height: 26px;
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
         line-height: 25px;
         color: #000000;
-        padding: 0;
         min-width: 230px;
         max-width: 250px;
         width: 100%;
@@ -148,7 +150,7 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 27px;
-        padding: 0 !important;
+        padding: 5px 0 !important;
     }
 
     .dropdown-item:focus, .dropdown-item:hover {

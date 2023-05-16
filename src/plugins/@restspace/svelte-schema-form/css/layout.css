@@ -49,17 +49,8 @@ form.svelte-schema-form .error {
 form.svelte-schema-form .sf-drop-area {
   display: flex;
   width: 84px;
-  margin-top: 8px;
 }
 form.svelte-schema-form .sf-drop-area .sf-upload-caption {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
   width: 100%;
 }
@@ -96,8 +87,6 @@ form.svelte-schema-form .sf-drop-area.link .sf-upload-thumb, form.svelte-schema-
 }
 form.svelte-schema-form .sf-drop-area .sf-upload-file {
   color: #000000;
-  position: absolute;
-  left: -67px;
 }
 form.svelte-schema-form .sf-progress-bars {
   grid-column: 2;

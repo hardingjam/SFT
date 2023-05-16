@@ -5,7 +5,7 @@ export let schema;
 const title = schemaLabel(schema, params.path);
 $: error = params.validationErrors[params.path.join('.')];
 </script>
-<div class="display-flex w-100 space-between">
+<div class="display-flex w-100 space-between items-center">
 	{#if params.containerParent !== "array"}
 		<label for={params.path.join('.')} class:required={params.required} class:readonly={schema.readOnly || params.containerReadOnly}>
 			{@html stringToHtml(title)}

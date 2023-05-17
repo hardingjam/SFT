@@ -18,10 +18,6 @@
 </button>
 
 <style>
-    .text-nav {
-        color: #5F9AD1;
-    }
-
     .nav-item {
         color: #575757;
         display: flex;

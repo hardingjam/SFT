@@ -292,7 +292,7 @@
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-      {#if location && location !== "#set-vault"}
+      {#if location && (location !== "#set-vault" && location !== "/")}
         <BreadCrumbs/>
       {/if}
 

@@ -1,12 +1,12 @@
 <script>
-    import {navigateTo} from "yrv";
     import {tokens} from "../scripts/store.js";
+    import {navigate} from '../scripts/helpers.js';
 </script>
 <div class="buttons-container">
-  <button class=" btn-hover" on:click={()=>{navigateTo("#setup")}}>
+  <button class=" btn-hover" on:click={()=>{navigate("#setup", 'Setup new SFT')}}>
     Setup new SFT
   </button>
-  <button class="{$tokens.length ? `btn-hover`: 'disabled'}" on:click={()=>{navigateTo("#list")}}
+  <button class="{$tokens.length ? `btn-hover`: 'disabled'}" on:click={()=>{navigate("#list", "SFT list")}}
           disabled="{!$tokens.length}">
     Manage existing SFT
   </button>

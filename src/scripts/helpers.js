@@ -5,6 +5,7 @@ import pako from "pako"
 import {encodeCanonical, decodeAllSync} from "cbor-web";
 import {arrayify, isBytesLike} from "ethers/lib/utils.js";
 import {
+    breadCrumbs,
     promptBottomText, promptCloseAction, promptErrorText, promptNoBottom, promptSuccessText,
     promptTopText, transactionError,
     transactionHash,
@@ -13,6 +14,7 @@ import {
     transactionSuccess
 } from "./store.js";
 import {VAULT_INFORMATION_QUERY} from "./queries.js";
+import {navigateTo} from 'yrv';
 
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -532,4 +534,9 @@ export async function setAccountRoles(roles, account) {
     }
     return accountRoles
 
+}
+
+export function navigate(path, label) {
+    breadCrumbs.update(bc => [...bc, {path, label}])
+    navigateTo(path)
 }

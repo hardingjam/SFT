@@ -307,7 +307,7 @@
         justify-content: start;
         align-items: center;
         width: 100%;
-        font-weight: 700;
+        font-weight: 500;
         padding-left: 4.5rem;
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;

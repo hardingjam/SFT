@@ -5,11 +5,12 @@
     export let path;
     export let label;
     export let child = false;
+    export let disabled = false;
 
 </script>
 <button on:click={()=>navigate(targetPath, label, {clear: true})}
         class:active={path===targetPath}
-        class="{child? 'sub-nav-item' : 'nav-item'} space-x-6">
+        class="{child? 'sub-nav-item' : 'nav-item'} space-x-6" disabled={disabled ? 'disabled' : ''}>
         <span class="w-3">
           <slot name="icon"></slot>
         </span>

@@ -536,7 +536,11 @@ export async function setAccountRoles(roles, account) {
 
 }
 
-export function navigate(path, label) {
-    breadCrumbs.update(bc => [...bc, {path, label}])
+export function navigate(path, label, options) {
+    if (options && options.clear) {
+        breadCrumbs.update(() => [{path: "#set-vault", label: "Home"}, {path, label}])
+    } else {
+        breadCrumbs.update(bc => [...bc, {path, label}])
+    }
     navigateTo(path)
 }

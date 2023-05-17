@@ -1,11 +1,11 @@
 <script>
-    import {navigateTo} from "yrv";
     import {icons} from "../scripts/assets.js";
+    import {navigate} from '../scripts/helpers.js';
 
     let error = ""
 
     function goToRoles() {
-        navigateTo("#roles", {replace: false});
+        navigate("#roles","SFT roles", {clear: true});
     }
 
 </script>

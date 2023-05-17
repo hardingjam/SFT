@@ -18,7 +18,7 @@
         getContract,
         getSubgraphData,
         getEvent,
-        showPromptSFTCreate
+        showPromptSFTCreate, navigate
     } from "../scripts/helpers.js";
     import {navigateTo} from "yrv";
 
@@ -102,7 +102,7 @@
                         localStorage.setItem('vaultAddress', $vault.address)
                         //wait for sg data
                         await getSgData(newVault.address)
-                        navigateTo("#sft-create-success", {replace: false});
+                        navigate("#sft-create-success", "Sft created successfully");
                     }
                 }, 2000)
             } else {

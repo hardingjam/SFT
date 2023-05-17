@@ -292,7 +292,9 @@
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-      <BreadCrumbs/>
+      {#if location !== "#set-vault"}
+        <BreadCrumbs/>
+      {/if}
 
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
         <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">

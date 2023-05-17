@@ -6,6 +6,7 @@
     export let targetPath;
     export let path;
     export let label;
+    export let child = false;
 
     function updateBreadCrumbsAndNavigate(path) {
         let target = {
@@ -18,16 +19,14 @@
     }
 
 </script>
-
 <button on:click={()=>updateBreadCrumbsAndNavigate(targetPath)}
         class:active={path===targetPath}
-        class="nav-item space-x-6">
+        class="{child? 'sub-nav-item' : 'nav-item'} space-x-6">
         <span class="w-3">
           <slot name="icon"></slot>
         </span>
   <label class="text-base leading-5  ">{label}</label>
 </button>
-
 <style>
     .nav-item {
         color: #575757;
@@ -57,5 +56,28 @@
     .active {
         background: #CAE6FF;
     }
+
+    .sub-nav-item {
+        color: #575757;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        width: 100%;
+        font-weight: 500;
+        padding-left: 2.5rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+
+    .sub-nav-item:hover {
+        background: #ECECEC;
+    }
+
+    .nav-item, .nav-item label, .sub-nav-item label {
+        cursor: pointer;
+    }
+
 
 </style>

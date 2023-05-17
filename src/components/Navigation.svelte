@@ -65,7 +65,7 @@
             </svg>
           </div>
         </NavigationButton>
-        <NavigationButton targetPath="#asset-classes" {path} label="Asset class list"/>
+        <NavigationButton targetPath="#asset-classes" {path} label="Asset class list" child = {true}/>
       {/if}
 
       <NavigationButton targetPath="#members" {path} label="Members">
@@ -238,26 +238,5 @@
         color: #575757;
     }
 
-    .sub-nav-item {
-        color: #575757;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        width: 100%;
-        font-weight: 500;
-        padding-left: 4.5rem;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        border-radius: 0.25rem;
-        cursor: pointer;
-    }
-
-    .sub-nav-item:hover{
-        background: #ECECEC;
-    }
-
-    .nav-item, .nav-item label, .sub-nav-item label{
-        cursor: pointer;
-    }
 
 </style>

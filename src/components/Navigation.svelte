@@ -223,9 +223,10 @@
     .sft-info {
         width: 22rem;
         margin-left: 12.71rem;
-        margin-top: 0.5rem;
+        margin-top: 3.5rem;
         height: 100%;
         position: fixed;
+        z-index: 1;
         transition: 0.5s ease;
     }
 

@@ -7,17 +7,12 @@
     export let path;
     export let label;
 
-    function updateBreadCrumbsAndNavigate(path){
+    function updateBreadCrumbsAndNavigate(path) {
         let target = {
             path,
             label
         }
-        let temp = [{path: "#home", label: "Home"}, target]
-        if(path === "#set-vault")
-        {
-            temp = [target]
-        }
-        console.log(temp);
+        let temp = path === "#set-vault" ? [target] : [{path: "#set-vault", label: "Home"}, target]
         breadCrumbs.set(temp)
         navigateTo(targetPath)
     }

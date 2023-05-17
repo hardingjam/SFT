@@ -1,5 +1,6 @@
 <script>
     import {breadCrumbs} from '../scripts/store.js';
+    import {navigateTo} from 'yrv';
 
     function isLast(elem) {
         let lastElement = $breadCrumbs[$breadCrumbs.length-1];
@@ -10,7 +11,7 @@
 
 <div class="breadcrumbs py-7 flex items-center fixed w-100">
   {#each $breadCrumbs as breadCrumb}
-    <span class="cursor-pointer">{breadCrumb.label}</span>
+    <span class="cursor-pointer" on:click={()=>{navigateTo(breadCrumb.path)}}>{breadCrumb.label}</span>
     {#if !isLast(breadCrumb)}
       <div class="mx-6">
         <svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg">

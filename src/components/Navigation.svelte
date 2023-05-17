@@ -65,6 +65,7 @@
             </svg>
           </div>
         </NavigationButton>
+        <NavigationButton targetPath="#asset-classes" {path} label="Asset class list"/>
       {/if}
 
       <NavigationButton targetPath="#members" {path} label="Members">
@@ -125,7 +126,7 @@
     <div class="mt-6 flex flex-col justify-start items-center w-full">
       <a href=""
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
-        <p class="text-base leading-5 menu-header">Web 3</p>
+        <p class="leading-5 menu-header">Web 3</p>
       </a>
       <NavigationButton targetPath="#ipfs" {path} label="IPFS">
         <div slot="icon">
@@ -209,6 +210,7 @@
 </div>
 
 <style lang="postcss">
+
     .text-nav {
         color: #5F9AD1;
     }
@@ -233,6 +235,28 @@
 
     .sft-info-table {
         color: #575757;
+    }
+
+    .sub-nav-item {
+        color: #575757;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        width: 100%;
+        font-weight: 500;
+        padding-left: 4.5rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+
+    .sub-nav-item:hover{
+        background: #ECECEC;
+    }
+
+    .nav-item, .nav-item label, .sub-nav-item label{
+        cursor: pointer;
     }
 
 </style>

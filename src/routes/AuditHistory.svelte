@@ -148,7 +148,7 @@
 <DefaultFrame header="Audit history">
   <div slot="header-buttons" class="display-flex">
     <button class="header-btn btn-hover" on:click={()=>{navigate("#members", "Members")}}>Members</button>
-    <button class="header-btn btn-hover" on:click={()=>{navigate("#roles", "Roles")}}>Roles</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigate("#roles", "SFT roles")}}>Roles</button>
   </div>
   <div slot="content">
     <div class="history">

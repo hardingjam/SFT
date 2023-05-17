@@ -67,7 +67,8 @@
                     [uploadResult?.Hash].toString(),
                     MAGIC_NUMBERS.OA_HASH_LIST
                 );
-                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema +
+                    encodedHashList
                 let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
                 await showPromptSFTCreate(transaction)
 
@@ -211,7 +212,7 @@
     }
 
     function goToAssetClassList() {
-        navigate("#asset-classes", 'Asset classes');
+        navigate("#asset-classes", 'Asset class list', {clear: true});
     }
 
     async function getDeposits() {

@@ -16,7 +16,8 @@
         accountRoles,
         data,
         roles,
-        sftInfo
+        sftInfo,
+        tokenName
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -46,7 +47,6 @@
 
 
     let connectedAccount;
-    let tokenName = "";
     export let url = "";
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined";
@@ -54,16 +54,12 @@
     let location = window.location.hash;
     let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
-    $: $data && setVaultName()
-
-    function setVaultName() {
-        tokenName = $data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : ""
-    }
 
     async function vaultChanged() {
         if ($vault.address && $activeNetwork.id && $account) {
             await getRoles($vault.address)
             accountRoles.set(await setAccountRoles($roles, $account));
+            tokenName.set($data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : "")
         }
     }
 
@@ -105,6 +101,7 @@
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
                 account.set(connectedAccount)
+                await vaultChanged()
                 navigateTo(location || '#', {replace: false})
             } else {
                 localStorage.removeItem("account");
@@ -286,6 +283,12 @@
 
   <div class={$account ? "content" : "content-not-connected"}>
     <Header on:select={handleNetworkSelect}></Header>
+    <div class="logo-container">
+      <a href="/">
+        <img src={icons.logo} alt=""
+             class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
+      </a>
+    </div>
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
       <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
@@ -366,6 +369,19 @@
 
 
 <style lang="scss">
+  .logo-container {
+    z-index: 2;
+    position: fixed;
+    display: flex;
+    top: 20px;
+    left: 60px;
+  }
+
+  .logo-container img {
+    height: 85px;
+    width: 85px;
+  }
+
   .container {
     display: flex;
     flex-direction: column;

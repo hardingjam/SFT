@@ -1,14 +1,20 @@
 <script>
 
     import {navigateTo} from 'yrv';
+    import {breadCrumbs} from '../scripts/store.js';
 
     export let targetPath;
     export let path;
     export let label;
 
+    function updateBreadCrumbsAndNavigate(path){
+        breadCrumbs.set(["#home", path])
+        navigateTo(targetPath)
+    }
+
 </script>
 
-<button on:click={()=>navigateTo(targetPath)}
+<button on:click={()=>updateBreadCrumbsAndNavigate(targetPath)}
         class:active={path===targetPath}
         class="nav-item space-x-6">
         <span class="w-3">

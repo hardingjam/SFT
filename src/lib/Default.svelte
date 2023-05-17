@@ -44,6 +44,7 @@
     import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
     import {ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
+    import BreadCrumbs from '../components/BreadCrumbs.svelte';
 
 
     let connectedAccount;
@@ -291,8 +292,11 @@
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-      <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
-        <div class={$activeNetwork  ? 'show' : 'hide'}>
+      <BreadCrumbs/>
+
+      <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
+        <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">
+
           <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
           <Route path="#roles" component={Roles}/>
           <Route path="#list" component={Tokens}/>
@@ -304,6 +308,7 @@
           <Route path="#receipt/:id" component={ReceiptAudit}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
+
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -412,7 +417,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 5rem;
+    padding-top: 9rem;
     transition: 0.5s ease;
     padding-bottom: 5rem;
   }

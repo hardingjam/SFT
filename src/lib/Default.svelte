@@ -122,6 +122,10 @@
                     }
                 }
             });
+            window.addEventListener("hashchange", function(e) {
+                // ...
+                console.log(e)
+            })
             window.ethereum.on("chainChanged", networkChanged);
         }
         if (location === "/" || location === "") {

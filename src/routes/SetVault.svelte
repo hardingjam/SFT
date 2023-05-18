@@ -3,10 +3,10 @@
     import {navigate} from '../scripts/helpers.js';
 </script>
 <div class="buttons-container">
-  <button class=" btn-hover" on:click={()=>{navigate("#setup", 'Setup new SFT')}}>
+  <button class=" btn-hover" on:click={()=>{navigate("#setup")}}>
     Setup new SFT
   </button>
-  <button class="{$tokens.length ? `btn-hover`: 'disabled'}" on:click={()=>{navigate("#list", "SFT list")}}
+  <button class="{$tokens.length ? `btn-hover`: 'disabled'}" on:click={()=>{navigate("#list")}}
           disabled="{!$tokens.length}">
     Manage existing SFT
   </button>

@@ -49,3 +49,16 @@ export const MAGIC_NUMBERS = {
 
 export const TRANSACTION_IN_PROGRESS_TEXT = "Transaction taking place, please wait."
 export const VIEW_ON_EXPLORER_TEXT = "View on the block explorer"
+export const ROUTE_LABEL_MAP = new Map([
+    ["#setup", "Setup new SFT"],
+    ["#roles", "SFT roles"],
+    ["#mint", "Mint/Redeem"],
+    ["#list", "SFT list"],
+    ["#members", "Members"],
+    ["#audit-history", "Audits"],
+    ["#set-vault", "Home"],
+    ["#asset-classes", "Asset class list"],
+    ["#new-asset-class", "New asset class"],
+    ["#receipt/:id", "Receipt"],
+    ["#sft-create-success", "Sft created successfully"],
+    ["#ipfs", "IPFS"]]);

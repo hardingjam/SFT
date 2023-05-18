@@ -16,7 +16,7 @@
 </script>
 <DefaultFrame header={`Audit History > ${receipt.receiptId}`}>
   <div slot="header-buttons" class="display-flex">
-    <button class="header-btn btn-hover" on:click={()=>{navigate("#roles", 'Sft roles')}}>Roles</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigate("#roles")}}>Roles</button>
   </div>
   <div slot="content">
     <div class="history">

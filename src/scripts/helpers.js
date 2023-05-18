@@ -1,5 +1,5 @@
 import {ethers} from "ethers";
-import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES} from "./consts.js";
+import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES, ROUTE_LABEL_MAP} from "./consts.js";
 import axios from "axios";
 import pako from "pako"
 import {encodeCanonical, decodeAllSync} from "cbor-web";
@@ -536,7 +536,8 @@ export async function setAccountRoles(roles, account) {
 
 }
 
-export function navigate(path, label, options) {
+export function navigate(path, options) {
+    let label = ROUTE_LABEL_MAP.get(path)
     navigationButtonClicked.update(()=>false)
     if (options && options.clear) {
         breadCrumbs.update(() => [{path: "#set-vault", label: "Home"}, {path, label}])

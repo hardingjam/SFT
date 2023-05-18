@@ -5,7 +5,7 @@
     let error = ""
 
     function goToRoles() {
-        navigate("#roles","SFT roles", {clear: true});
+        navigate("#roles", {clear: true});
     }
 
 </script>

@@ -102,7 +102,7 @@
                         localStorage.setItem('vaultAddress', $vault.address)
                         //wait for sg data
                         await getSgData(newVault.address)
-                        navigate("#sft-create-success", "Sft created successfully");
+                        navigate("#sft-create-success");
                     }
                 }, 2000)
             } else {

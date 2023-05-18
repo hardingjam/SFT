@@ -9,7 +9,7 @@
     export let disabled = false;
 
     function handleNavigationButtonClick(){
-        navigate(targetPath, label, {clear: true})
+        navigate(targetPath, {clear: true})
         navigationButtonClicked.set(true)
     }
 

@@ -383,7 +383,7 @@
   }
 
   .border-6 {
-    border-width: 5px
+    border-width: 6px
   }
 
   .container {

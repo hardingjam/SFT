@@ -1,9 +1,10 @@
 <script>
-    import {accountRoles, sftInfo, tokens, vault} from "../scripts/store.js";
+    import {account, accountRoles, sftInfo, tokenName, tokens, vault} from "../scripts/store.js";
     import {navigateTo} from 'yrv';
     import {fly} from 'svelte/transition';
     import {timeStampToDate} from '../scripts/helpers.js';
     import {ethers} from 'ethers';
+    import {icons} from '../scripts/assets.js';
 
     function showSftInfo() {
         sftInfo.set(true)
@@ -19,7 +20,7 @@
 </script>
 <div class="navigation-container  relative h-full">
   <div
-    class="flex justify-start items-start bg-white top-14 flex-col navigation fixed h-full {$sftInfo ? '' :'rounded-tr-3xl'}">
+    class="flex justify-start items-start bg-white flex-col navigation top-14 fixed h-full {$sftInfo ? '' :'rounded-tr-3xl'}">
     <div class="flex justify-center items-center w-full space-x-3">
       <!--      <a href="/"><img src={logo} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>-->
       {#if !$sftInfo && $vault.address}
@@ -38,8 +39,10 @@
       {/if}
     </div>
     <div class="mt-14 flex flex-col justify-start items-center w-full">
+      <div class="sft-name f-weight-600 menu-header mb-3">{$account ? $tokenName : ""}</div>
+
       <a href=""
-         class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
+         class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <p class="text-base leading-5 menu-header">SFT</p>
       </a>
       <button on:click={()=>navigateTo("#set-vault")}
@@ -52,7 +55,7 @@
               stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
-        <label class="text-base leading-5  ">Home</label>
+        <label class="leading-5  ">Home</label>
       </button>
       {#if $accountRoles.DEPOSITOR}
         <button on:click={()=>navigateTo("#mint")}
@@ -66,7 +69,13 @@
               stroke-linejoin="round"/>
           </svg>
         </span>
-          <label class="text-base leading-5  ">Mint/Redeem</label>
+          <label class="leading-5  ">Mint/Redeem</label>
+        </button>
+        <button on:click={()=>navigateTo("#asset-classes")}
+                class:active={path==='#asset-classes'}
+                class="sub-nav-item" disabled={$vault.address? '' : 'disabled'}>
+
+          <label class="leading-5  ">Asset class list</label>
         </button>
       {/if}
       <button on:click={()=>navigateTo("#members")}
@@ -80,7 +89,7 @@
               stroke-linejoin="round"/>
           </svg>
         </span>
-        <label class="text-base leading-5  ">Members</label>
+        <label class="leading-5  ">Members</label>
       </button>
       <button on:click={()=>navigateTo("#roles")}
               class:active={path==='#roles'}
@@ -93,7 +102,7 @@
               stroke-linejoin="round"/>
           </svg>
         </span>
-        <label class="text-base leading-5  ">SFT roles</label>
+        <label class="leading-5  ">SFT roles</label>
       </button>
       <button on:click={()=>navigateTo("#audit-history")}
               class:active={path==='#audit-history'}
@@ -106,7 +115,7 @@
               stroke-linejoin="round"/>
           </svg>
         </span>
-        <label class="text-base leading-5  ">Audits</label>
+        <label class="leading-5  ">Audits</label>
       </button>
       <button on:click={()=>navigateTo("#list")}
               class:active={path==='#list'}
@@ -124,7 +133,7 @@
                   stroke-linejoin="round"/>
           </svg>
         </span>
-        <label class="text-base leading-5  ">SFT list</label>
+        <label class="leading-5  ">SFT list</label>
       </button>
       <!--      <button on:click={()=>navigateTo("#manual")} disabled-->
       <!--      class:active={path==='#manual'}-->
@@ -136,14 +145,14 @@
       <!--              stroke="#575757" stroke-width="2" stroke-linecap="round"/>-->
       <!--          </svg>-->
       <!--        </span>-->
-      <!--        <p class="text-base leading-5  ">Manual</p>-->
+      <!--        <p class="leading-5  ">Manual</p>-->
       <!--      </button>-->
     </div>
     <div class="items-center pt-16 border-b w-11/12 self-center"></div>
     <div class="mt-6 flex flex-col justify-start items-center w-full">
       <a href=""
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
-        <p class="text-base leading-5 menu-header">Web 3</p>
+        <p class="leading-5 menu-header">Web 3</p>
       </a>
       <button on:click={()=>navigateTo("#ipfs")}
               class:active={path==='#ipfs'}
@@ -157,7 +166,7 @@
             <circle cx="11.5" cy="10.5" r="1.5" fill="#575757"/>
           </svg>
         </span>
-        <label class="text-base leading-5  ">IPFS</label>
+        <label class="leading-5  ">IPFS</label>
       </button>
       <button on:click={()=>navigateTo("#setup")}
 
@@ -169,7 +178,7 @@
                     stroke-linejoin="round"/>
           </svg>
         </span>
-        <label class="text-base leading-5  ">SFT Setup</label>
+        <label class="leading-5  ">SFT Setup</label>
       </button>
     </div>
 
@@ -290,6 +299,28 @@
 
     .sft-info-table {
         color: #575757;
+    }
+
+    .sub-nav-item {
+        color: #575757;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        width: 100%;
+        font-weight: 500;
+        padding-left: 4.5rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+
+    .sub-nav-item:hover{
+        background: #ECECEC;
+    }
+
+    .nav-item, .nav-item label, .sub-nav-item label{
+        cursor: pointer;
     }
 
 </style>

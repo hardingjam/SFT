@@ -1,5 +1,5 @@
 <script>
-    import {account, activeNetwork} from "../scripts/store.js";
+    import {account, activeNetwork, tokenName} from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
@@ -47,12 +47,6 @@
 </script>
 
 <div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
-  <div class="logo-container ml-14 flex items-center justify-center fixed">
-    <a href="/">
-      <img src={icons.logo} alt=""
-           class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
-    </a>
-  </div>
   {#if $account}
     <div class="flex justify-end w-full">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
@@ -76,13 +70,5 @@
         background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
     }
 
-    .logo-container {
-        top: 26px;
-    }
-
-    .logo-container img {
-        height: 85px;
-        width: 85px;
-    }
 </style>
 

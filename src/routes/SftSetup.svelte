@@ -1,8 +1,8 @@
 <script>
     import {
         activeNetwork,
-        data, tokens,
-        transactionError, transactionInProgress,
+        data, SFTCreated, tokens,
+        transactionError, transactionInProgress, transactionInProgressShow,
         transactionSuccess,
         vault
     } from '../scripts/store.js';
@@ -95,14 +95,15 @@
                 let interval = setInterval(async () => {
                     await getTokens()
                     if (deployBlockNumber.toString() === $tokens[0].deployBlock) {
-                        transactionSuccess.set(true)
                         transactionInProgress.set(false)
+                        transactionInProgressShow.set(false)
+                        SFTCreated.set(true)
                         clearInterval(interval)
                         vault.set(newVault)
                         localStorage.setItem('vaultAddress', $vault.address)
                         //wait for sg data
                         await getSgData(newVault.address)
-                        navigateTo("#sft-create-success", {replace: false});
+                        // navigateTo("#sft-create-success", {replace: false});
                     }
                 }, 2000)
             } else {

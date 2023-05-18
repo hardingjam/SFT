@@ -5,7 +5,7 @@ import pako from "pako"
 import {encodeCanonical, decodeAllSync} from "cbor-web";
 import {arrayify, isBytesLike} from "ethers/lib/utils.js";
 import {
-    breadCrumbs,
+    breadCrumbs, navigationButtonClicked,
     promptBottomText, promptCloseAction, promptErrorText, promptNoBottom, promptSuccessText,
     promptTopText, transactionError,
     transactionHash,
@@ -537,6 +537,7 @@ export async function setAccountRoles(roles, account) {
 }
 
 export function navigate(path, label, options) {
+    navigationButtonClicked.update(()=>false)
     if (options && options.clear) {
         breadCrumbs.update(() => [{path: "#set-vault", label: "Home"}, {path, label}])
     } else {

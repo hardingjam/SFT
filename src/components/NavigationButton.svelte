@@ -1,5 +1,6 @@
 <script>
     import {navigate} from '../scripts/helpers.js';
+    import {navigationButtonClicked} from '../scripts/store.js';
 
     export let targetPath;
     export let path;
@@ -7,8 +8,13 @@
     export let child = false;
     export let disabled = false;
 
+    function handleNavigationButtonClick(){
+        navigate(targetPath, label, {clear: true})
+        navigationButtonClicked.set(true)
+    }
+
 </script>
-<button on:click={()=>navigate(targetPath, label, {clear: true})}
+<button on:click={()=>handleNavigationButtonClick()}
         class:active={path===targetPath}
         class="{child? 'sub-nav-item' : 'nav-item'} space-x-6" disabled={disabled ? 'disabled' : ''}>
         <span class="w-3">

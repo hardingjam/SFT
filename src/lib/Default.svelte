@@ -17,7 +17,7 @@
         data,
         roles,
         sftInfo,
-        tokenName
+        tokenName, breadCrumbs, navigationButtonClicked
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -65,6 +65,9 @@
     }
 
     router.subscribe(async e => {
+
+
+        console.log($navigationButtonClicked);
         if (!e.initial) {
             await setVault()
             location = e.path
@@ -122,9 +125,23 @@
                     }
                 }
             });
-            window.addEventListener("hashchange", function(e) {
-                // ...
-                console.log(e)
+            window.addEventListener("hashchange", function (e) {
+                // listen to browser back/forward button click event and update breadcrumbs accordingly
+                if (!$navigationButtonClicked) {
+                    let indexOfNewUrl = $breadCrumbs.findIndex(u => u.path === e.newURL.split('/')[3])
+                    let indexOfOldUrl = $breadCrumbs.findIndex(u => u.path === e.oldURL.split('/')[3])
+                    if (indexOfNewUrl > 0 && indexOfNewUrl < indexOfOldUrl) {
+                        breadCrumbs.set($breadCrumbs.filter(p => p.path !== e.oldURL.split('/')[3]))
+                    }
+
+                    if (!$breadCrumbs.find(b => b.path === e.newURL.split('/')[3])) {
+                        breadCrumbs.set([...$breadCrumbs,
+                            {path: e.newURL.split('/')[3], label: e.newURL.split('/')[3]}])
+                    }
+                } else {
+                    breadCrumbs.set([{path: "#set-vault", label: "Home"},
+                        {path: e.newURL.split('/')[3], label: e.newURL.split('/')[3]}])
+                }
             })
             window.ethereum.on("chainChanged", networkChanged);
         }

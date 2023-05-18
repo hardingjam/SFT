@@ -9,11 +9,11 @@
     export let transactionHash = null;
 
     import {createEventDispatcher} from 'svelte';
-    import {navigateTo} from 'yrv';
+    import {navigate} from '../scripts/helpers.js';
 
     function goToRoles() {
         closeBtnClick()
-        navigateTo("#roles", {replace: false});
+        navigate("#roles", {clear: true});
     }
 
     const dispatch = createEventDispatcher();

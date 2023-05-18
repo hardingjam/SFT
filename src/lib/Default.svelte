@@ -45,6 +45,7 @@
     import {ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
     import BreadCrumbs from '../components/BreadCrumbs.svelte';
+    import {ROUTE_LABEL_MAP} from '../scripts/consts';
 
 
     let connectedAccount;
@@ -65,9 +66,6 @@
     }
 
     router.subscribe(async e => {
-
-
-        console.log($navigationButtonClicked);
         if (!e.initial) {
             await setVault()
             location = e.path
@@ -127,20 +125,21 @@
             });
             window.addEventListener("hashchange", function (e) {
                 // listen to browser back/forward button click event and update breadcrumbs accordingly
+                let newUrl = e.newURL.split('/')[3]
+                let oldURL = e.oldURL.split('/')[3]
                 if (!$navigationButtonClicked) {
-                    let indexOfNewUrl = $breadCrumbs.findIndex(u => u.path === e.newURL.split('/')[3])
-                    let indexOfOldUrl = $breadCrumbs.findIndex(u => u.path === e.oldURL.split('/')[3])
+                    let indexOfNewUrl = $breadCrumbs.findIndex(u => u.path === newUrl)
+                    let indexOfOldUrl = $breadCrumbs.findIndex(u => u.path === oldURL)
                     if (indexOfNewUrl > 0 && indexOfNewUrl < indexOfOldUrl) {
-                        breadCrumbs.set($breadCrumbs.filter(p => p.path !== e.oldURL.split('/')[3]))
+                        breadCrumbs.set($breadCrumbs.filter(p => p.path !== oldURL))
                     }
 
-                    if (!$breadCrumbs.find(b => b.path === e.newURL.split('/')[3])) {
-                        breadCrumbs.set([...$breadCrumbs,
-                            {path: e.newURL.split('/')[3], label: e.newURL.split('/')[3]}])
+                    if (!$breadCrumbs.find(b => b.path === newUrl)) {
+                        breadCrumbs.set([...$breadCrumbs, {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
                     }
                 } else {
                     breadCrumbs.set([{path: "#set-vault", label: "Home"},
-                        {path: e.newURL.split('/')[3], label: e.newURL.split('/')[3]}])
+                        {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
                 }
             })
             window.ethereum.on("chainChanged", networkChanged);
@@ -320,15 +319,15 @@
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
         <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">
 
-          <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
-          <Route path="#roles" component={Roles}/>
-          <Route path="#list" component={Tokens}/>
-          <Route path="#members" component={Members}/>
-          <Route path="#audit-history" component={AuditHistory}/>
-          <Route path="#set-vault" component={SetVault}/>
-          <Route path="#asset-classes" component={AssetClasses}/>
-          <Route path="#new-asset-class" component={NewSchema}/>
-          <Route path="#receipt/:id" component={ReceiptAudit}/>
+          <Route path="#setup"              component={SftSetup} ethersData={$ethersData}/>
+          <Route path="#roles"              component={Roles}/>
+          <Route path="#list"               component={Tokens}/>
+          <Route path="#members"            component={Members}/>
+          <Route path="#audit-history"      component={AuditHistory}/>
+          <Route path="#set-vault"            component={SetVault}/>
+          <Route path="#asset-classes"      component={AssetClasses}/>
+          <Route path="#new-asset-class"      component={NewSchema}/>
+          <Route path="#receipt/:id"          component={ReceiptAudit}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
 

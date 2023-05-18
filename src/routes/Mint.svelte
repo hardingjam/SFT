@@ -39,6 +39,7 @@
         VAULT_INFORMATION_QUERY
     } from "../scripts/queries.js";
     import {arrayify} from "ethers/lib/utils.js";
+    import {navigate} from '../scripts/helpers.js';
 
     let image = {}
 
@@ -337,13 +338,13 @@
 <div class="mint-container">
   <div class="header-buttons">
     <button type="button" class="default-btn mr-2" disabled={!$schemas.length}
-            on:click={()=>{navigateTo('#asset-classes')}}>
-      Asset classes
+            on:click={()=>{navigate('#asset-classes')}}>
+      Asset class list
     </button>
-    <button type="button" class="default-btn mr-2" on:click={()=>{navigateTo('#new-asset-class')}}>
+    <button type="button" class="default-btn mr-2" on:click={()=>{navigate('#new-asset-class')}}>
       New asset class
     </button>
-    <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>
+    <button class="default-btn" on:click={()=>{navigate('#audit-history')}}>
       Audit history
     </button>
   </div>

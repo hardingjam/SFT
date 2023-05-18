@@ -14,7 +14,7 @@
     import {
         cborDecode,
         getSubgraphData,
-        hasRole,
+        hasRole, navigate,
         showPromptSFTCreate,
         timeStampToDate
     } from "../scripts/helpers.js";
@@ -147,8 +147,8 @@
 </script>
 <DefaultFrame header="Audit history">
   <div slot="header-buttons" class="display-flex">
-    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#members")}}>Members</button>
-    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#roles")}}>Roles</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigate("#members")}}>Members</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigate("#roles")}}>Roles</button>
   </div>
   <div slot="content">
     <div class="history">

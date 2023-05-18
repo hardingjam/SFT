@@ -17,7 +17,7 @@
         data,
         roles,
         sftInfo,
-        tokenName
+        tokenName, breadCrumbs, navigationButtonClicked
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -44,6 +44,8 @@
     import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
     import {ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
+    import BreadCrumbs from '../components/BreadCrumbs.svelte';
+    import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
 
 
@@ -122,6 +124,25 @@
                     }
                 }
             });
+            window.addEventListener("hashchange", function (e) {
+                // listen to browser back/forward button click event and update breadcrumbs accordingly
+                let newUrl = e.newURL.split('/')[3]
+                let oldURL = e.oldURL.split('/')[3]
+                if (!$navigationButtonClicked) {
+                    let indexOfNewUrl = $breadCrumbs.findIndex(u => u.path === newUrl)
+                    let indexOfOldUrl = $breadCrumbs.findIndex(u => u.path === oldURL)
+                    if (indexOfNewUrl > 0 && indexOfNewUrl < indexOfOldUrl) {
+                        breadCrumbs.set($breadCrumbs.filter(p => p.path !== oldURL))
+                    }
+
+                    if (!$breadCrumbs.find(b => b.path === newUrl)) {
+                        breadCrumbs.set([...$breadCrumbs, {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
+                    }
+                } else {
+                    breadCrumbs.set([{path: "#set-vault", label: "Home"},
+                        {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
+                }
+            })
             window.ethereum.on("chainChanged", networkChanged);
         }
         if (location === "/" || location === "") {
@@ -292,8 +313,13 @@
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-      <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
-        <div class={$activeNetwork  ? 'show' : 'hide'}>
+      {#if location && (location !== "#set-vault" && location !== "/")}
+        <BreadCrumbs/>
+      {/if}
+
+      <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
+        <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">
+
           <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
           <Route path="#roles" component={Roles}/>
           <Route path="#list" component={Tokens}/>
@@ -418,7 +444,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 5rem;
+    padding-top: 9rem;
     transition: 0.5s ease;
     padding-bottom: 5rem;
   }

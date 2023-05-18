@@ -20,7 +20,6 @@
         getEvent,
         showPromptSFTCreate
     } from "../scripts/helpers.js";
-    import {navigateTo} from "yrv";
 
     let name = "";
     let admin_ledger = "";
@@ -103,7 +102,6 @@
                         localStorage.setItem('vaultAddress', $vault.address)
                         //wait for sg data
                         await getSgData(newVault.address)
-                        // navigateTo("#sft-create-success", {replace: false});
                     }
                 }, 2000)
             } else {

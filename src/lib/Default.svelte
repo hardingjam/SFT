@@ -283,10 +283,10 @@
 
   <div class={$account ? "content" : "content-not-connected"}>
     <Header on:select={handleNetworkSelect}></Header>
-    <div class="logo-container">
+    <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
       <a href="/">
         <img src={icons.logo} alt=""
-             class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
+             class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
       </a>
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
@@ -374,12 +374,16 @@
     position: fixed;
     display: flex;
     top: 20px;
-    left: 60px;
+    left: 55px;
   }
 
   .logo-container img {
     height: 85px;
     width: 85px;
+  }
+
+  .border-6 {
+    border-width: 5px
   }
 
   .container {

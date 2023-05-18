@@ -46,7 +46,19 @@ const networks = [
         icon: 'polygon',
         factory_address: '0x94927792b88D518f9a429572dD3D40400b8BE906',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
-    }
+    }  ,
+    // {
+    //     id: 80001,
+    //     chainId: 80001,
+    //     name: 'mumbai',
+    //     displayName: "Mumbai testnet",
+    //     currencySymbol: "MATIC",
+    //     blockExplorer: "https://mumbai.polygonscan.com",
+    //     rpcUrl: "https://rpc-mumbai.maticvigil.com/",
+    //     icon: 'polygon',
+    //     factory_address: '0x792f2567Af36fD43655f62Bf1a457e701a1f7C8d',
+    //     subgraph_url: "https://api.thegraph.com/subgraphs/name/ninokeldishvili/erc20-price-oracle-vault"
+    // }
 ];
 
 export default networks;

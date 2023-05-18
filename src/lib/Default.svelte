@@ -46,6 +46,7 @@
     import Header from '../components/Header.svelte';
     import BreadCrumbs from '../components/BreadCrumbs.svelte';
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
+    import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
 
 
     let connectedAccount;
@@ -304,10 +305,10 @@
 
   <div class={$account ? "content" : "content-not-connected"}>
     <Header on:select={handleNetworkSelect}></Header>
-    <div class="logo-container">
+    <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
       <a href="/">
         <img src={icons.logo} alt=""
-             class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
+             class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
       </a>
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
@@ -319,18 +320,17 @@
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
         <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">
 
-          <Route path="#setup"              component={SftSetup} ethersData={$ethersData}/>
-          <Route path="#roles"              component={Roles}/>
-          <Route path="#list"               component={Tokens}/>
-          <Route path="#members"            component={Members}/>
-          <Route path="#audit-history"      component={AuditHistory}/>
-          <Route path="#set-vault"            component={SetVault}/>
-          <Route path="#asset-classes"      component={AssetClasses}/>
-          <Route path="#new-asset-class"      component={NewSchema}/>
-          <Route path="#receipt/:id"          component={ReceiptAudit}/>
+          <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
+          <Route path="#roles" component={Roles}/>
+          <Route path="#list" component={Tokens}/>
+          <Route path="#members" component={Members}/>
+          <Route path="#audit-history" component={AuditHistory}/>
+          <Route path="#set-vault" component={SetVault}/>
+          <Route path="#asset-classes" component={AssetClasses}/>
+          <Route path="#new-asset-class" component={NewSchema}/>
+          <Route path="#receipt/:id" component={ReceiptAudit}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
-
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -392,6 +392,7 @@
                                errorText={$promptErrorText}
                                successText={$promptSuccessText}
                                on:close={$promptCloseAction}/>
+  <SFTCreateSuccessBanner/>
 </Router>
 
 
@@ -401,12 +402,16 @@
     position: fixed;
     display: flex;
     top: 20px;
-    left: 60px;
+    left: 55px;
   }
 
   .logo-container img {
     height: 85px;
     width: 85px;
+  }
+
+  .border-6 {
+    border-width: 6px
   }
 
   .container {

@@ -37,7 +37,7 @@
         </div>
       {/if}
     </div>
-    <div class="mt-14 flex flex-col justify-start items-center w-full">
+    <div class="mt-16 flex flex-col justify-start items-center w-full">
       <div class="sft-name f-weight-600 menu-header mb-3">{$account ? $tokenName : ""}</div>
 
       <a href=""

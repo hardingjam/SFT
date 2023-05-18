@@ -1,8 +1,8 @@
 <script>
     import {
         activeNetwork,
-        data, tokens,
-        transactionError, transactionInProgress,
+        data, SFTCreated, tokens,
+        transactionError, transactionInProgress, transactionInProgressShow,
         transactionSuccess,
         vault
     } from '../scripts/store.js';
@@ -18,9 +18,8 @@
         getContract,
         getSubgraphData,
         getEvent,
-        showPromptSFTCreate, navigate
+        showPromptSFTCreate
     } from "../scripts/helpers.js";
-    import {navigateTo} from "yrv";
 
     let name = "";
     let admin_ledger = "";
@@ -95,14 +94,14 @@
                 let interval = setInterval(async () => {
                     await getTokens()
                     if (deployBlockNumber.toString() === $tokens[0].deployBlock) {
-                        transactionSuccess.set(true)
                         transactionInProgress.set(false)
+                        transactionInProgressShow.set(false)
+                        SFTCreated.set(true)
                         clearInterval(interval)
                         vault.set(newVault)
                         localStorage.setItem('vaultAddress', $vault.address)
                         //wait for sg data
                         await getSgData(newVault.address)
-                        navigate("#sft-create-success");
                     }
                 }, 2000)
             } else {

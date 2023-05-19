@@ -81,6 +81,9 @@
             if (location === "#ipfs") {
                 navigateTo("#ipfs", {replace: false})
             }
+            if (location === "#manual") {
+                navigateTo("#manual", {replace: false})
+            }
         }
     });
 

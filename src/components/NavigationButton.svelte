@@ -1,10 +1,10 @@
 <script>
     import {navigate} from '../scripts/helpers.js';
     import {navigationButtonClicked} from '../scripts/store.js';
+    import {ROUTE_LABEL_MAP} from '../scripts/consts.js';
 
     export let targetPath;
     export let path;
-    export let label;
     export let child = false;
     export let disabled = false;
 
@@ -20,7 +20,7 @@
         <span class="w-3">
           <slot name="icon"></slot>
         </span>
-  <label class="text-base leading-5  ">{label}</label>
+  <label class="text-base leading-5  ">{ROUTE_LABEL_MAP.get(targetPath)}</label>
 </button>
 <style>
     .nav-item {

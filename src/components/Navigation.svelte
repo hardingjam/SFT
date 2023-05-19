@@ -44,7 +44,7 @@
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <p class="text-base leading-5 menu-header">SFT</p>
       </a>
-      <NavigationButton targetPath="#set-vault" {path} label="Home">
+      <NavigationButton targetPath="#set-vault" {path}>
         <div slot="icon">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -55,7 +55,7 @@
       </NavigationButton>
 
       {#if $accountRoles.DEPOSITOR}
-        <NavigationButton targetPath="#mint" {path} label="Mint/Redeem" disabled={!!!$vault.address}>
+        <NavigationButton targetPath="#mint" {path} disabled={!!!$vault.address}>
           <div slot="icon">
             <svg width="19" height="10" viewBox="0 0 19 10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -65,10 +65,10 @@
             </svg>
           </div>
         </NavigationButton>
-        <NavigationButton targetPath="#asset-classes" {path} label="Asset class list" child = {true}/>
+        <NavigationButton targetPath="#asset-classes" {path} child = {true}/>
       {/if}
 
-      <NavigationButton targetPath="#members" {path} label="Members" disabled={!!!$vault.address}>
+      <NavigationButton targetPath="#members" {path} disabled={!!!$vault.address}>
         <div slot="icon">
           <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -78,7 +78,7 @@
           </svg>
         </div>
       </NavigationButton>
-      <NavigationButton targetPath="#roles" {path} label="SFT roles" disabled={!!!$vault.address}>
+      <NavigationButton targetPath="#roles" {path} disabled={!!!$vault.address}>
         <div slot="icon">
           <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -88,7 +88,7 @@
           </svg>
         </div>
       </NavigationButton>
-      <NavigationButton targetPath="#audit-history" {path} label="Audits" disabled={!!!$vault.address}>
+      <NavigationButton targetPath="#audit-history" {path} disabled={!!!$vault.address}>
         <div slot="icon">
           <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -98,7 +98,7 @@
           </svg>
         </div>
       </NavigationButton>
-      <NavigationButton targetPath="#list" {path} label="SFT list">
+      <NavigationButton targetPath="#list" {path}>
         <div slot="icon">
           <svg width="16" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="4 2 16 20">
             <path
@@ -112,7 +112,7 @@
           </svg>
         </div>
       </NavigationButton>
-            <NavigationButton targetPath="#manual" {path} label="Manual">
+            <NavigationButton targetPath="#manual" {path}>
               <div slot="icon">
                 <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -128,7 +128,7 @@
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <p class="leading-5 menu-header">Web 3</p>
       </a>
-      <NavigationButton targetPath="#ipfs" {path} label="IPFS">
+      <NavigationButton targetPath="#ipfs" {path}>
         <div slot="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -139,7 +139,7 @@
           </svg>
         </div>
       </NavigationButton>
-      <NavigationButton targetPath="#setup" {path} label="SFT Setup">
+      <NavigationButton targetPath="#setup" {path}>
         <div slot="icon">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="9" cy="9" r="8" stroke="#575757" stroke-width="2" stroke-linecap="round"

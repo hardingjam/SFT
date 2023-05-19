@@ -33,7 +33,8 @@
 <style>
     .breadcrumbs {
         top: 3.5rem;
-        margin-left: 223px;
+        margin-left: 203px;
+        padding-left: 20px;
         color: #9D7334;
         background: #DCDBDD;
     }

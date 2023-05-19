@@ -61,4 +61,6 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#new-asset-class", "New asset class"],
     ["#receipt/:id", "Receipt"],
     ["#sft-create-success", "Sft created successfully"],
-    ["#ipfs", "IPFS"]]);
+    ["#ipfs", "IPFS"],
+    ["#manual", "Manual"]
+]);

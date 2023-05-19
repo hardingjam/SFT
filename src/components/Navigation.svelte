@@ -42,9 +42,9 @@
 
       <a href=""
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
-        <p class="text-base leading-5 menu-header">SFT</p>
+        <span class="text-base leading-5 menu-header">SFT</span>
       </a>
-      <NavigationButton targetPath="#set-vault" {path} label="Home">
+      <NavigationButton targetPath="#set-vault" {path}>
         <div slot="icon">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -55,7 +55,7 @@
       </NavigationButton>
 
       {#if $accountRoles.DEPOSITOR}
-        <NavigationButton targetPath="#mint" {path} label="Mint/Redeem" disabled={!!!$vault.address}>
+        <NavigationButton targetPath="#mint" {path} disabled={!!!$vault.address}>
           <div slot="icon">
             <svg width="19" height="10" viewBox="0 0 19 10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -65,10 +65,10 @@
             </svg>
           </div>
         </NavigationButton>
-        <NavigationButton targetPath="#asset-classes" {path} label="Asset class list" child = {true}/>
+        <NavigationButton targetPath="#asset-classes" {path} child = {true}/>
       {/if}
 
-      <NavigationButton targetPath="#members" {path} label="Members" disabled={!!!$vault.address}>
+      <NavigationButton targetPath="#members" {path} disabled={!!!$vault.address}>
         <div slot="icon">
           <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -78,7 +78,7 @@
           </svg>
         </div>
       </NavigationButton>
-      <NavigationButton targetPath="#roles" {path} label="SFT roles" disabled={!!!$vault.address}>
+      <NavigationButton targetPath="#roles" {path} disabled={!!!$vault.address}>
         <div slot="icon">
           <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -88,7 +88,7 @@
           </svg>
         </div>
       </NavigationButton>
-      <NavigationButton targetPath="#audit-history" {path} label="Audits" disabled={!!!$vault.address}>
+      <NavigationButton targetPath="#audit-history" {path} disabled={!!!$vault.address}>
         <div slot="icon">
           <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -98,7 +98,7 @@
           </svg>
         </div>
       </NavigationButton>
-      <NavigationButton targetPath="#list" {path} label="SFT list">
+      <NavigationButton targetPath="#list" {path}>
         <div slot="icon">
           <svg width="16" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="4 2 16 20">
             <path
@@ -112,23 +112,23 @@
           </svg>
         </div>
       </NavigationButton>
-      <!--      <NavigationButton targetPath="#manual" {path} label="Manual">-->
-      <!--        <div slot="icon">-->
-      <!--          <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-      <!--            <path-->
-      <!--              d="M11 4.05337V18.3025M4 6.25464C5.26578 6.45067 6.67778 6.77657 8 7.28788M4 10.2546C4.63949 10.3537 5.3163 10.4859 6 10.6584M2.99433 1.01127C5.21271 1.26195 8.19313 1.93632 10.3168 3.42445C10.725 3.71045 11.275 3.71045 11.6832 3.42445C13.8069 1.93632 16.7873 1.26195 19.0057 1.01127C20.1036 0.887209 21 1.80402 21 2.93518V14.2C21 15.3311 20.1036 16.2483 19.0057 16.3723C16.7873 16.623 13.8069 17.2974 11.6832 18.7855C11.275 19.0715 10.725 19.0715 10.3168 18.7855C8.19313 17.2974 5.21271 16.623 2.99433 16.3723C1.89642 16.2483 1 15.3311 1 14.2V2.93518C1 1.80402 1.89642 0.887209 2.99433 1.01127Z"-->
-      <!--              stroke="#575757" stroke-width="2" stroke-linecap="round"/>-->
-      <!--          </svg>-->
-      <!--        </div>-->
-      <!--      </NavigationButton>-->
+            <NavigationButton targetPath="#manual" {path}>
+              <div slot="icon">
+                <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M11 4.05337V18.3025M4 6.25464C5.26578 6.45067 6.67778 6.77657 8 7.28788M4 10.2546C4.63949 10.3537 5.3163 10.4859 6 10.6584M2.99433 1.01127C5.21271 1.26195 8.19313 1.93632 10.3168 3.42445C10.725 3.71045 11.275 3.71045 11.6832 3.42445C13.8069 1.93632 16.7873 1.26195 19.0057 1.01127C20.1036 0.887209 21 1.80402 21 2.93518V14.2C21 15.3311 20.1036 16.2483 19.0057 16.3723C16.7873 16.623 13.8069 17.2974 11.6832 18.7855C11.275 19.0715 10.725 19.0715 10.3168 18.7855C8.19313 17.2974 5.21271 16.623 2.99433 16.3723C1.89642 16.2483 1 15.3311 1 14.2V2.93518C1 1.80402 1.89642 0.887209 2.99433 1.01127Z"
+                    stroke="#575757" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </NavigationButton>
     </div>
     <div class="items-center pt-16 border-b w-11/12 self-center"></div>
     <div class="mt-6 flex flex-col justify-start items-center w-full">
       <a href=""
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
-        <p class="leading-5 menu-header">Web 3</p>
+        <span class="leading-5 menu-header">Web 3</span>
       </a>
-      <NavigationButton targetPath="#ipfs" {path} label="IPFS">
+      <NavigationButton targetPath="#ipfs" {path}>
         <div slot="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -139,7 +139,7 @@
           </svg>
         </div>
       </NavigationButton>
-      <NavigationButton targetPath="#setup" {path} label="SFT Setup">
+      <NavigationButton targetPath="#setup" {path}>
         <div slot="icon">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="9" cy="9" r="8" stroke="#575757" stroke-width="2" stroke-linecap="round"

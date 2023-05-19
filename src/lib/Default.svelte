@@ -47,6 +47,7 @@
     import BreadCrumbs from '../components/BreadCrumbs.svelte';
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
+    import Manual from '../routes/Manual.svelte';
 
 
     let connectedAccount;
@@ -331,6 +332,7 @@
           <Route path="#receipt/:id" component={ReceiptAudit}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
+          <Route path="#manual" component={Manual}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

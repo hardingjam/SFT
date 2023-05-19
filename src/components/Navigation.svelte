@@ -42,7 +42,7 @@
 
       <a href=""
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
-        <p class="text-base leading-5 menu-header">SFT</p>
+        <span class="text-base leading-5 menu-header">SFT</span>
       </a>
       <NavigationButton targetPath="#set-vault" {path}>
         <div slot="icon">
@@ -126,7 +126,7 @@
     <div class="mt-6 flex flex-col justify-start items-center w-full">
       <a href=""
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
-        <p class="leading-5 menu-header">Web 3</p>
+        <span class="leading-5 menu-header">Web 3</span>
       </a>
       <NavigationButton targetPath="#ipfs" {path}>
         <div slot="icon">

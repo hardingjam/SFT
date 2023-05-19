@@ -197,6 +197,10 @@ ul {
     padding-inline-start: 40px;
 }
 
+ul ul {
+    list-style-type: circle;
+}
+
 li {
     display: list-item;
     text-align: -webkit-match-parent;

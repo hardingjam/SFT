@@ -56,7 +56,7 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#list", "SFT list"],
     ["#members", "Members"],
     ["#audit-history", "Audits"],
-    ["/", "Home"],
+    ["#", "Home"],
     ["#asset-classes", "Asset class list"],
     ["#new-asset-class", "New asset class"],
     ["#receipt/:id", "Receipt"],

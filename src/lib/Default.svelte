@@ -96,8 +96,8 @@
 
         } else {
             vault.set({})
-            location = "#set-vault"
-            navigateTo("#set-vault", {replace: false})
+            location = "#"
+            navigateTo("#", {replace: false})
         }
     }
 
@@ -125,7 +125,7 @@
                     accountRoles.set(await setAccountRoles($roles, $account));
 
                     if ((location === '#mint' || location === '#redeem') && !$accountRoles.DEPOSITOR) {
-                        navigateTo('#set-vault');
+                        navigateTo('#');
                     }
                 }
             });
@@ -165,7 +165,7 @@
         vault.set({});
         await setNetwork();
         await getTokens();
-        navigateTo("#set-vault");
+        navigateTo("#");
     }
 
     async function getEthersData() {
@@ -318,7 +318,7 @@
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-      {#if location && (location !== "#set-vault" && location !== "/")}
+      {#if location && (location !== "#set-vault" && location !== "#")}
         <BreadCrumbs/>
       {/if}
 
@@ -337,7 +337,7 @@
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
-          <Route path="/" component={Home}/>
+          <Route path="#" component={Home}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

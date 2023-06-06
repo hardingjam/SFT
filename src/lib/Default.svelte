@@ -48,6 +48,7 @@
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
     import Manual from '../routes/Manual.svelte';
+    import Home from '../routes/Home.svelte';
 
 
     let connectedAccount;
@@ -149,9 +150,9 @@
             })
             window.ethereum.on("chainChanged", networkChanged);
         }
-        if (location === "/" || location === "") {
-            navigateTo("#set-vault");
-        }
+        // if (location === "/" || location === "") {
+        //     navigateTo("#set-vault");
+        // }
         await getTokens();
 
         // const grantRoleTx = await $vault.connect($ethersData.signer).grantRole(await $vault.connect($ethersData.signer).DEPOSITOR(), $account.trim());
@@ -336,6 +337,7 @@
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
+          <Route path="/" component={Home}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

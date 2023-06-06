@@ -44,7 +44,7 @@
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <span class="text-base leading-5 menu-header">SFT</span>
       </a>
-      <NavigationButton targetPath="#set-vault" {path}>
+      <NavigationButton targetPath="/" {path}>
         <div slot="icon">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

@@ -40,7 +40,7 @@
         }
     ]
 </script>
-<div class="flex flex-col w-full">
+<div class="flex flex-col w-full items-center home-container">
   <div class="views flex justify-end w-full space-x-6 pr-20 pt-5">
     <div class="cursor-pointer" on:click={()=>{view = "tile"}}>
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -94,5 +94,10 @@
     {/if}
   </div>
 </div>
+<style>
+  .home-container{
+      padding-top: 3.5rem;
+  }
+</style>
 
 

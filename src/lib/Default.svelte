@@ -321,7 +321,11 @@
       {#if location && (location !== "#set-vault" && location !== "#")}
         <BreadCrumbs/>
       {/if}
-
+      <div class={$sftInfo ? "sft-info-opened" : "" }>
+        <div class="{$activeNetwork  ? 'show' : 'hide'}">
+          <Route path="#" component={Home}/>
+        </div>
+      </div>
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
         <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">
 
@@ -337,7 +341,6 @@
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
-          <Route path="#" component={Home}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

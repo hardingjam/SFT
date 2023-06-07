@@ -140,12 +140,22 @@ export const VAULT_INFORMATION_QUERY = `
 export const VAULTS_QUERY = `
         query {
           offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
-            deployer,
-            name,
-            address,
-            symbol,
-            deployBlock,
+            deployer
+            name
+            address
+            symbol
+            deployBlock
             deployTimestamp
+            totalShares
+            roleHolders {
+              role {
+                roleName
+                roleHash
+              }
+              account {
+                address
+              }
+            }
           }
         }`;
 

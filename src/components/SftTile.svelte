@@ -59,7 +59,7 @@
     </tr>
     <tr>
       <td class="font-bold">Number of holders</td>
-      <td class="sft-info">{sft.holders || 0}</td>
+      <td class="sft-info">{issuers.length}</td>
     </tr>
     <tr>
       <td class="font-bold">Token supply</td>

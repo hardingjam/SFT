@@ -1,44 +1,9 @@
 <script>
     import SftTile from "../components/SftTile.svelte";
     import SftList from "../components/SftList.svelte";
-    import {sftInfo} from "../scripts/store.js";
+    import {sftInfo, tokens} from "../scripts/store.js";
 
     let view = "tile";
-    let offchainAssetReceiptVaults = [
-        {
-            name: "OPUS",
-            symbol: "OPS",
-            date: "30/09/2021",
-            holders: "3,000,000",
-            token_supply: "123,000,000",
-            auditors: "KPMG",
-            issuer: "British Land",
-        }, {
-            name: "OPUS1",
-            symbol: "OPS",
-            date: "30/09/2021",
-            holders: "3,000,000",
-            token_supply: "123,000,000",
-            auditors: "KPMG",
-            issuer: "British Land",
-        }, {
-            name: "OPUS2",
-            symbol: "OPS",
-            date: "30/09/2021",
-            holders: "3,000,000",
-            token_supply: "123,000,000",
-            auditors: "KPMG",
-            issuer: "British Land",
-        }, {
-            name: "OPUS3",
-            symbol: "OPS",
-            date: "30/09/2021",
-            holders: "3,000,000",
-            token_supply: "123,000,000",
-            auditors: "KPMG",
-            issuer: "British Land",
-        }
-    ]
 </script>
 <div class="flex flex-col w-full items-center home-container">
   <div class="views flex justify-end w-full space-x-6 pr-20 pt-5">
@@ -81,23 +46,23 @@
       </svg>
     </div>
   </div>
-  <div class={$sftInfo? "content mt-5 w-full" : "content mt-5 w-8/12" } >
+  <div class={$sftInfo? "content mt-5 w-full" : "content mt-5 w-8/12" }>
     {#if (view === "tile")}
       <div class="grid grid-cols-2 gap-5">
-        {#each offchainAssetReceiptVaults as sft }
+        {#each $tokens as sft }
           <SftTile sft={sft}></SftTile>
         {/each}
       </div>
     {/if}
     {#if (view === "list")}
-      <SftList sfts={offchainAssetReceiptVaults}></SftList>
+      <SftList sfts={$tokens}></SftList>
     {/if}
   </div>
 </div>
 <style>
-  .home-container{
-      padding-top: 3.5rem;
-  }
+    .home-container {
+        padding-top: 3.5rem;
+    }
 </style>
 
 

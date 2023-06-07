@@ -7,11 +7,11 @@
   <thead>
   <tr class="text-white text-bold">
     <th></th>
-    <th>Token Name</th>
-    <th>Token Symbol</th>
-    <th>Creation Date</th>
+    <th>Token name</th>
+    <th>Token symbol</th>
+    <th>Creation date</th>
     <th>Number of holders</th>
-    <th>Token Supply</th>
+    <th>Token supply</th>
     <th>Auditor(s)</th>
     <th>Name of issuer</th>
   </tr>

@@ -144,15 +144,15 @@
                         breadCrumbs.set([...$breadCrumbs, {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
                     }
                 } else {
-                    breadCrumbs.set([{path: "#set-vault", label: "Home"},
+                    breadCrumbs.set([{path: "#", label: "Home"},
                         {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
                 }
             })
             window.ethereum.on("chainChanged", networkChanged);
         }
-        // if (location === "/" || location === "") {
-        //     navigateTo("#set-vault");
-        // }
+        if (location === "/" || location === "") {
+            navigateTo("#");
+        }
         await getTokens();
 
         // const grantRoleTx = await $vault.connect($ethersData.signer).grantRole(await $vault.connect($ethersData.signer).DEPOSITOR(), $account.trim());
@@ -318,7 +318,8 @@
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-      {#if location && (location !== "#set-vault" && location !== "#")}
+
+      {#if location && (location !== "/" && location !== "#")}
         <BreadCrumbs/>
       {/if}
       <div class={$sftInfo ? "sft-info-opened" : "" }>
@@ -334,7 +335,7 @@
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>
-          <Route path="#set-vault" component={SetVault}/>
+          <!--          <Route path="#set-vault" component={SetVault}/>-->
           <Route path="#asset-classes" component={AssetClasses}/>
           <Route path="#new-asset-class" component={NewSchema}/>
           <Route path="#receipt/:id" component={ReceiptAudit}/>

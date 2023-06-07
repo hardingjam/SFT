@@ -55,13 +55,44 @@
       </div>
     {/if}
     {#if (view === "list")}
-      <SftList sfts={$tokens}></SftList>
+      <table class="w-full leading-7 text-center token-list-table">
+        <thead>
+        <tr class="text-white text-bold">
+          <th></th>
+          <th>Token name</th>
+          <th>Token symbol</th>
+          <th>Creation date</th>
+          <th>Number of holders</th>
+          <th>Token supply</th>
+          <th>Auditor(s)</th>
+          <th>Name of issuer</th>
+        </tr>
+        </thead>
+        <tbody>
+        {#each $tokens as sft }
+          <SftList {sft}></SftList>
+        {/each}
+        </tbody>
+      </table>
+
     {/if}
   </div>
 </div>
 <style>
     .home-container {
         padding-top: 3.5rem;
+    }
+
+    .token-list-table thead tr {
+        background-color: #9196C5;
+    }
+
+    .token-list-table thead tr:first-child th:first-child {
+        border-top-left-radius: 10px;
+    }
+
+    .token-list-table thead tr:first-child th:last-child {
+        border-top-right-radius: 10px;
     }
 </style>
 

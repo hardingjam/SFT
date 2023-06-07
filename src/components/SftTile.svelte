@@ -7,15 +7,23 @@
 
     export let sft = {}
     let auditors = []
+    let issuers = []
 
     onMount(() => {
         getAuditors()
+        getIssuers()
     })
 
     function getAuditors() {
         if (sft.address) {
             let tempAuditors = sft.roleHolders.filter(rh => rh.role.roleName === 'CERTIFIER')
             auditors = tempAuditors.map(a => a.account.address)
+        }
+    }
+    function getIssuers() {
+        if (sft.address) {
+            let tempAuditors = sft.roleHolders.filter(rh => rh.role.roleName === 'DEPOSITOR')
+            issuers = tempAuditors.map(a => a.account.address)
         }
     }
 </script>
@@ -51,7 +59,7 @@
     </tr>
     <tr>
       <td class="font-bold">Number of holders</td>
-      <td class="sft-info">{sft.holders}</td>
+      <td class="sft-info">{sft.holders || 0}</td>
     </tr>
     <tr>
       <td class="font-bold">Token supply</td>
@@ -73,7 +81,16 @@
     </tr>
     <tr>
       <td class="font-bold">Name of issuer</td>
-      <td class="sft-info">{sft.issuer}</td>
+      <td class="sft-info ">
+        {#if !issuers.length}
+          <div>N/A</div>
+        {/if}
+        {#each issuers as issuer}
+          <div class="underline">
+            <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`} target="_blank">{formatAddress(issuer)}</a>
+          </div>
+        {/each}
+      </td>
     </tr>
   </table>
 </div>

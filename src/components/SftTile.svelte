@@ -1,5 +1,5 @@
 <script>
-    import logo from "../../src/assets/sft_logo.svg"
+    import {icons} from "../../src/scripts/assets.js"
     import {formatAddress, timeStampToDate} from '../scripts/helpers';
     import {ethers} from 'ethers';
     import {onMount} from 'svelte';
@@ -20,6 +20,7 @@
             auditors = tempAuditors.map(a => a.account.address)
         }
     }
+
     function getIssuers() {
         if (sft.address) {
             let tempAuditors = sft.roleHolders.filter(rh => rh.role.roleName === 'DEPOSITOR')
@@ -30,8 +31,16 @@
 
 <div class="w-full bg-white pt-5 pb-8 px-10 flex flex-row-reverse rounded-xl justify-between relative ">
   <div class="img-container">
-    <img src="{logo}" alt="sft logo"/>
-    <div class="absolute top-2 right-2 cursor-pointer">
+    <div class="sft-logo-container rounded-full flex items-center justify-center text-white flex-col cursor-pointer">
+      {#if sft.icon}
+        <img src="{sft.icon}" alt="sft logo"/>
+      {/if}
+      {#if !sft.icon}
+        <img src="{icons.camera}" alt="sft logo"/>
+      {/if}
+      <span>Upload</span>
+    </div>
+    <div class="absolute top-2 right-2 cursor-pointer expand-btn">
       <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M14 10.3999L19 5.1999M19 5.1999L19 10.3999M19 5.1999L14 5.1999" stroke="#9D9D9D" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round"/>
@@ -107,5 +116,15 @@
     .img-container {
         width: 88px;
         height: 88px;
+    }
+
+    .sft-logo-container {
+        background: #9D9D9D;
+        width: 88px;
+        height: 88px;
+    }
+
+    .sft-logo-container:hover {
+        background: rgba(0, 0, 0, 0.6);;
     }
 </style>

@@ -156,6 +156,11 @@ export const VAULTS_QUERY = `
                 address
               }
             }
+            receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
+              information
+              id
+              timestamp
+            }
           }
         }`;
 

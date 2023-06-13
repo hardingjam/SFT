@@ -43,28 +43,14 @@
     }
 
     async function getVaultImages() {
-        let variables = {id: sft.address.toLowerCase()}
-        if (sft.address) {
-            try {
-                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
-                let receiptVaultInformations = ""
-
-                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
-                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
-                    if (receiptVaultInformations.length) {
-                        receiptVaultInformations.map(async data => {
-                            let cborDecodedInformation = cborDecode(data.information.slice(18))
-                            if (cborDecodedInformation[0].get(1) === MAGIC_NUMBERS.OA_TOKEN_IMAGE) {
-                                let imageHash = cborDecodedInformation[1].get(0)
-                                sft.icon = imageHash
-                            }
-                        })
-                    }
+        let receiptVaultInformations = sft.receiptVaultInformations
+        if (receiptVaultInformations.length) {
+            receiptVaultInformations.map(async data => {
+                let cborDecodedInformation = cborDecode(data.information.slice(18))
+                if (cborDecodedInformation[0].get(1) === MAGIC_NUMBERS.OA_TOKEN_IMAGE) {
+                    sft.icon = cborDecodedInformation[1].get(0)
                 }
-
-            } catch (err) {
-                console.log(err)
-            }
+            })
         }
     }
 
@@ -177,7 +163,7 @@
         height: 88px;
     }
 
-    .sft-logo-container .logo{
+    .sft-logo-container .logo {
         width: 100%;
         height: 100%;
         border-radius: 50%;
@@ -192,7 +178,7 @@
         height: 88px;
     }
 
-    .update{
+    .update {
         display: none;
         width: inherit;
         height: inherit;

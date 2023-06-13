@@ -1,10 +1,9 @@
 <script>
     import {icons} from "../../src/scripts/assets.js"
-    import {cborDecode, formatAddress, getIpfsGetWay, getSubgraphData, timeStampToDate} from '../scripts/helpers';
+    import {cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers';
     import {ethers} from 'ethers';
     import {createEventDispatcher, onMount} from 'svelte';
     import {activeNetwork} from '../scripts/store.js';
-    import {VAULT_INFORMATION_QUERY} from '../scripts/queries.js';
     import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
 
     export let sft = {}
@@ -38,7 +37,8 @@
     const onFileSelected = (e) => {
         let file = e.target.files[0];
         dispatch('fileDrop', {
-            file
+            file,
+            vault: sft
         });
     }
 
@@ -55,27 +55,25 @@
     }
 
 </script>
-
 <div class="w-full bg-white pt-5 pb-8 px-10 flex flex-row-reverse rounded-xl justify-between relative ">
   <div class="img-container">
     <div class="sft-logo-container rounded-full ">
-      <label for="upload" id="sft-logo-upload"
+      <label for={`${sft.address}-upload`} id="sft-logo-upload"
              class="flex items-center justify-center text-white flex-col cursor-pointer">
         {#if sft.icon}
           <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="logo"/>
-
           <div class="update absolute flex-col flex items-center justify-center">
             <img src="{icons.camera}" alt="sft logo"/>
             <span class="text">Update</span>
           </div>
-
         {/if}
         {#if !sft.icon}
           <img src="{icons.camera}" alt="sft logo"/>
-          <input type="file" id="upload" hidden accept=".jpg, .jpeg, .png" on:change={(e)=>onFileSelected(e)}
-                 bind:this={sftLogo}/>
           <span class="text">Upload</span>
         {/if}
+        <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png"
+               on:change={(e)=>onFileSelected(e)}
+               bind:this={sftLogo}/>
       </label>
 
     </div>

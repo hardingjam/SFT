@@ -12,13 +12,14 @@
     import axios from 'axios';
     import {
         cborEncode,
-        encodeCBOR,
+        encodeCBOR, getContract,
         getSubgraphData,
         showPrompt,
         showPromptSFTCreate
     } from '../scripts/helpers.js';
     import {arrayify} from 'ethers/lib/utils.js';
     import {RECEIPT_VAULT_INFORMATION_QUERY} from '../scripts/queries.js';
+    import contractAbi from '../contract/OffchainAssetVaultAbi.json';
 
     let username;
     let password;
@@ -26,9 +27,8 @@
 
     async function deployImage(event) {
         let file = event.detail.file
+        let vault = await getContract($activeNetwork, event.detail.vault.address, contractAbi, $ethersData.signerOrProvider)
         try {
-
-
             try {
                 let uploadResult = await upload(file)
 
@@ -45,7 +45,7 @@
                 const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedFile +
                     encodedHashList
 
-                let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+                let transaction = await vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
                 await showPromptSFTCreate(transaction)
 
                 let wait = await transaction.wait()

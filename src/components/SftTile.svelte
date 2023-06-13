@@ -1,17 +1,21 @@
 <script>
     import {icons} from "../../src/scripts/assets.js"
-    import {formatAddress, timeStampToDate} from '../scripts/helpers';
+    import {cborDecode, formatAddress, getIpfsGetWay, getSubgraphData, timeStampToDate} from '../scripts/helpers';
     import {ethers} from 'ethers';
-    import {onMount} from 'svelte';
+    import {createEventDispatcher, onMount} from 'svelte';
     import {activeNetwork} from '../scripts/store.js';
+    import {VAULT_INFORMATION_QUERY} from '../scripts/queries.js';
+    import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
 
     export let sft = {}
     let auditors = []
     let issuers = []
+    let sftLogo;
 
     onMount(() => {
         getAuditors()
         getIssuers()
+        getVaultImages()
     })
 
     function getAuditors() {
@@ -27,18 +31,67 @@
             issuers = tempAuditors.map(a => a.account.address)
         }
     }
+
+    const dispatch = createEventDispatcher();
+
+
+    const onFileSelected = (e) => {
+        let file = e.target.files[0];
+        dispatch('fileDrop', {
+            file
+        });
+    }
+
+    async function getVaultImages() {
+        let variables = {id: sft.address.toLowerCase()}
+        if (sft.address) {
+            try {
+                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
+                let receiptVaultInformations = ""
+
+                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
+                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+                    if (receiptVaultInformations.length) {
+                        receiptVaultInformations.map(async data => {
+                            let cborDecodedInformation = cborDecode(data.information.slice(18))
+                            if (cborDecodedInformation[0].get(1) === MAGIC_NUMBERS.OA_TOKEN_IMAGE) {
+                                let imageHash = cborDecodedInformation[1].get(0)
+                                sft.icon = imageHash
+                            }
+                        })
+                    }
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
+
 </script>
 
 <div class="w-full bg-white pt-5 pb-8 px-10 flex flex-row-reverse rounded-xl justify-between relative ">
   <div class="img-container">
-    <div class="sft-logo-container rounded-full flex items-center justify-center text-white flex-col cursor-pointer">
-      {#if sft.icon}
-        <img src="{sft.icon}" alt="sft logo"/>
-      {/if}
-      {#if !sft.icon}
-        <img src="{icons.camera}" alt="sft logo"/>
-      {/if}
-      <span>Upload</span>
+    <div class="sft-logo-container rounded-full ">
+      <label for="upload" id="sft-logo-upload"
+             class="flex items-center justify-center text-white flex-col cursor-pointer">
+        {#if sft.icon}
+          <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="logo"/>
+
+          <div class="update absolute flex-col flex items-center justify-center">
+            <img src="{icons.camera}" alt="sft logo"/>
+            <span class="text">Update</span>
+          </div>
+
+        {/if}
+        {#if !sft.icon}
+          <img src="{icons.camera}" alt="sft logo"/>
+          <input type="file" id="upload" hidden accept=".jpg, .jpeg, .png" on:change={(e)=>onFileSelected(e)}
+                 bind:this={sftLogo}/>
+          <span class="text">Upload</span>
+        {/if}
+      </label>
+
     </div>
     <div class="absolute top-2 right-2 cursor-pointer expand-btn">
       <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -124,7 +177,30 @@
         height: 88px;
     }
 
+    .sft-logo-container .logo{
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+
     .sft-logo-container:hover {
-        background: rgba(0, 0, 0, 0.6);;
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    #sft-logo-upload {
+        width: 88px;
+        height: 88px;
+    }
+
+    .update{
+        display: none;
+        width: inherit;
+        height: inherit;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    .sft-logo-container:hover .update {
+        display: flex;
     }
 </style>

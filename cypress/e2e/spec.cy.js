@@ -35,7 +35,7 @@ let schema = {
 describe('Stepper', () => {
     it('checks output after encode and decode where data is schema', () => {
 
-        let cborEncodedSchema = encodeCBOR(schema)
+        let cborEncodedSchema = encodeCBOR(schema, MAGIC_NUMBERS.OA_SCHEMA)
         let cborDecodedData = cborDecode(cborEncodedSchema)
         let bytes = cborDecodedData[0].get(0)
 

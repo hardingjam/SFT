@@ -1,9 +1,157 @@
 <script>
     import SftTile from "../components/SftTile.svelte";
     import SftList from "../components/SftList.svelte";
-    import {sftInfo, tokens} from "../scripts/store.js";
+    import {
+        activeNetwork,
+        ethersData,
+        sftInfo,
+        tokens, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
+        vault
+    } from "../scripts/store.js";
+    import {IPFS_APIS, MAGIC_NUMBERS} from '../scripts/consts.js';
+    import axios from 'axios';
+    import {
+        cborEncode,
+        encodeCBOR,
+        getSubgraphData,
+        showPrompt,
+        showPromptSFTCreate
+    } from '../scripts/helpers.js';
+    import {arrayify} from 'ethers/lib/utils.js';
+    import {RECEIPT_VAULT_INFORMATION_QUERY} from '../scripts/queries.js';
 
+    let username;
+    let password;
     let view = "tile";
+
+    async function deployImage(event) {
+        let file = event.detail.file
+        try {
+
+
+            try {
+                let uploadResult = await upload(file)
+
+                let fileHash = {
+                    hash: uploadResult.Hash.toString()
+                }
+
+                let encodedFile = encodeCBOR(fileHash, MAGIC_NUMBERS.OA_TOKEN_IMAGE)
+
+                let encodedHashList = cborEncode(
+                    [uploadResult?.Hash].toString(),
+                    MAGIC_NUMBERS.OA_HASH_LIST
+                );
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedFile +
+                    encodedHashList
+
+                let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+                await showPromptSFTCreate(transaction)
+
+                let wait = await transaction.wait()
+                if (wait.status === 1) {
+                    let interval = setInterval(async () => {
+                        let informationResp = await getSubgraphData($activeNetwork, {}, RECEIPT_VAULT_INFORMATION_QUERY, 'receiptVaultInformations')
+                        informationResp = informationResp?.data?.receiptVaultInformations
+                        if (informationResp && informationResp.length) {
+                            if (wait.blockNumber.toString() === informationResp[0].transaction.blockNumber) {
+                                // schemas.set(await getSchemas($activeNetwork, $vault, $deposits))
+                                transactionSuccess.set(true)
+                                transactionInProgress.set(false)
+                                clearInterval(interval)
+                            }
+                        }
+                    }, 2000)
+                } else {
+                    transactionError.set(true)
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+        } catch (e) {
+            console.log(e.message)
+        }
+
+    }
+
+    const upload = async (data) => {
+        // error = ""
+
+        let savedUsername = localStorage.getItem('ipfsUsername');
+        let savedPassword = localStorage.getItem('ipfsPassword');
+        if (!savedPassword || !savedUsername) {
+            // showAuth = true;
+            // await waitForCredentials()
+            console.log("no creds")
+        } else {
+            username = savedUsername;
+            password = savedPassword
+        }
+
+        let formData = new FormData();
+
+        formData.append('file', data)
+
+
+        const requestArr = IPFS_APIS.map((url) => {
+            return axios.request({
+                url,
+                auth: {
+                    username,
+                    password
+                },
+                method: 'post',
+                headers: {
+                    "Content-Type": `multipart/form-data;`,
+                },
+                data: formData,
+                onUploadProgress: (async (p) => {
+                    await showPrompt(null, {topText: "Uploading to IPFS, please wait", noBottomText: true})
+                    console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                }),
+                withCredentials: true,
+            })
+        });
+
+        let respAll = await Promise.allSettled(requestArr)
+
+        respAll.map(response => {
+            if (response.status === "rejected") {
+                reportError(response.reason)
+            } else return response
+        })
+
+        let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+        if (resolvedPromise) {
+
+            localStorage.setItem('ipfsUsername', username);
+            localStorage.setItem('ipfsPassword', password);
+
+        } else {
+            console.log("Something went wrong")
+        }
+        username = ""
+        password = ""
+        transactionInProgressShow.set(false)
+        transactionInProgress.set(false)
+
+        return resolvedPromise?.value.data
+    };
+
+
+    // async function waitForCredentials() {
+    //     const confirm = document.getElementById("ok-button")
+    //
+    //     promise = new Promise((resolve) => {
+    //         confirm.addEventListener('click', resolve)
+    //     })
+    //     return await promise.then(() => {
+    //             showAuth = false;
+    //         }
+    //     )
+    // }
+
 </script>
 <div class="flex flex-col w-full items-center home-container">
   <div class="views flex justify-end w-full space-x-6 pr-20 pt-5">
@@ -50,7 +198,7 @@
     {#if (view === "tile")}
       <div class="grid grid-cols-2 gap-5">
         {#each $tokens as sft }
-          <SftTile sft={sft}></SftTile>
+          <SftTile sft={sft} on:fileDrop={deployImage}></SftTile>
         {/each}
       </div>
     {/if}

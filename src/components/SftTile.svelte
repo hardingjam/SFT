@@ -45,12 +45,13 @@
     async function getVaultImages() {
         let receiptVaultInformations = sft.receiptVaultInformations
         if (receiptVaultInformations.length) {
-            receiptVaultInformations.map(async data => {
-                let cborDecodedInformation = cborDecode(data.information.slice(18))
-                if (cborDecodedInformation[0].get(1) === MAGIC_NUMBERS.OA_TOKEN_IMAGE) {
-                    sft.icon = cborDecodedInformation[1].get(0)
-                }
+            let receiptInformations = receiptVaultInformations.map(data => {
+                return cborDecode(data.information.slice(18))
             })
+            let sftImages = receiptInformations.filter(i => i[0].get(1) === MAGIC_NUMBERS.OA_TOKEN_IMAGE)
+            if (sftImages.length) {
+                sft.icon = sftImages[0][1].get(0)
+            }
         }
     }
 

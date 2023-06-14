@@ -48,6 +48,7 @@
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
     import Manual from '../routes/Manual.svelte';
+    import SftOverview from '../routes/SftOverview.svelte';
 
 
     let connectedAccount;
@@ -337,6 +338,7 @@
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
+          <Route path="#overview" component={SftOverview}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

@@ -10,6 +10,7 @@
     let auditors = []
     let issuers = []
     let sftLogo;
+    let logoPreview;
 
     onMount(() => {
         getAuditors()
@@ -36,6 +37,11 @@
 
     const onFileSelected = (e) => {
         let file = e.target.files[0];
+        const reader = new FileReader();
+        reader.addEventListener("load", function () {
+            logoPreview.setAttribute("src", reader.result);
+        });
+        reader.readAsDataURL(file);
         dispatch('fileDrop', {
             file,
             vault: sft
@@ -62,7 +68,7 @@
       <label for={`${sft.address}-upload`} id="sft-logo-upload"
              class="flex items-center justify-center text-white flex-col cursor-pointer">
         {#if sft.icon}
-          <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="logo"/>
+          <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="logo" bind:this={logoPreview}/>
           <div class="update absolute flex-col flex items-center justify-center">
             <img src="{icons.camera}" alt="sft logo"/>
             <span class="text">Update</span>

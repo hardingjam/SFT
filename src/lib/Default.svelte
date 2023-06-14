@@ -584,7 +584,8 @@
     width: 100%;
     height: 100%;
     backdrop-filter: blur(3.5px);
-    top: 0
+    top: 0;
+    z-index: 2;
   }
 
 

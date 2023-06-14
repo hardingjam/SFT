@@ -18,7 +18,7 @@
         showPromptSFTCreate
     } from '../scripts/helpers.js';
     import {arrayify} from 'ethers/lib/utils.js';
-    import {RECEIPT_VAULT_INFORMATION_QUERY} from '../scripts/queries.js';
+    import {RECEIPT_VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
 
     let username;
@@ -62,6 +62,8 @@
                             }
                         }
                     }, 2000)
+                    await getTokens()
+
                 } else {
                     transactionError.set(true)
                 }
@@ -151,6 +153,17 @@
     //         }
     //     )
     // }
+
+    async function getTokens() {
+        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
+            if ($activeNetwork) {
+                let temp = res.data.offchainAssetReceiptVaults;
+                tokens.set(temp);
+            } else {
+                tokens.set([])
+            }
+        });
+    }
 
 </script>
 <div class="flex flex-col w-full items-center home-container">

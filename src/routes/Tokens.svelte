@@ -6,7 +6,7 @@
         auditHistory,
         ethersData, roles,
         schemas,
-        tokens,
+        tokens, transactionInProgress, transactionInProgressShow,
         vault
     } from "../scripts/store.js";
     import {
@@ -14,11 +14,10 @@
         getContract,
         getSubgraphData,
         navigate,
-        setAccountRoles,
+        setAccountRoles, showPrompt,
         timeStampToDate
     } from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
-    import {navigateTo} from "yrv";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
@@ -32,6 +31,7 @@
     });
 
     async function handleTokenSelect(token) {
+        await showPrompt(null, {topText: "SFT loading, please wait", noBottomText: true})
         let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
         if (contract) {
             vault.set(contract)
@@ -40,6 +40,8 @@
             let auditHistoryData = await getAuditHistoryData(token.address)
             auditHistory.set(auditHistoryData)
             accountRoles.set(await setAccountRoles($roles, $account));
+            transactionInProgressShow.set(false)
+            transactionInProgress.set(false)
             navigate("#roles", {clear: true})
         }
     }

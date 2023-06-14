@@ -67,7 +67,8 @@
         </tr>
         {#if $tokens.length}
           {#each $tokens as token }
-            <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
+            <tr
+              class="{token?.address?.toLowerCase() === $vault?.address?.toLowerCase() ? 'active-token' : ''} token tb-row">
               <td>{token.name}</td>
               <td>{token.symbol}</td>
               <td>{formatAddress(token.deployer)}</td>
@@ -106,6 +107,10 @@
 
     table th {
         background: #625e91;
+    }
+
+    .active-token {
+        background: #CAE6FF;
     }
 
 </style>

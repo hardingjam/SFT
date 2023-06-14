@@ -384,10 +384,8 @@ li {
 }
 
 .tb-row:hover {
-    background: #625e91;
-    color: #ffffff;
+    background: #ECECEC;
     cursor: pointer;
-    opacity: 0.7;
 }
 
 .right {

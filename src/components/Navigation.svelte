@@ -98,7 +98,7 @@
           </svg>
         </div>
       </NavigationButton>
-      <NavigationButton targetPath="#list" {path}>
+      <NavigationButton targetPath="#list" {path} disabled={!$tokens.length}>
         <div slot="icon">
           <svg width="16" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="4 2 16 20">
             <path

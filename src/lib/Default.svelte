@@ -105,6 +105,9 @@
         await getEthersData();
 
         if (isMetamaskInstalled) {
+            if (location === "/" || location === "") {
+                navigateTo("#");
+            }
             await setNetwork();
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
@@ -150,9 +153,7 @@
             })
             window.ethereum.on("chainChanged", networkChanged);
         }
-        if (location === "/" || location === "") {
-            navigateTo("#");
-        }
+
         await getTokens();
 
         // const grantRoleTx = await $vault.connect($ethersData.signer).grantRole(await $vault.connect($ethersData.signer).DEPOSITOR(), $account.trim());

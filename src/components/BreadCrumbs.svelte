@@ -32,6 +32,7 @@
 </div>
 <style>
     .breadcrumbs {
+        z-index: 1;
         top: 3.5rem;
         margin-left: 203px;
         padding-left: 20px;

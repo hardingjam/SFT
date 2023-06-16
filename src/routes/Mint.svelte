@@ -356,7 +356,7 @@
         <label class="f-weight-700">{$tokenName || ""}</label>
         {#if $schemas.length}
           <div class="schema">
-            <div class="schema-dropdown">
+            <div class="schema-dropdown flex justify-between mb-6">
               <label class="f-weight-700 custom-col">Asset class</label>
               <Select options={$schemas}
 
@@ -405,7 +405,7 @@
       (FT)
     </div>
 
-    <button class="mint-btn btn-solid absolute bottom-0" on:click={() => mint()}
+    <button class="mint-btn btn-solid" on:click={() => mint()}
             disabled="{!selectedSchema.hash || !parseFloat(amount)}">
       Mint
     </button>
@@ -521,8 +521,6 @@
     }
 
     .schema-dropdown {
-        width: 100%;
-        display: flex;
         align-items: center;
     }
 

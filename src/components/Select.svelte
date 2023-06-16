@@ -113,8 +113,7 @@
         border: none;
     }
     .dropdown-toggle{
-        padding: 5px 0;
-
+        padding: 1px 0;
     }
 
     .meinMenu {
@@ -129,9 +128,7 @@
         font-size: 16px;
         line-height: 25px;
         color: #000000;
-        min-width: 230px;
-        max-width: 250px;
-        width: 100%;
+        width: 360px;
     }
 
     .inputSelect.dropdown {
@@ -139,8 +136,8 @@
         height: auto;
         overflow: auto;
         background-color: #ececec;
-        min-width: 230px;
-        max-width: 250px;
+        min-width: 360px;
+        max-width: 360px;
         overflow-x: hidden;
     }
 
@@ -150,7 +147,7 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 27px;
-        padding: 5px 0 !important;
+        padding: 1px 0 !important;
     }
 
     .dropdown-item:focus, .dropdown-item:hover {

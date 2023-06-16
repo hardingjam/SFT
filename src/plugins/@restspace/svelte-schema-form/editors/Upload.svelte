@@ -116,7 +116,7 @@ const openFile = () => {
          readonly={readOnly}
          on:input={onInput}
          style="display: none" disabled={$uploadBtnLoading}/>
-  <div class="flex items-center">
+  <div class="">
     <div class="sf-drop-area {mode} default-btn"
          class:highlight
          tabIndex="0"

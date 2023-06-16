@@ -7,7 +7,7 @@ $: error = params.validationErrors[params.path.join('.')];
 </script>
 <div class="display-flex w-100 space-between items-center">
 	{#if params.containerParent !== "array"}
-		<label for={params.path.join('.')} class:required={params.required} class:readonly={schema.readOnly || params.containerReadOnly}>
+		<label for={params.path.join('.')} class:required={params.required} class:readonly={schema.readOnly || params.containerReadOnly} class="form-label">
 			{@html stringToHtml(title)}
 			{#if schema.description}
 				<span class="info" title={schema.description}></span>
@@ -19,3 +19,10 @@ $: error = params.validationErrors[params.path.join('.')];
 		<div class="error">{error}</div>
 	{/if}
 </div>
+
+<style>
+	.form-label{
+		display: block;
+		width: calc(100% - 360px);
+	}
+</style>

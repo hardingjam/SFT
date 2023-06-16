@@ -53,7 +53,7 @@
                         receipt,
                         []
                    );
-                    await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
+                    await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem successful!"})
 
                     // selectedReceipts = []
                     await getData()
@@ -136,7 +136,7 @@
                         multicallArr,
                         {from: $account}
                     );
-                await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
+                await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem successful!"})
             } catch (err) {
                 error = err.reason
             }

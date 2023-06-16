@@ -11,6 +11,7 @@
     import SftLoader from "../components/SftLoader.svelte";
     import {DEPLOYER_QUERY, RECEIPTS_QUERY} from '../scripts/queries.js'
     import ReceiptInformation from "./ReceiptInformation.svelte";
+    import RedeemInput from '../components/RedeemInput.svelte';
 
     let shouldDisable = false;
     let amount;
@@ -206,7 +207,7 @@
     {#if error}
       <span class="error">{error}</span>
     {/if}
-    <MintInput bind:amount={amount} amountLabel={"Total to redeem"} maxButton={true}
+    <RedeemInput bind:amount={amount} amountLabel={"Total to redeem"} maxButton={true}
                on:setMax={()=>{setMaxValue()}}/>
     <button class="redeem-btn btn-solid" disabled="{!selectedReceipts || !parseFloat(amount)}" on:click={() => redeem(selectedReceipts)}>
       Redeem

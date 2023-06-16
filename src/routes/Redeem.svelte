@@ -4,7 +4,6 @@
     import {
         account,
         activeNetwork,
-        transactionError,
         vault
     } from "../scripts/store.js";
     import {onMount} from "svelte";
@@ -53,7 +52,7 @@
                         receipt,
                         []
                    );
-                    await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
+                    await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem successful!"})
 
                     // selectedReceipts = []
                     await getData()
@@ -136,7 +135,7 @@
                         multicallArr,
                         {from: $account}
                     );
-                await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
+                await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem successful!"})
             } catch (err) {
                 error = err.reason
             }

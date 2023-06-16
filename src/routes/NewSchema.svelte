@@ -11,7 +11,7 @@
     import {
         cborEncode,
         encodeCBOR, getSchemas,
-        getSubgraphData,
+        getSubgraphData, navigate,
         showPrompt,
         showPromptSFTCreate
     } from "../scripts/helpers.js";
@@ -19,7 +19,6 @@
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
     import {JSONEditor} from "svelte-jsoneditor";
-    import {navigateTo} from "yrv";
     import {validator} from "@exodus/schemasafe";
     import {nullOptionalsAllowed} from '../plugins/@restspace/svelte-schema-form/utilities';
     import {DEPOSITS_QUERY, RECEIPT_VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
@@ -68,7 +67,8 @@
                     [uploadResult?.Hash].toString(),
                     MAGIC_NUMBERS.OA_HASH_LIST
                 );
-                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema +
+                    encodedHashList
                 let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
                 await showPromptSFTCreate(transaction)
 
@@ -212,7 +212,7 @@
     }
 
     function goToAssetClassList() {
-        navigateTo("#asset-classes", {replace: false});
+        navigate("#asset-classes", {clear: true});
     }
 
     async function getDeposits() {

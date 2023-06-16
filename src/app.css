@@ -154,6 +154,77 @@ button:focus-visible {
     font-weight: 600;
 }
 
+h1, h2, h3, h4, h5 {
+    display: block;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+}
+
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    padding-inline-start: 40px;
+}
+
+ul ul {
+    list-style-type: circle;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+.pdf-container a:visited {
+    color: rgb(0, 80, 160);
+}
+
+.pdf-container a {
+    color: rgb(0, 100, 200);
+    text-decoration: none;
+}
+
+.pdf-container a:hover {
+    text-decoration: underline;
+}
+
+.pdf-container tr, .pdf-container td, .pdf-container th {
+    border-collapse: collapse;
+    border: 1px solid #dcdbdd;
+    padding: 0.2rem;
+}
+
 .default-btn {
     box-sizing: border-box;
     padding: 0 18px;
@@ -313,10 +384,8 @@ button:focus-visible {
 }
 
 .tb-row:hover {
-    background: #625e91;
-    color: #ffffff;
+    background: #ECECEC;
     cursor: pointer;
-    opacity: 0.7;
 }
 
 .right {
@@ -333,10 +402,6 @@ button:focus-visible {
 
 .underline {
     text-decoration: underline;
-}
-
-a {
-    color: inherit !important;
 }
 
 @media (prefers-color-scheme: light) {

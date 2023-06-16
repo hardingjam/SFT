@@ -1,5 +1,4 @@
 <script>
-    import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
     import {
         vault,
@@ -9,7 +8,7 @@
         activeNetwork,
         schemas,
         schemaError,
-        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, data, tokenName
+        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, tokenName
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -39,6 +38,7 @@
         VAULT_INFORMATION_QUERY
     } from "../scripts/queries.js";
     import {arrayify} from "ethers/lib/utils.js";
+    import {navigate} from '../scripts/helpers.js';
 
     let image = {}
 
@@ -93,6 +93,8 @@
         if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
             navigateTo('#set-vault');
         }
+        await getSchemas()
+
     })
 
     async function getSchemas() {
@@ -171,7 +173,7 @@
                         const tx = await $vault
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
-                        await showPromptSFTCreate(tx)
+                        await showPromptSFTCreate(tx, {errorText:"Mint failed", successText:"Mint successful!"})
                         let wait = await tx.wait()
                         if (wait.status === 1) {
                             let interval = setInterval(async () => {
@@ -339,10 +341,13 @@
       New asset class
     </button>
     <button type="button" class="default-btn mr-2" disabled={!$schemas.length}
-            on:click={()=>{navigateTo('#asset-classes')}}>
-      Asset classes
+            on:click={()=>{navigate('#asset-classes')}}>
+      Asset class list
     </button>
-    <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>
+    <button type="button" class="default-btn mr-2" on:click={()=>{navigate('#new-asset-class')}}>
+      New asset class
+    </button>
+    <button class="default-btn" on:click={()=>{navigate('#audit-history')}}>
       Audit history
     </button>
   </div>

@@ -1,11 +1,10 @@
 <script>
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {navigateTo} from "yrv";
     import SftLoader from "../components/SftLoader.svelte";
     import {activeNetwork, selectedReceipt} from "../scripts/store.js";
     import {ethers} from "ethers";
-    import {timeStampToDate} from "../scripts/helpers.js";
+    import {navigate, timeStampToDate} from "../scripts/helpers.js";
 
     let receipt = $selectedReceipt.receipt;
     let loading = false
@@ -17,7 +16,7 @@
 </script>
 <DefaultFrame header={`Audit History > ${receipt.receiptId}`}>
   <div slot="header-buttons" class="display-flex">
-    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#roles")}}>Roles</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigate("#roles")}}>Roles</button>
   </div>
   <div slot="content">
     <div class="history">

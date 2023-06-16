@@ -464,7 +464,7 @@
 
     .mint-btn {
         width: 413px;
-        margin-top: 10px;
+        margin-top: 30px;
     }
 
     .empty-schemas button {

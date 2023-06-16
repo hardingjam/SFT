@@ -116,7 +116,7 @@ const openFile = () => {
          readonly={readOnly}
          on:input={onInput}
          style="display: none" disabled={$uploadBtnLoading}/>
-  <div class="">
+  <div class="sf-drop-area-container flex items-center">
     <div class="sf-drop-area {mode} default-btn"
          class:highlight
          tabIndex="0"
@@ -144,3 +144,14 @@ const openFile = () => {
     </div>
   {/if}
 </svelte:component>
+
+<style>
+  .sf-drop-area-container{
+      width: 360px;
+  }
+
+  .sf-upload-file{
+      height: 27px;
+      margin-top: 8px;
+  }
+</style>

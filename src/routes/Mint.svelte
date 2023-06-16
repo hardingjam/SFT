@@ -39,6 +39,7 @@
     } from "../scripts/queries.js";
     import {arrayify} from "ethers/lib/utils.js";
     import {navigate} from '../scripts/helpers.js';
+    import MintInput from '../components/MintInput.svelte';
 
     let image = {}
 
@@ -173,7 +174,7 @@
                         const tx = await $vault
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
-                        await showPromptSFTCreate(tx, {errorText:"Mint failed", successText:"Mint successful!"})
+                        await showPromptSFTCreate(tx, {errorText: "Mint failed", successText: "Mint successful!"})
                         let wait = await tx.wait()
                         if (wait.status === 1) {
                             let interval = setInterval(async () => {
@@ -350,10 +351,10 @@
   </div>
   {#if (!showAuth)}
 
-    <!--    <MintInput bind:amount={amount} amountLabel={"Mint amount"}/>-->
     <div class="audit-info-container basic-frame-parent">
       <div class="form-frame basic-frame">
-        <label class="f-weight-700">{$tokenName || ""}</label>
+        <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
+        <MintInput bind:amount={amount} amountLabel={"Mint amount"} />
         {#if $schemas.length}
           <div class="schema">
             <div class="schema-dropdown flex justify-between mb-6">

@@ -25,6 +25,7 @@
     let dropdownTrigger;
 
     function commitAction(option) {
+
         if (option.action) {
             option.action()
         }

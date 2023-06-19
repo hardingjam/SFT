@@ -25,6 +25,7 @@
     let dropdownTrigger;
 
     function commitAction(option) {
+
         if (option.action) {
             option.action()
         }
@@ -37,9 +38,9 @@
   <Dropdown triggerElement={dropdownTrigger}>
 
     <button
-        type="button"
-        class={`${className} btn dropdown-toggle`}
-        bind:this={dropdownTrigger}
+      type="button"
+      class={`${className} btn dropdown-toggle`}
+      bind:this={dropdownTrigger}
     >
       <slot name="icon"></slot>
       <span class="select-label">{selected && !staticLabel ? selected : label}</span>
@@ -49,7 +50,8 @@
     </button>
     <div slot="DropdownMenu" class={`${dropDownClass} ${className} dropdown`}>
       {#each options as option}
-        <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
+        <button class="{selected === option.displayName? 'selected' : ''} dropdown-item" type="button"
+                on:click={()=>commitAction(option)}>
           {#if option.icon}
             <img src={icons[option.icon]} alt={option?.displayName}/>
           {/if}
@@ -59,7 +61,7 @@
     </div>
   </Dropdown>
 </div>
-<style >
+<style>
     /*@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");*/
 
     .btn:focus {
@@ -113,6 +115,10 @@
         border: none;
     }
 
+    .dropdown-toggle {
+        padding: 1px 0;
+    }
+
     .meinMenu {
         color: #FFFFFF;
     }
@@ -120,16 +126,12 @@
     .inputSelect {
         background: #ECECEC;
         border-radius: 5px;
-        height: 26px;
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
         line-height: 25px;
         color: #000000;
-        padding: 0;
-        min-width: 230px;
-        max-width: 250px;
-        width: 100%;
+        width: 360px;
     }
 
     .inputSelect.dropdown {
@@ -137,8 +139,8 @@
         height: auto;
         overflow: auto;
         background-color: #ececec;
-        min-width: 230px;
-        max-width: 250px;
+        min-width: 360px;
+        max-width: 360px;
         overflow-x: hidden;
     }
 
@@ -148,10 +150,15 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 27px;
-        padding: 0 !important;
+        padding: 1px 0 !important;
     }
 
     .dropdown-item:focus, .dropdown-item:hover {
         text-decoration: none;
+        background: #CAE6FF
+    }
+
+    .selected {
+        background: #CAE6FF
     }
 </style>

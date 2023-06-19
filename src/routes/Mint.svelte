@@ -1,5 +1,4 @@
 <script>
-    import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
     import {
         vault,
@@ -9,7 +8,7 @@
         activeNetwork,
         schemas,
         schemaError,
-        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles
+        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, tokenName
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -40,6 +39,7 @@
     } from "../scripts/queries.js";
     import {arrayify} from "ethers/lib/utils.js";
     import {navigate} from '../scripts/helpers.js';
+    import MintInput from '../components/MintInput.svelte';
 
     let image = {}
 
@@ -177,7 +177,7 @@
                         const tx = await $vault
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
-                        await showPromptSFTCreate(tx, {errorText:"Mint failed", successText:"Mint successful!"})
+                        await showPromptSFTCreate(tx, {errorText: "Mint failed", successText: "Mint successful!"})
                         let wait = await tx.wait()
                         if (wait.status === 1) {
                             let interval = setInterval(async () => {
@@ -284,6 +284,7 @@
     };
 
     $: ($fileDropped.file && $fileDropped.file.size) && upload($fileDropped, "file");
+    $: $activeNetwork.chainId && getSchemas()
 
     // $: $fileHash && getCertificateUrl($fileHash);
 
@@ -338,14 +339,14 @@
 
 </script>
 
-<div class="mint-container">
+<div class="mint-container relative">
   <div class="header-buttons">
+    <button type="button" class="default-btn mr-2" on:click={()=>{navigate('#new-asset-class')}}>
+      New asset class
+    </button>
     <button type="button" class="default-btn mr-2" disabled={!$schemas.length}
             on:click={()=>{navigate('#asset-classes')}}>
       Asset class list
-    </button>
-    <button type="button" class="default-btn mr-2" on:click={()=>{navigate('#new-asset-class')}}>
-      New asset class
     </button>
     <button class="default-btn" on:click={()=>{navigate('#audit-history')}}>
       Audit history
@@ -353,13 +354,14 @@
   </div>
   {#if (!showAuth)}
 
-    <MintInput bind:amount={amount} amountLabel={"Mint amount"}/>
     <div class="audit-info-container basic-frame-parent">
-      <div class="audit-info basic-frame">
+      <div class="form-frame basic-frame">
+        <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
+        <MintInput bind:amount={amount} amountLabel={"Mint amount"} />
         {#if $schemas.length}
           <div class="schema">
-            <div class="schema-dropdown">
-              <label class="f-weight-700 custom-col">Asset class:</label>
+            <div class="schema-dropdown flex justify-between mb-6">
+              <label class="f-weight-700 custom-col">Asset class</label>
               <Select options={$schemas}
 
                       on:select={handleSchemaSelect}
@@ -406,7 +408,9 @@
     <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
       (FT)
     </div>
-    <button class="mint-btn btn-solid" on:click={() => mint()} disabled="{!selectedSchema.hash || !parseFloat(amount)}">
+
+    <button class="mint-btn btn-solid" on:click={() => mint()}
+            disabled="{!selectedSchema.hash || !parseFloat(amount)}">
       Mint
     </button>
   {/if}
@@ -431,6 +435,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        height: 100%;
     }
 
     .header-buttons {
@@ -441,18 +446,18 @@
         padding: 0 12px 0 12px;
     }
 
-    .audit-info {
-        padding: 20px 60px;
+    .form-frame {
+        padding: 20px;
         display: flex;
         text-align: left;
         flex-direction: column;
         font-weight: 400;
         font-size: 16px;
         line-height: 27px;
-        min-height: 142px;
+        min-height: 325px;
     }
 
-    .audit-info .title {
+    .form-frame .title {
         text-align: center;
     }
 
@@ -462,8 +467,8 @@
     }
 
     .mint-btn {
-        width: calc(100% - 70px);
-        margin-top: 10px;
+        width: 413px;
+        margin-top: 30px;
     }
 
     .empty-schemas button {
@@ -520,8 +525,7 @@
     }
 
     .schema-dropdown {
-        width: 100%;
-        display: flex;
+        align-items: center;
     }
 
 </style>

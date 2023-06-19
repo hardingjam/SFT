@@ -177,7 +177,7 @@
                         const tx = await $vault
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
-                        await showPromptSFTCreate(tx)
+                        await showPromptSFTCreate(tx, {errorText:"Mint failed", successText:"Mint successful!"})
                         let wait = await tx.wait()
                         if (wait.status === 1) {
                             let interval = setInterval(async () => {

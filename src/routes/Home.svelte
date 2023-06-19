@@ -13,7 +13,7 @@
     import {
         cborEncode,
         encodeCBOR, getContract,
-        getSubgraphData,
+        getSubgraphData, navigate,
         showPrompt,
         showPromptSFTCreate
     } from '../scripts/helpers.js';
@@ -84,62 +84,63 @@
         let savedUsername = localStorage.getItem('ipfsUsername');
         let savedPassword = localStorage.getItem('ipfsPassword');
         if (!savedPassword || !savedUsername) {
-            // showAuth = true;
-            // await waitForCredentials()
+            navigate("#ipfs");
             console.log("no creds")
         } else {
             username = savedUsername;
             password = savedPassword
-        }
 
-        let formData = new FormData();
+            let formData = new FormData();
 
-        formData.append('file', data)
+            formData.append('file', data)
 
 
-        const requestArr = IPFS_APIS.map((url) => {
-            return axios.request({
-                url,
-                auth: {
-                    username,
-                    password
-                },
-                method: 'post',
-                headers: {
-                    "Content-Type": `multipart/form-data;`,
-                },
-                data: formData,
-                onUploadProgress: (async (p) => {
-                    await showPrompt(null, {topText: "Uploading to IPFS, please wait", noBottomText: true})
-                    console.log(`Uploading...  ${p.loaded} / ${p.total}`);
-                }),
-                withCredentials: true,
+            const requestArr = IPFS_APIS.map((url) => {
+                return axios.request({
+                    url,
+                    auth: {
+                        username,
+                        password
+                    },
+                    method: 'post',
+                    headers: {
+                        "Content-Type": `multipart/form-data;`,
+                    },
+                    data: formData,
+                    onUploadProgress: (async (p) => {
+                        await showPrompt(null, {topText: "Uploading to IPFS, please wait", noBottomText: true})
+                        console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                    }),
+                    withCredentials: true,
+                })
+            });
+
+            let respAll = await Promise.allSettled(requestArr)
+
+            respAll.map(response => {
+                if (response.status === "rejected") {
+                    reportError(response.reason)
+                } else return response
             })
-        });
 
-        let respAll = await Promise.allSettled(requestArr)
+            let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+            if (resolvedPromise) {
 
-        respAll.map(response => {
-            if (response.status === "rejected") {
-                reportError(response.reason)
-            } else return response
-        })
+                localStorage.setItem('ipfsUsername', username);
+                localStorage.setItem('ipfsPassword', password);
 
-        let resolvedPromise = respAll.find(r => r.status === "fulfilled")
-        if (resolvedPromise) {
+            } else {
+                console.log("Something went wrong")
+            }
+            username = ""
+            password = ""
+            transactionInProgressShow.set(false)
+            transactionInProgress.set(false)
 
-            localStorage.setItem('ipfsUsername', username);
-            localStorage.setItem('ipfsPassword', password);
-
-        } else {
-            console.log("Something went wrong")
+            return resolvedPromise?.value.data
         }
-        username = ""
-        password = ""
-        transactionInProgressShow.set(false)
-        transactionInProgress.set(false)
 
-        return resolvedPromise?.value.data
+
     };
 
 

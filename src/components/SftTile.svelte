@@ -18,6 +18,8 @@
         getVaultImages()
     })
 
+    $: sft && getVaultImages()
+
     function getAuditors() {
         if (sft.address) {
             let tempAuditors = sft.roleHolders.filter(rh => rh.role.roleName === 'CERTIFIER')
@@ -72,7 +74,7 @@
         {/if}
         {#if !sft.icon}
           <img src="{icons.camera}" alt="sft logo"/>
-          <span class="text">Upload</span>
+          <span class="text">Update</span>
         {/if}
         <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
                on:change={(e)=>onFileSelected(e)}

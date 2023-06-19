@@ -71,7 +71,7 @@ body {
 }
 
 .btn-solid:disabled {
-  background: #B7B7B7;
+    background: #B7B7B7;
 }
 
 .btn-solid:disabled:hover {
@@ -79,12 +79,12 @@ body {
 }
 
 .btn-solid:disabled:active {
-  background: #B7B7B7;
-  box-shadow: none;
+    background: #B7B7B7;
+    box-shadow: none;
 }
 
 .btn-solid:disabled {
-  background: #B7B7B7;
+    background: #B7B7B7;
 }
 
 .btn-cancel {
@@ -113,12 +113,12 @@ button:focus-visible {
 }
 
 .dropdown-items {
-  background-color: #2c2c5454;
-  border-radius: 0 0 5px 5px;
-  box-shadow: 0 4px 4px #00000040;
-  border: none;
-  padding: 0;
-  z-index: 2;
+    background-color: #2c2c5454;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 4px 4px #00000040;
+    border: none;
+    padding: 0;
+    z-index: 2;
 }
 
 .dropdown-item {
@@ -250,8 +250,8 @@ li {
 }
 
 .default-btn:disabled {
-  border: 1px solid #B7B7B7;
-  color: #B7B7B7;
+    border: 1px solid #B7B7B7;
+    color: #B7B7B7;
 }
 
 .default-btn:disabled:hover {
@@ -279,8 +279,8 @@ li {
 }
 
 .basic-frame-parent {
-  padding: 12px;
-  width: 100%;
+    padding: 12px;
+    width: 100%;
 }
 
 .basic-frame {
@@ -402,6 +402,15 @@ li {
 .underline {
     text-decoration: underline;
 }
+
+
+.dropdown .dropdown-menu {
+    z-index: 1;
+    -webkit-box-shadow: 0 10px 5px -3px rgba(179,179,179,1);
+    -moz-box-shadow: 0 10px 5px -3px rgba(179,179,179,1);
+    box-shadow: 0 10px 5px -3px rgba(179,179,179,1);
+}
+
 
 @media (prefers-color-scheme: light) {
 }

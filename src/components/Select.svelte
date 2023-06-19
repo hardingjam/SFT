@@ -15,6 +15,8 @@
     const dispatch = createEventDispatcher();
 
     function selectOption(option) {
+
+        console.log(option)
         dispatch('select', {
             selected: option
         });
@@ -37,9 +39,9 @@
   <Dropdown triggerElement={dropdownTrigger}>
 
     <button
-        type="button"
-        class={`${className} btn dropdown-toggle`}
-        bind:this={dropdownTrigger}
+      type="button"
+      class={`${className} btn dropdown-toggle`}
+      bind:this={dropdownTrigger}
     >
       <slot name="icon"></slot>
       <span class="select-label">{selected && !staticLabel ? selected : label}</span>
@@ -49,7 +51,8 @@
     </button>
     <div slot="DropdownMenu" class={`${dropDownClass} ${className} dropdown`}>
       {#each options as option}
-        <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
+        <button class="{selected === option.displayName? 'selected' : ''} dropdown-item" type="button"
+                on:click={()=>commitAction(option)}>
           {#if option.icon}
             <img src={icons[option.icon]} alt={option?.displayName}/>
           {/if}
@@ -59,7 +62,7 @@
     </div>
   </Dropdown>
 </div>
-<style >
+<style>
     /*@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");*/
 
     .btn:focus {
@@ -112,7 +115,8 @@
         content: '';
         border: none;
     }
-    .dropdown-toggle{
+
+    .dropdown-toggle {
         padding: 1px 0;
     }
 
@@ -152,5 +156,10 @@
 
     .dropdown-item:focus, .dropdown-item:hover {
         text-decoration: none;
+        background: #CAE6FF
+    }
+
+    .selected{
+        background: #CAE6FF
     }
 </style>

@@ -135,7 +135,6 @@ button:focus-visible {
 .dropdown-item:focus,
 .dropdown-item:hover {
     text-decoration: none;
-    background: #2c2c5454 !important;
 }
 
 .display-flex {

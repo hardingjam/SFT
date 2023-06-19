@@ -59,10 +59,16 @@
                                 transactionSuccess.set(true)
                                 transactionInProgress.set(false)
                                 clearInterval(interval)
+                                //set image
+                                const reader = new FileReader();
+                                reader.addEventListener("load", function () {
+                                    console.log(event.detail.imageElement);
+                                    event.detail.imageElement?.setAttribute("src", reader.result);
+                                });
+                                reader.readAsDataURL(file);
                             }
                         }
                     }, 2000)
-                    await getTokens()
 
                 } else {
                     transactionError.set(true)

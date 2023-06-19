@@ -37,13 +37,9 @@
 
     const onFileSelected = (e) => {
         let file = e.target.files[0];
-        const reader = new FileReader();
-        reader.addEventListener("load", function () {
-            logoPreview.setAttribute("src", reader.result);
-        });
-        reader.readAsDataURL(file);
         dispatch('fileDrop', {
             file,
+            imageElement: logoPreview,
             vault: sft
         });
     }

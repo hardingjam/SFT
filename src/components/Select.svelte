@@ -15,8 +15,6 @@
     const dispatch = createEventDispatcher();
 
     function selectOption(option) {
-
-        console.log(option)
         dispatch('select', {
             selected: option
         });
@@ -159,7 +157,7 @@
         background: #CAE6FF
     }
 
-    .selected{
+    .selected {
         background: #CAE6FF
     }
 </style>

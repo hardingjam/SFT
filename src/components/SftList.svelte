@@ -1,17 +1,21 @@
 <script>
-    import logo from "../assets/sft_logo.svg"
     import {ethers} from 'ethers';
-    import {onMount} from 'svelte';
+    import {createEventDispatcher, onMount} from 'svelte';
     import {activeNetwork} from '../scripts/store.js';
-    import {formatAddress, timeStampToDate} from '../scripts/helpers.js';
+    import {cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers.js';
+    import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
+    import {icons} from '../scripts/assets.js';
 
     export let sft = {}
     let auditors = []
     let issuers = []
+    let sftLogo;
+    let logoPreview;
 
     onMount(() => {
         getAuditors()
         getIssuers()
+        getVaultImages()
     })
 
     function getAuditors() {
@@ -27,11 +31,52 @@
             issuers = tempAuditors.map(a => a.account.address)
         }
     }
+
+    const dispatch = createEventDispatcher();
+
+
+    const onFileSelected = (e) => {
+        let file = e.target.files[0];
+        dispatch('fileDrop', {
+            file,
+            imageElement: logoPreview,
+            vault: sft
+        });
+    }
+
+    async function getVaultImages() {
+        let receiptVaultInformations = sft.receiptVaultInformations
+        if (receiptVaultInformations.length) {
+            let receiptInformations = receiptVaultInformations.map(data => {
+                return cborDecode(data.information.slice(18))
+            })
+            let sftImages = receiptInformations.filter(i => i[0].get(1) === MAGIC_NUMBERS.OA_TOKEN_IMAGE)
+            if (sftImages.length) {
+                sft.icon = sftImages[0][1].get(0)
+            }
+        }
+    }
 </script>
 
 <tr>
-  <td class="flex justify-center w-10">
-    <img class="w-5 h-5 mt-1" src={logo} alt="sft logo"/>
+  <td class="sft-logo-container relative" style="width: 99px">
+    <label for={`${sft.address}-upload`} id="sft-logo-upload"
+           class="flex items-center justify-center text-white cursor-pointer">
+      {#if sft.icon}
+        <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="rounded-full sft-logo"
+             bind:this={logoPreview}/>
+      {/if}
+      {#if !sft.icon}
+        <div class="rounded-full no-image sft-logo"></div>
+      {/if}
+      <div class="update absolute">
+        <span class="text flex items-center mr-1">{sft.icon ? "Update" : "Upload"}</span>
+        <img src="{icons.camera}" alt="sft logo"/>
+      </div>
+      <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
+             on:change={(e)=>onFileSelected(e)}
+             bind:this={sftLogo}/>
+    </label>
   </td>
   <td class="sft-name">{sft.name}</td>
   <td class="sft-info">{sft.symbol}</td>
@@ -70,4 +115,26 @@
         background-color: #FFFFFF;
     }
 
+    .update {
+        display: none;
+        width: 99px;
+        height: 100%;
+        position: absolute;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    .sft-logo-container:hover .update {
+        display: flex;
+    }
+
+    .no-image {
+        background: #B7B7B7;
+    }
+
+    .sft-logo-container .sft-logo {
+        width: 20px;
+        height: 20px;
+    }
 </style>

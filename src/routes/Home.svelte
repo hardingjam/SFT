@@ -225,7 +225,7 @@
       <table class="w-full leading-7 text-center token-list-table">
         <thead>
         <tr class="text-white text-bold">
-          <th></th>
+          <th style="width: 99px"></th>
           <th>Token name</th>
           <th>Token symbol</th>
           <th>Creation date</th>
@@ -237,7 +237,7 @@
         </thead>
         <tbody>
         {#each $tokens as sft }
-          <SftList {sft}></SftList>
+          <SftList {sft} on:fileDrop={deployImage}></SftList>
         {/each}
         </tbody>
       </table>

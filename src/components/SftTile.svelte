@@ -74,7 +74,7 @@
           <img src="{icons.camera}" alt="sft logo"/>
           <span class="text">Upload</span>
         {/if}
-        <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png"
+        <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
                on:change={(e)=>onFileSelected(e)}
                bind:this={sftLogo}/>
       </label>

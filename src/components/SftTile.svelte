@@ -3,7 +3,7 @@
     import {cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers';
     import {ethers} from 'ethers';
     import {createEventDispatcher, onMount} from 'svelte';
-    import {activeNetwork} from '../scripts/store.js';
+    import {account, activeNetwork} from '../scripts/store.js';
     import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
 
     export let sft = {}
@@ -67,18 +67,24 @@
              class="flex items-center justify-center text-white flex-col cursor-pointer">
         {#if sft.icon}
           <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="logo" bind:this={logoPreview}/>
-          <div class="update absolute flex-col flex items-center justify-center">
-            <img src="{icons.camera}" alt="sft logo"/>
-            <span class="text">Update</span>
-          </div>
+          {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
+            <div class="update absolute flex-col flex items-center justify-center">
+              <img src="{icons.camera}" alt="sft logo"/>
+              <span class="text">Update</span>
+            </div>
+          {/if}
         {/if}
         {#if !sft.icon}
           <img src="{icons.camera}" alt="sft logo"/>
-          <span class="text">Update</span>
+          {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
+            <span class="text">Update</span>
+          {/if}
         {/if}
-        <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
-               on:change={(e)=>onFileSelected(e)}
-               bind:this={sftLogo}/>
+        {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
+          <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
+                 on:change={(e)=>onFileSelected(e)}
+                 bind:this={sftLogo}/>
+        {/if}
       </label>
 
     </div>

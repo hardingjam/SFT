@@ -209,7 +209,7 @@
       </svg>
     </div>
   </div>
-  <div class={$sftInfo? "content mt-5 w-full" : "content mt-5 w-8/12" }>
+  <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'w-8/12'} content mt-5 mr-5">
     {#if (view === "tile")}
       <div class="grid grid-cols-2 gap-5">
         {#each $tokens as sft }
@@ -257,6 +257,13 @@
     .token-list-table thead tr:first-child th:last-child {
         border-top-right-radius: 10px;
     }
+
+    .list-view {
+        align-self: end;
+        width: calc(100% - 243px);
+        margin-right: 20px;
+    }
+
 </style>
 
 

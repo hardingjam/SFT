@@ -246,7 +246,7 @@
         padding-top: 3.5rem;
     }
 
-    .token-list-table thead tr {
+    .token-list-table thead th {
         background-color: #9196C5;
     }
 

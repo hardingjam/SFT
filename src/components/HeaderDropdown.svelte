@@ -57,7 +57,7 @@
     <img src={ icons.expand} alt="expand"/>
   </button>
   <!-- Dropdown menu -->
-  <div id="networks" class="absolute top-14" class:hidden={dropdownHidden} bind:this={dropdown}>
+  <div id="networks" class="absolute top-14 drop-menu" class:hidden={dropdownHidden} bind:this={dropdown}>
     <ul class="dropdown-items" aria-labelledby="dropdownDefaultButton">
       {#each items as item}
         <li on:click={()=>handleNavItemClick(item)} class="dropdown-item cursor-pointer display-flex">
@@ -88,6 +88,10 @@
 
     .dropdown-item:hover {
         background: #d9d9d98c !important;
+    }
+
+    .drop-menu{
+     z-index: 3;
     }
 
 </style>

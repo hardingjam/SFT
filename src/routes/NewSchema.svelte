@@ -59,7 +59,7 @@
                 schema: schema,
             }
 
-            let encodedSchema = encodeCBOR(schemaInformation)
+            let encodedSchema = encodeCBOR(schemaInformation, MAGIC_NUMBERS.OA_SCHEMA)
 
             try {
                 let uploadResult = await upload(JSON.stringify(schemaInformation))

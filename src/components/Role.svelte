@@ -54,10 +54,11 @@
       <span>{admin ? 'Role Admin' : 'Executor'}</span>
       {#if roleHolders?.length}
         {#each roleHolders as roleHolder}
-          <div class="display-flex">
-            <span class="underline btn-hover display-flex" on:click={()=>showAddress(roleHolder.account.address)}>
+          <div class="flex items-center">
+            <span class="underline btn-hover flex items-center mr-2"
+                  on:click={()=>showAddress(roleHolder.account.address)}>
                           {formatAddress(roleHolder.account.address)}
-              <img class="action-icon" src={icons.show} alt="show"/>
+              <img class="action-icon ml-2" src={icons.show} alt="show"/>
             </span>
             <img class="btn-hover action-icon" src={icons.delete_icon}
                  on:click={()=>revokeRole(name,roleHolder.account.address)}
@@ -90,6 +91,7 @@
     }
 
     .action-icon {
-        margin: 0 3px;
+        width: 17px;
+        height: 17px;
     }
 </style>

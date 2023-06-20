@@ -285,7 +285,7 @@ export function cborDecode(dataEncoded_) {
     return decodeAllSync(dataEncoded_);
 }
 
-export function encodeCBOR(data) {
+export function encodeCBOR(data, magicNumber) {
     // -- Encoding with CBOR
     // Obtain (Deflated JSON) and parse it to an ArrayBuffer
     if (typeof data === 'object') {
@@ -294,7 +294,7 @@ export function encodeCBOR(data) {
     const deflatedData = arrayify(deflateJson(data)).buffer;
     return cborEncode(
         deflatedData,
-        MAGIC_NUMBERS.OA_SCHEMA,
+        magicNumber,
         "application/json",
         {
             contentEncoding: "deflate",
@@ -432,7 +432,7 @@ export async function showPromptSFTCreate(transaction, options) {
 export async function addMissingHashesToSubGraph(hashes, vault, signer) {
     let schemaInformation = {}
 
-    let encodedSchema = encodeCBOR(schemaInformation)
+    let encodedSchema = encodeCBOR(schemaInformation, MAGIC_NUMBERS.OA_SCHEMA)
 
     try {
         let encodedHashList = cborEncode(
@@ -538,9 +538,9 @@ export async function setAccountRoles(roles, account) {
 
 export function navigate(path, options) {
     let label = ROUTE_LABEL_MAP.get(path)
-    navigationButtonClicked.update(()=>false)
+    navigationButtonClicked.update(() => false)
     if (options && options.clear) {
-        breadCrumbs.update(() => [{path: "#set-vault", label: "Home"}, {path, label}])
+        breadCrumbs.update(() => [{path: "#", label: "Home"}, {path, label}])
     } else {
         breadCrumbs.update(bc => [...bc, {path, label}])
     }

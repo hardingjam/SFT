@@ -44,7 +44,7 @@
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <span class="text-base leading-5 menu-header">SFT</span>
       </a>
-      <NavigationButton targetPath="#set-vault" {path}>
+      <NavigationButton targetPath="#" {path}>
         <div slot="icon">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -166,18 +166,18 @@
         </svg>
       </div>
       <div class="flex flex-col pt-10 px-9 sft-info-table">
-        <span class="font-bold self-center">Token Overview</span>
+        <span class="font-bold self-center">Token overview</span>
         <table class="w-8/12 leading-8 w-full mt-5 leading-10 text-left">
           <tr>
-            <td class="font-bold">Token Name</td>
+            <td class="font-bold">Token name</td>
             <td class="sft-name">{token.name}</td>
           </tr>
           <tr>
-            <td class="font-bold">Token Symbol</td>
+            <td class="font-bold">Token symbol</td>
             <td class="">{token.symbol}</td>
           </tr>
           <tr>
-            <td class="font-bold">Creation Date</td>
+            <td class="font-bold">Creation date</td>
             <td class="">{timeStampToDate(token.deployTimestamp)}</td>
           </tr>
           <tr>
@@ -185,7 +185,7 @@
             <td class="">{token.shareHolders?.length || 0}</td>
           </tr>
           <tr>
-            <td class="font-bold">Token Supply</td>
+            <td class="font-bold">Token supply</td>
             <td class="">{token?.totalShares ? ethers.utils.formatUnits(token?.totalShares, 18) : 0}</td>
           </tr>
           <!--          <tr>-->
@@ -226,7 +226,7 @@
         margin-top: 3.5rem;
         height: 100%;
         position: fixed;
-        z-index: 2;
+        z-index: 3;
         transition: 0.5s ease;
     }
 

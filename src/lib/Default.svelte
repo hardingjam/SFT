@@ -48,6 +48,7 @@
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
     import Manual from '../routes/Manual.svelte';
+    import Home from '../routes/Home.svelte';
 
 
     let connectedAccount;
@@ -95,8 +96,8 @@
 
         } else {
             vault.set({})
-            location = "#set-vault"
-            navigateTo("#set-vault", {replace: false})
+            location = "#"
+            navigateTo("#", {replace: false})
         }
     }
 
@@ -105,7 +106,7 @@
 
         if (isMetamaskInstalled) {
             if (location === "/" || location === "") {
-                navigateTo("#set-vault");
+                navigateTo("#");
             }
             await setNetwork();
             connectedAccount = await getMetamaskConnectedAccount();
@@ -127,7 +128,7 @@
                     accountRoles.set(await setAccountRoles($roles, $account));
 
                     if ((location === '#mint' || location === '#redeem') && !$accountRoles.DEPOSITOR) {
-                        navigateTo('#set-vault');
+                        navigateTo('#');
                     }
                 }
             });
@@ -146,7 +147,7 @@
                         breadCrumbs.set([...$breadCrumbs, {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
                     }
                 } else {
-                    breadCrumbs.set([{path: "#set-vault", label: "Home"},
+                    breadCrumbs.set([{path: "#", label: "Home"},
                         {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
                 }
             })
@@ -165,7 +166,7 @@
         vault.set({});
         await setNetwork();
         await getTokens();
-        navigateTo("#set-vault");
+        navigateTo("#");
     }
 
     async function getEthersData() {
@@ -309,7 +310,7 @@
 <Router url={url}>
 
   <div class={$account ? "content" : "content-not-connected"}>
-    <Header on:select={handleNetworkSelect}></Header>
+    <Header on:select={handleNetworkSelect} {location}></Header>
     <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
       <a href="/">
         <img src={icons.logo} alt=""
@@ -318,10 +319,12 @@
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-      {#if location && (location !== "#set-vault" && location !== "/")}
-        <BreadCrumbs/>
-      {/if}
 
+      <div class={$sftInfo ? "sft-info-opened" : "" }>
+        <div class="{$activeNetwork  ? 'show' : 'hide'}">
+          <Route path="#" component={Home}/>
+        </div>
+      </div>
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
         <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">
 
@@ -330,7 +333,7 @@
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>
-          <Route path="#set-vault" component={SetVault}/>
+          <!--          <Route path="#set-vault" component={SetVault}/>-->
           <Route path="#asset-classes" component={AssetClasses}/>
           <Route path="#new-asset-class" component={NewSchema}/>
           <Route path="#receipt/:id" component={ReceiptAudit}/>
@@ -580,7 +583,7 @@
     height: 100%;
     backdrop-filter: blur(3.5px);
     top: 0;
-    z-index: 2;
+    z-index: 3;
   }
 
 

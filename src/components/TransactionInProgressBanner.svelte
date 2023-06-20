@@ -136,7 +136,7 @@
         border-radius: 20px;
         width: 420px;
         height: 420px;
-        z-index: 2;
+        z-index: 3;
         padding: 10px;
     }
 

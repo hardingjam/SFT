@@ -1,7 +1,7 @@
 <script>
     import {ethers} from 'ethers';
     import {createEventDispatcher, onMount} from 'svelte';
-    import {activeNetwork} from '../scripts/store.js';
+    import {account, activeNetwork} from '../scripts/store.js';
     import {cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers.js';
     import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
     import {icons} from '../scripts/assets.js';
@@ -71,13 +71,15 @@
       {#if !sft.icon}
         <div class="rounded-full no-image sft-logo"></div>
       {/if}
-      <div class="update absolute">
-        <span class="text flex items-center mr-1">Update</span>
-        <img src="{icons.camera}" alt="sft logo"/>
-      </div>
-      <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
-             on:change={(e)=>onFileSelected(e)}
-             bind:this={sftLogo}/>
+      {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
+        <div class="update absolute">
+          <span class="text flex items-center mr-1">Update</span>
+          <img src="{icons.camera}" alt="sft logo"/>
+        </div>
+        <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
+               on:change={(e)=>onFileSelected(e)}
+               bind:this={sftLogo}/>
+      {/if}
     </label>
   </td>
   <td class="sft-name">{sft.name}</td>

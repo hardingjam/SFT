@@ -5,6 +5,9 @@
     import {createEventDispatcher} from "svelte";
     import {formatAddress} from "../scripts/helpers.js";
     import HeaderDropdown from './HeaderDropdown.svelte';
+    import BreadCrumbs from './BreadCrumbs.svelte';
+
+    export let location;
 
     let accountMenuOptions = [
         {
@@ -56,6 +59,9 @@
       <HeaderDropdown triggerLabel={formatAddress($account)}
                       items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}></HeaderDropdown>
     </div>
+    {#if location && (location !== "/" && location !== "#")}
+      <BreadCrumbs/>
+    {/if}
   {/if}
 </div>
 

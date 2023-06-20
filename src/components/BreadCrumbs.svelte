@@ -32,11 +32,12 @@
 </div>
 <style>
     .breadcrumbs {
-        z-index: 1;
+        z-index: 2;
         top: 3.5rem;
         margin-left: 203px;
         padding-left: 20px;
         color: #9D7334;
         background: #DCDBDD;
+        font-weight: 400;
     }
 </style>

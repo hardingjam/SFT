@@ -310,7 +310,7 @@
 <Router url={url}>
 
   <div class={$account ? "content" : "content-not-connected"}>
-    <Header on:select={handleNetworkSelect}></Header>
+    <Header on:select={handleNetworkSelect} {location}></Header>
     <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
       <a href="/">
         <img src={icons.logo} alt=""
@@ -320,9 +320,6 @@
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
 
-      {#if location && (location !== "/" && location !== "#")}
-        <BreadCrumbs/>
-      {/if}
       <div class={$sftInfo ? "sft-info-opened" : "" }>
         <div class="{$activeNetwork  ? 'show' : 'hide'}">
           <Route path="#" component={Home}/>
@@ -586,7 +583,7 @@
     height: 100%;
     backdrop-filter: blur(3.5px);
     top: 0;
-    z-index: 2;
+    z-index: 3;
   }
 
 

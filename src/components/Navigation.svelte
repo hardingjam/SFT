@@ -226,7 +226,7 @@
         margin-top: 3.5rem;
         height: 100%;
         position: fixed;
-        z-index: 2;
+        z-index: 3;
         transition: 0.5s ease;
     }
 

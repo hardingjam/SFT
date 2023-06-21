@@ -188,13 +188,14 @@
               </thead>
               <tbody>
               {#each receiptBalances as receipt}
-                <tr>
+                <tr class:active={selectedReceipts === receipt.receipt.receiptId}
+                    on:click={()=>{selectedReceipts=receipt.receipt.receiptId}}>
                   <td class="receipt-id">
-                    <label class="check-container">
-                      <input type="radio" class="check-box" bind:group={selectedReceipts}
-                             value={receipt.receipt.receiptId}/>
-                      <span class="checkmark"></span>
-                    </label>
+                    <!--                    <label class="check-container">-->
+                    <!--                      <input type="radio" class="check-box" bind:group={selectedReceipts}-->
+                    <!--                             value={receipt.receipt.receiptId}/>-->
+                    <!--                      <span class="checkmark"></span>-->
+                    <!--                    </label>-->
                     <div class="check-box-label btn-hover"
                          on:click={()=>{goToReceiptInfo(receipt)}}>{receipt.receipt.receiptId}</div>
                   </td>
@@ -249,17 +250,13 @@
     }
 
 
-    .receipts-table .selected {
+    .receipts-table .active, .receipts-table .active:hover {
         background: #CAE6FF;
     }
 
     .receipts-table tbody tr:hover {
+        cursor: pointer;
         background: #ECECEC;
-    }
-
-
-    .check-box {
-        margin-right: 8px;
     }
 
     .receipt-id {

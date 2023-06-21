@@ -79,8 +79,6 @@
     }
 
     const upload = async (data) => {
-        // error = ""
-
         let savedUsername = localStorage.getItem('ipfsUsername');
         let savedPassword = localStorage.getItem('ipfsPassword');
         if (!savedPassword || !savedUsername) {

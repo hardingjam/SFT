@@ -179,11 +179,14 @@
           {/if}
           {#if !loading}
             <table class="receipts-table mb-5">
+              <thead>
               <tr>
-                <td class="f-weight-700">Receipt ID (NFT)</td>
+                <td class="f-weight-700 w-1/3">Receipt ID (NFT)</td>
                 <td class="f-weight-700">Amount</td>
-                <td class="f-weight-700">Minted</td>
+                <td class="f-weight-700 w-1/4">Minted</td>
               </tr>
+              </thead>
+              <tbody>
               {#each receiptBalances as receipt}
                 <tr>
                   <td class="receipt-id">
@@ -199,7 +202,7 @@
                   <td class="value">{timeStampToDate(receipt.receipt.deposits[0].timestamp)}</td>
                 </tr>
               {/each}
-
+              </tbody>
             </table>
           {/if}
         </div>
@@ -212,7 +215,7 @@
       <span class="error">{error}</span>
     {/if}
 
-    <button class="redeem-btn btn-solid" disabled="{!selectedReceipts || !parseFloat(amount)}"
+    <button class="redeem-btn btn-solid mt-3" disabled="{!selectedReceipts || !parseFloat(amount)}"
             on:click={() => redeem(selectedReceipts)}>
       Redeem
     </button>
@@ -242,26 +245,34 @@
     .receipts-table {
         width: 100%;
         font-size: 16px;
+        font-weight: 700;
     }
+
+
+    .receipts-table .selected {
+        background: #CAE6FF;
+    }
+
+    .receipts-table tbody tr:hover {
+        background: #ECECEC;
+    }
+
 
     .check-box {
         margin-right: 8px;
     }
 
     .receipt-id {
-        /*width: 33%;*/
-        justify-content: left;
+        justify-content: center;
         display: flex;
     }
 
     .redeem-btn {
-        margin-top: 33px;
         width: calc(100% - 50px);
     }
 
     .check-box-label {
-        width: 100%;
-        text-align: left;
+        width: 10px;
     }
 
     .check-box-label:hover {

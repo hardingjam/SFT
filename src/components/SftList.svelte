@@ -63,7 +63,7 @@
 <tr>
   <td class="sft-logo-container relative" style="width: 99px">
     <label for={`${sft.address}-upload`} id="sft-logo-upload"
-           class="flex items-center justify-center text-white cursor-pointer">
+           class="flex items-center justify-center text-white {sft.deployer.toLowerCase() === $account.toLowerCase() ? 'cursor-pointer' : '' }">
       {#if sft.icon}
         <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="rounded-full sft-logo"
              bind:this={logoPreview}/>

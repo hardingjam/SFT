@@ -182,7 +182,7 @@
           </tr>
           <tr>
             <td class="font-bold">Number of holders</td>
-            <td class="">{token.shareHolders?.length || 0}</td>
+            <td class="">{token.tokenHolders.filter(h=>h.balance !== "0").length}</td>
           </tr>
           <tr>
             <td class="font-bold">Token supply</td>

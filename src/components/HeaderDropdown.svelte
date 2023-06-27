@@ -65,6 +65,9 @@
             <img src={icons[item.icon]} alt={item?.displayName}/>
           {/if}
           <span class={`${item.class} network-name`}>{item?.displayName} </span>
+          {#if item.rightIcon}
+            <slot name="rightIcon"></slot>
+          {/if}
         </li>
       {/each}
     </ul>
@@ -74,27 +77,35 @@
 <style>
     .network-name {
         font-style: normal;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 18px;
         line-height: 39px;
-        color: #FFFFFF;
         margin-left: 20px;
         margin-right: 20px;
     }
-    .network-name:hover{
-        color: #ECECEC;
 
+    .dropdown-items .network-name {
+        margin-left: 8px;
+        margin-right: 8px;
+        color: #FFFFFF;
     }
-    .network-name:active{
+
+    .dropdown-item:active .network-name {
         color: #CAE6FF;
     }
 
     .dropdown-item {
-        padding: 0 40px 0 13px !important;
+        padding: 0 15px 0 13px !important;
+        display: flex;
+        align-items: center;
     }
 
-    .drop-menu{
-     z-index: 3;
+    .dropdown-item:hover .network-name {
+        color: #ECECEC;
+    }
+
+    .drop-menu {
+        z-index: 3;
     }
 
 </style>

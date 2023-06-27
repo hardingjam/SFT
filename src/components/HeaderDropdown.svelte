@@ -81,13 +81,16 @@
         margin-left: 20px;
         margin-right: 20px;
     }
+    .network-name:hover{
+        color: #ECECEC;
+
+    }
+    .network-name:active{
+        color: #CAE6FF;
+    }
 
     .dropdown-item {
         padding: 0 40px 0 13px !important;
-    }
-
-    .dropdown-item:hover {
-        background: #d9d9d98c !important;
     }
 
     .drop-menu{

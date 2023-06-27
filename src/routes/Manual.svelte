@@ -24,7 +24,7 @@
         /*margin-top: -48px;*/
 
         width: calc(100vw - 223px);
-        height: calc(100vh - 176px);
+        height: calc(100vh - 100px);
         margin-left: 203px;
         margin-top: -48px;
     }

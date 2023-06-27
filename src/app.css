@@ -115,7 +115,6 @@ button:focus-visible {
 .dropdown-items {
     background-color: #9D9D9D;
     border-radius: 0 0 10px 10px;
-    box-shadow: 0 4px 4px #00000040;
     border: none;
     padding: 15px 0;
     z-index: 2;

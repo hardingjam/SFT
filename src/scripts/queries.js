@@ -12,6 +12,10 @@ export const QUERY = `
                 shareHolders{
                     address
                 }
+                tokenHolders {
+                    address
+                    balance
+                }
                 roles(orderBy: roleName){
                     roleName
                     roleHolders{
@@ -147,6 +151,10 @@ export const VAULTS_QUERY = `
             deployBlock
             deployTimestamp
             totalShares
+            tokenHolders {
+                address
+                balance
+            }
             roleHolders {
               role {
                 roleName

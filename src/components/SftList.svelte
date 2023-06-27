@@ -13,12 +13,17 @@
     let logoPreview;
 
     onMount(() => {
-        getAuditors()
-        getIssuers()
-        getVaultImages()
+        getSftData()
     })
 
-    $: sft && getVaultImages()
+    $: sft && getSftData()
+
+    function getSftData() {
+        getVaultImages()
+        getAuditors()
+        getIssuers()
+    }
+
 
     function getAuditors() {
         if (sft.address) {
@@ -85,7 +90,7 @@
   <td class="sft-name">{sft.name}</td>
   <td class="sft-info">{sft.symbol}</td>
   <td class="sft-info">{timeStampToDate(sft.deployTimestamp)}</td>
-  <td class="sft-info">{issuers.length}</td>
+  <td class="sft-info">{sft.tokenHolders.filter(h => h.balance !== "0").length}</td>
   <td class="sft-info">{sft?.totalShares ? ethers.utils.formatUnits(sft?.totalShares, 18) : 0}</td>
   <td class="sft-info">
     {#each auditors as auditor}

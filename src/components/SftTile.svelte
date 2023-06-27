@@ -13,12 +13,16 @@
     let logoPreview;
 
     onMount(() => {
-        getAuditors()
-        getIssuers()
-        getVaultImages()
+        getSftData()
     })
 
-    $: sft && getVaultImages()
+    $: sft && getSftData()
+
+    function getSftData() {
+        getVaultImages()
+        getAuditors()
+        getIssuers()
+    }
 
     function getAuditors() {
         if (sft.address) {
@@ -116,7 +120,7 @@
     </tr>
     <tr>
       <td class="font-bold">Number of holders</td>
-      <td class="sft-info">{issuers.length}</td>
+      <td class="sft-info">{sft.tokenHolders.filter(h => h.balance !== "0").length}</td>
     </tr>
     <tr>
       <td class="font-bold">Token supply</td>

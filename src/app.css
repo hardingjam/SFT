@@ -410,11 +410,11 @@ li {
     box-shadow: 0 10px 5px -3px rgba(179, 179, 179, 1);
 }
 
-.dropdown-item:hover .icon-path {
+.list-item:hover .icon-path {
     stroke: #ECECEC;
 }
 
-.dropdown-item .icon-path {
+.list-item .icon-path {
     stroke: #FFFFFF;
 }
 

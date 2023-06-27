@@ -50,7 +50,7 @@
 
 </script>
 
-<div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
+<div class="{$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 items-center font-bold">
   {#if $account}
     <div class="flex justify-end w-full">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}

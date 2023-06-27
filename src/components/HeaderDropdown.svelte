@@ -48,7 +48,7 @@
 </script>
 <div class="dropdown-container" on:click_outside={handleClickOutside} use:clickOutside>
   <button id="networks-dropdown" data-dropdown-toggle="networks" on:click={()=>toggleDropdown()}
-          class="text-white focus:outline-none items-center display-flex mr-10 relative" type="button">
+          class="focus:outline-none items-center text-white display-flex mr-10 relative" type="button">
     {#if triggerIcon}
       <img src={triggerIcon}
            alt={triggerLabel}/>
@@ -57,10 +57,10 @@
     <img src={ icons.expand} alt="expand"/>
   </button>
   <!-- Dropdown menu -->
-  <div id="networks" class="absolute top-14 drop-menu" class:hidden={dropdownHidden} bind:this={dropdown}>
+  <div id="networks" class="absolute top-10 drop-menu" class:hidden={dropdownHidden} bind:this={dropdown}>
     <ul class="dropdown-items" aria-labelledby="dropdownDefaultButton">
       {#each items as item}
-        <li on:click={()=>handleNavItemClick(item)} class="dropdown-item cursor-pointer display-flex">
+        <li on:click={()=>handleNavItemClick(item)} class="list-item cursor-pointer display-flex">
           {#if item.icon}
             <img src={icons[item.icon]} alt={item?.displayName}/>
           {/if}
@@ -87,20 +87,20 @@
     .dropdown-items .network-name {
         margin-left: 8px;
         margin-right: 8px;
-        color: #FFFFFF;
     }
 
-    .dropdown-item:active .network-name {
+    .network-name:active {
         color: #CAE6FF;
     }
 
-    .dropdown-item {
+    .list-item {
+        color: #FFFFFF;
         padding: 0 15px 0 13px !important;
         display: flex;
         align-items: center;
     }
 
-    .dropdown-item:hover .network-name {
+    .list-item:hover {
         color: #ECECEC;
     }
 

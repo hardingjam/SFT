@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "mocha test/**/*.test.js"
+    "cypress:open": "cypress open"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
@@ -28,6 +28,7 @@
     "@sentry/svelte": "^7.38.0",
     "@sentry/tracing": "^7.27.0",
     "axios": "^1.1.2",
+    "big-list-of-naughty-strings": "^1.0.0",
     "cbor-js": "^0.1.0",
     "cbor-web": "^8.1.0",
     "classnames": "^2.3.2",

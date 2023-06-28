@@ -97,7 +97,7 @@
     }
 
     .list-item:hover {
-        background-color:#9F9F9F;
+        background-color: #9F9F9F;
     }
 
     .drop-menu {

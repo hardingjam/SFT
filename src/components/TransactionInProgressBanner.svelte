@@ -30,9 +30,37 @@
             close: true
         });
     }
+
+    function clickOutside(node) {
+
+        const handleClick = event => {
+            if (node && !node.contains(event.target) && !event.defaultPrevented) {
+                node.dispatchEvent(
+                    new CustomEvent('click_outside', node)
+                )
+            }
+        }
+
+        document.addEventListener('click', handleClick, true);
+
+        return {
+            destroy() {
+                document.removeEventListener('click', handleClick, true);
+            }
+        }
+    }
+
+    let name = 'world';
+
+    function handleClickOutside(event) {
+        if ($transactionInProgressShow && !$transactionInProgress) {
+            closeBtnClick()
+        }
+    }
 </script>
 
-<div class={$transactionInProgressShow? "frame show": "frame hide" }>
+<div class={$transactionInProgressShow? "frame show": "frame hide" } use:clickOutside
+     on:click_outside={handleClickOutside}>
   <div class="content">
     {#if ($transactionInProgress)}
       <div class="top-text">{topText || TRANSACTION_IN_PROGRESS_TEXT}</div>
@@ -72,7 +100,8 @@
       <SftLoader></SftLoader>
     {/if}
     {#if !noBottomText}
-      <div class="bottom-text" on:click={()=>viewInExplorer(transactionHash)}>{bottomText || VIEW_ON_EXPLORER_TEXT}&nbsp; &nbsp;
+      <div class="bottom-text underline"
+           on:click={()=>viewInExplorer(transactionHash)}>{bottomText || VIEW_ON_EXPLORER_TEXT}&nbsp; &nbsp;
         <span class="icon">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path
@@ -107,12 +136,12 @@
         border-radius: 20px;
         width: 420px;
         height: 420px;
-        z-index: 2;
+        z-index: 3;
         padding: 10px;
     }
 
     .content {
-        border-radius: 20px;
+        border-radius: 16px;
         border: 1px solid rgba(255, 255, 255, 0.8);
         display: flex;
         align-items: center;
@@ -133,6 +162,8 @@
 
     .bottom-text {
         cursor: pointer;
+        display: flex;
+        align-items: center;
     }
 
     .close-btn {

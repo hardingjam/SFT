@@ -8,10 +8,16 @@
         account,
         selectedReceipt,
         ethersData,
-        transactionError
+        transactionError, transactionSuccess, transactionInProgress
     } from "../scripts/store";
     import {onMount} from "svelte";
-    import {cborDecode, getSubgraphData, hasRole, showPrompt, timeStampToDate} from "../scripts/helpers.js";
+    import {
+        cborDecode,
+        getSubgraphData,
+        hasRole, navigate,
+        showPromptSFTCreate,
+        timeStampToDate
+    } from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatAddress, formatDate} from "../scripts/helpers";
@@ -20,28 +26,23 @@
         MAGIC_NUMBERS,
     } from "../scripts/consts.js";
     import axios from "axios";
+    import SftLoader from "../components/SftLoader.svelte";
+    import {accountRoles} from "../scripts/store.js";
 
     let error = ''
     let certifyUntil = formatDate(new Date())
     let certifyData = []
     let receipts = []
+    let loading = false;
+    let tempReceipts = []
 
-    onMount(async () => {
-        if ($vault.address) {
-            if (!$auditHistory?.id) {
-                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                if (data) {
-                    let temp = data.data.offchainAssetReceiptVault
-                    auditHistory.set(temp)
-                } else return {}
-            }
-        }
-        certifyData = $auditHistory?.certifications || []
-        receipts = $auditHistory?.deposits || []
+    $:tempReceipts && setAssetClasses()
 
-        //get schema
-        receipts = await Promise.all(receipts.map(async (r) => {
-            let information = r.receipt.receiptInformations[0]?.information ? cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) : null
+    async function setAssetClasses() {
+        receipts = await Promise.all(tempReceipts.map(async (r) => {
+            let information = r.receipt.receiptInformations[0]?.information ?
+                cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) :
+                null
             let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
             let schema;
             if (schemaHash) {
@@ -58,6 +59,32 @@
 
             return {...r, information, schema}
         }))
+    }
+
+    async function getAuditHistory() {
+        if ($vault.address) {
+            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+            if (data) {
+                let temp = data.data.offchainAssetReceiptVault
+                auditHistory.set(temp)
+            } else {
+                auditHistory.set({})
+            }
+        }
+        certifyData = $auditHistory?.certifications || []
+        tempReceipts = $auditHistory?.deposits || []
+    }
+
+
+    onMount(async () => {
+        if (!$auditHistory.id) {
+            loading = true;
+            await getAuditHistory()
+            loading = false
+        } else {
+            certifyData = $auditHistory?.certifications || []
+            tempReceipts = $auditHistory?.deposits || []
+        }
     })
 
     async function certify() {
@@ -71,17 +98,32 @@
             try {
 
                 let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
-                await showPrompt(certifyTx).then(()=>{
-                        certifyData = [...certifyData, {
-                            timestamp: Math.floor(new Date().getTime() / 1000),
-                            certifier: {address: $account},
-                            certifiedUntil: Math.floor(untilToTime / 1000),
-                            totalShares: ethers.BigNumber.from($auditHistory?.totalShares)
-                        }]
-                })
+                await showPromptSFTCreate(certifyTx)
+
+                let wait = await certifyTx.wait()
+                if (wait.status === 1) {
+                    let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                    let lastElementBlockNumber = preData.data.offchainAssetReceiptVault.certifications.slice(-1)[0].transaction.blockNumber
+                    let interval = setInterval(async () => {
+                        if (wait.blockNumber.toString() === lastElementBlockNumber) {
+                            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                            if (auditHistory) {
+                                let temp = data.data.offchainAssetReceiptVault
+                                auditHistory.set(temp)
+                                certifyData = $auditHistory?.certifications || []
+                            } else {
+                                auditHistory.set({})
+                            }
+                            transactionSuccess.set(true)
+                            transactionInProgress.set(false)
+                            clearInterval(interval)
+                        }
+                    }, 2000)
+                } else {
+                    transactionError.set(true)
+                }
 
             } catch (e) {
-                transactionError.set(true)
                 console.log(e)
             }
 
@@ -95,36 +137,48 @@
         selectedReceipt.set(receipt)
         navigateTo(`#receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
     }
+
+    function inFuture(date) {
+        let day = date.split('-')[0]
+        let month = date.split('-')[1]
+        let year = date.split('-')[2]
+        return new Date(`${month}/${day}/${year}`) > new Date()
+    }
 </script>
-<DefaultFrame header="Audit history" backBtn={false}>
+<DefaultFrame header="Audit history">
   <div slot="header-buttons" class="display-flex">
-    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#members")}}>Members</button>
-    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#roles")}}>Roles</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigate("#members")}}>Members</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigate("#roles")}}>Roles</button>
   </div>
   <div slot="content">
     <div class="history">
       <div class="receipts">
-        <table>
-          <thead>
-          <tr>
-            <th>Receipt ID</th>
-            <th>Asset class</th>
-            <th>Amount</th>
-            <th>Last updated</th>
-          </tr>
-          </thead>
-          <tbody>
-          {#each receipts as receipt}
-            <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
-            <tr class="tb-row">
-              <td>{receipt.receipt.receiptId}</td>
-              <td>{receipt.schema || ""}</td>
-              <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
-              <td>{timeStampToDate(receipt.timestamp)}</td>
+        {#if loading}
+          <SftLoader width="50"></SftLoader>
+        {/if}
+        {#if !loading}
+          <table>
+            <thead>
+            <tr>
+              <th>Receipt ID</th>
+              <th>Asset class</th>
+              <th>Amount</th>
+              <th>Last updated</th>
             </tr>
-          {/each}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            {#each receipts as receipt}
+              <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
+              <tr class="tb-row">
+                <td>{receipt.receipt.receiptId}</td>
+                <td>{receipt.schema || ""}</td>
+                <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
+                <td>{timeStampToDate(receipt.timestamp)}</td>
+              </tr>
+            {/each}
+            </tbody>
+          </table>
+        {/if}
       </div>
       <div class="certify">
         <table>
@@ -142,16 +196,19 @@
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
               <td>{formatAddress(cert?.certifier.address)}</td>
-              <td class="until">{timeStampToDate(cert?.certifiedUntil)}</td>
+              <td
+                class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>{timeStampToDate(cert?.certifiedUntil)}</td>
             </tr>
           {/each}
           </tbody>
         </table>
       </div>
-      <div class="certify-btn-container">
-        <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
-        <button class="default-btn" on:click={() => certify()}>Certify</button>
-      </div>
+      {#if ($accountRoles.CERTIFIER)}
+        <div class="certify-btn-container">
+          <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
+          <button class="default-btn" on:click={() => certify()}>Certify</button>
+        </div>
+      {/if}
       <div class="error">
         {error}
         <!--        System frozen until certified-->

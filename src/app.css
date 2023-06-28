@@ -1,3 +1,5 @@
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
 /* width */
 ::-webkit-scrollbar {
     width: 9px;
@@ -5,14 +7,13 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #D2D2D2;
+    background: #d2d2d2;
     box-shadow: inset 0 0 0 4px white;
-
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #D2D2D2;
+    background: #d2d2d2;
     border-radius: 20px;
 }
 
@@ -26,16 +27,14 @@ body {
     display: flex;
     min-width: 320px;
     min-height: 100vh;
-    background: rgb(181, 220, 255);
-    background: linear-gradient(0deg, #b5dcff 0%, #6f5ea1 100%);
+    /*background-color: #DCDBDD;*/
     background-attachment: fixed;
 }
 
 #app {
     text-align: center;
     width: 100%;
-    margin-top: 52px;
-    font-family: 'Mukta', sans-serif;
+    font-family: "Mukta", sans-serif;
 }
 
 .space-between {
@@ -55,24 +54,24 @@ body {
     line-height: 27px;
     height: 50px;
     border-radius: 30px;
-    color: #FFFFFF;
+    color: #ffffff;
     border: none;
     cursor: pointer;
     padding: 0 30px;
-    background: #9D7334;
+    background: #9d7334;
 }
 
 .btn-solid:hover {
-    background: #C98E36;
+    background: #c98e36;
 }
 
 .btn-solid:active {
-    background: #C98E36;
+    background: #c98e36;
     box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .btn-solid:disabled {
-    background: #D2D2D2;
+    background: #B7B7B7;
 }
 
 .btn-solid:disabled:hover {
@@ -80,12 +79,12 @@ body {
 }
 
 .btn-solid:disabled:active {
-    background: #D2D2D2;
+    background: #B7B7B7;
     box-shadow: none;
 }
 
 .btn-solid:disabled {
-    background: #D2D2D2;
+    background: #B7B7B7;
 }
 
 .btn-cancel {
@@ -100,7 +99,8 @@ input:focus {
     outline: none;
 }
 
-button:focus, button:focus-visible {
+button:focus,
+button:focus-visible {
     outline: none !important;
 }
 
@@ -108,16 +108,17 @@ button:focus, button:focus-visible {
     border: 1px solid #f11717;
 }
 
-.nav{
+.nav {
     align-items: center;
 }
 
-.dropdown-menu {
-    background-color: #2c2c5454 !important;
-    border-radius: 5px !important;
+.dropdown-items {
+    background-color: #2c2c5454;
+    border-radius: 0 0 5px 5px;
     box-shadow: 0 4px 4px #00000040;
-    border: none !important;
-    padding: 0!important;
+    border: none;
+    padding: 0;
+    z-index: 2;
 }
 
 .dropdown-item {
@@ -127,11 +128,13 @@ button:focus, button:focus-visible {
     font-size: 16px;
     line-height: 27px;
     padding: 0 !important;
+    width: 100%;
+    text-align: left;
 }
 
-.dropdown-item:focus, .dropdown-item:hover {
+.dropdown-item:focus,
+.dropdown-item:hover {
     text-decoration: none;
-    background: #2c2c5454 !important;
 }
 
 .display-flex {
@@ -146,34 +149,109 @@ button:focus, button:focus-visible {
     font-weight: 700;
 }
 
+.f-weight-600 {
+    font-weight: 600;
+}
+
+h1, h2, h3, h4, h5 {
+    display: block;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+}
+
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    padding-inline-start: 40px;
+}
+
+ul ul {
+    list-style-type: circle;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+.pdf-container a:visited {
+    color: rgb(0, 80, 160);
+}
+
+.pdf-container a {
+    color: rgb(0, 100, 200);
+    text-decoration: none;
+}
+
+.pdf-container a:hover {
+    text-decoration: underline;
+}
+
+.pdf-container tr, .pdf-container td, .pdf-container th {
+    border-collapse: collapse;
+    border: 1px solid #dcdbdd;
+    padding: 0.2rem;
+}
+
 .default-btn {
     box-sizing: border-box;
     padding: 0 18px;
     gap: 10px;
     min-width: 73px;
     height: 27px;
-    border: 1px solid #9D7334;
+    border: 1px solid #9d7334;
     border-radius: 5px;
     background-color: #ffffff;
     width: fit-content;
-    color: #9D7334;
+    color: #9d7334;
 }
 
 .default-btn:hover {
-    background: #ECECEC;
+    background: #ececec;
     cursor: pointer;
 }
 
 .default-btn:active {
-    background: #ECECEC;
+    background: #ececec;
     border: 1px solid #000000;
     box-shadow: inset 0 4px 4px #00000040;
     border-radius: 5px;
 }
 
 .default-btn:disabled {
-    border: 1px solid #D2D2D2;
-    color: #D2D2D2;
+    border: 1px solid #B7B7B7;
+    color: #B7B7B7;
 }
 
 .default-btn:disabled:hover {
@@ -188,11 +266,12 @@ button:focus, button:focus-visible {
 
 .header-btn {
     box-sizing: border-box;
-    border: 1px solid #FFFFFF;
+    border: 1px solid #ffffff;
     border-radius: 5px;
     background: transparent;
     color: #ffffff;
     margin-left: 15px;
+    padding: 0 10px;
 }
 
 .header-btn:focus {
@@ -200,14 +279,14 @@ button:focus, button:focus-visible {
 }
 
 .basic-frame-parent {
-    padding: 12px 12px 25px 12px;
+    padding: 12px;
     width: 100%;
 }
 
 .basic-frame {
     box-sizing: border-box;
     width: 100%;
-    border: 1px solid #D2D2D2;
+    border: 1px solid #d2d2d2;
     border-radius: 10px;
 }
 
@@ -219,9 +298,9 @@ button:focus, button:focus-visible {
 }
 
 .default-input {
-    width: 370px;
+    width: 360px;
     height: 28px;
-    background: #ECECEC;
+    background: #ececec;
     border-radius: 5px;
     margin-bottom: 8px;
     padding-left: 13px;
@@ -230,7 +309,6 @@ button:focus, button:focus-visible {
     font-size: 16px;
     line-height: 27px;
 }
-
 
 .check-container {
     display: block;
@@ -243,13 +321,12 @@ button:focus, button:focus-visible {
 }
 
 .error {
-    color: #DD1212;
+    color: #dd1212;
     max-width: fit-content;
 }
 
 .success {
-    color: #1EA51B;
-    font-weight: 700;
+    color: #1ea51b;
 }
 
 .w-100 {
@@ -270,13 +347,13 @@ button:focus, button:focus-visible {
     left: 0;
     height: 19px;
     width: 19px;
-    border: 1px solid #C1C1C1;
+    border: 1px solid #c1c1c1;
     border-radius: 5px;
 }
 
 /* When the radio button is checked, add a blue background */
 .check-container input:checked ~ .checkmark {
-    background: #5B5B8A;
+    background: #5b5b8a;
 }
 
 /* Create the indicator (the dot/circle - hidden when not checked) */
@@ -298,7 +375,7 @@ button:focus, button:focus-visible {
     top: -5px;
     bottom: 0;
     color: #ffffffff;
-    content: '\2714';
+    content: "\2714";
 }
 
 .check-box-label {
@@ -306,10 +383,8 @@ button:focus, button:focus-visible {
 }
 
 .tb-row:hover {
-    background: #625e91;
-    color: #ffffff;
+    background: #ECECEC;
     cursor: pointer;
-    opacity: 0.7;
 }
 
 .right {
@@ -324,7 +399,22 @@ button:focus, button:focus-visible {
     display: block;
 }
 
+.underline {
+    text-decoration: underline;
+}
+
+
+.dropdown .dropdown-menu {
+    z-index: 1;
+    -webkit-box-shadow: 0 10px 5px -3px rgba(179,179,179,1);
+    -moz-box-shadow: 0 10px 5px -3px rgba(179,179,179,1);
+    box-shadow: 0 10px 5px -3px rgba(179,179,179,1);
+}
+
 
 @media (prefers-color-scheme: light) {
-
 }
+
+@tailwind components;
+
+@tailwind utilities;

@@ -1,10 +1,11 @@
 import {ethers} from "ethers";
-import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES} from "./consts.js";
+import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES, ROUTE_LABEL_MAP} from "./consts.js";
 import axios from "axios";
 import pako from "pako"
 import {encodeCanonical, decodeAllSync} from "cbor-web";
 import {arrayify, isBytesLike} from "ethers/lib/utils.js";
 import {
+    breadCrumbs, navigationButtonClicked,
     promptBottomText, promptCloseAction, promptErrorText, promptNoBottom, promptSuccessText,
     promptTopText, transactionError,
     transactionHash,
@@ -12,6 +13,8 @@ import {
     transactionInProgressShow,
     transactionSuccess
 } from "./store.js";
+import {VAULT_INFORMATION_QUERY} from "./queries.js";
+import {navigateTo} from 'yrv';
 
 import DOMPurify from 'dompurify'
 
@@ -84,7 +87,7 @@ export async function fetchSubgraphData(activeNetwork, variables, query) {
 }
 
 export function getSubgraphData(activeNetwork, variables, query, param) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         async function fetchData() {
             return await fetchSubgraphData(activeNetwork, variables, query)
         }
@@ -163,7 +166,7 @@ function getDateValues(date) {
 export function accessControlError(msg) {
     let hash = msg.slice(-66)
     let error = msg.slice(20, msg.length - 66)
-    let role = ROLES.find(r => r.hash === hash)
+    let role = ROLES.find(r => r.roleHash === hash)
     return error + " " + role?.roleName
 }
 
@@ -284,7 +287,7 @@ export function cborDecode(dataEncoded_) {
     return decodeAllSync(dataEncoded_);
 }
 
-export function encodeCBOR(data) {
+export function encodeCBOR(data, magicNumber) {
     // -- Encoding with CBOR
     // Obtain (Deflated JSON) and parse it to an ArrayBuffer
     if (typeof data === 'object') {
@@ -293,7 +296,7 @@ export function encodeCBOR(data) {
     const deflatedData = arrayify(deflateJson(data)).buffer;
     return cborEncode(
         deflatedData,
-        MAGIC_NUMBERS.OA_SCHEMA,
+        magicNumber,
         "application/json",
         {
             contentEncoding: "deflate",
@@ -381,8 +384,169 @@ export async function showPrompt(transaction, options) {
         if (wait.status === 1) {
             transactionSuccess.set(true)
             transactionInProgress.set(false)
+        } else {
+            transactionError.set(true)
         }
     }
+}
+
+export async function showPromptSFTCreate(transaction, options) {
+    //clear store
+    transactionError.set(false)
+    transactionSuccess.set(false)
+    promptTopText.set("")
+    promptErrorText.set("Transaction failed")
+    promptSuccessText.set("Transaction successful!")
+    promptNoBottom.set(false)
+    promptBottomText.set("")
+    promptCloseAction.set(() => {
+    })
+    transactionHash.set("false")
+
+    //show prompt
+    transactionInProgressShow.set(true)
+    transactionInProgress.set(true)
+    if (options && options.topText) {
+        promptTopText.set(options.topText)
+    }
+    if (options && options.noBottomText) {
+        promptNoBottom.set(options.noBottomText)
+    }
+    if (options && options.bottomText) {
+        promptBottomText.set(options.bottomText)
+    }
+    if (options && options.closeAction) {
+        promptCloseAction.set(options.closeAction)
+    }
+    if (options && options.errorText) {
+        promptErrorText.set(options.errorText)
+    }
+    if (options && options.successText) {
+        promptSuccessText.set(options.successText)
+    }
+    if (transaction) {
+        if (transaction.hash) {
+            transactionHash.set(transaction.hash)
+        }
+    }
+}
+
+export async function addMissingHashesToSubGraph(hashes, vault, signer) {
+    let schemaInformation = {}
+
+    let encodedSchema = encodeCBOR(schemaInformation, MAGIC_NUMBERS.OA_SCHEMA)
+
+    try {
+        let encodedHashList = cborEncode(
+            hashes.toString(),
+            MAGIC_NUMBERS.OA_HASH_LIST
+        );
+        const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema +
+            encodedHashList
+        await vault.connect(signer).receiptVaultInformation(arrayify(meta))
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export function mapOrder(array, order, key) {
+
+    array.sort(function (a, b) {
+        let A = a[key], B = b[key];
+
+        if (order.indexOf(A) > order.indexOf(B)) {
+            return 1;
+        } else {
+            return -1;
+        }
+
+    });
+
+    return array;
+}
+
+export async function getSchemas(activeNetwork, vault, deposits) {
+    let tempSchema = []
+
+
+    let variables = {id: vault.address.toLowerCase()}
+    if (vault.address) {
+
+        try {
+            let resp = await getSubgraphData(activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
+            let receiptVaultInformations = []
+
+            if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
+                receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+
+                if (receiptVaultInformations.length) {
+                    for (let i = 0; i < receiptVaultInformations.length; i++) {
+                        let cborDecodedInformation = cborDecode(receiptVaultInformations[i].information.slice(18))
+                        let schemaHash = cborDecodedInformation[1].get(0)
+                        let url = `${IPFS_GETWAY}${schemaHash}`
+                        let assetCount = getAssetCount(schemaHash, deposits)
+
+                        try {
+                            if (url) {
+                                let res = await axios.get(url)
+                                if (res) {
+                                    tempSchema = [...tempSchema, {
+                                        ...res.data,
+                                        timestamp: receiptVaultInformations[i].timestamp,
+                                        id: receiptVaultInformations[i].id,
+                                        hash: schemaHash,
+                                        assetCount,
+                                    }]
+                                    tempSchema = tempSchema.filter(d => d.displayName)
+                                }
+                            }
+                        } catch (err) {
+                            console.log(err)
+                        }
+                    }
+                    return tempSchema
+                }
+            }
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
+
+function getAssetCount(hash, deposits) {
+    let depositsWithSchema = deposits.filter(d => d.receipt.receiptInformations[0]?.schema === hash)
+    let depositAmounts = depositsWithSchema.map(d => d.amount);
+    let assetCount = depositAmounts.reduce(
+        (accumulator, currentValue) => ethers.BigNumber.from(accumulator).add(ethers.BigNumber.from(currentValue)),
+        0
+    );
+    return ethers.utils.formatUnits(assetCount, 18)
+}
+
+export async function setAccountRoles(roles, account) {
+    let accountRoles = []
+    for (let i = 0; i < ROLES.length; i++) {
+        let role = roles.find(r => r.roleHash === ROLES[i].roleHash);
+        if (role) {
+            accountRoles[ROLES[i].roleName] = role.roleHolders.some(h => h.account.address.toLowerCase() ===
+                account.toLowerCase());
+        }
+    }
+    return accountRoles
+
+}
+
+export function navigate(path, options) {
+    let label = ROUTE_LABEL_MAP.get(path)
+    navigationButtonClicked.update(() => false)
+    if (options && options.clear) {
+        breadCrumbs.update(() => [{path: "#", label: "Home"}, {path, label}])
+    } else {
+        breadCrumbs.update(bc => [...bc, {path, label}])
+    }
+    navigateTo(path)
 }
 
 export function sanitizeJson(json) {

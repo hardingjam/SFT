@@ -1,8 +1,8 @@
 <script>
     import {
         activeNetwork,
-        data,
-        roles, transactionError,
+        data, SFTCreated, tokens,
+        transactionError, transactionInProgress, transactionInProgressShow,
         transactionSuccess,
         vault
     } from '../scripts/store.js';
@@ -10,12 +10,16 @@
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {
-        ADDRESS_ZERO,
-        TEST_CONTRACT_ADDRESS,
+        ADDRESS_ZERO
     } from "../scripts/consts.js"
-    import {QUERY} from "../scripts/queries.js";
-    import {getEventArgs, getContract, getSubgraphData, filterArray, showPrompt} from "../scripts/helpers.js";
-    import {navigateTo} from "yrv";
+    import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
+    import {
+        getEventArgs,
+        getContract,
+        getSubgraphData,
+        getEvent,
+        showPromptSFTCreate
+    } from "../scripts/helpers.js";
 
     let name = "";
     let admin_ledger = "";
@@ -63,13 +67,14 @@
                 constructionConfig
             )
 
-            await showPrompt(offChainAssetVaultTx)
+            await showPromptSFTCreate(offChainAssetVaultTx)
 
+            let eventArgs = await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)
             let contract;
             contract = new ethers.Contract(
                 ethers.utils.hexZeroPad(
                     ethers.utils.hexStripZeros(
-                        (await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)).child
+                        (eventArgs).child
                     ),
                     20
                 ),
@@ -77,27 +82,34 @@
                 signer.address
             );
 
-
-            name = null;
-            admin_ledger = null;
-            symbol = null;
-
-            console.log(
-                "vault deployed to:",
-                contract.address
-            );
+            console.log("vault deployed to:", contract.address);
 
             let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
-            vault.set(newVault)
-            localStorage.setItem('vaultAddress', $vault.address)
-            //wait for sg data
-            await getSgData(newVault.address)
 
-            navigateTo("#sft-create-success", {replace: false});
+            let createChildEvent = await getEvent(offChainAssetVaultTx, "OffchainAssetReceiptVaultInitialized", newVault)
+            let deployBlockNumber = createChildEvent.blockNumber
+
+            let wait = await offChainAssetVaultTx.wait()
+            if (wait.status === 1) {
+                let interval = setInterval(async () => {
+                    await getTokens()
+                    if (deployBlockNumber.toString() === $tokens[0].deployBlock) {
+                        transactionInProgress.set(false)
+                        transactionInProgressShow.set(false)
+                        SFTCreated.set(true)
+                        clearInterval(interval)
+                        vault.set(newVault)
+                        localStorage.setItem('vaultAddress', $vault.address)
+                        //wait for sg data
+                        await getSgData(newVault.address)
+                    }
+                }, 2000)
+            } else {
+                transactionError.set(true)
+            }
+
         } catch (er) {
-            transactionError.set(true)
-            console.log(er)
-            console.log(er.message)
+            console.log(er.message || er.message)
         }
         loading = false
     }
@@ -108,19 +120,19 @@
         getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
             if (res && res.data) {
                 data.set(res.data)
-                roles.set(res.data.offchainAssetReceiptVault?.roles)
-
-                let rolesFiltered = $roles.map(role => {
-                    let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
-                    let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
-                    let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
-                    return {roleName: role.roleName, roleHolders: filtered}
-                })
-                roles.set(rolesFiltered)
             }
 
         })
 
+    }
+
+    async function getTokens() {
+        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, 'offchainAssetReceiptVaults').then((res) => {
+            if ($activeNetwork) {
+                let temp = res.data.offchainAssetReceiptVaults
+                tokens.set(temp)
+            }
+        })
     }
 
 </script>
@@ -130,15 +142,15 @@
     <div class="form-box">
       <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
       </div>
-      <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
-                                                                                                 bind:value={admin_ledger}>
-      </div>
       <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
                                                                                           bind:value={symbol}>
       </div>
+      <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
+                                                                                                 bind:value={admin_ledger}>
+      </div>
+      <div class="success info-text">The ‘super admin address’ will need to assign roles to manage this token.</div>
     </div>
     <div class="form-after">
-      <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
       <div class="error">{error}</div>
       <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol}
               on:click={() => createToken()}>Create SFT
@@ -203,15 +215,14 @@
     }
 
     .info-text {
-        font-style: normal;
-        font-size: 12px;
+        font-size: 15px;
         line-height: 20px;
-        margin-top: 21px;
-        margin-bottom: 20px;
+        text-align: center;
     }
 
     .create-token {
         width: 413px;
+        margin-top: 20px;
     }
 
     .error {

@@ -1,11 +1,10 @@
 <script>
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {navigateTo} from "yrv";
     import SftLoader from "../components/SftLoader.svelte";
     import {activeNetwork, selectedReceipt} from "../scripts/store.js";
     import {ethers} from "ethers";
-    import {timeStampToDate} from "../scripts/helpers.js";
+    import {navigate, timeStampToDate} from "../scripts/helpers.js";
 
     let receipt = $selectedReceipt.receipt;
     let loading = false
@@ -17,7 +16,7 @@
 </script>
 <DefaultFrame header={`Audit History > ${receipt.receiptId}`}>
   <div slot="header-buttons" class="display-flex">
-    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#roles")}}>Roles</button>
+    <button class="header-btn btn-hover" on:click={()=>{navigate("#roles")}}>Roles</button>
   </div>
   <div slot="content">
     <div class="history">
@@ -64,7 +63,7 @@
                 </td>
                 <td class="value">{timeStampToDate(deposit.timestamp)} </td>
                 <td class="value">
-                  <a href="{`${$activeNetwork.blockExplorer}tx/${getHash(deposit.id)}`}" target="_blank">
+                  <a href="{`${$activeNetwork.blockExplorer}/tx/${getHash(deposit.id)}`}" target="_blank">
                     {getHash(deposit.id).replace(/(.{6}).*(.{6})/, "$1…$2") || ""}
                   </a>
                 </td>
@@ -137,18 +136,7 @@
         text-align: center;
     }
 
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
-
     a:hover {
         text-decoration: underline;
     }
-
-    /*.loader {*/
-    /*    display: flex;*/
-    /*    justify-content: center;*/
-    /*}*/
-
 </style>

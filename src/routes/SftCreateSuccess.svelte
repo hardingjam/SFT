@@ -1,25 +1,25 @@
 <script>
-    import {navigateTo} from "yrv";
     import {icons} from "../scripts/assets.js";
+    import {navigate} from '../scripts/helpers.js';
 
     let error = ""
 
     function goToRoles() {
-        navigateTo("#roles", {replace: false});
+        navigate("#roles", {clear: true});
     }
 
 </script>
 <div class="sft-setup-container">
   <label class="title f-weight-700"></label>
   <div class="success-container form-box">
-    <span class="success">Your SFT Setup was successful!</span>
+    <span class="success">Your SFT setup was successful!</span>
     <img src="{icons.success_circle}" alt="sft success"/>
   </div>
   <div class="form-after">
     <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
     <div class="error">{error}</div>
     <button class="create-token btn-solid btn-submit"
-            on:click={() => goToRoles()}>Ok, take me to Roles
+            on:click={() => goToRoles()}>Ok, take me to roles
     </button>
   </div>
 </div>

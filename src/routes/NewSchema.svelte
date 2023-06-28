@@ -1,20 +1,28 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {
-        ethersData,
+        activeNetwork, deposits,
+        ethersData, schemas,
         transactionError,
         transactionInProgress, transactionInProgressShow, transactionSuccess,
         uploadBtnLoading,
         vault
     } from "../scripts/store.js";
-    import {cborEncode, encodeCBOR, sanitizeJson, showPrompt} from "../scripts/helpers.js";
+    import {
+        cborEncode,
+        encodeCBOR, getSchemas,
+        getSubgraphData, navigate,
+        showPrompt,
+        showPromptSFTCreate,
+        sanitizeJson
+    } from "../scripts/helpers.js";
     import {IPFS_APIS, MAGIC_NUMBERS} from "../scripts/consts.js";
     import axios from "axios";
     import {arrayify} from "ethers/lib/utils.js";
     import {JSONEditor} from "svelte-jsoneditor";
-    import {navigateTo} from "yrv";
     import {validator} from "@exodus/schemasafe";
     import {nullOptionalsAllowed} from '../plugins/@restspace/svelte-schema-form/utilities';
+    import {DEPOSITS_QUERY, RECEIPT_VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
 
 
     let label = ""
@@ -53,7 +61,7 @@
             }
             schemaInformation = sanitizeJson(schemaInformation);
 
-            let encodedSchema = encodeCBOR(schemaInformation)
+            let encodedSchema = encodeCBOR(schemaInformation, MAGIC_NUMBERS.OA_SCHEMA)
 
             try {
                 let uploadResult = await upload(JSON.stringify(schemaInformation))
@@ -61,12 +69,33 @@
                     [uploadResult?.Hash].toString(),
                     MAGIC_NUMBERS.OA_HASH_LIST
                 );
-                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema + encodedHashList
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedSchema +
+                    encodedHashList
                 let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
-                await showPrompt(transaction, {closeAction: goToAssetClassList})
+                await showPromptSFTCreate(transaction)
+
+                let wait = await transaction.wait()
+                if (wait.status === 1) {
+                    let interval = setInterval(async () => {
+                        let assetClassesResp = await getSubgraphData($activeNetwork, {}, RECEIPT_VAULT_INFORMATION_QUERY, 'receiptVaultInformations')
+                        assetClassesResp = assetClassesResp?.data?.receiptVaultInformations
+                        if (assetClassesResp && assetClassesResp.length) {
+                            if (wait.blockNumber.toString() === assetClassesResp[0].transaction.blockNumber) {
+                                await getDeposits()
+                                schemas.set(await getSchemas($activeNetwork, $vault, $deposits))
+
+                                goToAssetClassList()
+                                transactionSuccess.set(true)
+                                transactionInProgress.set(false)
+                                clearInterval(interval)
+                            }
+                        }
+                    }, 2000)
+                } else {
+                    transactionError.set(true)
+                }
 
             } catch (err) {
-                transactionError.set(true)
                 console.log(err)
             }
         } catch (e) {
@@ -179,14 +208,21 @@
             }
         }
     }
+
     function clearLabelError() {
         labelError = ""
     }
 
-    function goToAssetClassList(event) {
-        if ($transactionSuccess && event.detail.close) {
-            navigateTo("#asset-classes", {replace: false});
-        }
+    function goToAssetClassList() {
+        navigate("#asset-classes", {clear: true});
+    }
+
+    async function getDeposits() {
+        let variables = {id: $vault.address.toLowerCase()}
+
+        getSubgraphData($activeNetwork, variables, DEPOSITS_QUERY, 'offchainAssetReceiptVault').then((res) => {
+            deposits.set(res.data.offchainAssetReceiptVault.deposits)
+        })
     }
 
 </script>
@@ -253,10 +289,6 @@
         margin: 10px 0;
         position: relative;
         border-radius: 5px 5px 0 0
-    }
-
-    #highlighting {
-        display: none;
     }
 
     .schema-container {

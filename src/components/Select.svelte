@@ -1,5 +1,5 @@
 <script>
-    import {createEventDispatcher, onMount} from 'svelte';
+    import {createEventDispatcher} from 'svelte';
     import {icons} from "../scripts/assets.js";
     import Dropdown from 'sv-bootstrap-dropdown';
 
@@ -25,6 +25,7 @@
     let dropdownTrigger;
 
     function commitAction(option) {
+
         if (option.action) {
             option.action()
         }
@@ -37,9 +38,9 @@
   <Dropdown triggerElement={dropdownTrigger}>
 
     <button
-        type="button"
-        class={`${className} btn dropdown-toggle`}
-        bind:this={dropdownTrigger}
+      type="button"
+      class={`${className} btn dropdown-toggle`}
+      bind:this={dropdownTrigger}
     >
       <slot name="icon"></slot>
       <span class="select-label">{selected && !staticLabel ? selected : label}</span>
@@ -49,7 +50,8 @@
     </button>
     <div slot="DropdownMenu" class={`${dropDownClass} ${className} dropdown`}>
       {#each options as option}
-        <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
+        <button class="{selected === option.displayName? 'selected' : ''} dropdown-item" type="button"
+                on:click={()=>commitAction(option)}>
           {#if option.icon}
             <img src={icons[option.icon]} alt={option?.displayName}/>
           {/if}
@@ -60,7 +62,7 @@
   </Dropdown>
 </div>
 <style>
-    @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");
+    /*@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");*/
 
     .btn:focus {
         outline: none;
@@ -83,52 +85,9 @@
         margin-left: 17px;
     }
 
-    .dropdown-toggle::after {
-        display: inline-block;
-        content: '';
-        border: none;
-    }
-
-    .meinMenu {
-        color: #FFFFFF;
-    }
-
-    .inputSelect {
-        background: #ECECEC;
-        border-radius: 5px;
-        height: 26px;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 25px;
-        color: #000000;
-        padding: 0;
-        min-width: 230px;
-        max-width: 250px;
-        width: 100%;
-    }
-
-    .inputSelect.dropdown {
-        max-height: 255px;
-        height: auto;
-        overflow: auto;
-        background-color: #ececec;
-        padding-right: 50px;
-        min-width: 230px;
-        max-width: 250px;
-    }
-
     .select-label {
         margin-left: 10px;
         width: calc(100% - 15px);
-    }
-
-
-    .nav-dropdown {
-        background-color: #2c2c5454 !important;
-        border-radius: 0 0 5px 5px !important;
-        box-shadow: 0 4px 4px #00000040;
-        border: none !important;
     }
 
     .nav-dropdown .dropdown-item {
@@ -148,6 +107,42 @@
         background: #d9d9d98c !important;
     }
 
+    /*important styles for select*/
+
+    .dropdown-toggle::after {
+        display: inline-block;
+        content: '';
+        border: none;
+    }
+
+    .dropdown-toggle {
+        padding: 1px 0;
+    }
+
+    .meinMenu {
+        color: #FFFFFF;
+    }
+
+    .inputSelect {
+        background: #ECECEC;
+        border-radius: 5px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 25px;
+        color: #000000;
+        width: 360px;
+    }
+
+    .inputSelect.dropdown {
+        max-height: 255px;
+        height: auto;
+        overflow: auto;
+        background-color: #ececec;
+        min-width: 360px;
+        max-width: 360px;
+        overflow-x: hidden;
+    }
 
     .dropdown-item {
         color: #000000;
@@ -155,10 +150,15 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 27px;
-        padding: 0 !important;
+        padding: 1px 0 !important;
     }
 
     .dropdown-item:focus, .dropdown-item:hover {
         text-decoration: none;
+        background: #CAE6FF
+    }
+
+    .selected {
+        background: #CAE6FF
     }
 </style>

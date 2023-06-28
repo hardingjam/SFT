@@ -4,7 +4,6 @@
     import {
         account,
         activeNetwork,
-        transactionError,
         vault
     } from "../scripts/store.js";
     import {onMount} from "svelte";
@@ -12,6 +11,7 @@
     import SftLoader from "../components/SftLoader.svelte";
     import {DEPLOYER_QUERY, RECEIPTS_QUERY} from '../scripts/queries.js'
     import ReceiptInformation from "./ReceiptInformation.svelte";
+    import RedeemInput from '../components/RedeemInput.svelte';
 
     let shouldDisable = false;
     let amount;
@@ -53,7 +53,7 @@
                         receipt,
                         []
                    );
-                    await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
+                    await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem successful!"})
 
                     // selectedReceipts = []
                     await getData()
@@ -68,7 +68,6 @@
                 return
             }
         } catch (err) {
-            transactionError.set(true)
             error = err.reason
         }
         shouldDisable = false;
@@ -137,9 +136,8 @@
                         multicallArr,
                         {from: $account}
                     );
-                await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem Successful!"})
+                await showPrompt(tx, {errorText:"Redeem failed", successText:"Redeem successful!"})
             } catch (err) {
-                transactionError.set(true)
                 error = err.reason
             }
         } else {
@@ -209,7 +207,7 @@
     {#if error}
       <span class="error">{error}</span>
     {/if}
-    <MintInput bind:amount={amount} amountLabel={"Total to redeem"} maxButton={true}
+    <RedeemInput bind:amount={amount} amountLabel={"Total to redeem"} maxButton={true}
                on:setMax={()=>{setMaxValue()}}/>
     <button class="redeem-btn btn-solid" disabled="{!selectedReceipts || !parseFloat(amount)}" on:click={() => redeem(selectedReceipts)}>
       Redeem

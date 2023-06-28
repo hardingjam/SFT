@@ -30,12 +30,14 @@
   <div class="options-background">
     <div class="options">
       <div class="labels">
-        <div class="txt">{amountLabel}</div>
+        <div class="txt f-weight-700">{amountLabel}</div>
       </div>
-      <div class="options-input"><input type="text" bind:value={amount} autofocus on:keydown={(e)=>allowNumbersOnly(e)}>
+      <div class="options-input flex-col">
+        <input class="focus:shadow-none focus:ring-0" autofocus type="text" bind:value={amount} on:keydown={(e)=>allowNumbersOnly(e)}>
         {#if maxButton}
           <button class="max-button btn-hover" on:click={(e)=>setMaxValue(e)}>Max</button>
         {/if}
+        <div class="amount-info">(Mint amount = number of tokens that will go into your wallet)</div>
       </div>
     </div>
   </div>
@@ -43,23 +45,23 @@
 
 <style>
     .options-container {
-        width: 100%;
+        width: calc(100% + 40px);
+        margin-left: -20px;
+        margin-bottom: 20px;
     }
 
     .options-background {
         width: 100%;
-        padding: 7px 0;
+        padding: 6px 0;
         background: linear-gradient(270deg, #342604 12.96%, #A28541 87.96%);
     }
 
     .options {
         width: 100%;
         background: #2C2C54;
-        padding: 20px 53px 20px 64px;
-        color: #ffffff;
+        padding: 13px 20px;
         display: flex;
         justify-content: space-between;
-        align-items: center;
     }
 
     .labels {
@@ -69,10 +71,9 @@
     }
 
     .txt {
-        font-weight: 300;
-        font-size: 24px;
         line-height: 27px;
         white-space: nowrap;
+        color: #FFFFFF;
     }
 
     .options-input {
@@ -81,13 +82,13 @@
     }
 
     .options-input input {
-        font-weight: 500;
-        font-size: 32px;
-        line-height: 53px;
-        width: 100%;
-        text-align: right;
-        background: inherit;
-        color: inherit;
+        width: 358px;
+        height: 27px;
+        left: 390px;
+        top: 284px;
+        background: #ECECEC;
+        border-radius: 5px;
+        padding-left: 10px;
     }
 
     .max-button {
@@ -97,5 +98,12 @@
         color: #ffffff;
         height: fit-content;
         margin-left: 5px;
+    }
+
+    .amount-info{
+        color: #FFFFFF;
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 20px;
     }
 </style>

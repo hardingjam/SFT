@@ -17,10 +17,10 @@ const networks = [
         name: 'goerli',
         displayName: "Goerli testnet",
         currencySymbol: "GoerliETH",
-        blockExplorer: "https://goerli.etherscan.io/",
+        blockExplorer: "https://goerli.etherscan.io",
         rpcUrl: "https://goerli.infura.io/v3/",
         icon: 'ethereum',
-        factory_address: '0xf1A14e96977E8dE295Ba9612691D127B157d1371',
+        factory_address: '0x6DB9F75C0B79E0351B09311c4856F556b09F67a5',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-goerli"
     },
     {
@@ -29,7 +29,7 @@ const networks = [
         name: 'polygon',
         displayName: "Polygon",
         currencySymbol: "MATIC",
-        blockExplorer: "https://polygonscan.com/",
+        blockExplorer: "https://polygonscan.com",
         rpcUrl: "https://polygon-rpc.com",
         icon: 'polygon',
         factory_address: '0xFE259001e141A41f3bcCDBc315A8F0D23Ef84b0b',
@@ -41,12 +41,24 @@ const networks = [
         name: 'mumbai',
         displayName: "Mumbai testnet",
         currencySymbol: "MATIC",
-        blockExplorer: "https://mumbai.polygonscan.com/",
+        blockExplorer: "https://mumbai.polygonscan.com",
         rpcUrl: "https://rpc-mumbai.maticvigil.com/",
         icon: 'polygon',
         factory_address: '0x94927792b88D518f9a429572dD3D40400b8BE906',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
-    }
+    }  ,
+    // {
+    //     id: 80001,
+    //     chainId: 80001,
+    //     name: 'mumbai',
+    //     displayName: "Mumbai testnet",
+    //     currencySymbol: "MATIC",
+    //     blockExplorer: "https://mumbai.polygonscan.com",
+    //     rpcUrl: "https://rpc-mumbai.maticvigil.com/",
+    //     icon: 'polygon',
+    //     factory_address: '0x792f2567Af36fD43655f62Bf1a457e701a1f7C8d',
+    //     subgraph_url: "https://api.thegraph.com/subgraphs/name/ninokeldishvili/erc20-price-oracle-vault"
+    // }
 ];
 
 export default networks;

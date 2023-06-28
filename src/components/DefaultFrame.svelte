@@ -1,17 +1,13 @@
 <script>
     export let header = ''
-    export let backBtn = true
 </script>
 <div class="default-frame">
-  <div class="header">
+  <div class="frame-header">
     <span>{header}</span>
     <slot name="address">
     </slot>
     <div class="display-flex">
       <slot name="header-buttons"></slot>
-      {#if backBtn}
-        <button class="header-btn btn-hover" on:click={()=>{history.back()}}>Back</button>
-      {/if}
     </div>
   </div>
   <div class="default-frame-container">
@@ -19,7 +15,7 @@
   </div>
 </div>
 <style>
-    .header {
+    .frame-header {
         color: #ffffff;
         display: flex;
         justify-content: space-between;

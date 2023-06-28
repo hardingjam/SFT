@@ -1,19 +1,29 @@
 export const QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
-                id,
-                totalShares,
-                address,
-                deployer,
-                admin,
-                name,
-                roles{
-                    roleName,
+                id
+                totalShares
+                address
+                deployer
+                admin
+                name
+                symbol
+                deployTimestamp
+                shareHolders{
+                    address
+                }
+                tokenHolders {
+                    address
+                    balance
+                }
+                roles(orderBy: roleName){
+                    roleName
                     roleHolders{
                       account{
                         address
                       }
                     }
+                    roleHash
                 },
                 roleRevokes{
                     role{
@@ -27,7 +37,7 @@ export const QUERY = `
                 }
             }
           }
-         `
+         `;
 
 export const AUDIT_HISTORY_DATA_QUERY = `
         query($id: ID!) {
@@ -44,8 +54,11 @@ export const AUDIT_HISTORY_DATA_QUERY = `
               },
               certifiedUntil,
               totalShares
+                transaction {
+                  blockNumber
+                }
             },
-            deposits 
+            deposits(orderBy: timestamp orderDirection:desc) 
             {
               receipt
               {
@@ -64,36 +77,8 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             }
           }
         }
-    `
+    `;
 
-export const DEPOSITS_QUERY = `
-          query($id: ID!) {
-           account(id: $id)
-           {
-              id,
-              offchainAssetReceiptVault
-              {
-                name
-                deposits
-                {
-                  id,
-                  timestamp,
-                  amount,
-                  receipt
-                  {
-                    id,
-                    shares,
-                    receiptId,
-                    balances {
-                      value,
-                      valueExact
-                    }
-                  },
-                }
-              }
-           }
-        }
-         `
 
 export const RECEIPTS_QUERY = `
           query($id: ID!) {
@@ -115,7 +100,7 @@ export const RECEIPTS_QUERY = `
                 }
               }
           }
-         `
+         `;
 export const DEPLOYER_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
@@ -123,7 +108,7 @@ export const DEPLOYER_QUERY = `
                 totalShares
             }
           }
-         `
+         `;
 export const RECEIPT_INFORMATION_QUERY = `
           query($id: ID!) {
             receipt(id: $id) {
@@ -133,7 +118,16 @@ export const RECEIPT_INFORMATION_QUERY = `
                   }
             }
           }
-         `
+         `;
+export const RECEIPT_VAULT_INFORMATION_QUERY = `
+          query {
+             receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
+               transaction {
+                 blockNumber
+               }
+            }
+          }
+         `;
 export const VAULT_INFORMATION_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
@@ -145,4 +139,53 @@ export const VAULT_INFORMATION_QUERY = `
                  }
             }
           }
-         `
+         `;
+
+export const VAULTS_QUERY = `
+        query {
+          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
+            deployer
+            name
+            address
+            symbol
+            deployBlock
+            deployTimestamp
+            totalShares
+            tokenHolders {
+                address
+                balance
+            }
+            roleHolders {
+              role {
+                roleName
+                roleHash
+              }
+              account {
+                address
+              }
+            }
+            receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
+              information
+              id
+              timestamp
+            }
+          }
+        }`;
+
+export const DEPOSITS_QUERY = `
+          query($id: ID!) {
+            offchainAssetReceiptVault(id: $id) {
+              deposits(orderBy: timestamp, orderDirection: desc) {
+                amount
+                transaction {
+                 blockNumber
+                }
+                receipt {
+                  receiptInformations {
+                    schema
+                  }
+                }
+              }
+            }
+          }
+         `;

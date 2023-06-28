@@ -66,7 +66,7 @@
           {/if}
           <span class={`${item.class} network-name`}>{item?.displayName} </span>
           {#if item.rightIcon}
-            <slot name="rightIcon"></slot>
+            <img src={icons[item.rightIcon]} alt={item?.displayName}/>
           {/if}
         </li>
       {/each}
@@ -89,10 +89,6 @@
         margin-right: 8px;
     }
 
-    .network-name:active {
-        color: #CAE6FF;
-    }
-
     .list-item {
         color: #FFFFFF;
         padding: 0 15px 0 13px !important;
@@ -101,7 +97,7 @@
     }
 
     .list-item:hover {
-        color: #ECECEC;
+        background-color:#9F9F9F;
     }
 
     .drop-menu {

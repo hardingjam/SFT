@@ -246,7 +246,6 @@
     .receipts-table {
         width: 100%;
         font-size: 16px;
-        font-weight: 700;
     }
 
 

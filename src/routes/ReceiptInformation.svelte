@@ -133,8 +133,8 @@
 
           {#if fileUploadProperties.includes(info.label)}
             <span class="underline btn-hover">
-              <a href={`${IPFS_GETWAY}${info.value}`} target="_blank">
-                    {info.label} <img src="{icons.show}" alt="view file">
+              <a href={`${IPFS_GETWAY}${info.value}`} target="_blank" class="display-flex">
+                    {info.label} <img src="{icons.show}" alt="view file" class="ml-2">
               </a>
             </span>
           {/if}

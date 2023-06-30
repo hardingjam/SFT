@@ -1,5 +1,5 @@
 <script>
-    import {account, activeNetwork, tokenName} from "../scripts/store.js";
+    import {account, activeNetwork} from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
@@ -22,7 +22,8 @@
                     return navigator.clipboard.writeText($account);
                 }
                 return Promise.reject("The Clipboard API is not available.");
-            }
+            },
+            rightIcon: 'copy'
         },
         {
             id: "view",
@@ -30,7 +31,7 @@
             action: () => {
                 window.open(`${$activeNetwork.blockExplorer}/address/${$account}`);
             },
-            class: 'underline'
+            class: 'underline',
         }
     ]
 
@@ -49,7 +50,7 @@
 
 </script>
 
-<div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
+<div class="{$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 items-center font-bold">
   {#if $account}
     <div class="flex justify-end w-full">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
@@ -57,7 +58,8 @@
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
 
       <HeaderDropdown triggerLabel={formatAddress($account)}
-                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}></HeaderDropdown>
+                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}>
+      </HeaderDropdown>
     </div>
     {#if location && (location !== "/" && location !== "#")}
       <BreadCrumbs/>

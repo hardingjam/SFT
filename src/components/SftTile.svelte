@@ -13,12 +13,16 @@
     let logoPreview;
 
     onMount(() => {
-        getAuditors()
-        getIssuers()
-        getVaultImages()
+        getSftData()
     })
 
-    $: sft && getVaultImages()
+    $: sft && getSftData()
+
+    function getSftData() {
+        getVaultImages()
+        getAuditors()
+        getIssuers()
+    }
 
     function getAuditors() {
         if (sft.address) {
@@ -62,9 +66,9 @@
 </script>
 <div class="w-full bg-white pt-5 pb-8 px-10 flex flex-row-reverse rounded-xl justify-between relative ">
   <div class="img-container">
-    <div class="sft-logo-container rounded-full ">
+    <div class="sft-logo-container rounded-full" class:hover={sft.deployer.toLowerCase() === $account.toLowerCase()}>
       <label for={`${sft.address}-upload`} id="sft-logo-upload"
-             class="flex items-center justify-center text-white flex-col cursor-pointer">
+             class="flex items-center justify-center text-white flex-col {sft.deployer.toLowerCase() === $account.toLowerCase() ? 'cursor-pointer' : '' }">
         {#if sft.icon}
           <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="logo" bind:this={logoPreview}/>
           {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
@@ -75,8 +79,8 @@
           {/if}
         {/if}
         {#if !sft.icon}
-          <img src="{icons.camera}" alt="sft logo"/>
           {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
+            <img src="{icons.camera}" alt="sft logo"/>
             <span class="text">Update</span>
           {/if}
         {/if}
@@ -116,7 +120,7 @@
     </tr>
     <tr>
       <td class="font-bold">Number of holders</td>
-      <td class="sft-info">{issuers.length}</td>
+      <td class="sft-info">{sft.tokenHolders.filter(h => h.balance !== "0").length}</td>
     </tr>
     <tr>
       <td class="font-bold">Token supply</td>
@@ -178,7 +182,7 @@
         border-radius: 50%;
     }
 
-    .sft-logo-container:hover {
+    .sft-logo-container.hover:hover {
         background: rgba(0, 0, 0, 0.6);
     }
 

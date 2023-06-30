@@ -2,8 +2,10 @@
     import SftTile from "../components/SftTile.svelte";
     import SftList from "../components/SftList.svelte";
     import {
-        activeNetwork,
-        ethersData,
+        account,
+        accountRoles,
+        activeNetwork, auditHistory,
+        ethersData, roles, schemas,
         sftInfo,
         tokens, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
         vault
@@ -13,12 +15,12 @@
     import {
         cborEncode,
         encodeCBOR, getContract,
-        getSubgraphData, navigate,
+        getSubgraphData, navigate, setAccountRoles,
         showPrompt,
         showPromptSFTCreate
     } from '../scripts/helpers.js';
     import {arrayify} from 'ethers/lib/utils.js';
-    import {RECEIPT_VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
+    import {AUDIT_HISTORY_DATA_QUERY, RECEIPT_VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
 
     let username;
@@ -143,19 +145,6 @@
 
     };
 
-
-    // async function waitForCredentials() {
-    //     const confirm = document.getElementById("ok-button")
-    //
-    //     promise = new Promise((resolve) => {
-    //         confirm.addEventListener('click', resolve)
-    //     })
-    //     return await promise.then(() => {
-    //             showAuth = false;
-    //         }
-    //     )
-    // }
-
     async function getTokens() {
         getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
             if ($activeNetwork) {
@@ -165,6 +154,33 @@
                 tokens.set([])
             }
         });
+    }
+
+    async function handleTokenSelect(event) {
+        let token = event.detail.token
+        if (token.address === $vault.address) {
+            return
+        }
+        await showPrompt(null, {topText: "SFT loading, please wait", noBottomText: true})
+        let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
+        if (contract) {
+            vault.set(contract)
+            schemas.set([])
+            localStorage.setItem("vaultAddress", token.address)
+            let auditHistoryData = await getAuditHistoryData(token.address)
+            auditHistory.set(auditHistoryData)
+            accountRoles.set(await setAccountRoles($roles, $account));
+            transactionInProgressShow.set(false)
+            transactionInProgress.set(false)
+            navigate("#roles", {clear: true})
+        }
+    }
+
+    async function getAuditHistoryData(token) {
+        let data = await getSubgraphData($activeNetwork, {id: token.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+        if (data) {
+            return data.data.offchainAssetReceiptVault
+        } else return {}
     }
 
 </script>
@@ -213,7 +229,7 @@
     {#if (view === "tile")}
       <div class="grid grid-cols-2 gap-5">
         {#each $tokens as sft }
-          <SftTile sft={sft} on:fileDrop={deployImage}></SftTile>
+          <SftTile sft={sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftTile>
         {/each}
       </div>
     {/if}
@@ -233,7 +249,7 @@
         </thead>
         <tbody>
         {#each $tokens as sft }
-          <SftList {sft} on:fileDrop={deployImage}></SftList>
+          <SftList {sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftList>
         {/each}
         </tbody>
       </table>

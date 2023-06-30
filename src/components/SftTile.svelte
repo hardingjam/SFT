@@ -50,6 +50,12 @@
         });
     }
 
+    const onTokenSelect = (token) => {
+        dispatch('tokenSelect', {
+            token,
+        });
+    }
+
     async function getVaultImages() {
         let receiptVaultInformations = sft.receiptVaultInformations
         if (receiptVaultInformations.length) {
@@ -108,7 +114,9 @@
   <table class="w-8/12 leading-8 text-left">
     <tr>
       <td class="font-bold">Token name</td>
-      <td class="sft-name">{sft.name}</td>
+      <td class="sft-name">
+        <span on:click={()=>onTokenSelect(sft)} class="underline cursor-pointer">{sft.name}</span>
+      </td>
     </tr>
     <tr>
       <td class="font-bold">Token symbol</td>

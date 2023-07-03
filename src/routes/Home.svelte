@@ -1,9 +1,13 @@
 <script>
     import SftTile from "../components/SftTile.svelte";
     import SftList from "../components/SftList.svelte";
+    import SftLoader from "../components/SftLoader.svelte";
+
     import {
-        activeNetwork,
-        ethersData,
+        account,
+        accountRoles,
+        activeNetwork, auditHistory,
+        ethersData, roles, schemas,
         sftInfo,
         tokens, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
         vault
@@ -13,12 +17,12 @@
     import {
         cborEncode,
         encodeCBOR, getContract,
-        getSubgraphData, navigate,
+        getSubgraphData, navigate, setAccountRoles,
         showPrompt,
         showPromptSFTCreate
     } from '../scripts/helpers.js';
     import {arrayify} from 'ethers/lib/utils.js';
-    import {RECEIPT_VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
+    import {AUDIT_HISTORY_DATA_QUERY, RECEIPT_VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
 
     let username;
@@ -141,19 +145,6 @@
 
     };
 
-
-    // async function waitForCredentials() {
-    //     const confirm = document.getElementById("ok-button")
-    //
-    //     promise = new Promise((resolve) => {
-    //         confirm.addEventListener('click', resolve)
-    //     })
-    //     return await promise.then(() => {
-    //             showAuth = false;
-    //         }
-    //     )
-    // }
-
     async function getTokens() {
         getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
             if ($activeNetwork) {
@@ -163,6 +154,33 @@
                 tokens.set([])
             }
         });
+    }
+
+    async function handleTokenSelect(event) {
+        let token = event.detail.token
+        if (token.address === $vault.address) {
+            return
+        }
+        await showPrompt(null, {topText: "SFT loading, please wait", noBottomText: true})
+        let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
+        if (contract) {
+            vault.set(contract)
+            schemas.set([])
+            localStorage.setItem("vaultAddress", token.address)
+            let auditHistoryData = await getAuditHistoryData(token.address)
+            auditHistory.set(auditHistoryData)
+            accountRoles.set(await setAccountRoles($roles, $account));
+            transactionInProgressShow.set(false)
+            transactionInProgress.set(false)
+            navigate("#roles", {clear: true})
+        }
+    }
+
+    async function getAuditHistoryData(token) {
+        let data = await getSubgraphData($activeNetwork, {id: token.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+        if (data) {
+            return data.data.offchainAssetReceiptVault
+        } else return {}
     }
 
 </script>
@@ -175,25 +193,29 @@
           stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path
           d="M1 2C1 1.44772 1.44772 1 2 1H6C6.55228 1 7 1.44772 7 2V6C7 6.55228 6.55228 7 6 7H2C1.44772 7 1 6.55228 1 6V2Z"
-          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round"/>
         <path
           d="M1 12C1 11.4477 1.44772 11 2 11H6C6.55228 11 7 11.4477 7 12V16C7 16.5523 6.55228 17 6 17H2C1.44772 17 1 16.5523 1 16V12Z"
           stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path
           d="M1 12C1 11.4477 1.44772 11 2 11H6C6.55228 11 7 11.4477 7 12V16C7 16.5523 6.55228 17 6 17H2C1.44772 17 1 16.5523 1 16V12Z"
-          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round"/>
         <path
           d="M11 2C11 1.44772 11.4477 1 12 1H16C16.5523 1 17 1.44772 17 2V6C17 6.55228 16.5523 7 16 7H12C11.4477 7 11 6.55228 11 6V2Z"
           stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path
           d="M11 2C11 1.44772 11.4477 1 12 1H16C16.5523 1 17 1.44772 17 2V6C17 6.55228 16.5523 7 16 7H12C11.4477 7 11 6.55228 11 6V2Z"
-          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round"/>
         <path
           d="M11 12C11 11.4477 11.4477 11 12 11H16C16.5523 11 17 11.4477 17 12V16C17 16.5523 16.5523 17 16 17H12C11.4477 17 11 16.5523 11 16V12Z"
           stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path
           d="M11 12C11 11.4477 11.4477 11 12 11H16C16.5523 11 17 11.4477 17 12V16C17 16.5523 16.5523 17 16 17H12C11.4477 17 11 16.5523 11 16V12Z"
-          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round"/>
       </svg>
     </div>
     <div class="cursor-pointer" on:click={()=>{view = "list"}}>
@@ -203,41 +225,49 @@
           stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path
           d="M1 6V2C1 1.44772 1.44772 1 2 1H16C16.5523 1 17 1.44772 17 2V6M1 6H17M1 6V12M17 6V12M17 12V16C17 16.5523 16.5523 17 16 17H2C1.44772 17 1 16.5523 1 16V12M17 12H1"
-          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round"/>
       </svg>
     </div>
   </div>
-  <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'w-8/12'} content mt-5 mr-5">
-    {#if (view === "tile")}
-      <div class="grid grid-cols-2 gap-5">
-        {#each $tokens as sft }
-          <SftTile sft={sft} on:fileDrop={deployImage}></SftTile>
-        {/each}
-      </div>
-    {/if}
-    {#if (view === "list")}
-      <table class="w-full leading-7 text-center token-list-table">
-        <thead>
-        <tr class="text-white text-bold">
-          <th style="width: 99px"></th>
-          <th>Token name</th>
-          <th>Token symbol</th>
-          <th>Creation date</th>
-          <th>Number of holders</th>
-          <th>Token supply</th>
-          <th>Auditor(s)</th>
-          <th>Name of issuer</th>
-        </tr>
-        </thead>
-        <tbody>
-        {#each $tokens as sft }
-          <SftList {sft} on:fileDrop={deployImage}></SftList>
-        {/each}
-        </tbody>
-      </table>
+  {#if !$tokens.length}
+    <div class="loader">
+      <SftLoader></SftLoader>
+    </div>
+  {/if}
+  {#if $tokens.length}
+    <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'w-8/12'} content mt-5 mr-5">
+      {#if (view === "tile")}
+        <div class="grid grid-cols-2 gap-5">
+          {#each $tokens as sft }
+            <SftTile sft={sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftTile>
+          {/each}
+        </div>
+      {/if}
+      {#if (view === "list")}
+        <table class="w-full leading-7 text-center token-list-table">
+          <thead>
+          <tr class="text-white text-bold">
+            <th style="width: 99px"></th>
+            <th>Token name</th>
+            <th>Token symbol</th>
+            <th>Creation date</th>
+            <th>Number of holders</th>
+            <th>Token supply</th>
+            <th>Auditor(s)</th>
+            <th>Name of issuer</th>
+          </tr>
+          </thead>
+          <tbody>
+          {#each $tokens as sft }
+            <SftList {sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftList>
+          {/each}
+          </tbody>
+        </table>
 
-    {/if}
-  </div>
+      {/if}
+    </div>
+  {/if}
 </div>
 <style>
     .home-container {
@@ -254,6 +284,10 @@
 
     .token-list-table thead tr:first-child th:last-child {
         border-top-right-radius: 10px;
+    }
+
+    .loader {
+        margin-left: 203px;
     }
 
     .list-view {

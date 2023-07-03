@@ -16,6 +16,11 @@ jobs:
         with:
           node-version: 14
 
+      - name: Update npm and clear cache
+        run: |
+          npm install -g npm@latest
+          npm cache clean --force
+
       - name: Install dependencies
         run: npm ci
 

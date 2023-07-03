@@ -1,5 +1,5 @@
 <script>
-    import {account, accountRoles, sftInfo, tokenName, tokens, vault} from "../scripts/store.js";
+    import {account, accountRoles, sftInfo, tokenName, vault} from "../scripts/store.js";
     import {fly} from 'svelte/transition';
     import {timeStampToDate} from '../scripts/helpers.js';
     import {ethers} from 'ethers';
@@ -95,20 +95,6 @@
               d="M5.34876 9.50002L7.34876 11.5L11.5 7.34878M7.72528 1.07852L1.72528 2.7928C1.29598 2.91546 1 3.30784 1 3.75432L1 8.85384C1 12.0834 2.55966 15.1141 5.18762 16.9912L7.41876 18.5849C7.76646 18.8332 8.23354 18.8332 8.58124 18.5849L10.8124 16.9912C13.4403 15.1141 15 12.0834 15 8.85384V3.75432C15 3.30784 14.704 2.91546 14.2747 2.7928L8.27472 1.07852C8.09517 1.02721 7.90483 1.02721 7.72528 1.07852Z"
               stroke={$vault.address? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </NavigationButton>
-      <NavigationButton targetPath="#list" {path} disabled={!$tokens.length}>
-        <div slot="icon">
-          <svg width="16" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="4 2 16 20">
-            <path
-              d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H16C17.6569 21 19 19.6569 19 18V8.625M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19"
-              stroke={$tokens.length? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round"/>
-            <path d="M9 13H15" stroke={$tokens.length? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round"/>
-            <path d="M9 17H15" stroke={$tokens.length? '#575757' : '#B7B7B7'} stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round"/>
           </svg>
         </div>
       </NavigationButton>

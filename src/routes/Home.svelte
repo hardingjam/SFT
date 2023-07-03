@@ -1,6 +1,8 @@
 <script>
     import SftTile from "../components/SftTile.svelte";
     import SftList from "../components/SftList.svelte";
+    import SftLoader from "../components/SftLoader.svelte";
+
     import {
         account,
         accountRoles,
@@ -225,6 +227,11 @@
       </svg>
     </div>
   </div>
+    {#if !$tokens.length}
+        <div class="loader">
+            <SftLoader></SftLoader>
+        </div>
+    {/if}
   <div class={$sftInfo? "content mt-5 w-full" : "content mt-5 w-8/12" }>
     {#if (view === "tile")}
       <div class="grid grid-cols-2 gap-5">
@@ -272,6 +279,10 @@
 
     .token-list-table thead tr:first-child th:last-child {
         border-top-right-radius: 10px;
+    }
+
+    .loader {
+        margin-left: 203px;
     }
 </style>
 

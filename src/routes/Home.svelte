@@ -228,42 +228,42 @@
     </div>
   </div>
   {#if !$tokens.length}
-      <div class="loader">
-          <SftLoader></SftLoader>
-      </div>
+    <div class="loader">
+      <SftLoader></SftLoader>
+    </div>
   {/if}
   {#if $tokens.length}
-   <div class={$sftInfo? "content mt-5 w-full" : "content mt-5 w-8/12" }>
-    {#if (view === "tile")}
-      <div class="grid grid-cols-2 gap-5">
-        {#each $tokens as sft }
-          <SftTile sft={sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftTile>
-        {/each}
-      </div>
-    {/if}
-    {#if (view === "list")}
-      <table class="w-full leading-7 text-center token-list-table">
-        <thead>
-        <tr class="text-white text-bold">
-          <th style="width: 99px"></th>
-          <th>Token name</th>
-          <th>Token symbol</th>
-          <th>Creation date</th>
-          <th>Number of holders</th>
-          <th>Token supply</th>
-          <th>Auditor(s)</th>
-          <th>Name of issuer</th>
-        </tr>
-        </thead>
-        <tbody>
-        {#each $tokens as sft }
-          <SftList {sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftList>
-        {/each}
-        </tbody>
-      </table>
+    <div class={$sftInfo? "content mt-5 w-full" : "content mt-5 w-8/12" }>
+      {#if (view === "tile")}
+        <div class="grid grid-cols-2 gap-5">
+          {#each $tokens as sft }
+            <SftTile sft={sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftTile>
+          {/each}
+        </div>
+      {/if}
+      {#if (view === "list")}
+        <table class="w-full leading-7 text-center token-list-table">
+          <thead>
+          <tr class="text-white text-bold">
+            <th style="width: 99px"></th>
+            <th>Token name</th>
+            <th>Token symbol</th>
+            <th>Creation date</th>
+            <th>Number of holders</th>
+            <th>Token supply</th>
+            <th>Auditor(s)</th>
+            <th>Name of issuer</th>
+          </tr>
+          </thead>
+          <tbody>
+          {#each $tokens as sft }
+            <SftList {sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftList>
+          {/each}
+          </tbody>
+        </table>
 
-    {/if}
-  </div>
+      {/if}
+    </div>
   {/if}
 </div>
 <style>

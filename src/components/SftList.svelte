@@ -93,7 +93,7 @@
       {/if}
     </label>
   </td>
-  <td class="sft-name">
+  <td class="brown">
     <span on:click={()=>onTokenSelect(sft)} class="underline cursor-pointer">{sft.name}</span>
   </td>
   <td class="sft-info">{sft.symbol}</td>
@@ -102,24 +102,20 @@
   <td class="sft-info">{sft?.totalShares ? ethers.utils.formatUnits(sft?.totalShares, 18) : 0}</td>
   <td class="sft-info">
     {#each auditors as auditor}
-      <div class="underline">
+      <div class="underline brown">
         <a href={`${$activeNetwork.blockExplorer}/address/${auditor}`} target="_blank">{formatAddress(auditor)}</a>
       </div>
     {/each}
   </td>
   <td class="sft-info">
     {#each issuers as issuer}
-      <div class="underline">
+      <div class="underline brown">
         <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`} target="_blank">{formatAddress(issuer)}</a>
       </div>
     {/each}
   </td>
 </tr>
 <style>
-    .sft-name {
-        color: #9D7334;
-    }
-
     .sft-info {
         color: #575757
     }

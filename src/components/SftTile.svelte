@@ -1,5 +1,5 @@
 <script>
-    import {icons} from "../../src/scripts/assets.js"
+    import {icons} from "../scripts/assets.js"
     import {cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers';
     import {ethers} from 'ethers';
     import {createEventDispatcher, onMount} from 'svelte';
@@ -114,7 +114,7 @@
   <table class="w-8/12 leading-8 text-left">
     <tr>
       <td class="font-bold">Token name</td>
-      <td class="sft-name">
+      <td class="sft-name brown">
         <span on:click={()=>onTokenSelect(sft)} class="underline cursor-pointer">{sft.name}</span>
       </td>
     </tr>
@@ -141,7 +141,7 @@
           <div>N/A</div>
         {/if}
         {#each auditors as auditor}
-          <div class="underline">
+          <div class="underline brown">
             <a href={`${$activeNetwork.blockExplorer}/address/${auditor}`} target="_blank">{formatAddress(auditor)}</a>
           </div>
         {/each}
@@ -155,7 +155,7 @@
           <div>N/A</div>
         {/if}
         {#each issuers as issuer}
-          <div class="underline">
+          <div class="underline brown">
             <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`} target="_blank">{formatAddress(issuer)}</a>
           </div>
         {/each}
@@ -165,9 +165,6 @@
 </div>
 
 <style>
-    .sft-name {
-        color: #9D7334;
-    }
 
     .sft-info {
         color: #575757

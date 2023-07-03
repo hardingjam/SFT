@@ -409,6 +409,10 @@ li {
     box-shadow: 0 10px 5px -3px rgba(179, 179, 179, 1);
 }
 
+.brown{
+    color: #9D7334;
+}
+
 @media (prefers-color-scheme: light) {
 }
 

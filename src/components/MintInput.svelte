@@ -4,6 +4,7 @@
     export let amount = "0.0";
     export let maxButton;
     export let amountLabel;
+    export let info;
 
     function allowNumbersOnly(evt) {
         const charCode = evt.keyCode;
@@ -28,17 +29,23 @@
 </script>
 <div class="options-container">
   <div class="options-background">
-    <div class="options">
-      <div class="labels">
-        <div class="txt f-weight-700">{amountLabel}</div>
+    <div class="options flex-col">
+      <div class="flex justify-between w-full">
+        <div class="labels">
+          <div class="txt f-weight-700">{amountLabel}</div>
+        </div>
+        <div class="options-input flex ">
+          <input class="focus:shadow-none focus:ring-0 w-100" autofocus type="text" bind:value={amount}
+                 on:keydown={(e)=>allowNumbersOnly(e)}>
+          {#if maxButton}
+            <button class="max-button btn-hover" on:click={(e)=>setMaxValue(e)}>MAX</button>
+          {/if}
+
+        </div>
       </div>
-      <div class="options-input flex-col">
-        <input class="focus:shadow-none focus:ring-0" autofocus type="text" bind:value={amount} on:keydown={(e)=>allowNumbersOnly(e)}>
-        {#if maxButton}
-          <button class="max-button btn-hover" on:click={(e)=>setMaxValue(e)}>Max</button>
-        {/if}
-        <div class="amount-info">(Mint amount = number of tokens that will go into your wallet)</div>
-      </div>
+
+      <div class="amount-info mr-2">{info}</div>
+
     </div>
   </div>
 </div>
@@ -47,7 +54,6 @@
     .options-container {
         width: calc(100% + 40px);
         margin-left: -20px;
-        margin-bottom: 20px;
     }
 
     .options-background {
@@ -59,7 +65,7 @@
     .options {
         width: 100%;
         background: #2C2C54;
-        padding: 13px 20px;
+        padding: 11px 20px;
         display: flex;
         justify-content: space-between;
     }
@@ -77,12 +83,12 @@
     }
 
     .options-input {
-        display: flex;
         align-items: center;
+        width: 358px;
     }
 
     .options-input input {
-        width: 358px;
+        /*width: 358px;*/
         height: 27px;
         left: 390px;
         top: 284px;
@@ -97,13 +103,16 @@
         background: transparent;
         color: #ffffff;
         height: fit-content;
-        margin-left: 5px;
+        margin-left: 6px;
+        padding: 0 6px;
     }
 
-    .amount-info{
+    .amount-info {
         color: #FFFFFF;
         font-weight: 700;
         font-size: 12px;
         line-height: 20px;
+        align-self: end;
+        margin-top: 2px;
     }
 </style>

@@ -227,12 +227,13 @@
       </svg>
     </div>
   </div>
-    {#if !$tokens.length}
-        <div class="loader">
-            <SftLoader></SftLoader>
-        </div>
-    {/if}
-  <div class={$sftInfo? "content mt-5 w-full" : "content mt-5 w-8/12" }>
+  {#if !$tokens.length}
+      <div class="loader">
+          <SftLoader></SftLoader>
+      </div>
+  {/if}
+  {#if $tokens.length}
+   <div class={$sftInfo? "content mt-5 w-full" : "content mt-5 w-8/12" }>
     {#if (view === "tile")}
       <div class="grid grid-cols-2 gap-5">
         {#each $tokens as sft }
@@ -263,6 +264,7 @@
 
     {/if}
   </div>
+  {/if}
 </div>
 <style>
     .home-container {

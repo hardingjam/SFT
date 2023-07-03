@@ -382,7 +382,7 @@
     {/if}
   </div>
 
-  <div class="footer fixed bottom-0 w-full p-2 {$account ? 'bg-white' :'' }">
+  <div class="footer w-full p-2 {$account ? 'bg-white' :'' }">
     <div class="powered-by">
       <span>Powered by</span>
       <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>

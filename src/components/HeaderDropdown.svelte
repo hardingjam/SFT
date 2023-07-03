@@ -48,7 +48,7 @@
 </script>
 <div class="dropdown-container" on:click_outside={handleClickOutside} use:clickOutside>
   <button id="networks-dropdown" data-dropdown-toggle="networks" on:click={()=>toggleDropdown()}
-          class="text-white focus:outline-none items-center display-flex mr-10 relative" type="button">
+          class="focus:outline-none items-center text-white display-flex mr-10 relative" type="button">
     {#if triggerIcon}
       <img src={triggerIcon}
            alt={triggerLabel}/>
@@ -57,14 +57,17 @@
     <img src={ icons.expand} alt="expand"/>
   </button>
   <!-- Dropdown menu -->
-  <div id="networks" class="absolute top-14 drop-menu" class:hidden={dropdownHidden} bind:this={dropdown}>
+  <div id="networks" class="absolute top-10 drop-menu" class:hidden={dropdownHidden} bind:this={dropdown}>
     <ul class="dropdown-items" aria-labelledby="dropdownDefaultButton">
       {#each items as item}
-        <li on:click={()=>handleNavItemClick(item)} class="dropdown-item cursor-pointer display-flex">
+        <li on:click={()=>handleNavItemClick(item)} class="list-item cursor-pointer display-flex">
           {#if item.icon}
             <img src={icons[item.icon]} alt={item?.displayName}/>
           {/if}
           <span class={`${item.class} network-name`}>{item?.displayName} </span>
+          {#if item.rightIcon}
+            <img src={icons[item.rightIcon]} alt={item?.displayName}/>
+          {/if}
         </li>
       {/each}
     </ul>
@@ -74,24 +77,31 @@
 <style>
     .network-name {
         font-style: normal;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 18px;
         line-height: 39px;
-        color: #FFFFFF;
         margin-left: 20px;
         margin-right: 20px;
     }
 
-    .dropdown-item {
-        padding: 0 40px 0 13px !important;
+    .dropdown-items .network-name {
+        margin-left: 8px;
+        margin-right: 8px;
     }
 
-    .dropdown-item:hover {
-        background: #d9d9d98c !important;
+    .list-item {
+        color: #FFFFFF;
+        padding: 0 15px 0 13px !important;
+        display: flex;
+        align-items: center;
     }
 
-    .drop-menu{
-     z-index: 3;
+    .list-item:hover {
+        background-color: #9F9F9F;
+    }
+
+    .drop-menu {
+        z-index: 3;
     }
 
 </style>

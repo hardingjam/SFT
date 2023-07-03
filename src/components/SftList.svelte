@@ -13,12 +13,17 @@
     let logoPreview;
 
     onMount(() => {
-        getAuditors()
-        getIssuers()
-        getVaultImages()
+        getSftData()
     })
 
-    $: sft && getVaultImages()
+    $: sft && getSftData()
+
+    function getSftData() {
+        getVaultImages()
+        getAuditors()
+        getIssuers()
+    }
+
 
     function getAuditors() {
         if (sft.address) {
@@ -63,7 +68,7 @@
 <tr>
   <td class="sft-logo-container relative" style="width: 99px">
     <label for={`${sft.address}-upload`} id="sft-logo-upload"
-           class="flex items-center justify-center text-white cursor-pointer">
+           class="flex items-center justify-center text-white {sft.deployer.toLowerCase() === $account.toLowerCase() ? 'cursor-pointer' : '' }">
       {#if sft.icon}
         <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="rounded-full sft-logo"
              bind:this={logoPreview}/>
@@ -85,7 +90,7 @@
   <td class="sft-name">{sft.name}</td>
   <td class="sft-info">{sft.symbol}</td>
   <td class="sft-info">{timeStampToDate(sft.deployTimestamp)}</td>
-  <td class="sft-info">{issuers.length}</td>
+  <td class="sft-info">{sft.tokenHolders.filter(h => h.balance !== "0").length}</td>
   <td class="sft-info">{sft?.totalShares ? ethers.utils.formatUnits(sft?.totalShares, 18) : 0}</td>
   <td class="sft-info">
     {#each auditors as auditor}

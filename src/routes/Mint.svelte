@@ -357,7 +357,8 @@
     <div class="audit-info-container basic-frame-parent">
       <div class="form-frame basic-frame">
         <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
-        <MintInput bind:amount={amount} amountLabel={"Mint amount"} />
+        <MintInput bind:amount={amount} amountLabel={"Mint amount"}
+                   info="(Mint amount = number of tokens that will go into your wallet)"/>
         {#if $schemas.length}
           <div class="schema">
             <div class="schema-dropdown flex justify-between mb-6">
@@ -525,6 +526,7 @@
     }
 
     .schema-dropdown {
+        margin-top: 20px;
         align-items: center;
     }
 

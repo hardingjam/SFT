@@ -7,5 +7,8 @@ export default defineConfig({
   build: {
     target: [ 'es2020' ],
     build: { chunkSizeWarningLimit: 1600, },
-  }
+  },
+  css: {
+    include: ['./src/app.css']
+  },
 })

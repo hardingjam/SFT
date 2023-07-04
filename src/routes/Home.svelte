@@ -83,8 +83,6 @@
     }
 
     const upload = async (data) => {
-        // error = ""
-
         let savedUsername = localStorage.getItem('ipfsUsername');
         let savedPassword = localStorage.getItem('ipfsPassword');
         if (!savedPassword || !savedUsername) {
@@ -187,7 +185,7 @@
 
 </script>
 <div class="flex flex-col w-full items-center home-container">
-  <div class="views flex justify-end w-full space-x-6 pr-20 pt-5">
+  <div class="views flex justify-end w-full space-x-6 pr-5 pt-5">
     <div class="cursor-pointer" on:click={()=>{view = "tile"}}>
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -238,7 +236,7 @@
     </div>
   {/if}
   {#if $tokens.length}
-    <div class={$sftInfo? "content mt-5 w-full" : "content mt-5 w-8/12" }>
+    <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'w-8/12'} content mt-5 mr-5">
       {#if (view === "tile")}
         <div class="grid grid-cols-2 gap-5">
           {#each $tokens as sft }
@@ -276,7 +274,7 @@
         padding-top: 3.5rem;
     }
 
-    .token-list-table thead tr {
+    .token-list-table thead th {
         background-color: #9196C5;
     }
 
@@ -291,6 +289,13 @@
     .loader {
         margin-left: 203px;
     }
+
+    .list-view {
+        align-self: end;
+        width: calc(100% - 243px);
+        margin-right: 20px;
+    }
+
 </style>
 
 

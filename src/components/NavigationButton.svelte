@@ -33,7 +33,6 @@
         padding-left: 1.25rem;
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
-        border-radius: 0.25rem;
     }
 
     .nav-item:hover {

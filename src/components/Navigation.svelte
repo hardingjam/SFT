@@ -62,17 +62,13 @@
             </svg>
           </div>
         </NavigationButton>
-
         {#if $accountRoles.DEPOSITOR}
           <NavigationButton targetPath="#mint" {path} disabled={!!!$vault.address} child={true}/>
           <NavigationButton targetPath="#asset-classes" {path} child={true}/>
         {/if}
-
         <NavigationButton targetPath="#members" {path} disabled={!!!$vault.address} child={true}/>
         <NavigationButton targetPath="#roles" {path} disabled={!!!$vault.address} child={true}/>
       {/if}
-
-
       <NavigationButton targetPath="#audit-history" {path} disabled={!!!$vault.address}>
         <div slot="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

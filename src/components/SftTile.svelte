@@ -3,7 +3,7 @@
     import {cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers';
     import {ethers} from 'ethers';
     import {createEventDispatcher, onMount} from 'svelte';
-    import {account, activeNetwork} from '../scripts/store.js';
+    import {account, activeNetwork, vault} from '../scripts/store.js';
     import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
 
     export let sft = {}
@@ -173,9 +173,11 @@
     <img class="link-icon" src={icons.discord} alt="discord">
     <img class="link-icon" src={icons.web} alt="web">
     <img class="link-icon" src={icons.etherscan} alt="etherscan">
+    {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
+      <img class="link-icon" src={icons.edit} alt="edit">
+    {/if}
   </div>
 </div>
-
 
 <style>
 

@@ -174,12 +174,14 @@
       </div>
     </div>
     <div class="links-container pt-5">
-      <img class="link-icon" src={icons.twitter} alt="twitter">
-      <img class="link-icon" src={icons.telegram} alt="telegram">
-      <img class="link-icon" src={icons.github} alt="github">
-      <img class="link-icon" src={icons.discord} alt="discord">
-      <img class="link-icon" src={icons.web} alt="web">
-      <img class="link-icon" src={icons.etherscan} alt="etherscan">
+      <a href="#" target="_blank"><img class="link-icon" src={icons.twitter} alt="twitter"></a>
+      <a href="#" target="_blank"><img class="link-icon" src={icons.telegram} alt="telegram"></a>
+      <a href="#" target="_blank"><img class="link-icon" src={icons.github} alt="github"></a>
+      <a href="#" target="_blank"><img class="link-icon" src={icons.discord} alt="discord"></a>
+      <a href="#" target="_blank"><img class="link-icon" src={icons.web} alt="web"></a>
+      <a href={`${$activeNetwork?.blockExplorer}/address/${sft.address}`} target="_blank">
+        <img class="link-icon" src={icons.etherscan} alt="etherscan">
+      </a>
       {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
         <img class="link-icon" src={icons.edit} alt="edit" on:click={()=>{openEditor()}}>
       {/if}
@@ -190,16 +192,23 @@
       <div class="span self-start pt-2 pb-4">{`Edit credentials links for ${sft.name}`}</div>
       <div class="form flex items-center justify-between">
         <div class="inputs">
-          <div class="input flex items-center mb-4"><img src={icons.twitter} alt="twitter"> <input
-            class="default-input"/></div>
-          <div class="input flex items-center mb-4"><img src={icons.web_brown} alt="web"> <input class="default-input"/>
+          <div class="input flex items-center mb-4">
+            <img src={icons.twitter} alt="twitter">
+            <input class="default-input"/></div>
+          <div class="input flex items-center mb-4">
+            <img src={icons.web_brown} alt="web">
+            <input class="default-input"/>
           </div>
-          <div class="input flex items-center mb-4"><img src={icons.discord} alt="discord"> <input
-            class="default-input"/></div>
-          <div class="input flex items-center mb-4"><img src={icons.github} alt="github"> <input class="default-input"/>
+          <div class="input flex items-center mb-4">
+            <img src={icons.discord} alt="discord">
+            <input class="default-input"/></div>
+          <div class="input flex items-center mb-4">
+            <img src={icons.github} alt="github">
+            <input class="default-input"/>
           </div>
-          <div class="input flex items-center mb-4"><img src={icons.telegram} alt="telegram"> <input
-            class="default-input"/></div>
+          <div class="input flex items-center mb-4">
+            <img src={icons.telegram} alt="telegram">
+            <input class="default-input"/></div>
         </div>
         <div class="ok-btn">
           <button class="default-btn w-full">ok</button>

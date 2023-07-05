@@ -29,6 +29,7 @@
     let username;
     let password;
     let view = "tile";
+    let credentialLinks = {}
 
     async function deployImage(event) {
         let file = event.detail.file
@@ -184,6 +185,11 @@
         } else return {}
     }
 
+    function handleInputs(event) {
+        credentialLinks = event.detail
+        console.log(credentialLinks)
+    }
+
 </script>
 <div class="flex flex-col w-full items-center home-container relative">
   <div class="views flex justify-end w-full space-x-3 pr-5 pt-5">
@@ -204,7 +210,8 @@
       {#if (view === "tile")}
         <div class="grid grid-cols-2 gap-5">
           {#each $tokens as sft }
-            <SftTile sft={sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftTile>
+            <SftTile sft={sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}
+                     on:inputValueChange={handleInputs}></SftTile>
           {/each}
         </div>
       {/if}

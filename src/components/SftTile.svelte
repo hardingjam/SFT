@@ -12,6 +12,15 @@
     let sftLogo;
     let logoPreview;
     let isEditorOpen = false;
+    let credentialLinks = {
+        discord: "",
+        github: "",
+        telegram: "",
+        twitter: "",
+        web: "",
+    };
+    const dispatch = createEventDispatcher();
+
 
     onMount(() => {
         getSftData()
@@ -38,9 +47,6 @@
             issuers = tempAuditors.map(a => a.account.address)
         }
     }
-
-    const dispatch = createEventDispatcher();
-
 
     const onFileSelected = (e) => {
         let file = e.target.files[0];
@@ -72,6 +78,10 @@
 
     function openEditor() {
         isEditorOpen = true;
+    }
+
+    function handleChange(event) {
+        dispatch('inputValueChange', credentialLinks);
     }
 
 </script>
@@ -194,21 +204,21 @@
         <div class="inputs">
           <div class="input flex items-center mb-4">
             <img src={icons.twitter} alt="twitter">
-            <input class="default-input"/></div>
+            <input class="default-input" bind:value={credentialLinks.twitter} on:input={handleChange}/></div>
           <div class="input flex items-center mb-4">
             <img src={icons.web_brown} alt="web">
-            <input class="default-input"/>
+            <input class="default-input" bind:value={credentialLinks.web} on:input={handleChange}/>
           </div>
           <div class="input flex items-center mb-4">
             <img src={icons.discord} alt="discord">
-            <input class="default-input"/></div>
+            <input class="default-input" bind:value={credentialLinks.discord} on:input={handleChange}/></div>
           <div class="input flex items-center mb-4">
             <img src={icons.github} alt="github">
-            <input class="default-input"/>
+            <input class="default-input" bind:value={credentialLinks.github} on:input={handleChange}/>
           </div>
           <div class="input flex items-center mb-4">
             <img src={icons.telegram} alt="telegram">
-            <input class="default-input"/></div>
+            <input class="default-input" bind:value={credentialLinks.telegram} on:input={handleChange}/></div>
         </div>
         <div class="ok-btn">
           <button class="default-btn w-full">ok</button>

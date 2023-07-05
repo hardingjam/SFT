@@ -21,6 +21,8 @@ import github from '../assets/icons/github.svg'
 import telegram from '../assets/icons/telegram.svg'
 import twitter from '../assets/icons/twitter.svg'
 import web from '../assets/icons/web.svg'
+import list_view from '../assets/icons/list_view.svg'
+import tile_view from '../assets/icons/tile_view.svg'
 
 export const icons = {
     ethereum,
@@ -45,5 +47,7 @@ export const icons = {
     github,
     telegram,
     twitter,
-    web
+    web,
+    list_view,
+    tile_view
 }

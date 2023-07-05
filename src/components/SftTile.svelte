@@ -75,7 +75,7 @@
     }
 
 </script>
-<div class="w-full bg-white pt-5 pb-5 pl-10 pr-14 rounded-xl relative">
+<div class="w-full bg-white pt-5 pb-5 pl-10 pr-6 rounded-xl relative">
   <div class="absolute right-2 cursor-pointer expand-btn">
     <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M14 10.3999L19 5.1999M19 5.1999L19 10.3999M19 5.1999L14 5.1999" stroke="#9D9D9D" stroke-width="2"
@@ -143,7 +143,7 @@
           </td>
         </tr>
       </table>
-      <div class="img-container">
+      <div class="img-container mr-8">
         <div class="sft-logo-container rounded-full"
              class:hover={sft.deployer.toLowerCase() === $account.toLowerCase()}>
           <label for={`${sft.address}-upload`} id="sft-logo-upload"
@@ -190,15 +190,23 @@
       <div class="span self-start pt-2 pb-4">{`Edit credentials links for ${sft.name}`}</div>
       <div class="form flex items-center justify-between">
         <div class="inputs">
-          <div class="input flex items-center mb-4"><img src={icons.discord} alt="discord"> <input class="default-input"/></div>
-          <div class="input flex items-center mb-4"><img src={icons.etherscan} alt="etherscan"> <input class="default-input"/></div>
-          <div class="input flex items-center mb-4"><img src={icons.github} alt="github"> <input class="default-input"/></div>
-          <div class="input flex items-center mb-4"><img src={icons.telegram} alt="telegram"> <input class="default-input"/></div>
-          <div class="input flex items-center mb-4"><img src={icons.twitter} alt="twitter"> <input class="default-input"/></div>
+          <div class="input flex items-center mb-4"><img src={icons.twitter} alt="twitter"> <input
+            class="default-input"/></div>
+          <div class="input flex items-center mb-4"><img src={icons.web_brown} alt="web"> <input class="default-input"/>
+          </div>
+          <div class="input flex items-center mb-4"><img src={icons.discord} alt="discord"> <input
+            class="default-input"/></div>
+          <div class="input flex items-center mb-4"><img src={icons.github} alt="github"> <input class="default-input"/>
+          </div>
+          <div class="input flex items-center mb-4"><img src={icons.telegram} alt="telegram"> <input
+            class="default-input"/></div>
         </div>
         <div class="ok-btn">
-          <button class="default-btn">ok</button>
+          <button class="default-btn w-full">ok</button>
         </div>
+      </div>
+      <div class="back flex justify-end w-full cursor-pointer" on:click={()=>{isEditorOpen = false}}>
+        <img src={icons.back} alt="back">
       </div>
     </div>
   {/if}
@@ -252,7 +260,6 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        margin-right: -2rem;
     }
 
     .link-icon {
@@ -275,5 +282,21 @@
     .inputs .input input {
         width: 325px;
         margin-bottom: 0;
+    }
+
+    .ok-btn {
+        width: 100px;
+    }
+
+    @media only screen and (max-width: 1600px) {
+        .inputs .input input {
+            width: 280px;
+        }
+    }
+
+    @media only screen and (max-width: 1300px) {
+        .inputs .input input {
+            width: 200px;
+        }
     }
 </style>

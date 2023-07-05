@@ -70,99 +70,112 @@
     }
 
 </script>
-<div class="w-full bg-white pt-5 pb-8 px-10 flex flex-row-reverse rounded-xl justify-between relative ">
-  <div class="img-container">
-    <div class="sft-logo-container rounded-full" class:hover={sft.deployer.toLowerCase() === $account.toLowerCase()}>
-      <label for={`${sft.address}-upload`} id="sft-logo-upload"
-             class="flex items-center justify-center text-white flex-col {sft.deployer.toLowerCase() === $account.toLowerCase() ? 'cursor-pointer' : '' }">
-        {#if sft.icon}
-          <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="logo" bind:this={logoPreview}/>
-          {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
-            <div class="update absolute flex-col flex items-center justify-center">
+<div class="w-full bg-white pt-5 pb-5 pl-10 pr-14 rounded-xl">
+  <div class="flex relative justify-between">
+    <table class="w-8/12 leading-8 text-left">
+      <tr>
+        <td class="font-bold">Token name</td>
+        <td class="sft-name brown">
+          <span on:click={()=>onTokenSelect(sft)} class="underline cursor-pointer">{sft.name}</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="font-bold">Token symbol</td>
+        <td class="sft-info">{sft.symbol}</td>
+      </tr>
+      <tr>
+        <td class="font-bold">Creation date</td>
+        <td class="sft-info">{timeStampToDate(sft.deployTimestamp)}</td>
+      </tr>
+      <tr>
+        <td class="font-bold">Number of holders</td>
+        <td class="sft-info">{sft.tokenHolders.filter(h => h.balance !== "0").length}</td>
+      </tr>
+      <tr>
+        <td class="font-bold">Token supply</td>
+        <td class="sft-info">{sft?.totalShares ? ethers.utils.formatUnits(sft?.totalShares, 18) : 0}</td>
+      </tr>
+      <tr>
+        <td class="font-bold align-text-top">Name of auditor(s)</td>
+        <td class="sft-info ">
+          {#if !auditors.length}
+            <div>N/A</div>
+          {/if}
+          {#each auditors as auditor}
+            <div class="underline brown">
+              <a href={`${$activeNetwork.blockExplorer}/address/${auditor}`}
+                 target="_blank">{formatAddress(auditor)}</a>
+            </div>
+          {/each}
+        </td>
+
+      </tr>
+      <tr>
+        <td class="font-bold">Name of issuer</td>
+        <td class="sft-info ">
+          {#if !issuers.length}
+            <div>N/A</div>
+          {/if}
+          {#each issuers as issuer}
+            <div class="underline brown">
+              <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`} target="_blank">{formatAddress(issuer)}</a>
+            </div>
+          {/each}
+        </td>
+      </tr>
+    </table>
+    <div class="img-container">
+      <div class="sft-logo-container rounded-full" class:hover={sft.deployer.toLowerCase() === $account.toLowerCase()}>
+        <label for={`${sft.address}-upload`} id="sft-logo-upload"
+               class="flex items-center justify-center text-white flex-col {sft.deployer.toLowerCase() === $account.toLowerCase() ? 'cursor-pointer' : '' }">
+          {#if sft.icon}
+            <img src={`${IPFS_GETWAY}${sft.icon}`} alt="sft logo" class="logo" bind:this={logoPreview}/>
+            {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
+              <div class="update absolute flex-col flex items-center justify-center">
+                <img src="{icons.camera}" alt="sft logo"/>
+                <span class="text">Update</span>
+              </div>
+            {/if}
+          {/if}
+          {#if !sft.icon}
+            {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
               <img src="{icons.camera}" alt="sft logo"/>
               <span class="text">Update</span>
-            </div>
+            {/if}
           {/if}
-        {/if}
-        {#if !sft.icon}
           {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
-            <img src="{icons.camera}" alt="sft logo"/>
-            <span class="text">Update</span>
+            <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
+                   on:change={(e)=>onFileSelected(e)}
+                   bind:this={sftLogo}/>
           {/if}
-        {/if}
-        {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
-          <input type="file" id={`${sft.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
-                 on:change={(e)=>onFileSelected(e)}
-                 bind:this={sftLogo}/>
-        {/if}
-      </label>
+        </label>
 
+      </div>
+      <div class="absolute right-2 cursor-pointer expand-btn">
+        <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 10.3999L19 5.1999M19 5.1999L19 10.3999M19 5.1999L14 5.1999" stroke="#9D9D9D" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 10.3999L19 5.1999M19 5.1999L19 10.3999M19 5.1999L14 5.1999" stroke="black" stroke-opacity="0.2"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10 14.5601L5 19.7601M5 19.7601L5 14.5601M5 19.7601H10" stroke="#9D9D9D" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10 14.5601L5 19.7601M5 19.7601L5 14.5601M5 19.7601H10" stroke="black" stroke-opacity="0.2"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
     </div>
-    <div class="absolute top-2 right-2 cursor-pointer expand-btn">
-      <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14 10.3999L19 5.1999M19 5.1999L19 10.3999M19 5.1999L14 5.1999" stroke="#9D9D9D" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M14 10.3999L19 5.1999M19 5.1999L19 10.3999M19 5.1999L14 5.1999" stroke="black" stroke-opacity="0.2"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M10 14.5601L5 19.7601M5 19.7601L5 14.5601M5 19.7601H10" stroke="#9D9D9D" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M10 14.5601L5 19.7601M5 19.7601L5 14.5601M5 19.7601H10" stroke="black" stroke-opacity="0.2"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
+
   </div>
-  <table class="w-8/12 leading-8 text-left">
-    <tr>
-      <td class="font-bold">Token name</td>
-      <td class="sft-name brown">
-        <span on:click={()=>onTokenSelect(sft)} class="underline cursor-pointer">{sft.name}</span>
-      </td>
-    </tr>
-    <tr>
-      <td class="font-bold">Token symbol</td>
-      <td class="sft-info">{sft.symbol}</td>
-    </tr>
-    <tr>
-      <td class="font-bold">Creation date</td>
-      <td class="sft-info">{timeStampToDate(sft.deployTimestamp)}</td>
-    </tr>
-    <tr>
-      <td class="font-bold">Number of holders</td>
-      <td class="sft-info">{sft.tokenHolders.filter(h => h.balance !== "0").length}</td>
-    </tr>
-    <tr>
-      <td class="font-bold">Token supply</td>
-      <td class="sft-info">{sft?.totalShares ? ethers.utils.formatUnits(sft?.totalShares, 18) : 0}</td>
-    </tr>
-    <tr>
-      <td class="font-bold align-text-top">Name of auditor(s)</td>
-      <td class="sft-info ">
-        {#if !auditors.length}
-          <div>N/A</div>
-        {/if}
-        {#each auditors as auditor}
-          <div class="underline brown">
-            <a href={`${$activeNetwork.blockExplorer}/address/${auditor}`} target="_blank">{formatAddress(auditor)}</a>
-          </div>
-        {/each}
-      </td>
-
-    </tr>
-    <tr>
-      <td class="font-bold">Name of issuer</td>
-      <td class="sft-info ">
-        {#if !issuers.length}
-          <div>N/A</div>
-        {/if}
-        {#each issuers as issuer}
-          <div class="underline brown">
-            <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`} target="_blank">{formatAddress(issuer)}</a>
-          </div>
-        {/each}
-      </td>
-    </tr>
-  </table>
+  <div class="links-container pt-5">
+    <img class="link-icon" src={icons.twitter} alt="twitter">
+    <img class="link-icon" src={icons.telegram} alt="telegram">
+    <img class="link-icon" src={icons.github} alt="github">
+    <img class="link-icon" src={icons.discord} alt="discord">
+    <img class="link-icon" src={icons.web} alt="web">
+    <img class="link-icon" src={icons.etherscan} alt="etherscan">
+  </div>
 </div>
+
 
 <style>
 
@@ -206,5 +219,25 @@
 
     .sft-logo-container:hover .update {
         display: flex;
+    }
+
+    .links-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-right: -2rem;
+    }
+
+    .link-icon {
+        margin-left: 22px;
+    }
+
+    .link-icon:hover {
+        cursor: pointer;
+    }
+
+    .expand-btn {
+        top: -0.7rem;
+        right: -2rem;
     }
 </style>

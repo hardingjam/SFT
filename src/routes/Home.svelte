@@ -185,7 +185,7 @@
     }
 
 </script>
-<div class="flex flex-col w-full items-center home-container">
+<div class="flex flex-col w-full items-center home-container relative">
   <div class="views flex justify-end w-full space-x-3 pr-5 pt-5">
     <div class="cursor-pointer" on:click={()=>{view = "tile"}}>
       <img src={icons.tile_view} alt="tiles">
@@ -230,6 +230,9 @@
         </table>
 
       {/if}
+      <div class="note">
+        <span class="py-2">Note: token creation is permissionless and so all the data on this site could be malicious/ scam, please do your own research before downloading any files or buying any tokens. </span>
+      </div>
     </div>
   {/if}
 </div>
@@ -258,6 +261,16 @@
         align-self: end;
         width: calc(100% - 243px);
         margin-right: 20px;
+    }
+
+    .note {
+        color: #575757;
+        position: sticky;
+        bottom: 0;
+        font-size: 14px;
+        text-align: center;
+        background: #DCDBDD;
+        padding: 0.5rem 0;
     }
 
 </style>

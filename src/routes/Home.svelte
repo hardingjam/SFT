@@ -25,11 +25,14 @@
     import {AUDIT_HISTORY_DATA_QUERY, RECEIPT_VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
     import {icons} from '../scripts/assets.js';
+    import CredentialLinksEditor from '../components/CredentialLinksEditor.svelte';
+    import TileView from '../components/TileView.svelte';
 
     let username;
     let password;
     let view = "tile";
     let credentialLinks = {}
+    let isEditorOpen = false;
 
     async function deployImage(event) {
         let file = event.detail.file
@@ -187,7 +190,7 @@
 
     function handleInputs(event) {
         credentialLinks = event.detail
-        console.log(credentialLinks)
+        console.log(1111,credentialLinks)
     }
 
 </script>
@@ -208,33 +211,37 @@
   {#if $tokens.length}
     <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'w-8/12'} content mt-5 mr-5">
       {#if (view === "tile")}
-        <div class="grid grid-cols-2 gap-5">
-          {#each $tokens as sft }
-            <SftTile sft={sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}
-                     on:inputValueChange={handleInputs}></SftTile>
-          {/each}
-        </div>
+        <TileView tokens={$tokens} on:tokenSelect={handleTokenSelect}
+                  on:inputValueChange={handleInputs} on:fileDrop={deployImage}/>
       {/if}
       {#if (view === "list")}
-        <table class="w-full leading-7 text-center token-list-table">
-          <thead>
-          <tr class="text-white text-bold">
-            <th style="width: 99px"></th>
-            <th>Token name</th>
-            <th>Token symbol</th>
-            <th>Creation date</th>
-            <th>Number of holders</th>
-            <th>Token supply</th>
-            <th>Auditor(s)</th>
-            <th>Name of issuer</th>
-          </tr>
-          </thead>
-          <tbody>
-          {#each $tokens as sft }
-            <SftList {sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftList>
-          {/each}
-          </tbody>
-        </table>
+        {#if !isEditorOpen}
+          <table class="w-full leading-7 text-center token-list-table">
+            <thead>
+            <tr class="text-white text-bold">
+              <th style="width: 99px"></th>
+              <th>Token name</th>
+              <th>Token symbol</th>
+              <th>Creation date</th>
+              <th>Number of holders</th>
+              <th>Token supply</th>
+              <th>Auditor(s)</th>
+              <th>Name of issuer</th>
+            </tr>
+            </thead>
+            <tbody>
+            {#each $tokens as sft }
+              <SftList {sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}
+                       on:editClick={()=>{isEditorOpen = true}} {isEditorOpen}></SftList>
+            {/each}
+            </tbody>
+          </table>
+        {/if}
+        {#if isEditorOpen}
+          <div class="editor bg-amber-200">
+            <CredentialLinksEditor on:inputValueChange={handleInputs} {sft}/>
+          </div>
+        {/if}
 
       {/if}
       <div class="note">

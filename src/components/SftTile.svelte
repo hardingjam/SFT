@@ -5,6 +5,7 @@
     import {createEventDispatcher, onMount} from 'svelte';
     import {account, activeNetwork, vault} from '../scripts/store.js';
     import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
+    import CredentialLinksEditor from './CredentialLinksEditor.svelte';
 
     export let sft = {}
     let auditors = []
@@ -12,13 +13,7 @@
     let sftLogo;
     let logoPreview;
     let isEditorOpen = false;
-    let credentialLinks = {
-        discord: "",
-        github: "",
-        telegram: "",
-        twitter: "",
-        web: "",
-    };
+    let credentialLinks = {};
     const dispatch = createEventDispatcher();
 
 
@@ -80,10 +75,12 @@
         isEditorOpen = true;
     }
 
-    function handleChange(event) {
-        dispatch('inputValueChange', credentialLinks);
+    function handleInputs(event) {
+        credentialLinks = event.detail.credentialLinks
+        dispatch('inputValueChange', {
+            credentialLinks,
+        });
     }
-
 </script>
 <div class="w-full bg-white pt-5 pb-5 pl-10 pr-6 rounded-xl relative">
   <div class="absolute right-2 cursor-pointer expand-btn">
@@ -198,35 +195,9 @@
     </div>
   {/if}
   {#if isEditorOpen}
-    <div class="editor-container flex flex-col">
-      <div class="span self-start pt-2 pb-4">{`Edit credentials links for ${sft.name}`}</div>
-      <div class="form flex items-center justify-between">
-        <div class="inputs">
-          <div class="input flex items-center mb-4">
-            <img src={icons.twitter} alt="twitter">
-            <input class="default-input" bind:value={credentialLinks.twitter} on:input={handleChange}/></div>
-          <div class="input flex items-center mb-4">
-            <img src={icons.web_brown} alt="web">
-            <input class="default-input" bind:value={credentialLinks.web} on:input={handleChange}/>
-          </div>
-          <div class="input flex items-center mb-4">
-            <img src={icons.discord} alt="discord">
-            <input class="default-input" bind:value={credentialLinks.discord} on:input={handleChange}/></div>
-          <div class="input flex items-center mb-4">
-            <img src={icons.github} alt="github">
-            <input class="default-input" bind:value={credentialLinks.github} on:input={handleChange}/>
-          </div>
-          <div class="input flex items-center mb-4">
-            <img src={icons.telegram} alt="telegram">
-            <input class="default-input" bind:value={credentialLinks.telegram} on:input={handleChange}/></div>
-        </div>
-        <div class="ok-btn">
-          <button class="default-btn w-full">ok</button>
-        </div>
-      </div>
-      <div class="back flex justify-end w-full cursor-pointer" on:click={()=>{isEditorOpen = false}}>
-        <img src={icons.back} alt="back">
-      </div>
+    <CredentialLinksEditor on:inputValueChange={handleInputs} {sft}/>
+    <div class="back flex justify-end w-full cursor-pointer" on:click={()=>{isEditorOpen = false}}>
+      <img src={icons.back} alt="back">
     </div>
   {/if}
 </div>

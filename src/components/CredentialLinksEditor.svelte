@@ -17,7 +17,7 @@
         dispatch('inputValueChange', {credentialLinks});
     }
 </script>
-<div class="editor-container flex flex-col">
+<div class="editor-container flex flex-col bg-white">
   <div class="span self-start pt-2 pb-4">{`Edit credentials links for ${sft.name}`}</div>
   <div class="form flex items-center justify-between">
     <div class="inputs">
@@ -44,3 +44,31 @@
     </div>
   </div>
 </div>
+
+<style>
+
+    .inputs .input img {
+        margin-right: 1rem;
+    }
+
+    .inputs .input input {
+        width: 325px;
+        margin-bottom: 0;
+    }
+
+    .ok-btn {
+        width: 100px;
+    }
+
+    @media only screen and (max-width: 1600px) {
+        .inputs .input input {
+            width: 280px;
+        }
+    }
+
+    @media only screen and (max-width: 1300px) {
+        .inputs .input input {
+            width: 200px;
+        }
+    }
+</style>

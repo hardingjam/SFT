@@ -246,6 +246,10 @@
         display: flex;
     }
 
+    .expand-btn {
+        top: 0.7rem;
+        right: 1.2rem;
+    }
     .links-container {
         display: flex;
         justify-content: flex-end;
@@ -258,35 +262,5 @@
 
     .link-icon:hover {
         cursor: pointer;
-    }
-
-    .expand-btn {
-        top: 0.7rem;
-        right: 1.2rem;
-    }
-
-    .inputs .input img {
-        margin-right: 1rem;
-    }
-
-    .inputs .input input {
-        width: 325px;
-        margin-bottom: 0;
-    }
-
-    .ok-btn {
-        width: 100px;
-    }
-
-    @media only screen and (max-width: 1600px) {
-        .inputs .input input {
-            width: 280px;
-        }
-    }
-
-    @media only screen and (max-width: 1300px) {
-        .inputs .input input {
-            width: 200px;
-        }
     }
 </style>

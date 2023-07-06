@@ -1,10 +1,12 @@
 <script>
     import {createEventDispatcher} from 'svelte';
     import SftList from './SftList.svelte';
+    import CredentialLinksEditor from './CredentialLinksEditor.svelte';
 
     const dispatch = createEventDispatcher();
     export let tokens;
     let isEditorOpen = false
+    let tokenToEdit;
 
     function handleTokenSelect(event) {
         dispatch('tokenSelect', {
@@ -26,7 +28,9 @@
         });
     }
 
-    function handleEditClick() {
+    function handleEditClick(event) {
+        console.log(event)
+        tokenToEdit = event.detail.token
         isEditorOpen = true
     }
 
@@ -56,7 +60,7 @@
   {/if}
   {#if isEditorOpen}
     <div class="editor">
-      asdfasdf
+      <CredentialLinksEditor on:inputValueChange={handleInputs} sft={tokenToEdit}/>
     </div>
   {/if}
 </div>
@@ -72,6 +76,13 @@
 
     .token-list-table thead tr:first-child th:last-child {
         border-top-right-radius: 10px;
+    }
+
+    .editor{
+        background: #FFFFFF;
+        height: 100vh;
+        border-radius:8px;
+        padding:30px 60px
     }
 
 

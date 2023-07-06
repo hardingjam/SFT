@@ -18,7 +18,7 @@
     }
 </script>
 <div class="editor-container flex flex-col">
-  <div class="span self-start pt-4 pb-4">{`Edit credentials links for ${sft.name}`}</div>
+  <div class="span self-start pb-4">{`Edit credentials links for ${sft.name}`}</div>
   <div class="form flex items-center">
     <div class="inputs">
       <div class="input flex items-center mb-4">

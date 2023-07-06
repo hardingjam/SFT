@@ -2,6 +2,7 @@
     import {createEventDispatcher} from 'svelte';
     import SftList from './SftList.svelte';
     import CredentialLinksEditor from './CredentialLinksEditor.svelte';
+    import {icons} from '../scripts/assets.js';
 
     const dispatch = createEventDispatcher();
     export let tokens;
@@ -29,9 +30,14 @@
     }
 
     function handleEditClick(event) {
-        console.log(event)
         tokenToEdit = event.detail.token
         isEditorOpen = true
+        dispatch('listEditClick');
+    }
+
+    function editorClosed() {
+        isEditorOpen = false
+        dispatch('listEditClosed');
     }
 
 </script>
@@ -59,7 +65,10 @@
     </table>
   {/if}
   {#if isEditorOpen}
-    <div class="editor mr-16 ml-14">
+    <div class="editor mr-16 pt-4">
+      <div class="back flex ml-5 w-full cursor-pointer" on:click={()=>{editorClosed()}}>
+        <img src={icons.back} alt="back" class="mr-6">
+      </div>
       <CredentialLinksEditor on:inputValueChange={handleInputs} sft={tokenToEdit}/>
     </div>
   {/if}
@@ -78,10 +87,10 @@
         border-top-right-radius: 10px;
     }
 
-    .editor{
+    .editor {
         background: #FFFFFF;
         height: 100vh;
-        border-radius:8px;
+        border-radius: 8px;
     }
 
 

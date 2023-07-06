@@ -188,9 +188,10 @@
         } else return {}
     }
 
+    let isListEditorOpen = false
+
     function handleInputs(event) {
         credentialLinks = event.detail
-        console.log(1111,credentialLinks)
     }
 
 </script>
@@ -216,11 +217,14 @@
       {/if}
       {#if (view === "list")}
         <ListView tokens={$tokens} on:tokenSelect={handleTokenSelect}
-                  on:inputValueChange={handleInputs} on:fileDrop={deployImage}/>
+                  on:inputValueChange={handleInputs} on:fileDrop={deployImage}
+                  on:listEditClick={()=>{isListEditorOpen=true}} on:listEditClosed={()=>{isListEditorOpen=false}}/>
       {/if}
-      <div class="note">
-        <span class="py-2">Note: token creation is permissionless and so all the data on this site could be malicious/ scam, please do your own research before downloading any files or buying any tokens. </span>
-      </div>
+      {#if !isListEditorOpen}
+        <div class="note">
+          <span class="py-2">Note: token creation is permissionless and so all the data on this site could be malicious/ scam, please do your own research before downloading any files or buying any tokens. </span>
+        </div>
+      {/if}
     </div>
   {/if}
 </div>

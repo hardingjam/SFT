@@ -71,8 +71,11 @@
         }
     }
 
-    function openEditor() {
-        isEditorOpen = true;
+    function openEditor(token) {
+        dispatch('editClick', {
+            token,
+            isEditorOpen
+        });
     }
 </script>
 
@@ -121,7 +124,7 @@
   </td>
   <td>
     {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
-      <img class="link-icon ml-5 cursor-pointer" src={icons.edit} alt="edit" on:click={()=>{openEditor()}}>
+      <img class="link-icon ml-5 cursor-pointer" src={icons.edit} alt="edit" on:click={()=>{openEditor(sft)}}>
     {/if}
   </td>
 </tr>

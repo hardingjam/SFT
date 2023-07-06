@@ -27,12 +27,12 @@
     import {icons} from '../scripts/assets.js';
     import CredentialLinksEditor from '../components/CredentialLinksEditor.svelte';
     import TileView from '../components/TileView.svelte';
+    import ListView from '../components/ListView.svelte';
 
     let username;
     let password;
     let view = "tile";
     let credentialLinks = {}
-    let isEditorOpen = false;
 
     async function deployImage(event) {
         let file = event.detail.file
@@ -215,34 +215,8 @@
                   on:inputValueChange={handleInputs} on:fileDrop={deployImage}/>
       {/if}
       {#if (view === "list")}
-        {#if !isEditorOpen}
-          <table class="w-full leading-7 text-center token-list-table">
-            <thead>
-            <tr class="text-white text-bold">
-              <th style="width: 99px"></th>
-              <th>Token name</th>
-              <th>Token symbol</th>
-              <th>Creation date</th>
-              <th>Number of holders</th>
-              <th>Token supply</th>
-              <th>Auditor(s)</th>
-              <th>Name of issuer</th>
-            </tr>
-            </thead>
-            <tbody>
-            {#each $tokens as sft }
-              <SftList {sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}
-                       on:editClick={()=>{isEditorOpen = true}} {isEditorOpen}></SftList>
-            {/each}
-            </tbody>
-          </table>
-        {/if}
-        {#if isEditorOpen}
-          <div class="editor bg-amber-200">
-            <CredentialLinksEditor on:inputValueChange={handleInputs} {sft}/>
-          </div>
-        {/if}
-
+        <ListView tokens={$tokens} on:tokenSelect={handleTokenSelect}
+                  on:inputValueChange={handleInputs} on:fileDrop={deployImage}/>
       {/if}
       <div class="note">
         <span class="py-2">Note: token creation is permissionless and so all the data on this site could be malicious/ scam, please do your own research before downloading any files or buying any tokens. </span>
@@ -255,26 +229,8 @@
         padding-top: 3.5rem;
     }
 
-    .token-list-table thead th {
-        background-color: #9196C5;
-    }
-
-    .token-list-table thead tr:first-child th:first-child {
-        border-top-left-radius: 10px;
-    }
-
-    .token-list-table thead tr:first-child th:last-child {
-        border-top-right-radius: 10px;
-    }
-
     .loader {
         margin-left: 203px;
-    }
-
-    .list-view {
-        align-self: end;
-        width: calc(100% - 243px);
-        margin-right: 20px;
     }
 
     .note {
@@ -285,6 +241,12 @@
         text-align: center;
         background: #DCDBDD;
         padding: 0.5rem 0;
+    }
+
+    .list-view {
+        align-self: end;
+        width: calc(100% - 243px);
+        margin-right: 20px;
     }
 
 </style>

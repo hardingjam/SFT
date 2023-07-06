@@ -4,11 +4,17 @@
     import {ROUTE_LABEL_MAP} from '../scripts/consts.js';
 
     export let targetPath;
+    export let label;
     export let path;
     export let child = false;
     export let disabled = false;
 
-    function handleNavigationButtonClick(){
+    export let clickable = true;
+
+    function handleNavigationButtonClick() {
+        if (!clickable) {
+            return
+        }
         navigate(targetPath, {clear: true})
         navigationButtonClicked.set(true)
     }
@@ -20,7 +26,7 @@
         <span class="w-3">
           <slot name="icon"></slot>
         </span>
-  <label class="text-base leading-5  ">{ROUTE_LABEL_MAP.get(targetPath)}</label>
+  <label class="text-base leading-5  ">{targetPath ? ROUTE_LABEL_MAP.get(targetPath) : label}</label>
 </button>
 <style>
     .nav-item {

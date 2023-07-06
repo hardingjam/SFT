@@ -8,7 +8,7 @@
 </script>
 
 <div class="pdf-container">
-<!--  <div class="preview">{@html marked(markdown)}</div>-->
+  <!--  <div class="preview">{@html marked(markdown)}</div>-->
   <iframe src={`${manual}#view=fit`} height="100%" width="100%"></iframe>
 
 </div>
@@ -27,5 +27,6 @@
         height: calc(100vh - 100px);
         margin-left: 203px;
         margin-top: -48px;
+        margin-bottom: -80px;
     }
 </style>

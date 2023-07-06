@@ -17,9 +17,9 @@
         dispatch('inputValueChange', {credentialLinks});
     }
 </script>
-<div class="editor-container flex flex-col bg-white">
-  <div class="span self-start pt-2 pb-4">{`Edit credentials links for ${sft.name}`}</div>
-  <div class="form flex items-center justify-between">
+<div class="editor-container flex flex-col">
+  <div class="span self-start pt-4 pb-4">{`Edit credentials links for ${sft.name}`}</div>
+  <div class="form flex items-center">
     <div class="inputs">
       <div class="input flex items-center mb-4">
         <img src={icons.twitter} alt="twitter">
@@ -40,35 +40,35 @@
         <input class="default-input" bind:value={credentialLinks.telegram} on:input={handleChange}/></div>
     </div>
     <div class="ok-btn">
-      <button class="default-btn w-full">ok</button>
+      <button class="default-btn w-1/2">ok</button>
     </div>
   </div>
 </div>
 
 <style>
 
+    .inputs {
+        width: 70%;
+        margin-left: 5%;
+    }
+
     .inputs .input img {
         margin-right: 1rem;
     }
 
     .inputs .input input {
-        width: 325px;
+        width: 100%;
         margin-bottom: 0;
     }
 
     .ok-btn {
-        width: 100px;
+        width: 30%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    @media only screen and (max-width: 1600px) {
-        .inputs .input input {
-            width: 280px;
-        }
-    }
-
-    @media only screen and (max-width: 1300px) {
-        .inputs .input input {
-            width: 200px;
-        }
+    .span {
+        margin-left: 5%;
     }
 </style>

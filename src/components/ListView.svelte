@@ -35,7 +35,7 @@
     }
 
 </script>
-<div >
+<div>
   {#if !isEditorOpen}
     <table class="w-full leading-7 text-center token-list-table">
       <thead>
@@ -59,7 +59,7 @@
     </table>
   {/if}
   {#if isEditorOpen}
-    <div class="editor">
+    <div class="editor mr-16 ml-14">
       <CredentialLinksEditor on:inputValueChange={handleInputs} sft={tokenToEdit}/>
     </div>
   {/if}
@@ -82,7 +82,6 @@
         background: #FFFFFF;
         height: 100vh;
         border-radius:8px;
-        padding:30px 60px
     }
 
 

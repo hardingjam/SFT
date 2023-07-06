@@ -82,7 +82,7 @@
         });
     }
 </script>
-<div class="w-full bg-white pt-5 pb-5 pl-10 pr-6 rounded-xl relative">
+<div class="w-full bg-white pt-5 pb-5 {!isEditorOpen? 'pl-10 pr-6' : ''}  rounded-xl relative">
   <div class="absolute right-2 cursor-pointer expand-btn">
     <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M14 10.3999L19 5.1999M19 5.1999L19 10.3999M19 5.1999L14 5.1999" stroke="#9D9D9D" stroke-width="2"
@@ -197,7 +197,7 @@
   {#if isEditorOpen}
     <CredentialLinksEditor on:inputValueChange={handleInputs} {sft}/>
     <div class="back flex justify-end w-full cursor-pointer" on:click={()=>{isEditorOpen = false}}>
-      <img src={icons.back} alt="back">
+      <img src={icons.back} alt="back" class="mr-6">
     </div>
   {/if}
 </div>
@@ -250,6 +250,7 @@
         top: 0.7rem;
         right: 1.2rem;
     }
+
     .links-container {
         display: flex;
         justify-content: flex-end;

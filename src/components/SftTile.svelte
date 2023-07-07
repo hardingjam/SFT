@@ -75,11 +75,8 @@
         isEditorOpen = true;
     }
 
-    function handleInputs(event) {
-        credentialLinks = event.detail.credentialLinks
-        dispatch('inputValueChange', {
-            credentialLinks,
-        });
+    function handleOkButtonClick(event) {
+        dispatch('okClick', {credentialLinks: event.detail.credentialLinks, token: event.detail.token});
     }
 </script>
 <div class="w-full bg-white pt-5 pb-5 {!isEditorOpen? 'pl-10 pr-6' : ''}  rounded-xl relative">
@@ -195,7 +192,7 @@
     </div>
   {/if}
   {#if isEditorOpen}
-    <CredentialLinksEditor on:inputValueChange={handleInputs} {sft}/>
+    <CredentialLinksEditor on:okClick={handleOkButtonClick} {sft}/>
     <div class="back flex justify-end w-full cursor-pointer" on:click={()=>{isEditorOpen = false}}>
       <img src={icons.back} alt="back" class="mr-6">
     </div>

@@ -5,16 +5,16 @@
     const dispatch = createEventDispatcher();
 
     let credentialLinks = {
+        twitter: "",
+        web: "",
         discord: "",
         github: "",
         telegram: "",
-        twitter: "",
-        web: "",
     };
     export let sft;
 
-    function handleChange(event) {
-        dispatch('inputValueChange', {credentialLinks});
+    function handleOkButtonClick(event) {
+        dispatch('okClick', {credentialLinks, token:sft});
     }
 </script>
 <div class="editor-container flex flex-col">
@@ -23,24 +23,24 @@
     <div class="inputs">
       <div class="input flex items-center mb-4">
         <img src={icons.twitter} alt="twitter">
-        <input class="default-input" bind:value={credentialLinks.twitter} on:input={handleChange}/></div>
+        <input class="default-input" bind:value={credentialLinks.twitter}/></div>
       <div class="input flex items-center mb-4">
         <img src={icons.web_brown} alt="web">
-        <input class="default-input" bind:value={credentialLinks.web} on:input={handleChange}/>
+        <input class="default-input" bind:value={credentialLinks.web}/>
       </div>
       <div class="input flex items-center mb-4">
         <img src={icons.discord} alt="discord">
-        <input class="default-input" bind:value={credentialLinks.discord} on:input={handleChange}/></div>
+        <input class="default-input" bind:value={credentialLinks.discord}/></div>
       <div class="input flex items-center mb-4">
         <img src={icons.github} alt="github">
-        <input class="default-input" bind:value={credentialLinks.github} on:input={handleChange}/>
+        <input class="default-input" bind:value={credentialLinks.github}/>
       </div>
       <div class="input flex items-center mb-4">
         <img src={icons.telegram} alt="telegram">
-        <input class="default-input" bind:value={credentialLinks.telegram} on:input={handleChange}/></div>
+        <input class="default-input" bind:value={credentialLinks.telegram}/></div>
     </div>
     <div class="ok-btn">
-      <button class="default-btn w-1/2">ok</button>
+      <button class="default-btn w-1/2" on:click={()=>{handleOkButtonClick()}}>ok</button>
     </div>
   </div>
 </div>

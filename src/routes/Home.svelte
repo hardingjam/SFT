@@ -6,7 +6,7 @@
     import {
         account,
         accountRoles,
-        activeNetwork, auditHistory,
+        activeNetwork, auditHistory, deposits,
         ethersData, roles, schemas,
         sftInfo,
         tokens, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
@@ -16,13 +16,18 @@
     import axios from 'axios';
     import {
         cborEncode,
-        encodeCBOR, getContract,
+        encodeCBOR, getContract, getSchemas,
         getSubgraphData, navigate, setAccountRoles,
         showPrompt,
         showPromptSFTCreate
     } from '../scripts/helpers.js';
     import {arrayify} from 'ethers/lib/utils.js';
-    import {AUDIT_HISTORY_DATA_QUERY, RECEIPT_VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
+    import {
+        AUDIT_HISTORY_DATA_QUERY,
+        RECEIPT_VAULT_INFORMATION_QUERY,
+        VAULT_INFORMATION_QUERY,
+        VAULTS_QUERY
+    } from '../scripts/queries.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
     import {icons} from '../scripts/assets.js';
     import CredentialLinksEditor from '../components/CredentialLinksEditor.svelte';
@@ -92,7 +97,6 @@
         let savedPassword = localStorage.getItem('ipfsPassword');
         if (!savedPassword || !savedUsername) {
             navigate("#ipfs");
-            console.log("no creds")
         } else {
             username = savedUsername;
             password = savedPassword
@@ -100,7 +104,6 @@
             let formData = new FormData();
 
             formData.append('file', data)
-
 
             const requestArr = IPFS_APIS.map((url) => {
                 return axios.request({
@@ -190,8 +193,53 @@
 
     let isListEditorOpen = false
 
-    function handleInputs(event) {
-        credentialLinks = event.detail
+    async function handleOkButtonClick(event) {
+        let token = await getContract($activeNetwork, event.detail.token.address, contractAbi, $ethersData.signerOrProvider)
+
+        credentialLinks = event.detail.credentialLinks
+        try {
+
+            let encodedCredentialsList = encodeCBOR(credentialLinks, MAGIC_NUMBERS.OA_TOKEN_CREDENTIAL_LINKS)
+
+            try {
+                let uploadResult = await upload(JSON.stringify(credentialLinks))
+                let encodedHashList = cborEncode(
+                    [uploadResult?.Hash].toString(),
+                    MAGIC_NUMBERS.OA_HASH_LIST
+                );
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedCredentialsList +
+                    encodedHashList
+                console.log(meta)
+                let transaction = await token.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+                await showPromptSFTCreate(transaction)
+
+                let wait = await transaction.wait()
+                let variables = {id: token.address.toLowerCase()}
+                if (wait.status === 1) {
+                    let interval = setInterval(async () => {
+                        let infoResp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
+                        infoResp = infoResp?.data//?.receiptVaultInformations
+                        console.log(infoResp)
+                        if (infoResp && infoResp.length) {
+                            if (wait.blockNumber.toString() === infoResp[0].transaction.blockNumber) {
+                                console.log(infoResp)
+                                transactionSuccess.set(true)
+                                transactionInProgress.set(false)
+                                clearInterval(interval)
+                            }
+                        }
+                    }, 2000)
+                } else {
+                    transactionError.set(true)
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+
+    } catch (err) {
+            console.log(err)
+        }
     }
 
 </script>
@@ -213,11 +261,11 @@
     <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'w-8/12'} content mt-5 mr-5">
       {#if (view === "tile")}
         <TileView tokens={$tokens} on:tokenSelect={handleTokenSelect}
-                  on:inputValueChange={handleInputs} on:fileDrop={deployImage}/>
+                  on:fileDrop={deployImage} on:okClick={handleOkButtonClick}/>
       {/if}
       {#if (view === "list")}
         <ListView tokens={$tokens} on:tokenSelect={handleTokenSelect}
-                  on:inputValueChange={handleInputs} on:fileDrop={deployImage}
+                  on:fileDrop={deployImage}
                   on:listEditClick={()=>{isListEditorOpen=true}} on:listEditClosed={()=>{isListEditorOpen=false}}/>
       {/if}
       {#if !isListEditorOpen}

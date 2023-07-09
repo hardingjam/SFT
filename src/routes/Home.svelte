@@ -1,6 +1,4 @@
 <script>
-    import SftTile from "../components/SftTile.svelte";
-    import SftList from "../components/SftList.svelte";
     import SftLoader from "../components/SftLoader.svelte";
 
     import {
@@ -16,7 +14,7 @@
     import axios from 'axios';
     import {
         cborEncode,
-        encodeCBOR, getContract, getSchemas,
+        encodeCBOR, getContract,
         getSubgraphData, navigate, setAccountRoles,
         showPrompt,
         showPromptSFTCreate
@@ -30,7 +28,6 @@
     } from '../scripts/queries.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
     import {icons} from '../scripts/assets.js';
-    import CredentialLinksEditor from '../components/CredentialLinksEditor.svelte';
     import TileView from '../components/TileView.svelte';
     import ListView from '../components/ListView.svelte';
 

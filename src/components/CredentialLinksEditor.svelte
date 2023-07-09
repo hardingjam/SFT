@@ -4,17 +4,18 @@
 
     const dispatch = createEventDispatcher();
 
+    export let sft = {};
+
     let credentialLinks = {
-        twitter: "",
-        webLink: "",
-        discord: "",
-        github: "",
-        telegram: "",
+        twitter: sft.credentialLinks ? sft.credentialLinks.twitter : "",
+        webLink: sft.credentialLinks ? sft.credentialLinks.webLink : "",
+        discord: sft.credentialLinks ? sft.credentialLinks.discord : "",
+        github: sft.credentialLinks ? sft.credentialLinks.github : "",
+        telegram: sft.credentialLinks ? sft.credentialLinks.telegram : "",
     };
-    export let sft;
 
     function handleOkButtonClick(event) {
-        dispatch('okClick', {credentialLinks, token:sft});
+        dispatch('okClick', {credentialLinks, token: sft});
     }
 </script>
 <div class="editor-container flex flex-col">

@@ -6,7 +6,7 @@
 
     let credentialLinks = {
         twitter: "",
-        web: "",
+        webLink: "",
         discord: "",
         github: "",
         telegram: "",
@@ -26,7 +26,7 @@
         <input class="default-input" bind:value={credentialLinks.twitter}/></div>
       <div class="input flex items-center mb-4">
         <img src={icons.web_brown} alt="web">
-        <input class="default-input" bind:value={credentialLinks.web}/>
+        <input class="default-input" bind:value={credentialLinks.webLink}/>
       </div>
       <div class="input flex items-center mb-4">
         <img src={icons.discord} alt="discord">

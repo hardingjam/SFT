@@ -1,6 +1,6 @@
 <script>
     import {icons} from "../scripts/assets.js"
-    import {cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers';
+    import {bytesToMeta, cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers';
     import {ethers} from 'ethers';
     import {createEventDispatcher, onMount} from 'svelte';
     import {account, activeNetwork, vault} from '../scripts/store.js';
@@ -13,7 +13,6 @@
     let sftLogo;
     let logoPreview;
     let isEditorOpen = false;
-    let credentialLinks = {};
     const dispatch = createEventDispatcher();
 
 
@@ -24,7 +23,7 @@
     $: sft && getSftData()
 
     function getSftData() {
-        getVaultImages()
+        getVaultInformation()
         getAuditors()
         getIssuers()
     }
@@ -58,15 +57,21 @@
         });
     }
 
-    async function getVaultImages() {
+    async function getVaultInformation() {
         let receiptVaultInformations = sft.receiptVaultInformations
         if (receiptVaultInformations.length) {
             let receiptInformations = receiptVaultInformations.map(data => {
                 return cborDecode(data.information.slice(18))
             })
             let sftImages = receiptInformations.filter(i => i[0].get(1) === MAGIC_NUMBERS.OA_TOKEN_IMAGE)
+            let sftCredentialLinks = receiptInformations.filter(i => i[0].get(1) ===
+                MAGIC_NUMBERS.OA_TOKEN_CREDENTIAL_LINKS)
             if (sftImages.length) {
                 sft.icon = sftImages[0][1].get(0)
+            }
+            if (sftCredentialLinks.length) {
+                sft.credentialLinks = bytesToMeta(sftCredentialLinks[0][0].get(0), "json")
+                console.log(sft.name, sft.credentialLinks)
             }
         }
     }
@@ -178,11 +183,23 @@
       </div>
     </div>
     <div class="links-container pt-5">
-      <a href="#" target="_blank"><img class="link-icon" src={icons.twitter} alt="twitter"></a>
-      <a href="#" target="_blank"><img class="link-icon" src={icons.telegram} alt="telegram"></a>
-      <a href="#" target="_blank"><img class="link-icon" src={icons.github} alt="github"></a>
-      <a href="#" target="_blank"><img class="link-icon" src={icons.discord} alt="discord"></a>
-      <a href="#" target="_blank"><img class="link-icon" src={icons.web} alt="web"></a>
+      {#if sft.credentialLinks}
+        {#if sft.credentialLinks.twitter}
+          <a href={sft.credentialLinks.twitter} target="_blank">
+            <img class="link-icon" src={icons.twitter} alt="twitter"></a>{/if}
+        {#if sft.credentialLinks.telegram}
+          <a href={sft.credentialLinks.telegram} target="_blank">
+            <img class="link-icon" src={icons.telegram} alt="telegram"></a>{/if}
+        {#if sft.credentialLinks.github}
+          <a href={sft.credentialLinks.github} target="_blank">
+            <img class="link-icon" src={icons.github} alt="github"></a>{/if}
+        {#if sft.credentialLinks.discord}
+          <a href={sft.credentialLinks.discord} target="_blank">
+            <img class="link-icon" src={icons.discord} alt="discord"></a>{/if}
+        {#if sft.credentialLinks.webLink}
+          <a href={sft.credentialLinks.webLink} target="_blank">
+            <img class="link-icon" src={icons.web} alt="web"></a>{/if}
+      {/if}
       <a href={`${$activeNetwork?.blockExplorer}/address/${sft.address}`} target="_blank">
         <img class="link-icon" src={icons.etherscan} alt="etherscan">
       </a>

@@ -204,9 +204,9 @@
                     [uploadResult?.Hash].toString(),
                     MAGIC_NUMBERS.OA_HASH_LIST
                 );
-                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedCredentialsList +
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() +
+                    encodedCredentialsList +
                     encodedHashList
-                console.log(meta)
                 let transaction = await token.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
                 await showPromptSFTCreate(transaction)
 
@@ -215,14 +215,14 @@
                 if (wait.status === 1) {
                     let interval = setInterval(async () => {
                         let infoResp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
-                        infoResp = infoResp?.data//?.receiptVaultInformations
-                        console.log(infoResp)
-                        if (infoResp && infoResp.length) {
-                            if (wait.blockNumber.toString() === infoResp[0].transaction.blockNumber) {
-                                console.log(infoResp)
+                        infoResp = infoResp?.data?.offchainAssetReceiptVault
+                        if (infoResp && infoResp.receiptVaultInformations && infoResp.receiptVaultInformations.length) {
+                            if (wait.blockNumber.toString() ===
+                                infoResp.receiptVaultInformations[0].transaction.blockNumber) {
                                 transactionSuccess.set(true)
                                 transactionInProgress.set(false)
                                 clearInterval(interval)
+                                await getTokens()
                             }
                         }
                     }, 2000)
@@ -234,7 +234,7 @@
                 console.log(err)
             }
 
-    } catch (err) {
+        } catch (err) {
             console.log(err)
         }
     }

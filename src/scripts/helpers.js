@@ -1,10 +1,11 @@
 import {ethers} from "ethers";
-import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES} from "./consts.js";
+import {IPFS_GETWAY, MAGIC_NUMBERS, ONE, ROLES, ROUTE_LABEL_MAP} from "./consts.js";
 import axios from "axios";
 import pako from "pako"
 import {encodeCanonical, decodeAllSync} from "cbor-web";
 import {arrayify, isBytesLike} from "ethers/lib/utils.js";
 import {
+    breadCrumbs, navigationButtonClicked,
     promptBottomText, promptCloseAction, promptErrorText, promptNoBottom, promptSuccessText,
     promptTopText, transactionError,
     transactionHash,
@@ -13,6 +14,7 @@ import {
     transactionSuccess
 } from "./store.js";
 import {VAULT_INFORMATION_QUERY} from "./queries.js";
+import {navigateTo} from 'yrv';
 
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -283,7 +285,7 @@ export function cborDecode(dataEncoded_) {
     return decodeAllSync(dataEncoded_);
 }
 
-export function encodeCBOR(data) {
+export function encodeCBOR(data, magicNumber) {
     // -- Encoding with CBOR
     // Obtain (Deflated JSON) and parse it to an ArrayBuffer
     if (typeof data === 'object') {
@@ -292,7 +294,7 @@ export function encodeCBOR(data) {
     const deflatedData = arrayify(deflateJson(data)).buffer;
     return cborEncode(
         deflatedData,
-        MAGIC_NUMBERS.OA_SCHEMA,
+        magicNumber,
         "application/json",
         {
             contentEncoding: "deflate",
@@ -430,7 +432,7 @@ export async function showPromptSFTCreate(transaction, options) {
 export async function addMissingHashesToSubGraph(hashes, vault, signer) {
     let schemaInformation = {}
 
-    let encodedSchema = encodeCBOR(schemaInformation)
+    let encodedSchema = encodeCBOR(schemaInformation, MAGIC_NUMBERS.OA_SCHEMA)
 
     try {
         let encodedHashList = cborEncode(
@@ -532,4 +534,19 @@ export async function setAccountRoles(roles, account) {
     }
     return accountRoles
 
+}
+
+export function navigate(path, options) {
+    let label = ROUTE_LABEL_MAP.get(path)
+    navigationButtonClicked.update(() => false)
+    if (options && options.clear) {
+        if (path === "#") {
+            breadCrumbs.update(() => [])
+        } else {
+            breadCrumbs.update(() => [{path: "#", label: "Home"}, {path, label}])
+        }
+    } else {
+        breadCrumbs.update(bc => [...bc, {path, label}])
+    }
+    navigateTo(path)
 }

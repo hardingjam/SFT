@@ -44,8 +44,27 @@ export const MAGIC_NUMBERS = {
     /**
      * OA Structure
      */
-    OA_STRUCTURE: BigInt(0xffc47a6299e8a911n)
+    OA_STRUCTURE: BigInt(0xffc47a6299e8a911n),
+    /**
+     * OA Token image
+     */
+    OA_TOKEN_IMAGE: BigInt(0xff8cd2927c8c86cbn)
 };
 
 export const TRANSACTION_IN_PROGRESS_TEXT = "Transaction taking place, please wait."
 export const VIEW_ON_EXPLORER_TEXT = "View on the block explorer"
+export const ROUTE_LABEL_MAP = new Map([
+    ["#setup", "Setup new SFT"],
+    ["#roles", "SFT roles"],
+    ["#mint", "Mint/Redeem"],
+    ["#list", "SFT list"],
+    ["#members", "Members"],
+    ["#audit-history", "Audits"],
+    ["#", "Home"],
+    ["#asset-classes", "Asset class list"],
+    ["#new-asset-class", "New asset class"],
+    ["#receipt/:id", "Receipt"],
+    ["#sft-create-success", "Sft created successfully"],
+    ["#ipfs", "IPFS"],
+    ["#manual", "Manual"]
+]);

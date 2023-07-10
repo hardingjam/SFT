@@ -5,6 +5,9 @@
     import {createEventDispatcher} from "svelte";
     import {formatAddress} from "../scripts/helpers.js";
     import HeaderDropdown from './HeaderDropdown.svelte';
+    import BreadCrumbs from './BreadCrumbs.svelte';
+
+    export let location;
 
     let accountMenuOptions = [
         {
@@ -19,7 +22,8 @@
                     return navigator.clipboard.writeText($account);
                 }
                 return Promise.reject("The Clipboard API is not available.");
-            }
+            },
+            rightIcon: 'copy'
         },
         {
             id: "view",
@@ -27,7 +31,7 @@
             action: () => {
                 window.open(`${$activeNetwork.blockExplorer}/address/${$account}`);
             },
-            class: 'underline'
+            class: 'underline',
         }
     ]
 
@@ -46,13 +50,7 @@
 
 </script>
 
-<div class=" {$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 text-white items-center font-bold">
-  <div class="logo-container ml-14 flex items-center justify-center fixed">
-    <a href="/">
-      <img src={icons.logo} alt=""
-           class="{$account ? 'border-8' : ''}  border-white rounded-full w-full h-full"/>
-    </a>
-  </div>
+<div class="{$account ? 'header' : ''} flex w-full h-14 justify-between pr-20 items-center font-bold">
   {#if $account}
     <div class="flex justify-end w-full">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
@@ -60,8 +58,12 @@
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
 
       <HeaderDropdown triggerLabel={formatAddress($account)}
-                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}></HeaderDropdown>
+                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}>
+      </HeaderDropdown>
     </div>
+    {#if location && (location !== "/" && location !== "#")}
+      <BreadCrumbs/>
+    {/if}
   {/if}
 </div>
 
@@ -76,13 +78,5 @@
         background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
     }
 
-    .logo-container {
-        top: 26px;
-    }
-
-    .logo-container img {
-        height: 85px;
-        width: 85px;
-    }
 </style>
 

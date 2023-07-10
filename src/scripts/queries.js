@@ -12,6 +12,10 @@ export const QUERY = `
                 shareHolders{
                     address
                 }
+                tokenHolders {
+                    address
+                    balance
+                }
                 roles(orderBy: roleName){
                     roleName
                     roleHolders{
@@ -140,12 +144,31 @@ export const VAULT_INFORMATION_QUERY = `
 export const VAULTS_QUERY = `
         query {
           offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
-            deployer,
-            name,
-            address,
-            symbol,
-            deployBlock,
+            deployer
+            name
+            address
+            symbol
+            deployBlock
             deployTimestamp
+            totalShares
+            tokenHolders {
+                address
+                balance
+            }
+            roleHolders {
+              role {
+                roleName
+                roleHash
+              }
+              account {
+                address
+              }
+            }
+            receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
+              information
+              id
+              timestamp
+            }
           }
         }`;
 

@@ -16,7 +16,8 @@
         accountRoles,
         data,
         roles,
-        sftInfo
+        sftInfo,
+        tokenName, breadCrumbs, navigationButtonClicked
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -43,10 +44,14 @@
     import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
     import {ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
+    import BreadCrumbs from '../components/BreadCrumbs.svelte';
+    import {ROUTE_LABEL_MAP} from '../scripts/consts';
+    import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
+    import Manual from '../routes/Manual.svelte';
+    import Home from '../routes/Home.svelte';
 
 
     let connectedAccount;
-    let tokenName = "";
     export let url = "";
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined";
@@ -54,16 +59,12 @@
     let location = window.location.hash;
     let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
-    $: $data && setVaultName()
-
-    function setVaultName() {
-        tokenName = $data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : ""
-    }
 
     async function vaultChanged() {
         if ($vault.address && $activeNetwork.id && $account) {
             await getRoles($vault.address)
             accountRoles.set(await setAccountRoles($roles, $account));
+            tokenName.set($data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : "")
         }
     }
 
@@ -81,6 +82,9 @@
             if (location === "#ipfs") {
                 navigateTo("#ipfs", {replace: false})
             }
+            if (location === "#manual") {
+                navigateTo("#manual", {replace: false})
+            }
         }
     });
 
@@ -92,8 +96,8 @@
 
         } else {
             vault.set({})
-            location = "#set-vault"
-            navigateTo("#set-vault", {replace: false})
+            location = "#"
+            navigateTo("#", {replace: false})
         }
     }
 
@@ -101,10 +105,14 @@
         await getEthersData();
 
         if (isMetamaskInstalled) {
+            if (location === "/" || location === "") {
+                navigateTo("#");
+            }
             await setNetwork();
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
                 account.set(connectedAccount)
+                await vaultChanged()
                 navigateTo(location || '#', {replace: false})
             } else {
                 localStorage.removeItem("account");
@@ -120,15 +128,32 @@
                     accountRoles.set(await setAccountRoles($roles, $account));
 
                     if ((location === '#mint' || location === '#redeem') && !$accountRoles.DEPOSITOR) {
-                        navigateTo('#set-vault');
+                        navigateTo('#');
                     }
                 }
             });
+            window.addEventListener("hashchange", function (e) {
+                // listen to browser back/forward button click event and update breadcrumbs accordingly
+                let newUrl = e.newURL.split('/')[3]
+                let oldURL = e.oldURL.split('/')[3]
+                if (!$navigationButtonClicked) {
+                    let indexOfNewUrl = $breadCrumbs.findIndex(u => u.path === newUrl)
+                    let indexOfOldUrl = $breadCrumbs.findIndex(u => u.path === oldURL)
+                    if (indexOfNewUrl > 0 && indexOfNewUrl < indexOfOldUrl) {
+                        breadCrumbs.set($breadCrumbs.filter(p => p.path !== oldURL))
+                    }
+
+                    if (!$breadCrumbs.find(b => b.path === newUrl)) {
+                        breadCrumbs.set([...$breadCrumbs, {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
+                    }
+                } else {
+                    breadCrumbs.set([{path: "#", label: "Home"},
+                        {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
+                }
+            })
             window.ethereum.on("chainChanged", networkChanged);
         }
-        if (location === "/" || location === "") {
-            navigateTo("#set-vault");
-        }
+
         await getTokens();
 
         // const grantRoleTx = await $vault.connect($ethersData.signer).grantRole(await $vault.connect($ethersData.signer).DEPOSITOR(), $account.trim());
@@ -141,7 +166,7 @@
         vault.set({});
         await setNetwork();
         await getTokens();
-        navigateTo("#set-vault");
+        navigateTo("#");
     }
 
     async function getEthersData() {
@@ -285,22 +310,36 @@
 <Router url={url}>
 
   <div class={$account ? "content" : "content-not-connected"}>
-    <Header on:select={handleNetworkSelect}></Header>
+    <Header on:select={handleNetworkSelect} {location}></Header>
+    <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
+      <a href="/">
+        <img src={icons.logo} alt=""
+             class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
+      </a>
+    </div>
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-      <div class={$sftInfo ? "main-card mt-12 sft-info-opened" : "main-card mt-12" }>
-        <div class={$activeNetwork  ? 'show' : 'hide'}>
+
+      <div class={$sftInfo ? "sft-info-opened" : "" }>
+        <div class="{$activeNetwork  ? 'show' : 'hide'}">
+          <Route path="#" component={Home}/>
+        </div>
+      </div>
+      <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
+        <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">
+
           <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
           <Route path="#roles" component={Roles}/>
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
           <Route path="#audit-history" component={AuditHistory}/>
-          <Route path="#set-vault" component={SetVault}/>
+          <!--          <Route path="#set-vault" component={SetVault}/>-->
           <Route path="#asset-classes" component={AssetClasses}/>
           <Route path="#new-asset-class" component={NewSchema}/>
           <Route path="#receipt/:id" component={ReceiptAudit}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
+          <Route path="#manual" component={Manual}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -343,7 +382,7 @@
     {/if}
   </div>
 
-  <div class="footer fixed bottom-0 w-full p-2 {$account ? 'bg-white' :'' }">
+  <div class="footer w-full p-2 {$account ? 'bg-white' :'' }">
     <div class="powered-by">
       <span>Powered by</span>
       <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>
@@ -362,10 +401,28 @@
                                errorText={$promptErrorText}
                                successText={$promptSuccessText}
                                on:close={$promptCloseAction}/>
+  <SFTCreateSuccessBanner/>
 </Router>
 
 
 <style lang="scss">
+  .logo-container {
+    z-index: 2;
+    position: fixed;
+    display: flex;
+    top: 20px;
+    left: 55px;
+  }
+
+  .logo-container img {
+    height: 85px;
+    width: 85px;
+  }
+
+  .border-6 {
+    border-width: 6px
+  }
+
   .container {
     display: flex;
     flex-direction: column;
@@ -396,7 +453,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 5rem;
+    padding-top: 9rem;
     transition: 0.5s ease;
     padding-bottom: 5rem;
   }
@@ -525,7 +582,8 @@
     width: 100%;
     height: 100%;
     backdrop-filter: blur(3.5px);
-    top: 0
+    top: 0;
+    z-index: 3;
   }
 
 

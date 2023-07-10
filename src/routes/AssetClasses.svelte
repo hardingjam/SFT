@@ -2,7 +2,7 @@
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
-    import {activeNetwork, schemas, vault, deposits} from "../scripts/store.js";
+    import {activeNetwork, schemas, vault, deposits, accountRoles} from "../scripts/store.js";
     import {getSchemas, getSubgraphData, timeStampToDate} from "../scripts/helpers";
     import {DEPOSITS_QUERY} from "../scripts/queries.js";
     import {onMount} from "svelte";
@@ -15,11 +15,26 @@
     }
 
     onMount(async () => {
-        if (!$schemas.length) {
-            await getDeposits()
-            schemas.set(await getSchemas($activeNetwork, $vault, $deposits))
-        }
+        console.log($vault.address, Object.keys($accountRoles).length, $accountRoles.DEPOSITOR)
+
+        // if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
+        //     navigateTo('#set-vault');
+        // } else {
+        await getData()
+        // }
     })
+
+    $: $activeNetwork.chainId && getData()
+
+    async function getData() {
+        if ($activeNetwork.chainId && !$schemas.length) {
+            await getDeposits()
+            let tempSchemas = await getSchemas($activeNetwork, $vault, $deposits)
+            if (tempSchemas) {
+                schemas.set(tempSchemas)
+            }
+        }
+    }
 
     async function getDeposits() {
         let variables = {id: $vault.address.toLowerCase()}
@@ -45,7 +60,7 @@
           <th>Date created</th>
           <th>Asset count</th>
         </tr>
-        {#if ($schemas.length)}
+        {#if ($schemas?.length)}
           {#each $schemas as schema }
             <tr class="schema" on:click={()=>{handleSchemasSelect(schema)}}>
               <td>{schema?.displayName}</td>

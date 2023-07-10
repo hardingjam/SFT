@@ -6,12 +6,18 @@
         auditHistory,
         ethersData, roles,
         schemas,
-        tokens,
+        tokens, transactionInProgress, transactionInProgressShow,
         vault
     } from "../scripts/store.js";
-    import {formatAddress, getContract, getSubgraphData, setAccountRoles, timeStampToDate} from "../scripts/helpers.js";
+    import {
+        formatAddress,
+        getContract,
+        getSubgraphData,
+        navigate,
+        setAccountRoles, showPrompt,
+        timeStampToDate
+    } from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
-    import {navigateTo} from "yrv";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
@@ -25,6 +31,7 @@
     });
 
     async function handleTokenSelect(token) {
+        await showPrompt(null, {topText: "SFT loading, please wait", noBottomText: true})
         let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
         if (contract) {
             vault.set(contract)
@@ -33,7 +40,9 @@
             let auditHistoryData = await getAuditHistoryData(token.address)
             auditHistory.set(auditHistoryData)
             accountRoles.set(await setAccountRoles($roles, $account));
-            navigateTo("#roles")
+            transactionInProgressShow.set(false)
+            transactionInProgress.set(false)
+            navigate("#roles", {clear: true})
         }
     }
 
@@ -58,7 +67,9 @@
         </tr>
         {#if $tokens.length}
           {#each $tokens as token }
-            <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
+            <tr
+              class="{token?.address?.toLowerCase() === $vault?.address?.toLowerCase() ? 'active-token' : ''} token tb-row"
+              on:click={()=>{handleTokenSelect(token)}}>
               <td>{token.name}</td>
               <td>{token.symbol}</td>
               <td>{formatAddress(token.deployer)}</td>
@@ -97,6 +108,10 @@
 
     table th {
         background: #625e91;
+    }
+
+    .active-token {
+        background: #CAE6FF;
     }
 
 </style>

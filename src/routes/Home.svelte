@@ -1,12 +1,10 @@
 <script>
-    import SftTile from "../components/SftTile.svelte";
-    import SftList from "../components/SftList.svelte";
     import SftLoader from "../components/SftLoader.svelte";
 
     import {
         account,
         accountRoles,
-        activeNetwork, auditHistory,
+        activeNetwork, auditHistory, deposits,
         ethersData, roles, schemas,
         sftInfo,
         tokens, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
@@ -22,12 +20,21 @@
         showPromptSFTCreate
     } from '../scripts/helpers.js';
     import {arrayify} from 'ethers/lib/utils.js';
-    import {AUDIT_HISTORY_DATA_QUERY, RECEIPT_VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
+    import {
+        AUDIT_HISTORY_DATA_QUERY,
+        RECEIPT_VAULT_INFORMATION_QUERY,
+        VAULT_INFORMATION_QUERY,
+        VAULTS_QUERY
+    } from '../scripts/queries.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
+    import {icons} from '../scripts/assets.js';
+    import TileView from '../components/TileView.svelte';
+    import ListView from '../components/ListView.svelte';
 
     let username;
     let password;
     let view = "tile";
+    let credentialLinks = {}
 
     async function deployImage(event) {
         let file = event.detail.file
@@ -87,7 +94,6 @@
         let savedPassword = localStorage.getItem('ipfsPassword');
         if (!savedPassword || !savedUsername) {
             navigate("#ipfs");
-            console.log("no creds")
         } else {
             username = savedUsername;
             password = savedPassword
@@ -95,7 +101,6 @@
             let formData = new FormData();
 
             formData.append('file', data)
-
 
             const requestArr = IPFS_APIS.map((url) => {
                 return axios.request({
@@ -183,51 +188,65 @@
         } else return {}
     }
 
+    let isListEditorOpen = false
+
+    async function handleOkButtonClick(event) {
+        let token = await getContract($activeNetwork, event.detail.token.address, contractAbi, $ethersData.signerOrProvider)
+
+        credentialLinks = event.detail.credentialLinks
+        try {
+
+            let encodedCredentialsList = encodeCBOR(credentialLinks, MAGIC_NUMBERS.OA_TOKEN_CREDENTIAL_LINKS)
+
+            try {
+                let uploadResult = await upload(JSON.stringify(credentialLinks))
+                let encodedHashList = cborEncode(
+                    [uploadResult?.Hash].toString(),
+                    MAGIC_NUMBERS.OA_HASH_LIST
+                );
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() +
+                    encodedCredentialsList +
+                    encodedHashList
+                let transaction = await token.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+                await showPromptSFTCreate(transaction)
+
+                let wait = await transaction.wait()
+                let variables = {id: token.address.toLowerCase()}
+                if (wait.status === 1) {
+                    let interval = setInterval(async () => {
+                        let infoResp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
+                        infoResp = infoResp?.data?.offchainAssetReceiptVault
+                        if (infoResp && infoResp.receiptVaultInformations && infoResp.receiptVaultInformations.length) {
+                            if (wait.blockNumber.toString() ===
+                                infoResp.receiptVaultInformations[0].transaction.blockNumber) {
+                                transactionSuccess.set(true)
+                                transactionInProgress.set(false)
+                                clearInterval(interval)
+                                await getTokens()
+                            }
+                        }
+                    }, 2000)
+                } else {
+                    transactionError.set(true)
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
 </script>
-<div class="flex flex-col w-full items-center home-container">
-  <div class="views flex justify-end w-full space-x-6 pr-5 pt-5">
+<div class="flex flex-col w-full items-center home-container relative">
+  <div class="views flex justify-end w-full space-x-3 pr-5 pt-5">
     <div class="cursor-pointer" on:click={()=>{view = "tile"}}>
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M1 2C1 1.44772 1.44772 1 2 1H6C6.55228 1 7 1.44772 7 2V6C7 6.55228 6.55228 7 6 7H2C1.44772 7 1 6.55228 1 6V2Z"
-          stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path
-          d="M1 2C1 1.44772 1.44772 1 2 1H6C6.55228 1 7 1.44772 7 2V6C7 6.55228 6.55228 7 6 7H2C1.44772 7 1 6.55228 1 6V2Z"
-          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round"/>
-        <path
-          d="M1 12C1 11.4477 1.44772 11 2 11H6C6.55228 11 7 11.4477 7 12V16C7 16.5523 6.55228 17 6 17H2C1.44772 17 1 16.5523 1 16V12Z"
-          stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path
-          d="M1 12C1 11.4477 1.44772 11 2 11H6C6.55228 11 7 11.4477 7 12V16C7 16.5523 6.55228 17 6 17H2C1.44772 17 1 16.5523 1 16V12Z"
-          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round"/>
-        <path
-          d="M11 2C11 1.44772 11.4477 1 12 1H16C16.5523 1 17 1.44772 17 2V6C17 6.55228 16.5523 7 16 7H12C11.4477 7 11 6.55228 11 6V2Z"
-          stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path
-          d="M11 2C11 1.44772 11.4477 1 12 1H16C16.5523 1 17 1.44772 17 2V6C17 6.55228 16.5523 7 16 7H12C11.4477 7 11 6.55228 11 6V2Z"
-          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round"/>
-        <path
-          d="M11 12C11 11.4477 11.4477 11 12 11H16C16.5523 11 17 11.4477 17 12V16C17 16.5523 16.5523 17 16 17H12C11.4477 17 11 16.5523 11 16V12Z"
-          stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path
-          d="M11 12C11 11.4477 11.4477 11 12 11H16C16.5523 11 17 11.4477 17 12V16C17 16.5523 16.5523 17 16 17H12C11.4477 17 11 16.5523 11 16V12Z"
-          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round"/>
-      </svg>
+      <img src={icons.tile_view} alt="tiles">
     </div>
     <div class="cursor-pointer" on:click={()=>{view = "list"}}>
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M1 6V2C1 1.44772 1.44772 1 2 1H16C16.5523 1 17 1.44772 17 2V6M1 6H17M1 6V12M17 6V12M17 12V16C17 16.5523 16.5523 17 16 17H2C1.44772 17 1 16.5523 1 16V12M17 12H1"
-          stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path
-          d="M1 6V2C1 1.44772 1.44772 1 2 1H16C16.5523 1 17 1.44772 17 2V6M1 6H17M1 6V12M17 6V12M17 12V16C17 16.5523 16.5523 17 16 17H2C1.44772 17 1 16.5523 1 16V12M17 12H1"
-          stroke="black" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round"/>
-      </svg>
+      <img src={icons.list_view} alt="tiles">
     </div>
   </div>
   {#if !$tokens.length}
@@ -238,33 +257,18 @@
   {#if $tokens.length}
     <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'w-8/12'} content mt-5 mr-5">
       {#if (view === "tile")}
-        <div class="grid grid-cols-2 gap-5">
-          {#each $tokens as sft }
-            <SftTile sft={sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftTile>
-          {/each}
-        </div>
+        <TileView tokens={$tokens} on:tokenSelect={handleTokenSelect}
+                  on:fileDrop={deployImage} on:okClick={handleOkButtonClick}/>
       {/if}
       {#if (view === "list")}
-        <table class="w-full leading-7 text-center token-list-table">
-          <thead>
-          <tr class="text-white text-bold">
-            <th style="width: 99px"></th>
-            <th>Token name</th>
-            <th>Token symbol</th>
-            <th>Creation date</th>
-            <th>Number of holders</th>
-            <th>Token supply</th>
-            <th>Auditor(s)</th>
-            <th>Name of issuer</th>
-          </tr>
-          </thead>
-          <tbody>
-          {#each $tokens as sft }
-            <SftList {sft} on:fileDrop={deployImage} on:tokenSelect={handleTokenSelect}></SftList>
-          {/each}
-          </tbody>
-        </table>
-
+        <ListView tokens={$tokens} on:tokenSelect={handleTokenSelect}
+                  on:fileDrop={deployImage}
+                  on:listEditClick={()=>{isListEditorOpen=true}} on:listEditClosed={()=>{isListEditorOpen=false}}/>
+      {/if}
+      {#if !isListEditorOpen}
+        <div class="note">
+          <span class="py-2">Note: token creation is permissionless and so all the data on this site could be malicious/ scam, please do your own research before downloading any files or buying any tokens. </span>
+        </div>
       {/if}
     </div>
   {/if}
@@ -274,20 +278,18 @@
         padding-top: 3.5rem;
     }
 
-    .token-list-table thead th {
-        background-color: #9196C5;
-    }
-
-    .token-list-table thead tr:first-child th:first-child {
-        border-top-left-radius: 10px;
-    }
-
-    .token-list-table thead tr:first-child th:last-child {
-        border-top-right-radius: 10px;
-    }
-
     .loader {
         margin-left: 203px;
+    }
+
+    .note {
+        color: #575757;
+        position: sticky;
+        bottom: 0;
+        font-size: 14px;
+        text-align: center;
+        background: #DCDBDD;
+        padding: 0.5rem 0;
     }
 
     .list-view {

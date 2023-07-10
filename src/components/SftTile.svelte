@@ -198,7 +198,7 @@
             <img class="link-icon" src={icons.discord} alt="discord"></a>{/if}
         {#if sft.credentialLinks.webLink}
           <a href={sft.credentialLinks.webLink} target="_blank">
-            <img class="link-icon" src={icons.web} alt="web"></a>{/if}
+            <img class="link-icon" src={icons.web_brown} alt="web"></a>{/if}
       {/if}
       <a href={`${$activeNetwork?.blockExplorer}/address/${sft.address}`} target="_blank">
         <img class="link-icon" src={icons.etherscan} alt="etherscan">

@@ -20,7 +20,6 @@ import etherscan from '../assets/icons/etherscan.svg'
 import github from '../assets/icons/github.svg'
 import telegram from '../assets/icons/telegram.svg'
 import twitter from '../assets/icons/twitter.svg'
-import web from '../assets/icons/web.svg'
 import web_brown from '../assets/icons/web_brown.svg'
 import list_view from '../assets/icons/list_view.svg'
 import tile_view from '../assets/icons/tile_view.svg'
@@ -49,7 +48,6 @@ export const icons = {
     github,
     telegram,
     twitter,
-    web,
     web_brown,
     list_view,
     tile_view,

@@ -17,6 +17,7 @@ import camera from '../assets/icons/camera.svg'
 import copy from '../assets/icons/copy.svg'
 import discord from '../assets/icons/discord.svg'
 import etherscan from '../assets/icons/etherscan.svg'
+import polygonscan from '../assets/icons/polygonscan.svg'
 import github from '../assets/icons/github.svg'
 import telegram from '../assets/icons/telegram.svg'
 import twitter from '../assets/icons/twitter.svg'
@@ -51,5 +52,6 @@ export const icons = {
     web_brown,
     list_view,
     tile_view,
-    back
+    back,
+    polygonscan
 }

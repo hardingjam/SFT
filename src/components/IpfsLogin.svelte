@@ -59,7 +59,6 @@
     .credentials {
         display: flex;
         flex-direction: column;
-        border: 1px solid #D2D2D2;
         border-radius: 10px;
         padding: 20px 45px 20px 45px;
         font-weight: 500;

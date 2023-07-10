@@ -10,7 +10,7 @@
     import Select from "../components/Select.svelte";
     import {
         accessControlError,
-        toSentenceCase, showPrompt, setAccountRoles
+        toSentenceCase, showPrompt, setAccountRoles, navigate
     } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
@@ -94,15 +94,8 @@
 </script>
 <div class="roles-container">
   <DefaultFrame header="Roles">
-
-    <div slot="address">
-  <span>Token address: <a href={`${$activeNetwork?.blockExplorer}/address/${$vault.address}`}
-                          class="contract-address underline"
-                          target="_blank">{$vault.address}</a></span>
-    </div>
-
     <div slot="header-buttons">
-      <!--    <button class="header-btn btn-hover" on:click={()=>{navigateTo("#new-schema")}}>New schema</button>-->
+          <button class="header-btn btn-hover" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
     </div>
 
     <div slot="content">

@@ -265,10 +265,10 @@ li {
 
 .header-btn {
     box-sizing: border-box;
-    border: 1px solid #ffffff;
+    border: 1px solid #9d7334;
     border-radius: 5px;
     background: transparent;
-    color: #ffffff;
+    color: #9d7334;
     margin-left: 15px;
     padding: 0 10px;
 }
@@ -290,10 +290,9 @@ li {
 }
 
 .default-frame {
-    background: #2c2c5454;
+    background: #ffffff;
     border-radius: 20px;
-    padding: 12px;
-    color: #ffffff;
+    padding: 20px;
 }
 
 .default-input {

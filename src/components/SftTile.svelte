@@ -71,7 +71,6 @@
             }
             if (sftCredentialLinks.length) {
                 sft.credentialLinks = bytesToMeta(sftCredentialLinks[0][0].get(0), "json")
-                console.log(sft.name, sft.credentialLinks)
             }
         }
     }
@@ -201,7 +200,7 @@
             <img class="link-icon" src={icons.web_brown} alt="web"></a>{/if}
       {/if}
       <a href={`${$activeNetwork?.blockExplorer}/address/${sft.address}`} target="_blank">
-        <img class="link-icon" src={icons.etherscan} alt="etherscan">
+        <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
       </a>
       {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
         <img class="link-icon" src={icons.edit} alt="edit" on:click={()=>{openEditor()}}>
@@ -273,6 +272,8 @@
 
     .link-icon {
         margin-left: 22px;
+        width: 24px;
+        height: 24px;
     }
 
     .link-icon:hover {

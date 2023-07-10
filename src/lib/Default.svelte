@@ -17,7 +17,7 @@
         data,
         roles,
         sftInfo,
-        tokenName, breadCrumbs, navigationButtonClicked
+        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -28,13 +28,19 @@
     import {icons} from "../scripts/assets.js";
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
-    import {filterArray, getContract, getSubgraphData, mapOrder, setAccountRoles} from "../scripts/helpers.js";
+    import {
+        filterArray,
+        getContract,
+        getSubgraphData,
+        mapOrder,
+        setAccountRoles,
+        showPrompt
+    } from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
     import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
     import AuditHistory from "../routes/AuditHistory.svelte";
     import NewSchema from "../routes/NewSchema.svelte";
-    import SetVault from "../routes/SetVault.svelte";
     import ReceiptAudit from "../routes/ReceiptAudit.svelte";
     import SftCreateSuccess from "../routes/SftCreateSuccess.svelte";
     import AssetClasses from "../routes/AssetClasses.svelte";
@@ -44,7 +50,6 @@
     import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
     import {ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
-    import BreadCrumbs from '../components/BreadCrumbs.svelte';
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
     import Manual from '../routes/Manual.svelte';
@@ -162,6 +167,7 @@
     });
 
     async function networkChanged() {
+        await showPrompt(null, {topText: "Loading, please wait", noBottomText: true})
         localStorage.setItem("vaultAddress", "");
         vault.set({});
         await setNetwork();
@@ -201,7 +207,6 @@
                 method: "wallet_switchEthereumChain",
                 params: [{chainId}]
             });
-
         } catch (switchError) {
             // This error code indicates that the chain has not been added to MetaMask.
             if (switchError.code === 4902) {
@@ -228,8 +233,6 @@
             }
             // handle other "switch" errors
         }
-        await networkChanged();
-        // activeNetwork.set(activeNet)
     }
 
     async function connect() {
@@ -271,6 +274,8 @@
             if ($activeNetwork) {
                 let temp = res.data.offchainAssetReceiptVaults;
                 tokens.set(temp);
+                transactionInProgressShow.set(false)
+                transactionInProgress.set(false)
             } else {
                 tokens.set([])
             }

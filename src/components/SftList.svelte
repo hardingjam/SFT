@@ -11,6 +11,7 @@
     let issuers = []
     let sftLogo;
     let logoPreview;
+    let isEditorOpen = false;
 
     onMount(() => {
         getSftData()
@@ -69,6 +70,13 @@
             }
         }
     }
+
+    function openEditor(token) {
+        dispatch('editClick', {
+            token,
+            isEditorOpen
+        });
+    }
 </script>
 
 <tr>
@@ -114,6 +122,11 @@
       </div>
     {/each}
   </td>
+  <td>
+    {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
+      <img class="link-icon ml-5 cursor-pointer" src={icons.edit} alt="edit" on:click={()=>{openEditor(sft)}}>
+    {/if}
+  </td>
 </tr>
 <style>
     .sft-info {
@@ -149,5 +162,9 @@
     .sft-logo-container .sft-logo {
         width: 20px;
         height: 20px;
+    }
+
+    td:last-child{
+        background: #DCDBDD;
     }
 </style>

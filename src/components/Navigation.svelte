@@ -185,6 +185,10 @@
         color: #5F9AD1;
     }
 
+    .navigation-container{
+        z-index: 1;
+    }
+
     .navigation {
         min-width: 203px;
         max-width: 203px;

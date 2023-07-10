@@ -546,7 +546,13 @@ export function navigate(path, options) {
             breadCrumbs.update(() => [{path: "#", label: "Home"}, {path, label}])
         }
     } else {
-        breadCrumbs.update(bc => [...bc, {path, label}])
+        breadCrumbs.update(bc => {
+            if (!bc.find(b => b.path === path)) {
+                return [...bc, {path, label}]
+            } else {
+                return [{path: "#", label: "Home"}, {path, label}]
+            }
+        })
     }
     navigateTo(path)
 }

@@ -250,7 +250,7 @@
     }
 
     .receipts {
-        height: 300px;
+        min-height: 300px;
         border-bottom: 1px solid #D2D2D2;
         overflow: auto;
     }

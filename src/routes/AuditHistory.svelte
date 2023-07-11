@@ -61,12 +61,9 @@
                         if (preData && preData.length) {
                             if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
                                 let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                                if ($auditHistory) {
                                     let temp = data.data.offchainAssetReceiptVault
                                     auditHistory.set(temp)
-                                } else {
-                                    auditHistory.set({})
-                                }
+                                    certifyData = $auditHistory?.certifications || []
                                 transactionSuccess.set(true)
                                 transactionInProgress.set(false)
                                 clearInterval(interval)
@@ -127,12 +124,13 @@
       {/each}
       </tbody>
     </table>
-    {#if ($accountRoles.CERTIFIER)}
-      <div class="certify-btn-container">
-        <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
-        <button class="default-btn" on:click={() => certify()}>Certify</button>
-      </div>
-    {/if}
+
+  {/if}
+  {#if  !loading && ($accountRoles.CERTIFIER)}
+    <div class="certify-btn-container">
+      <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
+      <button class="default-btn" on:click={() => certify()}>Certify</button>
+    </div>
   {/if}
 </div>
 

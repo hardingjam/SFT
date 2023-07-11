@@ -255,7 +255,7 @@
     </div>
   {/if}
   {#if $tokens.length}
-    <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'w-8/12'} content mt-5 mr-5">
+    <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} content mt-5 mr-5">
       {#if (view === "tile")}
         <TileView tokens={$tokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage} on:okClick={handleOkButtonClick}/>
@@ -296,6 +296,12 @@
         align-self: end;
         width: calc(100% - 243px);
         margin-right: 20px;
+    }
+
+    .tile-view {
+        align-self: end;
+        width: calc(100% - 320px);
+        margin-right: 6rem;
     }
 
 </style>

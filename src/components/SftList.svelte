@@ -133,14 +133,6 @@
         color: #575757
     }
 
-    tr:nth-child(even) {
-        background-color: #F0EFF1;
-    }
-
-    tr:nth-child(odd) {
-        background-color: #FFFFFF;
-    }
-
     .update {
         display: none;
         width: 99px;

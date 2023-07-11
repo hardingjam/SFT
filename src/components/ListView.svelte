@@ -43,9 +43,9 @@
 </script>
 <div>
   {#if !isEditorOpen}
-    <table class="w-full leading-7 text-center token-list-table">
+    <table class="sft-table">
       <thead>
-      <tr class="text-white text-bold">
+      <tr>
         <th style="width: 99px"></th>
         <th>Token name</th>
         <th>Token symbol</th>
@@ -74,24 +74,9 @@
   {/if}
 </div>
 <style>
-
-    .token-list-table thead th {
-        background-color: #9196C5;
-    }
-
-    .token-list-table thead tr:first-child th:first-child {
-        border-top-left-radius: 10px;
-    }
-
-    .token-list-table thead tr:first-child th:last-child {
-        border-top-right-radius: 10px;
-    }
-
     .editor {
         background: #FFFFFF;
         height: 100vh;
         border-radius: 8px;
     }
-
-
 </style>

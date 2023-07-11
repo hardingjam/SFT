@@ -329,6 +329,7 @@
       <div class={$sftInfo ? "sft-info-opened" : "" }>
         <div class="{$activeNetwork  ? 'show' : 'hide'}">
           <Route path="#" component={Home}/>
+          <Route path="#asset-register" component={AssetRegister}/>
         </div>
       </div>
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
@@ -346,7 +347,6 @@
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
-          <Route path="#asset-register" component={AssetRegister}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

@@ -80,11 +80,15 @@
     }
 </script>
 <div class="receipts">
+
+  <div class="title">
+    Asset register
+  </div>
   {#if loading}
-    <SftLoader width="50"></SftLoader>
+    <SftLoader/>
   {/if}
   {#if !loading}
-    <table>
+    <table class="sft-table">
       <thead>
       <tr>
         <th>Receipt ID</th>
@@ -97,7 +101,7 @@
       {#each receipts as receipt}
         <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
         <tr class="tb-row">
-          <td>{receipt.receipt.receiptId}</td>
+          <td class="brown">{receipt.receipt.receiptId}</td>
           <td>{receipt.schema || ""}</td>
           <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
           <td>{timeStampToDate(receipt.timestamp)}</td>
@@ -107,3 +111,20 @@
     </table>
   {/if}
 </div>
+
+<style>
+    .receipts {
+        width: 100%;
+        margin-right: 20px;
+        margin-left: 223px;
+        margin-top: 90px;
+    }
+
+    .title {
+        color: #6B7280;
+        font-weight: 700;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 25px;
+    }
+</style>

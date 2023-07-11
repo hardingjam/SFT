@@ -6,7 +6,7 @@
         activeNetwork,
         account,
         ethersData,
-        transactionError, transactionSuccess, transactionInProgress
+        transactionError, transactionSuccess, transactionInProgress, sftInfo
     } from "../scripts/store";
     import {
         getSubgraphData,
@@ -18,6 +18,7 @@
     import {ethers} from "ethers";
     import {formatAddress, formatDate} from "../scripts/helpers";
     import {accountRoles} from "../scripts/store.js";
+    import SftLoader from '../components/SftLoader.svelte';
 
     let error = ''
     let certifyUntil = formatDate(new Date())
@@ -54,21 +55,22 @@
 
                 let wait = await certifyTx.wait()
                 if (wait.status === 1) {
-                    let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                    let lastElementBlockNumber = preData.data.offchainAssetReceiptVault.certifications.slice(-1)[0].transaction.blockNumber
                     let interval = setInterval(async () => {
-                        if (wait.blockNumber.toString() === lastElementBlockNumber) {
-                            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                            if (auditHistory) {
-                                let temp = data.data.offchainAssetReceiptVault
-                                auditHistory.set(temp)
-                                certifyData = $auditHistory?.certifications || []
-                            } else {
-                                auditHistory.set({})
+                        let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                        preData = preData?.data?.offchainAssetReceiptVault.certifications
+                        if (preData && preData.length) {
+                            if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
+                                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                                if ($auditHistory) {
+                                    let temp = data.data.offchainAssetReceiptVault
+                                    auditHistory.set(temp)
+                                } else {
+                                    auditHistory.set({})
+                                }
+                                transactionSuccess.set(true)
+                                transactionInProgress.set(false)
+                                clearInterval(interval)
                             }
-                            transactionSuccess.set(true)
-                            transactionInProgress.set(false)
-                            clearInterval(interval)
                         }
                     }, 2000)
                 } else {
@@ -92,86 +94,65 @@
         return new Date(`${month}/${day}/${year}`) > new Date()
     }
 </script>
-<DefaultFrame header="Audit history">
-  <div slot="header-buttons" class="display-flex">
-    <button class="header-btn btn-hover" on:click={()=>{navigate("#members")}}>Members</button>
-    <button class="header-btn btn-hover" on:click={()=>{navigate("#roles")}}>Roles</button>
-  </div>
-  <div slot="content">
-    <div class="history">
-      <div class="certify">
-        <table>
-          <thead>
-          <tr>
-            <th>Total amount</th>
-            <th>Certified on</th>
-            <th>Certified by</th>
-            <th>Certified until</th>
-          </tr>
-          </thead>
-          <tbody>
-          {#each certifyData as cert}
-            <tr>
-              <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
-              <td>{timeStampToDate(cert?.timestamp)}</td>
-              <td>{formatAddress(cert?.certifier.address)}</td>
-              <td
-                class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>{timeStampToDate(cert?.certifiedUntil)}</td>
-            </tr>
-          {/each}
-          </tbody>
-        </table>
-      </div>
-      {#if ($accountRoles.CERTIFIER)}
-        <div class="certify-btn-container">
-          <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
-          <button class="default-btn" on:click={() => certify()}>Certify</button>
-        </div>
-      {/if}
-      <div class="error">
-        {error}
-        <!--        System frozen until certified-->
-      </div>
-    </div>
 
-  </div>
+<div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
 
-</DefaultFrame>
+  <div class="title">
+    Audit history
+  </div>
+  {#if loading}
+    <SftLoader/>
+  {/if}
+  {#if !loading}
+    <table class="sft-table">
+      <thead>
+      <tr>
+        <th>Total amount</th>
+        <th>Certified on</th>
+        <th>Certified by</th>
+        <th>Certified until</th>
+      </tr>
+      </thead>
+      <tbody>
+      {#each certifyData as cert}
+        <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
+        <tr class="tb-row">
+          <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
+          <td>{timeStampToDate(cert?.timestamp)}</td>
+          <td>{formatAddress(cert?.certifier.address)}</td>
+          <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
+            {timeStampToDate(cert?.certifiedUntil)}
+          </td>
+        </tr>
+      {/each}
+      </tbody>
+    </table>
+    {#if ($accountRoles.CERTIFIER)}
+      <div class="certify-btn-container">
+        <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
+        <button class="default-btn" on:click={() => certify()}>Certify</button>
+      </div>
+    {/if}
+  {/if}
+</div>
+
 <style>
-
-    .history {
-        text-align: left;
-        display: flex;
-        flex-direction: column;
-        width: 678px;
-        min-height: 530px;
-        position: relative;
+    .left-margin {
+        margin-left: 223px;
     }
 
-    table {
+    .receipts {
         width: 100%;
+        margin-right: 20px;
+        margin-top: 90px;
     }
 
-    thead, tbody {
+    .title {
+        color: #6B7280;
+        font-weight: 700;
         text-align: center;
-    }
-
-    th {
-        white-space: nowrap;
-    }
-
-    th, td {
-        text-align: left;
-    }
-
-    td {
-        padding-left: 10px;
-    }
-
-    .certify {
-        margin-top: 30px;
-        height: 180px;
-        overflow: auto;
+        width: 100%;
+        margin-bottom: 25px;
     }
 
     .certify-btn-container {

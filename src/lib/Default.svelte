@@ -330,6 +330,7 @@
         <div class="{$activeNetwork  ? 'show' : 'hide'}">
           <Route path="#" component={Home}/>
           <Route path="#asset-register" component={AssetRegister}/>
+          <Route path="#audit-history" component={AuditHistory}/>
         </div>
       </div>
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
@@ -339,7 +340,6 @@
           <Route path="#roles" component={Roles}/>
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
-          <Route path="#audit-history" component={AuditHistory}/>
           <!--          <Route path="#set-vault" component={SetVault}/>-->
           <Route path="#asset-classes" component={AssetClasses}/>
           <Route path="#new-asset-class" component={NewSchema}/>

@@ -70,5 +70,6 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#receipt/:id", "Receipt"],
     ["#sft-create-success", "Sft created successfully"],
     ["#ipfs", "IPFS"],
-    ["#manual", "Manual"]
+    ["#manual", "Manual"],
+    ["#asset-register", "Asset register"]
 ]);

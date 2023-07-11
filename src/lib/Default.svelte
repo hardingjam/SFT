@@ -54,6 +54,7 @@
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
     import Manual from '../routes/Manual.svelte';
     import Home from '../routes/Home.svelte';
+    import AssetRegister from '../routes/AssetRegister.svelte';
 
 
     let connectedAccount;
@@ -345,6 +346,7 @@
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
+          <Route path="#asset-register" component={AssetRegister}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

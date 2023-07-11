@@ -1,18 +1,14 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {navigateTo} from "yrv";
     import {
         vault,
         auditHistory,
         activeNetwork,
         account,
-        selectedReceipt,
         ethersData,
         transactionError, transactionSuccess, transactionInProgress
     } from "../scripts/store";
-    import {onMount} from "svelte";
     import {
-        cborDecode,
         getSubgraphData,
         hasRole, navigate,
         showPromptSFTCreate,
@@ -21,45 +17,12 @@
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatAddress, formatDate} from "../scripts/helpers";
-    import {
-        IPFS_GETWAY,
-        MAGIC_NUMBERS,
-    } from "../scripts/consts.js";
-    import axios from "axios";
-    import SftLoader from "../components/SftLoader.svelte";
     import {accountRoles} from "../scripts/store.js";
 
     let error = ''
     let certifyUntil = formatDate(new Date())
     let certifyData = []
-    let receipts = []
     let loading = false;
-    let tempReceipts = []
-
-    $:tempReceipts && setAssetClasses()
-
-    async function setAssetClasses() {
-        receipts = await Promise.all(tempReceipts.map(async (r) => {
-            let information = r.receipt.receiptInformations[0]?.information ?
-                cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) :
-                null
-            let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
-            let schema;
-            if (schemaHash) {
-
-                try {
-                    let res = await axios.get(`${IPFS_GETWAY}${schemaHash}`)
-                    if (res) {
-                        schema = res.data.displayName
-                    }
-                } catch (err) {
-                    console.log(err)
-                }
-            }
-
-            return {...r, information, schema}
-        }))
-    }
 
     async function getAuditHistory() {
         if ($vault.address) {
@@ -72,20 +35,9 @@
             }
         }
         certifyData = $auditHistory?.certifications || []
-        tempReceipts = $auditHistory?.deposits || []
     }
 
-
-    onMount(async () => {
-        if (!$auditHistory.id) {
-            loading = true;
-            await getAuditHistory()
-            loading = false
-        } else {
-            certifyData = $auditHistory?.certifications || []
-            tempReceipts = $auditHistory?.deposits || []
-        }
-    })
+    $: $activeNetwork && getAuditHistory();
 
     async function certify() {
         //Set date to the nearest Midnight in the future
@@ -133,11 +85,6 @@
         }
     }
 
-    function goToReceiptAudit(receipt) {
-        selectedReceipt.set(receipt)
-        navigateTo(`#receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
-    }
-
     function inFuture(date) {
         let day = date.split('-')[0]
         let month = date.split('-')[1]
@@ -152,34 +99,6 @@
   </div>
   <div slot="content">
     <div class="history">
-      <div class="receipts">
-        {#if loading}
-          <SftLoader width="50"></SftLoader>
-        {/if}
-        {#if !loading}
-          <table>
-            <thead>
-            <tr>
-              <th>Receipt ID</th>
-              <th>Asset class</th>
-              <th>Amount</th>
-              <th>Last updated</th>
-            </tr>
-            </thead>
-            <tbody>
-            {#each receipts as receipt}
-              <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
-              <tr class="tb-row">
-                <td>{receipt.receipt.receiptId}</td>
-                <td>{receipt.schema || ""}</td>
-                <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
-                <td>{timeStampToDate(receipt.timestamp)}</td>
-              </tr>
-            {/each}
-            </tbody>
-          </table>
-        {/if}
-      </div>
       <div class="certify">
         <table>
           <thead>
@@ -247,16 +166,6 @@
 
     td {
         padding-left: 10px;
-    }
-
-    .receipts {
-        min-height: 300px;
-        border-bottom: 1px solid #D2D2D2;
-        overflow: auto;
-    }
-
-    .receipts table th {
-        width: 33%;
     }
 
     .certify {

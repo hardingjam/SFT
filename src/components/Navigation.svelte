@@ -63,12 +63,13 @@
           </div>
         </NavigationButton>
         {#if $accountRoles.DEPOSITOR}
-          <NavigationButton targetPath="#mint" {path} disabled={!!!$vault.address} child={true}/>
+          <NavigationButton targetPath="#mint" {path} child={true}/>
           <NavigationButton targetPath="#asset-classes" {path} child={true}/>
         {/if}
-        <NavigationButton targetPath="#members" {path} disabled={!!!$vault.address} child={true}/>
-        <NavigationButton targetPath="#roles" {path} disabled={!!!$vault.address} child={true}/>
-        <NavigationButton targetPath="#audit-history" {path} disabled={!!!$vault.address} child={true}/>
+        <NavigationButton targetPath="#members" {path} child={true}/>
+        <NavigationButton targetPath="#roles" {path} child={true}/>
+        <NavigationButton targetPath="#audit-history" {path} child={true}/>
+        <NavigationButton targetPath="#asset-register" {path} child={true}/>
       {/if}
 
       <NavigationButton targetPath="#manual" {path}>
@@ -185,7 +186,7 @@
         color: #5F9AD1;
     }
 
-    .navigation-container{
+    .navigation-container {
         z-index: 2;
     }
 

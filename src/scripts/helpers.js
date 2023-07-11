@@ -63,7 +63,7 @@ export function toSentenceCase(text) {
 }
 
 export async function fetchSubgraphData(activeNetwork, variables, query) {
-    if (activeNetwork) {
+    if (activeNetwork.id) {
         try {
             let req = await fetch(activeNetwork.subgraph_url, {
                 method: "POST",

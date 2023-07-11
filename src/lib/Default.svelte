@@ -412,7 +412,7 @@
 
 <style lang="scss">
   .logo-container {
-    z-index: 2;
+    z-index: 3;
     position: fixed;
     display: flex;
     top: 20px;

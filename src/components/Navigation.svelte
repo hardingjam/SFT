@@ -186,7 +186,7 @@
     }
 
     .navigation-container{
-        z-index: 1;
+        z-index: 2;
     }
 
     .navigation {

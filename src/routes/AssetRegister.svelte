@@ -8,7 +8,7 @@
     } from "../scripts/store";
     import {
         cborDecode,
-        getSubgraphData,
+        getSubgraphData, navigate,
         timeStampToDate
     } from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
@@ -55,7 +55,7 @@
 
     function goToAssetInformation(receipt) {
         selectedReceipt.set(receipt)
-        navigateTo(`#asset-information/${$selectedReceipt.receipt.receiptId}`, {replace: false})
+        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)
     }
 
     async function getAuditHistory() {

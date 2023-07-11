@@ -537,7 +537,7 @@ export async function setAccountRoles(roles, account) {
 }
 
 export function navigate(path, options) {
-    let label = ROUTE_LABEL_MAP.get(path)
+    let label = ROUTE_LABEL_MAP.get(path.split("/")[0])
     navigationButtonClicked.update(() => false)
     if (options && options.clear) {
         if (path === "#") {

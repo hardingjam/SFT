@@ -4,7 +4,7 @@
         vault,
         auditHistory,
         activeNetwork,
-        selectedReceipt,
+        selectedReceipt, sftInfo,
     } from "../scripts/store";
     import {
         cborDecode,
@@ -79,7 +79,7 @@
         tempReceipts = $auditHistory?.deposits || []
     }
 </script>
-<div class="receipts">
+<div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
 
   <div class="title">
     Asset register
@@ -113,10 +113,13 @@
 </div>
 
 <style>
+    .left-margin {
+        margin-left: 223px;
+    }
+
     .receipts {
         width: 100%;
         margin-right: 20px;
-        margin-left: 223px;
         margin-top: 90px;
     }
 

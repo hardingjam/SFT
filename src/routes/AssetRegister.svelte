@@ -87,7 +87,7 @@
   {#if loading}
     <SftLoader/>
   {/if}
-  {#if !loading}
+  {#if !loading && receipts.length}
     <table class="sft-table">
       <thead>
       <tr>

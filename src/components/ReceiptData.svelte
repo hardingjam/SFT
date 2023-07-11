@@ -8,7 +8,7 @@
         getSubgraphData,
         toSentenceCase
     } from '../scripts/helpers.js';
-    import {activeNetwork} from '../scripts/store.js';
+    import {activeNetwork, vault} from '../scripts/store.js';
     import {RECEIPT_INFORMATION_QUERY} from '../scripts/queries.js';
     import {onMount} from 'svelte';
     import SftLoader from './SftLoader.svelte';
@@ -26,6 +26,7 @@
 
 
     $: schemaHash && getSchemaFileProps()
+    $: $activeNetwork && getReceiptData()
 
     onMount(async () => {
         await getReceiptData(receipt)
@@ -59,8 +60,14 @@
 
 
     async function getReceiptData(receipt) {
+        let variables
+        if (!receipt) {
+            let receiptId = $vault.address + "-" + window.location.hash.split("/")[1]
+            variables = {id: receiptId}
+        } else {
+            variables = {id: receipt.id}
+        }
         loading = true;
-        let variables = {id: receipt.id}
         let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
         let receiptInfo = ""
         let information = ""

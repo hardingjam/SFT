@@ -401,6 +401,10 @@ li {
     text-decoration: underline;
 }
 
+.hover-underline:hover {
+    text-decoration: underline;
+}
+
 .dropdown .dropdown-menu {
     z-index: 1;
     -webkit-box-shadow: 0 10px 5px -3px rgba(179, 179, 179, 1);
@@ -417,6 +421,7 @@ li {
     text-align: center;
     line-height: 1.75rem;
 }
+
 .sft-table tbody tr:nth-child(even) {
     background-color: #F0EFF1;
 }

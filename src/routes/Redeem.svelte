@@ -155,7 +155,7 @@
     }
 
     function goToReceiptInfo(receipt) {
-        receiptClicked = receipt
+        receiptClicked = receipt.receipt
         showReceiptInfo = true
     }
 

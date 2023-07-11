@@ -53,16 +53,16 @@
         }))
     }
 
-    function goToReceiptAudit(receipt) {
+    function goToAssetInformation(receipt) {
         selectedReceipt.set(receipt)
-        navigateTo(`#receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
+        navigateTo(`#asset-information/${$selectedReceipt.receipt.receiptId}`, {replace: false})
     }
 
     async function getAuditHistory() {
         if ($vault.address) {
             loading = true
             try {
-                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault', "asdfasdf")
+                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
 
                 if (data) {
                     let temp = data.data.offchainAssetReceiptVault
@@ -101,7 +101,7 @@
       {#each receipts as receipt}
         <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
         <tr class="tb-row">
-          <td class="brown">{receipt.receipt.receiptId}</td>
+          <td class="brown hover-underline" on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
           <td>{receipt.schema || ""}</td>
           <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
           <td>{timeStampToDate(receipt.timestamp)}</td>

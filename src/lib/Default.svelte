@@ -41,7 +41,6 @@
     import Members from "../routes/Members.svelte";
     import AuditHistory from "../routes/AuditHistory.svelte";
     import NewSchema from "../routes/NewSchema.svelte";
-    import ReceiptAudit from "../routes/ReceiptAudit.svelte";
     import SftCreateSuccess from "../routes/SftCreateSuccess.svelte";
     import AssetClasses from "../routes/AssetClasses.svelte";
     import Navigation from "../components/Navigation.svelte";
@@ -55,6 +54,7 @@
     import Manual from '../routes/Manual.svelte';
     import Home from '../routes/Home.svelte';
     import AssetRegister from '../routes/AssetRegister.svelte';
+    import AssetInformation from '../routes/AssetInformation.svelte';
 
 
     let connectedAccount;
@@ -343,7 +343,7 @@
           <!--          <Route path="#set-vault" component={SetVault}/>-->
           <Route path="#asset-classes" component={AssetClasses}/>
           <Route path="#new-asset-class" component={NewSchema}/>
-          <Route path="#receipt/:id" component={ReceiptAudit}/>
+          <Route path="#asset-information/:id" component={AssetInformation}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>

@@ -62,6 +62,7 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             {
               receipt
               {
+                id,
                 receiptId,
                   receiptInformations{
                     information

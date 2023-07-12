@@ -87,7 +87,7 @@
     async function handlePageChange(event) {
         currentPage = event.detail.currentPage
         let skip = (perPage * (currentPage - 1)) - 1
-        filteredReceipts = tempReceipts.filter((r, index) => index > skip && index < perPage * currentPage)
+        filteredReceipts = receipts.filter((r, index) => index > skip && index < perPage * currentPage)
     }
 
 </script>

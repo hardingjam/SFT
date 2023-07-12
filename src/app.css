@@ -32,6 +32,8 @@ body {
 }
 
 #app {
+    background: #DCDBDD;
+
     text-align: center;
     width: 100%;
     font-family: "Mukta", sans-serif;
@@ -420,6 +422,15 @@ li {
     width: 100%;
     text-align: center;
     line-height: 1.75rem;
+}
+
+.sft-table-container {
+    position: relative;
+    height: calc(100vh - 228px);
+    margin-bottom: -100px;
+    background: #FFFFFF;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .sft-table tbody tr:nth-child(even) {

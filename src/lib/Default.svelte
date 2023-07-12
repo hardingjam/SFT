@@ -389,7 +389,7 @@
     {/if}
   </div>
 
-  <div class="footer w-full p-2 {$account ? 'bg-white' :'' }">
+  <div class="footer w-full p-2 mt-5 {$account ? 'bg-white' :'' }">
     <div class="powered-by">
       <span>Powered by</span>
       <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>
@@ -462,7 +462,6 @@
     justify-content: center;
     padding-top: 9rem;
     transition: 0.5s ease;
-    padding-bottom: 5rem;
   }
 
   .sft-info-opened {
@@ -571,7 +570,6 @@
   }
 
   .content {
-    background: #DCDBDD;
     height: fit-content;
     min-height: 100vh;
   }

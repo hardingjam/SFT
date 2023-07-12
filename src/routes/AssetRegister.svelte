@@ -20,15 +20,19 @@
     } from "../scripts/consts.js";
     import axios from "axios";
     import SftLoader from "../components/SftLoader.svelte";
+    import Pagination from '../components/Pagination.svelte';
 
     let error = ''
     let certifyUntil = formatDate(new Date())
     let receipts = []
     let loading = false;
-    let tempReceipts = []
+    let tempReceipts = [];
+    let filteredReceipts = [];
+    let perPage = 10;
+    let currentPage = 1
 
     $:tempReceipts && setAssetClasses()
-    $: $activeNetwork && getAuditHistory();
+    $:$activeNetwork && getAuditHistory();
 
     async function setAssetClasses() {
         receipts = await Promise.all(tempReceipts.map(async (r) => {
@@ -77,7 +81,17 @@
             loading = false
         }
         tempReceipts = $auditHistory?.deposits || []
+        let skip = (perPage * (currentPage - 1)) - 1
+        filteredReceipts = tempReceipts.filter((r, index) => index > skip && index < perPage * currentPage)
+
     }
+
+    async function handlePageChange(event) {
+        currentPage = event.detail.currentPage
+        let skip = (perPage * (currentPage - 1)) - 1
+        filteredReceipts = tempReceipts.filter((r, index) => index > skip && index < perPage * currentPage)
+    }
+
 </script>
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
 
@@ -88,27 +102,30 @@
     <SftLoader/>
   {/if}
   {#if !loading && receipts.length}
-    <table class="sft-table">
-      <thead>
-      <tr>
-        <th>Receipt ID</th>
-        <th>Asset class</th>
-        <th>Amount</th>
-        <th>Last updated</th>
-      </tr>
-      </thead>
-      <tbody>
-      {#each receipts as receipt}
-        <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
-        <tr class="tb-row">
-          <td class="brown hover-underline" on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
-          <td>{receipt.schema || ""}</td>
-          <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
-          <td>{timeStampToDate(receipt.timestamp)}</td>
+    <div class="sft-table-container">
+      <table class="sft-table">
+        <thead>
+        <tr>
+          <th>Receipt ID</th>
+          <th>Asset class</th>
+          <th>Amount</th>
+          <th>Last updated</th>
         </tr>
-      {/each}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+        {#each filteredReceipts as receipt}
+          <tr class="tb-row">
+            <td class="brown hover-underline"
+                on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
+            <td>{receipt.schema || ""}</td>
+            <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
+            <td>{timeStampToDate(receipt.timestamp)}</td>
+          </tr>
+        {/each}
+        </tbody>
+        <Pagination dataLength={receipts.length} {perPage} on:pageChange={handlePageChange}/>
+      </table>
+    </div>
   {/if}
 </div>
 

@@ -5,7 +5,7 @@
     export let perPage = 10
     let currentPage = 1;
 
-    let pagesArray = [];
+    let pagesArray = [1];
     let totalPages;
 
     $:dataLength && getTotalPages()
@@ -25,17 +25,16 @@
 
     function getTotalPages() {
         totalPages = Math.ceil(dataLength / perPage);
-        for (let i = 1; i < totalPages + 1; i++) {
+        for (let i = 2; i < totalPages + 1; i++) {
             pagesArray.push(i)
-
             if (i > 2) {
                 pagesArray.push("...")
                 break
             }
-
         }
-        if (totalPages > 3)
+        if (totalPages > 3) {
             pagesArray.push(totalPages)
+        }
     }
 
     function setPage(page) {

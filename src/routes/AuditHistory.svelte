@@ -10,7 +10,7 @@
     } from "../scripts/store";
     import {
         getSubgraphData,
-        hasRole, navigate,
+        hasRole,
         showPromptSFTCreate,
         timeStampToDate
     } from "../scripts/helpers.js";
@@ -19,11 +19,15 @@
     import {formatAddress, formatDate} from "../scripts/helpers";
     import {accountRoles} from "../scripts/store.js";
     import SftLoader from '../components/SftLoader.svelte';
+    import Pagination from '../components/Pagination.svelte';
 
     let error = ''
     let certifyUntil = formatDate(new Date())
     let certifyData = []
     let loading = false;
+    let filteredCertifications = [];
+    let perPage = 10;
+    let currentPage = 1
 
     async function getAuditHistory() {
         if ($vault.address) {
@@ -36,6 +40,9 @@
             }
         }
         certifyData = $auditHistory?.certifications || []
+        let skip = (perPage * (currentPage - 1)) - 1
+        filteredCertifications = certifyData.filter((r, index) => index > skip && index <
+            perPage * currentPage)
     }
 
     $: $activeNetwork && getAuditHistory();
@@ -61,9 +68,12 @@
                         if (preData && preData.length) {
                             if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
                                 let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                                    let temp = data.data.offchainAssetReceiptVault
-                                    auditHistory.set(temp)
-                                    certifyData = $auditHistory?.certifications || []
+                                let temp = data.data.offchainAssetReceiptVault
+                                auditHistory.set(temp)
+                                certifyData = $auditHistory?.certifications || []
+                                let skip = (perPage * (currentPage - 1)) - 1
+                                filteredCertifications = certifyData.filter((r, index) => index > skip && index <
+                                    perPage * currentPage)
                                 transactionSuccess.set(true)
                                 transactionInProgress.set(false)
                                 clearInterval(interval)
@@ -90,6 +100,12 @@
         let year = date.split('-')[2]
         return new Date(`${month}/${day}/${year}`) > new Date()
     }
+
+    async function handlePageChange(event) {
+        currentPage = event.detail.currentPage
+        let skip = (perPage * (currentPage - 1)) - 1
+        filteredCertifications = certifyData.filter((r, index) => index > skip && index < perPage * currentPage)
+    }
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
@@ -101,32 +117,36 @@
     <SftLoader/>
   {/if}
   {#if !loading && certifyData.length}
-    <table class="sft-table">
-      <thead>
-      <tr>
-        <th>Total amount</th>
-        <th>Certified on</th>
-        <th>Certified by</th>
-        <th>Certified until</th>
-      </tr>
-      </thead>
-      <tbody>
-      {#each certifyData as cert}
-        <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
-        <tr class="tb-row">
-          <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
-          <td>{timeStampToDate(cert?.timestamp)}</td>
-          <td>{formatAddress(cert?.certifier.address)}</td>
-          <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
-            {timeStampToDate(cert?.certifiedUntil)}
-          </td>
-        </tr>
-      {/each}
-      </tbody>
-    </table>
+    <div class="sft-table-container">
 
+      <table class="sft-table">
+        <thead>
+        <tr>
+          <th>Total amount</th>
+          <th>Certified on</th>
+          <th>Certified by</th>
+          <th>Certified until</th>
+        </tr>
+        </thead>
+        <tbody>
+        {#each filteredCertifications as cert}
+          <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
+          <tr class="tb-row">
+            <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
+            <td>{timeStampToDate(cert?.timestamp)}</td>
+            <td>{formatAddress(cert?.certifier.address)}</td>
+            <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
+              {timeStampToDate(cert?.certifiedUntil)}
+            </td>
+          </tr>
+        {/each}
+        </tbody>
+        <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}/>
+
+      </table>
+    </div>
   {/if}
-  {#if  !loading && ($accountRoles.CERTIFIER)}
+  {#if !loading && ($accountRoles.CERTIFIER)}
     <div class="certify-btn-container">
       <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
       <button class="default-btn" on:click={() => certify()}>Certify</button>

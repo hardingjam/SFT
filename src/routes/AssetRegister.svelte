@@ -1,5 +1,4 @@
 <script>
-    import {navigateTo} from "yrv";
     import {
         vault,
         auditHistory,

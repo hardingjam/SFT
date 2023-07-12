@@ -99,7 +99,7 @@
   {#if loading}
     <SftLoader/>
   {/if}
-  {#if !loading && receipts.length}
+  {#if !loading }
     <div class="sft-table-container">
       <table class="sft-table">
         <thead>
@@ -111,15 +111,17 @@
         </tr>
         </thead>
         <tbody>
-        {#each filteredReceipts as receipt}
-          <tr class="tb-row">
-            <td class="brown hover-underline"
-                on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
-            <td>{receipt.schema || ""}</td>
-            <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
-            <td>{timeStampToDate(receipt.timestamp)}</td>
-          </tr>
-        {/each}
+        {#if receipts.length}
+          {#each filteredReceipts as receipt}
+            <tr class="tb-row">
+              <td class="brown hover-underline"
+                  on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
+              <td>{receipt.schema || ""}</td>
+              <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
+              <td>{timeStampToDate(receipt.timestamp)}</td>
+            </tr>
+          {/each}
+        {/if}
         </tbody>
         <Pagination dataLength={receipts.length} {perPage} on:pageChange={handlePageChange}/>
       </table>

@@ -54,6 +54,7 @@
 <div class="pagination-container">
   <div class="showing">Showing <span class="font-bold">1-{perPage}</span> of <span class="font-bold">{dataLength}</span>
   </div>
+  <slot name="actions"></slot>
   <div class="pagination">
     <button on:click={previousPage} disabled={currentPage === 1} class="previous-button">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

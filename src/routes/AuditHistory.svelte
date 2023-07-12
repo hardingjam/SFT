@@ -1,5 +1,4 @@
 <script>
-    import DefaultFrame from "../components/DefaultFrame.svelte";
     import {
         vault,
         auditHistory,
@@ -28,6 +27,7 @@
     let filteredCertifications = [];
     let perPage = 10;
     let currentPage = 1
+    let maxCertifiedUntil = 0
 
     async function getAuditHistory() {
         if ($vault.address) {
@@ -43,6 +43,19 @@
         let skip = (perPage * (currentPage - 1)) - 1
         filteredCertifications = certifyData.filter((r, index) => index > skip && index <
             perPage * currentPage)
+
+        //get the latest certify date
+        maxCertifiedUntil = 0
+
+        for (const element of certifyData) {
+            const certifiedUntil = parseInt(element.certifiedUntil);
+            if (certifiedUntil > maxCertifiedUntil) {
+                maxCertifiedUntil = certifiedUntil;
+            }
+        }
+
+        maxCertifiedUntil = new Date(timeStampToDate(maxCertifiedUntil, "yyyy-mm-dd"))
+
     }
 
     $: $activeNetwork && getAuditHistory();
@@ -98,7 +111,8 @@
         let day = date.split('-')[0]
         let month = date.split('-')[1]
         let year = date.split('-')[2]
-        return new Date(`${month}/${day}/${year}`) > new Date()
+        let d = new Date(`${month}/${day}/${year}`).setHours(23, 59)
+        return d > new Date()
     }
 
     async function handlePageChange(event) {
@@ -116,19 +130,20 @@
   {#if loading}
     <SftLoader/>
   {/if}
-  {#if !loading && certifyData.length}
-    <div class="sft-table-container">
+  <div class="sft-table-container">
 
-      <table class="sft-table">
-        <thead>
-        <tr>
-          <th>Total amount</th>
-          <th>Certified on</th>
-          <th>Certified by</th>
-          <th>Certified until</th>
-        </tr>
-        </thead>
-        <tbody>
+    <table class="sft-table">
+      <thead>
+      <tr>
+        <th>Total amount</th>
+        <th>Certified on</th>
+        <th>Certified by</th>
+        <th>Certified until</th>
+      </tr>
+      </thead>
+      <tbody>
+      {#if !loading && certifyData.length}
+
         {#each filteredCertifications as cert}
           <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
           <tr class="tb-row">
@@ -140,18 +155,26 @@
             </td>
           </tr>
         {/each}
-        </tbody>
-        <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}/>
+      {/if}
 
-      </table>
-    </div>
-  {/if}
-  {#if !loading && ($accountRoles.CERTIFIER)}
-    <div class="certify-btn-container">
-      <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
-      <button class="default-btn" on:click={() => certify()}>Certify</button>
-    </div>
-  {/if}
+      </tbody>
+      <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}>
+        <div slot="actions">
+          {#if !loading && ($accountRoles.CERTIFIER)}
+            <div class="certify-btn-container">
+              {#if maxCertifiedUntil < new Date()}
+                <span class="error">System frozen until certified</span>
+              {/if}
+              <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
+              <button class="default-btn" on:click={() => certify()}>Certify</button>
+            </div>
+          {/if}
+        </div>
+      </Pagination>
+
+    </table>
+  </div>
+
 </div>
 
 <style>
@@ -180,7 +203,8 @@
     }
 
     .certify-date-input {
-        margin-right: 5px;
+        margin-right: 20px;
+        margin-left: 20px;
         width: 130px;
         border: none;
         box-sizing: border-box;

@@ -137,9 +137,20 @@ export function tierReport(report) {
     return parsedReport;
 }
 
-export function timeStampToDate(timeStamp) {
+export function timeStampToDate(timeStamp, format) {
+    let value;
     let {year, month, day} = getDateValues(new Date(timeStamp * 1000))
-    return [day, month, year].join('-');
+
+    if (format === "mm-dd-yyyy") {
+        value = [month, day, year].join('-');
+    }
+    if (format === "yyyy-mm-dd") {
+        value = [year, month, day].join('-');
+
+    } else {
+        value = [day, month, year].join('-');
+    }
+    return value
 }
 
 export function formatDate(date) {

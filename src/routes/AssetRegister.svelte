@@ -54,6 +54,8 @@
 
             return {...r, information, schema}
         }))
+        let skip = (perPage * (currentPage - 1)) - 1
+        filteredReceipts = receipts.filter((r, index) => index > skip && index < perPage * currentPage)
     }
 
     function goToAssetInformation(receipt) {
@@ -80,9 +82,6 @@
             loading = false
         }
         tempReceipts = $auditHistory?.deposits || []
-        let skip = (perPage * (currentPage - 1)) - 1
-        filteredReceipts = tempReceipts.filter((r, index) => index > skip && index < perPage * currentPage)
-
     }
 
     async function handlePageChange(event) {

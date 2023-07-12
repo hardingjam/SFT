@@ -29,6 +29,16 @@
     let currentPage = 1
     let maxCertifiedUntil = 0
 
+    function getMaxCertifyDate() {
+        for (const element of certifyData) {
+            const certifiedUntil = parseInt(element.certifiedUntil);
+            if (certifiedUntil > maxCertifiedUntil) {
+                maxCertifiedUntil = certifiedUntil;
+            }
+        }
+        maxCertifiedUntil = new Date(timeStampToDate(maxCertifiedUntil, "yyyy-mm-dd")).setHours(23, 59)
+    }
+
     async function getAuditHistory() {
         if ($vault.address) {
             let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
@@ -44,17 +54,7 @@
         filteredCertifications = certifyData.filter((r, index) => index > skip && index <
             perPage * currentPage)
 
-        //get the latest certify date
-        maxCertifiedUntil = 0
-
-        for (const element of certifyData) {
-            const certifiedUntil = parseInt(element.certifiedUntil);
-            if (certifiedUntil > maxCertifiedUntil) {
-                maxCertifiedUntil = certifiedUntil;
-            }
-        }
-
-        maxCertifiedUntil = new Date(timeStampToDate(maxCertifiedUntil, "yyyy-mm-dd"))
+        getMaxCertifyDate()
 
     }
 
@@ -87,6 +87,7 @@
                                 let skip = (perPage * (currentPage - 1)) - 1
                                 filteredCertifications = certifyData.filter((r, index) => index > skip && index <
                                     perPage * currentPage)
+                                getMaxCertifyDate()
                                 transactionSuccess.set(true)
                                 transactionInProgress.set(false)
                                 clearInterval(interval)

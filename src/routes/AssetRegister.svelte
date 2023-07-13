@@ -27,7 +27,7 @@
     let loading = false;
     let tempReceipts = [];
     let filteredReceipts = [];
-    let perPage = 10;
+    let perPage = 20;
     let currentPage = 1
 
     $:tempReceipts && setAssetClasses()

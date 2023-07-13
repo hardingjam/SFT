@@ -2,7 +2,7 @@
     import {createEventDispatcher} from 'svelte';
 
     export let dataLength = 0
-    export let perPage = 10
+    export let perPage = 20
     let currentPage = 1;
 
     let pagesArray = [1];
@@ -26,14 +26,14 @@
     function getTotalPages() {
         totalPages = Math.ceil(dataLength / perPage);
         for (let i = 2; i < totalPages + 1; i++) {
-            pagesArray.push(i)
+            pagesArray = [...pagesArray, i]
             if (i > 2) {
-                pagesArray.push("...")
+                pagesArray = [...pagesArray, "..."]
                 break
             }
         }
         if (totalPages > 3) {
-            pagesArray.push(totalPages)
+            pagesArray = [...pagesArray, totalPages]
         }
     }
 

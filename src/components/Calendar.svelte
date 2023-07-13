@@ -1,5 +1,6 @@
 <script>
     import {createEventDispatcher} from 'svelte';
+    import {icons} from '../scripts/assets.js';
 
     export let value;
     export let minDate;
@@ -24,8 +25,6 @@
             selectedDate = date;
         }
 
-        dispatch('change', selectedDate);
-        showCalendar = false;
     }
 
     function getDaysInMonth(year, month) {
@@ -98,6 +97,30 @@
             dispatch('change', selectedDate);
         }
     }
+
+    function okClick() {
+        dispatch('change', selectedDate);
+        showCalendar = false;
+    }
+
+    function getMonthName(monthNumber) {
+        let months = {
+            1: "January",
+            2: "February",
+            3: "March",
+            4: "April",
+            5: "May",
+            6: "June",
+            7: "July",
+            8: "August",
+            9: "September",
+            10: "October",
+            11: "November",
+            12: "December",
+        }
+
+        return months[monthNumber]
+    }
 </script>
 
 <div class="date-picker">
@@ -111,44 +134,50 @@
 
   {#if showCalendar}
     <div class="calendar">
-      <div class="calendar">
-        <div class="header">
-          <div on:click={prevMonth}>&lt;</div>
-          <span>{currentYear} - {currentMonth + 1}</span>
-          <div on:click={nextMonth}>&gt;</div>
+      <div class="header">
+        <div on:click={prevMonth}>
+          <img src={icons.arrow_narrow_left} alt="prev">
         </div>
-
-        <div class="days">
-          <div class="day">Sun</div>
-          <div class="day">Mon</div>
-          <div class="day">Tue</div>
-          <div class="day">Wed</div>
-          <div class="day">Thu</div>
-          <div class="day">Fri</div>
-          <div class="day">Sat</div>
+        <span>{getMonthName(currentMonth + 1)} {currentYear}</span>
+        <div on:click={nextMonth}>
+          <img src={icons.arrow_narrow_right} alt="next">
         </div>
-
-        {#each weeks as week}
-          <div class="week">
-            {#each week as day}
-              {#if day === null}
-                <div class="empty"></div>
-              {:else}
-                <div
-                  class="date"
-                  class:selected={selectedDate.getTime() === day.getTime()}
-                  class:today={today.toDateString() === day.toDateString()}
-                  on:click={() => selectDate(day)}
-                >
-                  {day.getDate()}
-                </div>
-              {/if}
-            {/each}
-          </div>
-        {/each}
       </div>
 
+      <div class="days">
+        <div class="day">Sun</div>
+        <div class="day">Mon</div>
+        <div class="day">Tue</div>
+        <div class="day">Wed</div>
+        <div class="day">Thu</div>
+        <div class="day">Fri</div>
+        <div class="day">Sat</div>
+      </div>
+
+      {#each weeks as week}
+        <div class="week">
+          {#each week as day}
+            {#if day === null}
+              <div class="empty"></div>
+            {:else}
+              <div
+                class="date"
+                class:selected={selectedDate.getTime() === day.getTime()}
+                class:today={today.toDateString() === day.toDateString()}
+                on:click={() => selectDate(day)}
+              >
+                {day.getDate()}
+              </div>
+            {/if}
+          {/each}
+        </div>
+      {/each}
+      <div class="buttons">
+        <div class="ok-btn" on:click={()=>{okClick()}}>Ok</div>
+        <div class="cancel-btn">Cancel</div>
+      </div>
     </div>
+
   {/if}
 </div>
 
@@ -171,7 +200,7 @@
     .header {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         margin-bottom: 10px;
         font-size: 12px;
         font-style: normal;
@@ -212,8 +241,8 @@
     }
 
     .date {
-        width: 30px;
-        height: 30px;
+        width: 36px;
+        height: 36px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -221,16 +250,63 @@
     }
 
     .date.selected {
-        background-color: #ccc;
+        border-radius: 8px;
+        border: 1px solid #AE6E00;
+        color: #AE6E00;
     }
 
     .date.today {
-        font-weight: bold;
-        color: blue;
+        border-radius: 8px;
+        border: 1px solid #1C64F2;
+        background: #E1EFFE;
     }
 
     .empty {
-        width: 30px;
-        height: 30px;
+        width: 36px;
+        height: 36px;
+    }
+
+    .buttons {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+    }
+
+    .ok-btn {
+        border-radius: 8px;
+        background: #AE6E00;
+        text-align: center;
+        color: #FFFFFF;
+        padding: 12px 0;
+        width: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 37px;
+    }
+
+    .ok-btn:hover {
+        cursor: pointer;
+        background: #9d7334;
+    }
+
+    .cancel-btn {
+        border-radius: 8px;
+        border: 1px solid #AE6E00;
+        color: #AE6E00;
+        padding: 12px 0;
+        width: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 37px;
+
+    }
+
+    .cancel-btn:hover {
+        background: #ececec;
+        cursor: pointer;
     }
 </style>

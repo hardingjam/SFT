@@ -426,6 +426,8 @@ li {
 
 .sft-table tr {
     line-height: 36px;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .sft-table-container {

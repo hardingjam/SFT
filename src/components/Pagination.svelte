@@ -14,6 +14,21 @@
     function nextPage() {
         if (currentPage < totalPages) {
             currentPage += 1;
+            // Find the index of the '...' element in the array
+            const ellipsisIndex = pagesArray.indexOf('...');
+
+            // Check if the ellipsis exists in the array
+            if (currentPage > 3 && currentPage < totalPages && ellipsisIndex !== -1 && pagesArray.length < totalPages +
+                1) {
+                // Get the last page number before the ellipsis
+                const lastPageNumber = pagesArray[ellipsisIndex - 1];
+                // Calculate the next page number
+                const nextPageNumber = lastPageNumber + 1;
+
+                // Insert the next page number at the correct place in the array
+                pagesArray.splice(ellipsisIndex, 0, nextPageNumber);
+                pagesArray = [...pagesArray]
+            }
         }
     }
 

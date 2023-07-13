@@ -424,6 +424,10 @@ li {
     line-height: 1.75rem;
 }
 
+.sft-table tr {
+    line-height: 36px;
+}
+
 .sft-table-container {
     position: relative;
     height: calc(100vh - 228px);

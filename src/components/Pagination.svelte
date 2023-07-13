@@ -4,6 +4,8 @@
     export let dataLength = 0
     export let perPage = 20
     let currentPage = 1;
+    let showingStart = 1;
+    let showingEnd = 1;
 
     let pagesArray = [1];
     let totalPages;
@@ -50,6 +52,8 @@
         if (totalPages > 3) {
             pagesArray = [...pagesArray, totalPages]
         }
+        showingStart = currentPage * perPage - perPage + 1
+        showingEnd = currentPage * perPage > dataLength ? dataLength : currentPage * perPage
     }
 
     function setPage(page) {
@@ -59,6 +63,8 @@
     const dispatch = createEventDispatcher();
 
     function handlePageChange() {
+        showingStart = currentPage * perPage - perPage + 1
+        showingEnd = currentPage * perPage > dataLength ? dataLength : currentPage * perPage
         dispatch('pageChange', {
             currentPage
         });
@@ -66,7 +72,8 @@
 </script>
 
 <div class="pagination-container">
-  <div class="showing">Showing <span class="font-bold">1-{perPage}</span> of <span class="font-bold">{dataLength}</span>
+  <div class="showing">Showing <span class="font-bold">{showingStart}-{showingEnd}</span> of
+    <span class="font-bold">{dataLength}</span>
   </div>
   <slot name="actions"></slot>
   <div class="pagination">

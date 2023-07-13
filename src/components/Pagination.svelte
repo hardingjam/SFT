@@ -109,6 +109,15 @@
         padding: 5px 12px;
     }
 
+    .next-button:disabled, .previous-button:disabled {
+        opacity: 0.3;
+    }
+
+    .next-button:disabled:hover, .previous-button:disabled:hover {
+        cursor: default;
+        background: none;
+    }
+
     .pagination-button.last {
         border-right: 1px solid #D1D5DB;
     }

@@ -27,7 +27,7 @@
         totalPages = Math.ceil(dataLength / perPage);
         for (let i = 2; i < totalPages + 1; i++) {
             pagesArray = [...pagesArray, i]
-            if (i > 2) {
+            if (i > 2 && totalPages > 3) {
                 pagesArray = [...pagesArray, "..."]
                 break
             }

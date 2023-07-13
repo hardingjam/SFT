@@ -28,7 +28,7 @@
     let tempReceipts = [];
     let filteredReceipts = [];
     let perPage = 20;
-    let currentPage = 1
+    let currentPage = 1;
 
     $:tempReceipts && setAssetClasses()
     $:$activeNetwork && getAuditHistory();

@@ -71,7 +71,7 @@
     }
 </script>
 
-<div class="pagination-container">
+<div class="pagination-container border-t">
   <div class="showing">Showing <span class="font-bold">{showingStart}-{showingEnd}</span> of
     <span class="font-bold">{dataLength}</span>
   </div>

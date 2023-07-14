@@ -182,7 +182,7 @@
               {#if maxCertifiedUntil < new Date()}
                 <span class="error">System frozen until certified</span>
               {/if}
-              <Calendar value={selectedDate} on:change={handleDateChange} />
+              <Calendar value={selectedDate} on:change={handleDateChange}/>
               <button class="default-btn ml-3" on:click={() => certify()}>Certify</button>
             </div>
           {/if}

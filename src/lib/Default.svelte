@@ -17,7 +17,7 @@
         data,
         roles,
         sftInfo,
-        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress
+        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -75,6 +75,9 @@
     }
 
     router.subscribe(async e => {
+        //reset pageTitle
+        pageTitle.set("")
+
         if (!e.initial) {
             await setVault()
             location = e.path

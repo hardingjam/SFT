@@ -3,7 +3,7 @@
         vault,
         auditHistory,
         activeNetwork,
-        selectedReceipt, sftInfo,
+        selectedReceipt, sftInfo, pageTitle,
     } from "../scripts/store";
     import {
         cborDecode,
@@ -64,6 +64,9 @@
     }
 
     async function getAuditHistory() {
+        //set pageTitle
+        pageTitle.set("Asset register")
+
         if ($vault.address) {
             loading = true
             try {
@@ -92,10 +95,6 @@
 
 </script>
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
-
-  <div class="title">
-    Asset register
-  </div>
   {#if loading}
     <SftLoader/>
   {/if}
@@ -137,14 +136,7 @@
     .receipts {
         width: 100%;
         margin-right: 20px;
-        margin-top: 90px;
+        margin-top: 102px;
     }
 
-    .title {
-        color: #6B7280;
-        font-weight: 700;
-        text-align: center;
-        width: 100%;
-        margin-bottom: 25px;
-    }
 </style>

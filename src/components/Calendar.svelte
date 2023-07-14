@@ -237,6 +237,7 @@
     }
 
     .calendar {
+        background: #ffffff;
         position: absolute;
         bottom: 40px;
         left: 0;

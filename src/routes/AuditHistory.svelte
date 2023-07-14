@@ -5,7 +5,7 @@
         activeNetwork,
         account,
         ethersData,
-        transactionError, transactionSuccess, transactionInProgress, sftInfo
+        transactionError, transactionSuccess, transactionInProgress, sftInfo, pageTitle
     } from "../scripts/store";
     import {
         getSubgraphData,
@@ -41,6 +41,10 @@
     }
 
     async function getAuditHistory() {
+
+        //set pageTitle
+        pageTitle.set("Audit history")
+
         if ($vault.address) {
             loading = true
             let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
@@ -136,10 +140,6 @@
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
-
-  <div class="title">
-    Audit history
-  </div>
   {#if loading}
     <SftLoader/>
   {/if}
@@ -199,15 +199,7 @@
     .receipts {
         width: 100%;
         margin-right: 20px;
-        margin-top: 90px;
-    }
-
-    .title {
-        color: #6B7280;
-        font-weight: 700;
-        text-align: center;
-        width: 100%;
-        margin-bottom: 25px;
+        margin-top: 102px;
     }
 
     .certify-btn-container {
@@ -216,36 +208,8 @@
         margin-top: 10px
     }
 
-    .certify-date-input {
-        margin-right: 20px;
-        margin-left: 20px;
-        width: 130px;
-        border: none;
-        box-sizing: border-box;
-        outline: 0;
-        position: relative;
-        text-align: center;
-    }
-
     .until {
         color: #F11717;;
-    }
-
-    .default-input {
-        padding-left: 0;
-    }
-
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        background: transparent;
-        bottom: 0;
-        color: transparent;
-        cursor: pointer;
-        height: auto;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: auto;
     }
 
 </style>

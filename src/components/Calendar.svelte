@@ -45,23 +45,32 @@
 
     let weeks = [];
 
-    let dayCounter = 1;
 
-    for (let i = 0; i < 6; i++) {
-        let week = [];
-        for (let j = 0; j < 7; j++) {
-            if (i === 0 && j < firstDayOfMonth) {
-                week.push(null);
-            } else if (dayCounter > daysInMonth) {
-                week.push(null);
-            } else {
-                let date = new Date(currentYear, currentMonth, dayCounter);
-                week.push(date);
-                dayCounter++;
+    function renderWeek(month, year) {
+        let dayCounter = 1;
+
+        daysInMonth = getDaysInMonth(month, year);
+        weeks = []
+        for (let i = 0; i < 6; i++) {
+            let week = [];
+            for (let j = 0; j < 7; j++) {
+                if (i === 0 && j < firstDayOfMonth) {
+                    week.push(null);
+                } else if (dayCounter > daysInMonth) {
+                    week.push(null);
+                } else {
+                    let date = new Date(year, month, dayCounter);
+                    week.push(date);
+                    dayCounter++;
+                }
             }
+            weeks.push(week);
         }
-        weeks.push(week);
     }
+
+
+    renderWeek(currentMonth, currentYear);
+
 
     function prevMonth() {
         if (currentMonth === 0) {
@@ -75,6 +84,8 @@
         firstDayOfMonth = getFirstDayOfMonth(currentYear, currentMonth);
 
         updateSelectedDate();
+
+        renderWeek(currentMonth, currentYear)
     }
 
     function nextMonth() {
@@ -89,6 +100,8 @@
         firstDayOfMonth = getFirstDayOfMonth(currentYear, currentMonth);
 
         updateSelectedDate();
+        renderWeek(currentMonth, currentYear)
+
     }
 
     function updateSelectedDate() {

@@ -8,7 +8,7 @@
         activeNetwork,
         schemas,
         schemaError,
-        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, tokenName
+        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, tokenName, pageTitle
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -336,6 +336,9 @@
             }
         )
     }
+
+    pageTitle.set("Mint/Redeem")
+
 
 </script>
 

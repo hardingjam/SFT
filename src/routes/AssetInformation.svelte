@@ -1,7 +1,7 @@
 <script>
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {selectedReceipt, tokenName, data} from "../scripts/store.js";
+    import {selectedReceipt, tokenName, data, pageTitle} from "../scripts/store.js";
     import ReceiptData from '../components/ReceiptData.svelte';
     import {timeStampToDate} from '../scripts/helpers.js';
     import {ethers} from 'ethers';
@@ -9,8 +9,10 @@
     let receipt = $selectedReceipt.receipt;
     let loading = false
 
+    pageTitle.set("Asset information")
+
 </script>
-<DefaultFrame header={`Asset information`}>
+<DefaultFrame>
   <div slot="content" class="info-container">
     <div class="display-flex justify-between font-bold mb-5">
       <span>{$tokenName}</span>

@@ -1,7 +1,7 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {icons} from "../scripts/assets.js"
-    import {account, activeNetwork, ethersData, transactionError, vault} from "../scripts/store.js";
+    import {account, activeNetwork, ethersData, pageTitle, transactionError, vault} from "../scripts/store.js";
     import {getContract, hasRole, showPrompt, tierReport} from "../scripts/helpers.js";
     import tierContractAbi from "../contract/TierContractAbi.json";
 
@@ -89,8 +89,11 @@
         }
     }
 
+    pageTitle.set("Members")
+
+
 </script>
-<DefaultFrame header="Members">
+<DefaultFrame>
   <div slot="content">
     <div class="members f-weight-700">
       <div class="erc20 tier">

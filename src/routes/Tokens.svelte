@@ -4,8 +4,8 @@
         accountRoles,
         activeNetwork,
         auditHistory,
-        ethersData, roles,
-        schemas,
+        ethersData, pageTitle, roles,
+        schemas, tokenName,
         tokens, transactionInProgress, transactionInProgressShow,
         vault
     } from "../scripts/store.js";
@@ -52,10 +52,11 @@
             return data.data.offchainAssetReceiptVault
         } else return {}
     }
+    pageTitle.set("SFT list")
 
 
 </script>
-<DefaultFrame header="SFT list">
+<DefaultFrame>
   <div slot="content">
     <div class="tokens">
       <table>

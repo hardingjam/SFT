@@ -80,7 +80,7 @@
         background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
     }
 
-    .page-title{
+    .page-title {
         width: 33.3%;
         color: #FFFFFF;
         font-family: "Mukta", sans-serif;

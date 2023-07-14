@@ -443,7 +443,7 @@
     }
 
     .header-buttons {
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         display: flex;
         width: 100%;
         justify-content: right;

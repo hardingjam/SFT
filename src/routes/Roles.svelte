@@ -95,7 +95,7 @@
 </script>
 <div class="roles-container">
   <DefaultFrame>
-    <div slot="header-buttons">
+    <div slot="header_buttons">
       <button class="header-btn btn-hover" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
     </div>
 

@@ -1,9 +1,15 @@
 <script>
-    export let header = ''
+    let hasSlot = false; // Initialize the slot flag to false
+
+    // Check if the slot is provided from the parent component
+    $: {
+        hasSlot = !!$$slots.header_buttons;
+    }
 </script>
+
 <div class="default-frame">
-  <div class="display-flex buttons">
-    <slot name="header-buttons"></slot>
+  <div class="display-flex justify-end {hasSlot? 'mb-5': ''}">
+    <slot name="header_buttons"></slot>
   </div>
   <div class="default-frame-container">
     <slot name="content"></slot>
@@ -20,11 +26,6 @@
         flex-direction: column;
         overflow: hidden;
         padding: 30px 60px;
-    }
-
-    .buttons {
-        justify-content: end;
-        margin-bottom: 1rem;
     }
 
 </style>

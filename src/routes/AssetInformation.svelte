@@ -7,10 +7,9 @@
     import {ethers} from 'ethers';
     import {icons} from '../scripts/assets.js';
 
-    let receipt = $selectedReceipt.receipt;
     let loading = false
 
-      pageTitle.set("Asset information")
+    pageTitle.set("Asset information")
 
 </script>
 <DefaultFrame>
@@ -22,18 +21,26 @@
   <div slot="content" class="info-container">
     <div class="display-flex justify-between font-bold mb-5">
       <span>{$tokenName}</span>
-      <span>{$data.offchainAssetReceiptVault ? timeStampToDate($data.offchainAssetReceiptVault.deployTimestamp): 0}</span>
+      <span>{$data.offchainAssetReceiptVault ?
+          timeStampToDate($data.offchainAssetReceiptVault.deployTimestamp, "yy-mm-dd tt:tt") :
+          0}</span>
     </div>
-    <ReceiptData receipt={receipt}/>
+    <ReceiptData receipt={$selectedReceipt.receipt}/>
     <div class="display-flex justify-between font-bold mt-5">
       <span>Total token amount:</span>
-      <span>{$data.offchainAssetReceiptVault ? ethers.utils.formatUnits($data.offchainAssetReceiptVault.totalShares, 18): 0}</span>
+      <span>{$data.offchainAssetReceiptVault ?
+          ethers.utils.formatUnits($data.offchainAssetReceiptVault.totalShares, 18) :
+          0}</span>
     </div>
   </div>
 </DefaultFrame>
 
 <style>
     .info-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         width: 470px;
+        min-height: 300px;
     }
 </style>

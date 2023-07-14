@@ -139,14 +139,18 @@ export function tierReport(report) {
 
 export function timeStampToDate(timeStamp, format) {
     let value;
-    let {year, month, day} = getDateValues(new Date(timeStamp * 1000))
+    let {year, month, day, hour, min} = getDateValues(new Date(timeStamp * 1000))
 
     if (format === "mm-dd-yyyy") {
         value = [month, day, year].join('-');
     }
     if (format === "yyyy-mm-dd") {
         value = [year, month, day].join('-');
-
+    }
+    if (format === "yy-mm-dd tt:tt") {
+        let date = [year, month, day].join('-');
+        let time = [hour, min].join(":")
+        value = date + " " + time;
     } else {
         value = [day, month, year].join('-');
     }
@@ -162,14 +166,16 @@ function getDateValues(date) {
     let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
-        year = d.getFullYear();
+        year = d.getFullYear(),
+        min = d.getMinutes(),
+        hour = d.getHours();
 
     if (month.length < 2)
         month = '0' + month;
     if (day.length < 2)
         day = '0' + day;
 
-    return {day, month, year};
+    return {day, month, year, hour, min};
 }
 
 export function accessControlError(msg) {

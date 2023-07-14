@@ -270,7 +270,7 @@
         align-items: center;
         position: absolute;
         bottom: 1rem;
-        right: 1rem;
+        right: 1.5rem;
     }
 
     .link-icon {

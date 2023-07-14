@@ -16,7 +16,7 @@
 
 </script>
 
-<div class="breadcrumbs py-2 flex items-center fixed w-100">
+<div class="breadcrumbs flex items-center fixed w-100">
   {#each $breadCrumbs as breadCrumb}
     <span class="cursor-pointer" on:click={()=>{cleanOutBreadCrumbs(breadCrumb.path)}}>{breadCrumb.label}</span>
     {#if !isLast(breadCrumb)}
@@ -33,11 +33,11 @@
 <style>
     .breadcrumbs {
         z-index: 2;
-        top: 3.7rem;
+        top: 3.5rem;
         margin-left: 203px;
-        padding-left: 20px;
         color: #9D7334;
         background: #DCDBDD;
         font-weight: 400;
+        padding: 0.7rem 0 0.7rem 1.5rem
     }
 </style>

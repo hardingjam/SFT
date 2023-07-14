@@ -432,7 +432,7 @@ li {
 
 .sft-table-container {
     position: relative;
-    height: calc(100vh - 228px);
+    height: calc(100vh - 180px);
     margin-bottom: -100px;
     background: #FFFFFF;
     border-top-left-radius: 10px;

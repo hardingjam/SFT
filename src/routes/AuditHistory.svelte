@@ -172,21 +172,22 @@
         {/if}
 
         </tbody>
-        <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}>
-          <div slot="actions">
-            {#if !loading && ($accountRoles.CERTIFIER)}
-              <div class="certify-btn-container">
-                {#if maxCertifiedUntil < new Date()}
-                  <span class="error">System frozen until certified</span>
-                {/if}
-                <Calendar value={selectedDate} on:change={handleDateChange} />
-                <button class="default-btn ml-3" on:click={() => certify()}>Certify</button>
-              </div>
-            {/if}
-          </div>
-        </Pagination>
+
 
       </table>
+      <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}>
+        <div slot="actions">
+          {#if !loading && ($accountRoles.CERTIFIER)}
+            <div class="certify-btn-container">
+              {#if maxCertifiedUntil < new Date()}
+                <span class="error">System frozen until certified</span>
+              {/if}
+              <Calendar value={selectedDate} on:change={handleDateChange} />
+              <button class="default-btn ml-3" on:click={() => certify()}>Certify</button>
+            </div>
+          {/if}
+        </div>
+      </Pagination>
     </div>
   {/if}
 </div>

@@ -19,6 +19,7 @@
     import {accountRoles} from "../scripts/store.js";
     import SftLoader from '../components/SftLoader.svelte';
     import Pagination from '../components/Pagination.svelte';
+    import Calendar from '../components/Calendar.svelte';
 
     let error = ''
     let certifyUntil = formatDate(new Date())
@@ -63,6 +64,9 @@
     $: $activeNetwork && getAuditHistory();
 
     async function certify() {
+
+        certifyUntil = formatDate(selectedDate)
+
         //Set date to the nearest Midnight in the future
         let untilToTime = new Date(certifyUntil).setHours(23, 59, 59, 0)
         untilToTime = new Date(untilToTime).getTime()
@@ -123,6 +127,12 @@
         let skip = (perPage * (currentPage - 1)) - 1
         filteredCertifications = certifyData.filter((r, index) => index > skip && index < perPage * currentPage)
     }
+
+    let selectedDate = new Date();
+
+    function handleDateChange(event) {
+        selectedDate = event.detail;
+    }
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
@@ -169,8 +179,8 @@
                 {#if maxCertifiedUntil < new Date()}
                   <span class="error">System frozen until certified</span>
                 {/if}
-                <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
-                <button class="default-btn" on:click={() => certify()}>Certify</button>
+                <Calendar value={selectedDate} on:change={handleDateChange} />
+                <button class="default-btn ml-3" on:click={() => certify()}>Certify</button>
               </div>
             {/if}
           </div>

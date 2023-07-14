@@ -116,6 +116,12 @@
         showCalendar = false;
     }
 
+    function cancelClick() {
+        selectedDate = new Date()
+        dispatch('change', selectedDate);
+        showCalendar = false;
+    }
+
     function getMonthName(monthNumber) {
         let months = {
             1: "January",
@@ -134,9 +140,30 @@
 
         return months[monthNumber]
     }
+
+    function clickOutside(node) {
+
+        const handleClick = event => {
+            if (node && !node.contains(event.target) && !event.defaultPrevented) {
+                node.dispatchEvent(
+                    new CustomEvent('click_outside', node)
+                )
+            }
+        }
+
+        document.addEventListener('click', handleClick, true);
+
+        return {
+            destroy() {
+                document.removeEventListener('click', handleClick, true);
+            }
+        }
+    }
+
 </script>
 
-<div class="date-picker">
+<div class="date-picker" use:clickOutside
+     on:click_outside={()=>okClick()}>
   <div class="input" on:click={toggleCalendar}>
     {#if selectedDate}
       {selectedDate.toLocaleDateString()}
@@ -173,21 +200,19 @@
             {#if day === null}
               <div class="empty"></div>
             {:else}
-              <div
-                class="date"
-                class:selected={selectedDate.getTime() === day.getTime()}
-                class:today={today.toDateString() === day.toDateString()}
-                on:click={() => selectDate(day)}
-              >
+              <div class="date"
+                   class:selected={selectedDate.getTime() === day.getTime()}
+                   class:today={today.toDateString() === day.toDateString()}
+                   on:click={() => selectDate(day)}>
                 {day.getDate()}
               </div>
             {/if}
           {/each}
         </div>
       {/each}
-      <div class="buttons">
+      <div class="buttons mt-2">
         <div class="ok-btn" on:click={()=>{okClick()}}>Ok</div>
-        <div class="cancel-btn">Cancel</div>
+        <div class="cancel-btn" on:click={()=>{cancelClick()}}>Cancel</div>
       </div>
     </div>
 
@@ -201,9 +226,20 @@
         position: relative;
     }
 
+    .input {
+        height: 27px;
+        border-radius: 5px;
+        padding: 0 25px;
+        border: 1px solid #B7B7B7;
+        background: #ECECEC;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.25) inset;
+        cursor: pointer;
+    }
+
     .calendar {
         position: absolute;
         bottom: 40px;
+        left: 0;
         display: inline-block;
         box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.10), 0 1px 3px 0 rgba(0, 0, 0, 0.10);
         padding: 1rem;

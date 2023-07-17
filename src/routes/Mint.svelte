@@ -364,9 +364,8 @@
             <div class="schema-dropdown flex justify-between mb-6">
               <label class="f-weight-700 custom-col">Asset class</label>
               <Select options={$schemas}
-
                       on:select={handleSchemaSelect}
-                      label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+                      label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
 
             </div>
             {#if selectedSchema?.displayName}

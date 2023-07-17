@@ -113,7 +113,7 @@
                   <Select options={ROLES.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
 
                           on:select={handleRoleSelect}
-                          label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+                          label={'Choose'} className={"rolesInputSelect"} expandIcon={icons.expand_black}></Select>
                 </div>
               </td>
             </tr>

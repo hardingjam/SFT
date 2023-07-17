@@ -55,6 +55,7 @@
     import Home from '../routes/Home.svelte';
     import AssetRegister from '../routes/AssetRegister.svelte';
     import AssetInformation from '../routes/AssetInformation.svelte';
+    import TokenOverview from '../routes/TokenOverview.svelte';
 
 
     let connectedAccount;
@@ -334,6 +335,7 @@
           <Route path="#" component={Home}/>
           <Route path="#asset-register" component={AssetRegister}/>
           <Route path="#audit-history" component={AuditHistory}/>
+          <Route path="#token-overview" component={TokenOverview}/>
         </div>
       </div>
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>

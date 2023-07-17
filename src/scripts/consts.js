@@ -72,5 +72,6 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#ipfs", "IPFS"],
     ["#manual", "Manual"],
     ["#asset-register", "Asset register"],
-    ["#asset-information", "Asset information"]
+    ["#asset-information", "Asset information"],
+    ["#token-overview", "Token overview"]
 ]);

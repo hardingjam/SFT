@@ -177,7 +177,7 @@
             accountRoles.set(await setAccountRoles($roles, $account));
             transactionInProgressShow.set(false)
             transactionInProgress.set(false)
-            navigate("#roles", {clear: true})
+            navigate("#token-overview", {clear: true})
         }
     }
 

@@ -1,9 +1,8 @@
 <script>
     import {account, accountRoles, sftInfo, tokenName, vault} from "../scripts/store.js";
     import {fly} from 'svelte/transition';
-    import {timeStampToDate} from '../scripts/helpers.js';
-    import {ethers} from 'ethers';
     import NavigationButton from './NavigationButton.svelte';
+    import TokenOverviewTable from './TokenOverviewTable.svelte';
 
     function showSftInfo() {
         sftInfo.set(true)
@@ -138,41 +137,7 @@
       </div>
       <div class="flex flex-col pt-10 px-9 sft-info-table">
         <span class="font-bold self-center">Token overview</span>
-        <table class="w-8/12 leading-8 w-full mt-5 leading-10 text-left">
-          <tr>
-            <td class="font-bold">Token name</td>
-            <td class="sft-name">{token.name}</td>
-          </tr>
-          <tr>
-            <td class="font-bold">Token symbol</td>
-            <td class="">{token.symbol}</td>
-          </tr>
-          <tr>
-            <td class="font-bold">Creation date</td>
-            <td class="">{timeStampToDate(token.deployTimestamp)}</td>
-          </tr>
-          <tr>
-            <td class="font-bold">Number of holders</td>
-            <td class="">{token.tokenHolders.filter(h => h.balance !== "0").length}</td>
-          </tr>
-          <tr>
-            <td class="font-bold">Token supply</td>
-            <td class="">{token?.totalShares ? ethers.utils.formatUnits(token?.totalShares, 18) : 0}</td>
-          </tr>
-          <!--          <tr>-->
-          <!--            <td class="font-bold">Name of Auditor(s)</td>-->
-          <!--            <td class="">KPMG</td>-->
-          <!--          </tr>-->
-          <!--          <tr>-->
-          <!--            <td class="font-bold">Name of issuer</td>-->
-          <!--            <td class="">British Land</td>-->
-          <!--          </tr>    -->
-          <tr>
-            <td class="font-bold">About</td>
-            <td class=""></td>
-          </tr>
-        </table>
-
+        <TokenOverviewTable {token}/>
       </div>
     </div>
 

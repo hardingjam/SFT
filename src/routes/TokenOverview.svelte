@@ -202,16 +202,28 @@
         <TokenOverviewTable {token}/>
       </div>
       <div class="sft-image w-1/2">
-        <div class="sft-logo-container rounded-full"
+        <div class="sft-logo-container relative rounded-full"
              class:hover={token.deployer.toLowerCase() === $account.toLowerCase()}>
           <label for={`${token.address}-upload`} id="sft-logo-upload"
                  class="flex items-center justify-center text-white flex-col {token.deployer.toLowerCase() === $account.toLowerCase() ? 'cursor-pointer' : '' }">
             {#if token.icon}
               <img src={`${IPFS_GETWAY}${token.icon}`} alt="token logo" class="logo" bind:this={logoPreview}/>
               {#if token.deployer.toLowerCase() === $account.toLowerCase()}
-                <div class="update absolute flex-col flex items-center justify-center">
-                  <img src="{icons.camera}" alt="token logo"/>
-                  <span class="text">Update</span>
+                <div class="update">
+                  <div class="relative">
+                    <div class="update-container">
+                      <img src="{icons.camera}" alt="token logo" />
+                      <span class="text">Update</span>
+                    </div>
+                    <svg width="303" height="303" viewBox="0 0 303 303" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <mask id="mask0_3572_11735" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="303" height="303">
+                        <circle cx="151.5" cy="151.5" r="151.5" fill="#D9D9D9"/>
+                      </mask>
+                      <g mask="url(#mask0_3572_11735)">
+                        <rect x="-1.43555" y="178.914" width="303" height="142.843" fill="black" fill-opacity="0.6"/>
+                      </g>
+                    </svg>
+                  </div>
                 </div>
               {/if}
             {/if}
@@ -280,8 +292,17 @@
         background: rgba(0, 0, 0, 0.6);
     }
 
-    .sft-logo-container:hover .update {
+    .sft-logo-container .update {
+        position: absolute;
+    }
+
+    .update-container{
+        position: absolute;
+        top: 70%;
+        width: 100%;
         display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
 </style>

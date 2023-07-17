@@ -17,7 +17,7 @@
         data,
         roles,
         sftInfo,
-        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress
+        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -41,7 +41,6 @@
     import Members from "../routes/Members.svelte";
     import AuditHistory from "../routes/AuditHistory.svelte";
     import NewSchema from "../routes/NewSchema.svelte";
-    import ReceiptAudit from "../routes/ReceiptAudit.svelte";
     import SftCreateSuccess from "../routes/SftCreateSuccess.svelte";
     import AssetClasses from "../routes/AssetClasses.svelte";
     import Navigation from "../components/Navigation.svelte";
@@ -54,6 +53,8 @@
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
     import Manual from '../routes/Manual.svelte';
     import Home from '../routes/Home.svelte';
+    import AssetRegister from '../routes/AssetRegister.svelte';
+    import AssetInformation from '../routes/AssetInformation.svelte';
 
 
     let connectedAccount;
@@ -74,6 +75,9 @@
     }
 
     router.subscribe(async e => {
+        //reset pageTitle
+        pageTitle.set("")
+
         if (!e.initial) {
             await setVault()
             location = e.path
@@ -328,6 +332,8 @@
       <div class={$sftInfo ? "sft-info-opened" : "" }>
         <div class="{$activeNetwork  ? 'show' : 'hide'}">
           <Route path="#" component={Home}/>
+          <Route path="#asset-register" component={AssetRegister}/>
+          <Route path="#audit-history" component={AuditHistory}/>
         </div>
       </div>
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
@@ -337,11 +343,10 @@
           <Route path="#roles" component={Roles}/>
           <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
-          <Route path="#audit-history" component={AuditHistory}/>
           <!--          <Route path="#set-vault" component={SetVault}/>-->
           <Route path="#asset-classes" component={AssetClasses}/>
           <Route path="#new-asset-class" component={NewSchema}/>
-          <Route path="#receipt/:id" component={ReceiptAudit}/>
+          <Route path="#asset-information/:id" component={AssetInformation}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
@@ -387,7 +392,7 @@
     {/if}
   </div>
 
-  <div class="footer w-full p-2 {$account ? 'bg-white' :'' }">
+  <div class="footer w-full p-2 mt-5 {$account ? 'bg-white' :'' }">
     <div class="powered-by">
       <span>Powered by</span>
       <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>
@@ -460,7 +465,6 @@
     justify-content: center;
     padding-top: 9rem;
     transition: 0.5s ease;
-    padding-bottom: 5rem;
   }
 
   .sft-info-opened {
@@ -569,7 +573,6 @@
   }
 
   .content {
-    background: #DCDBDD;
     height: fit-content;
     min-height: 100vh;
   }

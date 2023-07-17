@@ -97,7 +97,7 @@
     </svg>
   </div>
   {#if !isEditorOpen}
-    <div class="flex justify-between">
+    <div class="flex justify-between mb-7">
       <table class="w-8/12 leading-8 text-left">
         <tr>
           <td class="font-bold">Token name</td>
@@ -181,7 +181,7 @@
         </div>
       </div>
     </div>
-    <div class="links-container pt-5">
+    <div class="links-container">
       {#if sft.credentialLinks}
         {#if sft.credentialLinks.twitter}
           <a href={sft.credentialLinks.twitter} target="_blank">
@@ -268,6 +268,9 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        position: absolute;
+        bottom: 1rem;
+        right: 1.5rem;
     }
 
     .link-icon {

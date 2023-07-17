@@ -2,7 +2,7 @@
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
-    import {activeNetwork, schemas, vault, deposits, accountRoles, tokenName} from "../scripts/store.js";
+    import {activeNetwork, schemas, vault, deposits, accountRoles, tokenName, pageTitle} from "../scripts/store.js";
     import {getSchemas, getSubgraphData, navigate, timeStampToDate} from "../scripts/helpers";
     import {DEPOSITS_QUERY} from "../scripts/queries.js";
     import {onMount} from "svelte";
@@ -42,11 +42,12 @@
         })
     }
 
+    pageTitle.set( `${$tokenName} asset class list`)
 
 </script>
 
-<DefaultFrame header={`${$tokenName} asset class list`}>
-  <div slot="header-buttons" class="display-flex">
+<DefaultFrame>
+  <div slot="header_buttons" class="display-flex">
     <button class="header-btn btn-hover" on:click={()=>{navigate("#mint")}}>Mint</button>
     <button class="header-btn btn-hover" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
   </div>

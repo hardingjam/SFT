@@ -25,6 +25,8 @@ import web_brown from '../assets/icons/web_brown.svg'
 import list_view from '../assets/icons/list_view.svg'
 import tile_view from '../assets/icons/tile_view.svg'
 import back from '../assets/icons/back.svg'
+import arrow_narrow_right from '../assets/icons/arrow_narrow_right.svg'
+import arrow_narrow_left from '../assets/icons/arrow_narrow_left.svg'
 
 export const icons = {
     ethereum,
@@ -53,5 +55,7 @@ export const icons = {
     list_view,
     tile_view,
     back,
-    polygonscan
+    polygonscan,
+    arrow_narrow_right,
+    arrow_narrow_left
 }

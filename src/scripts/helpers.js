@@ -63,7 +63,7 @@ export function toSentenceCase(text) {
 }
 
 export async function fetchSubgraphData(activeNetwork, variables, query) {
-    if (activeNetwork) {
+    if (activeNetwork.id) {
         try {
             let req = await fetch(activeNetwork.subgraph_url, {
                 method: "POST",
@@ -137,9 +137,24 @@ export function tierReport(report) {
     return parsedReport;
 }
 
-export function timeStampToDate(timeStamp) {
-    let {year, month, day} = getDateValues(new Date(timeStamp * 1000))
-    return [day, month, year].join('-');
+export function timeStampToDate(timeStamp, format) {
+    let value;
+    let {year, month, day, hour, min} = getDateValues(new Date(timeStamp * 1000))
+
+    if (format === "mm-dd-yyyy") {
+        value = [month, day, year].join('-');
+    }
+    if (format === "yyyy-mm-dd") {
+        value = [year, month, day].join('-');
+    }
+    if (format === "yy-mm-dd tt:tt") {
+        let date = [year, month, day].join('-');
+        let time = [hour, min].join(":")
+        value = date + " " + time;
+    } else {
+        value = [day, month, year].join('-');
+    }
+    return value
 }
 
 export function formatDate(date) {
@@ -151,14 +166,16 @@ function getDateValues(date) {
     let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
-        year = d.getFullYear();
+        year = d.getFullYear(),
+        min = d.getMinutes(),
+        hour = d.getHours();
 
     if (month.length < 2)
         month = '0' + month;
     if (day.length < 2)
         day = '0' + day;
 
-    return {day, month, year};
+    return {day, month, year, hour, min};
 }
 
 export function accessControlError(msg) {
@@ -537,7 +554,7 @@ export async function setAccountRoles(roles, account) {
 }
 
 export function navigate(path, options) {
-    let label = ROUTE_LABEL_MAP.get(path)
+    let label = ROUTE_LABEL_MAP.get(path.split("/")[0])
     navigationButtonClicked.update(() => false)
     if (options && options.clear) {
         if (path === "#") {

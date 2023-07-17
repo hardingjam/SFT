@@ -4,7 +4,7 @@
         activeNetwork,
         roles,
         data,
-        transactionError, accountRoles,
+        transactionError, accountRoles, pageTitle,
     } from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
@@ -90,11 +90,11 @@
         }
     }
 
+    pageTitle.set("SFT roles")
 
 </script>
 <div class="roles-container">
   <DefaultFrame>
-
     <div slot="content">
       <div class="roles">
         <div class="w-full flex justify-end">
@@ -125,9 +125,7 @@
                          bind:value={account}></td>
             </tr>
           </table>
-
           <button class="default-btn" on:click={grantRole} disabled={!!error || !account || !roleName}>Enter</button>
-
         </div>
         <div class="warning error">Important - Deleting or adding is permanent on the blockchain. If all role admins are
           removed then it will be unrecoverable.

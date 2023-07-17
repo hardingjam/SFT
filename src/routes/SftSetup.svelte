@@ -1,7 +1,7 @@
 <script>
     import {
         activeNetwork,
-        data, SFTCreated, tokens,
+        data, pageTitle, SFTCreated, tokens,
         transactionError, transactionInProgress, transactionInProgressShow,
         transactionSuccess,
         vault
@@ -135,10 +135,12 @@
         })
     }
 
+
+    pageTitle.set("Setup new SFT")
+
 </script>
 <div>
   <div class="sft-setup-container">
-    <label class="title f-weight-700">SFT setup</label>
     <div class="form-box">
       <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
       </div>

@@ -8,7 +8,7 @@
         activeNetwork,
         schemas,
         schemaError,
-        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, tokenName
+        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, tokenName, pageTitle
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -337,6 +337,9 @@
         )
     }
 
+    pageTitle.set("Mint/Redeem")
+
+
 </script>
 
 <div class="mint-container relative">
@@ -439,7 +442,7 @@
     }
 
     .header-buttons {
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         display: flex;
         width: 100%;
         justify-content: right;

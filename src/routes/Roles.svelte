@@ -12,7 +12,7 @@
         accessControlError,
         toSentenceCase, showPrompt, setAccountRoles, navigate
     } from "../scripts/helpers.js";
-    import {icons} from "../scripts/assets.js";
+    import {icons as images, icons} from "../scripts/assets.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
     import {ROLES} from "../scripts/consts.js";
@@ -107,7 +107,9 @@
         <div class="role-list">
           <table>
             <tr>
-              <td><label class="f-weight-700">Role:</label></td>
+              <td class="flex items-center">
+                <img src={images.plus_sign} alt="add" class="plus">
+                <label class="f-weight-700">Role:</label></td>
               <td>
                 <div>
                   <Select options={ROLES.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
@@ -239,6 +241,11 @@
 
     .asset-class-btn:focus {
         outline: none;
+    }
+
+    .plus {
+        margin-left: -22px;
+        margin-right: 7px;
     }
 
 </style>

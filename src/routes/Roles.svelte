@@ -93,15 +93,16 @@
 
 </script>
 <div class="roles-container">
-  <DefaultFrame header="Roles">
-    <div slot="header-buttons">
-          <button class="header-btn btn-hover" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
-    </div>
+  <DefaultFrame>
 
     <div slot="content">
-      <span class="warning error">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
       <div class="roles">
-        <div class="grant-role-txt f-weight-700">Grant a role</div>
+        <div class="w-full flex justify-end">
+          <button class="asset-class-btn btn-hover" on:click={()=>{navigate("#new-asset-class")}}>
+            New asset class
+          </button>
+        </div>
+        <div class="grant-role-txt f-weight-700 flex justify-between">Grant a role</div>
         <div class="error">{error}</div>
         <div class="role-list">
           <table>
@@ -124,7 +125,12 @@
           </table>
 
           <button class="default-btn" on:click={grantRole} disabled={!!error || !account || !roleName}>Enter</button>
+
         </div>
+        <div class="warning error">Important - Deleting or adding is permanent on the blockchain. If all role admins are
+          removed then it will be unrecoverable.
+        </div>
+
         {#if loading}
           <SftLoader width="50"></SftLoader>
         {/if}
@@ -163,6 +169,7 @@
 
     .roles {
         text-align: left;
+        width: 550px;
     }
 
     .roles-data {
@@ -180,6 +187,8 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 20px;
+        margin-top: 18px;
+        margin-bottom: 30px
     }
 
     .grant-role-txt {
@@ -215,6 +224,21 @@
 
     .default-input {
         padding-left: 13px;
+    }
+
+    .asset-class-btn {
+        margin-right: -40px;
+        border: 1px solid #9d7334;
+        border-radius: 5px;
+        background: transparent;
+        color: #9d7334;
+        padding: 0 10px;
+        margin-bottom: -20px
+
+    }
+
+    .asset-class-btn:focus {
+        outline: none;
     }
 
 </style>

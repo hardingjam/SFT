@@ -4,7 +4,7 @@
         activeNetwork,
         roles,
         data,
-        transactionError, accountRoles,
+        transactionError, accountRoles, pageTitle,
     } from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
@@ -90,12 +90,13 @@
         }
     }
 
+    pageTitle.set("SFT roles")
 
 </script>
 <div class="roles-container">
-  <DefaultFrame header="Roles">
-    <div slot="header-buttons">
-          <button class="header-btn btn-hover" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
+  <DefaultFrame>
+    <div slot="header_buttons">
+      <button class="header-btn btn-hover" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
     </div>
 
     <div slot="content">

@@ -1,68 +1,52 @@
 <script>
-    import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {navigateTo} from "yrv";
     import {
         vault,
         auditHistory,
         activeNetwork,
         account,
-        selectedReceipt,
         ethersData,
-        transactionError, transactionSuccess, transactionInProgress
+        transactionError, transactionSuccess, transactionInProgress, sftInfo, pageTitle
     } from "../scripts/store";
-    import {onMount} from "svelte";
     import {
-        cborDecode,
         getSubgraphData,
-        hasRole, navigate,
+        hasRole,
         showPromptSFTCreate,
         timeStampToDate
     } from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
     import {formatAddress, formatDate} from "../scripts/helpers";
-    import {
-        IPFS_GETWAY,
-        MAGIC_NUMBERS,
-    } from "../scripts/consts.js";
-    import axios from "axios";
-    import SftLoader from "../components/SftLoader.svelte";
     import {accountRoles} from "../scripts/store.js";
+    import SftLoader from '../components/SftLoader.svelte';
+    import Pagination from '../components/Pagination.svelte';
+    import Calendar from '../components/Calendar.svelte';
 
     let error = ''
     let certifyUntil = formatDate(new Date())
     let certifyData = []
-    let receipts = []
     let loading = false;
-    let tempReceipts = []
+    let filteredCertifications = [];
+    let perPage = 10;
+    let currentPage = 1
+    let maxCertifiedUntil = 0
 
-    $:tempReceipts && setAssetClasses()
-
-    async function setAssetClasses() {
-        receipts = await Promise.all(tempReceipts.map(async (r) => {
-            let information = r.receipt.receiptInformations[0]?.information ?
-                cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) :
-                null
-            let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
-            let schema;
-            if (schemaHash) {
-
-                try {
-                    let res = await axios.get(`${IPFS_GETWAY}${schemaHash}`)
-                    if (res) {
-                        schema = res.data.displayName
-                    }
-                } catch (err) {
-                    console.log(err)
-                }
+    function getMaxCertifyDate() {
+        for (const element of certifyData) {
+            const certifiedUntil = parseInt(element.certifiedUntil);
+            if (certifiedUntil > maxCertifiedUntil) {
+                maxCertifiedUntil = certifiedUntil;
             }
-
-            return {...r, information, schema}
-        }))
+        }
+        maxCertifiedUntil = new Date(timeStampToDate(maxCertifiedUntil, "yyyy-mm-dd")).setHours(23, 59)
     }
 
     async function getAuditHistory() {
+
+        //set pageTitle
+        pageTitle.set("Audit history")
+
         if ($vault.address) {
+            loading = true
             let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
             if (data) {
                 let temp = data.data.offchainAssetReceiptVault
@@ -72,22 +56,21 @@
             }
         }
         certifyData = $auditHistory?.certifications || []
-        tempReceipts = $auditHistory?.deposits || []
+        let skip = (perPage * (currentPage - 1)) - 1
+        filteredCertifications = certifyData.filter((r, index) => index > skip && index <
+            perPage * currentPage)
+        loading = false
+
+        getMaxCertifyDate()
+
     }
 
-
-    onMount(async () => {
-        if (!$auditHistory.id) {
-            loading = true;
-            await getAuditHistory()
-            loading = false
-        } else {
-            certifyData = $auditHistory?.certifications || []
-            tempReceipts = $auditHistory?.deposits || []
-        }
-    })
+    $: $activeNetwork && getAuditHistory();
 
     async function certify() {
+
+        certifyUntil = formatDate(selectedDate)
+
         //Set date to the nearest Midnight in the future
         let untilToTime = new Date(certifyUntil).setHours(23, 59, 59, 0)
         untilToTime = new Date(untilToTime).getTime()
@@ -102,21 +85,23 @@
 
                 let wait = await certifyTx.wait()
                 if (wait.status === 1) {
-                    let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                    let lastElementBlockNumber = preData.data.offchainAssetReceiptVault.certifications.slice(-1)[0].transaction.blockNumber
                     let interval = setInterval(async () => {
-                        if (wait.blockNumber.toString() === lastElementBlockNumber) {
-                            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                            if (auditHistory) {
+                        let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                        preData = preData?.data?.offchainAssetReceiptVault.certifications
+                        if (preData && preData.length) {
+                            if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
+                                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
                                 let temp = data.data.offchainAssetReceiptVault
                                 auditHistory.set(temp)
                                 certifyData = $auditHistory?.certifications || []
-                            } else {
-                                auditHistory.set({})
+                                let skip = (perPage * (currentPage - 1)) - 1
+                                filteredCertifications = certifyData.filter((r, index) => index > skip && index <
+                                    perPage * currentPage)
+                                getMaxCertifyDate()
+                                transactionSuccess.set(true)
+                                transactionInProgress.set(false)
+                                clearInterval(interval)
                             }
-                            transactionSuccess.set(true)
-                            transactionInProgress.set(false)
-                            clearInterval(interval)
                         }
                     }, 2000)
                 } else {
@@ -133,136 +118,89 @@
         }
     }
 
-    function goToReceiptAudit(receipt) {
-        selectedReceipt.set(receipt)
-        navigateTo(`#receipt/${$selectedReceipt.receipt.receiptId}`, {replace: false})
-    }
-
     function inFuture(date) {
         let day = date.split('-')[0]
         let month = date.split('-')[1]
         let year = date.split('-')[2]
-        return new Date(`${month}/${day}/${year}`) > new Date()
+        let d = new Date(`${month}/${day}/${year}`).setHours(23, 59)
+        return d > new Date()
+    }
+
+    async function handlePageChange(event) {
+        currentPage = event.detail.currentPage
+        let skip = (perPage * (currentPage - 1)) - 1
+        filteredCertifications = certifyData.filter((r, index) => index > skip && index < perPage * currentPage)
+    }
+
+    let selectedDate = new Date();
+
+    function handleDateChange(event) {
+        selectedDate = event.detail;
     }
 </script>
-<DefaultFrame header="Audit history">
-  <div slot="header-buttons" class="display-flex">
-    <button class="header-btn btn-hover" on:click={()=>{navigate("#members")}}>Members</button>
-    <button class="header-btn btn-hover" on:click={()=>{navigate("#roles")}}>Roles</button>
-  </div>
-  <div slot="content">
-    <div class="history">
-      <div class="receipts">
-        {#if loading}
-          <SftLoader width="50"></SftLoader>
-        {/if}
-        {#if !loading}
-          <table>
-            <thead>
-            <tr>
-              <th>Receipt ID</th>
-              <th>Asset class</th>
-              <th>Amount</th>
-              <th>Last updated</th>
-            </tr>
-            </thead>
-            <tbody>
-            {#each receipts as receipt}
-              <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
-              <tr class="tb-row">
-                <td>{receipt.receipt.receiptId}</td>
-                <td>{receipt.schema || ""}</td>
-                <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
-                <td>{timeStampToDate(receipt.timestamp)}</td>
-              </tr>
-            {/each}
-            </tbody>
-          </table>
-        {/if}
-      </div>
-      <div class="certify">
-        <table>
-          <thead>
-          <tr>
-            <th>Total amount</th>
-            <th>Certified on</th>
-            <th>Certified by</th>
-            <th>Certified until</th>
-          </tr>
-          </thead>
-          <tbody>
-          {#each certifyData as cert}
-            <tr>
+
+<div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
+  {#if loading}
+    <SftLoader/>
+  {/if}
+  {#if !loading }
+    <div class="sft-table-container">
+
+      <table class="sft-table">
+        <thead>
+        <tr>
+          <th>Total amount</th>
+          <th>Certified on</th>
+          <th>Certified by</th>
+          <th>Certified until</th>
+        </tr>
+        </thead>
+        <tbody>
+        {#if certifyData.length}
+
+          {#each filteredCertifications as cert}
+            <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
+            <tr class="tb-row">
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
               <td>{formatAddress(cert?.certifier.address)}</td>
-              <td
-                class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>{timeStampToDate(cert?.certifiedUntil)}</td>
+              <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
+                {timeStampToDate(cert?.certifiedUntil)}
+              </td>
             </tr>
           {/each}
-          </tbody>
-        </table>
-      </div>
-      {#if ($accountRoles.CERTIFIER)}
-        <div class="certify-btn-container">
-          <input type="date" class="default-input certify-date-input" bind:value={certifyUntil}>
-          <button class="default-btn" on:click={() => certify()}>Certify</button>
+        {/if}
+
+        </tbody>
+
+
+      </table>
+      <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}>
+        <div slot="actions">
+          {#if !loading && ($accountRoles.CERTIFIER)}
+            <div class="certify-btn-container">
+              {#if maxCertifiedUntil < new Date()}
+                <span class="error">System frozen until certified</span>
+              {/if}
+              <Calendar value={selectedDate} on:change={handleDateChange}/>
+              <button class="default-btn ml-3" on:click={() => certify()}>Certify</button>
+            </div>
+          {/if}
         </div>
-      {/if}
-      <div class="error">
-        {error}
-        <!--        System frozen until certified-->
-      </div>
+      </Pagination>
     </div>
+  {/if}
+</div>
 
-  </div>
-
-</DefaultFrame>
 <style>
-
-    .history {
-        text-align: left;
-        display: flex;
-        flex-direction: column;
-        width: 678px;
-        min-height: 530px;
-        position: relative;
-    }
-
-    table {
-        width: 100%;
-    }
-
-    thead, tbody {
-        text-align: center;
-    }
-
-    th {
-        white-space: nowrap;
-    }
-
-    th, td {
-        text-align: left;
-    }
-
-    td {
-        padding-left: 10px;
+    .left-margin {
+        margin-left: 223px;
     }
 
     .receipts {
-        min-height: 300px;
-        border-bottom: 1px solid #D2D2D2;
-        overflow: auto;
-    }
-
-    .receipts table th {
-        width: 33%;
-    }
-
-    .certify {
-        margin-top: 30px;
-        height: 180px;
-        overflow: auto;
+        width: 100%;
+        margin-right: 20px;
+        margin-top: 102px;
     }
 
     .certify-btn-container {
@@ -271,35 +209,8 @@
         margin-top: 10px
     }
 
-    .certify-date-input {
-        margin-right: 5px;
-        width: 130px;
-        border: none;
-        box-sizing: border-box;
-        outline: 0;
-        position: relative;
-        text-align: center;
-    }
-
     .until {
         color: #F11717;;
-    }
-
-    .default-input {
-        padding-left: 0;
-    }
-
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        background: transparent;
-        bottom: 0;
-        color: transparent;
-        cursor: pointer;
-        height: auto;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: auto;
     }
 
 </style>

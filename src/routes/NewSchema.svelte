@@ -2,7 +2,7 @@
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {
         activeNetwork, deposits,
-        ethersData, schemas,
+        ethersData, pageTitle, schemas,
         transactionError,
         transactionInProgress, transactionInProgressShow, transactionSuccess,
         uploadBtnLoading,
@@ -223,8 +223,10 @@
         })
     }
 
+    pageTitle.set("New asset class")
+
 </script>
-<DefaultFrame header="New asset class">
+<DefaultFrame>
   <div slot="content" class="schema-content">
     <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
       <div class="label">

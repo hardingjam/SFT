@@ -3,7 +3,9 @@
     // import {marked} from 'marked'
 
     import manual from "../assets/documents/manual.pdf"
+    import {pageTitle} from '../scripts/store.js';
 
+    pageTitle.set("Manual")
 
 </script>
 

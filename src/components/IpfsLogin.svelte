@@ -1,6 +1,7 @@
 <script>
     import DefaultFrame from './DefaultFrame.svelte';
     import {createEventDispatcher} from 'svelte';
+    import {pageTitle} from '../scripts/store.js';
     export let username = localStorage.getItem('ipfsUsername') || "";
     export let password = localStorage.getItem('ipfsPassword') || "";
     export let loggedIn = username && password
@@ -20,6 +21,9 @@
         });
     }
 
+    pageTitle.set("IPFS login")
+
+
     function toggleShowPassword() {
         type = passwordInput.getAttribute("type")
         if (type === "password") {
@@ -31,7 +35,7 @@
 
 </script>
 
-<DefaultFrame header="IPFS login">
+<DefaultFrame>
   <div slot="content">
     <div class="credentials">
       <div class="logged-in-text">{loggedIn ? `You are currently logged in as: ${loggedInUser}` : ''}</div>

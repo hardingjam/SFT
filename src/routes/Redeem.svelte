@@ -3,7 +3,7 @@
     import {getReceiptBalance, getSubgraphData, hasRole, showPrompt, timeStampToDate} from "../scripts/helpers.js";
     import {
         account,
-        activeNetwork,
+        activeNetwork, pageTitle,
         vault
     } from "../scripts/store.js";
     import {onMount} from "svelte";
@@ -155,13 +155,16 @@
     }
 
     function goToReceiptInfo(receipt) {
-        receiptClicked = receipt
+        receiptClicked = receipt.receipt
         showReceiptInfo = true
     }
 
     function showReceiptsList(e) {
         showReceiptInfo = e.detail.showReceiptInfo
     }
+
+    pageTitle.set("Mint/Redeem")
+
 </script>
 
 

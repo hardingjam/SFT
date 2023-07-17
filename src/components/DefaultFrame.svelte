@@ -1,24 +1,33 @@
 <script>
-    export let header = ''
+    let hasSlot = false; // Initialize the slot flag to false
+
+    // Check if the slot is provided from the parent component
+    $: {
+        hasSlot = !!$$slots.header_buttons;
+    }
+    let hasSlotBack = false; // Initialize the slot flag to false
+
+    // Check if the slot is provided from the parent component
+    $: {
+        hasSlotBack = !!$$slots.back_button;
+    }
 </script>
-<div class="default-frame">
-  <div class="frame-header">
-    <span class="header-text">{header}</span>
-    <div class="display-flex buttons">
-      <slot name="header-buttons"></slot>
+
+<div class="default-frame {hasSlotBack?'pt-2':'11'}">
+  <div class="display-flex justify-end">
+    <div class="{hasSlot? 'mb-5': ''}">
+      <slot name="header_buttons"></slot>
+    </div>
+    <div class="{hasSlotBack? 'mb-2': ''}">
+      <slot name="back_button"></slot>
     </div>
   </div>
+
   <div class="default-frame-container">
     <slot name="content"></slot>
   </div>
 </div>
 <style>
-    .frame-header {
-        display: flex;
-        align-items: center;
-        justify-content: right;
-        padding-bottom: 14px;
-    }
 
     .default-frame-container {
         background: #FFFFFF;
@@ -29,18 +38,6 @@
         flex-direction: column;
         overflow: hidden;
         padding: 30px 60px;
-    }
-
-    .buttons {
-        justify-content: end;
-        width: 33.3%;
-    }
-
-    .header-text {
-        font-weight: 700;
-        color: #9D9D9D;
-        text-align: center;
-        width: 33.3%;
     }
 
 </style>

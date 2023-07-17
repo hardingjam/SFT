@@ -6,7 +6,7 @@
     export let token;
     pageTitle.set("Token overview")
 </script>
-<table class="w-8/12 leading-8 w-full mt-5 leading-10 text-left">
+<table class="leading-8 w-full text-left">
   <tr>
     <td class="font-bold">Token name</td>
     <td class="sft-name">{token?.name}</td>

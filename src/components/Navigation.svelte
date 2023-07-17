@@ -136,7 +136,7 @@
         </svg>
       </div>
       <div class="flex flex-col pt-10 px-9 sft-info-table">
-        <span class="font-bold self-center">Token overview</span>
+        <span class="font-bold self-center mb-5">Token overview</span>
         <TokenOverviewTable {token}/>
       </div>
     </div>

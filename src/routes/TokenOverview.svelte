@@ -1,16 +1,40 @@
 <script>
     import DefaultFrame from '../components/DefaultFrame.svelte';
-    import {sftInfo, data} from '../scripts/store.js';
+    import {
+        sftInfo,
+        data,
+        account,
+        activeNetwork,
+        ethersData,
+        transactionSuccess,
+        transactionInProgress, transactionError, transactionInProgressShow, tokens
+    } from '../scripts/store.js';
     import TokenOverviewTable from '../components/TokenOverviewTable.svelte';
-    import {bytesToMeta, cborDecode, navigate} from '../scripts/helpers.js';
-    import {MAGIC_NUMBERS} from '../scripts/consts.js';
+    import {
+        bytesToMeta,
+        cborDecode,
+        cborEncode,
+        encodeCBOR,
+        getContract, getSubgraphData,
+        navigate, showPrompt,
+        showPromptSFTCreate
+    } from '../scripts/helpers.js';
+    import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
     import SftCredentialLinks from '../components/SftCredentialLinks.svelte';
     import {icons} from '../scripts/assets.js';
+    import contractAbi from '../contract/OffchainAssetVaultAbi.json';
+    import {RECEIPT_VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
+    import axios from 'axios';
+    import {arrayify} from 'ethers/lib/utils.js';
 
     $:$data && setToken()
     $:token && getVaultInformation()
 
     let token = {}
+    let logoPreview;
+    let username;
+    let password;
+    let tokenLogo;
 
     function setToken() {
         token = $data.offchainAssetReceiptVault
@@ -33,6 +57,135 @@
             }
         }
     }
+
+    const onFileSelected = (e) => {
+        deployImage(e.target.files[0])
+    }
+
+    async function getTokens() {
+        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
+            if ($activeNetwork) {
+                let temp = res.data.offchainAssetReceiptVaults;
+                tokens.set(temp);
+            } else {
+                tokens.set([])
+            }
+        });
+    }
+
+    async function deployImage(file) {
+        let vault = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
+        try {
+            try {
+                let uploadResult = await upload(file)
+
+                let fileHash = {
+                    hash: uploadResult.Hash.toString()
+                }
+
+                let encodedFile = encodeCBOR(fileHash, MAGIC_NUMBERS.OA_TOKEN_IMAGE)
+
+                let encodedHashList = cborEncode(
+                    [uploadResult?.Hash].toString(),
+                    MAGIC_NUMBERS.OA_HASH_LIST
+                );
+                const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedFile +
+                    encodedHashList
+
+                let transaction = await vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
+                await showPromptSFTCreate(transaction)
+
+                let wait = await transaction.wait()
+                if (wait.status === 1) {
+                    let interval = setInterval(async () => {
+                        let informationResp = await getSubgraphData($activeNetwork, {}, RECEIPT_VAULT_INFORMATION_QUERY, 'receiptVaultInformations')
+                        informationResp = informationResp?.data?.receiptVaultInformations
+                        if (informationResp && informationResp.length) {
+                            if (wait.blockNumber.toString() === informationResp[0].transaction.blockNumber) {
+                                // schemas.set(await getSchemas($activeNetwork, $vault, $deposits))
+                                transactionSuccess.set(true)
+                                transactionInProgress.set(false)
+                                clearInterval(interval)
+                                //set image
+                                await getTokens()
+                            }
+                        }
+                    }, 2000)
+
+                } else {
+                    transactionError.set(true)
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+        } catch (e) {
+            console.log(e.message)
+        }
+
+    }
+
+    const upload = async (data) => {
+        let savedUsername = localStorage.getItem('ipfsUsername');
+        let savedPassword = localStorage.getItem('ipfsPassword');
+        if (!savedPassword || !savedUsername) {
+            navigate("#ipfs");
+        } else {
+            username = savedUsername;
+            password = savedPassword
+
+            let formData = new FormData();
+
+            formData.append('file', data)
+
+            const requestArr = IPFS_APIS.map((url) => {
+                return axios.request({
+                    url,
+                    auth: {
+                        username,
+                        password
+                    },
+                    method: 'post',
+                    headers: {
+                        "Content-Type": `multipart/form-data;`,
+                    },
+                    data: formData,
+                    onUploadProgress: (async (p) => {
+                        await showPrompt(null, {topText: "Uploading to IPFS, please wait", noBottomText: true})
+                        console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                    }),
+                    withCredentials: true,
+                })
+            });
+
+            let respAll = await Promise.allSettled(requestArr)
+
+            respAll.map(response => {
+                if (response.status === "rejected") {
+                    reportError(response.reason)
+                } else return response
+            })
+
+            let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+            if (resolvedPromise) {
+
+                localStorage.setItem('ipfsUsername', username);
+                localStorage.setItem('ipfsPassword', password);
+
+            } else {
+                console.log("Something went wrong")
+            }
+            username = ""
+            password = ""
+            transactionInProgressShow.set(false)
+            transactionInProgress.set(false)
+
+            return resolvedPromise?.value.data
+        }
+
+
+    };
+
 </script>
 <div class="{$sftInfo ? '' : 'left-margin'} w-full token-overview-container">
   <div class="flex justify-between mb-2">
@@ -44,9 +197,39 @@
     </button>
   </div>
   <div class="content">
+    <div class="w-full flex justify-between">
+      <div class="w-1/2">
+        <TokenOverviewTable {token}/>
+      </div>
+      <div class="sft-image w-1/2">
+        <div class="sft-logo-container rounded-full"
+             class:hover={token.deployer.toLowerCase() === $account.toLowerCase()}>
+          <label for={`${token.address}-upload`} id="sft-logo-upload"
+                 class="flex items-center justify-center text-white flex-col {token.deployer.toLowerCase() === $account.toLowerCase() ? 'cursor-pointer' : '' }">
+            {#if token.icon}
+              <img src={`${IPFS_GETWAY}${token.icon}`} alt="token logo" class="logo" bind:this={logoPreview}/>
+              {#if token.deployer.toLowerCase() === $account.toLowerCase()}
+                <div class="update absolute flex-col flex items-center justify-center">
+                  <img src="{icons.camera}" alt="token logo"/>
+                  <span class="text">Update</span>
+                </div>
+              {/if}
+            {/if}
+            {#if !token.icon}
+              {#if token.deployer.toLowerCase() === $account.toLowerCase()}
+                <img src="{icons.camera}" alt="token logo"/>
+                <span class="text">Update</span>
+              {/if}
+            {/if}
+            {#if token.deployer.toLowerCase() === $account.toLowerCase()}
+              <input type="file" id={`${token.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
+                     on:change={(e)=>onFileSelected(e)}
+                     bind:this={tokenLogo}/>
+            {/if}
+          </label>
 
-    <div class="">
-      <TokenOverviewTable {token}/>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -72,6 +255,33 @@
         border: 1px solid #C1C1C1;
         border-radius: 10px;
         padding: 20px
+    }
+
+    .sft-image {
+        display: flex;
+        justify-content: center;
+    }
+
+    .sft-logo-container {
+        background: #9D9D9D;
+        width: 303px;
+        height: 303px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .sft-logo-container .logo {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+
+    .sft-logo-container.hover:hover {
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    .sft-logo-container:hover .update {
+        display: flex;
     }
 
 </style>

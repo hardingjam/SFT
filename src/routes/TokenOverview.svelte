@@ -2,17 +2,20 @@
     import DefaultFrame from '../components/DefaultFrame.svelte';
     import {sftInfo, data} from '../scripts/store.js';
     import TokenOverviewTable from '../components/TokenOverviewTable.svelte';
-    import {bytesToMeta, cborDecode} from '../scripts/helpers.js';
+    import {bytesToMeta, cborDecode, navigate} from '../scripts/helpers.js';
     import {MAGIC_NUMBERS} from '../scripts/consts.js';
     import SftCredentialLinks from '../components/SftCredentialLinks.svelte';
+    import {icons} from '../scripts/assets.js';
 
     $:$data && setToken()
     $:token && getVaultInformation()
 
     let token = {}
+
     function setToken() {
         token = $data.offchainAssetReceiptVault
     }
+
     async function getVaultInformation() {
         let receiptVaultInformations = token.receiptVaultInformations
         if (receiptVaultInformations.length) {
@@ -32,14 +35,20 @@
     }
 </script>
 <div class="{$sftInfo ? '' : 'left-margin'} w-full token-overview-container">
-<SftCredentialLinks sft={token}></SftCredentialLinks>
-  <DefaultFrame>
-    <div slot="content">
-      <div class="">
-        <TokenOverviewTable {token}/>
-      </div>
+  <div class="flex justify-between mb-2">
+    <div class="links">
+      <SftCredentialLinks sft={token}></SftCredentialLinks>
     </div>
-  </DefaultFrame>
+    <button class="btn-hover mr-3" on:click={()=>{navigate("#asset-register")}}>
+      <img src={icons.back} alt="back">
+    </button>
+  </div>
+  <div class="content">
+
+    <div class="">
+      <TokenOverviewTable {token}/>
+    </div>
+  </div>
 </div>
 <style>
 
@@ -49,9 +58,20 @@
 
     .token-overview-container {
         background: #FFFFFF;
-        /*height: calc(100vh - 200px);*/
         border-radius: 20px 20px 0 0;
         margin-top: 103px;
         margin-right: 102px;
+        color: #000000;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 14px 20px 20px 20px;
     }
+
+    .content {
+        border: 1px solid #C1C1C1;
+        border-radius: 10px;
+        padding: 20px
+    }
+
 </style>

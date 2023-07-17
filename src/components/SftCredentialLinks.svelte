@@ -33,7 +33,7 @@
     <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
   </a>
   {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
-    <img class="link-icon" src={icons.edit} alt="edit" on:click={handleEditClick}>
+    <img class="link-icon edit" src={icons.edit} alt="edit" on:click={handleEditClick}>
   {/if}
 </div>
 
@@ -52,5 +52,10 @@
 
     .link-icon:hover {
         cursor: pointer;
+    }
+
+    .edit{
+        width: 21px;
+        height: 21px;
     }
 </style>

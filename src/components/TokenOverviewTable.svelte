@@ -9,23 +9,23 @@
 <table class="leading-8 w-full text-left">
   <tr>
     <td class="font-bold">Token name</td>
-    <td class="sft-name">{token?.name}</td>
+    <td class="sft-name">{token?.name || ""}</td>
   </tr>
   <tr>
     <td class="font-bold">Token symbol</td>
-    <td class="">{token?.symbol}</td>
+    <td class="">{token?.symbol || ""}</td>
   </tr>
   <tr>
     <td class="font-bold">Creation date</td>
-    <td class="">{timeStampToDate(token?.deployTimestamp)}</td>
+    <td class="">{token?.deployTimestamp ? timeStampToDate(token?.deployTimestamp) : ""}</td>
   </tr>
   <tr>
     <td class="font-bold">Number of holders</td>
-    <td class="">{token?.tokenHolders.filter(h => h.balance !== "0").length}</td>
+    <td class="">{token?.tokenHolders ? token?.tokenHolders?.filter(h => h.balance !== "0").length : 0}</td>
   </tr>
   <tr>
     <td class="font-bold">Token supply</td>
-    <td class="">{token?.totalShares ? ethers.utils.formatUnits(token?.totalShares, 18) : 0}</td>
+    <td class="">{token?.totalShares ? ethers.utils.formatUnits(token?.totalShares, 18) : "0.0"}</td>
   </tr>
   <tr>
     <td class="font-bold">About</td>

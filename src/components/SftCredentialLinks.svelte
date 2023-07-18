@@ -32,7 +32,7 @@
   <a href={`${$activeNetwork?.blockExplorer}/address/${sft.address}`} target="_blank">
     <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
   </a>
-  {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
+  {#if sft?.deployer?.toLowerCase() === $account.toLowerCase()}
     <img class="link-icon edit" src={icons.edit} alt="edit" on:click={handleEditClick}>
   {/if}
 </div>

@@ -164,6 +164,7 @@
     async function handleTokenSelect(event) {
         let token = event.detail.token
         if (token.address === $vault.address) {
+            navigate("#token-overview", {clear: true})
             return
         }
         await showPrompt(null, {topText: "SFT loading, please wait", noBottomText: true})

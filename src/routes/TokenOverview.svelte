@@ -192,7 +192,7 @@
     <div class="links">
       <SftCredentialLinks sft={token}></SftCredentialLinks>
     </div>
-    <button class="btn-hover mr-3" on:click={()=>{navigate("#asset-register")}}>
+    <button class="btn-hover mr-3" on:click={()=>{navigate("#")}}>
       <img src={icons.back} alt="back">
     </button>
   </div>

@@ -259,7 +259,7 @@
       <div class="links">
         <SftCredentialLinks sft={token} on:editClick={handleEditClick}></SftCredentialLinks>
       </div>
-      <button class="btn-hover mr-3" on:click={()=>{navigate("#")}}>
+      <button class="btn-hover mr-3" on:click={()=>{navigate("#", {clear:true})}}>
         <img src={icons.back} alt="back">
       </button>
     </div>
@@ -345,12 +345,14 @@
         flex-direction: column;
         overflow: hidden;
         padding: 14px 20px 20px 20px;
+        height: 100vh;
     }
 
     .content {
         border: 1px solid #C1C1C1;
         border-radius: 10px;
-        padding: 20px
+        padding: 20px;
+        height: 100%;
     }
 
     .sft-image {

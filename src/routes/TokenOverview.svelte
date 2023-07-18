@@ -1,5 +1,4 @@
 <script>
-    import DefaultFrame from '../components/DefaultFrame.svelte';
     import {
         sftInfo,
         data,
@@ -43,23 +42,7 @@
         if ($data.offchainAssetReceiptVault) {
             token = $data.offchainAssetReceiptVault
         } else {
-            let vault = localStorage.getItem("vaultAddress");
-            if (vault) {
-                let variables = {id: vault.toLowerCase()}
-                let res;
-                try {
-                    res = await getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault')
-                    if (res && res.data) {
-                        data.set(res.data)
-                    }
-                } catch (e) {
-                    console.log(e)
-                }
-
-            } else {
-                navigate("#")
-            }
-
+            await getToken()
         }
     }
 
@@ -87,15 +70,23 @@
         deployImage(e.target.files[0])
     }
 
-    async function getTokens() {
-        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
-            if ($activeNetwork) {
-                let temp = res.data.offchainAssetReceiptVaults;
-                tokens.set(temp);
-            } else {
-                tokens.set([])
+    async function getToken(){
+        let vault = localStorage.getItem("vaultAddress");
+        if (vault) {
+            let variables = {id: vault.toLowerCase()}
+            let res;
+            try {
+                res = await getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault')
+                if (res && res.data) {
+                    data.set(res.data)
+                }
+            } catch (e) {
+                console.log(e)
             }
-        });
+
+        } else {
+            navigate("#")
+        }
     }
 
     async function deployImage(file) {
@@ -132,7 +123,8 @@
                                 transactionInProgress.set(false)
                                 clearInterval(interval)
                                 //set image
-                                await getTokens()
+                                await getToken()
+
                             }
                         }
                     }, 2000)
@@ -247,7 +239,7 @@
                             transactionSuccess.set(true)
                             transactionInProgress.set(false)
                             clearInterval(interval)
-                            await getTokens()
+                            await getToken()
                         }
                     }
                 }, 2000)

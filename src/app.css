@@ -60,16 +60,16 @@ body {
     border: none;
     cursor: pointer;
     padding: 0 30px;
-    background: #9d7334;
+    background: #9D7334;
 }
 
 .btn-solid:hover {
-    background: #c98e36;
+    background: #C98F36;
 }
 
 .btn-solid:active {
-    background: #c98e36;
-    box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
+    background: #C98F36;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) inset;
 }
 
 .btn-solid:disabled {
@@ -235,10 +235,10 @@ li {
     color: #000000;
 }
 
-/*.default-btn:hover {*/
-/*    background: #ececec;*/
-/*    cursor: pointer;*/
-/*}*/
+.default-btn:hover {
+    background: #CAE6FF;
+    cursor: pointer;
+}
 
 .default-btn:active {
     background: #CAE6FF;

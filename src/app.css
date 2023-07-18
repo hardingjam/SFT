@@ -231,17 +231,16 @@ li {
     gap: 10px;
     min-width: 73px;
     height: 27px;
-    border: 1px solid #9d7334;
     border-radius: 5px;
-    background-color: #ffffff;
+    background-color: #D2D2D2;
     width: fit-content;
-    color: #9d7334;
+    color: #000000;
 }
 
-.default-btn:hover {
-    background: #ececec;
-    cursor: pointer;
-}
+/*.default-btn:hover {*/
+/*    background: #ececec;*/
+/*    cursor: pointer;*/
+/*}*/
 
 .default-btn:active {
     background: #ececec;
@@ -253,6 +252,7 @@ li {
 .default-btn:disabled {
     border: 1px solid #B7B7B7;
     color: #B7B7B7;
+    background-color: #FFffff;
 }
 
 .default-btn:disabled:hover {
@@ -265,18 +265,11 @@ li {
     box-shadow: none;
 }
 
-.header-btn {
-    box-sizing: border-box;
-    border: 1px solid #9d7334;
-    border-radius: 5px;
-    background: transparent;
-    color: #9d7334;
-    margin-left: 15px;
-    padding: 0 10px;
-}
-
-.header-btn:focus {
-    outline: none;
+.header-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-weight: 400;
 }
 
 .basic-frame-parent {

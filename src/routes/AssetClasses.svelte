@@ -47,9 +47,9 @@
 </script>
 
 <DefaultFrame>
-  <div slot="header_buttons" class="display-flex">
-    <button class="header-btn btn-hover" on:click={()=>{navigate("#mint")}}>Mint</button>
-    <button class="header-btn btn-hover" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
+  <div slot="header_buttons" class="display-flex header-buttons">
+    <button class="default-btn" on:click={()=>{navigate("#mint")}}>Mint</button>
+    <button class="default-btn" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
   </div>
   <div slot="content">
     <div class="schemas">

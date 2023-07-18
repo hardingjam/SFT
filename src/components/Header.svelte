@@ -54,7 +54,7 @@
   {#if $account}
     <div class="w-1/3"></div>
     <div class="page-title">{$pageTitle}</div>
-    <div class="flex justify-end w-1/3">
+    <div class="flex justify-end w-1/3 whitespace-nowrap">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
                       triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>

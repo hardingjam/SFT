@@ -246,7 +246,7 @@
       <div class="schema">
         <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
       </div>
-      <button class="default-btn btn-hover deploy-btn" on:click={()=>{deploySchema()}}
+      <button class="default-btn deploy-btn" on:click={()=>{deploySchema()}}
               disabled={!content.text || error || invalidJson || labelError}>
         Create new asset class
       </button>

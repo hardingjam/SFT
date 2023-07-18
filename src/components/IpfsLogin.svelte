@@ -99,4 +99,8 @@
         font-size: 16px;
         line-height: 27px;
     }
+
+    .ok-button{
+        font-weight: 400;
+    }
 </style>

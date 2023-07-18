@@ -95,9 +95,9 @@
 </script>
 <DefaultFrame>
   <div slot="content">
-    <div class="members f-weight-700">
+    <div class="members">
       <div class="erc20 tier">
-        <div>ERC20</div>
+        <div class="f-weight-700">ERC20</div>
         <div class="display-flex address-container">
           <div class="f-weight-700 contract label">Contract address:
             <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
@@ -122,14 +122,14 @@
           {/if}
         </div>
         <div>
-          <button class="default-btn"
+          <button class="default-btn "
                   on:click={()=>{checkAddress(erc20TierContract,addressErc20, erc20MinTier, 'erc20')}}>
             Check
           </button>
         </div>
       </div>
       <div class="erc1155 tier">
-        <div>ERC1155</div>
+        <div class="f-weight-700">ERC1155</div>
         <div class="display-flex address-container">
 
           <div class="f-weight-700 contract label">

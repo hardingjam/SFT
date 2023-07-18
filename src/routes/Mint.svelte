@@ -344,10 +344,10 @@
 
 <div class="mint-container relative">
   <div class="header-buttons">
-    <button type="button" class="default-btn mr-2" on:click={()=>{navigate('#new-asset-class')}}>
+    <button type="button" class="default-btn" on:click={()=>{navigate('#new-asset-class')}}>
       New asset class
     </button>
-    <button type="button" class="default-btn mr-2" disabled={!$schemas.length}
+    <button type="button" class="default-btn" disabled={!$schemas.length}
             on:click={()=>{navigate('#asset-classes')}}>
       Asset class list
     </button>
@@ -443,7 +443,6 @@
 
     .header-buttons {
         margin-bottom: 5px;
-        display: flex;
         width: 100%;
         justify-content: right;
         padding: 0 12px 0 12px;

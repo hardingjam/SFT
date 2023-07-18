@@ -6,6 +6,7 @@
     import {account, activeNetwork, vault} from '../scripts/store.js';
     import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
     import CredentialLinksEditor from './CredentialLinksEditor.svelte';
+    import SftCredentialLinks from './SftCredentialLinks.svelte';
 
     export let sft = {}
     let auditors = []
@@ -182,29 +183,7 @@
       </div>
     </div>
     <div class="links-container">
-      {#if sft.credentialLinks}
-        {#if sft.credentialLinks.twitter}
-          <a href={sft.credentialLinks.twitter} target="_blank">
-            <img class="link-icon" src={icons.twitter} alt="twitter"></a>{/if}
-        {#if sft.credentialLinks.telegram}
-          <a href={sft.credentialLinks.telegram} target="_blank">
-            <img class="link-icon" src={icons.telegram} alt="telegram"></a>{/if}
-        {#if sft.credentialLinks.github}
-          <a href={sft.credentialLinks.github} target="_blank">
-            <img class="link-icon" src={icons.github} alt="github"></a>{/if}
-        {#if sft.credentialLinks.discord}
-          <a href={sft.credentialLinks.discord} target="_blank">
-            <img class="link-icon" src={icons.discord} alt="discord"></a>{/if}
-        {#if sft.credentialLinks.webLink}
-          <a href={sft.credentialLinks.webLink} target="_blank">
-            <img class="link-icon" src={icons.web_brown} alt="web"></a>{/if}
-      {/if}
-      <a href={`${$activeNetwork?.blockExplorer}/address/${sft.address}`} target="_blank">
-        <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
-      </a>
-      {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
-        <img class="link-icon" src={icons.edit} alt="edit" on:click={()=>{openEditor()}}>
-      {/if}
+      <SftCredentialLinks {sft} on:editClick={openEditor}/>
     </div>
   {/if}
   {#if isEditorOpen}
@@ -265,21 +244,9 @@
     }
 
     .links-container {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
         position: absolute;
         bottom: 1rem;
         right: 1.5rem;
     }
 
-    .link-icon {
-        margin-left: 22px;
-        width: 24px;
-        height: 24px;
-    }
-
-    .link-icon:hover {
-        cursor: pointer;
-    }
 </style>

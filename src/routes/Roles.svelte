@@ -12,7 +12,7 @@
         accessControlError,
         toSentenceCase, showPrompt, setAccountRoles, navigate
     } from "../scripts/helpers.js";
-    import {icons as images, icons} from "../scripts/assets.js";
+    import {icons} from "../scripts/assets.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
     import {ROLES} from "../scripts/consts.js";
@@ -98,7 +98,7 @@
     <div slot="content">
       <div class="roles">
         <div class="w-full flex justify-end">
-          <button class="asset-class-btn btn-hover" on:click={()=>{navigate("#new-asset-class")}}>
+          <button class="asset-class-btn default-btn" on:click={()=>{navigate("#new-asset-class")}}>
             New asset class
           </button>
         </div>
@@ -108,7 +108,7 @@
           <table>
             <tr>
               <td class="flex items-center">
-                <img src={images.plus_sign} alt="add" class="plus">
+                <img src={icons.plus_sign} alt="add" class="plus">
                 <label class="f-weight-700">Role:</label></td>
               <td>
                 <div>
@@ -218,27 +218,12 @@
         color: #000000;
     }
 
-    .contract-address {
-        color: inherit;
-    }
-
     .default-input {
         padding-left: 13px;
     }
 
-    .asset-class-btn {
-        margin-right: -40px;
-        border: 1px solid #9d7334;
-        border-radius: 5px;
-        background: transparent;
-        color: #9d7334;
-        padding: 0 10px;
-        margin-bottom: -20px
-
-    }
-
-    .asset-class-btn:focus {
-        outline: none;
+    .asset-class-btn{
+        margin-right: -2.5rem;
     }
 
     .plus {

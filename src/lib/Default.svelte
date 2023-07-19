@@ -260,6 +260,7 @@
                 console.log(error);
             }
         }
+        await setVault()
     }
 
     async function getMetamaskConnectedAccount() {

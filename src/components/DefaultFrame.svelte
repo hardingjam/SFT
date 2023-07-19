@@ -33,7 +33,7 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        padding: 30px 60px;
+        padding: 20px 60px;
     }
 
 </style>

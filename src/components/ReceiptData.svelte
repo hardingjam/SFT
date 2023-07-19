@@ -111,13 +111,9 @@
             </span>
       {/if}
 
-      {#if !fileUploadProperties.includes(info.label)} <span>{info.label}</span>
-        {#if isAddress(info.value)}
-          <div>{formatAddress(info.value)}</div>
-        {/if}
-        {#if !isAddress(info.value)}
-          <div>{info.value}</div>
-        {/if}
+      {#if !fileUploadProperties.includes(info.label)}
+        <span class="w-2/3">{info.label}</span>
+        <span class="w-1/3">{isAddress(info.value) ? formatAddress(info.value) : info.value}</span>
       {/if}
 
     </div>
@@ -136,6 +132,10 @@
         padding: 2px 0;
         display: flex;
         justify-content: space-between;
+    }
+
+    .receipt-row span {
+        text-align: start;
     }
 
     .ipfs-hash {

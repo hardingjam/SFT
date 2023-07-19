@@ -56,6 +56,7 @@
     import AssetRegister from '../routes/AssetRegister.svelte';
     import AssetInformation from '../routes/AssetInformation.svelte';
     import TokenOverview from '../routes/TokenOverview.svelte';
+    import NewRevision from '../routes/NewRevision.svelte';
 
 
     let connectedAccount;
@@ -353,6 +354,7 @@
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
+          <Route path="#new-revision" component={NewRevision}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">

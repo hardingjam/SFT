@@ -567,7 +567,8 @@ export function navigate(path, options) {
             if (!bc.find(b => b.path === path)) {
                 return [...bc, {path, label}]
             } else {
-                return [{path: "#", label: "Home"}, {path, label}]
+                let indexOfPage = bc.findIndex(b => b.path === path)
+                return bc.splice(0, indexOfPage + 1)
             }
         })
     }

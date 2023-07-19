@@ -1,15 +1,39 @@
 <script>
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {selectedReceipt, tokenName, data, pageTitle} from "../scripts/store.js";
+    import {selectedReceipt, tokenName, data, pageTitle, vault, activeNetwork} from "../scripts/store.js";
     import ReceiptData from '../components/ReceiptData.svelte';
-    import {navigate, timeStampToDate} from '../scripts/helpers.js';
+    import {getSubgraphData, navigate, timeStampToDate} from '../scripts/helpers.js';
     import {ethers} from 'ethers';
     import {icons} from '../scripts/assets.js';
+    import {RECEIPT_INFORMATION_QUERY} from '../scripts/queries.js';
+    import {onMount} from 'svelte';
 
     let loading = false
 
+    let revisionNumber = 1;
+
     pageTitle.set("Asset information")
+    $: $selectedReceipt && getRevisionNumber()
+
+    async function getRevisionNumber(receipt) {
+        let variables
+        if (!receipt) {
+            let receiptId = $vault.address + "-" + window.location.hash.split("/")[1]
+            variables = {id: receiptId}
+        } else {
+            variables = {id: receipt.id}
+        }
+        loading = true;
+        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
+        let informationIndex = 0;
+        if (resp && resp.data && resp.data.receipt && resp.data.receipt.id && resp.data.receipt.receiptInformations.length) {
+            informationIndex = resp.data.receipt.receiptInformations.findIndex(inf => inf.id === "ReceiptInformation-" +
+                resp.data.receipt.id)
+            revisionNumber = resp.data.receipt.receiptInformations.length - informationIndex
+        }
+    }
+
 </script>
 <DefaultFrame>
   <div slot="back_button" class="display-flex">
@@ -28,11 +52,22 @@
       <span>
        Revision date:
         {$selectedReceipt.receipt ?
-            timeStampToDate($selectedReceipt.receipt.deposits[0].timestamp, "yy-mm-dd tt:tt") :
+            timeStampToDate($selectedReceipt?.receipt?.deposits[0].timestamp, "yy-mm-dd tt:tt") :
             0}
       </span>
     </div>
-    <ReceiptData receipt={$selectedReceipt.receipt}/>
+    <div class="flex items-start flex-col mb-6">
+      <span class="f-weight-700">{$selectedReceipt?.schema || ""}</span>
+      <div class="">
+        <span class="f-weight-700">Current revision</span>
+        <span class="f-weight-400">{revisionNumber}</span>
+      </div>
+      <div>
+        <span class="f-weight-700">Receipt ID</span>
+        <span class="f-weight-400">{$selectedReceipt?.receipt?.receiptId || 0}</span>
+      </div>
+    </div>
+    <ReceiptData receipt={$selectedReceipt?.receipt}/>
     <div class="display-flex justify-between font-bold mt-5 text-left">
       <span class="w-2/3">Total token amount:</span>
       <span class="w-1/3">{$data.offchainAssetReceiptVault ?

@@ -24,7 +24,7 @@
     export let receipt;
 
     $: schemaHash && getSchemaFileProps()
-    $: $activeNetwork && getReceiptData(receipt)
+    $: $activeNetwork && getReceiptData()
 
     async function getSchema() {
         let url = await getIpfsGetWay(schemaHash)
@@ -53,13 +53,13 @@
     }
 
 
-    async function getReceiptData(_receipt) {
+    async function getReceiptData() {
         let variables
-        if (!_receipt) {
+        if (!receipt) {
             let receiptId = $vault.address + "-" + window.location.hash.split("/")[1]
             variables = {id: receiptId}
         } else {
-            variables = {id: _receipt.id}
+            variables = {id: receipt.id}
         }
         loading = true;
         let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
@@ -67,7 +67,9 @@
         let information = ""
 
         if (resp && resp.data && resp.data.receipt) {
-            selectedReceipt.set(resp.data)
+            selectedReceipt.update(() => {
+                return {...resp.data, schema: localStorage.getItem("selectedReceiptSchema")}
+            })
             ipfsLoading = true;
             receiptInfo = resp.data.receipt.receiptInformations
             if (receiptInfo.length) {

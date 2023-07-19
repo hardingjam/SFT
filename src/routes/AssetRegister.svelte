@@ -60,6 +60,7 @@
 
     function goToAssetInformation(receipt) {
         selectedReceipt.set(receipt)
+        localStorage.setItem("selectedReceiptSchema", $selectedReceipt.schema)
         navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)
     }
 

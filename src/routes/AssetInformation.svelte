@@ -13,7 +13,7 @@
 
     let revisionNumber = 1;
 
-    pageTitle.set("Asset information")
+    pageTitle.set("Asset information - current revision")
     $: $selectedReceipt && getRevisionNumber()
 
     async function getRevisionNumber(receipt) {

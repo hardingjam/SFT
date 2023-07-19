@@ -10,7 +10,6 @@
     let loading = false
 
     pageTitle.set("Asset information")
-
 </script>
 <DefaultFrame>
   <div slot="back_button" class="display-flex">
@@ -21,9 +20,10 @@
   <div slot="content" class="info-container">
     <div class="display-flex justify-between font-bold mb-5">
       <span>{$tokenName}</span>
-      <span>{$data.offchainAssetReceiptVault ?
-          timeStampToDate($data.offchainAssetReceiptVault.deployTimestamp, "yy-mm-dd tt:tt") :
-          0}</span>
+      <span>
+       Revision date:
+        {$selectedReceipt.receipt ? timeStampToDate($selectedReceipt.receipt.deposits[0].timestamp, "yy-mm-dd tt:tt") : 0}
+      </span>
     </div>
     <ReceiptData receipt={$selectedReceipt.receipt}/>
     <div class="display-flex justify-between font-bold mt-5">

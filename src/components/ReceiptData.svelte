@@ -8,9 +8,8 @@
         getSubgraphData,
         toSentenceCase
     } from '../scripts/helpers.js';
-    import {activeNetwork, vault} from '../scripts/store.js';
+    import {activeNetwork, selectedReceipt, vault} from '../scripts/store.js';
     import {RECEIPT_INFORMATION_QUERY} from '../scripts/queries.js';
-    import {onMount} from 'svelte';
     import SftLoader from './SftLoader.svelte';
     import axios from 'axios';
     import {ethers} from 'ethers';
@@ -24,13 +23,8 @@
     let fileUploadProperties = []
     export let receipt;
 
-
     $: schemaHash && getSchemaFileProps()
-    $: $activeNetwork && getReceiptData()
-
-    onMount(async () => {
-        await getReceiptData(receipt)
-    })
+    $: $activeNetwork && getReceiptData(receipt)
 
     async function getSchema() {
         let url = await getIpfsGetWay(schemaHash)
@@ -59,13 +53,13 @@
     }
 
 
-    async function getReceiptData(receipt) {
+    async function getReceiptData(_receipt) {
         let variables
-        if (!receipt) {
+        if (!_receipt) {
             let receiptId = $vault.address + "-" + window.location.hash.split("/")[1]
             variables = {id: receiptId}
         } else {
-            variables = {id: receipt.id}
+            variables = {id: _receipt.id}
         }
         loading = true;
         let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
@@ -73,6 +67,7 @@
         let information = ""
 
         if (resp && resp.data && resp.data.receipt) {
+            selectedReceipt.set(resp.data)
             ipfsLoading = true;
             receiptInfo = resp.data.receipt.receiptInformations
             if (receiptInfo.length) {

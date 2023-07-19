@@ -7,10 +7,6 @@
     }
     let hasSlotBack = false; // Initialize the slot flag to false
 
-    // Check if the slot is provided from the parent component
-    $: {
-        hasSlotBack = !!$$slots.back_button;
-    }
 </script>
 
 <div class="default-frame {hasSlotBack?'pt-2':'11'}">
@@ -18,7 +14,7 @@
     <div class="{hasSlot? 'mb-5': ''}">
       <slot name="header_buttons"></slot>
     </div>
-    <div class="{hasSlotBack? 'mb-2': ''}">
+    <div class="mb-5">
       <slot name="back_button"></slot>
     </div>
   </div>

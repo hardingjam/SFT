@@ -7,16 +7,20 @@
     import {ethers} from 'ethers';
     import {icons} from '../scripts/assets.js';
     import {RECEIPT_INFORMATION_QUERY} from '../scripts/queries.js';
-    import {onMount} from 'svelte';
+    import axios from 'axios';
+    import {IPFS_GETWAY} from '../scripts/consts.js';
 
     let loading = false
 
     let revisionNumber = 1;
 
+    let schemaName = ''
+
     pageTitle.set("Asset information - current revision")
     $: $selectedReceipt && getRevisionNumber()
 
     async function getRevisionNumber(receipt) {
+        await getSchema()
         let variables
         if (!receipt) {
             let receiptId = $vault.address + "-" + window.location.hash.split("/")[1]
@@ -32,6 +36,16 @@
             informationIndex = resp.data.receipt.receiptInformations.findIndex(inf => inf.id === "ReceiptInformation-" +
                 resp.data.receipt.id)
             revisionNumber = resp.data.receipt.receiptInformations.length - informationIndex
+        }
+    }
+
+    async function getSchema() {
+        let selectedSchemaHash = localStorage.getItem("selectedReceiptSchema")
+        if (selectedSchemaHash) {
+            let res = await axios.get(`${IPFS_GETWAY}${selectedSchemaHash}`)
+            if (res) {
+                schemaName = res.data.displayName
+            }
         }
     }
 
@@ -58,7 +72,7 @@
       </span>
     </div>
     <div class="flex items-start flex-col mb-6">
-      <span class="f-weight-700">{$selectedReceipt?.schema || ""}</span>
+      <span class="f-weight-700">{schemaName}</span>
       <div class="">
         <span class="f-weight-700">Current revision</span>
         <span class="f-weight-400">{revisionNumber}</span>

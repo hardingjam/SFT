@@ -226,6 +226,7 @@ li {
 .default-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     box-sizing: border-box;
     padding: 0 18px;
     gap: 10px;

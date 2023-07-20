@@ -1,13 +1,14 @@
 <script>
     import DefaultFrame from '../components/DefaultFrame.svelte';
     import {icons} from '../scripts/assets.js';
-    import {navigate} from '../scripts/helpers.js';
-    import {pageTitle, selectedReceipt} from '../scripts/store.js';
+    import {getSubgraphData, navigate} from '../scripts/helpers.js';
+    import {activeNetwork, pageTitle, selectedReceipt, vault} from '../scripts/store.js';
     import axios from 'axios';
     import {IPFS_GETWAY} from '../scripts/consts.js';
     import Schema from '../components/Schema.svelte';
     import jQuery from 'jquery';
     import {ethers} from 'ethers';
+    import {RECEIPT_INFORMATION_QUERY} from '../scripts/queries.js';
 
     pageTitle.set("New revision")
 
@@ -16,8 +17,10 @@
     let schema = {}
 
     $:$selectedReceipt && getSchema()
+    $:$activeNetwork && getReceiptData()
 
     async function getSchema() {
+        console.log($selectedReceipt);
         let selectedSchemaHash = localStorage.getItem("selectedReceiptSchema")
         let res = await axios.get(`${IPFS_GETWAY}${selectedSchemaHash}`)
         if (res) {
@@ -51,6 +54,23 @@
 
         return response
     }
+
+    async function getReceiptData() {
+        let variables
+        if (!$selectedReceipt.receipt) {
+            let receiptId = $vault.address + "-" + window.location.hash.split("/")[1]
+            variables = {id: receiptId}
+        } else {
+            variables = {id: $selectedReceipt.receipt.id}
+        }
+        loading = true;
+        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
+        if (resp && resp.data && resp.data.receipt) {
+            selectedReceipt.set(resp.data)
+        }
+    }
+
+
 </script>
 
 <div class="new-revision">
@@ -71,7 +91,7 @@
       </div>
       <div class="flex justify-between w-full mb-6 items-center mt-6">
         <span class="f-weight-700">Amount</span>
-        <div class="asset-class"> {$selectedReceipt ?
+        <div class="asset-class"> {$selectedReceipt && $selectedReceipt.receipt ?
             ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
             0}</div>
       </div>

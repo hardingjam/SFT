@@ -59,7 +59,7 @@
   <div slot="content" class="info-container">
     <div class="buttons">
       <div class="default-btn">download IPFS pin list</div>
-      <div class="default-btn" on:click={()=>navigate("#new-revision")}>New revision</div>
+      <div class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New revision</div>
       <div class="default-btn">History</div>
     </div>
     <div class="display-flex justify-between font-bold mb-5 text-left">

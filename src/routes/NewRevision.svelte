@@ -75,9 +75,13 @@
             ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
             0}</div>
       </div>
+      <div class="default-btn float-right mt-6">Upload</div>
     </div>
   </DefaultFrame>
-
+  <div class="footer">
+    <div class="info f-weight-700 mb-5">Changed to the asset are permanent on IPFS and Blockchain</div>
+    <div class="btn-solid w-full ok-btn">OK</div>
+  </div>
 </div>
 
 <style>
@@ -101,5 +105,21 @@
         margin-top: 8px;
         padding: 0 5px;
         text-align: left;
+    }
+
+    .footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: 30px;
+    }
+
+    .info {
+        font-size: 12px;
+    }
+
+    .ok-btn {
+        width: calc(100% - 160px)
     }
 </style>

@@ -7,6 +7,7 @@
     import {IPFS_GETWAY} from '../scripts/consts.js';
     import Schema from '../components/Schema.svelte';
     import jQuery from 'jquery';
+    import {ethers} from 'ethers';
 
     pageTitle.set("New revision")
 
@@ -24,7 +25,7 @@
         }
     }
 
-    async function createNewRevision(){
+    async function createNewRevision() {
 
     }
 
@@ -68,6 +69,12 @@
       <div class="text-left schema-container">
         <Schema schema={schema}></Schema>
       </div>
+      <div class="flex justify-between w-full mb-6 items-center mt-6">
+        <span class="f-weight-700">Amount</span>
+        <div class="asset-class"> {$selectedReceipt ?
+            ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
+            0}</div>
+      </div>
     </div>
   </DefaultFrame>
 
@@ -84,7 +91,7 @@
         background: #FFF;
     }
 
-    .asset-class{
+    .asset-class {
         border: 2px solid #ECECEC;
         border-radius: 5px;
         color: #000000;

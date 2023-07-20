@@ -1,6 +1,5 @@
 <script>
     import {fileDropped, schemaError, uploadBtnLoading} from '../scripts/store.js';
-    import {icons} from '../scripts/assets.js';
     import SftLoader from './SftLoader.svelte';
     import SchemaForm from './SchemaForm.svelte';
     import {createEventDispatcher} from 'svelte';

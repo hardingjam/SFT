@@ -1,10 +1,16 @@
 <script>
     import DefaultFrame from '../components/DefaultFrame.svelte';
     import {icons} from '../scripts/assets.js';
-    import {getSubgraphData, navigate} from '../scripts/helpers.js';
-    import {activeNetwork, pageTitle, selectedReceipt, vault} from '../scripts/store.js';
+    import {getSubgraphData, navigate, showPrompt} from '../scripts/helpers.js';
+    import {
+        activeNetwork,
+        pageTitle,
+        selectedReceipt, transactionInProgress,
+        transactionInProgressShow,
+        vault
+    } from '../scripts/store.js';
     import axios from 'axios';
-    import {IPFS_GETWAY} from '../scripts/consts.js';
+    import {IPFS_APIS, IPFS_GETWAY} from '../scripts/consts.js';
     import Schema from '../components/Schema.svelte';
     import jQuery from 'jquery';
     import {ethers} from 'ethers';
@@ -15,6 +21,11 @@
     let loading = false;
     let fileHashes = []
     let schema = {}
+    let username = '';
+    let password = '';
+    let error;
+    let uploadedData = {};
+
 
     $:$selectedReceipt && getSchema()
     $:$activeNetwork && getReceiptData()
@@ -32,7 +43,65 @@
 
     }
 
-    async function submitForm() {
+    const upload = async () => {
+        let structure = await getFormData()
+        error = ""
+
+        let savedUsername = localStorage.getItem('ipfsUsername');
+        let savedPassword = localStorage.getItem('ipfsPassword');
+        if (!savedPassword || !savedUsername) {
+            navigate("#ipfs")
+        } else {
+            username = savedUsername;
+            password = savedPassword
+
+            let formData = new FormData();
+
+            formData.append('file', structure)
+
+            const requestArr = IPFS_APIS.map((url) => {
+                return axios.request({
+                    url,
+                    auth: {
+                        username,
+                        password
+                    },
+                    method: 'post',
+                    headers: {
+                        "Content-Type": `multipart/form-data;`,
+                    },
+                    data: formData,
+                    onUploadProgress: (async (p) => {
+                        await showPrompt(null, {topText: "Uploading to IPFS, please wait", noBottomText: true})
+                        console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                    }),
+                    withCredentials: true,
+                })
+            });
+
+            let respAll = await Promise.allSettled(requestArr)
+
+            respAll.map(response => {
+                if (response.status === "rejected") {
+                    reportError(response.reason)
+                } else return response
+            })
+
+            let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+            if (!resolvedPromise) {
+                error = "Something went wrong"
+            }
+            username = ""
+            password = ""
+            transactionInProgressShow.set(false)
+            transactionInProgress.set(false)
+
+            uploadedData = resolvedPromise?.value.data
+        }
+    };
+
+
+    async function getFormData() {
         //get form data
         let formDataArr = jQuery(".svelte-schema-form").serializeArray()
         const json = {};
@@ -95,7 +164,7 @@
             ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
             0}</div>
       </div>
-      <div class="default-btn float-right mt-6">Upload</div>
+      <div class="default-btn float-right mt-6" on:click={()=>{upload()}}>Upload</div>
     </div>
   </DefaultFrame>
   <div class="footer">

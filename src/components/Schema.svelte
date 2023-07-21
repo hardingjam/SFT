@@ -9,8 +9,8 @@
 
     export let schema = {}
     const dispatch = createEventDispatcher();
-    let username='';
-    let password='';
+    let username = '';
+    let password = '';
 
     let fileHashes = []
 
@@ -19,7 +19,7 @@
     $: ($fileDropped.file && $fileDropped.file.size) && handleFileDrop($fileDropped);
     $: schema && clearFileHashes();
 
-    function clearFileHashes(){
+    function clearFileHashes() {
         fileHashes = []
     }
 
@@ -30,9 +30,7 @@
         let savedUsername = localStorage.getItem('ipfsUsername');
         let savedPassword = localStorage.getItem('ipfsPassword');
         if (!savedPassword || !savedUsername) {
-            // showAuth = true;
             navigate("#ipfs")
-            // await waitForCredentials()
         } else {
             username = savedUsername;
             password = savedPassword
@@ -85,11 +83,9 @@
             password = ""
             return resolvedPromise?.value.data
         }
-
-
     };
 
-    async function handleFileDrop(file){
+    async function handleFileDrop(file) {
         await upload(file)
         dispatch('fileUpload', {
             fileHashes,

@@ -5,7 +5,7 @@
     import {
         activeNetwork,
         pageTitle,
-        selectedReceipt, transactionInProgress,
+        selectedReceipt, tokenName, transactionInProgress,
         transactionInProgressShow,
         vault
     } from '../scripts/store.js';
@@ -151,6 +151,9 @@
       </button>
     </div>
     <div slot="content" class="info-container">
+      <div class="flex w-full items-center justify-center f-weight-700 mb-6">
+        {$tokenName}
+      </div>
       <div class="flex justify-between w-full mb-6 items-end">
         <span class="f-weight-700">Asset class</span>
         <div class="asset-class"> {schema.displayName}</div>

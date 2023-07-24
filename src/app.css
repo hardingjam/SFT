@@ -461,6 +461,18 @@ li {
 }
 
 
+/* Add dots styling */
+.dots {
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left: 15px;
+}
+
+.dots::after {
+    color: #D2D2D2;
+    content: ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . "; /* Add as many dots as you want */
+}
+
 @media (prefers-color-scheme: light) {
 }
 

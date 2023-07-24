@@ -59,7 +59,9 @@
   <div slot="header_buttons" class="display-flex">
     <div class="buttons">
       <div class="default-btn">download IPFS pin list</div>
-      <div class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New revision</div>
+      <div class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
+        revision
+      </div>
       <div class="default-btn mr-5">History</div>
     </div>
   </div>
@@ -75,14 +77,17 @@
       </span>
     </div>
     <div class="flex items-start flex-col mb-6">
-      <span class="f-weight-700">{schemaName}</span>
-      <div class="">
-        <span class="f-weight-700">Current revision</span>
-        <span class="f-weight-400">{revisionNumber}</span>
+      <div class="flex justify-between font-bold text-left w-full">
+        <span class="f-weight-700 w-2/3 whitespace-nowrap flex pr-3">Asset class <span class="dots"></span></span>
+        <span class="f-weight-700 w-1/3">{schemaName}</span>
       </div>
-      <div>
-        <span class="f-weight-700">Receipt ID</span>
-        <span class="f-weight-400">{$selectedReceipt?.receipt?.receiptId || 0}</span>
+      <div class="flex justify-between font-bold text-left w-full">
+        <span class="f-weight-700 w-2/3 whitespace-nowrap flex pr-3">Current revision <span class="dots"></span></span>
+        <span class="f-weight-400 w-1/3">{revisionNumber}</span>
+      </div>
+      <div class="flex justify-between font-bold text-left w-full">
+        <span class="f-weight-700 w-2/3 whitespace-nowrap flex pr-3">Receipt ID <span class="dots"></span></span>
+        <span class="f-weight-400 w-1/3">{$selectedReceipt?.receipt?.receiptId || 0}</span>
       </div>
     </div>
     <ReceiptData receipt={$selectedReceipt?.receipt}/>
@@ -109,4 +114,5 @@
         justify-content: flex-end;
         gap: 20px;
     }
+
 </style>

@@ -103,7 +103,7 @@
 </script>
 <div class="">
   {#each displayInformation as info}
-    <div class="receipt-row">
+    <div class="receipt-row flex justify-between font-bold text-left w-full">
 
       {#if fileUploadProperties.includes(info.label)}
             <span class="underline btn-hover">
@@ -114,7 +114,7 @@
       {/if}
 
       {#if !fileUploadProperties.includes(info.label)}
-        <span class="w-2/3">{info.label}</span>
+        <span class="w-2/3 whitespace-nowrap flex pr-3">{info.label} <span class="dots"></span> </span>
         <span class="w-1/3">{isAddress(info.value) ? formatAddress(info.value) : info.value}</span>
       {/if}
 

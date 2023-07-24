@@ -56,12 +56,15 @@
       <img src={icons.back} alt="back">
     </button>
   </div>
-  <div slot="content" class="info-container">
+  <div slot="header_buttons" class="display-flex">
     <div class="buttons">
       <div class="default-btn">download IPFS pin list</div>
       <div class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New revision</div>
-      <div class="default-btn">History</div>
+      <div class="default-btn mr-5">History</div>
     </div>
+  </div>
+  <div slot="content" class="info-container">
+
     <div class="display-flex justify-between font-bold mb-5 text-left">
       <span>{$tokenName}</span>
       <span>
@@ -105,6 +108,5 @@
         display: flex;
         justify-content: flex-end;
         gap: 20px;
-        margin-bottom: 16px;
     }
 </style>

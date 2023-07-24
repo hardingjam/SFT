@@ -10,7 +10,7 @@
 </script>
 
 <div class="default-frame {hasSlotBack?'pt-2':'11'}">
-  <div class="display-flex justify-end">
+  <div class="display-flex justify-end items-center">
     <div class="{hasSlot? 'mb-5': ''}">
       <slot name="header_buttons"></slot>
     </div>

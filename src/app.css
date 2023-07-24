@@ -469,6 +469,7 @@ li {
 }
 
 .dots::after {
+    font-size: 10px;
     color: #D2D2D2;
     content: ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . "; /* Add as many dots as you want */
 }

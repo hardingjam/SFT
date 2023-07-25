@@ -1,20 +1,33 @@
 <script>
     import DefaultFrame from '../components/DefaultFrame.svelte';
     import {icons} from '../scripts/assets.js';
-    import {getSubgraphData, navigate, showPrompt} from '../scripts/helpers.js';
+    import {
+        cborEncode,
+        encodeCBORStructure,
+        getContract,
+        getSubgraphData,
+        hasRole,
+        navigate,
+        showPrompt, showPromptSFTCreate
+    } from '../scripts/helpers.js';
     import {
         activeNetwork,
         pageTitle,
         selectedReceipt, tokenName, transactionInProgress,
         transactionInProgressShow,
-        vault
+        vault, data, ethersData, account, transactionSuccess, transactionError, fileDropped
     } from '../scripts/store.js';
     import axios from 'axios';
-    import {IPFS_APIS, IPFS_GETWAY} from '../scripts/consts.js';
+    import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
     import Schema from '../components/Schema.svelte';
     import jQuery from 'jquery';
     import {ethers} from 'ethers';
-    import {RECEIPT_INFORMATION_QUERY} from '../scripts/queries.js';
+    import {
+        RECEIPT_INFORMATION_QUERY,
+        RECEIPT_INFORMATIONS_QUERY
+    } from '../scripts/queries.js';
+    import receiptContractAbi from '../contract/ReceiptContractAbi.json';
+    import {arrayify} from 'ethers/lib/utils.js';
 
     pageTitle.set("New revision")
 
@@ -26,6 +39,7 @@
     let error;
     let uploadedData = {};
 
+    let {signer} = $ethersData;
 
     $:$selectedReceipt && getSchema()
     $:$activeNetwork && getReceiptData()
@@ -35,11 +49,66 @@
         let selectedSchemaHash = localStorage.getItem("selectedReceiptSchema")
         let res = await axios.get(`${IPFS_GETWAY}${selectedSchemaHash}`)
         if (res) {
-            schema = res.data
+            schema = {...res.data, hash: selectedSchemaHash}
         }
     }
 
     async function createNewRevision() {
+        let receiptContractAddress = $data.offchainAssetReceiptVault.receiptContractAddress
+        let receiptContract = await getContract($activeNetwork, receiptContractAddress, receiptContractAbi, $ethersData.signerOrProvider)
+
+        const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
+        if (!hasRoleDepositor.error) {
+            if (uploadedData) {
+
+                let fileHashesList = fileHashes.map(f => f.hash)
+                let encodedStructure = encodeCBORStructure(uploadedData, schema.hash)
+
+                try {
+                    let structureIpfs = await upload(uploadedData)
+                    let encodedHashList = cborEncode([...fileHashesList,
+                        structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
+                    const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() +
+                        encodedStructure + encodedHashList
+
+                    const tx = await receiptContract
+                        .connect(signer).receiptInformation($selectedReceipt.receipt.receiptId, arrayify(meta));
+                    await showPromptSFTCreate(tx)
+                    let wait = await tx.wait()
+                    if (wait.status === 1) {
+                        let interval = setInterval(async () => {
+                            let receipts = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, RECEIPT_INFORMATIONS_QUERY, 'offchainAssetReceiptVault')
+                            receipts = receipts?.data?.offchainAssetReceiptVault.receipts
+                            let receiptInformations = []
+                            let receipt = {}
+                            if (receipts.length) {
+                                receipt = receipts.find(r => r.receiptId === $selectedReceipt.receipt.receiptId)
+                                if (receipt) {
+                                    receiptInformations = receipt.receiptInformations
+                                }
+                            }
+                            if (receiptInformations && receiptInformations.length) {
+                                let blockNumbers = receiptInformations.map(r => r.transaction.blockNumber)
+                                if (blockNumbers.indexOf(wait.blockNumber.toString()) !== -1) {
+                                    transactionSuccess.set(true)
+                                    transactionInProgress.set(false)
+                                    clearInterval(interval)
+                                }
+
+                            }
+                        }, 2000)
+                    } else {
+                        transactionError.set(true)
+                    }
+                    fileDropped.set({})
+                } catch (err) {
+                    console.log(err)
+                }
+            }
+        } else {
+            error = hasRoleDepositor.error
+        }
+
 
     }
 
@@ -172,7 +241,7 @@
   </DefaultFrame>
   <div class="footer">
     <div class="info f-weight-700 mb-5">Changed to the asset are permanent on IPFS and Blockchain</div>
-    <div class="btn-solid w-full ok-btn">OK</div>
+    <div class="btn-solid w-full ok-btn" on:click={()=>{createNewRevision()}}>OK</div>
   </div>
 </div>
 

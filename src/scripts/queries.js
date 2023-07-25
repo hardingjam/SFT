@@ -9,6 +9,7 @@ export const QUERY = `
                 name
                 symbol
                 deployTimestamp
+                receiptContractAddress
                 shareHolders{
                     address
                 }
@@ -49,6 +50,7 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             id,
             address,
             totalShares,
+            receiptContractAddress
             certifications(orderBy: timestamp, orderDirection: desc)
             {
               timestamp,
@@ -123,6 +125,9 @@ export const RECEIPT_INFORMATION_QUERY = `
               receiptInformations(orderDirection: desc, orderBy: timestamp){
                 information
                 id
+                transaction {
+                  blockNumber
+                }
               }
               deposits{
                  amount
@@ -145,6 +150,7 @@ export const VAULT_INFORMATION_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
               id,
+              receiptContractAddress
                receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
                  information
                  id
@@ -153,6 +159,25 @@ export const VAULT_INFORMATION_QUERY = `
                    blockNumber
                  }
                }
+            }
+          }
+         `;
+export const RECEIPT_INFORMATIONS_QUERY = `
+          query($id: ID!) {
+            offchainAssetReceiptVault(id: $id) {
+              id,
+              receiptContractAddress
+              receipts {
+                id,
+                receiptId,
+                receiptInformations(orderDirection: desc, orderBy: timestamp){
+                  information
+                  id
+                  transaction {
+                    blockNumber
+                  }
+                }
+              }
             }
           }
          `;
@@ -167,6 +192,7 @@ export const VAULTS_QUERY = `
             deployBlock
             deployTimestamp
             totalShares
+            receiptContractAddress
             tokenHolders {
                 address
                 balance

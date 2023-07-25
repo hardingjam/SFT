@@ -37,7 +37,8 @@
     let username = '';
     let password = '';
     let error;
-    let uploadedData = {};
+    let uploadedData;
+    let structure;
 
     let {signer} = $ethersData;
 
@@ -62,12 +63,11 @@
             if (uploadedData) {
 
                 let fileHashesList = fileHashes.map(f => f.hash)
-                let encodedStructure = encodeCBORStructure(uploadedData, schema.hash)
+                let encodedStructure = encodeCBORStructure(structure, schema.hash)
 
                 try {
-                    let structureIpfs = await upload(uploadedData)
                     let encodedHashList = cborEncode([...fileHashesList,
-                        structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
+                        uploadedData?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
                     const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() +
                         encodedStructure + encodedHashList
 
@@ -113,7 +113,7 @@
     }
 
     const upload = async () => {
-        let structure = await getFormData()
+        structure = await getFormData()
         error = ""
 
         let savedUsername = localStorage.getItem('ipfsUsername');

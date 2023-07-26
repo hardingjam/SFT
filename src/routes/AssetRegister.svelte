@@ -45,7 +45,7 @@
                 try {
                     let res = await axios.get(`${IPFS_GETWAY}${schemaHash}`)
                     if (res) {
-                        schema = res.data.displayName
+                        schema = {...res.data, id: schemaHash}
                     }
                 } catch (err) {
                     console.log(err)
@@ -60,6 +60,7 @@
 
     function goToAssetInformation(receipt) {
         selectedReceipt.set(receipt)
+        localStorage.setItem("selectedReceiptSchema", $selectedReceipt.schema.id)
         navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)
     }
 
@@ -115,7 +116,7 @@
             <tr class="tb-row">
               <td class="brown hover-underline"
                   on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
-              <td>{receipt.schema || ""}</td>
+              <td>{receipt.schema?.displayName || ""}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td>{timeStampToDate(receipt.timestamp)}</td>
             </tr>

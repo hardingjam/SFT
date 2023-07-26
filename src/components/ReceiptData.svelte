@@ -8,9 +8,8 @@
         getSubgraphData,
         toSentenceCase
     } from '../scripts/helpers.js';
-    import {activeNetwork, vault} from '../scripts/store.js';
+    import {activeNetwork, selectedReceipt, vault} from '../scripts/store.js';
     import {RECEIPT_INFORMATION_QUERY} from '../scripts/queries.js';
-    import {onMount} from 'svelte';
     import SftLoader from './SftLoader.svelte';
     import axios from 'axios';
     import {ethers} from 'ethers';
@@ -24,13 +23,8 @@
     let fileUploadProperties = []
     export let receipt;
 
-
     $: schemaHash && getSchemaFileProps()
     $: $activeNetwork && getReceiptData()
-
-    onMount(async () => {
-        await getReceiptData(receipt)
-    })
 
     async function getSchema() {
         let url = await getIpfsGetWay(schemaHash)
@@ -59,7 +53,7 @@
     }
 
 
-    async function getReceiptData(receipt) {
+    async function getReceiptData() {
         let variables
         if (!receipt) {
             let receiptId = $vault.address + "-" + window.location.hash.split("/")[1]
@@ -73,6 +67,9 @@
         let information = ""
 
         if (resp && resp.data && resp.data.receipt) {
+            selectedReceipt.update(() => {
+                return {...resp.data, schema: localStorage.getItem("selectedReceiptSchema")}
+            })
             ipfsLoading = true;
             receiptInfo = resp.data.receipt.receiptInformations
             if (receiptInfo.length) {
@@ -106,7 +103,7 @@
 </script>
 <div class="">
   {#each displayInformation as info}
-    <div class="receipt-row">
+    <div class="receipt-row flex justify-between font-bold text-left w-full">
 
       {#if fileUploadProperties.includes(info.label)}
             <span class="underline btn-hover">
@@ -116,13 +113,9 @@
             </span>
       {/if}
 
-      {#if !fileUploadProperties.includes(info.label)} <span>{info.label}</span>
-        {#if isAddress(info.value)}
-          <div>{formatAddress(info.value)}</div>
-        {/if}
-        {#if !isAddress(info.value)}
-          <div>{info.value}</div>
-        {/if}
+      {#if !fileUploadProperties.includes(info.label)}
+        <span class="w-2/3 whitespace-nowrap flex pr-3">{info.label} <span class="dots"></span> </span>
+        <span class="w-1/3">{isAddress(info.value) ? formatAddress(info.value) : info.value}</span>
       {/if}
 
     </div>
@@ -141,6 +134,10 @@
         padding: 2px 0;
         display: flex;
         justify-content: space-between;
+    }
+
+    .receipt-row span {
+        text-align: start;
     }
 
     .ipfs-hash {

@@ -61,6 +61,9 @@ body {
     cursor: pointer;
     padding: 0 30px;
     background: #9D7334;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-solid:hover {
@@ -224,6 +227,9 @@ li {
 }
 
 .default-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-sizing: border-box;
     padding: 0 18px;
     gap: 10px;
@@ -454,6 +460,19 @@ li {
     border-top-right-radius: 10px;
 }
 
+
+/* Add dots styling */
+.dots {
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left: 15px;
+}
+
+.dots::after {
+    font-size: 10px;
+    color: #D2D2D2;
+    content: ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . "; /* Add as many dots as you want */
+}
 
 @media (prefers-color-scheme: light) {
 }

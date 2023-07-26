@@ -168,7 +168,7 @@
 </script>
 
 
-<div class="redeem-container">
+<div class="redeem-container flex items-center flex-col">
   {#if !showReceiptInfo}
     <div class="title"><span
       class="f-weight-700">Total supply: (FT):</span>
@@ -241,9 +241,10 @@
     .title {
         padding-top: 25px;
         font-size: 16px;
+        align-self: flex-start;
         line-height: 27px;
-        text-align: right;
-        margin-right: 55px;
+        text-align: left;
+        margin-left: 1rem;
     }
 
     .receipts-table {

@@ -23,6 +23,8 @@
     let filteredReceiptInformations = [];
     let perPage = 20;
     let currentPage = 1;
+    let selectedReceiptInformations = [];
+
 
     $:$activeNetwork && getAuditHistory();
 
@@ -65,6 +67,9 @@
         window.open(`${$activeNetwork.blockExplorer}/tx/${hash}`);
     }
 
+    function compareHistory() {
+        console.log(selectedReceiptInformations)
+    }
 </script>
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
   {#if loading}
@@ -85,10 +90,18 @@
         <tbody>
         {#if receiptInformations.length}
           {#each filteredReceiptInformations as information}
-            <tr >
-              <td></td>
+            <tr>
+              <td class="receipt-id">
+                <label class="check-container">
+                  <input type="checkbox" class="check-box" bind:group={selectedReceiptInformations}
+                         value={information.id}
+                         disabled={selectedReceiptInformations.length === 2 && !selectedReceiptInformations.includes(information.id)}/>
+                  <span class="checkmark"></span>
+                </label>
+              </td>
               <td class="date underline cursor-pointer">{timeStampToDate(information.timestamp, "yy-mm-dd/tt:tt")}</td>
-              <td class="underline cursor-pointer" on:click={()=>{viewInExplorer(information.transaction.id)}}>{formatHash(information.transaction.id) ||
+              <td class="underline cursor-pointer"
+                  on:click={()=>{viewInExplorer(information.transaction.id)}}>{formatHash(information.transaction.id) ||
               ""}</td>
               <td>{formatAddress(information.emitter.address) || ""}</td>
               <td>{ethers.utils.formatUnits(information.receipt.deposits[0].amount, 18)}</td>
@@ -96,7 +109,13 @@
           {/each}
         {/if}
         </tbody>
-        <Pagination dataLength={receiptInformations.length} {perPage} on:pageChange={handlePageChange}/>
+        <Pagination dataLength={receiptInformations.length} {perPage} on:pageChange={handlePageChange}>
+          <div slot="actions">
+            <div class="certify-btn-container">
+              <button class="default-btn ml-3" on:click={() => compareHistory()}>Compare History</button>
+            </div>
+          </div>
+        </Pagination>
       </table>
     </div>
   {/if}
@@ -118,4 +137,13 @@
         margin-top: 102px;
     }
 
+    .receipt-id {
+        justify-content: center;
+        display: flex;
+    }
+
+    .check-container {
+        top: 8px;
+        left: 18px;
+    }
 </style>

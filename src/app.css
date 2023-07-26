@@ -367,11 +367,11 @@ li {
 /* Style the indicator (dot/circle) */
 .check-container .checkmark:after {
     position: absolute;
-    left: 22.42%;
-    top: -5px;
     bottom: 0;
     color: #ffffffff;
     content: "\2714";
+    left: 3px;
+    top: -7px;
 }
 
 .check-box-label {

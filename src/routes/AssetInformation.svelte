@@ -72,7 +72,7 @@
       <span>
        Revision date:
         {$selectedReceipt.receipt ?
-            timeStampToDate($selectedReceipt?.receipt?.deposits[0].timestamp, "yy-mm-dd tt:tt") :
+            timeStampToDate($selectedReceipt?.receipt?.receiptInformations[0].timestamp, "yy-mm-dd tt:tt") :
             0}
       </span>
     </div>

@@ -163,25 +163,6 @@ export const VAULT_INFORMATION_QUERY = `
             }
           }
          `;
-export const RECEIPT_INFORMATIONS_QUERY = `
-          query($id: ID!) {
-            offchainAssetReceiptVault(id: $id) {
-              id,
-              receiptContractAddress
-              receipts {
-                id,
-                receiptId,
-                receiptInformations(orderDirection: desc, orderBy: timestamp){
-                  information
-                  id
-                  transaction {
-                    blockNumber
-                  }
-                }
-              }
-            }
-          }
-         `;
 
 export const VAULTS_QUERY = `
         query {

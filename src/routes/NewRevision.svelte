@@ -23,8 +23,7 @@
     import jQuery from 'jquery';
     import {ethers} from 'ethers';
     import {
-        RECEIPT_INFORMATION_QUERY,
-        RECEIPT_INFORMATIONS_QUERY
+        RECEIPT_INFORMATION_QUERY
     } from '../scripts/queries.js';
     import receiptContractAbi from '../contract/ReceiptContractAbi.json';
     import {arrayify} from 'ethers/lib/utils.js';
@@ -46,7 +45,6 @@
     $:$activeNetwork && getReceiptData()
 
     async function getSchema() {
-        console.log($selectedReceipt);
         let selectedSchemaHash = localStorage.getItem("selectedReceiptSchema")
         let res = await axios.get(`${IPFS_GETWAY}${selectedSchemaHash}`)
         if (res) {
@@ -77,15 +75,10 @@
                     let wait = await tx.wait()
                     if (wait.status === 1) {
                         let interval = setInterval(async () => {
-                            let receipts = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, RECEIPT_INFORMATIONS_QUERY, 'offchainAssetReceiptVault')
-                            receipts = receipts?.data?.offchainAssetReceiptVault.receipts
-                            let receiptInformations = []
-                            let receipt = {}
-                            if (receipts.length) {
-                                receipt = receipts.find(r => r.receiptId === $selectedReceipt.receipt.receiptId)
-                                if (receipt) {
-                                    receiptInformations = receipt.receiptInformations
-                                }
+                            let resp = await getSubgraphData($activeNetwork, {id: $selectedReceipt.receipt.id.toLowerCase()}, RECEIPT_INFORMATION_QUERY, 'receipt')
+                            let receiptInformations;
+                            if (resp && resp.data) {
+                                receiptInformations = resp.data.receipt.receiptInformations
                             }
                             if (receiptInformations && receiptInformations.length) {
                                 let blockNumbers = receiptInformations.map(r => r.transaction.blockNumber)
@@ -94,7 +87,6 @@
                                     transactionInProgress.set(false)
                                     clearInterval(interval)
                                 }
-
                             }
                         }, 2000)
                     } else {

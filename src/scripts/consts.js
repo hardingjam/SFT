@@ -63,7 +63,7 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#mint", "Mint/Redeem"],
     ["#list", "SFT list"],
     ["#members", "Members"],
-    ["#audit-history", "Audits"],
+    ["#audit-history", "Audit history"],
     ["#", "Home"],
     ["#asset-classes", "Asset class list"],
     ["#new-asset-class", "New asset class"],
@@ -75,4 +75,5 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#asset-information", "Asset information"],
     ["#token-overview", "Token overview"],
     ["#new-revision", "New revision"],
+    ["#asset-history", "Asset history"],
 ]);

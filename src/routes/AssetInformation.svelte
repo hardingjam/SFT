@@ -62,7 +62,7 @@
       <button class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
         revision
       </button>
-      <button class="default-btn mr-5" disabled>Asset history</button>
+      <button class="default-btn mr-5"  on:click={()=>navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)}>Asset history</button>
     </div>
   </div>
   <div slot="content" class="info-container">

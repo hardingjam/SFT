@@ -144,13 +144,18 @@ export function timeStampToDate(timeStamp, format) {
     if (format === "mm-dd-yyyy") {
         value = [month, day, year].join('-');
     }
-    if (format === "yyyy-mm-dd") {
+    else if (format === "yyyy-mm-dd") {
         value = [year, month, day].join('-');
     }
-    if (format === "yy-mm-dd tt:tt") {
+    else if (format === "yy-mm-dd tt:tt") {
         let date = [year, month, day].join('-');
         let time = [hour, min].join(":")
         value = date + " " + time;
+    }
+    else if (format === "yy-mm-dd/tt:tt") {
+        let date = [year, month, day].join('-');
+        let time = [hour, min].join(":")
+        value = date + " / " + time;
     } else {
         value = [day, month, year].join('-');
     }
@@ -259,6 +264,13 @@ export async function getIpfsGetWay(hash) {
 export function formatAddress(address) {
     if (address) {
         return address.replace(/(.{6}).*(.{5})/, "$1…$2")
+    } else
+        return ''
+}
+
+export function formatHash(hash) {
+    if (hash) {
+        return hash.replace(/(.{17}).*/, "$1…")
     } else
         return ''
 }

@@ -57,6 +57,7 @@
     import AssetInformation from '../routes/AssetInformation.svelte';
     import TokenOverview from '../routes/TokenOverview.svelte';
     import NewRevision from '../routes/NewRevision.svelte';
+    import AssetHistory from '../routes/AssetHistory.svelte';
 
 
     let connectedAccount;
@@ -336,6 +337,7 @@
         <div class="{$activeNetwork  ? 'show' : 'hide'}">
           <Route path="#" component={Home}/>
           <Route path="#asset-register" component={AssetRegister}/>
+          <Route path="#asset-history/:id" component={AssetHistory}/>
           <Route path="#audit-history" component={AuditHistory}/>
           <Route path="#token-overview" component={TokenOverview}/>
         </div>

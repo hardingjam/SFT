@@ -73,7 +73,15 @@ export const AUDIT_HISTORY_DATA_QUERY = `
                   receiptInformations(orderDirection: desc, orderBy: timestamp){
                     information
                     id
-                    timestamp
+                    timestamp       
+                    emitter {
+                     address
+                    }        
+                    receipt {
+                      deposits {
+                        amount
+                      }
+                    }
                   }
                   deposits{
                      amount
@@ -130,7 +138,15 @@ export const RECEIPT_INFORMATION_QUERY = `
                   blockNumber
                   id
                 }
-                timestamp  
+                timestamp 
+                emitter {
+                  address
+                }        
+                receipt {
+                  deposits {
+                    amount
+                  }
+                }
               }
               deposits{
                  amount
@@ -211,6 +227,14 @@ export const DEPOSITS_QUERY = `
                     id
                     schema
                     timestamp
+                    emitter {
+                     address
+                    }
+                    receipt {
+                      deposits {
+                        amount
+                      }
+                    }
                   }
                 }
               }

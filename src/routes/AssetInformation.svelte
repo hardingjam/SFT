@@ -58,11 +58,11 @@
   </div>
   <div slot="header_buttons" class="display-flex">
     <div class="buttons">
-      <div class="default-btn">download IPFS pin list</div>
-      <div class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
+      <button class="default-btn" disabled>download IPFS pin list</button>
+      <button class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
         revision
-      </div>
-      <div class="default-btn mr-5">History</div>
+      </button>
+      <button class="default-btn mr-5" disabled>Asset history</button>
     </div>
   </div>
   <div slot="content" class="info-container">

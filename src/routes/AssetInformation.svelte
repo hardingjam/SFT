@@ -33,8 +33,8 @@
         let informationIndex = 0;
         if (resp && resp.data && resp.data.receipt && resp.data.receipt.id &&
             resp.data.receipt.receiptInformations.length) {
-            informationIndex = resp.data.receipt.receiptInformations.findIndex(inf => inf.id === "ReceiptInformation-" +
-                resp.data.receipt.id)
+            informationIndex = resp.data.receipt.receiptInformations
+                .findIndex(inf => inf.id === `ReceiptInformation-${resp.data.receipt.id}-${resp.data.receipt.receiptInformations[0].transaction.id}`)
             revisionNumber = resp.data.receipt.receiptInformations.length - informationIndex
         }
     }

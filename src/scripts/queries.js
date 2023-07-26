@@ -127,6 +127,7 @@ export const RECEIPT_INFORMATION_QUERY = `
                 id
                 transaction {
                   blockNumber
+                  id
                 }
               }
               deposits{

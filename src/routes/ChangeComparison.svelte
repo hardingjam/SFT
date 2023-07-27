@@ -47,12 +47,16 @@
             receiptInformation2 = resp2.data?.receiptInformation || {}
             let decodedReceiptInformation1 = decodeInformation(receiptInformation1.information)
             let decodedReceiptInformation2 = decodeInformation(receiptInformation2.information)
+            let fieldsArray = [...Object.keys(decodedReceiptInformation1), ...Object.keys(decodedReceiptInformation2)]
+            //remove duplicate fields
+            const uniqueSet = new Set(fieldsArray);
+            fieldsArray = Array.from(uniqueSet);
 
-            comparisonTableData = decodedReceiptInformation1.map((info, index)=>{
+            comparisonTableData = fieldsArray.map(field => {
                 return {
-                    field: info.field_label,
-                    information_1: info.value,
-                    information_2: decodedReceiptInformation2[index].value
+                    field: toSentenceCase(field),
+                    information_1: decodedReceiptInformation1[field],
+                    information_2: decodedReceiptInformation2[field],
                 }
             })
         } catch (e) {
@@ -64,14 +68,7 @@
 
     function decodeInformation(information) {
         let cborDecodedInformation = cborDecode(information.slice(18))
-        let structure = bytesToMeta(cborDecodedInformation[0].get(0), "json")
-        return Object.keys(structure).map(prop => {
-            return {
-                field: prop,
-                field_label: toSentenceCase(prop),
-                value: structure[prop]
-            }
-        })
+        return bytesToMeta(cborDecodedInformation[0].get(0), "json")
     }
 
 </script>
@@ -85,30 +82,19 @@
         <thead>
         <tr>
           <th>Field</th>
-          <th>Before {receiptInformation1? timeStampToDate(receiptInformation1.timestamp, 'yy-mm-dd/tt:tt') : "" }</th>
-          <th>After {receiptInformation2? timeStampToDate(receiptInformation2.timestamp, 'yy-mm-dd/tt:tt'): ""}</th>
+          <th>Before {receiptInformation1 ? timeStampToDate(receiptInformation1.timestamp, 'yy-mm-dd/tt:tt') : "" }</th>
+          <th>After {receiptInformation2 ? timeStampToDate(receiptInformation2.timestamp, 'yy-mm-dd/tt:tt') : ""}</th>
         </tr>
         </thead>
         <tbody>
-        {#if selectedReceiptInformations.length}
-          <!--{#each filteredReceiptInformations as information}-->
-          <!--  <tr>-->
-          <!--    <td class="receipt-id">-->
-          <!--      <label class="check-container">-->
-          <!--        <input type="checkbox" class="check-box" bind:group={selectedReceiptInformations}-->
-          <!--               value={information.id}-->
-          <!--               disabled={selectedReceiptInformations.length === 2 && !selectedReceiptInformations.includes(information.id)}/>-->
-          <!--        <span class="checkmark"></span>-->
-          <!--      </label>-->
-          <!--    </td>-->
-          <!--    <td class="date underline cursor-pointer">{timeStampToDate(information.timestamp, "yy-mm-dd/tt:tt")}</td>-->
-          <!--    <td class="underline cursor-pointer"-->
-          <!--        on:click={()=>{viewInExplorer(information.transaction.id)}}>{formatHash(information.transaction.id) ||-->
-          <!--    ""}</td>-->
-          <!--    <td>{formatAddress(information.emitter.address) || ""}</td>-->
-          <!--    <td>{ethers.utils.formatUnits(information.receipt.deposits[0].amount, 18)}</td>-->
-          <!--  </tr>-->
-          <!--{/each}-->
+        {#if comparisonTableData.length}
+          {#each comparisonTableData as comparable}
+            <tr>
+              <td>{comparable.field}</td>
+              <td>{comparable.information_1}</td>
+              <td>{comparable.information_2}</td>
+            </tr>
+          {/each}
         {/if}
         </tbody>
       </table>

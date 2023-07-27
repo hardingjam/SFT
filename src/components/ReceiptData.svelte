@@ -9,7 +9,7 @@
         toSentenceCase
     } from '../scripts/helpers.js';
     import {activeNetwork, selectedReceipt, vault} from '../scripts/store.js';
-    import {RECEIPT_INFORMATION_QUERY} from '../scripts/queries.js';
+    import {RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
     import SftLoader from './SftLoader.svelte';
     import axios from 'axios';
     import {ethers} from 'ethers';
@@ -62,7 +62,7 @@
             variables = {id: receipt.id}
         }
         loading = true;
-        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
+        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATIONS_QUERY, 'receipt')
         let receiptInfo = ""
         let information = ""
 

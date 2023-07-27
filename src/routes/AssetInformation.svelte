@@ -6,7 +6,7 @@
     import {getSubgraphData, navigate, timeStampToDate} from '../scripts/helpers.js';
     import {ethers} from 'ethers';
     import {icons} from '../scripts/assets.js';
-    import {RECEIPT_INFORMATION_QUERY} from '../scripts/queries.js';
+    import {RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
     import axios from 'axios';
     import {IPFS_GETWAY} from '../scripts/consts.js';
 
@@ -29,7 +29,7 @@
             variables = {id: receipt.id}
         }
         loading = true;
-        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
+        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATIONS_QUERY, 'receipt')
         let informationIndex = 0;
         if (resp && resp.data && resp.data.receipt && resp.data.receipt.id &&
             resp.data.receipt.receiptInformations.length) {

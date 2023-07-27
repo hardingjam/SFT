@@ -126,7 +126,7 @@ export const DEPLOYER_QUERY = `
             }
           }
          `;
-export const RECEIPT_INFORMATION_QUERY = `
+export const RECEIPT_INFORMATIONS_QUERY = `
           query($id: ID!) {
             receipt(id: $id) {
               id,
@@ -152,6 +152,27 @@ export const RECEIPT_INFORMATION_QUERY = `
                  amount
                  timestamp
                  id
+              }
+            }
+          }
+         `;
+export const RECEIPT_INFORMATION_QUERY = `
+          query($id: ID!) {
+            receiptInformation(id: $id){
+              information
+              id
+              transaction {
+                blockNumber
+                id
+              }
+              timestamp 
+              emitter {
+                address
+              }        
+              receipt {
+                deposits {
+                  amount
+                }
               }
             }
           }

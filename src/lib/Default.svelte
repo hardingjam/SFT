@@ -58,6 +58,7 @@
     import TokenOverview from '../routes/TokenOverview.svelte';
     import NewRevision from '../routes/NewRevision.svelte';
     import AssetHistory from '../routes/AssetHistory.svelte';
+    import ChangeComparison from '../routes/ChangeComparison.svelte';
 
 
     let connectedAccount;
@@ -340,6 +341,8 @@
           <Route path="#asset-history/:id" component={AssetHistory}/>
           <Route path="#audit-history" component={AuditHistory}/>
           <Route path="#token-overview" component={TokenOverview}/>
+          <Route path="#token-overview" component={TokenOverview}/>
+          <Route path="#change-comparison" component={ChangeComparison}/>
         </div>
       </div>
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>

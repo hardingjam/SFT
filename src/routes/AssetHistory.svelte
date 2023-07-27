@@ -2,28 +2,26 @@
     import {
         vault,
         activeNetwork,
-        sftInfo, pageTitle,
+        sftInfo, pageTitle, selectedReceiptInformations
     } from "../scripts/store";
     import {
         formatAddress, formatHash,
         getSubgraphData,
         timeStampToDate
     } from "../scripts/helpers.js";
-    import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
+    import {RECEIPT_INFORMATIONS_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
-    import {formatDate} from "../scripts/helpers";
     import SftLoader from "../components/SftLoader.svelte";
     import Pagination from '../components/Pagination.svelte';
+    import {navigate} from '../scripts/helpers.js';
 
-    let error = ''
-    let certifyUntil = formatDate(new Date())
     let receiptInformations = []
     let receipt;
     let loading = false;
     let filteredReceiptInformations = [];
     let perPage = 20;
     let currentPage = 1;
-    let selectedReceiptInformations = [];
+    let selected = [];
 
 
     $:$activeNetwork && getAuditHistory();
@@ -42,7 +40,7 @@
         }
         loading = true;
         try {
-            let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
+            let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATIONS_QUERY, 'receipt')
             receiptInformations = resp.data?.receipt.receiptInformations || []
             let skip = (perPage * (currentPage - 1)) - 1
             filteredReceiptInformations = receiptInformations.filter((r, index) => index > skip && index < perPage *
@@ -68,7 +66,12 @@
     }
 
     function compareHistory() {
-        console.log(selectedReceiptInformations)
+        if (selected.length) {
+            localStorage.setItem("information_1", selected[0])
+            localStorage.setItem("information_2", selected[1])
+            selectedReceiptInformations.set(selected)
+            navigate("#change-comparison")
+        }
     }
 </script>
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
@@ -93,9 +96,9 @@
             <tr>
               <td class="receipt-id">
                 <label class="check-container">
-                  <input type="checkbox" class="check-box" bind:group={selectedReceiptInformations}
+                  <input type="checkbox" class="check-box" bind:group={selected}
                          value={information.id}
-                         disabled={selectedReceiptInformations.length === 2 && !selectedReceiptInformations.includes(information.id)}/>
+                         disabled={selected.length === 2 && !selected.includes(information.id)}/>
                   <span class="checkmark"></span>
                 </label>
               </td>

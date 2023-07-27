@@ -23,7 +23,7 @@
     import jQuery from 'jquery';
     import {ethers} from 'ethers';
     import {
-        RECEIPT_INFORMATION_QUERY
+        RECEIPT_INFORMATIONS_QUERY
     } from '../scripts/queries.js';
     import receiptContractAbi from '../contract/ReceiptContractAbi.json';
     import {arrayify} from 'ethers/lib/utils.js';
@@ -75,7 +75,7 @@
                     let wait = await tx.wait()
                     if (wait.status === 1) {
                         let interval = setInterval(async () => {
-                            let resp = await getSubgraphData($activeNetwork, {id: $selectedReceipt.receipt.id.toLowerCase()}, RECEIPT_INFORMATION_QUERY, 'receipt')
+                            let resp = await getSubgraphData($activeNetwork, {id: $selectedReceipt.receipt.id.toLowerCase()}, RECEIPT_INFORMATIONS_QUERY, 'receipt')
                             let receiptInformations;
                             if (resp && resp.data) {
                                 receiptInformations = resp.data.receipt.receiptInformations
@@ -194,7 +194,7 @@
             variables = {id: $selectedReceipt.receipt.id}
         }
         loading = true;
-        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
+        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATIONS_QUERY, 'receipt')
         if (resp && resp.data && resp.data.receipt) {
             selectedReceipt.set(resp.data)
         }

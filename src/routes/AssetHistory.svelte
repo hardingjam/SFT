@@ -26,7 +26,6 @@
 
     $:$activeNetwork && getAuditHistory();
 
-
     async function getAuditHistory() {
         //set pageTitle
         pageTitle.set("Asset history")
@@ -67,8 +66,8 @@
 
     function compareHistory() {
         if (selected.length) {
-            localStorage.setItem("information_1", selected[0])
-            localStorage.setItem("information_2", selected[1])
+            localStorage.setItem("information_before", selected[1])
+            localStorage.setItem("information_after", selected[0])
             selectedReceiptInformations.set(selected)
             navigate("#change-comparison")
         }

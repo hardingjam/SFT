@@ -12,8 +12,8 @@
     import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
     import SftLoader from "../components/SftLoader.svelte";
 
-    let receiptInformation1;
-    let receiptInformation2;
+    let receiptInformation_before;
+    let receiptInformation_after;
     let loading = false;
 
     let comparisonTableData = [];
@@ -24,32 +24,32 @@
         //set pageTitle
         pageTitle.set("Change comparison")
 
-        let information_1_Id;
-        let information_2_Id;
+        let information_before_id;
+        let information_after_id;
 
         if (!selectedReceiptInformations.length) {
-            information_1_Id = localStorage.getItem("information_1")
-            information_2_Id = localStorage.getItem("information_2")
+            information_before_id = localStorage.getItem("information_before")
+            information_after_id = localStorage.getItem("information_after")
         } else {
-            information_1_Id = $selectedReceiptInformations[0]
-            information_2_Id = $selectedReceiptInformations[1]
+            information_before_id = $selectedReceiptInformations[1]
+            information_after_id = $selectedReceiptInformations[0]
         }
         loading = true;
         try {
-            let resp1 = await getSubgraphData($activeNetwork, {id: information_1_Id}, RECEIPT_INFORMATION_QUERY, 'receiptInformation')
-            receiptInformation1 = resp1.data?.receiptInformation || {}
-            let resp2 = await getSubgraphData($activeNetwork, {id: information_2_Id}, RECEIPT_INFORMATION_QUERY, 'receiptInformation')
-            receiptInformation2 = resp2.data?.receiptInformation || {}
-            let decodedReceiptInformation1 = decodeInformation(receiptInformation1.information)
-            let decodedReceiptInformation2 = decodeInformation(receiptInformation2.information)
-            let fieldsArray = [...Object.keys(decodedReceiptInformation1), ...Object.keys(decodedReceiptInformation2)]
+            let resp1 = await getSubgraphData($activeNetwork, {id: information_before_id}, RECEIPT_INFORMATION_QUERY, 'receiptInformation')
+            receiptInformation_before = resp1.data?.receiptInformation || {}
+            let resp2 = await getSubgraphData($activeNetwork, {id: information_after_id}, RECEIPT_INFORMATION_QUERY, 'receiptInformation')
+            receiptInformation_after = resp2.data?.receiptInformation || {}
+            let decodedReceiptInformation_before = decodeInformation(receiptInformation_before.information)
+            let decodedReceiptInformation_after = decodeInformation(receiptInformation_after.information)
+            let fieldsArray = [...Object.keys(decodedReceiptInformation_before), ...Object.keys(decodedReceiptInformation_after)]
 
             //remove duplicate fields
             const uniqueSet = new Set(fieldsArray);
             fieldsArray = Array.from(uniqueSet);
 
             comparisonTableData = fieldsArray.map(field => {
-                let deference = highlight(decodedReceiptInformation2[field], decodedReceiptInformation1[field])
+                let deference = highlight(decodedReceiptInformation_after[field], decodedReceiptInformation_before[field])
 
                 return {
                     field: toSentenceCase(field),
@@ -96,8 +96,8 @@
         <thead>
         <tr>
           <th>Field</th>
-          <th>Before {receiptInformation1 ? timeStampToDate(receiptInformation1.timestamp, 'yy-mm-dd/tt:tt') : "" }</th>
-          <th>After {receiptInformation2 ? timeStampToDate(receiptInformation2.timestamp, 'yy-mm-dd/tt:tt') : ""}</th>
+          <th>Before {receiptInformation_before ? timeStampToDate(receiptInformation_before.timestamp, 'yy-mm-dd/tt:tt') : "" }</th>
+          <th>After {receiptInformation_after ? timeStampToDate(receiptInformation_after.timestamp, 'yy-mm-dd/tt:tt') : ""}</th>
         </tr>
         </thead>
         <tbody>

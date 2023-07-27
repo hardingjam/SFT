@@ -20,7 +20,6 @@
 
     $:$activeNetwork && getInformations();
 
-
     async function getInformations() {
         //set pageTitle
         pageTitle.set("Change comparison")
@@ -50,13 +49,14 @@
             fieldsArray = Array.from(uniqueSet);
 
             comparisonTableData = fieldsArray.map(field => {
+                let deference = highlight(decodedReceiptInformation2[field], decodedReceiptInformation1[field])
+
                 return {
                     field: toSentenceCase(field),
-                    information_1: decodedReceiptInformation1[field],
-                    information_2: highlight(decodedReceiptInformation2[field], decodedReceiptInformation1[field]),
+                    information_1: deference[0],
+                    information_2: deference[1],
                 }
             })
-
         } catch (e) {
             console.log(e)
         }
@@ -70,15 +70,19 @@
     }
 
     function highlight(newText, oldText) {
-        let oldTextArray = oldText.split(' ')
+        let oldTextArray = oldText ?  oldText.split(' ')  : []
         let text = '';
-        newText.split(' ').forEach(function (val, i) {
-            if (val !== oldTextArray[i]) {
-                text += "<span class='success'>" + " " + val + "</span>";
-            } else
-                text += " " + val;
-        });
-        return text;
+        if(newText){
+            newText.split(' ').forEach(function (val, i) {
+                if (val !== oldTextArray[i]) {
+                    if (oldTextArray[i])
+                        oldTextArray[i] = "<span class='error'>" + " " + oldTextArray[i] + "</span>"
+                    text += "<span class='success'>" + " " + val + "</span>";
+                } else
+                    text += " " + val;
+            });
+        }
+        return [oldTextArray.join(' '), text];
     }
 
 </script>
@@ -100,9 +104,9 @@
         {#if comparisonTableData.length}
           {#each comparisonTableData as comparable}
             <tr>
-              <td>{comparable.field}</td>
-              <td>{@html comparable.information_1}</td>
-              <td>{@html comparable.information_2}</td>
+              <td class="w-1/5">{comparable.field}</td>
+              <td class="w-2/5">{@html comparable.information_1}</td>
+              <td class="w-2/5">{@html comparable.information_2}</td>
             </tr>
           {/each}
         {/if}

@@ -7,20 +7,16 @@
     import {
         bytesToMeta,
         cborDecode,
-        formatDate,
         getSubgraphData, timeStampToDate, toSentenceCase,
     } from "../scripts/helpers.js";
     import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
     import SftLoader from "../components/SftLoader.svelte";
-    import {MAGIC_NUMBERS} from '../scripts/consts.js';
 
-    let error = ''
     let receiptInformation1;
     let receiptInformation2;
     let loading = false;
 
     let comparisonTableData = [];
-
 
     $:$activeNetwork && getInformations();
 
@@ -48,6 +44,7 @@
             let decodedReceiptInformation1 = decodeInformation(receiptInformation1.information)
             let decodedReceiptInformation2 = decodeInformation(receiptInformation2.information)
             let fieldsArray = [...Object.keys(decodedReceiptInformation1), ...Object.keys(decodedReceiptInformation2)]
+
             //remove duplicate fields
             const uniqueSet = new Set(fieldsArray);
             fieldsArray = Array.from(uniqueSet);
@@ -56,9 +53,10 @@
                 return {
                     field: toSentenceCase(field),
                     information_1: decodedReceiptInformation1[field],
-                    information_2: decodedReceiptInformation2[field],
+                    information_2: highlight(decodedReceiptInformation2[field], decodedReceiptInformation1[field]),
                 }
             })
+
         } catch (e) {
             console.log(e)
         }
@@ -69,6 +67,18 @@
     function decodeInformation(information) {
         let cborDecodedInformation = cborDecode(information.slice(18))
         return bytesToMeta(cborDecodedInformation[0].get(0), "json")
+    }
+
+    function highlight(newText, oldText) {
+        let oldTextArray = oldText.split(' ')
+        let text = '';
+        newText.split(' ').forEach(function (val, i) {
+            if (val !== oldTextArray[i]) {
+                text += "<span class='success'>" + " " + val + "</span>";
+            } else
+                text += " " + val;
+        });
+        return text;
     }
 
 </script>
@@ -91,8 +101,8 @@
           {#each comparisonTableData as comparable}
             <tr>
               <td>{comparable.field}</td>
-              <td>{comparable.information_1}</td>
-              <td>{comparable.information_2}</td>
+              <td>{@html comparable.information_1}</td>
+              <td>{@html comparable.information_2}</td>
             </tr>
           {/each}
         {/if}

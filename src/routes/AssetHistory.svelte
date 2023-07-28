@@ -2,7 +2,7 @@
     import {
         vault,
         activeNetwork,
-        sftInfo, pageTitle, selectedReceiptInformations
+        sftInfo, pageTitle, selectedReceiptInformations, selectedReceiptInformation, selectedReceipt
     } from "../scripts/store";
     import {
         formatAddress, formatHash,
@@ -41,6 +41,7 @@
         try {
             let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATIONS_QUERY, 'receipt')
             receiptInformations = resp.data?.receipt.receiptInformations || []
+            receipt = resp.data
             let skip = (perPage * (currentPage - 1)) - 1
             filteredReceiptInformations = receiptInformations.filter((r, index) => index > skip && index < perPage *
                 currentPage)
@@ -72,6 +73,14 @@
             navigate("#change-comparison")
         }
     }
+
+    function goToAssetInformation(information) {
+        selectedReceipt.set(receipt)
+        let temp = receipt.receipt.receiptInformations.find(r => r.id === information.id)
+        selectedReceiptInformation.set(temp.id)
+        localStorage.setItem("selectedReceiptInformation", information.id)
+        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)
+    }
 </script>
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
   {#if loading}
@@ -101,7 +110,10 @@
                   <span class="checkmark"></span>
                 </label>
               </td>
-              <td class="date underline cursor-pointer">{timeStampToDate(information.timestamp, "yy-mm-dd/tt:tt")}</td>
+              <td class="date underline cursor-pointer">
+                <span
+                  on:click={()=>{goToAssetInformation(information)}}>{timeStampToDate(information.timestamp, "yy-mm-dd/tt:tt")}</span>
+              </td>
               <td class="underline cursor-pointer"
                   on:click={()=>{viewInExplorer(information.transaction.id)}}>{formatHash(information.transaction.id) ||
               ""}</td>

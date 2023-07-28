@@ -1,7 +1,15 @@
 <script>
 
     import DefaultFrame from "../components/DefaultFrame.svelte";
-    import {selectedReceipt, tokenName, data, pageTitle, vault, activeNetwork} from "../scripts/store.js";
+    import {
+        selectedReceipt,
+        tokenName,
+        data,
+        pageTitle,
+        vault,
+        activeNetwork,
+        selectedReceiptInformation
+    } from "../scripts/store.js";
     import ReceiptData from '../components/ReceiptData.svelte';
     import {getSubgraphData, navigate, timeStampToDate} from '../scripts/helpers.js';
     import {ethers} from 'ethers';
@@ -16,10 +24,14 @@
 
     let schemaName = ''
 
-    pageTitle.set("Asset information - current revision")
-    $: $selectedReceipt && getRevisionNumber()
+    let revision;
 
-    async function getRevisionNumber(receipt) {
+
+    pageTitle.set("Asset information - current revision")
+    $: $selectedReceipt && getRevision()
+
+    async function getRevision(receipt) {
+
         await getSchema()
         let variables
         if (!receipt) {
@@ -33,8 +45,17 @@
         let informationIndex = 0;
         if (resp && resp.data && resp.data.receipt && resp.data.receipt.id &&
             resp.data.receipt.receiptInformations.length) {
+
+            if ($selectedReceiptInformation) {
+                revision = resp.data.receipt.receiptInformations.find(r => r.id === $selectedReceiptInformation)
+            } else {
+                revision = resp.data.receipt.receiptInformations.find(r => r.id ===
+                    localStorage.getItem("selectedReceiptInformation"))
+            }
+
             informationIndex = resp.data.receipt.receiptInformations
-                .findIndex(inf => inf.id === `ReceiptInformation-${resp.data.receipt.id}-${resp.data.receipt.receiptInformations[0].transaction.id}`)
+                .findIndex(inf => inf.id ===
+                    `ReceiptInformation-${resp.data.receipt.id}-${revision.transaction.id}`)
             revisionNumber = resp.data.receipt.receiptInformations.length - informationIndex
         }
     }
@@ -62,7 +83,9 @@
       <button class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
         revision
       </button>
-      <button class="default-btn mr-5"  on:click={()=>navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)}>Asset history</button>
+      <button class="default-btn mr-5" on:click={()=>navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)}>
+        Asset history
+      </button>
     </div>
   </div>
   <div slot="content" class="info-container">
@@ -71,8 +94,8 @@
       <span>{$tokenName}</span>
       <span>
        Revision date:
-        {$selectedReceipt.receipt ?
-            timeStampToDate($selectedReceipt?.receipt?.receiptInformations[0].timestamp, "yy-mm-dd tt:tt") :
+        {revision ?
+            timeStampToDate(revision.timestamp, "yy-mm-dd tt:tt") :
             0}
       </span>
     </div>

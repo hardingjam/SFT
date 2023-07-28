@@ -3,7 +3,7 @@
         vault,
         auditHistory,
         activeNetwork,
-        selectedReceipt, sftInfo, pageTitle,
+        selectedReceipt, sftInfo, pageTitle, selectedReceiptInformation
     } from "../scripts/store";
     import {
         cborDecode,
@@ -61,6 +61,8 @@
     function goToAssetInformation(receipt) {
         selectedReceipt.set(receipt)
         localStorage.setItem("selectedReceiptSchema", $selectedReceipt.schema.id)
+        selectedReceiptInformation.set(receipt.receipt.receiptInformations[0].id)
+        localStorage.setItem("selectedReceiptInformation",receipt.receipt.receiptInformations[0].id)
         navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)
     }
 

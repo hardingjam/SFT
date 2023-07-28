@@ -72,8 +72,11 @@
             })
             ipfsLoading = true;
             receiptInfo = resp.data.receipt.receiptInformations
+            let revisionId = localStorage.getItem("selectedReceiptInformation")
             if (receiptInfo.length) {
-                information = receiptInfo[0].information
+                information = receiptInfo.find(r => r.id === revisionId) ?
+                    receiptInfo.find(r => r.id === revisionId).information :
+                    receiptInfo[0].information
 
                 let cborDecodedInformation = cborDecode(information.slice(18))
                 let structure = bytesToMeta(cborDecodedInformation[0].get(0), "json")

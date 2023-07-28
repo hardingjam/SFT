@@ -114,7 +114,6 @@
                 <span
                   on:click={()=>{goToAssetInformation(information)}}>{timeStampToDate(information.timestamp, "yy-mm-dd/tt:tt")}
                 </span>
-                {timeStampToDate(information.timestamp, "yy-mm-dd/tt:tt")}
               </td>
               <td class="underline cursor-pointer"
                   on:click={()=>{viewInExplorer(information.transaction.id)}}>{formatHash(information.transaction.id) ||

@@ -232,7 +232,7 @@
     </div>
   </DefaultFrame>
   <div class="footer">
-    <div class="info f-weight-700 mb-5">Changed to the asset are permanent on IPFS and Blockchain</div>
+    <div class="info f-weight-700 mb-5">Changes to the asset are permanent on IPFS and Blockchain</div>
     <button class="btn-solid w-full ok-btn" on:click={()=>{createNewRevision()}} disabled="{!uploadedData}">OK</button>
   </div>
 </div>

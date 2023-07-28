@@ -111,9 +111,9 @@
                 </label>
               </td>
               <td class="date underline cursor-pointer">
-<!--                <span-->
-<!--                  on:click={()=>{goToAssetInformation(information)}}>{timeStampToDate(information.timestamp, "yy-mm-dd/tt:tt")}-->
-<!--                </span>-->
+                <span
+                  on:click={()=>{goToAssetInformation(information)}}>{timeStampToDate(information.timestamp, "yy-mm-dd/tt:tt")}
+                </span>
                 {timeStampToDate(information.timestamp, "yy-mm-dd/tt:tt")}
               </td>
               <td class="underline cursor-pointer"

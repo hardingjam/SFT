@@ -26,8 +26,10 @@
 
     let revision;
 
+    let isCurrentRevision = false;
 
-    pageTitle.set("Asset information - current revision")
+
+
     $: $selectedReceipt && getRevision()
 
     async function getRevision(receipt) {
@@ -57,6 +59,9 @@
                 .findIndex(inf => inf.id ===
                     `ReceiptInformation-${resp.data.receipt.id}-${revision.transaction.id}`)
             revisionNumber = resp.data.receipt.receiptInformations.length - informationIndex
+
+            isCurrentRevision = revision.id === resp.data.receipt.receiptInformations[0].id
+            pageTitle.set(`Asset information - ${isCurrentRevision ? 'current revision' : 'specific revision time'}`)
         }
     }
 

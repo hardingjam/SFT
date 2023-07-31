@@ -50,7 +50,7 @@
                 revision = resp.data.receipt.receiptInformations[0]
             }
             isCurrentRevision = revision.id === resp.data.receipt.receiptInformations[0].id
-            pageTitle.set(`Asset information - ${isCurrentRevision ? 'current revision' : 'specific revision time'}`)
+            pageTitle.set(`Asset information - ${isCurrentRevision ? 'current revision' : 'specific current revision'}`)
 
             informationIndex = resp.data.receipt.receiptInformations
                 .findIndex(inf => inf.id ===

@@ -42,7 +42,8 @@
             receiptInformation_after = resp2.data?.receiptInformation || {}
             let decodedReceiptInformation_before = decodeInformation(receiptInformation_before.information)
             let decodedReceiptInformation_after = decodeInformation(receiptInformation_after.information)
-            let fieldsArray = [...Object.keys(decodedReceiptInformation_before), ...Object.keys(decodedReceiptInformation_after)]
+            let fieldsArray = [...Object.keys(decodedReceiptInformation_before),
+                ...Object.keys(decodedReceiptInformation_after)]
 
             //remove duplicate fields
             const uniqueSet = new Set(fieldsArray);
@@ -70,9 +71,9 @@
     }
 
     function highlight(newText, oldText) {
-        let oldTextArray = oldText ?  oldText.split(' ')  : []
+        let oldTextArray = oldText ? oldText.split(' ') : []
         let text = '';
-        if(newText){
+        if (newText) {
             newText.split(' ').forEach(function (val, i) {
                 if (val !== oldTextArray[i]) {
                     if (oldTextArray[i])
@@ -96,8 +97,12 @@
         <thead>
         <tr>
           <th>Field</th>
-          <th>Before {receiptInformation_before ? timeStampToDate(receiptInformation_before.timestamp, 'yy-mm-dd/tt:tt') : "" }</th>
-          <th>After {receiptInformation_after ? timeStampToDate(receiptInformation_after.timestamp, 'yy-mm-dd/tt:tt') : ""}</th>
+          <th>Before {receiptInformation_before ?
+              timeStampToDate(receiptInformation_before.timestamp, 'yy-mm-dd/tt:tt') :
+              "" }</th>
+          <th>After {receiptInformation_after ?
+              timeStampToDate(receiptInformation_after.timestamp, 'yy-mm-dd/tt:tt') :
+              ""}</th>
         </tr>
         </thead>
         <tbody>

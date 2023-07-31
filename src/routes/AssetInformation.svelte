@@ -31,7 +31,7 @@
     let isCurrentRevision = false;
 
     router.subscribe(async e => {
-        if (!e.initial) {
+        if (!e.initial && e.path.includes('#asset-information')) {
             await getRevision(e.params.id)
         }
     })
@@ -80,26 +80,22 @@
     }
 
 
-
 </script>
-<DefaultFrame>
-  <div slot="back_button" class="display-flex">
-    <button class="btn-hover mr-3" on:click={()=>{navigate("#asset-register")}}>
+<div class="asset-information">
+  <div class="buttons">
+    <button class="default-btn" disabled>download IPFS pin list</button>
+    <button class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
+      revision
+    </button>
+    <button class="default-btn" on:click={()=>navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)}>
+      Asset history
+    </button>
+    <button class="btn-hover absolute right-5" on:click={()=>{navigate("#asset-register")}}>
       <img src={icons.back} alt="back">
     </button>
   </div>
-  <div slot="header_buttons" class="display-flex">
-    <div class="buttons">
-      <button class="default-btn" disabled>download IPFS pin list</button>
-      <button class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
-        revision
-      </button>
-      <button class="default-btn mr-5" on:click={()=>navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)}>
-        Asset history
-      </button>
-    </div>
-  </div>
-  <div slot="content" class="info-container">
+
+  <div class="info-container">
     {#if !isCurrentRevision}
       <div class="mb-5">This is not the current revision. <span
         class="brown underline cursor-pointer ml-1" on:click={()=>setCurrentRevision()}>Current revision</span></div>
@@ -135,21 +131,39 @@
           0}</span>
     </div>
   </div>
-</DefaultFrame>
+</div>
+
 
 <style>
+
+    .asset-information {
+        border-radius: 10px;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .info-container {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         width: 630px;
         min-height: 300px;
+        padding: 16px 60px 60px 60px
+
     }
 
     .buttons {
+        position: relative;
         display: flex;
-        justify-content: flex-end;
         gap: 20px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+        align-items: center;
+        border-bottom-width:1px;
+        width: 100%;
+        justify-content: center;
     }
 
 </style>

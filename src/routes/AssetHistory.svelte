@@ -11,6 +11,7 @@
     } from "../scripts/helpers.js";
     import {RECEIPT_INFORMATIONS_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
+    import SftLoader from "../components/SftLoader.svelte";
     import Pagination from '../components/Pagination.svelte';
     import {navigate} from '../scripts/helpers.js';
 
@@ -83,6 +84,9 @@
     }
 </script>
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
+  {#if loading}
+    <SftLoader/>
+  {/if}
   {#if !loading }
     <div class="sft-table-container">
       <table class="sft-table">

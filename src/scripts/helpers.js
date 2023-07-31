@@ -580,10 +580,10 @@ export function navigate(path, options) {
         }
     } else {
         breadCrumbs.update(bc => {
-            if (!bc.find(b => b.path === path)) {
+            if (!bc.find(b => b.path.split("/")[0] === path.split("/")[0])) {
                 return [...bc, {path, label}]
             } else {
-                let indexOfPage = bc.findIndex(b => b.path === path)
+                let indexOfPage = bc.findIndex(b => b.path.split("/")[0] === path.split("/")[0])
                 return bc.splice(0, indexOfPage + 1)
             }
         })

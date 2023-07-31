@@ -13,6 +13,7 @@
     import SftLoader from './SftLoader.svelte';
     import axios from 'axios';
     import {ethers} from 'ethers';
+    import {onMount} from 'svelte';
 
     let loading = false
     let ipfsLoading = false
@@ -22,9 +23,14 @@
     let schema = {}
     let fileUploadProperties = []
     export let receipt;
+    export let revisionId;
 
     $: schemaHash && getSchemaFileProps()
-    $: $activeNetwork && getReceiptData()
+    $: revisionId && getReceiptData()
+
+    onMount(() => {
+        getReceiptData()
+    })
 
     async function getSchema() {
         let url = await getIpfsGetWay(schemaHash)
@@ -72,7 +78,6 @@
             })
             ipfsLoading = true;
             receiptInfo = resp.data.receipt.receiptInformations
-            let revisionId = localStorage.getItem("selectedReceiptInformation")
             if (receiptInfo.length) {
                 information = receiptInfo.find(r => r.id === revisionId) ?
                     receiptInfo.find(r => r.id === revisionId).information :

@@ -7,10 +7,10 @@
         data,
         pageTitle,
         vault,
-        activeNetwork,
+        activeNetwork, transactionInProgressShow, transactionInProgress,
     } from "../scripts/store.js";
     import ReceiptData from '../components/ReceiptData.svelte';
-    import {getSubgraphData, navigate, timeStampToDate} from '../scripts/helpers.js';
+    import {getSubgraphData, navigate, showPrompt, timeStampToDate} from '../scripts/helpers.js';
     import {ethers} from 'ethers';
     import {icons} from '../scripts/assets.js';
     import {RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
@@ -30,7 +30,6 @@
 
     let isCurrentRevision = false;
 
-    // $: $selectedReceipt && getRevision()
     router.subscribe(async e => {
         if (!e.initial) {
             await getRevision(e.params.id)
@@ -41,7 +40,8 @@
         await getSchema()
         let receiptId = $vault.address + "-" + window.location.hash.split("/")[1]
         variables = {id: receiptId}
-        loading = true;
+        await showPrompt(null, {topText: "Loading, please wait", noBottomText: true})
+
         let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATIONS_QUERY, 'receipt')
         let informationIndex = 0;
         if (resp && resp.data && resp.data.receipt && resp.data.receipt.id &&
@@ -61,6 +61,8 @@
             isCurrentRevision = revision.id === resp.data.receipt.receiptInformations[0].id
             pageTitle.set(`Asset information - ${isCurrentRevision ? 'current revision' : 'specific revision time'}`)
         }
+        transactionInProgressShow.set(false)
+        transactionInProgress.set(false)
     }
 
     async function getSchema() {
@@ -76,6 +78,8 @@
     async function setCurrentRevision() {
         navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${$selectedReceipt?.receipt.receiptInformations[0].id}`)
     }
+
+
 
 </script>
 <DefaultFrame>

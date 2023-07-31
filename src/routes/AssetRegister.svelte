@@ -18,11 +18,8 @@
         MAGIC_NUMBERS,
     } from "../scripts/consts.js";
     import axios from "axios";
-    import SftLoader from "../components/SftLoader.svelte";
     import Pagination from '../components/Pagination.svelte';
 
-    let error = ''
-    let certifyUntil = formatDate(new Date())
     let receipts = []
     let loading = false;
     let tempReceipts = [];
@@ -98,9 +95,6 @@
 
 </script>
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
-  {#if loading}
-    <SftLoader/>
-  {/if}
   {#if !loading }
     <div class="sft-table-container">
       <table class="sft-table">

@@ -355,7 +355,7 @@
           <!--          <Route path="#set-vault" component={SetVault}/>-->
           <Route path="#asset-classes" component={AssetClasses}/>
           <Route path="#new-asset-class" component={NewSchema}/>
-          <Route path="#asset-information/:id" component={AssetInformation}/>
+          <Route path="#asset-information/:id/:id" component={AssetInformation}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>

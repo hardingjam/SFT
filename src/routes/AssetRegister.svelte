@@ -63,7 +63,7 @@
         localStorage.setItem("selectedReceiptSchema", $selectedReceipt.schema.id)
         selectedReceiptInformation.set(receipt.receipt.receiptInformations[0].id)
         localStorage.setItem("selectedReceiptInformation",receipt.receipt.receiptInformations[0].id)
-        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)
+        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${$selectedReceiptInformation}`)
     }
 
     async function getAuditHistory() {

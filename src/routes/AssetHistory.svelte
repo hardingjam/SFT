@@ -23,6 +23,7 @@
     let currentPage = 1;
     let selected = [];
 
+    let selectedReceiptId = window.location.hash.split("/")[1]
 
     $:$activeNetwork && getAuditHistory();
 
@@ -79,7 +80,7 @@
         let temp = receipt.receipt.receiptInformations.find(r => r.id === information.id)
         selectedReceiptInformation.set(temp.id)
         localStorage.setItem("selectedReceiptInformation", information.id)
-        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)
+        navigate(`#asset-information/${selectedReceiptId}/${$selectedReceiptInformation}`)
     }
 </script>
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">

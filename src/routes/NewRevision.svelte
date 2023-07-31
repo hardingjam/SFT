@@ -52,6 +52,33 @@
         }
     }
 
+    function resetFormInputs() {
+        // Get all input elements inside the form with the class "svelte-schema-form"
+        const formInputs = document.querySelectorAll('.svelte-schema-form input');
+
+        // Iterate over the input elements and reset their values
+        formInputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'email' || input.type === 'password') {
+                input.value = '';
+            } else if (input.type === 'checkbox' || input.type === 'radio') {
+                input.checked = false;
+            } else if (input.type === 'file') {
+                // For file inputs, we cannot directly set the value to an empty string due to security restrictions.
+                // So, we create a new file input and replace the original one with it.
+                const newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.name = input.name;
+                newInput.id = input.id;
+                newInput.className = input.className;
+                newInput.style.display = 'none';
+                newInput.onchange = input.onchange;
+
+                // Replace the original file input with the new one
+                input.parentNode.replaceChild(newInput, input);
+            }
+        });
+    }
+
     async function createNewRevision() {
         let receiptContractAddress = $data.offchainAssetReceiptVault.receiptContractAddress
         let receiptContract = await getContract($activeNetwork, receiptContractAddress, receiptContractAbi, $ethersData.signerOrProvider)
@@ -86,6 +113,8 @@
                                     transactionSuccess.set(true)
                                     transactionInProgress.set(false)
                                     clearInterval(interval)
+                                    resetFormInputs()
+
                                 }
                             }
                         }, 2000)
@@ -93,6 +122,7 @@
                         transactionError.set(true)
                     }
                     fileDropped.set({})
+
                 } catch (err) {
                     console.log(err)
                 }

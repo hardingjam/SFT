@@ -36,6 +36,8 @@
         }
     })
 
+    $:$activeNetwork && getRevision(window.location.hash.split("/")[2])
+
     async function getRevision(revisionId) {
         await getSchema()
         let receiptId = $vault.address + "-" + window.location.hash.split("/")[1]

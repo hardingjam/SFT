@@ -2,7 +2,7 @@
     import {
         vault,
         activeNetwork,
-        sftInfo, pageTitle, selectedReceiptInformations, selectedReceiptInformation, selectedReceipt
+        sftInfo, pageTitle, selectedReceiptInformations, selectedReceipt
     } from "../scripts/store";
     import {
         formatAddress, formatHash,
@@ -78,9 +78,7 @@
     function goToAssetInformation(information) {
         selectedReceipt.set(receipt)
         let temp = receipt.receipt.receiptInformations.find(r => r.id === information.id)
-        selectedReceiptInformation.set(temp.id)
-        localStorage.setItem("selectedReceiptInformation", information.id)
-        navigate(`#asset-information/${selectedReceiptId}/${$selectedReceiptInformation}`)
+        navigate(`#asset-information/${selectedReceiptId}/${temp.id}`)
     }
 </script>
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">

@@ -30,12 +30,6 @@
 
     let isCurrentRevision = false;
 
-    router.subscribe(async e => {
-        if (!e.initial && e.path.includes('#asset-information')) {
-            await getRevision(e.params.id)
-        }
-    })
-
     $:$activeNetwork && getRevision(window.location.hash.split("/")[2])
 
     async function getRevision(revisionId) {
@@ -48,20 +42,21 @@
         let informationIndex = 0;
         if (resp && resp.data && resp.data.receipt && resp.data.receipt.id &&
             resp.data.receipt.receiptInformations.length) {
-            selectedReceipt.set(resp.data.receipt)
+
+
             if (revisionId) {
                 revision = resp.data.receipt.receiptInformations.find(r => r.id === revisionId)
             } else {
                 revision = resp.data.receipt.receiptInformations[0]
             }
+            isCurrentRevision = revision.id === resp.data.receipt.receiptInformations[0].id
+            pageTitle.set(`Asset information - ${isCurrentRevision ? 'current revision' : 'specific revision time'}`)
 
             informationIndex = resp.data.receipt.receiptInformations
                 .findIndex(inf => inf.id ===
                     `ReceiptInformation-${resp.data.receipt.id}-${revision.transaction.id}`)
             revisionNumber = resp.data.receipt.receiptInformations.length - informationIndex
 
-            isCurrentRevision = revision.id === resp.data.receipt.receiptInformations[0].id
-            pageTitle.set(`Asset information - ${isCurrentRevision ? 'current revision' : 'specific revision time'}`)
         }
         transactionInProgressShow.set(false)
         transactionInProgress.set(false)
@@ -79,6 +74,7 @@
 
     async function setCurrentRevision() {
         navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${$selectedReceipt?.receipt.receiptInformations[0].id}`)
+        await getRevision($selectedReceipt?.receipt.receiptInformations[0].id)
     }
 
 
@@ -163,7 +159,7 @@
         padding-top: 16px;
         padding-bottom: 16px;
         align-items: center;
-        border-bottom-width:1px;
+        border-bottom-width: 1px;
         width: 100%;
         justify-content: center;
     }

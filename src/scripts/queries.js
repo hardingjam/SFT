@@ -113,6 +113,10 @@ export const RECEIPTS_QUERY = `
                         deposits{
                             timestamp
                         }
+                        receiptInformations(orderDirection: desc, orderBy: timestamp){
+                          information
+                          id
+                        }
                     }
                 }
               }

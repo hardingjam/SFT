@@ -2,7 +2,7 @@
     import {
         vault,
         activeNetwork,
-        sftInfo, pageTitle, selectedReceiptInformations, selectedReceipt
+        sftInfo, pageTitle, selectedReceiptInformations, selectedReceipt, breadCrumbs
     } from "../scripts/store";
     import {
         formatAddress, formatHash,
@@ -14,6 +14,8 @@
     import SftLoader from "../components/SftLoader.svelte";
     import Pagination from '../components/Pagination.svelte';
     import {navigate} from '../scripts/helpers.js';
+    import {ROUTE_LABEL_MAP} from '../scripts/consts.js';
+    import {navigateTo} from 'yrv';
 
     let receiptInformations = []
     let receipt;
@@ -78,7 +80,8 @@
     function goToAssetInformation(information) {
         selectedReceipt.set(receipt)
         let temp = receipt.receipt.receiptInformations.find(r => r.id === information.id)
-        navigate(`#asset-information/${selectedReceiptId}/${temp.id}`)
+        breadCrumbs.update(() => [...$breadCrumbs, {path:'#asset-information', label:ROUTE_LABEL_MAP.get('#asset-information'), id:'#asset-information'}])
+        navigateTo(`#asset-information/${selectedReceiptId}/${temp.id}`)
     }
 </script>
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">

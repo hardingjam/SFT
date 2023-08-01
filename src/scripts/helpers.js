@@ -570,20 +570,21 @@ export async function setAccountRoles(roles, account) {
 }
 
 export function navigate(path, options) {
-    let label = ROUTE_LABEL_MAP.get(path.split("/")[0])
+    let bcId = path.split("/")[0]
+    let label = ROUTE_LABEL_MAP.get(bcId)
     navigationButtonClicked.update(() => false)
     if (options && options.clear) {
         if (path === "#") {
             breadCrumbs.update(() => [])
         } else {
-            breadCrumbs.update(() => [{path: "#", label: "Home"}, {path, label}])
+            breadCrumbs.update(() => [{path: "#", label: "Home", id: 'home'}, {path, label, id:bcId}])
         }
     } else {
         breadCrumbs.update(bc => {
-            if (!bc.find(b => b.path.split("/")[0] === path.split("/")[0])) {
-                return [...bc, {path, label}]
+            if (!bc.find(b => b.id === bcId)) {
+                return [...bc, {path, label, id:bcId}]
             } else {
-                let indexOfPage = bc.findIndex(b => b.path.split("/")[0] === path.split("/")[0])
+                let indexOfPage = bc.findIndex(b => b.id === bcId)
                 return bc.splice(0, indexOfPage + 1)
             }
         })

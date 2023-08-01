@@ -1,13 +1,12 @@
 <script>
 
-    import DefaultFrame from "../components/DefaultFrame.svelte";
     import {
         selectedReceipt,
         tokenName,
         data,
         pageTitle,
         vault,
-        activeNetwork, transactionInProgressShow, transactionInProgress,
+        activeNetwork, transactionInProgressShow, transactionInProgress, breadCrumbs
     } from "../scripts/store.js";
     import ReceiptData from '../components/ReceiptData.svelte';
     import {getSubgraphData, navigate, showPrompt, timeStampToDate} from '../scripts/helpers.js';
@@ -16,7 +15,7 @@
     import {RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
     import axios from 'axios';
     import {IPFS_GETWAY} from '../scripts/consts.js';
-    import {router} from 'yrv';
+    import {navigateTo} from 'yrv';
 
     let loading = false
 
@@ -73,8 +72,17 @@
     }
 
     async function setCurrentRevision() {
-        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${$selectedReceipt?.receipt.receiptInformations[0].id}`)
+        navigateTo(`#asset-information/${$selectedReceipt.receipt.receiptId}/${$selectedReceipt?.receipt.receiptInformations[0].id}`)
         await getRevision($selectedReceipt?.receipt.receiptInformations[0].id)
+    }
+
+    function goBack() {
+        let i = $breadCrumbs.findLastIndex(bc => bc.id === '#asset-information')
+        if ($breadCrumbs[i - 1].id === '#asset-register') {
+            navigate('#asset-register')
+        } else {
+            navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)
+        }
     }
 
 
@@ -88,7 +96,7 @@
     <button class="default-btn" on:click={()=>navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)}>
       Asset history
     </button>
-    <button class="btn-hover absolute right-5" on:click={()=>{navigate("#asset-register")}}>
+    <button class="btn-hover absolute right-5" on:click={()=>{goBack()}}>
       <img src={icons.back} alt="back">
     </button>
   </div>

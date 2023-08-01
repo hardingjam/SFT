@@ -2,6 +2,8 @@
     import DefaultFrame from '../components/DefaultFrame.svelte';
     import {icons} from '../scripts/assets.js';
     import {
+        bytesToMeta,
+        cborDecode,
         cborEncode,
         encodeCBORStructure,
         getContract,
@@ -15,7 +17,7 @@
         pageTitle,
         selectedReceipt, tokenName, transactionInProgress,
         transactionInProgressShow,
-        vault, data, ethersData, account, transactionSuccess, transactionError, fileDropped
+        vault, data, ethersData, account, transactionSuccess, transactionError, fileDropped, breadCrumbs
     } from '../scripts/store.js';
     import axios from 'axios';
     import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
@@ -38,6 +40,7 @@
     let error;
     let uploadedData;
     let structure;
+    let currentStructure;
 
     let {signer} = $ethersData;
 
@@ -52,16 +55,18 @@
         }
     }
 
-    function resetFormInputs() {
+    function setFormInputs(values) {
         // Get all input elements inside the form with the class "svelte-schema-form"
         const formInputs = document.querySelectorAll('.svelte-schema-form input');
-
         // Iterate over the input elements and reset their values
         formInputs.forEach(input => {
-            if (input.type === 'text' || input.type === 'email' || input.type === 'password') {
-                input.value = '';
-            } else if (input.type === 'checkbox' || input.type === 'radio') {
-                input.checked = false;
+            if (input.type === 'text' || input.type === 'email' || input.type === 'password' || input.type === 'date') {
+
+                if (!values) {
+                    input.value = '';
+                } else {
+                    input.value = values[input.id];
+                }
             } else if (input.type === 'file') {
                 // For file inputs, we cannot directly set the value to an empty string due to security restrictions.
                 // So, we create a new file input and replace the original one with it.
@@ -113,7 +118,7 @@
                                     transactionSuccess.set(true)
                                     transactionInProgress.set(false)
                                     clearInterval(interval)
-                                    resetFormInputs()
+                                    setFormInputs()
 
                                 }
                             }
@@ -227,17 +232,27 @@
         let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATIONS_QUERY, 'receipt')
         if (resp && resp.data && resp.data.receipt) {
             selectedReceipt.set(resp.data)
+
+            let cborDecodedInformation = cborDecode($selectedReceipt.receipt.receiptInformations[0].information.slice(18))
+            currentStructure = bytesToMeta(cborDecodedInformation[0].get(0), "json")
+            setFormInputs(currentStructure)
         }
     }
 
+    function handleFileUpload(event) {
+        fileHashes = event.detail.fileHashes
+    }
 
+    function goBack() {
+        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${$selectedReceipt.receipt.receiptInformations[0].id}`)
+    }
 </script>
 
 <div class="new-revision">
   <DefaultFrame>
     <div slot="back_button" class="display-flex">
       <button class="btn-hover mr-3"
-              on:click={()=>{navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)}}>
+              on:click={()=>{goBack()}}>
         <img src={icons.back} alt="back">
       </button>
     </div>
@@ -250,7 +265,7 @@
         <div class="asset-class"> {schema.displayName}</div>
       </div>
       <div class="text-left schema-container">
-        <Schema schema={schema}></Schema>
+        <Schema schema={schema} on:fileUpload={handleFileUpload}></Schema>
       </div>
       <div class="flex justify-between w-full mb-6 items-center mt-6">
         <span class="f-weight-700">Amount</span>

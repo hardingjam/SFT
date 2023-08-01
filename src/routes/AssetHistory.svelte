@@ -80,7 +80,7 @@
     function goToAssetInformation(information) {
         selectedReceipt.set(receipt)
         let temp = receipt.receipt.receiptInformations.find(r => r.id === information.id)
-        breadCrumbs.update(() => [...$breadCrumbs, {path:'#asset-information', label:ROUTE_LABEL_MAP.get('#asset-information'), id:'#asset-information'}])
+        breadCrumbs.update(() => [...$breadCrumbs, {path:`#asset-information/${selectedReceiptId}/${temp.id}`, label:ROUTE_LABEL_MAP.get('#asset-information'), id:'#asset-information'}])
         navigateTo(`#asset-information/${selectedReceiptId}/${temp.id}`)
     }
 </script>

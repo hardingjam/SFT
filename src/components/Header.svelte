@@ -1,5 +1,5 @@
 <script>
-    import {account, activeNetwork, pageTitle} from "../scripts/store.js";
+    import {account, activeNetwork, pageTitle, titleIcon} from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
@@ -53,14 +53,18 @@
 <div class="{$account ? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
   {#if $account}
     <div class="w-1/3"></div>
-    <div class="page-title">{$pageTitle}</div>
+    <div class="page-title">
+      {#if $titleIcon}
+        <img src={$titleIcon} alt="icon"/>
+      {/if}
+      {$pageTitle}</div>
     <div class="flex justify-end w-1/3 whitespace-nowrap">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
                       triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
 
       <HeaderDropdown triggerLabel={formatAddress($account)}
-                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}>
+                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect} triggerIcon="">
       </HeaderDropdown>
     </div>
     {#if location && (location !== "/" && location !== "#")}
@@ -88,6 +92,9 @@
         font-style: normal;
         font-weight: 700;
         line-height: normal;
+        display: flex;
+        align-items: center;
+        gap: 4px;
     }
 
 </style>

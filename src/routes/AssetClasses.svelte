@@ -1,12 +1,11 @@
 <script>
 
-    import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
-    import {activeNetwork, schemas, vault, deposits, accountRoles, tokenName, pageTitle} from "../scripts/store.js";
+    import {activeNetwork, schemas, vault, deposits, titleIcon, tokenName, pageTitle} from "../scripts/store.js";
     import {getSchemas, getSubgraphData, navigate, timeStampToDate} from "../scripts/helpers";
     import {DEPOSITS_QUERY} from "../scripts/queries.js";
-    import {onMount} from "svelte";
-    import {navigateTo} from 'yrv';
+    import {onDestroy, onMount} from "svelte";
+    import {icons} from "../scripts/assets.js"
 
     let ipfsLoading = false;
 
@@ -18,8 +17,14 @@
         // if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
         //     navigateTo('#set-vault');
         // } else {
+        pageTitle.set(`${$tokenName} asset class list`)
+        titleIcon.set(`${icons.asset_list}`)
         await getData()
         // }
+    })
+
+    onDestroy(()=>{
+        titleIcon.set("")
     })
 
     $: $activeNetwork.chainId && getData()
@@ -41,8 +46,6 @@
             deposits.set(res.data.offchainAssetReceiptVault.deposits)
         })
     }
-
-    pageTitle.set(`${$tokenName} asset class list`)
 
 </script>
 <div class="asset-classes-container">
@@ -92,7 +95,7 @@
         overflow: auto;
         text-align: left;
         width: 100%;
-        min-width: 670px;
+        min-width: 710px;
         justify-content: space-between;
         line-height: 27px;
         display: flex;

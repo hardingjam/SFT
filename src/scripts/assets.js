@@ -27,6 +27,7 @@ import tile_view from '../assets/icons/tile_view.svg'
 import back from '../assets/icons/back.svg'
 import arrow_narrow_right from '../assets/icons/arrow_narrow_right.svg'
 import arrow_narrow_left from '../assets/icons/arrow_narrow_left.svg'
+import asset_list from '../assets/icons/asset_list.svg'
 
 export const icons = {
     ethereum,
@@ -57,5 +58,6 @@ export const icons = {
     back,
     polygonscan,
     arrow_narrow_right,
-    arrow_narrow_left
+    arrow_narrow_left,
+    asset_list
 }

@@ -20,6 +20,8 @@
         getEvent,
         showPromptSFTCreate
     } from "../scripts/helpers.js";
+    import {onDestroy, onMount} from 'svelte';
+    import {icons} from "../scripts/assets.js"
 
     let name = "";
     let admin_ledger = "";
@@ -30,6 +32,14 @@
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
     let factoryContract;
+
+    onMount(()=>{
+        pageTitle.set("Setup new SFT")
+        titleIcon.set(`${icons.sft_create}`)
+    })
+    onDestroy(()=>{
+        titleIcon.set("")
+    })
 
     // async function createToken() {
     //     let contract = await getContract($activeNetwork, TEST_CONTRACT_ADDRESS, contractAbi, signerOrProvider)
@@ -136,24 +146,45 @@
     }
 
 
-    pageTitle.set("Setup new SFT")
 
 </script>
 <div>
   <div class="sft-setup-container">
+    <div class="header">
+
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <g clip-path="url(#clip0_4713_13519)">
+          <path d="M12.8311 15.4956H16.5729M16.5729 15.4956H20.2145M16.5729 15.4956L16.5805 11.7666M16.5729 15.4956L16.5947 19.1736" stroke="black" stroke-width="2.07204" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20.5154 12.0004C20.5154 11.269 20.4227 10.5594 20.2495 9.88202C19.3063 6.20543 15.9684 3.48535 12.0004 3.48535C7.30103 3.48535 3.48535 7.30103 3.48535 12.0004C3.48535 16.6997 7.30103 20.5154 12.0004 20.5154C12.5151 20.5154 13.0184 20.47 13.5075 20.382" stroke="black" stroke-width="1.89223" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <defs>
+          <clipPath id="clip0_4713_13519">
+            <rect width="24" height="24" fill="white"/>
+          </clipPath>
+        </defs>
+      </svg>
+      <div class="mt-1">Setup new SFT</div>
+    </div>
     <div class="form-box">
-      <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
+      <div class="space-between">
+        <label class="f-weight-700" for="name">Token name:</label>
+        <input id="name" type="text" bind:value={name}>
       </div>
-      <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
-                                                                                          bind:value={symbol}>
+      <div class="space-between">
+        <label class="f-weight-700" for="symbol">Token symbol:</label>
+        <input type="text" id="symbol" bind:value={symbol}>
       </div>
-      <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
-                                                                                                 bind:value={admin_ledger}>
+      <div class="space-between">
+        <label class="f-weight-700" for="admin">Super admin address:</label>
+        <input type="text" id="admin" bind:value={admin_ledger}>
       </div>
       <div class="success info-text">The ‘super admin address’ will need to assign roles to manage this token.</div>
     </div>
-    <div class="form-after">
-      <div class="error">{error}</div>
+    <div class="footer">
+      {#if error}
+        <div class="error">{error}</div>
+
+      {/if}
       <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol}
               on:click={() => createToken()}>Create SFT
       </button>
@@ -162,32 +193,30 @@
 </div>
 <style>
     .sft-setup-container {
-        max-width: 599px;
         left: 420px;
         top: 238px;
         background: #FFFFFF;
         border-radius: 20px;
-        padding: 29px 11px;
         display: flex;
         flex-direction: column;
         text-align: left;
     }
 
-    .title {
-        margin-left: 24px;
-        margin-bottom: 11px;
-        font-style: normal;
-        font-size: 16px;
-        line-height: 27px;
-        color: #000000;
+    .header{
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: flex-start;
+        gap:13px;
+        border-bottom-width: 1px;
+        padding: 13px 24px;
     }
 
     .form-box {
         box-sizing: border-box;
-        width: 577px;
-        border: 1px solid #D2D2D2;
+        width: 650px;
         border-radius: 10px;
-        padding: 28px;
+        padding: 24px 45px 50px 60px;
     }
 
     .form-box label {
@@ -210,10 +239,13 @@
         line-height: 27px;
     }
 
-    .form-after {
+    .footer {
         align-items: center;
         display: flex;
         flex-direction: column;
+        border-top-width: 1px;
+        padding-top: 16px;
+        padding-bottom: 16px;
     }
 
     .info-text {
@@ -224,7 +256,7 @@
 
     .create-token {
         width: 413px;
-        margin-top: 20px;
+        /*margin-top: 20px;*/
     }
 
     .error {

@@ -42,65 +42,84 @@
         })
     }
 
-    pageTitle.set( `${$tokenName} asset class list`)
+    pageTitle.set(`${$tokenName} asset class list`)
 
 </script>
-
-<DefaultFrame>
-  <div slot="header_buttons" class="display-flex header-buttons">
-    <button class="default-btn" on:click={()=>{navigate("#mint")}}>Mint</button>
-    <button class="default-btn" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
-  </div>
-  <div slot="content">
-    <div class="schemas">
-      <table class="w-100">
-        <tr class="f-weight-700">
-          <th>Asset class label</th>
-          <th>Date created</th>
-          <th>Asset count</th>
-        </tr>
-        {#if ($schemas?.length)}
-          {#each $schemas as schema }
-            <tr class="schema" on:click={()=>{handleSchemasSelect(schema)}}>
-              <td>{schema?.displayName}</td>
-              <td>{timeStampToDate(schema?.timestamp)}</td>
-              <td>{schema?.assetCount || 0}</td>
-            </tr>
-          {/each}
-        {/if}
-
-      </table>
-      {#if ipfsLoading}
-        <SftLoader width="50"></SftLoader>
-      {/if}
+<div class="asset-classes-container">
+  <div class="header">
+    <div class="title">{`${$tokenName} asset class list`}</div>
+    <div class="buttons">
+      <button class="default-btn" on:click={()=>{navigate("#mint")}}>Mint</button>
+      <button class="default-btn" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
     </div>
+
   </div>
-</DefaultFrame>
+  <div class="schemas">
+    <table class="w-100">
+      <tr class="f-weight-700">
+        <th>Asset class label</th>
+        <th>Date created</th>
+        <th>Asset count</th>
+      </tr>
+      {#if ($schemas?.length)}
+        {#each $schemas as schema }
+          <tr class="schema" on:click={()=>{handleSchemasSelect(schema)}}>
+            <td class="underline">{schema?.displayName}</td>
+            <td>{timeStampToDate(schema?.timestamp)}</td>
+            <td>{schema?.assetCount || 0}</td>
+          </tr>
+        {/each}
+      {/if}
+
+    </table>
+    {#if ipfsLoading}
+      <SftLoader width="50"></SftLoader>
+    {/if}
+  </div>
+</div>
+
 
 <style>
+
+    .asset-classes-container{
+        border-radius: 10px;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
     .schemas {
         overflow: auto;
-        min-height: 200px;
         text-align: left;
         width: 100%;
         min-width: 670px;
         justify-content: space-between;
         line-height: 27px;
-    }
-
-    .schema:hover {
-        text-decoration: underline;
-        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        min-height: 300px;
+        padding: 16px 45px 60px 45px
     }
 
     table td, table th {
         padding: 5px 15px;
     }
 
-    table th {
-        /*top: 0;*/
-        /*position: sticky;*/
-        /*z-index: 20;*/
+    .header {
+        position: relative;
+        display: flex;
+        align-items: center;
+        border-bottom-width: 1px;
+        width: 100%;
+        justify-content: space-between;
+        padding: 16px 60px;
+
+    }
+
+    .buttons{
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
     }
 
 </style>

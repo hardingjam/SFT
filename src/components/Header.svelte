@@ -95,6 +95,7 @@
         display: flex;
         align-items: center;
         gap: 4px;
+        justify-content: center;
     }
 
 </style>

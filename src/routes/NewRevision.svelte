@@ -48,6 +48,7 @@
     $:$activeNetwork && getReceiptData()
 
     async function getSchema() {
+
         let selectedSchemaHash = localStorage.getItem("selectedReceiptSchema")
         let res = await axios.get(`${IPFS_GETWAY}${selectedSchemaHash}`)
         if (res) {
@@ -67,19 +68,30 @@
                 } else {
                     input.value = values[input.id];
                 }
-            } else if (input.type === 'file') {
-                // For file inputs, we cannot directly set the value to an empty string due to security restrictions.
-                // So, we create a new file input and replace the original one with it.
-                const newInput = document.createElement('input');
-                newInput.type = 'file';
-                newInput.name = input.name;
-                newInput.id = input.id;
-                newInput.className = input.className;
-                newInput.style.display = 'none';
-                newInput.onchange = input.onchange;
+            } else if (input.type === 'file' && values) {
+                fileHashes = [...fileHashes, values[input.id]]
+                const linkURL = IPFS_GETWAY + values[input.id];
+                const imgSrc = '/src/assets/icons/show.svg';
+                const imgAlt = 'view file';
 
-                // Replace the original file input with the new one
-                input.parentNode.replaceChild(newInput, input);
+                // Create the link (<a>) element
+                const linkElement = document.createElement('a');
+                linkElement.href = linkURL;
+                linkElement.target = '_blank';
+                linkElement.classList.add('display-flex');
+                linkElement.classList.add('absolute');
+                linkElement.classList.add('right-0');
+
+                // Create the image (<img>) element
+                const imgElement = document.createElement('img');
+                imgElement.src = imgSrc;
+                imgElement.alt = imgAlt;
+
+                // Append the image element to the link element
+                linkElement.appendChild(imgElement);
+
+                // Append the link element to the container
+                input.parentNode.appendChild(linkElement);
             }
         });
     }

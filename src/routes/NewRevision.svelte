@@ -61,7 +61,7 @@
         const formInputs = document.querySelectorAll('.svelte-schema-form input');
         // Iterate over the input elements and reset their values
         formInputs.forEach(input => {
-            if (input.type === 'text' || input.type === 'email' || input.type === 'password' || input.type === 'date') {
+            if (input.type === 'text' || input.type === 'email' || input.type === 'password' || input.type === 'date' || input.type === 'number') {
 
                 if (!values) {
                     input.value = '';

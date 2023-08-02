@@ -61,37 +61,48 @@
         const formInputs = document.querySelectorAll('.svelte-schema-form input');
         // Iterate over the input elements and reset their values
         formInputs.forEach(input => {
-            if (input.type === 'text' || input.type === 'email' || input.type === 'password' || input.type === 'date' || input.type === 'number') {
+            if (input.type === 'text' || input.type === 'email' || input.type === 'password' || input.type === 'date' ||
+                input.type === 'number') {
 
                 if (!values) {
                     input.value = '';
                 } else {
                     input.value = values[input.id];
                 }
-            } else if (input.type === 'file' && values) {
-                fileHashes = [...fileHashes, values[input.id]]
-                const linkURL = IPFS_GETWAY + values[input.id];
-                const imgSrc = '/src/assets/icons/show.svg';
-                const imgAlt = 'view file';
+            } else if (input.type === 'file') {
 
-                // Create the link (<a>) element
-                const linkElement = document.createElement('a');
-                linkElement.href = linkURL;
-                linkElement.target = '_blank';
-                linkElement.classList.add('display-flex');
-                linkElement.classList.add('absolute');
-                linkElement.classList.add('right-0');
+                if (values) {
+                    fileHashes = [...fileHashes, values[input.id]]
+                    const linkURL = IPFS_GETWAY + values[input.id];
+                    const imgSrc = '/src/assets/icons/show.svg';
+                    const imgAlt = 'view file';
 
-                // Create the image (<img>) element
-                const imgElement = document.createElement('img');
-                imgElement.src = imgSrc;
-                imgElement.alt = imgAlt;
+                    // Create the link (<a>) element
+                    const linkElement = document.createElement('a');
+                    linkElement.href = linkURL;
+                    linkElement.target = '_blank';
+                    linkElement.classList.add('display-flex');
+                    linkElement.classList.add('absolute');
+                    linkElement.classList.add('right-0');
+                    linkElement.classList.add('file-link');
 
-                // Append the image element to the link element
-                linkElement.appendChild(imgElement);
+                    // Create the image (<img>) element
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imgSrc;
+                    imgElement.alt = imgAlt;
 
-                // Append the link element to the container
-                input.parentNode.appendChild(linkElement);
+                    // Append the image element to the link element
+                    linkElement.appendChild(imgElement);
+
+                    // Append the link element to the container
+                    input.parentNode.appendChild(linkElement);
+                } else {
+                    const fileLinks = document.getElementsByClassName('file-link')
+                    for (let i = 0; i < fileLinks.length; i++) {
+                        fileLinks[i].classList.add('hide');
+                    }
+                }
+
             }
         });
     }

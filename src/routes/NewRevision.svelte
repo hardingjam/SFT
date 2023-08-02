@@ -74,7 +74,7 @@
                 if (values) {
                     fileHashes = [...fileHashes, values[input.id]]
                     const linkURL = IPFS_GETWAY + values[input.id];
-                    const imgSrc = '/src/assets/icons/show.svg';
+                    const imgSrc = icons.show;
                     const imgAlt = 'view file';
 
                     // Create the link (<a>) element

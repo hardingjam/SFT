@@ -287,7 +287,7 @@
           ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
           0}</div>
     </div>
-    <div class="default-btn mt-6 self-end" on:click={()=>{upload()}}>Upload</div>
+    <div class="default-btn self-end" on:click={()=>{upload()}}>Upload</div>
   </div>
   <div class="footer">
     <div class="info f-weight-700 mb-5">Changes to the asset are permanent on IPFS and Blockchain</div>

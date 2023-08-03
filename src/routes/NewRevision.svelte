@@ -266,39 +266,29 @@
         fileHashes = event.detail.fileHashes
     }
 
-    function goBack() {
-        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${$selectedReceipt.receipt.receiptInformations[0].id}`)
-    }
+
 </script>
 
 <div class="new-revision">
-  <DefaultFrame>
-    <div slot="back_button" class="display-flex">
-      <button class="btn-hover mr-3"
-              on:click={()=>{goBack()}}>
-        <img src={icons.back} alt="back">
-      </button>
+  <div class="card-header f-weight-700">
+    {$tokenName}
+  </div>
+  <div class="info-container">
+    <div class="flex justify-between w-full mb-6 items-end">
+      <span class="f-weight-700">Asset class</span>
+      <div class="asset-class"> {schema.displayName}</div>
     </div>
-    <div slot="content" class="info-container">
-      <div class="flex w-full items-center justify-center f-weight-700 mb-6">
-        {$tokenName}
-      </div>
-      <div class="flex justify-between w-full mb-6 items-end">
-        <span class="f-weight-700">Asset class</span>
-        <div class="asset-class"> {schema.displayName}</div>
-      </div>
-      <div class="text-left schema-container">
-        <Schema schema={schema} on:fileUpload={handleFileUpload}></Schema>
-      </div>
-      <div class="flex justify-between w-full mb-6 items-center mt-6">
-        <span class="f-weight-700">Amount</span>
-        <div class="asset-class"> {$selectedReceipt && $selectedReceipt.receipt ?
-            ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
-            0}</div>
-      </div>
-      <div class="default-btn float-right mt-6" on:click={()=>{upload()}}>Upload</div>
+    <div class="text-left schema-container">
+      <Schema schema={schema} on:fileUpload={handleFileUpload}></Schema>
     </div>
-  </DefaultFrame>
+    <div class="flex justify-between w-full mb-6 items-center mt-6">
+      <span class="f-weight-700">Amount</span>
+      <div class="asset-class"> {$selectedReceipt && $selectedReceipt.receipt ?
+          ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
+          0}</div>
+    </div>
+    <div class="default-btn float-right mt-6" on:click={()=>{upload()}}>Upload</div>
+  </div>
   <div class="footer">
     <div class="info f-weight-700 mb-5">Changes to the asset are permanent on IPFS and Blockchain</div>
     <button class="btn-solid w-full ok-btn" on:click={()=>{createNewRevision()}} disabled="{!uploadedData}">OK</button>
@@ -307,7 +297,12 @@
 
 <style>
     .info-container {
-        width: 570px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 700px;
+        min-height: 300px;
+        padding: 16px 40px 40px 40px
     }
 
     .new-revision {

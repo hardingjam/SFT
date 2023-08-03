@@ -474,6 +474,15 @@ li {
     content: ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . "; /* Add as many dots as you want */
 }
 
+.card-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border-bottom-width: 1px;;
+    padding: 13px 0;
+}
+
 @media (prefers-color-scheme: light) {
 }
 

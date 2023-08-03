@@ -72,7 +72,7 @@
             } else if (input.type === 'file') {
 
                 if (values) {
-                    fileHashes = [...fileHashes, values[input.id]]
+                    fileHashes = [...fileHashes, {prop: input.id, hash: values[input.id]} ]
                     const linkURL = IPFS_GETWAY + values[input.id];
                     const imgSrc = icons.show;
                     const imgAlt = 'view file';
@@ -165,7 +165,6 @@
     const upload = async () => {
         structure = await getFormData()
         error = ""
-
         let savedUsername = localStorage.getItem('ipfsUsername');
         let savedPassword = localStorage.getItem('ipfsPassword');
         if (!savedPassword || !savedUsername) {
@@ -287,7 +286,7 @@
           ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
           0}</div>
     </div>
-    <div class="default-btn float-right mt-6" on:click={()=>{upload()}}>Upload</div>
+    <div class="default-btn mt-6 self-end" on:click={()=>{upload()}}>Upload</div>
   </div>
   <div class="footer">
     <div class="info f-weight-700 mb-5">Changes to the asset are permanent on IPFS and Blockchain</div>

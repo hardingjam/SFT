@@ -76,19 +76,9 @@
         await getRevision($selectedReceipt?.receipt.receiptInformations[0].id)
     }
 
-    function goBack() {
-        let i = $breadCrumbs.findLastIndex(bc => bc.id === '#asset-information')
-        if ($breadCrumbs[i - 1].id === '#asset-register') {
-            navigate('#asset-register')
-        } else {
-            navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)
-        }
-    }
-
-
 </script>
 <div class="asset-information">
-  <div class="buttons">
+  <div class="card-header justify-end pr-10">
     <button class="default-btn" disabled>download IPFS pin list</button>
     <button class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
       revision
@@ -96,17 +86,14 @@
     <button class="default-btn" on:click={()=>navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)}>
       Asset history
     </button>
-    <button class="btn-hover absolute right-5" on:click={()=>{goBack()}}>
-      <img src={icons.back} alt="back">
-    </button>
   </div>
 
-  <div class="info-container">
+  <div class="card-content">
     {#if !isCurrentRevision}
       <div class="mb-5">This is not the current revision. <span
         class="brown underline cursor-pointer ml-1" on:click={()=>setCurrentRevision()}>Current revision</span></div>
     {/if}
-    <div class="display-flex justify-between font-bold mb-5 text-left">
+    <div class="display-flex justify-between font-bold mb-8 text-left">
       <span>{$tokenName}</span>
       <span>
        Revision date:
@@ -115,7 +102,7 @@
             0}
       </span>
     </div>
-    <div class="flex items-start flex-col mb-6">
+    <div class="flex items-start flex-col mb-8">
       <div class="flex justify-between font-bold text-left w-full">
         <span class="f-weight-700 w-2/3 whitespace-nowrap flex pr-3">Asset class <span class="dots"></span></span>
         <span class="f-weight-700 w-1/3">{schemaName}</span>
@@ -130,7 +117,7 @@
       </div>
     </div>
     <ReceiptData receipt={$selectedReceipt?.receipt} revisionId={revision?.id}/>
-    <div class="display-flex justify-between font-bold mt-5 text-left">
+    <div class="display-flex justify-between font-bold mt-20 text-left">
       <span class="w-2/3">Total token amount:</span>
       <span class="w-1/3">{$data.offchainAssetReceiptVault ?
           ethers.utils.formatUnits($data.offchainAssetReceiptVault.totalShares, 18) :
@@ -148,28 +135,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-
-    .info-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 630px;
-        min-height: 300px;
-        padding: 16px 60px 60px 60px
-
-    }
-
-    .buttons {
-        position: relative;
-        display: flex;
-        gap: 20px;
-        padding-top: 16px;
-        padding-bottom: 16px;
-        align-items: center;
-        border-bottom-width: 1px;
-        width: 100%;
-        justify-content: center;
     }
 
 </style>

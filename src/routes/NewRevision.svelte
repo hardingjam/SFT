@@ -273,7 +273,7 @@
   <div class="card-header f-weight-700">
     {$tokenName}
   </div>
-  <div class="info-container">
+  <div class="info-container card-content">
     <div class="flex justify-between w-full mb-6 items-end">
       <span class="f-weight-700">Asset class</span>
       <div class="asset-class"> {schema.displayName}</div>
@@ -297,12 +297,7 @@
 
 <style>
     .info-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
         min-width: 700px;
-        min-height: 300px;
-        padding: 16px 40px 40px 40px
     }
 
     .new-revision {

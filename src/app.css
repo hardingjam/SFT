@@ -481,6 +481,16 @@ li {
     justify-content: center;
     border-bottom-width: 1px;;
     padding: 13px 0;
+    gap: 20px;
+}
+
+.card-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 630px;
+    min-height: 300px;
+    padding: 24px 60px 60px 60px
 }
 
 @media (prefers-color-scheme: light) {

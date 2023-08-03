@@ -1,6 +1,4 @@
 <script>
-    import DefaultFrame from '../components/DefaultFrame.svelte';
-    import {icons} from '../scripts/assets.js';
     import {
         bytesToMeta,
         cborDecode,
@@ -10,7 +8,7 @@
         getSubgraphData,
         hasRole,
         navigate,
-        showPrompt, showPromptSFTCreate
+        showPrompt, showPromptSFTCreate, toSentenceCase
     } from '../scripts/helpers.js';
     import {
         activeNetwork,
@@ -73,29 +71,32 @@
 
                 if (values) {
                     fileHashes = [...fileHashes, {prop: input.id, hash: values[input.id]} ]
-                    const linkURL = IPFS_GETWAY + values[input.id];
-                    const imgSrc = icons.show;
-                    const imgAlt = 'view file';
+                    const linkURL = values[input.id] ? IPFS_GETWAY + values[input.id]: null;
 
                     // Create the link (<a>) element
-                    const linkElement = document.createElement('a');
-                    linkElement.href = linkURL;
-                    linkElement.target = '_blank';
-                    linkElement.classList.add('display-flex');
-                    linkElement.classList.add('absolute');
-                    linkElement.classList.add('right-0');
-                    linkElement.classList.add('file-link');
+                    if(linkURL){
+                        const linkElement = document.createElement('a');
+                        linkElement.href = linkURL ;
+                        linkElement.target = '_blank';
+                        linkElement.classList.add('display-flex');
+                        linkElement.classList.add('absolute');
+                        linkElement.classList.add('right-0');
+                        linkElement.classList.add('file-link');
+                        linkElement.innerHTML = 'original&nbsp;'
 
-                    // Create the image (<img>) element
-                    const imgElement = document.createElement('img');
-                    imgElement.src = imgSrc;
-                    imgElement.alt = imgAlt;
+                        // Create the image (<img>) element
+                        const spanElement = document.createElement('span');
+                        spanElement.textContent =  toSentenceCase(input.id)//+ toSentenceCase(input.id)
+                        spanElement.classList.add('underline');
 
-                    // Append the image element to the link element
-                    linkElement.appendChild(imgElement);
 
-                    // Append the link element to the container
-                    input.parentNode.appendChild(linkElement);
+                        // Append the image element to the link element
+                        linkElement.appendChild(spanElement);
+
+                        // Append the link element to the container
+                        input.parentNode.appendChild(linkElement);
+                    }
+
                 } else {
                     const fileLinks = document.getElementsByClassName('file-link')
                     for (let i = 0; i < fileLinks.length; i++) {

@@ -27,6 +27,8 @@ import tile_view from '../assets/icons/tile_view.svg'
 import back from '../assets/icons/back.svg'
 import arrow_narrow_right from '../assets/icons/arrow_narrow_right.svg'
 import arrow_narrow_left from '../assets/icons/arrow_narrow_left.svg'
+import asset_list from '../assets/icons/asset_list.svg'
+import asset_list_dark from '../assets/icons/asset_list_dark.svg'
 import sft_create from '../assets/icons/sft_create.svg'
 
 export const icons = {
@@ -58,6 +60,8 @@ export const icons = {
     back,
     polygonscan,
     arrow_narrow_right,
+    asset_list,
+    asset_list_dark,
     arrow_narrow_left,
     sft_create
 }

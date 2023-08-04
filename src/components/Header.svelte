@@ -64,7 +64,7 @@
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
 
       <HeaderDropdown triggerLabel={formatAddress($account)}
-                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect}>
+                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect} triggerIcon="">
       </HeaderDropdown>
     </div>
     {#if location && (location !== "/" && location !== "#")}

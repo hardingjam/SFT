@@ -28,6 +28,7 @@ import back from '../assets/icons/back.svg'
 import arrow_narrow_right from '../assets/icons/arrow_narrow_right.svg'
 import arrow_narrow_left from '../assets/icons/arrow_narrow_left.svg'
 import asset_list from '../assets/icons/asset_list.svg'
+import asset_list_dark from '../assets/icons/asset_list_dark.svg'
 
 export const icons = {
     ethereum,
@@ -59,5 +60,6 @@ export const icons = {
     polygonscan,
     arrow_narrow_right,
     arrow_narrow_left,
-    asset_list
+    asset_list,
+    asset_list_dark
 }

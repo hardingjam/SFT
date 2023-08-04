@@ -50,7 +50,7 @@
 </script>
 <div class="asset-classes-container">
   <div class="card-header space-between">
-    <div class="title">{`${$tokenName} asset class list`}</div>
+    <div class="title flex"><img src="{icons.asset_list_dark}" alt="asset class list"/>{`${$tokenName} asset class list`}</div>
     <div class="buttons">
       <button class="default-btn" on:click={()=>{navigate("#mint")}}>Mint</button>
       <button class="default-btn" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
@@ -92,6 +92,13 @@
         align-items: center;
     }
 
+    .title {
+        font-weight: 800;
+        align-items: center;
+        gap: 3px;
+        justify-content: space-between;
+    }
+
     .schemas {
         overflow: auto;
         text-align: left;
@@ -111,7 +118,7 @@
 
     .card-header {
         justify-content: space-between;
-        padding: 13px 20px 13px 60px;
+        padding: 13px 20px 13px 35px;
     }
 
     .buttons {

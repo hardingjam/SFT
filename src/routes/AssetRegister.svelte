@@ -3,7 +3,7 @@
         vault,
         auditHistory,
         activeNetwork,
-        selectedReceipt, sftInfo, pageTitle,
+        selectedReceipt, sftInfo, pageTitle
     } from "../scripts/store";
     import {
         cborDecode,
@@ -21,8 +21,6 @@
     import SftLoader from "../components/SftLoader.svelte";
     import Pagination from '../components/Pagination.svelte';
 
-    let error = ''
-    let certifyUntil = formatDate(new Date())
     let receipts = []
     let loading = false;
     let tempReceipts = [];
@@ -61,7 +59,7 @@
     function goToAssetInformation(receipt) {
         selectedReceipt.set(receipt)
         localStorage.setItem("selectedReceiptSchema", $selectedReceipt.schema.id)
-        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)
+        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${receipt.receipt.receiptInformations[0].id}`)
     }
 
     async function getAuditHistory() {

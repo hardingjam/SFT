@@ -144,13 +144,18 @@ export function timeStampToDate(timeStamp, format) {
     if (format === "mm-dd-yyyy") {
         value = [month, day, year].join('-');
     }
-    if (format === "yyyy-mm-dd") {
+    else if (format === "yyyy-mm-dd") {
         value = [year, month, day].join('-');
     }
-    if (format === "yy-mm-dd tt:tt") {
+    else if (format === "yy-mm-dd tt:tt") {
         let date = [year, month, day].join('-');
         let time = [hour, min].join(":")
         value = date + " " + time;
+    }
+    else if (format === "yy-mm-dd/tt:tt") {
+        let date = [year, month, day].join('-');
+        let time = [hour, min].join(":")
+        value = date + " / " + time;
     } else {
         value = [day, month, year].join('-');
     }
@@ -259,6 +264,13 @@ export async function getIpfsGetWay(hash) {
 export function formatAddress(address) {
     if (address) {
         return address.replace(/(.{6}).*(.{5})/, "$1…$2")
+    } else
+        return ''
+}
+
+export function formatHash(hash) {
+    if (hash) {
+        return hash.replace(/(.{17}).*/, "$1…")
     } else
         return ''
 }
@@ -558,20 +570,21 @@ export async function setAccountRoles(roles, account) {
 }
 
 export function navigate(path, options) {
-    let label = ROUTE_LABEL_MAP.get(path.split("/")[0])
+    let bcId = path.split("/")[0]
+    let label = ROUTE_LABEL_MAP.get(bcId)
     navigationButtonClicked.update(() => false)
     if (options && options.clear) {
         if (path === "#") {
             breadCrumbs.update(() => [])
         } else {
-            breadCrumbs.update(() => [{path: "#", label: "Home"}, {path, label}])
+            breadCrumbs.update(() => [{path: "#", label: "Home", id: 'home'}, {path, label, id:bcId}])
         }
     } else {
         breadCrumbs.update(bc => {
-            if (!bc.find(b => b.path === path)) {
-                return [...bc, {path, label}]
+            if (!bc.find(b => b.id === bcId)) {
+                return [...bc, {path, label, id:bcId}]
             } else {
-                let indexOfPage = bc.findIndex(b => b.path === path)
+                let indexOfPage = bc.findIndex(b => b.id === bcId)
                 return bc.splice(0, indexOfPage + 1)
             }
         })

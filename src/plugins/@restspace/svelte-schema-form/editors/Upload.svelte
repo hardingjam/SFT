@@ -130,7 +130,9 @@ const openFile = () => {
         Upload
       </div>
     </div>
-    <div class="sf-upload-file ml-2" title={uploaded}>{uploaded || ""}</div>
+    {#if $fileDropped.file}
+      <div class="sf-upload-file ml-2" title={uploaded}>{uploaded || ""}</div>
+    {/if}
   </div>
 
   {#if Object.keys(progress).length > 0}
@@ -146,12 +148,12 @@ const openFile = () => {
 </svelte:component>
 
 <style>
-  .sf-drop-area-container{
-      width: 360px;
-  }
+    .sf-drop-area-container {
+        width: 360px;
+    }
 
-  .sf-upload-file{
-      height: 27px;
-      margin-top: 8px;
-  }
+    .sf-upload-file {
+        height: 27px;
+        margin-top: 8px;
+    }
 </style>

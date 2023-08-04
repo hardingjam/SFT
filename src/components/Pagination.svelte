@@ -75,26 +75,29 @@
   <div class="showing">Showing <span class="font-bold">{showingStart}-{showingEnd}</span> of
     <span class="font-bold">{dataLength}</span>
   </div>
-  <slot name="actions"></slot>
-  <div class="pagination">
-    <button on:click={previousPage} disabled={currentPage === 1} class="previous-button">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M15.5 19L9.20711 12.7071C8.81658 12.3166 8.81658 11.6834 9.20711 11.2929L15.5 5" stroke="#9D7334"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-    {#each pagesArray as page, i}
-      <div on:click={()=>{setPage(page)}}
-           class="pagination-button {i===pagesArray.length-1? 'last':''} {page===currentPage ? 'active':''}">{page}</div>
-    {/each}
-    <button class="next-button" on:click={nextPage} disabled={currentPage === totalPages}>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8.5 19L14.7929 12.7071C15.1834 12.3166 15.1834 11.6834 14.7929 11.2929L8.5 5" stroke="#9D7334"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-    <div class="page-button"></div>
+  <div class="flex items-center justify-between gap-5">
+    <slot name="actions"></slot>
+    <div class="pagination">
+      <button on:click={previousPage} disabled={currentPage === 1} class="previous-button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15.5 19L9.20711 12.7071C8.81658 12.3166 8.81658 11.6834 9.20711 11.2929L15.5 5" stroke="#9D7334"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      {#each pagesArray as page, i}
+        <div on:click={()=>{setPage(page)}}
+             class="pagination-button {i===pagesArray.length-1? 'last':''} {page===currentPage ? 'active':''}">{page}</div>
+      {/each}
+      <button class="next-button" on:click={nextPage} disabled={currentPage === totalPages}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.5 19L14.7929 12.7071C15.1834 12.3166 15.1834 11.6834 14.7929 11.2929L8.5 5" stroke="#9D7334"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="page-button"></div>
+    </div>
   </div>
+
 </div>
 
 <style>

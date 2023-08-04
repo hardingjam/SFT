@@ -4,7 +4,7 @@
 
     function isLast(elem) {
         let lastElement = $breadCrumbs[$breadCrumbs.length - 1];
-        return elem.path === lastElement.path
+        return elem.id === lastElement.id
     }
 
     function cleanOutBreadCrumbs(path) {

@@ -9,10 +9,11 @@
         toSentenceCase
     } from '../scripts/helpers.js';
     import {activeNetwork, selectedReceipt, vault} from '../scripts/store.js';
-    import {RECEIPT_INFORMATION_QUERY} from '../scripts/queries.js';
+    import {RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
     import SftLoader from './SftLoader.svelte';
     import axios from 'axios';
     import {ethers} from 'ethers';
+    import {onMount} from 'svelte';
 
     let loading = false
     let ipfsLoading = false
@@ -22,9 +23,14 @@
     let schema = {}
     let fileUploadProperties = []
     export let receipt;
+    export let revisionId;
 
     $: schemaHash && getSchemaFileProps()
-    $: $activeNetwork && getReceiptData()
+    $: revisionId && getReceiptData()
+
+    onMount(() => {
+        getReceiptData()
+    })
 
     async function getSchema() {
         let url = await getIpfsGetWay(schemaHash)
@@ -62,7 +68,7 @@
             variables = {id: receipt.id}
         }
         loading = true;
-        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
+        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATIONS_QUERY, 'receipt')
         let receiptInfo = ""
         let information = ""
 
@@ -73,7 +79,9 @@
             ipfsLoading = true;
             receiptInfo = resp.data.receipt.receiptInformations
             if (receiptInfo.length) {
-                information = receiptInfo[0].information
+                information = receiptInfo.find(r => r.id === revisionId) ?
+                    receiptInfo.find(r => r.id === revisionId).information :
+                    receiptInfo[0].information
 
                 let cborDecodedInformation = cborDecode(information.slice(18))
                 let structure = bytesToMeta(cborDecodedInformation[0].get(0), "json")

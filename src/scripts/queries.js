@@ -73,7 +73,15 @@ export const AUDIT_HISTORY_DATA_QUERY = `
                   receiptInformations(orderDirection: desc, orderBy: timestamp){
                     information
                     id
-                    timestamp
+                    timestamp       
+                    emitter {
+                     address
+                    }        
+                    receipt {
+                      deposits {
+                        amount
+                      }
+                    }
                   }
                   deposits{
                      amount
@@ -105,6 +113,10 @@ export const RECEIPTS_QUERY = `
                         deposits{
                             timestamp
                         }
+                        receiptInformations(orderDirection: desc, orderBy: timestamp){
+                          information
+                          id
+                        }
                     }
                 }
               }
@@ -118,7 +130,7 @@ export const DEPLOYER_QUERY = `
             }
           }
          `;
-export const RECEIPT_INFORMATION_QUERY = `
+export const RECEIPT_INFORMATIONS_QUERY = `
           query($id: ID!) {
             receipt(id: $id) {
               id,
@@ -130,12 +142,41 @@ export const RECEIPT_INFORMATION_QUERY = `
                   blockNumber
                   id
                 }
-                timestamp  
+                timestamp 
+                emitter {
+                  address
+                }        
+                receipt {
+                  deposits {
+                    amount
+                  }
+                }
               }
               deposits{
                  amount
                  timestamp
                  id
+              }
+            }
+          }
+         `;
+export const RECEIPT_INFORMATION_QUERY = `
+          query($id: ID!) {
+            receiptInformation(id: $id){
+              information
+              id
+              transaction {
+                blockNumber
+                id
+              }
+              timestamp 
+              emitter {
+                address
+              }        
+              receipt {
+                deposits {
+                  amount
+                }
               }
             }
           }
@@ -211,6 +252,14 @@ export const DEPOSITS_QUERY = `
                     id
                     schema
                     timestamp
+                    emitter {
+                     address
+                    }
+                    receipt {
+                      deposits {
+                        amount
+                      }
+                    }
                   }
                 }
               }

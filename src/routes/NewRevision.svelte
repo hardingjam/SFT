@@ -1,21 +1,21 @@
 <script>
-    import DefaultFrame from '../components/DefaultFrame.svelte';
-    import {icons} from '../scripts/assets.js';
     import {
+        bytesToMeta,
+        cborDecode,
         cborEncode,
         encodeCBORStructure,
         getContract,
         getSubgraphData,
         hasRole,
         navigate,
-        showPrompt, showPromptSFTCreate
+        showPrompt, showPromptSFTCreate, toSentenceCase
     } from '../scripts/helpers.js';
     import {
         activeNetwork,
         pageTitle,
         selectedReceipt, tokenName, transactionInProgress,
         transactionInProgressShow,
-        vault, data, ethersData, account, transactionSuccess, transactionError, fileDropped
+        vault, data, ethersData, account, transactionSuccess, transactionError, fileDropped, breadCrumbs
     } from '../scripts/store.js';
     import axios from 'axios';
     import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
@@ -23,7 +23,7 @@
     import jQuery from 'jquery';
     import {ethers} from 'ethers';
     import {
-        RECEIPT_INFORMATION_QUERY
+        RECEIPT_INFORMATIONS_QUERY
     } from '../scripts/queries.js';
     import receiptContractAbi from '../contract/ReceiptContractAbi.json';
     import {arrayify} from 'ethers/lib/utils.js';
@@ -38,6 +38,7 @@
     let error;
     let uploadedData;
     let structure;
+    let currentStructure;
 
     let {signer} = $ethersData;
 
@@ -45,11 +46,66 @@
     $:$activeNetwork && getReceiptData()
 
     async function getSchema() {
+
         let selectedSchemaHash = localStorage.getItem("selectedReceiptSchema")
         let res = await axios.get(`${IPFS_GETWAY}${selectedSchemaHash}`)
         if (res) {
             schema = {...res.data, hash: selectedSchemaHash}
         }
+    }
+
+    function setFormInputs(values) {
+        // Get all input elements inside the form with the class "svelte-schema-form"
+        const formInputs = document.querySelectorAll('.svelte-schema-form input');
+        // Iterate over the input elements and reset their values
+        formInputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'email' || input.type === 'password' || input.type === 'date' ||
+                input.type === 'number') {
+
+                if (!values) {
+                    input.value = '';
+                } else {
+                    input.value = values[input.id];
+                }
+            } else if (input.type === 'file') {
+
+                if (values) {
+                    fileHashes = [...fileHashes, {prop: input.id, hash: values[input.id]} ]
+                    const linkURL = values[input.id] ? IPFS_GETWAY + values[input.id]: null;
+
+                    // Create the link (<a>) element
+                    if(linkURL){
+                        const linkElement = document.createElement('a');
+                        linkElement.href = linkURL ;
+                        linkElement.target = '_blank';
+                        linkElement.classList.add('display-flex');
+                        linkElement.classList.add('absolute');
+                        linkElement.classList.add('right-0');
+                        linkElement.classList.add('file-link');
+                        linkElement.innerHTML = 'original&nbsp;'
+
+                        // Create the image (<img>) element
+                        const spanElement = document.createElement('span');
+                        spanElement.textContent =  toSentenceCase(input.id)//+ toSentenceCase(input.id)
+                        spanElement.classList.add('underline');
+
+
+                        // Append the image element to the link element
+                        linkElement.appendChild(spanElement);
+
+                        // Append the link element to the container
+                        input.parentNode.appendChild(linkElement);
+                    }
+
+                } else {
+                    const fileLinks = document.getElementsByClassName('file-link')
+                    for (let i = 0; i < fileLinks.length; i++) {
+                        fileLinks[i].classList.add('hide');
+                    }
+                }
+
+            }
+        });
     }
 
     async function createNewRevision() {
@@ -75,7 +131,7 @@
                     let wait = await tx.wait()
                     if (wait.status === 1) {
                         let interval = setInterval(async () => {
-                            let resp = await getSubgraphData($activeNetwork, {id: $selectedReceipt.receipt.id.toLowerCase()}, RECEIPT_INFORMATION_QUERY, 'receipt')
+                            let resp = await getSubgraphData($activeNetwork, {id: $selectedReceipt.receipt.id.toLowerCase()}, RECEIPT_INFORMATIONS_QUERY, 'receipt')
                             let receiptInformations;
                             if (resp && resp.data) {
                                 receiptInformations = resp.data.receipt.receiptInformations
@@ -86,6 +142,8 @@
                                     transactionSuccess.set(true)
                                     transactionInProgress.set(false)
                                     clearInterval(interval)
+                                    setFormInputs()
+
                                 }
                             }
                         }, 2000)
@@ -93,6 +151,7 @@
                         transactionError.set(true)
                     }
                     fileDropped.set({})
+
                 } catch (err) {
                     console.log(err)
                 }
@@ -107,7 +166,6 @@
     const upload = async () => {
         structure = await getFormData()
         error = ""
-
         let savedUsername = localStorage.getItem('ipfsUsername');
         let savedPassword = localStorage.getItem('ipfsPassword');
         if (!savedPassword || !savedUsername) {
@@ -194,52 +252,52 @@
             variables = {id: $selectedReceipt.receipt.id}
         }
         loading = true;
-        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
+        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATIONS_QUERY, 'receipt')
         if (resp && resp.data && resp.data.receipt) {
             selectedReceipt.set(resp.data)
+
+            let cborDecodedInformation = cborDecode($selectedReceipt.receipt.receiptInformations[0].information.slice(18))
+            currentStructure = bytesToMeta(cborDecodedInformation[0].get(0), "json")
+            setFormInputs(currentStructure)
         }
+    }
+
+    function handleFileUpload(event) {
+        fileHashes = event.detail.fileHashes
     }
 
 
 </script>
 
 <div class="new-revision">
-  <DefaultFrame>
-    <div slot="back_button" class="display-flex">
-      <button class="btn-hover mr-3"
-              on:click={()=>{navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)}}>
-        <img src={icons.back} alt="back">
-      </button>
+  <div class="card-header f-weight-700">
+    {$tokenName}
+  </div>
+  <div class="info-container card-content">
+    <div class="flex justify-between w-full mb-6 items-end">
+      <span class="f-weight-700">Asset class</span>
+      <div class="asset-class"> {schema.displayName}</div>
     </div>
-    <div slot="content" class="info-container">
-      <div class="flex w-full items-center justify-center f-weight-700 mb-6">
-        {$tokenName}
-      </div>
-      <div class="flex justify-between w-full mb-6 items-end">
-        <span class="f-weight-700">Asset class</span>
-        <div class="asset-class"> {schema.displayName}</div>
-      </div>
-      <div class="text-left schema-container">
-        <Schema schema={schema}></Schema>
-      </div>
-      <div class="flex justify-between w-full mb-6 items-center mt-6">
-        <span class="f-weight-700">Amount</span>
-        <div class="asset-class"> {$selectedReceipt && $selectedReceipt.receipt ?
-            ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
-            0}</div>
-      </div>
-      <div class="default-btn float-right mt-6" on:click={()=>{upload()}}>Upload</div>
+    <div class="text-left schema-container">
+      <Schema schema={schema} on:fileUpload={handleFileUpload}></Schema>
     </div>
-  </DefaultFrame>
+    <div class="flex justify-between w-full mb-6 items-center mt-6">
+      <span class="f-weight-700">Amount</span>
+      <div class="asset-class"> {$selectedReceipt && $selectedReceipt.receipt ?
+          ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
+          0}</div>
+    </div>
+    <div class="default-btn self-end" on:click={()=>{upload()}}>Upload</div>
+  </div>
   <div class="footer">
-    <div class="info f-weight-700 mb-5">Changed to the asset are permanent on IPFS and Blockchain</div>
+    <div class="info f-weight-700 mb-5">Changes to the asset are permanent on IPFS and Blockchain</div>
     <button class="btn-solid w-full ok-btn" on:click={()=>{createNewRevision()}} disabled="{!uploadedData}">OK</button>
   </div>
 </div>
 
 <style>
     .info-container {
-        width: 570px;
+        min-width: 700px;
     }
 
     .new-revision {

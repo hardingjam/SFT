@@ -23,7 +23,7 @@
         // }
     })
 
-    onDestroy(()=>{
+    onDestroy(() => {
         titleIcon.set("")
     })
 
@@ -49,7 +49,7 @@
 
 </script>
 <div class="asset-classes-container">
-  <div class="header">
+  <div class="card-header space-between">
     <div class="title">{`${$tokenName} asset class list`}</div>
     <div class="buttons">
       <button class="default-btn" on:click={()=>{navigate("#mint")}}>Mint</button>
@@ -84,13 +84,14 @@
 
 <style>
 
-    .asset-classes-container{
+    .asset-classes-container {
         border-radius: 10px;
         background: #ffffff;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
+
     .schemas {
         overflow: auto;
         text-align: left;
@@ -108,18 +109,12 @@
         padding: 5px 15px;
     }
 
-    .header {
-        position: relative;
-        display: flex;
-        align-items: center;
-        border-bottom-width: 1px;
-        width: 100%;
+    .card-header {
         justify-content: space-between;
-        padding: 16px 60px;
-
+        padding: 13px 20px 13px 60px;
     }
 
-    .buttons{
+    .buttons {
         display: flex;
         gap: 20px;
         justify-content: space-between;

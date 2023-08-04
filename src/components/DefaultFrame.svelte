@@ -7,18 +7,14 @@
     }
     let hasSlotBack = false; // Initialize the slot flag to false
 
-    // Check if the slot is provided from the parent component
-    $: {
-        hasSlotBack = !!$$slots.back_button;
-    }
 </script>
 
 <div class="default-frame {hasSlotBack?'pt-2':'11'}">
-  <div class="display-flex justify-end">
+  <div class="display-flex justify-end items-center">
     <div class="{hasSlot? 'mb-5': ''}">
       <slot name="header_buttons"></slot>
     </div>
-    <div class="{hasSlotBack? 'mb-2': ''}">
+    <div class="mb-5">
       <slot name="back_button"></slot>
     </div>
   </div>
@@ -37,7 +33,7 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        padding: 30px 60px;
+        padding: 20px 40px;
     }
 
 </style>

@@ -7,7 +7,6 @@
         uploadBtnLoading,
         activeNetwork,
         schemas,
-        schemaError,
         transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, tokenName, pageTitle
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
@@ -20,7 +19,6 @@
         MAGIC_NUMBERS,
         ONE,
     } from "../scripts/consts.js";
-    import SchemaForm from "../components/SchemaForm.svelte"
     import {
         cborDecode,
         cborEncode,
@@ -30,7 +28,6 @@
         hasRole, showPromptSFTCreate,
     } from "../scripts/helpers";
     import jQuery from 'jquery';
-    import SftLoader from "../components/SftLoader.svelte";
     import {beforeUpdate, onMount} from "svelte";
     import {
         AUDIT_HISTORY_DATA_QUERY,
@@ -40,6 +37,7 @@
     import {arrayify} from "ethers/lib/utils.js";
     import {navigate} from '../scripts/helpers.js';
     import MintInput from '../components/MintInput.svelte';
+    import Schema from '../components/Schema.svelte';
 
     let image = {}
 
@@ -95,7 +93,6 @@
             navigateTo('#');
         }
         await getSchemas()
-
     })
 
     async function getSchemas() {
@@ -283,7 +280,6 @@
         return resolvedPromise?.value.data
     };
 
-    $: ($fileDropped.file && $fileDropped.file.size) && upload($fileDropped, "file");
     $: $activeNetwork.chainId && getSchemas()
 
     // $: $fileHash && getCertificateUrl($fileHash);
@@ -339,7 +335,9 @@
 
     pageTitle.set("Mint/Redeem")
 
-
+    function handleFileUpload(event) {
+        fileHashes = event.detail.fileHashes
+    }
 </script>
 
 <div class="mint-container relative">
@@ -371,30 +369,7 @@
                       label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
 
             </div>
-            {#if selectedSchema?.displayName}
-              <span class="title f-weight-700">Asset info.</span>
-
-              <SchemaForm schema={selectedSchema.schema}></SchemaForm>
-              <div class="error">{$schemaError}</div>
-              {#if $fileHash}
-                <div class="file-uploaded">
-                  <span class="file-load-success">Pie Certificate loaded successfully</span>
-                  <div class="link-to-file underline">
-                    <span>To Link</span>
-                    <a href={certificateUrl} target="_blank">
-                      <img src="{icons.show}" alt="view file" class="btn-hover">
-                    </a>
-                    <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
-                  </div>
-                </div>
-              {/if}
-              {#if $uploadBtnLoading}
-                <div class="sf-upload-spinner">
-                  <SftLoader width="50"></SftLoader>
-                </div>
-              {/if}
-            {/if}
-
+            <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
           </div>
         {/if}
         {#if !$schemas.length}
@@ -459,10 +434,6 @@
         min-height: 325px;
     }
 
-    .form-frame .title {
-        text-align: center;
-    }
-
     .info-text {
         font-size: 12px;
         line-height: 20px;
@@ -483,15 +454,6 @@
 
     .schema table td:nth-child(2) {
         text-align: right;
-    }
-
-    .file-load-success {
-        color: #1EA51B
-    }
-
-    .file-uploaded {
-        display: flex;
-        justify-content: space-between;
     }
 
     .custom-col {

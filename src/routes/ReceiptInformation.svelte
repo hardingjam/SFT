@@ -9,8 +9,6 @@
 
     export let receipt = {}
     let receiptBalance = null
-    let receiptInformations = {}
-
 
     onMount(async () => {
         receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receiptId);
@@ -40,7 +38,7 @@
         <span class="f-weight-700">Sft amount </span>
         <div class="date f-weight-700">{receiptBalance ? ethers.utils.formatUnits(receiptBalance) : ''}</div>
       </div>
-      <ReceiptData receipt={receipt}></ReceiptData>
+      <ReceiptData receipt={receipt} revisionId=""></ReceiptData>
     </div>
   </div>
 </div>

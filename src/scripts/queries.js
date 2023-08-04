@@ -9,6 +9,7 @@ export const QUERY = `
                 name
                 symbol
                 deployTimestamp
+                receiptContractAddress
                 shareHolders{
                     address
                 }
@@ -49,6 +50,7 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             id,
             address,
             totalShares,
+            receiptContractAddress
             certifications(orderBy: timestamp, orderDirection: desc)
             {
               timestamp,
@@ -68,8 +70,18 @@ export const AUDIT_HISTORY_DATA_QUERY = `
               {
                 id,
                 receiptId,
-                  receiptInformations{
+                  receiptInformations(orderDirection: desc, orderBy: timestamp){
                     information
+                    id
+                    timestamp       
+                    emitter {
+                     address
+                    }        
+                    receipt {
+                      deposits {
+                        amount
+                      }
+                    }
                   }
                   deposits{
                      amount
@@ -101,6 +113,10 @@ export const RECEIPTS_QUERY = `
                         deposits{
                             timestamp
                         }
+                        receiptInformations(orderDirection: desc, orderBy: timestamp){
+                          information
+                          id
+                        }
                     }
                 }
               }
@@ -114,13 +130,54 @@ export const DEPLOYER_QUERY = `
             }
           }
          `;
-export const RECEIPT_INFORMATION_QUERY = `
+export const RECEIPT_INFORMATIONS_QUERY = `
           query($id: ID!) {
             receipt(id: $id) {
-                id,
-                  receiptInformations{
-                    information
+              id,
+              receiptId,
+              receiptInformations(orderDirection: desc, orderBy: timestamp){
+                information
+                id
+                transaction {
+                  blockNumber
+                  id
+                }
+                timestamp 
+                emitter {
+                  address
+                }        
+                receipt {
+                  deposits {
+                    amount
                   }
+                }
+              }
+              deposits{
+                 amount
+                 timestamp
+                 id
+              }
+            }
+          }
+         `;
+export const RECEIPT_INFORMATION_QUERY = `
+          query($id: ID!) {
+            receiptInformation(id: $id){
+              information
+              id
+              transaction {
+                blockNumber
+                id
+              }
+              timestamp 
+              emitter {
+                address
+              }        
+              receipt {
+                deposits {
+                  amount
+                }
+              }
             }
           }
          `;
@@ -137,6 +194,7 @@ export const VAULT_INFORMATION_QUERY = `
           query($id: ID!) {
             offchainAssetReceiptVault(id: $id) {
               id,
+              receiptContractAddress
                receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
                  information
                  id
@@ -159,6 +217,7 @@ export const VAULTS_QUERY = `
             deployBlock
             deployTimestamp
             totalShares
+            receiptContractAddress
             tokenHolders {
                 address
                 balance
@@ -189,8 +248,18 @@ export const DEPOSITS_QUERY = `
                  blockNumber
                 }
                 receipt {
-                  receiptInformations {
+                  receiptInformations(orderDirection: desc, orderBy: timestamp){
+                    id
                     schema
+                    timestamp
+                    emitter {
+                     address
+                    }
+                    receipt {
+                      deposits {
+                        amount
+                      }
+                    }
                   }
                 }
               }

@@ -61,6 +61,9 @@ body {
     cursor: pointer;
     padding: 0 30px;
     background: #9D7334;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-solid:hover {
@@ -224,6 +227,9 @@ li {
 }
 
 .default-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-sizing: border-box;
     padding: 0 18px;
     gap: 10px;
@@ -361,11 +367,11 @@ li {
 /* Style the indicator (dot/circle) */
 .check-container .checkmark:after {
     position: absolute;
-    left: 22.42%;
-    top: -5px;
     bottom: 0;
     color: #ffffffff;
     content: "\2714";
+    left: 3px;
+    top: -7px;
 }
 
 .check-box-label {
@@ -454,6 +460,38 @@ li {
     border-top-right-radius: 10px;
 }
 
+
+/* Add dots styling */
+.dots {
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left: 15px;
+}
+
+.dots::after {
+    font-size: 10px;
+    color: #D2D2D2;
+    content: ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . "; /* Add as many dots as you want */
+}
+
+.card-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border-bottom-width: 1px;;
+    padding: 13px 0;
+    gap: 20px;
+}
+
+.card-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 630px;
+    min-height: 300px;
+    padding: 24px 60px 60px 60px
+}
 
 @media (prefers-color-scheme: light) {
 }

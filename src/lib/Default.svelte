@@ -56,6 +56,9 @@
     import AssetRegister from '../routes/AssetRegister.svelte';
     import AssetInformation from '../routes/AssetInformation.svelte';
     import TokenOverview from '../routes/TokenOverview.svelte';
+    import NewRevision from '../routes/NewRevision.svelte';
+    import AssetHistory from '../routes/AssetHistory.svelte';
+    import ChangeComparison from '../routes/ChangeComparison.svelte';
 
 
     let connectedAccount;
@@ -260,6 +263,7 @@
                 console.log(error);
             }
         }
+        await setVault()
     }
 
     async function getMetamaskConnectedAccount() {
@@ -334,8 +338,11 @@
         <div class="{$activeNetwork  ? 'show' : 'hide'}">
           <Route path="#" component={Home}/>
           <Route path="#asset-register" component={AssetRegister}/>
+          <Route path="#asset-history/:id" component={AssetHistory}/>
           <Route path="#audit-history" component={AuditHistory}/>
           <Route path="#token-overview" component={TokenOverview}/>
+          <Route path="#token-overview" component={TokenOverview}/>
+          <Route path="#change-comparison" component={ChangeComparison}/>
         </div>
       </div>
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
@@ -348,10 +355,11 @@
           <!--          <Route path="#set-vault" component={SetVault}/>-->
           <Route path="#asset-classes" component={AssetClasses}/>
           <Route path="#new-asset-class" component={NewSchema}/>
-          <Route path="#asset-information/:id" component={AssetInformation}/>
+          <Route path="#asset-information/:id/:id" component={AssetInformation}/>
           <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
+          <Route path="#new-revision/:id" component={NewRevision}/>
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -529,6 +537,7 @@
 
   .tab-panel-container {
     min-width: 600px;
+    max-width: 700px;
     min-height: 535px;
     background: #FFFFFF;
     border-radius: 0 20px 20px 20px;

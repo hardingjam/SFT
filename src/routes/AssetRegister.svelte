@@ -3,7 +3,7 @@
         vault,
         auditHistory,
         activeNetwork,
-        selectedReceipt, sftInfo, pageTitle,
+        selectedReceipt, sftInfo, pageTitle
     } from "../scripts/store";
     import {
         cborDecode,
@@ -21,8 +21,6 @@
     import SftLoader from "../components/SftLoader.svelte";
     import Pagination from '../components/Pagination.svelte';
 
-    let error = ''
-    let certifyUntil = formatDate(new Date())
     let receipts = []
     let loading = false;
     let tempReceipts = [];
@@ -45,7 +43,7 @@
                 try {
                     let res = await axios.get(`${IPFS_GETWAY}${schemaHash}`)
                     if (res) {
-                        schema = res.data.displayName
+                        schema = {...res.data, id: schemaHash}
                     }
                 } catch (err) {
                     console.log(err)
@@ -60,7 +58,8 @@
 
     function goToAssetInformation(receipt) {
         selectedReceipt.set(receipt)
-        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}`)
+        localStorage.setItem("selectedReceiptSchema", $selectedReceipt.schema.id)
+        navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${receipt.receipt.receiptInformations[0].id}`)
     }
 
     async function getAuditHistory() {
@@ -115,7 +114,7 @@
             <tr class="tb-row">
               <td class="brown hover-underline"
                   on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
-              <td>{receipt.schema || ""}</td>
+              <td>{receipt.schema?.displayName || ""}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td>{timeStampToDate(receipt.timestamp)}</td>
             </tr>

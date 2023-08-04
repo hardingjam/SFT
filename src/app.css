@@ -367,11 +367,11 @@ li {
 /* Style the indicator (dot/circle) */
 .check-container .checkmark:after {
     position: absolute;
-    left: 22.42%;
-    top: -5px;
     bottom: 0;
     color: #ffffffff;
     content: "\2714";
+    left: 3px;
+    top: -7px;
 }
 
 .check-box-label {
@@ -472,6 +472,25 @@ li {
     font-size: 10px;
     color: #D2D2D2;
     content: ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . "; /* Add as many dots as you want */
+}
+
+.card-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border-bottom-width: 1px;;
+    padding: 13px 0;
+    gap: 20px;
+}
+
+.card-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 630px;
+    min-height: 300px;
+    padding: 24px 60px 60px 60px
 }
 
 @media (prefers-color-scheme: light) {

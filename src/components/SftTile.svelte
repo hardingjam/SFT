@@ -1,6 +1,6 @@
 <script>
     import {icons} from "../scripts/assets.js"
-    import {bytesToMeta, cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers';
+    import {bytesToMeta, cborDecode, formatAddress, navigate, timeStampToDate} from '../scripts/helpers';
     import {ethers} from 'ethers';
     import {createEventDispatcher, onMount} from 'svelte';
     import {account, activeNetwork, vault} from '../scripts/store.js';
@@ -129,9 +129,8 @@
               <div>N/A</div>
             {/if}
             {#each auditors as auditor}
-              <div class="underline brown">
-                <a href={`${$activeNetwork.blockExplorer}/address/${auditor}`}
-                   target="_blank">{formatAddress(auditor)}</a>
+              <div class="underline brown cursor-pointer">
+                <span on:click={()=>{navigate(`#address-overview/${auditor}`)}}>{formatAddress(auditor)}</span>
               </div>
             {/each}
           </td>
@@ -145,8 +144,9 @@
             {/if}
             {#each issuers as issuer}
               <div class="underline brown">
-                <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`}
-                   target="_blank">{formatAddress(issuer)}</a>
+<!--                <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`} target="_blank">-->
+                <span on:click={()=>{navigate(`#address-overview/${issuer}`)}}>{formatAddress(issuer)}</span>
+<!--                </a>-->
               </div>
             {/each}
           </td>

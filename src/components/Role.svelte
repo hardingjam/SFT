@@ -9,13 +9,13 @@
     export let name;
     export let admin;
     import {icons} from '../scripts/assets.js'
-    import {formatAddress, setAccountRoles, showPrompt} from "../scripts/helpers.js";
+    import {formatAddress, navigate, setAccountRoles, showPrompt} from "../scripts/helpers.js";
 
     let account = '';
 
 
     function showAddress(account) {
-        window.open(`${$activeNetwork.blockExplorer}/address/${account}`);
+        navigate(`#address-overview/${account}`)
     }
 
 
@@ -55,7 +55,7 @@
       {#if roleHolders?.length}
         {#each roleHolders as roleHolder}
           <div class="flex items-center">
-            <span class="underline btn-hover flex items-center mr-2"
+            <span class="underline btn-hover flex items-center mr-2 cursor-pointer"
                   on:click={()=>showAddress(roleHolder.account.address)}>
                           {formatAddress(roleHolder.account.address)}
               <img class="action-icon ml-2" src={icons.show} alt="show"/>

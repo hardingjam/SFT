@@ -1,8 +1,8 @@
 <script>
     import {ethers} from 'ethers';
     import {createEventDispatcher, onMount} from 'svelte';
-    import {account, activeNetwork} from '../scripts/store.js';
-    import {cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers.js';
+    import {account} from '../scripts/store.js';
+    import {cborDecode, formatAddress, navigate, timeStampToDate} from '../scripts/helpers.js';
     import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
     import {icons} from '../scripts/assets.js';
 
@@ -110,15 +110,15 @@
   <td class="sft-info">{sft?.totalShares ? ethers.utils.formatUnits(sft?.totalShares, 18) : 0}</td>
   <td class="sft-info">
     {#each auditors as auditor}
-      <div class="underline brown">
-        <a href={`${$activeNetwork.blockExplorer}/address/${auditor}`} target="_blank">{formatAddress(auditor)}</a>
+      <div class="underline brown cursor-pointer">
+        <span on:click={()=>{navigate(`#address-overview/${auditor}`)}}> {formatAddress(auditor)}</span>
       </div>
     {/each}
   </td>
   <td class="sft-info">
     {#each issuers as issuer}
-      <div class="underline brown">
-        <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`} target="_blank">{formatAddress(issuer)}</a>
+      <div class="underline brown cursor-pointer">
+        <span on:click={()=>{navigate(`#address-overview/${issuer}`)}}>{formatAddress(issuer)}</span>
       </div>
     {/each}
   </td>
@@ -156,7 +156,7 @@
         height: 20px;
     }
 
-    td:last-child{
+    td:last-child {
         background: #DCDBDD;
     }
 </style>

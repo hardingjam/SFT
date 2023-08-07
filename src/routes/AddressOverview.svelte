@@ -5,9 +5,11 @@
     import {getSubgraphData} from '../scripts/helpers.js';
     import {ADDRESS_OVERVIEW_QUERY} from '../scripts/queries.js';
     import MintRedeemView from '../components/MintRedeemView.svelte';
+    import CertificationsView from '../components/CertificationsView.svelte';
 
     let loading = false;
     let mint_redeems = []
+    let certifications = []
 
     let address = $router.params.address
 
@@ -19,17 +21,24 @@
         // loading = true
         let resp = await getSubgraphData($activeNetwork, {address}, ADDRESS_OVERVIEW_QUERY, 'offchainAssetReceiptVaults')
         if (resp && resp.data && resp.data.offchainAssetReceiptVaults) {
+            //set mint/redeems
             //filter data if there is no deposits and withdraws
-            resp = resp.data.offchainAssetReceiptVaults.filter(mr => mr.deposits.length ||
+            mint_redeems = resp.data.offchainAssetReceiptVaults.filter(mr => mr.deposits.length ||
                 mr.withdraws.length)
-
             //concatenate deposits and withdraws in one array
-            resp = resp.map(mr => [...mr.deposits, ...mr.withdraws])
+            mint_redeems = mint_redeems.map(mr => [...mr.deposits, ...mr.withdraws])
 
             //concat all data in one array
-            resp = resp.flat()
+            mint_redeems = mint_redeems.flat()
             //Sort by timestamp (desc)
-            mint_redeems = resp.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
+            mint_redeems = mint_redeems.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
+
+            //set Certifications
+            //filter data if there is no certifications
+            certifications = resp.data.offchainAssetReceiptVaults.filter(mr => mr.certifications.length)
+            certifications = certifications.map(c => c.certifications)
+            certifications = certifications.flat()
+
         }
         // loading = false
     }
@@ -52,18 +61,29 @@
       <div class="address-overview-table-container">
         <div class="buttons">
           <div class="left">
-            <button class="default-btn {active === 'mint'? 'active': ''}" on:click={()=>{active = 'mint'}}>Mint/ Redeems</button>
-            <button class="default-btn {active === 'certifications'? 'active': ''}" on:click={()=>{active = 'certifications'}}>Certifications</button>
+            <button class="default-btn {active === 'mint'? 'active': ''}" on:click={()=>{active = 'mint'}}>Mint/
+              Redeems
+            </button>
+            <button class="default-btn {active === 'certifications'? 'active': ''}"
+                    on:click={()=>{active = 'certifications'}}>Certifications
+            </button>
             <button class="default-btn {active === 'sfts'? 'active': ''}" on:click={()=>{active = 'sfts'}}>SFTs</button>
-            <button class="default-btn {active === 'erc20'? 'active': ''}" on:click={()=>{active = 'erc20'}}>ERC20 confiscations</button>
-            <button class="default-btn {active === 'erc1155'? 'active': ''}" on:click={()=>{active = 'erc1155'}}>ECRC1155 confiscations</button>
+            <button class="default-btn {active === 'erc20'? 'active': ''}" on:click={()=>{active = 'erc20'}}>ERC20
+              confiscations
+            </button>
+            <button class="default-btn {active === 'erc1155'? 'active': ''}" on:click={()=>{active = 'erc1155'}}>
+              ECRC1155 confiscations
+            </button>
           </div>
           <div class="right">
             <button class="default-btn">Download pins</button>
           </div>
         </div>
         {#if (active === 'mint')}
-          <MintRedeemView mintRedeemData={mint_redeems}></MintRedeemView>
+          <MintRedeemView mintRedeemData={mint_redeems}/>
+        {/if}
+        {#if (active === 'certifications')}
+          <CertificationsView certificationsData={certifications}/>
         {/if}
       </div>
     </div>
@@ -122,7 +142,7 @@
         gap: 14px;
     }
 
-    .default-btn.active{
+    .default-btn.active {
         background: #CAE6FF;
     }
 </style>

@@ -485,13 +485,23 @@ li {
     gap: 20px;
 }
 
-.card-content{
+.card-content {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 630px;
     min-height: 300px;
     padding: 24px 60px 60px 60px
+}
+
+.link-icon {
+    margin-left: 22px;
+    width: 24px;
+    height: 24px;
+}
+
+.link-icon:hover {
+    cursor: pointer;
 }
 
 @media (prefers-color-scheme: light) {

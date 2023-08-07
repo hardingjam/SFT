@@ -266,7 +266,7 @@ export const DEPOSITS_QUERY = `
             }
           }
          `;
-    export const ADDRESS_OVERVIEW_QUERY = `
+export const ADDRESS_OVERVIEW_QUERY = `
               query($address: String!) {
                 offchainAssetReceiptVaults(orderDirection: desc, orderBy: deployTimestamp, first: 200) {
                   deposits(
@@ -284,6 +284,9 @@ export const DEPOSITS_QUERY = `
                     caller {
                       address
 
+                    }
+                    transaction{
+                     id
                     }
                     amount
                     timestamp
@@ -310,6 +313,9 @@ export const DEPOSITS_QUERY = `
                     caller {
                       address
                     }
+                    transaction{
+                      id
+                    }
                     amount
                     timestamp
                     receipt {
@@ -320,6 +326,22 @@ export const DEPOSITS_QUERY = `
                       }
                     }
                   }
+                  certifications(
+                      where: {certifier_: {address: "0xc0D477556c25C9d67E1f57245C7453DA776B51cf"}}
+                      orderDirection: desc
+                      orderBy: timestamp
+                    ) 
+                    {
+                      id
+                      totalShares
+                      emitter {
+                        address
+                      }
+                      transaction{
+                        id
+                      }
+                      timestamp
+                    }
                 }
               }
              `;

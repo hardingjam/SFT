@@ -44,17 +44,8 @@
         align-items: center;
     }
 
-    .link-icon {
-        margin-left: 22px;
-        width: 24px;
-        height: 24px;
-    }
 
-    .link-icon:hover {
-        cursor: pointer;
-    }
-
-    .edit{
+    .edit {
         width: 21px;
         height: 21px;
     }

@@ -1,17 +1,20 @@
 <script>
-import {ethers} from 'ethers';
-import {toIsoDate} from '../scripts/helpers.js';
+    import {ethers} from 'ethers';
+    import {toIsoDate} from '../scripts/helpers.js';
+    import {icons} from '../scripts/assets.js';
+    import {activeNetwork} from '../scripts/store.js';
 
-export let mintRedeemData = []
+    export let mintRedeemData = []
 
-function getActionName(id) {
-    // console.log(111, id)
-    return id.split('-')[0] === 'DepositWithReceipt' ? 'Mint' : 'Redeem'
-}
+    function getActionName(id) {
+        // console.log(111, id)
+        return id.split('-')[0] === 'DepositWithReceipt' ? 'Mint' : 'Redeem'
+    }
 </script>
 <table class="sft-table">
   <thead>
   <tr>
+    <th></th>
     <th>Action</th>
     <th>Vault</th>
     <th>Amount</th>
@@ -24,6 +27,11 @@ function getActionName(id) {
   {#if mintRedeemData.length}
     {#each mintRedeemData as mr, i}
       <tr>
+        <td>
+          <a href={`${$activeNetwork?.blockExplorer}/tx/${mr.transaction.id}`} target="_blank">
+            <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
+          </a>
+        </td>
         <td>{getActionName(mr.id)}</td>
         <td>{mr.offchainAssetReceiptVault.name}</td>
         <td>{ethers.utils.formatUnits(mr.amount, 18)}</td>
@@ -35,3 +43,4 @@ function getActionName(id) {
   {/if}
   </tbody>
 </table>
+

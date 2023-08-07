@@ -143,10 +143,8 @@
               <div>N/A</div>
             {/if}
             {#each issuers as issuer}
-              <div class="underline brown">
-<!--                <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`} target="_blank">-->
+              <div class="underline brown cursor-pointer">
                 <span on:click={()=>{navigate(`#address-overview/${issuer}`)}}>{formatAddress(issuer)}</span>
-<!--                </a>-->
               </div>
             {/each}
           </td>

@@ -26,7 +26,6 @@
 
             //concat all data in one array
             resp = resp.flat()
-            console.log(11111111, resp)
             //Sort by timestamp (desc)
             mint_redeems = resp.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
         }
@@ -69,8 +68,8 @@
                 <td>{getActionName(mr.id)}</td>
                 <td>{mr.offchainAssetReceiptVault.name}</td>
                 <td>{ethers.utils.formatUnits(mr.amount, 18)}</td>
-                <td>{mr.receipt.receiptId}</td>
-                <td>s</td>
+                <td class="brown underline cursor-pointer">{mr.receipt.receiptId}</td>
+                <td></td>
                 <td>{toIsoDate(mr.timestamp)}</td>
               </tr>
             {/each}
@@ -102,6 +101,7 @@
         flex-direction: column;
         text-align: left;
         width: 100%;
+        min-height: 100vh;
     }
 
     .card-header {

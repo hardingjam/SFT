@@ -35,7 +35,7 @@
 
             //set Certifications
             //filter data if there is no certifications
-            certifications = resp.data.offchainAssetReceiptVaults.filter(mr => mr.certifications.length)
+            certifications = resp.data.offchainAssetReceiptVaults.filter(cert => cert.certifications.length)
             certifications = certifications.map(c => c.certifications)
             certifications = certifications.flat()
 

@@ -327,7 +327,7 @@ export const ADDRESS_OVERVIEW_QUERY = `
                     }
                   }
                   certifications(
-                      where: {certifier_: {address: "0xc0D477556c25C9d67E1f57245C7453DA776B51cf"}}
+                      where: {certifier_: {address: $address}}
                       orderDirection: desc
                       orderBy: timestamp
                     ) 

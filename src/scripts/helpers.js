@@ -162,6 +162,11 @@ export function timeStampToDate(timeStamp, format) {
     return value
 }
 
+export function toIsoDate(timeStamp){
+    let date = new Date(timeStamp * 1000)
+    return date.toISOString()
+}
+
 export function formatDate(date) {
     let {year, month, day} = getDateValues(date)
     return [year, month, day].join('-');

@@ -209,7 +209,7 @@ export const VAULT_INFORMATION_QUERY = `
 
 export const VAULTS_QUERY = `
         query {
-          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc){
+          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc first:200){
             deployer
             name
             address
@@ -266,3 +266,60 @@ export const DEPOSITS_QUERY = `
             }
           }
          `;
+    export const ADDRESS_OVERVIEW_QUERY = `
+              query($address: String!) {
+                offchainAssetReceiptVaults(orderDirection: desc, orderBy: deployTimestamp, first: 200) {
+                  deposits(
+                    where: {caller_: {address: $address}}
+                    orderBy: timestamp
+                    orderDirection: desc
+                  ) 
+                  {
+                    offchainAssetReceiptVault {
+                        id
+                        name
+                        address
+                    }
+                    id
+                    caller {
+                      address
+
+                    }
+                    amount
+                    timestamp
+                    receipt {
+                      id
+                      receiptId
+                      receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
+                        information
+                      }
+                    }
+                  }
+                  withdraws(
+                    where: {caller_: {address: $address}}
+                    orderBy: timestamp
+                    orderDirection: desc
+                  ) 
+                  {
+                    id
+                    offchainAssetReceiptVault {
+                        id
+                        name
+                        address
+                    }
+                    caller {
+                      address
+                    }
+                    amount
+                    timestamp
+                    receipt {
+                      id
+                      receiptId
+                      receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
+                        information
+                      }
+                    }
+                  }
+                }
+              }
+             `;

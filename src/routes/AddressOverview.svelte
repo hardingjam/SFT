@@ -2,14 +2,16 @@
     import {activeNetwork, sftInfo} from '../scripts/store.js';
     import SftLoader from '../components/SftLoader.svelte';
     import {router} from 'yrv';
-    import {getSubgraphData, toIsoDate} from '../scripts/helpers.js';
+    import {getSubgraphData} from '../scripts/helpers.js';
     import {ADDRESS_OVERVIEW_QUERY} from '../scripts/queries.js';
-    import {ethers} from 'ethers';
+    import MintRedeemView from '../components/MintRedeemView.svelte';
 
     let loading = false;
     let mint_redeems = []
 
     let address = $router.params.address
+
+    let active = 'mint'
 
     $:$activeNetwork && getAccountData()
 
@@ -32,10 +34,6 @@
         // loading = false
     }
 
-    function getActionName(id) {
-        // console.log(111, id)
-        return id.split('-')[0] === 'DepositWithReceipt' ? 'Mint' : 'Redeem'
-    }
 
 </script>
 
@@ -49,33 +47,24 @@
       <div class="card-header justify-start">
         <div class=""><b>Address</b> {address}</div>
       </div>
-      <div class="address-overview-table">
-        <table class="sft-table">
-          <thead>
-          <tr>
-            <th>Action</th>
-            <th>Vault</th>
-            <th>Amount</th>
-            <th>Receipt ID</th>
-            <th>Revision ID</th>
-            <th>Date</th>
-          </tr>
-          </thead>
-          <tbody>
-          {#if mint_redeems.length}
-            {#each mint_redeems as mr, i}
-              <tr>
-                <td>{getActionName(mr.id)}</td>
-                <td>{mr.offchainAssetReceiptVault.name}</td>
-                <td>{ethers.utils.formatUnits(mr.amount, 18)}</td>
-                <td class="brown underline cursor-pointer">{mr.receipt.receiptId}</td>
-                <td></td>
-                <td>{toIsoDate(mr.timestamp)}</td>
-              </tr>
-            {/each}
-          {/if}
-          </tbody>
-        </table>
+
+
+      <div class="address-overview-table-container">
+        <div class="buttons">
+          <div class="left">
+            <button class="default-btn {active === 'mint'? 'active': ''}" on:click={()=>{active = 'mint'}}>Mint/ Redeems</button>
+            <button class="default-btn {active === 'certifications'? 'active': ''}" on:click={()=>{active = 'certifications'}}>Certifications</button>
+            <button class="default-btn {active === 'sfts'? 'active': ''}" on:click={()=>{active = 'sfts'}}>SFTs</button>
+            <button class="default-btn {active === 'erc20'? 'active': ''}" on:click={()=>{active = 'erc20'}}>ERC20 confiscations</button>
+            <button class="default-btn {active === 'erc1155'? 'active': ''}" on:click={()=>{active = 'erc1155'}}>ECRC1155 confiscations</button>
+          </div>
+          <div class="right">
+            <button class="default-btn">Download pins</button>
+          </div>
+        </div>
+        {#if (active === 'mint')}
+          <MintRedeemView mintRedeemData={mint_redeems}></MintRedeemView>
+        {/if}
       </div>
     </div>
 
@@ -110,9 +99,30 @@
         color: #575757;
     }
 
-    .address-overview-table {
+    .address-overview-table-container {
         box-sizing: border-box;
         border-radius: 10px;
-        padding: 24px 45px 50px 60px;
+        padding: 15px 45px 50px 60px;
+        display: flex;
+        flex-direction: column;
+        gap: 35px;
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .left {
+        margin-left: 3rem;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .default-btn.active{
+        background: #CAE6FF;
     }
 </style>

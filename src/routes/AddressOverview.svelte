@@ -13,7 +13,7 @@
 
     let address = $router.params.address
 
-    let active = 'mint'
+    let active = localStorage.getItem('activeView') || 'mint'
 
     $:$activeNetwork && getAccountData()
 
@@ -43,6 +43,11 @@
         // loading = false
     }
 
+    function setActive(page) {
+        active = page
+        localStorage.setItem('activeView', page)
+    }
+
 
 </script>
 
@@ -61,17 +66,17 @@
       <div class="address-overview-table-container">
         <div class="buttons">
           <div class="left">
-            <button class="default-btn {active === 'mint'? 'active': ''}" on:click={()=>{active = 'mint'}}>Mint/
+            <button class="default-btn {active === 'mint'? 'active': ''}" on:click={()=>setActive('mint')}>Mint/
               Redeems
             </button>
             <button class="default-btn {active === 'certifications'? 'active': ''}"
-                    on:click={()=>{active = 'certifications'}}>Certifications
+                    on:click={()=>setActive('certifications')}>Certifications
             </button>
-            <button class="default-btn {active === 'sfts'? 'active': ''}" on:click={()=>{active = 'sfts'}}>SFTs</button>
-            <button class="default-btn {active === 'erc20'? 'active': ''}" on:click={()=>{active = 'erc20'}}>ERC20
+            <button class="default-btn {active === 'sfts'? 'active': ''}" on:click={()=>setActive('sfts')}>SFTs</button>
+            <button class="default-btn {active === 'erc20'? 'active': ''}" on:click={()=>setActive('erc20')}>ERC20
               confiscations
             </button>
-            <button class="default-btn {active === 'erc1155'? 'active': ''}" on:click={()=>{active = 'erc1155'}}>
+            <button class="default-btn {active === 'erc1155'? 'active': ''}" on:click={()=>setActive('erc1155')}>
               ECRC1155 confiscations
             </button>
           </div>

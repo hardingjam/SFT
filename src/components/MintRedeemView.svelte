@@ -14,7 +14,7 @@
 <table class="sft-table">
   <thead>
   <tr>
-    <th></th>
+    <th class="w-1/12"></th>
     <th>Action</th>
     <th>Vault</th>
     <th>Amount</th>
@@ -27,7 +27,7 @@
   {#if mintRedeemData.length}
     {#each mintRedeemData as mr, i}
       <tr>
-        <td>
+        <td class="w-1/12">
           <a href={`${$activeNetwork?.blockExplorer}/tx/${mr.transaction.id}`} target="_blank">
             <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
           </a>

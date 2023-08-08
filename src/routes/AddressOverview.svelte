@@ -3,20 +3,26 @@
     import SftLoader from '../components/SftLoader.svelte';
     import {router} from 'yrv';
     import {getSubgraphData} from '../scripts/helpers.js';
-    import {ADDRESS_OVERVIEW_QUERY} from '../scripts/queries.js';
+    import {ADDRESS_OVERVIEW_QUERY, VAULTS_BY_DEPLOYER_QUERY} from '../scripts/queries.js';
     import MintRedeemView from '../components/MintRedeemView.svelte';
     import CertificationsView from '../components/CertificationsView.svelte';
+    import AccountSftsView from '../components/AccountSftsView.svelte';
 
     let loading = false;
     let mint_redeems = []
     let certifications = []
+    let sfts = []
 
     let address = $router.params.address
 
     let active = localStorage.getItem('activeView') || 'mint'
 
-    $:$activeNetwork && getAccountData()
+    $:$activeNetwork && getData()
 
+    async function getData(){
+        await getAccountData()
+        await getAccountSFTs()
+    }
     async function getAccountData() {
         // loading = true
         let resp = await getSubgraphData($activeNetwork, {address}, ADDRESS_OVERVIEW_QUERY, 'offchainAssetReceiptVaults')
@@ -41,6 +47,14 @@
 
         }
         // loading = false
+    }
+    async function getAccountSFTs() {
+        let resp = await getSubgraphData($activeNetwork, {address}, VAULTS_BY_DEPLOYER_QUERY, 'offchainAssetReceiptVaults')
+        if (resp && resp.data && resp.data.offchainAssetReceiptVaults) {
+            //set Sfts
+            //filter data if there is no certifications
+            sfts = resp.data.offchainAssetReceiptVaults
+        }
     }
 
     function setActive(page) {
@@ -89,6 +103,9 @@
         {/if}
         {#if (active === 'certifications')}
           <CertificationsView certificationsData={certifications}/>
+        {/if}
+        {#if (active === 'sfts')}
+          <AccountSftsView sftsData={sfts}/>
         {/if}
       </div>
     </div>

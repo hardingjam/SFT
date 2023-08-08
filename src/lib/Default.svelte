@@ -341,8 +341,7 @@
           <Route path="#asset-register" component={AssetRegister}/>
           <Route path="#asset-history/:id" component={AssetHistory}/>
           <Route path="#audit-history" component={AuditHistory}/>
-          <Route path="#token-overview" component={TokenOverview}/>
-          <Route path="#token-overview" component={TokenOverview}/>
+          <Route path="#token-overview/:address" component={TokenOverview}/>
           <Route path="#change-comparison" component={ChangeComparison}/>
           <Route path="#address-overview/:address" component={AddressOverview}/>
         </div>

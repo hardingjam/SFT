@@ -345,3 +345,20 @@ export const ADDRESS_OVERVIEW_QUERY = `
                 }
               }
              `;
+
+export const VAULTS_BY_DEPLOYER_QUERY = `
+        query($address: String!) {
+            offchainAssetReceiptVaults(
+              orderDirection: desc
+              orderBy: deployTimestamp
+              first: 200
+              where: {deployer: $address}
+            ) 
+            {
+              id
+              name
+              totalShares
+              address
+            }
+        }
+       `

@@ -10,7 +10,7 @@
 <table class="sft-table">
   <thead>
   <tr>
-    <th></th>
+    <th class="w-1/12"></th>
     <th>Total amount</th>
     <th>Certified on</th>
     <th>Certified by</th>
@@ -20,7 +20,7 @@
   {#if certificationsData.length}
     {#each certificationsData as cert}
       <tr>
-        <td>
+        <td class="w-1/12">
           <a href={`${$activeNetwork?.blockExplorer}/tx/${cert.transaction.id}`} target="_blank">
             <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
           </a>

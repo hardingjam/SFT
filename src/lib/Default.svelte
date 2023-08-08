@@ -83,21 +83,28 @@
         //reset pageTitle
         pageTitle.set("")
 
+
         if (!e.initial) {
-            await setVault()
-            location = e.path
+            let contract = await setVault()
             selectedTab = location || '#mint'
-            if (location === "#list" && $tokens.length) {
-                navigateTo("#list", {replace: false})
-            }
-            if (location === "#setup") {
-                navigateTo("#setup", {replace: false})
-            }
-            if (location === "#ipfs") {
-                navigateTo("#ipfs", {replace: false})
-            }
-            if (location === "#manual") {
-                navigateTo("#manual", {replace: false})
+            if (!contract) {
+                location = e.path
+                if (location === "#list" && $tokens.length) {
+                    navigateTo("#list", {replace: false})
+                } else if (location === "#setup") {
+                    navigateTo("#setup", {replace: false})
+                } else if (location === "#ipfs") {
+                    navigateTo("#ipfs", {replace: false})
+                } else if (location === "#manual") {
+                    navigateTo("#manual", {replace: false})
+                } else if (location === `#address-overview/${e.params.address}`) {
+                    console.log(3)
+                    navigateTo(`#address-overview/${e.params.address}`, {replace: false})
+                } else {
+                    vault.set({})
+                    location = "#"
+                    navigateTo("#", {replace: false})
+                }
             }
         }
     });
@@ -107,12 +114,8 @@
         let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider);
         if (contract) {
             vault.set(contract);
-
-        } else {
-            vault.set({})
-            location = "#"
-            navigateTo("#", {replace: false})
         }
+        return contract
     }
 
     onMount(async () => {

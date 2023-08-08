@@ -111,14 +111,14 @@
   <td class="sft-info">
     {#each auditors as auditor}
       <div class="underline brown cursor-pointer">
-        <span on:click={()=>{navigate(`#address-overview/${auditor}`)}}> {formatAddress(auditor)}</span>
+        <span on:click={()=>{navigate(`#address-overview/${auditor}`, {clear : true})}}> {formatAddress(auditor)}</span>
       </div>
     {/each}
   </td>
   <td class="sft-info">
     {#each issuers as issuer}
       <div class="underline brown cursor-pointer">
-        <span on:click={()=>{navigate(`#address-overview/${issuer}`)}}>{formatAddress(issuer)}</span>
+        <span on:click={()=>{navigate(`#address-overview/${issuer}`, {clear : true})}}>{formatAddress(issuer)}</span>
       </div>
     {/each}
   </td>

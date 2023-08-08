@@ -9,7 +9,7 @@
     } from "../scripts/store";
     import {
         getSubgraphData,
-        hasRole,
+        hasRole, navigate,
         showPromptSFTCreate,
         timeStampToDate
     } from "../scripts/helpers.js";
@@ -163,7 +163,7 @@
             <tr class="tb-row">
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
-              <td>{formatAddress(cert?.certifier.address)}</td>
+              <td><span class="underline brown" on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span></td>
               <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
                 {timeStampToDate(cert?.certifiedUntil)}
               </td>

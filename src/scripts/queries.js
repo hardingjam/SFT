@@ -363,6 +363,32 @@ export const ADDRESS_OVERVIEW_QUERY = `
                     offchainAssetReceiptVault{
                       name
                     }
+                  } 
+                  receiptConfiscations(
+                    where: {confiscator_: {address: $address}}
+                    orderBy: timestamp
+                    orderDirection: desc
+                    ) 
+                    {
+                    confiscated
+                    confiscatee {
+                      address
+                    }
+                    confiscator {
+                      address
+                    }
+                    id
+                    timestamp
+                    transaction {
+                      id
+                    }
+                    offchainAssetReceiptVault{
+                      name
+                    }
+                    receipt{
+                      receiptId
+                      id
+                    }
                   }
                 }
               }

@@ -8,11 +8,13 @@
     import CertificationsView from '../components/CertificationsView.svelte';
     import AccountSftsView from '../components/AccountSftsView.svelte';
     import Erc20ConfiscationsView from '../components/Erc20ConfiscationsView.svelte';
+    import Erc1155ConfiscationsView from '../components/Erc1155ConfiscationsView.svelte';
 
     let loading = false;
     let mint_redeems = []
     let certifications = []
     let shareConfiscations = []
+    let receiptConfiscations = []
     let sfts = []
 
     let address = $router.params.address
@@ -58,6 +60,12 @@
             shareConfiscations = resp.data.offchainAssetReceiptVaults.filter(sc => sc.shareConfiscations.length)
             shareConfiscations = shareConfiscations.map(c => c.shareConfiscations)
             shareConfiscations = shareConfiscations.flat()
+
+            //set ReceiptConfiscations
+            //filter data if there is no ReceiptConfiscations
+            receiptConfiscations = resp.data.offchainAssetReceiptVaults.filter(rc => rc.receiptConfiscations.length)
+            receiptConfiscations = receiptConfiscations.map(c => c.receiptConfiscations)
+            receiptConfiscations = receiptConfiscations.flat()
 
         }
         // loading = false
@@ -123,6 +131,9 @@
         {/if}
         {#if (active === 'erc20')}
           <Erc20ConfiscationsView confiscations={shareConfiscations}/>
+        {/if}
+        {#if (active === 'erc1155')}
+          <Erc1155ConfiscationsView confiscations={receiptConfiscations}/>
         {/if}
       </div>
     </div>

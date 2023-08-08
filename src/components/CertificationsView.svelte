@@ -31,5 +31,10 @@
       </tr>
     {/each}
   {/if}
+  {#if !certificationsData.length}
+    <tr>
+      <td colspan="4">No data available</td>
+    </tr>
+  {/if}
   </tbody>
 </table>

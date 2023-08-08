@@ -13,6 +13,7 @@
     <th class="w-1/12"></th>
     <th>SFT</th>
     <th>Amount</th>
+    <th>Receipt ID</th>
     <th>Confiscated from</th>
     <th>Date</th>
   </tr>
@@ -27,6 +28,7 @@
           </a>
         </td>
         <td>{ethers.utils.formatUnits(confiscation.confiscated, 18)}</td>
+        <td>{confiscation.receipt.receiptId}</td>
         <td>{confiscation.offchainAssetReceiptVault.name}</td>
         <td>{formatAddress(confiscation.confiscatee.address)}</td>
         <td>{toIsoDate(confiscation.timestamp)}</td>
@@ -35,7 +37,7 @@
   {/if}
   {#if !confiscations.length}
     <tr>
-      <td colspan="5">No data available</td>
+      <td colspan="6">No data available</td>
     </tr>
   {/if}
   </tbody>

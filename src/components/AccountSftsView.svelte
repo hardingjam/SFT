@@ -31,5 +31,10 @@
       </tr>
     {/each}
   {/if}
+  {#if !sftsData.length}
+    <tr>
+      <td colspan="3">No data available</td>
+    </tr>
+  {/if}
   </tbody>
 </table>

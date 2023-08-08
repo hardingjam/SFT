@@ -41,6 +41,11 @@
       </tr>
     {/each}
   {/if}
+  {#if !mintRedeemData.length}
+    <tr>
+      <td colspan="7">No data available</td>
+    </tr>
+  {/if}
   </tbody>
 </table>
 

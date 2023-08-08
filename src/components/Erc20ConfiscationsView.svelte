@@ -28,7 +28,7 @@
         </td>
         <td>{ethers.utils.formatUnits(confiscation.confiscated, 18)}</td>
         <td>{confiscation.offchainAssetReceiptVault.name}</td>
-        <td>{formatAddress(confiscation.confiscator.address)}</td>
+        <td>{formatAddress(confiscation.confiscatee.address)}</td>
         <td>{toIsoDate(confiscation.timestamp)}</td>
       </tr>
     {/each}

@@ -1,5 +1,5 @@
 <script>
-    import {activeNetwork, sftInfo} from '../scripts/store.js';
+    import {account, activeNetwork, sftInfo, vault, ethersData} from '../scripts/store.js';
     import SftLoader from '../components/SftLoader.svelte';
     import {router} from 'yrv';
     import {getSubgraphData} from '../scripts/helpers.js';
@@ -7,10 +7,12 @@
     import MintRedeemView from '../components/MintRedeemView.svelte';
     import CertificationsView from '../components/CertificationsView.svelte';
     import AccountSftsView from '../components/AccountSftsView.svelte';
+    import Erc20ConfiscationsView from '../components/Erc20ConfiscationsView.svelte';
 
     let loading = false;
     let mint_redeems = []
     let certifications = []
+    let shareConfiscations = []
     let sfts = []
 
     let address = $router.params.address
@@ -19,7 +21,13 @@
 
     $:$activeNetwork && getData()
 
+    // let {signer} = $ethersData;
+
     async function getData(){
+        // const tx = await $vault.connect(signer)["confiscateShares(address,bytes)"](
+        //     address,
+        //     []
+        // );
         await getAccountData()
         await getAccountSFTs()
     }
@@ -44,6 +52,12 @@
             certifications = resp.data.offchainAssetReceiptVaults.filter(cert => cert.certifications.length)
             certifications = certifications.map(c => c.certifications)
             certifications = certifications.flat()
+
+            //set ShareConfiscations
+            //filter data if there is no ShareConfiscations
+            shareConfiscations = resp.data.offchainAssetReceiptVaults.filter(sc => sc.shareConfiscations.length)
+            shareConfiscations = shareConfiscations.map(c => c.shareConfiscations)
+            shareConfiscations = shareConfiscations.flat()
 
         }
         // loading = false
@@ -106,6 +120,9 @@
         {/if}
         {#if (active === 'sfts')}
           <AccountSftsView sftsData={sfts}/>
+        {/if}
+        {#if (active === 'erc20')}
+          <Erc20ConfiscationsView confiscations={shareConfiscations}/>
         {/if}
       </div>
     </div>

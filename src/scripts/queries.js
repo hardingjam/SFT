@@ -341,7 +341,29 @@ export const ADDRESS_OVERVIEW_QUERY = `
                         id
                       }
                       timestamp
+                  }
+                  shareConfiscations(
+                    where: {confiscator_: {address: $address}}
+                    orderBy: timestamp
+                    orderDirection: desc
+                    ) 
+                    {
+                    confiscated
+                    confiscatee {
+                      address
                     }
+                    confiscator {
+                      address
+                    }
+                    id
+                    timestamp
+                    transaction {
+                      id
+                    }
+                    offchainAssetReceiptVault{
+                      name
+                    }
+                  }
                 }
               }
              `;

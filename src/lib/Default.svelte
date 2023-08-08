@@ -86,6 +86,7 @@
 
         if (!e.initial) {
             let contract = await setVault()
+            location = e.path
             selectedTab = location || '#mint'
             if (!contract) {
                 location = e.path
@@ -122,6 +123,7 @@
         await getEthersData();
 
         if (isMetamaskInstalled) {
+
             if (location === "/" || location === "") {
                 navigateTo("#");
             }
@@ -364,7 +366,6 @@
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
           <Route path="#new-revision/:id" component={NewRevision}/>
-
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
               <button class:selected="{selectedTab === '#mint'}" class="tab-button"

@@ -134,6 +134,10 @@ export const RECEIPT_INFORMATIONS_QUERY = `
           query($id: ID!) {
             receipt(id: $id) {
               id,
+              offchainAssetReceiptVault {
+                name
+                address
+              }
               receiptId,
               receiptInformations(orderDirection: desc, orderBy: timestamp){
                 information
@@ -295,6 +299,7 @@ export const ADDRESS_OVERVIEW_QUERY = `
                       receiptId
                       receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
                         information
+                        id
                       }
                     }
                   }
@@ -323,6 +328,7 @@ export const ADDRESS_OVERVIEW_QUERY = `
                       receiptId
                       receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
                         information
+                        id
                       }
                     }
                   }

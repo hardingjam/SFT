@@ -1,6 +1,6 @@
 <script>
     import {ethers} from 'ethers';
-    import {toIsoDate} from '../scripts/helpers.js';
+    import {navigate, toIsoDate} from '../scripts/helpers.js';
     import {icons} from '../scripts/assets.js';
     import {activeNetwork} from '../scripts/store.js';
     import Pagination from './Pagination.svelte';
@@ -45,7 +45,11 @@
         <td>{getActionName(mr.id)}</td>
         <td>{mr.offchainAssetReceiptVault.name}</td>
         <td>{ethers.utils.formatUnits(mr.amount, 18)}</td>
-        <td class="brown underline cursor-pointer">{mr.receipt.receiptId}</td>
+        <td>
+          <span class="brown underline cursor-pointer" on:click={()=>{ console.log(mr.receipt);navigate(`#asset-information/${mr.receipt.receiptId}/${mr.receipt.receiptInformations[0].id}`)}}>
+            {mr.receipt.receiptId}
+          </span>
+        </td>
         <td></td>
         <td>{toIsoDate(mr.timestamp)}</td>
       </tr>

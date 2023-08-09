@@ -3,15 +3,25 @@
     import {toIsoDate} from '../scripts/helpers.js';
     import {icons} from '../scripts/assets.js';
     import {activeNetwork} from '../scripts/store.js';
+    import Pagination from './Pagination.svelte';
 
     export let mintRedeemData = []
+    export let perPage = 10
+    let currentPage = 1;
+    let filteredData = []
+
+    $: mintRedeemData && handlePageChange()
 
     function getActionName(id) {
-        // console.log(111, id)
         return id.split('-')[0] === 'DepositWithReceipt' ? 'Mint' : 'Redeem'
     }
+    async function handlePageChange(event) {
+        currentPage = event?.detail.currentPage || 1
+        let skip = (perPage * (currentPage - 1)) - 1
+        filteredData = mintRedeemData.filter((r, index) => index > skip && index < perPage * currentPage)
+    }
 </script>
-<table class="sft-table">
+<table class="sft-table relative">
   <thead>
   <tr>
     <th class="w-1/12"></th>
@@ -25,7 +35,7 @@
   </thead>
   <tbody>
   {#if mintRedeemData.length}
-    {#each mintRedeemData as mr, i}
+    {#each filteredData as mr, i}
       <tr>
         <td class="w-1/12">
           <a href={`${$activeNetwork?.blockExplorer}/tx/${mr.transaction.id}`} target="_blank">
@@ -47,5 +57,9 @@
     </tr>
   {/if}
   </tbody>
-</table>
+  {#if mintRedeemData.length}
 
+  <Pagination dataLength={mintRedeemData.length} {perPage} on:pageChange={handlePageChange}/>
+  {/if}
+
+</table>

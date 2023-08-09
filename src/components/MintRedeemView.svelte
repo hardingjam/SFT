@@ -4,9 +4,11 @@
     import {icons} from '../scripts/assets.js';
     import {activeNetwork} from '../scripts/store.js';
     import Pagination from './Pagination.svelte';
+    import SftLoader from './SftLoader.svelte';
 
     export let mintRedeemData = []
     export let perPage = 10
+    export let loading = false
     let currentPage = 1;
     let filteredData = []
 
@@ -15,6 +17,7 @@
     function getActionName(id) {
         return id.split('-')[0] === 'DepositWithReceipt' ? 'Mint' : 'Redeem'
     }
+
     async function handlePageChange(event) {
         currentPage = event?.detail.currentPage || 1
         let skip = (perPage * (currentPage - 1)) - 1
@@ -46,7 +49,8 @@
         <td>{mr.offchainAssetReceiptVault.name}</td>
         <td>{ethers.utils.formatUnits(mr.amount, 18)}</td>
         <td>
-          <span class="brown underline cursor-pointer" on:click={()=>{ console.log(mr.receipt);navigate(`#asset-information/${mr.receipt.receiptId}/${mr.receipt.receiptInformations[0].id}`)}}>
+          <span class="brown underline cursor-pointer"
+                on:click={()=>{ console.log(mr.receipt);navigate(`#asset-information/${mr.receipt.receiptId}/${mr.receipt.receiptInformations[0].id}`)}}>
             {mr.receipt.receiptId}
           </span>
         </td>
@@ -57,13 +61,20 @@
   {/if}
   {#if !mintRedeemData.length}
     <tr>
-      <td colspan="7">No data available</td>
+      <td colspan="7">
+        {#if (!loading)}
+          No data available
+        {/if}
+        {#if (loading)}
+          <SftLoader width="50"></SftLoader>
+        {/if}
+      </td>
     </tr>
   {/if}
   </tbody>
   {#if mintRedeemData.length}
 
-  <Pagination dataLength={mintRedeemData.length} {perPage} on:pageChange={handlePageChange}/>
+    <Pagination dataLength={mintRedeemData.length} {perPage} on:pageChange={handlePageChange}/>
   {/if}
 
 </table>

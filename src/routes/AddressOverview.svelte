@@ -1,6 +1,5 @@
 <script>
-    import {account, activeNetwork, sftInfo, vault, ethersData} from '../scripts/store.js';
-    import SftLoader from '../components/SftLoader.svelte';
+    import { activeNetwork, sftInfo} from '../scripts/store.js';
     import {router} from 'yrv';
     import {getSubgraphData} from '../scripts/helpers.js';
     import {ADDRESS_OVERVIEW_QUERY, VAULTS_BY_DEPLOYER_QUERY} from '../scripts/queries.js';
@@ -24,12 +23,12 @@
 
     $:$activeNetwork && getData()
 
-    async function getData(){
+    async function getData() {
         await getAccountData()
         await getAccountSFTs()
     }
     async function getAccountData() {
-        // loading = true
+        loading = true
         let resp = await getSubgraphData($activeNetwork, {address}, ADDRESS_OVERVIEW_QUERY, 'offchainAssetReceiptVaults')
         if (resp && resp.data && resp.data.offchainAssetReceiptVaults) {
             //set mint/redeems
@@ -63,7 +62,7 @@
             receiptConfiscations = receiptConfiscations.flat()
 
         }
-        // loading = false
+        loading = false
     }
     async function getAccountSFTs() {
         let resp = await getSubgraphData($activeNetwork, {address}, VAULTS_BY_DEPLOYER_QUERY, 'offchainAssetReceiptVaults')
@@ -83,61 +82,53 @@
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} address-overview">
-  {#if loading}
-    <SftLoader/>
-  {/if}
-  {#if !loading }
-
-    <div class="address-overview-container">
-      <div class="card-header justify-between">
-        <div class=""><b>Address</b> {address}</div>
-        <a href={`${$activeNetwork?.blockExplorer}/address/${address}`} target="_blank">
-          <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
-        </a>
-      </div>
-
-
-      <div class="address-overview-table-container">
-        <div class="buttons">
-          <div class="left">
-            <button class="default-btn {active === 'mint'? 'active': ''}" on:click={()=>setActive('mint')}>Mint/
-              Redeems
-            </button>
-            <button class="default-btn {active === 'certifications'? 'active': ''}"
-                    on:click={()=>setActive('certifications')}>Certifications
-            </button>
-            <button class="default-btn {active === 'sfts'? 'active': ''}" on:click={()=>setActive('sfts')}>SFTs</button>
-            <button class="default-btn {active === 'erc20'? 'active': ''}" on:click={()=>setActive('erc20')}>ERC20
-              confiscations
-            </button>
-            <button class="default-btn {active === 'erc1155'? 'active': ''}" on:click={()=>setActive('erc1155')}>
-              ECRC1155 confiscations
-            </button>
-          </div>
-          <div class="right">
-            <button class="default-btn">Download pins</button>
-          </div>
-        </div>
-        {#if (active === 'mint')}
-          <MintRedeemView mintRedeemData={mint_redeems}/>
-        {/if}
-        {#if (active === 'certifications')}
-          <CertificationsView certificationsData={certifications}/>
-        {/if}
-        {#if (active === 'sfts')}
-          <AccountSftsView sftsData={sfts}/>
-        {/if}
-        {#if (active === 'erc20')}
-          <Erc20ConfiscationsView confiscations={shareConfiscations}/>
-        {/if}
-        {#if (active === 'erc1155')}
-          <Erc1155ConfiscationsView confiscations={receiptConfiscations}/>
-        {/if}
-      </div>
+  <div class="address-overview-container">
+    <div class="card-header justify-between">
+      <div class=""><b>Address</b> {address}</div>
+      <a href={`${$activeNetwork?.blockExplorer}/address/${address}`} target="_blank">
+        <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
+      </a>
     </div>
 
 
-  {/if}
+    <div class="address-overview-table-container">
+      <div class="buttons">
+        <div class="left">
+          <button class="default-btn {active === 'mint'? 'active': ''}" on:click={()=>setActive('mint')}>Mint/
+            Redeems
+          </button>
+          <button class="default-btn {active === 'certifications'? 'active': ''}"
+                  on:click={()=>setActive('certifications')}>Certifications
+          </button>
+          <button class="default-btn {active === 'sfts'? 'active': ''}" on:click={()=>setActive('sfts')}>SFTs</button>
+          <button class="default-btn {active === 'erc20'? 'active': ''}" on:click={()=>setActive('erc20')}>ERC20
+            confiscations
+          </button>
+          <button class="default-btn {active === 'erc1155'? 'active': ''}" on:click={()=>setActive('erc1155')}>
+            ECRC1155 confiscations
+          </button>
+        </div>
+        <div class="right">
+          <button class="default-btn">Download pins</button>
+        </div>
+      </div>
+      {#if (active === 'mint')}
+        <MintRedeemView mintRedeemData={mint_redeems} {loading}/>
+      {/if}
+      {#if (active === 'certifications')}
+        <CertificationsView certificationsData={certifications}/>
+      {/if}
+      {#if (active === 'sfts')}
+        <AccountSftsView sftsData={sfts}/>
+      {/if}
+      {#if (active === 'erc20')}
+        <Erc20ConfiscationsView confiscations={shareConfiscations}/>
+      {/if}
+      {#if (active === 'erc1155')}
+        <Erc1155ConfiscationsView confiscations={receiptConfiscations}/>
+      {/if}
+    </div>
+  </div>
 </div>
 <style>
     .left-margin {

@@ -9,6 +9,7 @@
     import AccountSftsView from '../components/AccountSftsView.svelte';
     import Erc20ConfiscationsView from '../components/Erc20ConfiscationsView.svelte';
     import Erc1155ConfiscationsView from '../components/Erc1155ConfiscationsView.svelte';
+    import {icons} from '../scripts/assets.js';
 
     let loading = false;
     let mint_redeems = []
@@ -23,13 +24,7 @@
 
     $:$activeNetwork && getData()
 
-    // let {signer} = $ethersData;
-
     async function getData(){
-        // const tx = await $vault.connect(signer)["confiscateShares(address,bytes)"](
-        //     address,
-        //     []
-        // );
         await getAccountData()
         await getAccountSFTs()
     }
@@ -94,8 +89,11 @@
   {#if !loading }
 
     <div class="address-overview-container">
-      <div class="card-header justify-start">
+      <div class="card-header justify-between">
         <div class=""><b>Address</b> {address}</div>
+        <a href={`${$activeNetwork?.blockExplorer}/address/${address}`} target="_blank">
+          <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
+        </a>
       </div>
 
 
@@ -165,7 +163,7 @@
 
     .card-header {
         gap: 13px;
-        padding: 13px 24px;
+        padding: 13px 45px 13px 24px;
         color: #575757;
     }
 

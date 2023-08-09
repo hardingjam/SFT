@@ -109,23 +109,23 @@
           </button>
         </div>
         <div class="right">
-          <button class="default-btn">Download pins</button>
+          <button class="default-btn" disabled>Download pins</button>
         </div>
       </div>
       {#if (active === 'mint')}
         <MintRedeemView mintRedeemData={mint_redeems} {loading}/>
       {/if}
       {#if (active === 'certifications')}
-        <CertificationsView certificationsData={certifications}/>
+        <CertificationsView certificationsData={certifications} {loading}/>
       {/if}
       {#if (active === 'sfts')}
-        <AccountSftsView sftsData={sfts}/>
+        <AccountSftsView sftsData={sfts} {loading}/>
       {/if}
       {#if (active === 'erc20')}
-        <Erc20ConfiscationsView confiscations={shareConfiscations}/>
+        <Erc20ConfiscationsView confiscations={shareConfiscations} {loading}/>
       {/if}
       {#if (active === 'erc1155')}
-        <Erc1155ConfiscationsView confiscations={receiptConfiscations}/>
+        <Erc1155ConfiscationsView confiscations={receiptConfiscations} {loading}/>
       {/if}
     </div>
   </div>

@@ -3,7 +3,8 @@
     import {toIsoDate, formatAddress} from '../scripts/helpers.js';
     import {icons} from '../scripts/assets.js';
     import {activeNetwork} from '../scripts/store.js';
-
+    import SftLoader from './SftLoader.svelte';
+    export let loading = false
     export let certificationsData = []
 
 </script>
@@ -33,7 +34,14 @@
   {/if}
   {#if !certificationsData.length}
     <tr>
-      <td colspan="4">No data available</td>
+      <td colspan="4">
+        {#if (!loading)}
+          No data available
+        {/if}
+        {#if (loading)}
+          <SftLoader width="50"></SftLoader>
+        {/if}
+      </td>
     </tr>
   {/if}
   </tbody>

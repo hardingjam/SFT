@@ -4,8 +4,10 @@
     import {activeNetwork} from '../scripts/store.js';
     import {router} from 'yrv';
     import {navigate} from '../scripts/helpers.js';
+    import SftLoader from './SftLoader.svelte';
 
     export let sftsData = []
+    export let loading = false
     let address = $router.params.address
 
 </script>
@@ -33,7 +35,14 @@
   {/if}
   {#if !sftsData.length}
     <tr>
-      <td colspan="3">No data available</td>
+      <td colspan="3">
+        {#if (!loading)}
+          No data available
+        {/if}
+        {#if (loading)}
+          <SftLoader width="50"></SftLoader>
+        {/if}
+      </td>
     </tr>
   {/if}
   </tbody>

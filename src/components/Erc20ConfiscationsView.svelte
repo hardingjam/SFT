@@ -3,8 +3,10 @@
     import {toIsoDate, formatAddress} from '../scripts/helpers.js';
     import {icons} from '../scripts/assets.js';
     import {activeNetwork} from '../scripts/store.js';
+    import SftLoader from './SftLoader.svelte';
 
     export let confiscations = []
+    export let loading = false
 
 </script>
 <table class="sft-table">
@@ -35,7 +37,14 @@
   {/if}
   {#if !confiscations.length}
     <tr>
-      <td colspan="5">No data available</td>
+      <td colspan="5">
+        {#if (!loading)}
+          No data available
+        {/if}
+        {#if (loading)}
+          <SftLoader width="50"></SftLoader>
+        {/if}
+      </td>
     </tr>
   {/if}
   </tbody>

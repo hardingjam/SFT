@@ -5,13 +5,25 @@
     import {router} from 'yrv';
     import {navigate} from '../scripts/helpers.js';
     import SftLoader from './SftLoader.svelte';
+    import Pagination from './Pagination.svelte';
 
     export let sftsData = []
     export let loading = false
     let address = $router.params.address
 
+    export let perPage = 10
+    let currentPage = 1;
+    let filteredData = []
+
+    $: sftsData && handlePageChange()
+    async function handlePageChange(event) {
+        currentPage = event?.detail.currentPage || 1
+        let skip = (perPage * (currentPage - 1)) - 1
+        filteredData = sftsData.filter((r, index) => index > skip && index < perPage * currentPage)
+    }
+
 </script>
-<table class="sft-table">
+<table class="sft-table relative">
   <thead>
   <tr>
     <th class="w-1/12"></th>
@@ -21,7 +33,7 @@
   </thead>
   <tbody>
   {#if sftsData.length}
-    {#each sftsData as sft}
+    {#each filteredData as sft}
       <tr>
         <td class="w-1/12">
           <a href={`${$activeNetwork?.blockExplorer}/address/${sft.address}`} target="_blank">
@@ -46,4 +58,7 @@
     </tr>
   {/if}
   </tbody>
+  {#if sftsData.length}
+    <Pagination dataLength={sftsData.length} {perPage} on:pageChange={handlePageChange}/>
+  {/if}
 </table>

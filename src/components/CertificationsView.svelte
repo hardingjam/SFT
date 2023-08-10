@@ -4,11 +4,21 @@
     import {icons} from '../scripts/assets.js';
     import {activeNetwork} from '../scripts/store.js';
     import SftLoader from './SftLoader.svelte';
+    import Pagination from './Pagination.svelte';
     export let loading = false
     export let certificationsData = []
+    export let perPage = 10
+    let currentPage = 1;
+    let filteredData = []
 
+    $: certificationsData && handlePageChange()
+    async function handlePageChange(event) {
+        currentPage = event?.detail.currentPage || 1
+        let skip = (perPage * (currentPage - 1)) - 1
+        filteredData = certificationsData.filter((r, index) => index > skip && index < perPage * currentPage)
+    }
 </script>
-<table class="sft-table">
+<table class="sft-table relative">
   <thead>
   <tr>
     <th class="w-1/12"></th>
@@ -19,7 +29,7 @@
   </thead>
   <tbody>
   {#if certificationsData.length}
-    {#each certificationsData as cert}
+    {#each filteredData as cert}
       <tr>
         <td class="w-1/12">
           <a href={`${$activeNetwork?.blockExplorer}/tx/${cert.transaction.id}`} target="_blank">
@@ -45,4 +55,7 @@
     </tr>
   {/if}
   </tbody>
+  {#if certificationsData.length}
+    <Pagination dataLength={certificationsData.length} {perPage} on:pageChange={handlePageChange}/>
+  {/if}
 </table>

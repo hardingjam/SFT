@@ -179,6 +179,12 @@
         display: flex;
         align-items: center;
         gap: 14px;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .right{
+        white-space: nowrap;
     }
 
     .default-btn.active {

@@ -153,15 +153,14 @@
     }
 
     .card-header {
-        gap: 13px;
-        padding: 13px 40px 13px 40px;
+        padding: 13px 20px 13px 20px;
         color: #575757;
     }
 
     .address-overview-table-container {
         box-sizing: border-box;
         border-radius: 10px;
-        padding: 15px 40px 50px 40px;
+        padding: 15px 20px 50px 20px;
         display: flex;
         flex-direction: column;
         gap: 35px;
@@ -177,7 +176,7 @@
     .left {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 20px;
         flex-wrap: wrap;
         white-space: nowrap;
     }

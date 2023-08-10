@@ -135,7 +135,7 @@
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <div class="flex flex-col pt-10 px-9 sft-info-table">
+      <div class="flex flex-col pt-10 px-5 sft-info-table">
         <span class="font-bold self-center mb-5">Token overview</span>
         <TokenOverviewTable {token}/>
       </div>

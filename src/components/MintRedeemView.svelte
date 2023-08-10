@@ -54,8 +54,8 @@
             {mr.receipt.receiptId}
           </span>
         </td>
-        <td><a class="brown underline" href={`${$activeNetwork?.blockExplorer}/tx/${mr.receipt.receiptInformations[0].transaction.id}`} target="_blank">
-          {formatHash(mr.receipt.receiptInformations[0].transaction.id)}
+        <td><a class="brown underline" href={`${$activeNetwork?.blockExplorer}/tx/${mr.receipt.receiptInformations[0]?.transaction.id}`} target="_blank">
+          {formatHash(mr?.receipt?.receiptInformations[0]?.transaction.id)}
         </a>
         </td>
         <td>{toIsoDate(mr.timestamp)}</td>

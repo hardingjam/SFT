@@ -154,7 +154,7 @@
 
     .card-header {
         gap: 13px;
-        padding: 13px 45px 13px 24px;
+        padding: 13px 40px 13px 40px;
         color: #575757;
     }
 

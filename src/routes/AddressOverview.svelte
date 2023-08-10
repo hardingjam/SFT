@@ -161,7 +161,7 @@
     .address-overview-table-container {
         box-sizing: border-box;
         border-radius: 10px;
-        padding: 15px 45px 50px 60px;
+        padding: 15px 40px 50px 40px;
         display: flex;
         flex-direction: column;
         gap: 35px;

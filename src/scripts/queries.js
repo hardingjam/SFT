@@ -300,6 +300,9 @@ export const ADDRESS_OVERVIEW_QUERY = `
                       receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
                         information
                         id
+                        transaction{
+                         id
+                        }
                       }
                     }
                   }
@@ -329,6 +332,9 @@ export const ADDRESS_OVERVIEW_QUERY = `
                       receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
                         information
                         id
+                        transaction{
+                         id
+                        }
                       }
                     }
                   }

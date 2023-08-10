@@ -169,7 +169,7 @@
 
     .buttons {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
         width: 100%;
     }

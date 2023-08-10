@@ -175,7 +175,6 @@
     }
 
     .left {
-        margin-left: 3rem;
         display: flex;
         align-items: center;
         gap: 14px;

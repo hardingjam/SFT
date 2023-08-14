@@ -94,8 +94,7 @@
     <div class="address-overview-table-container">
       <div class="buttons">
         <div class="left">
-          <button class="default-btn {active === 'mint'? 'active': ''}" on:click={()=>setActive('mint')}>Mint/
-            Redeems
+          <button class="default-btn {active === 'mint'? 'active': ''}" on:click={()=>setActive('mint')}>Revisions
           </button>
           <button class="default-btn {active === 'certifications'? 'active': ''}"
                   on:click={()=>setActive('certifications')}>Certifications

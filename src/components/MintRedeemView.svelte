@@ -14,10 +14,6 @@
 
     $: mintRedeemData && handlePageChange()
 
-    function getActionName(id) {
-        return id.split('-')[0] === 'DepositWithReceipt' ? 'Mint' : 'Redeem'
-    }
-
     async function handlePageChange(event) {
         currentPage = event?.detail.currentPage || 1
         let skip = (perPage * (currentPage - 1)) - 1
@@ -28,7 +24,7 @@
   <thead>
   <tr>
     <th class="w-1/12"></th>
-    <th>Action</th>
+    <th>Revision type</th>
     <th>Vault</th>
     <th>Amount</th>
     <th>Receipt ID</th>
@@ -41,24 +37,25 @@
     {#each filteredData as mr, i}
       <tr>
         <td class="w-1/12">
-          <a href={`${$activeNetwork?.blockExplorer}/tx/${mr.transaction.id}`} target="_blank">
+          <a href={`${$activeNetwork?.blockExplorer}/tx/${mr.transaction}`} target="_blank">
             <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
           </a>
         </td>
-        <td>{getActionName(mr.id)}</td>
-        <td>{mr.offchainAssetReceiptVault.name}</td>
-        <td>{ethers.utils.formatUnits(mr.amount, 18)}</td>
+        <td>{mr.type}</td>
+        <td>{mr.vault}</td>
+        <td>{mr.amount ? ethers.utils.formatUnits(mr.amount, 18) : 0}</td>
         <td>
           <span class="brown underline cursor-pointer"
-                on:click={()=>{ console.log(mr.receipt);navigate(`#asset-information/${mr.receipt.receiptId}/${mr.receipt.receiptInformations[0].id}`)}}>
-            {mr.receipt.receiptId}
+                on:click={()=>{ navigate(`#asset-information/${mr.receiptId}/${mr.revisionId}`)}}>
+            {mr.receiptId}
           </span>
         </td>
-        <td><a class="brown underline" href={`${$activeNetwork?.blockExplorer}/tx/${mr.receipt.receiptInformations[0]?.transaction.id}`} target="_blank">
-          {formatHash(mr?.receipt?.receiptInformations[0]?.transaction.id)}
-        </a>
+        <td>
+          <span on:click={()=>{ navigate(`#asset-information/${mr.receiptId}/${mr.revisionId}`)}}>
+                    {formatHash(mr.revisionId)}
+        </span>
         </td>
-        <td>{toIsoDate(mr.timestamp)}</td>
+        <td>{toIsoDate(mr.date)}</td>
       </tr>
     {/each}
   {/if}

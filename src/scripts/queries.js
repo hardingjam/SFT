@@ -274,71 +274,6 @@ export const DEPOSITS_QUERY = `
 export const ADDRESS_OVERVIEW_QUERY = `
               query($address: String!) {
                 offchainAssetReceiptVaults(orderDirection: desc, orderBy: deployTimestamp, first: 200) {
-                  deposits(
-                    where: {caller_: {address: $address}}
-                    orderBy: timestamp
-                    orderDirection: desc
-                  ) 
-                  {
-                    offchainAssetReceiptVault {
-                        id
-                        name
-                        address
-                    }
-                    id
-                    caller {
-                      address
-
-                    }
-                    transaction{
-                     id
-                    }
-                    amount
-                    timestamp
-                    receipt {
-                      id
-                      receiptId
-                      receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
-                        information
-                        id
-                        transaction{
-                         id
-                        }
-                      }
-                    }
-                  }
-                  withdraws(
-                    where: {caller_: {address: $address}}
-                    orderBy: timestamp
-                    orderDirection: desc
-                  ) 
-                  {
-                    id
-                    offchainAssetReceiptVault {
-                        id
-                        name
-                        address
-                    }
-                    caller {
-                      address
-                    }
-                    transaction{
-                      id
-                    }
-                    amount
-                    timestamp
-                    receipt {
-                      id
-                      receiptId
-                      receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
-                        information
-                        id
-                        transaction{
-                         id
-                        }
-                      }
-                    }
-                  }
                   certifications(
                       where: {certifier_: {address: $address}}
                       orderDirection: desc
@@ -430,6 +365,7 @@ export const ALL_DEPOSITS_QUERY = `
         where: {caller_: {address: $address}}
         orderBy: timestamp
         orderDirection: desc
+        first: 200
         )
         {
             offchainAssetReceiptVault {
@@ -465,6 +401,7 @@ export const ALL_WITHDRAWS_QUERY = `
         where: {caller_: {address: $address}}
         orderBy: timestamp
         orderDirection: desc
+        first: 200
         )
         {
             offchainAssetReceiptVault {

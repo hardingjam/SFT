@@ -2,7 +2,11 @@
     import { activeNetwork, sftInfo} from '../scripts/store.js';
     import {router} from 'yrv';
     import {getSubgraphData} from '../scripts/helpers.js';
-    import {ADDRESS_OVERVIEW_QUERY, VAULTS_BY_DEPLOYER_QUERY} from '../scripts/queries.js';
+    import {
+        ADDRESS_OVERVIEW_QUERY, ALL_DEPOSITS_QUERY,
+        ALL_RECEIPT_INFORMATIONS_QUERY, ALL_WITHDRAWS_QUERY,
+        VAULTS_BY_DEPLOYER_QUERY
+    } from '../scripts/queries.js';
     import MintRedeemView from '../components/MintRedeemView.svelte';
     import CertificationsView from '../components/CertificationsView.svelte';
     import AccountSftsView from '../components/AccountSftsView.svelte';
@@ -26,6 +30,9 @@
     async function getData() {
         await getAccountData()
         await getAccountSFTs()
+        await getReceiptInformations()
+        await getDeposits()
+        await getWithdraws()
     }
     async function getAccountData() {
         loading = true
@@ -70,6 +77,36 @@
             //set Sfts
             //filter data if there is no certifications
             sfts = resp.data.offchainAssetReceiptVaults
+        }
+    }
+    async function getReceiptInformations() {
+        let resp = await getSubgraphData($activeNetwork, {address}, ALL_RECEIPT_INFORMATIONS_QUERY, 'receiptInformations')
+        if (resp && resp.data && resp.data.receiptInformations) {
+
+            console.log(1,resp.data)
+            //set Sfts
+            //filter data if there is no certifications
+            // sfts = resp.data.offchainAssetReceiptVaults
+        }
+    }
+    async function getDeposits() {
+        let resp = await getSubgraphData($activeNetwork, {address}, ALL_DEPOSITS_QUERY, 'depositWithReceipts')
+        if (resp && resp.data && resp.data.depositWithReceipts) {
+
+            console.log(2,resp.data)
+            //set Sfts
+            //filter data if there is no certifications
+            // sfts = resp.data.offchainAssetReceiptVaults
+        }
+    }
+    async function getWithdraws() {
+        let resp = await getSubgraphData($activeNetwork, {address}, ALL_WITHDRAWS_QUERY, 'withdrawWithReceipts')
+        if (resp && resp.data && resp.data.withdrawWithReceipts) {
+
+            console.log(3,resp.data)
+            //set Sfts
+            //filter data if there is no certifications
+            // sfts = resp.data.offchainAssetReceiptVaults
         }
     }
 

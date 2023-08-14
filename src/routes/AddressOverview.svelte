@@ -68,17 +68,31 @@
         }
     }
 
+    function filterRevisions(deposits, withdraws, revisions) {
+        //get array of all deposit receiptInformations for filtering
+        deposits.length ?
+            deposits = deposits.map(d => d.receipt.receiptInformations.length ?
+                d.receipt.receiptInformations[0].id : null).flat() : []
+
+        //get array of all withdraw receiptInformations for filtering
+        withdraws.length ? withdraws = withdraws.map(w => w.receipt.receiptInformations.length ?
+            w.receipt.receiptInformations[0].id : null).flat() : []
+
+        //if deposits or withdraws include receiptinformation from all the receiptinformations, filter them
+        return revisions.filter(r => !deposits.includes(r.id) && !withdraws.includes(r.id));
+    }
+
     async function getRevisionsData() {
         let revisionsData = await getSubgraphDataNoInterval($activeNetwork, {address}, REVISIONS_DATA_QUERY)
         if (revisionsData && revisionsData.data) {
             let deposits = revisionsData.data.depositWithReceipts
             let withdraws = revisionsData.data.withdrawWithReceipts
-            let receiptInformations = revisionsData.data.receiptInformations
-
+            let receiptInformationsAll = revisionsData.data.receiptInformations
+            //Need to filter receiptInformations to exclude duplicate receiptInformations of deposits and withdraws
+            let receiptInformations = filterRevisions(deposits, withdraws, receiptInformationsAll)
             if (receiptInformations !== undefined && deposits !== undefined && withdraws !== undefined) {
                 mint_redeems = [...receiptInformations, ...deposits, ...withdraws]
                 mint_redeems = mint_redeems.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
-
             }
             //Construct revision
             mint_redeems = mint_redeems.map(mr => {

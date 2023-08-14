@@ -1,10 +1,9 @@
 <script>
     import {activeNetwork, sftInfo} from '../scripts/store.js';
     import {router} from 'yrv';
-    import {getSubgraphData} from '../scripts/helpers.js';
+    import {getSubgraphData, getSubgraphDataNoInterval} from '../scripts/helpers.js';
     import {
-        ADDRESS_OVERVIEW_QUERY, ALL_DEPOSITS_QUERY,
-        ALL_RECEIPT_INFORMATIONS_QUERY, ALL_WITHDRAWS_QUERY,
+        ADDRESS_OVERVIEW_QUERY, REVISIONS_DATA_QUERY,
         VAULTS_BY_DEPLOYER_QUERY
     } from '../scripts/queries.js';
     import MintRedeemView from '../components/MintRedeemView.svelte';
@@ -28,14 +27,15 @@
     $:$activeNetwork && getData()
 
     async function getData() {
+        loading = true
         await getAccountData()
         await getAccountSFTs()
         await getRevisionsData()
+        loading = false
 
     }
 
     async function getAccountData() {
-        loading = true
         let resp = await getSubgraphData($activeNetwork, {address}, ADDRESS_OVERVIEW_QUERY, 'offchainAssetReceiptVaults')
         if (resp && resp.data && resp.data.offchainAssetReceiptVaults) {
             //set Certifications
@@ -57,7 +57,6 @@
             receiptConfiscations = receiptConfiscations.flat()
 
         }
-        loading = false
     }
 
     async function getAccountSFTs() {
@@ -69,55 +68,36 @@
         }
     }
 
-    async function getReceiptInformations() {
-        let resp = await getSubgraphData($activeNetwork, {address}, ALL_RECEIPT_INFORMATIONS_QUERY, 'receiptInformations')
-        if (resp && resp.data && resp.data.receiptInformations) {
-            return resp.data.receiptInformations
-        }
-    }
-
-    async function getDeposits() {
-        let resp = await getSubgraphData($activeNetwork, {address}, ALL_DEPOSITS_QUERY, 'depositWithReceipts')
-        if (resp && resp.data && resp.data.depositWithReceipts) {
-            return resp.data.depositWithReceipts
-
-        }
-    }
-
-    async function getWithdraws() {
-        let resp = await getSubgraphData($activeNetwork, {address}, ALL_WITHDRAWS_QUERY, 'withdrawWithReceipts')
-        if (resp && resp.data && resp.data.withdrawWithReceipts) {
-            return resp.data.withdrawWithReceipts
-        }
-    }
-
     async function getRevisionsData() {
-        let receiptInformations = await getReceiptInformations()
-        let deposits = await getDeposits()
-        let withdraws = await getWithdraws()
+        let revisionsData = await getSubgraphDataNoInterval($activeNetwork, {address}, REVISIONS_DATA_QUERY)
+        if (revisionsData && revisionsData.data) {
+            let deposits = revisionsData.data.depositWithReceipts
+            let withdraws = revisionsData.data.withdrawWithReceipts
+            let receiptInformations = revisionsData.data.receiptInformations
 
+            if (receiptInformations !== undefined && deposits !== undefined && withdraws !== undefined) {
+                mint_redeems = [...receiptInformations, ...deposits, ...withdraws]
+                mint_redeems = mint_redeems.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
 
-        if (receiptInformations !== undefined && deposits !== undefined && withdraws !== undefined) {
-            mint_redeems = [...receiptInformations, ...deposits, ...withdraws]
-            mint_redeems = mint_redeems.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp))
-
-        }
-        //Construct revision
-        mint_redeems = mint_redeems.map(mr => {
-            return {
-                type: mr.id.split('-')[0] === 'DepositWithReceipt' ?
-                    'Mint' :
-                    mr.id.split('-')[0] === 'WithdrawWithReceipt' ? 'Redeem' : 'Revision',
-                vault: mr.offchainAssetReceiptVault.name,
-                amount: mr.amount || 0,
-                receiptId: mr.receipt.receiptId,
-                revisionId: mr.receipt.receiptInformations && mr.receipt.receiptInformations[0] ? mr.receipt.receiptInformations[0].id : mr.id,
-                date: mr.timestamp,
-                transaction: mr.transaction.id
             }
-        })
+            //Construct revision
+            mint_redeems = mint_redeems.map(mr => {
+                return {
+                    type: mr.id.split('-')[0] === 'DepositWithReceipt' ?
+                        'Mint' :
+                        mr.id.split('-')[0] === 'WithdrawWithReceipt' ? 'Redeem' : 'Revision',
+                    vault: mr.offchainAssetReceiptVault.name,
+                    amount: mr.amount || 0,
+                    receiptId: mr.receipt.receiptId,
+                    revisionId: mr.receipt.receiptInformations && mr.receipt.receiptInformations[0] ?
+                        mr.receipt.receiptInformations[0].id :
+                        mr.id,
+                    date: mr.timestamp,
+                    transaction: mr.transaction.id
+                }
+            })
+        }
 
-        console.log(mint_redeems);
     }
 
     function setActive(page) {

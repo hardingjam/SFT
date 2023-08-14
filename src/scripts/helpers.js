@@ -84,6 +84,20 @@ export async function fetchSubgraphData(activeNetwork, variables, query) {
     }
 }
 
+export function getSubgraphDataNoInterval(activeNetwork, variables, query) {
+    return new Promise(async (resolve) => {
+        async function fetchData() {
+            return await fetchSubgraphData(activeNetwork, variables, query)
+        }
+
+        let data = await fetchData()
+        if (data && data.errors) {
+            console.log(data.errors)
+        }
+        return resolve(data)
+    })
+}
+
 export function getSubgraphData(activeNetwork, variables, query, param) {
     return new Promise(async (resolve) => {
         async function fetchData() {

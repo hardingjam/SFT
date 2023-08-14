@@ -460,3 +460,97 @@ export const ALL_RECEIPT_INFORMATIONS_QUERY = `
             }
           }
          `;
+
+export const REVISIONS_DATA_QUERY =
+    `query($address: String!) {
+       depositWithReceipts(
+           where: {caller_: {address: $address}}
+       orderBy: timestamp
+       orderDirection: desc
+       first: 200
+       )
+       {
+           offchainAssetReceiptVault {
+           id
+           name
+           address
+       }
+           id
+           caller {
+           address
+       }
+           transaction{
+           id
+       }
+           amount
+           timestamp
+           receipt {
+           id
+           receiptId
+           receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
+               information
+               id
+               transaction{
+                   id
+               }
+           }
+       }
+      }
+      withdrawWithReceipts(
+        where: {caller_: {address: $address}}
+        orderBy: timestamp
+        orderDirection: desc
+        first: 200
+        )
+        {
+            offchainAssetReceiptVault {
+             id
+             name
+             address
+            }
+            id
+            caller {
+             address
+            }
+            transaction{
+             id
+            }
+            amount
+            timestamp
+            receipt {
+              id
+              receiptId
+              receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
+                information
+                id
+                transaction{
+                    id
+                }
+              }
+            }
+        }
+        receiptInformations(
+                where: {caller_: {address: $address}}
+                first: 200
+                orderBy: timestamp
+                orderDirection: desc
+              ) {
+                information
+                id
+                caller {
+                  address
+                }
+                timestamp
+                transaction{
+                 id
+                }
+                receipt {
+                  id
+                  receiptId
+                }
+                offchainAssetReceiptVault {
+                  id
+                  name
+                }
+            }
+}`

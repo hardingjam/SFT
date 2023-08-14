@@ -6,26 +6,26 @@
         activeNetwork,
         ethersData,
         transactionSuccess,
-        transactionInProgress, transactionError, transactionInProgressShow, tokens
+        transactionInProgress, transactionError, transactionInProgressShow
     } from '../scripts/store.js';
-    import TokenOverviewTable from '../components/TokenOverviewTable.svelte';
     import {
         bytesToMeta,
         cborDecode,
         cborEncode,
-        encodeCBOR,
+        encodeCBOR, formatAddress,
         getContract, getSubgraphData,
         navigate, showPrompt,
-        showPromptSFTCreate
+        showPromptSFTCreate, timeStampToDate
     } from '../scripts/helpers.js';
     import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
     import SftCredentialLinks from '../components/SftCredentialLinks.svelte';
     import {icons} from '../scripts/assets.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
-    import {QUERY, RECEIPT_VAULT_INFORMATION_QUERY, VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
+    import {QUERY, RECEIPT_VAULT_INFORMATION_QUERY, VAULT_INFORMATION_QUERY} from '../scripts/queries.js';
     import axios from 'axios';
     import {arrayify} from 'ethers/lib/utils.js';
     import CredentialLinksEditor from '../components/CredentialLinksEditor.svelte';
+    import {ethers} from 'ethers';
 
     $:$data && setToken()
     $:token && getVaultInformation()
@@ -37,12 +37,30 @@
     let tokenLogo;
     let isEditorOpen = false;
     let credentialLinks;
+    let auditors = [];
+    let issuers = [];
 
     async function setToken() {
         if ($data.offchainAssetReceiptVault) {
             token = $data.offchainAssetReceiptVault
         } else {
             await getToken()
+        }
+        getAuditors()
+        getIssuers()
+    }
+
+    function getAuditors() {
+        if (token.address) {
+            let tempAuditors = token.roleHolders.filter(rh => rh.role.roleName === 'CERTIFIER')
+            auditors = tempAuditors.map(a => a.account.address)
+        }
+    }
+
+    function getIssuers() {
+        if (token.address) {
+            let tempAuditors = token.roleHolders.filter(rh => rh.role.roleName === 'DEPOSITOR')
+            issuers = tempAuditors.map(a => a.account.address)
         }
     }
 
@@ -70,7 +88,7 @@
         deployImage(e.target.files[0])
     }
 
-    async function getToken(){
+    async function getToken() {
         let vault = localStorage.getItem("vaultAddress");
         if (vault) {
             let variables = {id: vault.toLowerCase()}
@@ -203,7 +221,7 @@
 
     };
 
-    function handleEditClick(event) {
+    function handleEditClick() {
         isEditorOpen = true
     }
 
@@ -266,7 +284,62 @@
     <div class="content">
       <div class="w-full flex justify-between">
         <div class="w-1/2">
-          <TokenOverviewTable {token}/>
+          <table class="leading-8 w-full text-left">
+            <tr>
+              <td class="font-bold">Token name</td>
+              <td class="sft-name">{token?.name || ""}</td>
+            </tr>
+            <tr>
+              <td class="font-bold">Token symbol</td>
+              <td class="">{token?.symbol || ""}</td>
+            </tr>
+            <tr>
+              <td class="font-bold">Creation date</td>
+              <td class="">{token?.deployTimestamp ? timeStampToDate(token?.deployTimestamp) : ""}</td>
+            </tr>
+            <tr>
+              <td class="font-bold">Number of holders</td>
+              <td class="">{token?.tokenHolders ? token?.tokenHolders?.filter(h => h.balance !== "0").length : 0}</td>
+            </tr>
+            <tr>
+              <td class="font-bold">Token supply</td>
+              <td class="">{token?.totalShares ? ethers.utils.formatUnits(token?.totalShares, 18) : "0.0"}</td>
+            </tr>
+            <tr>
+              <td class="font-bold align-text-top">Name of auditor(s)</td>
+              <td class="sft-info ">
+                {#if !auditors.length}
+                  <div>N/A</div>
+                {/if}
+                {#each auditors as auditor}
+                  <div class="underline brown">
+                    <a href={`${$activeNetwork.blockExplorer}/address/${auditor}`}
+                       target="_blank">{formatAddress(auditor)}</a>
+                  </div>
+                {/each}
+              </td>
+
+            </tr>
+            <tr>
+              <td class="font-bold">Name of issuer</td>
+              <td class="sft-info ">
+                {#if !issuers.length}
+                  <div>N/A</div>
+                {/if}
+                {#each issuers as issuer}
+                  <div class="underline brown">
+                    <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`}
+                       target="_blank">{formatAddress(issuer)}</a>
+                  </div>
+                {/each}
+              </td>
+            </tr>
+            <tr>
+              <td class="font-bold">About</td>
+              <td class=""></td>
+            </tr>
+          </table>
+
         </div>
         <div class="sft-image w-1/2">
           <div class="sft-logo-container relative rounded-full"

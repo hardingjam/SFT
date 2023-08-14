@@ -17,6 +17,15 @@ export const QUERY = `
                     address
                     balance
                 }
+                roleHolders {
+                   role {
+                     roleName
+                     roleHash
+                   }
+                   account {
+                     address
+                   }
+                }
                 roles(orderBy: roleName){
                     roleName
                     roleHolders{

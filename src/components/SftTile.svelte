@@ -135,7 +135,7 @@
                   on:click={()=>{navigate(`#address-overview/${auditor}`, {clear : true})}}>{formatAddress(auditor)}</span>
                 </div>
               {/if}
-              {#if auditors.length > 2 && i<1}
+              {#if auditors.length > 2 && i < 1}
                 <div class="underline brown cursor-pointer">
                 <span
                   on:click={()=>{navigate(`#address-overview/${auditor}`, {clear : true})}}>{formatAddress(auditor)}</span>
@@ -163,7 +163,7 @@
                   on:click={()=>{navigate(`#address-overview/${issuer}`, {clear : true})}}>{formatAddress(issuer)}</span>
                 </div>
               {/if}
-              {#if issuers.length > 2 && i<1}
+              {#if issuers.length > 2 && i < 1}
                 <div class="underline brown cursor-pointer">
                 <span
                   on:click={()=>{navigate(`#address-overview/${issuer}`, {clear : true})}}>{formatAddress(issuer)}</span>

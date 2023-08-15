@@ -99,8 +99,9 @@
                 } else if (location === "#manual") {
                     navigateTo("#manual", {replace: false})
                 } else if (location === `#address-overview/${e.params.address}`) {
-                    console.log(3)
                     navigateTo(`#address-overview/${e.params.address}`, {replace: false})
+                } else if (location === `#token-overview/${e.params.address}`) {
+                    navigateTo(`#token-overview/${e.params.address}`, {replace: false})
                 } else {
                     vault.set({})
                     location = "#"

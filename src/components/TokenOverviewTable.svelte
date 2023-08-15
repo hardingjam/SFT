@@ -102,6 +102,7 @@
 <style>
 
     .row {
+        line-height: 37px;
         display: flex;
         align-items: flex-start;
         text-align: left;

@@ -129,20 +129,20 @@
               <div>N/A</div>
             {/if}
             {#each auditors as auditor,i}
-              {#if auditors.length <= 3}
+              {#if auditors.length <= 2}
                 <div class="underline brown cursor-pointer">
                 <span
                   on:click={()=>{navigate(`#address-overview/${auditor}`, {clear : true})}}>{formatAddress(auditor)}</span>
                 </div>
               {/if}
-              {#if auditors.length > 3 && i<2}
+              {#if auditors.length > 2 && i<1}
                 <div class="underline brown cursor-pointer">
                 <span
                   on:click={()=>{navigate(`#address-overview/${auditor}`, {clear : true})}}>{formatAddress(auditor)}</span>
                 </div>
               {/if}
             {/each}
-            {#if auditors.length > 3}
+            {#if auditors.length > 2}
               <div class="underline brown cursor-pointer">
                 <span on:click={()=>{navigate(`#token-overview/${sft.address}`)}}>...more</span>
               </div>
@@ -157,20 +157,20 @@
               <div>N/A</div>
             {/if}
             {#each issuers as issuer,i}
-              {#if issuers.length <= 3}
+              {#if issuers.length <= 2}
                 <div class="underline brown cursor-pointer">
                 <span
                   on:click={()=>{navigate(`#address-overview/${issuer}`, {clear : true})}}>{formatAddress(issuer)}</span>
                 </div>
               {/if}
-              {#if issuers.length > 3 && i<2}
+              {#if issuers.length > 2 && i<1}
                 <div class="underline brown cursor-pointer">
                 <span
                   on:click={()=>{navigate(`#address-overview/${issuer}`, {clear : true})}}>{formatAddress(issuer)}</span>
                 </div>
               {/if}
             {/each}
-            {#if issuers.length > 3}
+            {#if issuers.length > 2}
               <div class="underline brown cursor-pointer">
                 <span on:click={()=>{navigate(`#token-overview/${sft.address}`)}}>...more</span>
               </div>

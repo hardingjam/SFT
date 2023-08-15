@@ -13,6 +13,15 @@ export const QUERY = `
                 shareHolders{
                     address
                 }
+                roleHolders {
+                    role {
+                      roleName
+                      roleHash
+                    }
+                    account {
+                      address
+                    }
+                }
                 tokenHolders {
                     address
                     balance

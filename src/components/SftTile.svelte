@@ -101,8 +101,8 @@
     <div class=" mb-7 relative">
       <table class="leading-8 text-left">
         <tr>
-          <td class="font-bold label">Token name</td>
-          <td class="sft-name sft-info brown">
+          <td class="font-bold label ">Token name</td>
+          <td class="sft-name brown">
             <span on:click={()=>onTokenSelect(sft)} class="underline cursor-pointer">{sft.name}</span>
           </td>
         </tr>
@@ -128,11 +128,25 @@
             {#if !auditors.length}
               <div>N/A</div>
             {/if}
-            {#each auditors as auditor}
-              <div class="underline brown cursor-pointer">
-                <span on:click={()=>{navigate(`#address-overview/${auditor}`, {clear : true})}}>{formatAddress(auditor)}</span>
-              </div>
+            {#each auditors as auditor,i}
+              {#if auditors.length <= 3}
+                <div class="underline brown cursor-pointer">
+                <span
+                  on:click={()=>{navigate(`#address-overview/${auditor}`, {clear : true})}}>{formatAddress(auditor)}</span>
+                </div>
+              {/if}
+              {#if auditors.length > 3 && i<2}
+                <div class="underline brown cursor-pointer">
+                <span
+                  on:click={()=>{navigate(`#address-overview/${auditor}`, {clear : true})}}>{formatAddress(auditor)}</span>
+                </div>
+              {/if}
             {/each}
+            {#if auditors.length > 3}
+              <div class="underline brown cursor-pointer">
+                <span on:click={()=>{navigate(`#token-overview/${sft.address}`)}}>...more</span>
+              </div>
+            {/if}
           </td>
 
         </tr>
@@ -142,11 +156,26 @@
             {#if !issuers.length}
               <div>N/A</div>
             {/if}
-            {#each issuers as issuer}
-              <div class="underline brown cursor-pointer">
-                <span on:click={()=>{navigate(`#address-overview/${issuer}`, {clear : true})}}>{formatAddress(issuer)}</span>
-              </div>
+            {#each issuers as issuer,i}
+              {#if issuers.length <= 3}
+                <div class="underline brown cursor-pointer">
+                <span
+                  on:click={()=>{navigate(`#address-overview/${issuer}`, {clear : true})}}>{formatAddress(issuer)}</span>
+                </div>
+              {/if}
+              {#if issuers.length > 3 && i<2}
+                <div class="underline brown cursor-pointer">
+                <span
+                  on:click={()=>{navigate(`#address-overview/${issuer}`, {clear : true})}}>{formatAddress(issuer)}</span>
+                </div>
+              {/if}
             {/each}
+            {#if issuers.length > 2}
+              <div class="underline brown cursor-pointer">
+                <span on:click={()=>{navigate(`#token-overview/${sft.address}`)}}>...more</span>
+              </div>
+            {/if}
+
           </td>
         </tr>
       </table>
@@ -199,20 +228,24 @@
         padding-left: 40px;
     }
 
-    .label{
+    .sft-name {
+        padding-left: 40px;
+    }
+
+    .label {
         white-space: nowrap;
     }
 
-    .value-list{
+    .value-list {
         display: flex;
-        column-gap:20px;
+        column-gap: 20px;
         flex-wrap: wrap;
     }
 
     .img-container {
         width: 88px;
         height: 88px;
-        top:0;
+        top: 0;
         right: 0;
     }
 

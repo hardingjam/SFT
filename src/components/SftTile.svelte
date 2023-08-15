@@ -3,7 +3,7 @@
     import {bytesToMeta, cborDecode, formatAddress, navigate, timeStampToDate} from '../scripts/helpers';
     import {ethers} from 'ethers';
     import {createEventDispatcher, onMount} from 'svelte';
-    import {account, activeNetwork, vault} from '../scripts/store.js';
+    import {account} from '../scripts/store.js';
     import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
     import CredentialLinksEditor from './CredentialLinksEditor.svelte';
     import SftCredentialLinks from './SftCredentialLinks.svelte';
@@ -98,33 +98,33 @@
     </svg>
   </div>
   {#if !isEditorOpen}
-    <div class="flex justify-between mb-7">
-      <table class="w-8/12 leading-8 text-left">
+    <div class=" mb-7 relative">
+      <table class="leading-8 text-left">
         <tr>
-          <td class="font-bold">Token name</td>
-          <td class="sft-name brown">
+          <td class="font-bold label">Token name</td>
+          <td class="sft-name sft-info brown">
             <span on:click={()=>onTokenSelect(sft)} class="underline cursor-pointer">{sft.name}</span>
           </td>
         </tr>
         <tr>
-          <td class="font-bold">Token symbol</td>
+          <td class="font-bold label">Token symbol</td>
           <td class="sft-info">{sft.symbol}</td>
         </tr>
         <tr>
-          <td class="font-bold">Creation date</td>
+          <td class="font-bold label">Creation date</td>
           <td class="sft-info">{timeStampToDate(sft.deployTimestamp)}</td>
         </tr>
         <tr>
-          <td class="font-bold">Number of holders</td>
+          <td class="font-bold label">Number of holders</td>
           <td class="sft-info">{sft.tokenHolders.filter(h => h.balance !== "0").length}</td>
         </tr>
         <tr>
-          <td class="font-bold">Token supply</td>
+          <td class="font-bold label">Token supply</td>
           <td class="sft-info">{sft?.totalShares ? ethers.utils.formatUnits(sft?.totalShares, 18) : 0}</td>
         </tr>
         <tr>
-          <td class="font-bold align-text-top">Name of auditor(s)</td>
-          <td class="sft-info ">
+          <td class="font-bold label align-text-top">Name of auditor(s)</td>
+          <td class="sft-info value-list">
             {#if !auditors.length}
               <div>N/A</div>
             {/if}
@@ -137,8 +137,8 @@
 
         </tr>
         <tr>
-          <td class="font-bold">Name of issuer</td>
-          <td class="sft-info ">
+          <td class="font-bold label">Name of issuer</td>
+          <td class="sft-info value-list">
             {#if !issuers.length}
               <div>N/A</div>
             {/if}
@@ -150,7 +150,7 @@
           </td>
         </tr>
       </table>
-      <div class="img-container mr-8">
+      <div class="img-container mr-8 absolute ">
         <div class="sft-logo-container rounded-full"
              class:hover={sft.deployer.toLowerCase() === $account.toLowerCase()}>
           <label for={`${sft.address}-upload`} id="sft-logo-upload"
@@ -195,12 +195,25 @@
 <style>
 
     .sft-info {
-        color: #575757
+        color: #575757;
+        padding-left: 40px;
+    }
+
+    .label{
+        white-space: nowrap;
+    }
+
+    .value-list{
+        display: flex;
+        column-gap:20px;
+        flex-wrap: wrap;
     }
 
     .img-container {
         width: 88px;
         height: 88px;
+        top:0;
+        right: 0;
     }
 
     .sft-logo-container {

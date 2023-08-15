@@ -170,7 +170,7 @@
                 </div>
               {/if}
             {/each}
-            {#if issuers.length > 2}
+            {#if issuers.length > 3}
               <div class="underline brown cursor-pointer">
                 <span on:click={()=>{navigate(`#token-overview/${sft.address}`)}}>...more</span>
               </div>

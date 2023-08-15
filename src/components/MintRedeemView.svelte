@@ -51,8 +51,8 @@
           </span>
         </td>
         <td>
-          <span on:click={()=>{ navigate(`#asset-information/${mr.receiptId}/${mr.revisionId}`)}}>
-                    {formatHash(mr.revisionId)}
+          <span class="brown underline cursor-pointer" on:click={()=>{ navigate(`#asset-information/${mr.receiptId}/${mr.revisionId}`)}}>
+                    {formatHash(mr.transaction)}
         </span>
         </td>
         <td>{toIsoDate(mr.date)}</td>

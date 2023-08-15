@@ -487,7 +487,7 @@ export const REVISIONS_DATA_QUERY =
            receipt {
            id
            receiptId
-           receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
+           receiptInformations(orderBy: timestamp, orderDirection: asc) {
                information
                id
                transaction{
@@ -520,7 +520,7 @@ export const REVISIONS_DATA_QUERY =
             receipt {
               id
               receiptId
-              receiptInformations(first: 1, orderBy: timestamp, orderDirection: desc) {
+              receiptInformations(orderBy: timestamp, orderDirection: asc) {
                 information
                 id
                 transaction{

@@ -59,6 +59,7 @@
     import NewRevision from '../routes/NewRevision.svelte';
     import AssetHistory from '../routes/AssetHistory.svelte';
     import ChangeComparison from '../routes/ChangeComparison.svelte';
+    import AddressOverview from '../routes/AddressOverview.svelte';
 
 
     let connectedAccount;
@@ -82,21 +83,30 @@
         //reset pageTitle
         pageTitle.set("")
 
+
         if (!e.initial) {
-            await setVault()
+            let contract = await setVault()
             location = e.path
             selectedTab = location || '#mint'
-            if (location === "#list" && $tokens.length) {
-                navigateTo("#list", {replace: false})
-            }
-            if (location === "#setup") {
-                navigateTo("#setup", {replace: false})
-            }
-            if (location === "#ipfs") {
-                navigateTo("#ipfs", {replace: false})
-            }
-            if (location === "#manual") {
-                navigateTo("#manual", {replace: false})
+            if (!contract) {
+                location = e.path
+                if (location === "#list" && $tokens.length) {
+                    navigateTo("#list", {replace: false})
+                } else if (location === "#setup") {
+                    navigateTo("#setup", {replace: false})
+                } else if (location === "#ipfs") {
+                    navigateTo("#ipfs", {replace: false})
+                } else if (location === "#manual") {
+                    navigateTo("#manual", {replace: false})
+                } else if (location === `#address-overview/${e.params.address}`) {
+                    navigateTo(`#address-overview/${e.params.address}`, {replace: false})
+                } else if (location === `#token-overview/${e.params.address}`) {
+                    navigateTo(`#token-overview/${e.params.address}`, {replace: false})
+                } else {
+                    vault.set({})
+                    location = "#"
+                    navigateTo("#", {replace: false})
+                }
             }
         }
     });
@@ -106,18 +116,15 @@
         let contract = await getContract($activeNetwork, contractAddress, contractAbi, $ethersData.signerOrProvider);
         if (contract) {
             vault.set(contract);
-
-        } else {
-            vault.set({})
-            location = "#"
-            navigateTo("#", {replace: false})
         }
+        return contract
     }
 
     onMount(async () => {
         await getEthersData();
 
         if (isMetamaskInstalled) {
+
             if (location === "/" || location === "") {
                 navigateTo("#");
             }
@@ -340,9 +347,9 @@
           <Route path="#asset-register" component={AssetRegister}/>
           <Route path="#asset-history/:id" component={AssetHistory}/>
           <Route path="#audit-history" component={AuditHistory}/>
-          <Route path="#token-overview" component={TokenOverview}/>
-          <Route path="#token-overview" component={TokenOverview}/>
+          <Route path="#token-overview/:address" component={TokenOverview}/>
           <Route path="#change-comparison" component={ChangeComparison}/>
+          <Route path="#address-overview/:address" component={AddressOverview}/>
         </div>
       </div>
       <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
@@ -360,7 +367,6 @@
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
           <Route path="#new-revision/:id" component={NewRevision}/>
-
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
               <button class:selected="{selectedTab === '#mint'}" class="tab-button"

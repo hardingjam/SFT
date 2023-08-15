@@ -84,6 +84,20 @@ export async function fetchSubgraphData(activeNetwork, variables, query) {
     }
 }
 
+export function getSubgraphDataNoInterval(activeNetwork, variables, query) {
+    return new Promise(async (resolve) => {
+        async function fetchData() {
+            return await fetchSubgraphData(activeNetwork, variables, query)
+        }
+
+        let data = await fetchData()
+        if (data && data.errors) {
+            console.log(data.errors)
+        }
+        return resolve(data)
+    })
+}
+
 export function getSubgraphData(activeNetwork, variables, query, param) {
     return new Promise(async (resolve) => {
         async function fetchData() {
@@ -143,16 +157,13 @@ export function timeStampToDate(timeStamp, format) {
 
     if (format === "mm-dd-yyyy") {
         value = [month, day, year].join('-');
-    }
-    else if (format === "yyyy-mm-dd") {
+    } else if (format === "yyyy-mm-dd") {
         value = [year, month, day].join('-');
-    }
-    else if (format === "yy-mm-dd tt:tt") {
+    } else if (format === "yy-mm-dd tt:tt") {
         let date = [year, month, day].join('-');
         let time = [hour, min].join(":")
         value = date + " " + time;
-    }
-    else if (format === "yy-mm-dd/tt:tt") {
+    } else if (format === "yy-mm-dd/tt:tt") {
         let date = [year, month, day].join('-');
         let time = [hour, min].join(":")
         value = date + " / " + time;
@@ -160,6 +171,11 @@ export function timeStampToDate(timeStamp, format) {
         value = [day, month, year].join('-');
     }
     return value
+}
+
+export function toIsoDate(timeStamp) {
+    let date = new Date(timeStamp * 1000)
+    return date.toISOString().slice(0, date.toISOString().length - 5)
 }
 
 export function formatDate(date) {
@@ -577,12 +593,12 @@ export function navigate(path, options) {
         if (path === "#") {
             breadCrumbs.update(() => [])
         } else {
-            breadCrumbs.update(() => [{path: "#", label: "Home", id: 'home'}, {path, label, id:bcId}])
+            breadCrumbs.update(() => [{path: "#", label: "Home", id: 'home'}, {path, label, id: bcId}])
         }
     } else {
         breadCrumbs.update(bc => {
             if (!bc.find(b => b.id === bcId)) {
-                return [...bc, {path, label, id:bcId}]
+                return [...bc, {path, label, id: bcId}]
             } else {
                 let indexOfPage = bc.findIndex(b => b.id === bcId)
                 return bc.splice(0, indexOfPage + 1)

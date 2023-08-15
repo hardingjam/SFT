@@ -57,6 +57,8 @@
     }
 
     function setPage(page) {
+        if (page === "...")
+            return
         currentPage = page
     }
 
@@ -102,7 +104,7 @@
 
 <style>
     .pagination-container {
-        padding: 0 45px 0 120px;
+        padding: 0 45px;
         background: #FFFFFF;
         position: absolute;
         display: flex;
@@ -111,6 +113,7 @@
         height: 90px;
         align-items: center;
         bottom: -90px;
+        box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.10), 0 1px 3px 0 rgba(0, 0, 0, 0.10);
     }
 
     .pagination {

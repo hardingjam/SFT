@@ -1,8 +1,8 @@
 <script>
     import {ethers} from 'ethers';
     import {createEventDispatcher, onMount} from 'svelte';
-    import {account, activeNetwork} from '../scripts/store.js';
-    import {cborDecode, formatAddress, timeStampToDate} from '../scripts/helpers.js';
+    import {account} from '../scripts/store.js';
+    import {cborDecode, formatAddress, navigate, timeStampToDate} from '../scripts/helpers.js';
     import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
     import {icons} from '../scripts/assets.js';
 
@@ -108,19 +108,41 @@
   <td class="sft-info">{timeStampToDate(sft.deployTimestamp)}</td>
   <td class="sft-info">{sft.tokenHolders.filter(h => h.balance !== "0").length}</td>
   <td class="sft-info">{sft?.totalShares ? ethers.utils.formatUnits(sft?.totalShares, 18) : 0}</td>
-  <td class="sft-info">
-    {#each auditors as auditor}
-      <div class="underline brown">
-        <a href={`${$activeNetwork.blockExplorer}/address/${auditor}`} target="_blank">{formatAddress(auditor)}</a>
-      </div>
-    {/each}
+  <td class="sft-info ">
+    <div class="flex gap-5 justify-center">
+      {#each auditors as auditor,i}
+        {#if i < 1}
+          <div class="underline brown cursor-pointer">
+          <span
+            on:click={()=>{navigate(`#address-overview/${auditor}`, {clear : true})}}> {formatAddress(auditor)}</span>
+          </div>
+        {/if}
+
+      {/each}
+      {#if auditors.length > 1}
+        <span class="underline brown cursor-pointer"
+              on:click={()=>{navigate(`#token-overview/${sft.address}`)}}>...more</span>
+      {/if}
+    </div>
+
   </td>
-  <td class="sft-info">
-    {#each issuers as issuer}
-      <div class="underline brown">
-        <a href={`${$activeNetwork.blockExplorer}/address/${issuer}`} target="_blank">{formatAddress(issuer)}</a>
-      </div>
-    {/each}
+  <td class="sft-info ">
+    <div class="flex gap-5 justify-center">
+
+      {#each issuers as issuer,i}
+        {#if i < 1}
+          <div class="underline brown cursor-pointer">
+          <span
+            on:click={()=>{navigate(`#address-overview/${issuer}`, {clear : true})}}> {formatAddress(issuer)}</span>
+          </div>
+        {/if}
+
+      {/each}
+      {#if issuers.length > 1}
+        <span class="underline brown cursor-pointer"
+              on:click={()=>{navigate(`#token-overview/${sft.address}`)}}>...more</span>
+      {/if}
+    </div>
   </td>
   <td>
     {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
@@ -156,7 +178,7 @@
         height: 20px;
     }
 
-    td:last-child{
+    td:last-child {
         background: #DCDBDD;
     }
 </style>

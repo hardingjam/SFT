@@ -26,10 +26,12 @@
     import axios from 'axios';
     import {arrayify} from 'ethers/lib/utils.js';
     import CredentialLinksEditor from '../components/CredentialLinksEditor.svelte';
+    import {router} from 'yrv';
 
-    $:$data && setToken()
+    $:$activeNetwork && getToken()
     $:token && getVaultInformation()
 
+    let address = $router.params.address
     let token = {}
     let logoPreview;
     let username;
@@ -37,14 +39,6 @@
     let tokenLogo;
     let isEditorOpen = false;
     let credentialLinks;
-
-    async function setToken() {
-        if ($data.offchainAssetReceiptVault) {
-            token = $data.offchainAssetReceiptVault
-        } else {
-            await getToken()
-        }
-    }
 
     async function getVaultInformation() {
         if (token && token.id) {
@@ -71,22 +65,16 @@
     }
 
     async function getToken(){
-        let vault = localStorage.getItem("vaultAddress");
-        if (vault) {
-            let variables = {id: vault.toLowerCase()}
+        let variables = {id: address}
             let res;
             try {
                 res = await getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault')
                 if (res && res.data) {
-                    data.set(res.data)
+                    token = res.data.offchainAssetReceiptVault
                 }
             } catch (e) {
                 console.log(e)
             }
-
-        } else {
-            navigate("#")
-        }
     }
 
     async function deployImage(file) {

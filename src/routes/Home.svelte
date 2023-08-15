@@ -164,7 +164,7 @@
     async function handleTokenSelect(event) {
         let token = event.detail.token
         if (token.address === $vault.address) {
-            navigate("#token-overview", {clear: true})
+            navigate(`#token-overview/${token.address}`, {clear: true})
             return
         }
         await showPrompt(null, {topText: "SFT loading, please wait", noBottomText: true})
@@ -178,7 +178,7 @@
             accountRoles.set(await setAccountRoles($roles, $account));
             transactionInProgressShow.set(false)
             transactionInProgress.set(false)
-            navigate("#token-overview", {clear: true})
+            navigate(`#token-overview/${token.address}`, {clear: true})
         }
     }
 

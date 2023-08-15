@@ -2,20 +2,18 @@
 
     import {
         selectedReceipt,
-        tokenName,
         data,
         pageTitle,
         vault,
-        activeNetwork, transactionInProgressShow, transactionInProgress, breadCrumbs
+        activeNetwork, transactionInProgressShow, transactionInProgress
     } from "../scripts/store.js";
     import ReceiptData from '../components/ReceiptData.svelte';
-    import {getSubgraphData, navigate, showPrompt, timeStampToDate} from '../scripts/helpers.js';
+    import {cborDecode, getSubgraphData, navigate, showPrompt, timeStampToDate} from '../scripts/helpers.js';
     import {ethers} from 'ethers';
-    import {icons} from '../scripts/assets.js';
-    import {RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
+    import {RECEIPT_INFORMATION_QUERY, RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
     import axios from 'axios';
-    import {IPFS_GETWAY} from '../scripts/consts.js';
-    import {navigateTo} from 'yrv';
+    import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
+    import {navigateTo, router} from 'yrv';
 
     let loading = false
 
@@ -29,20 +27,25 @@
 
     let isCurrentRevision = false;
 
-    $:$activeNetwork && getRevision(window.location.hash.split("/")[2])
+
+    $:$activeNetwork && getRevision()
 
     async function getRevision(revisionId) {
-        await getSchema()
-        let receiptId = $vault.address + "-" + window.location.hash.split("/")[1]
-        variables = {id: receiptId}
+        if (!revisionId)
+            revisionId = $router.params.id
+
         await showPrompt(null, {topText: "Loading, please wait", noBottomText: true})
+
+        let receiptId = revisionId.split("-")[1] + '-' + revisionId.split('-')[2]// $vault.address + "-" + window.location.hash.split("/")[1]
+        variables = {id: receiptId}
+        await getSchema(revisionId)
 
         let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATIONS_QUERY, 'receipt')
         let informationIndex = 0;
         if (resp && resp.data && resp.data.receipt && resp.data.receipt.id &&
             resp.data.receipt.receiptInformations.length) {
 
-
+            selectedReceipt.set(resp.data)
             if (revisionId) {
                 revision = resp.data.receipt.receiptInformations.find(r => r.id === revisionId)
             } else {
@@ -52,8 +55,7 @@
             pageTitle.set(`Asset information - ${isCurrentRevision ? 'current revision' : 'specific revision'}`)
 
             informationIndex = resp.data.receipt.receiptInformations
-                .findIndex(inf => inf.id ===
-                    `ReceiptInformation-${resp.data.receipt.id}-${revision.transaction.id}`)
+                .findIndex(inf => inf.id === revision.id)
             revisionNumber = resp.data.receipt.receiptInformations.length - informationIndex
 
         }
@@ -61,12 +63,17 @@
         transactionInProgress.set(false)
     }
 
-    async function getSchema() {
-        let selectedSchemaHash = localStorage.getItem("selectedReceiptSchema")
-        if (selectedSchemaHash) {
-            let res = await axios.get(`${IPFS_GETWAY}${selectedSchemaHash}`)
-            if (res) {
-                schemaName = res.data.displayName
+    async function getSchema(revisionId) {
+        let resp = await getSubgraphData($activeNetwork, {id: revisionId}, RECEIPT_INFORMATION_QUERY, 'receiptInformation')
+        if (resp) {
+            let information = resp.data.receiptInformation.information;
+            let decoded = cborDecode(information.slice(18))
+            let schemaHash = decoded ? decoded[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
+            if (schemaHash) {
+                let res = await axios.get(`${IPFS_GETWAY}${schemaHash}`)
+                if (res) {
+                    schemaName = res.data.displayName
+                }
             }
         }
     }
@@ -80,12 +87,14 @@
 <div class="asset-information">
   <div class="card-header justify-end pr-10">
     <button class="default-btn" disabled>download IPFS pin list</button>
-    <button class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
-      revision
-    </button>
-    <button class="default-btn" on:click={()=>navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)}>
-      Asset history
-    </button>
+    {#if ($vault.address === $selectedReceipt?.receipt?.offchainAssetReceiptVault?.address)}
+      <button class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
+        revision
+      </button>
+      <button class="default-btn" on:click={()=>navigate(`#asset-history/${$selectedReceipt.receipt.receiptId}`)}>
+        Asset history
+      </button>
+    {/if}
   </div>
 
   <div class="card-content">
@@ -94,7 +103,7 @@
         class="brown underline cursor-pointer ml-1" on:click={()=>setCurrentRevision()}>Current revision</span></div>
     {/if}
     <div class="display-flex justify-between font-bold mb-8 text-left">
-      <span>{$tokenName}</span>
+      <span>{$selectedReceipt?.receipt?.offchainAssetReceiptVault?.name}</span>
       <span>
        Revision date:
         {revision ?

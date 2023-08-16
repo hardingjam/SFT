@@ -480,12 +480,10 @@
     align-items: center;
     justify-content: center;
     padding-top: 9rem;
-    transition: 0.5s ease;
   }
 
   .sft-info-opened {
     margin-left: 36rem;
-    transition: 0.5s ease;
   }
 
   .invalid-network {

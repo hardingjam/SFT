@@ -41,8 +41,9 @@
 
   </div>
   <div class="credentials">
-
-    <div class="logged-in-text">{loggedIn ? `You are currently logged in as: ${loggedInUser}` : ''}</div>
+    {#if loggedIn}
+      <div class="logged-in-text">{`You are currently logged in as: ${loggedInUser}`}</div>
+    {/if}
     <div class="flex flex-col gap-2 w-full">
       <div class="w-full space-between items-center">
         <label class="mr-2">Username:</label>

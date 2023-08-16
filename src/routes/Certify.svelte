@@ -1,0 +1,73 @@
+<script>
+import {pageTitle, titleIcon, tokenName} from '../scripts/store.js';
+import {icons} from '../scripts/assets.js';
+import {onMount} from 'svelte';
+
+onMount(async () => {
+    pageTitle.set(`Certify`)
+    titleIcon.set(`${icons.certify}`)
+})
+</script>
+
+<div class="certify-container ">
+  <div class="card-header justify-between pl-6 pr-10">
+   <div class="flex gap-2">
+     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <path d="M9.34875 11.499L11.3488 13.499L15.5 9.3478M11.7253 3.07754L5.72528 4.79182C5.29598 4.91448 5 5.30687 5 5.75335L5 10.8529C5 14.0824 6.55966 17.1131 9.18762 18.9902L11.4188 20.5839C11.7665 20.8322 12.2335 20.8322 12.5812 20.5839L14.8124 18.9902C17.4403 17.1131 19 14.0824 19 10.8529V5.75335C19 5.30687 18.704 4.91448 18.2747 4.79182L12.2747 3.07754C12.0952 3.02624 11.9048 3.02624 11.7253 3.07754Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+     </svg>
+     Certify
+   </div>
+    <button class="default-btn">New schema</button>
+  </div>
+
+    <div class="audit-info-container basic-frame-parent card-content">
+      asdfasdf
+<!--      <div class="form-frame basic-frame">-->
+<!--        {#if $schemas.length}-->
+<!--          <div class="schema">-->
+<!--            <div class="schema-dropdown flex justify-between mb-6">-->
+<!--              <label class="f-weight-700 custom-col">Asset class</label>-->
+<!--              <Select options={$schemas}-->
+
+<!--                      on:select={handleSchemaSelect}-->
+<!--                      label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>-->
+
+<!--            </div>-->
+<!--            <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>-->
+<!--          </div>-->
+<!--        {/if}-->
+<!--        {#if !$schemas.length}-->
+<!--          <div class="empty-schemas">-->
+<!--            <span>Please create a new asset class to mint </span>-->
+<!--          </div>-->
+<!--        {/if}-->
+
+<!--      </div>-->
+
+    </div>
+
+  <div class="card-footer justify-between pl-6 pr-10">
+
+    <button class="default-btn pl-14 pr-14">Certify</button>
+  </div>
+
+</div>
+<style>
+  .certify-container{
+      border-radius: 10px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .card-footer{
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: flex-end;
+      border-top-width: 1px;;
+      padding: 13px 40px;
+      gap: 20px;
+  }
+</style>

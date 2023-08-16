@@ -60,6 +60,7 @@
     import AssetHistory from '../routes/AssetHistory.svelte';
     import ChangeComparison from '../routes/ChangeComparison.svelte';
     import AddressOverview from '../routes/AddressOverview.svelte';
+    import Certify from '../routes/Certify.svelte';
 
 
     let connectedAccount;
@@ -367,6 +368,7 @@
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
           <Route path="#new-revision/:id" component={NewRevision}/>
+          <Route path="#certify" component={Certify}/>
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
               <button class:selected="{selectedTab === '#mint'}" class="tab-button"

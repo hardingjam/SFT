@@ -6,7 +6,6 @@
     let loggedInUser;
 
     function updateCredentials(e) {
-        console.log(e);
         message = ""
         localStorage.setItem('ipfsUsername', e.detail.username);
         localStorage.setItem('ipfsPassword', e.detail.password);

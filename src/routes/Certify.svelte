@@ -1,12 +1,29 @@
 <script>
-import {pageTitle, titleIcon, tokenName} from '../scripts/store.js';
+    import {pageTitle, schemas, titleIcon, tokenName} from '../scripts/store.js';
 import {icons} from '../scripts/assets.js';
 import {onMount} from 'svelte';
+    import Select from '../components/Select.svelte';
+    import Schema from '../components/Schema.svelte';
 
 onMount(async () => {
     pageTitle.set(`Certify`)
     titleIcon.set(`${icons.certify}`)
 })
+
+    let selectedSchema = {}
+
+    async function handleSchemaSelect(event) {
+        selectedSchema = event.detail.selected
+        const form = document.querySelector('.svelte-schema-form'); // select the form element
+        if (form) {
+            form.reset();
+        }
+    }
+
+    function handleFileUpload(event) {
+        // fileHashes = event.detail.fileHashes
+        console.log(555)
+    }
 </script>
 
 <div class="certify-container ">
@@ -19,35 +36,27 @@ onMount(async () => {
    </div>
     <button class="default-btn">New schema</button>
   </div>
+  <div class="flex items-center pt-10 pb-10 ">Choose a schema for the audit report
 
-    <div class="audit-info-container basic-frame-parent card-content">
-      asdfasdf
-<!--      <div class="form-frame basic-frame">-->
-<!--        {#if $schemas.length}-->
-<!--          <div class="schema">-->
-<!--            <div class="schema-dropdown flex justify-between mb-6">-->
-<!--              <label class="f-weight-700 custom-col">Asset class</label>-->
-<!--              <Select options={$schemas}-->
+    {#if $schemas.length}
+      <div class="schema">
+        <div class="schema-dropdown flex justify-between mb-6">
+          <Select options={$schemas}
+                  on:select={handleSchemaSelect}
+                  label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
 
-<!--                      on:select={handleSchemaSelect}-->
-<!--                      label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>-->
+        </div>
+      </div>
+    {/if}
+  </div>
 
-<!--            </div>-->
-<!--            <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>-->
-<!--          </div>-->
-<!--        {/if}-->
-<!--        {#if !$schemas.length}-->
-<!--          <div class="empty-schemas">-->
-<!--            <span>Please create a new asset class to mint </span>-->
-<!--          </div>-->
-<!--        {/if}-->
-
-<!--      </div>-->
+    <div class="schema-container card-content">
+     <div class="flex w-full justify-center">{selectedSchema.displayName}</div>
+      <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
 
     </div>
 
   <div class="card-footer justify-between pl-6 pr-10">
-
     <button class="default-btn pl-14 pr-14">Certify</button>
   </div>
 
@@ -69,5 +78,11 @@ onMount(async () => {
       border-top-width: 1px;;
       padding: 13px 40px;
       gap: 20px;
+  }
+
+  .schema-container{
+      border-radius: 10px;
+      border: 1px solid var(--divider, #D2D2D2);
+      padding: 15px 42px;
   }
 </style>

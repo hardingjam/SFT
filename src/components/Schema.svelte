@@ -105,8 +105,3 @@
   {/if}
 {/if}
 
-<style>
-    .title {
-        text-align: center;
-    }
-</style>

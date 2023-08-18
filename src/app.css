@@ -405,6 +405,7 @@ li {
 
 .dropdown .dropdown-menu {
     z-index: 1;
+    min-width: 100%;
     -webkit-box-shadow: 0 10px 5px -3px rgba(179, 179, 179, 1);
     -moz-box-shadow: 0 10px 5px -3px rgba(179, 179, 179, 1);
     box-shadow: 0 10px 5px -3px rgba(179, 179, 179, 1);

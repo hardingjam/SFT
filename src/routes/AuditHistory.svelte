@@ -2,16 +2,12 @@
     import {
         vault,
         auditHistory,
-        activeNetwork,
-        account,
-        ethersData,
-        transactionError, transactionSuccess, transactionInProgress, sftInfo, pageTitle
+        activeNetwork, sftInfo, pageTitle
     } from "../scripts/store";
     import {
         getSubgraphData,
-        hasRole, navigate,
-        showPromptSFTCreate,
-        timeStampToDate
+        navigate,
+        timeStampToDate, toIsoDate
     } from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
@@ -19,10 +15,8 @@
     import {accountRoles} from "../scripts/store.js";
     import SftLoader from '../components/SftLoader.svelte';
     import Pagination from '../components/Pagination.svelte';
-    import Calendar from '../components/Calendar.svelte';
 
     let error = ''
-    let certifyUntil = formatDate(new Date())
     let certifyData = []
     let loading = false;
     let filteredCertifications = [];
@@ -67,56 +61,6 @@
 
     $: $activeNetwork && getAuditHistory();
 
-    async function certify() {
-
-        certifyUntil = formatDate(selectedDate)
-
-        //Set date to the nearest Midnight in the future
-        let untilToTime = new Date(certifyUntil).setHours(23, 59, 59, 0)
-        untilToTime = new Date(untilToTime).getTime()
-
-        const hasRoleCertifier = await hasRole($vault, $account, "CERTIFIER")
-        const _referenceBlockNumber = await $ethersData.provider.getBlockNumber();
-        if (!hasRoleCertifier.error) {
-            try {
-
-                let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
-                await showPromptSFTCreate(certifyTx)
-
-                let wait = await certifyTx.wait()
-                if (wait.status === 1) {
-                    let interval = setInterval(async () => {
-                        let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                        preData = preData?.data?.offchainAssetReceiptVault.certifications
-                        if (preData && preData.length) {
-                            if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
-                                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                                let temp = data.data.offchainAssetReceiptVault
-                                auditHistory.set(temp)
-                                certifyData = $auditHistory?.certifications || []
-                                let skip = (perPage * (currentPage - 1)) - 1
-                                filteredCertifications = certifyData.filter((r, index) => index > skip && index <
-                                    perPage * currentPage)
-                                getMaxCertifyDate()
-                                transactionSuccess.set(true)
-                                transactionInProgress.set(false)
-                                clearInterval(interval)
-                            }
-                        }
-                    }, 2000)
-                } else {
-                    transactionError.set(true)
-                }
-
-            } catch (e) {
-                console.log(e)
-            }
-
-
-        } else {
-            error = hasRoleCertifier.error
-        }
-    }
 
     function inFuture(date) {
         let day = date.split('-')[0]
@@ -132,11 +76,6 @@
         filteredCertifications = certifyData.filter((r, index) => index > skip && index < perPage * currentPage)
     }
 
-    let selectedDate = new Date();
-
-    function handleDateChange(event) {
-        selectedDate = event.detail;
-    }
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
@@ -152,6 +91,7 @@
           <th>Total amount</th>
           <th>Certified on</th>
           <th>Certified by</th>
+          <th>Audit report</th>
           <th>Certified until</th>
         </tr>
         </thead>
@@ -163,9 +103,12 @@
             <tr class="tb-row">
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
-              <td><span class="underline brown" on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span></td>
+              <td><span class="underline brown"
+                        on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span>
+              </td>
+              <td><span class="brown cursor-pointer underline">asset class data</span></td>
               <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
-                {timeStampToDate(cert?.certifiedUntil)}
+                {toIsoDate(cert?.certifiedUntil)}
               </td>
             </tr>
           {/each}
@@ -182,7 +125,6 @@
               {#if maxCertifiedUntil < new Date()}
                 <span class="error">System frozen until certified</span>
               {/if}
-              <Calendar value={selectedDate} on:change={handleDateChange}/>
               <button class="default-btn ml-3" on:click={() => navigate('#certify')}>Certify</button>
             </div>
           {/if}

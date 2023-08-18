@@ -1,10 +1,27 @@
 <script>
-    import {pageTitle, schemas, titleIcon, tokenName} from '../scripts/store.js';
+    import {
+        account,
+        activeNetwork, auditHistory,
+        ethersData,
+        pageTitle,
+        schemas,
+        titleIcon,
+        tokenName, transactionError, transactionInProgress, transactionSuccess,
+        vault
+    } from '../scripts/store.js';
     import {icons} from '../scripts/assets.js';
     import {onMount} from 'svelte';
     import Select from '../components/Select.svelte';
     import Schema from '../components/Schema.svelte';
-    import {navigate} from '../scripts/helpers.js';
+    import {formatDate, getSubgraphData, hasRole, navigate, showPromptSFTCreate} from '../scripts/helpers.js';
+    import {AUDIT_HISTORY_DATA_QUERY} from '../scripts/queries.js';
+    import Calendar from '../components/Calendar.svelte';
+
+    let certifyUntil = formatDate(new Date())
+    let fileHashes = [];
+    let selectedDate = new Date();
+
+    let error = ''
 
     onMount(async () => {
         pageTitle.set(`Certify`)
@@ -22,9 +39,65 @@
     }
 
     function handleFileUpload(event) {
-        // fileHashes = event.detail.fileHashes
-        console.log(555)
+        fileHashes = event.detail.fileHashes
     }
+
+    async function certify() {
+
+        certifyUntil = formatDate(selectedDate)
+
+        //Set date to the nearest Midnight in the future
+        let untilToTime = new Date(certifyUntil).setHours(23, 59, 59, 0)
+        untilToTime = new Date(untilToTime).getTime()
+
+        const hasRoleCertifier = await hasRole($vault, $account, "CERTIFIER")
+        const _referenceBlockNumber = await $ethersData.provider.getBlockNumber();
+        if (!hasRoleCertifier.error) {
+            return
+            try {
+
+                let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
+                await showPromptSFTCreate(certifyTx)
+
+                let wait = await certifyTx.wait()
+                if (wait.status === 1) {
+                    let interval = setInterval(async () => {
+                        let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                        preData = preData?.data?.offchainAssetReceiptVault.certifications
+                        if (preData && preData.length) {
+                            if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
+                                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                                let temp = data.data.offchainAssetReceiptVault
+                                auditHistory.set(temp)
+                                // certifyData = $auditHistory?.certifications || []
+                                // let skip = (perPage * (currentPage - 1)) - 1
+                                // filteredCertifications = certifyData.filter((r, index) => index > skip && index <
+                                //     perPage * currentPage)
+                                getMaxCertifyDate()
+                                transactionSuccess.set(true)
+                                transactionInProgress.set(false)
+                                clearInterval(interval)
+                            }
+                        }
+                    }, 2000)
+                } else {
+                    transactionError.set(true)
+                }
+
+            } catch (e) {
+                console.log(e)
+            }
+
+
+        } else {
+            error = hasRoleCertifier.error
+        }
+    }
+
+    function handleDateChange(event) {
+        selectedDate = event.detail;
+    }
+
 </script>
 
 <div class="certify-container ">
@@ -64,11 +137,12 @@
     {/if}
 
     <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
-
   </div>
+  <div class="error">{error}</div>
 
   <div class="card-footer justify-between pl-6 pr-10">
-    <button class="default-btn pl-14 pr-14">Certify</button>
+    <Calendar value={selectedDate} on:change={handleDateChange}/>
+    <button class="default-btn pl-14 pr-14" on:click={()=>{certify()}}>Certify</button>
   </div>
 
 </div>
@@ -95,10 +169,16 @@
         border-radius: 10px;
         border: 1px solid var(--divider, #D2D2D2);
         padding: 15px 42px;
-        margin: 0 20px 40px 20px;
+        margin: 0 20px;
         width: 630px;
         min-height: 300px;
         text-align: left;
+    }
+
+    .error {
+        height: 40px;
+        display: flex;
+        align-items: center;
     }
 
     .asset-class {

@@ -13,8 +13,15 @@
     import {onMount} from 'svelte';
     import Select from '../components/Select.svelte';
     import Schema from '../components/Schema.svelte';
-    import {formatDate, getSubgraphData, hasRole, navigate, showPromptSFTCreate} from '../scripts/helpers.js';
-    import {AUDIT_HISTORY_DATA_QUERY} from '../scripts/queries.js';
+    import {
+        formatDate,
+        getSubgraphData,
+        hasRole,
+        navigate,
+        showPromptSFTCreate,
+        timeStampToDate
+    } from '../scripts/helpers.js';
+    import {LATEST_CERTIFY_QUERY} from '../scripts/queries.js';
     import Calendar from '../components/Calendar.svelte';
 
     let certifyUntil = formatDate(new Date())
@@ -27,6 +34,8 @@
         pageTitle.set(`Certify`)
         titleIcon.set(`${icons.certify}`)
     })
+
+    $:$activeNetwork && getMaxCertifyDate()
 
     let selectedSchema = {}
 
@@ -98,6 +107,25 @@
         selectedDate = event.detail;
     }
 
+    let maxCertifiedUntil = 0
+
+    async function getMaxCertifyDate() {
+
+        if ($vault.address) {
+            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, LATEST_CERTIFY_QUERY, 'offchainAssetReceiptVault')
+            if (data) {
+                let temp = data.data.offchainAssetReceiptVault.certifications.length ?
+                    data.data.offchainAssetReceiptVault.certifications[0].certifiedUntil :
+                    null
+                if (temp) {
+                    maxCertifiedUntil = new Date(timeStampToDate(temp, "yyyy-mm-dd")).setHours(23, 59)
+                }
+            } else {
+            }
+        }
+    }
+
+
 </script>
 
 <div class="certify-container ">
@@ -141,6 +169,9 @@
   <div class="error">{error}</div>
 
   <div class="card-footer justify-between pl-6 pr-10">
+    {#if maxCertifiedUntil < new Date()}
+      <span class="error">System frozen until certified</span>
+    {/if}
     <Calendar value={selectedDate} on:change={handleDateChange}/>
     <button class="default-btn pl-14 pr-14" on:click={()=>{certify()}}>Certify</button>
   </div>

@@ -22,17 +22,6 @@
     let filteredCertifications = [];
     let perPage = 10;
     let currentPage = 1
-    let maxCertifiedUntil = 0
-
-    function getMaxCertifyDate() {
-        for (const element of certifyData) {
-            const certifiedUntil = parseInt(element.certifiedUntil);
-            if (certifiedUntil > maxCertifiedUntil) {
-                maxCertifiedUntil = certifiedUntil;
-            }
-        }
-        maxCertifiedUntil = new Date(timeStampToDate(maxCertifiedUntil, "yyyy-mm-dd")).setHours(23, 59)
-    }
 
     async function getAuditHistory() {
 
@@ -54,9 +43,6 @@
         filteredCertifications = certifyData.filter((r, index) => index > skip && index <
             perPage * currentPage)
         loading = false
-
-        getMaxCertifyDate()
-
     }
 
     $: $activeNetwork && getAuditHistory();
@@ -122,9 +108,6 @@
         <div slot="actions">
           {#if !loading && ($accountRoles.CERTIFIER)}
             <div class="certify-btn-container">
-              {#if maxCertifiedUntil < new Date()}
-                <span class="error">System frozen until certified</span>
-              {/if}
               <button class="default-btn ml-3" on:click={() => navigate('#certify')}>Certify</button>
             </div>
           {/if}

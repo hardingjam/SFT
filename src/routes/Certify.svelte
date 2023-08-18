@@ -54,7 +54,14 @@
   </div>
 
   <div class="schema-container card-content">
-    <div class="flex w-full justify-center f-weight-700">{selectedSchema.displayName}</div>
+    <div class="flex w-full justify-center f-weight-700 mb-3">{$tokenName}</div>
+    {#if selectedSchema.displayName}
+      <div class="flex justify-between w-full mb-6 items-end">
+        <span class="f-weight-700">Asset class</span>
+        <div class="asset-class"> {selectedSchema.displayName}</div>
+      </div>
+    {/if}
+
     <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
 
   </div>
@@ -88,5 +95,21 @@
         border: 1px solid var(--divider, #D2D2D2);
         padding: 15px 42px;
         margin: 0 20px 40px 20px;
+        width: 630px;
+        min-height: 300px;
+        text-align: left;
     }
+
+    .asset-class {
+        border: 2px solid #ECECEC;
+        border-radius: 5px;
+        color: #000000;
+        background: #ECECEC;
+        width: 360px;
+        height: 27px;
+        margin-top: 8px;
+        padding: 0 5px;
+        text-align: left;
+    }
+
 </style>

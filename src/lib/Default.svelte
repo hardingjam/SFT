@@ -17,7 +17,7 @@
         data,
         roles,
         sftInfo,
-        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle
+        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, schemas
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -29,8 +29,9 @@
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
     import {
+        cborDecode,
         filterArray,
-        getContract,
+        getContract, getIpfsGetWay,
         getSubgraphData,
         mapOrder,
         setAccountRoles,
@@ -46,8 +47,8 @@
     import Navigation from "../components/Navigation.svelte";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
-    import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
-    import {ROLES} from '../scripts/consts.js';
+    import {QUERY, VAULT_INFORMATION_QUERY, VAULTS_QUERY} from "../scripts/queries.js";
+    import {MAGIC_NUMBERS, ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
@@ -61,6 +62,7 @@
     import ChangeComparison from '../routes/ChangeComparison.svelte';
     import AddressOverview from '../routes/AddressOverview.svelte';
     import Certify from '../routes/Certify.svelte';
+    import axios from 'axios';
 
 
     let connectedAccount;
@@ -118,6 +120,7 @@
         if (contract) {
             vault.set(contract);
         }
+        await getSchemas()
         return contract
     }
 
@@ -130,6 +133,7 @@
                 navigateTo("#");
             }
             await setNetwork();
+            await getSchemas();
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
                 account.set(connectedAccount)
@@ -297,6 +301,54 @@
                 tokens.set([])
             }
         });
+    }
+
+    async function getSchemas() {
+        let variables = {id: $vault?.address?.toLowerCase()}
+        if ($vault.address) {
+            try {
+                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
+                let receiptVaultInformations = ""
+                let tempSchema = []
+
+                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
+                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+
+                    if (receiptVaultInformations.length) {
+                        receiptVaultInformations.map(async data => {
+                            let cborDecodedInformation = cborDecode(data.information.slice(18))
+                            if (cborDecodedInformation[0].get(1) === MAGIC_NUMBERS.OA_SCHEMA) {
+                                let schemaHash = cborDecodedInformation[1].get(0)
+                                if (schemaHash && !schemaHash.includes(',')) {
+                                    let url = await getIpfsGetWay(schemaHash)
+                                    try {
+                                        if (url) {
+                                            let res = await axios.get(url)
+                                            if (res) {
+                                                tempSchema.push({
+                                                    ...res.data,
+                                                    timestamp: data.timestamp,
+                                                    id: data.id,
+                                                    hash: schemaHash
+                                                })
+                                                tempSchema = tempSchema.filter(d => d.displayName)
+                                                schemas.set(tempSchema)
+                                            }
+                                        }
+                                    } catch (err) {
+                                        // console.log(err)
+                                    }
+                                }
+                            }
+
+                        })
+                    }
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+        }
     }
 
     async function getRoles(vaultAddress) {

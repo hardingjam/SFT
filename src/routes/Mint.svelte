@@ -92,58 +92,9 @@
         if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
             navigateTo('#');
         }
-        await getSchemas()
     })
 
-    async function getSchemas() {
-        let variables = {id: $vault?.address?.toLowerCase()}
-        if ($vault.address) {
-            try {
-                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
-                let receiptVaultInformations = ""
-                let tempSchema = []
 
-                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
-                    ipfsLoading = true
-                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
-
-                    if (receiptVaultInformations.length) {
-                        receiptVaultInformations.map(async data => {
-                            let cborDecodedInformation = cborDecode(data.information.slice(18))
-                            if (cborDecodedInformation[0].get(1) === MAGIC_NUMBERS.OA_SCHEMA) {
-                                let schemaHash = cborDecodedInformation[1].get(0)
-                                if (schemaHash && !schemaHash.includes(',')) {
-                                    let url = await getIpfsGetWay(schemaHash)
-                                    try {
-                                        if (url) {
-                                            let res = await axios.get(url)
-                                            if (res) {
-                                                tempSchema.push({
-                                                    ...res.data,
-                                                    timestamp: data.timestamp,
-                                                    id: data.id,
-                                                    hash: schemaHash
-                                                })
-                                                tempSchema = tempSchema.filter(d => d.displayName)
-                                                schemas.set(tempSchema)
-                                                ipfsLoading = false;
-                                            }
-                                        }
-                                    } catch (err) {
-                                        // console.log(err)
-                                    }
-                                }
-                            }
-
-                        })
-                    }
-                }
-
-            } catch (err) {
-                console.log(err)
-            }
-        }
-    }
 
     async function mint() {
         try {
@@ -279,8 +230,6 @@
         password = ""
         return resolvedPromise?.value.data
     };
-
-    $: $activeNetwork.chainId && getSchemas()
 
     // $: $fileHash && getCertificateUrl($fileHash);
 

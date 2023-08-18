@@ -39,13 +39,14 @@
     </div>
     <button class="default-btn" on:click={()=>{navigate('#new-asset-class')}}>New schema</button>
   </div>
-  <div class="flex items-center pt-10 pb-10 ">Choose a schema for the audit report
+  <div class="flex items-center pt-10 pb-10 gap-5 ">Choose a schema for the audit report
 
     {#if $schemas.length}
       <div class="schema">
-        <div class="schema-dropdown flex justify-between mb-6">
+        <div class="schema-dropdown flex justify-between">
           <Select options={$schemas}
                   on:select={handleSchemaSelect}
+                  width="170"
                   label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
 
         </div>

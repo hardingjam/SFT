@@ -95,7 +95,6 @@
     })
 
 
-
     async function mint() {
         try {
             error = ""
@@ -314,7 +313,7 @@
             <div class="schema-dropdown flex justify-between mb-6">
               <label class="f-weight-700 custom-col">Asset class</label>
               <Select options={$schemas}
-
+                      width="360"
                       on:select={handleSchemaSelect}
                       label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
 

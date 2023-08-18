@@ -111,7 +111,7 @@
               <td>
                 <div>
                   <Select options={ROLES.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
-
+                          width="360"
                           on:select={handleRoleSelect}
                           label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
                 </div>

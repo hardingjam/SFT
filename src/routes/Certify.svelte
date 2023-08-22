@@ -1,8 +1,8 @@
 <script>
     import {
         account,
-        activeNetwork, auditHistory,
-        ethersData, fileDropped,
+        activeNetwork,
+        ethersData,
         pageTitle,
         schemas,
         titleIcon,
@@ -14,18 +14,16 @@
     import Select from '../components/Select.svelte';
     import Schema from '../components/Schema.svelte';
     import {
-        bytesToMeta,
-        cborDecode,
         cborEncode,
         encodeCBORStructure,
         formatDate, getFormData,
         getSubgraphData,
         hasRole,
-        navigate, showPrompt,
+        navigate, setFormInputs, showPrompt,
         showPromptSFTCreate,
         timeStampToDate
     } from '../scripts/helpers.js';
-    import {AUDIT_HISTORY_DATA_QUERY, DEPOSITS_QUERY, LATEST_CERTIFY_QUERY} from '../scripts/queries.js';
+    import {AUDIT_HISTORY_DATA_QUERY, LATEST_CERTIFY_QUERY} from '../scripts/queries.js';
     import Calendar from '../components/Calendar.svelte';
     import {IPFS_APIS, MAGIC_NUMBERS} from '../scripts/consts.js';
     import axios from 'axios';
@@ -100,14 +98,11 @@
                             preData = preData?.data?.offchainAssetReceiptVault.certifications
                             if (preData && preData.length) {
                                 if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
-                                    // certifyData = $auditHistory?.certifications || []
-                                    // let skip = (perPage * (currentPage - 1)) - 1
-                                    // filteredCertifications = certifyData.filter((r, index) => index > skip && index <
-                                    //     perPage * currentPage)
                                     await getMaxCertifyDate()
                                     transactionSuccess.set(true)
                                     transactionInProgress.set(false)
                                     clearInterval(interval)
+                                    setFormInputs()
                                 }
                             }
                         }, 2000)

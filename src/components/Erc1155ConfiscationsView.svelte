@@ -1,6 +1,6 @@
 <script>
     import {ethers} from 'ethers';
-    import {toIsoDate, formatAddress} from '../scripts/helpers.js';
+    import {toIsoDate, formatAddress, navigate} from '../scripts/helpers.js';
     import {icons} from '../scripts/assets.js';
     import {activeNetwork} from '../scripts/store.js';
     import SftLoader from './SftLoader.svelte';
@@ -13,6 +13,7 @@
     let filteredData = []
 
     $: confiscations && handlePageChange()
+
     async function handlePageChange(event) {
         currentPage = event?.detail.currentPage || 1
         let skip = (perPage * (currentPage - 1)) - 1
@@ -40,9 +41,16 @@
             <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
           </a>
         </td>
-        <td>{ethers.utils.formatUnits(confiscation.confiscated, 18)}</td>
-        <td>{confiscation.receipt.receiptId}</td>
         <td>{confiscation.offchainAssetReceiptVault.name}</td>
+        <td>{ethers.utils.formatUnits(confiscation.confiscated, 18)}</td>
+        <td>
+          {#if (confiscation.receipt.receiptInformations.length)}
+           <span class="brown underline cursor-pointer"
+                 on:click={()=>{ navigate(`#asset-information/${confiscation.receipt.receiptId}/${confiscation.receipt.receiptInformations[0].id}`)}}>
+           {confiscation.receipt.receiptId}
+          </span>
+          {/if}
+        </td>
         <td>{formatAddress(confiscation.confiscatee.address)}</td>
         <td>{toIsoDate(confiscation.timestamp)}</td>
       </tr>

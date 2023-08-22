@@ -15,6 +15,7 @@ import {
 } from "./store.js";
 import {VAULT_INFORMATION_QUERY} from "./queries.js";
 import {navigateTo} from 'yrv';
+import jQuery from 'jquery';
 
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -606,4 +607,27 @@ export function navigate(path, options) {
         })
     }
     navigateTo(path)
+}
+
+export async function getFormData(fileHashes) {
+    //get form data
+    let formDataArr = jQuery(".svelte-schema-form").serializeArray()
+    const json = {};
+    formDataArr.map(a => {
+        json[a.name] = a.value
+    })
+    if (fileHashes.length) {
+        fileHashes.map(data => {
+            json[data.prop] = data.hash
+        })
+    }
+    let formFields = Object.keys(json)
+
+    let formNotEmpty = formFields.some(f => json[f] !== "")
+    let response = null;
+    if (formNotEmpty) {
+        response = JSON.stringify(json)
+    }
+
+    return response
 }

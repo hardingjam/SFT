@@ -2,11 +2,11 @@
     import {
         account,
         activeNetwork, auditHistory,
-        ethersData,
+        ethersData, fileDropped,
         pageTitle,
         schemas,
         titleIcon,
-        tokenName, transactionError, transactionInProgress, transactionSuccess,
+        tokenName, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
         vault
     } from '../scripts/store.js';
     import {icons} from '../scripts/assets.js';
@@ -14,19 +14,31 @@
     import Select from '../components/Select.svelte';
     import Schema from '../components/Schema.svelte';
     import {
-        formatDate,
+        bytesToMeta,
+        cborDecode,
+        cborEncode,
+        encodeCBORStructure,
+        formatDate, getFormData,
         getSubgraphData,
         hasRole,
-        navigate,
+        navigate, showPrompt,
         showPromptSFTCreate,
         timeStampToDate
     } from '../scripts/helpers.js';
-    import {LATEST_CERTIFY_QUERY} from '../scripts/queries.js';
+    import {AUDIT_HISTORY_DATA_QUERY, DEPOSITS_QUERY, LATEST_CERTIFY_QUERY} from '../scripts/queries.js';
     import Calendar from '../components/Calendar.svelte';
+    import {IPFS_APIS, MAGIC_NUMBERS} from '../scripts/consts.js';
+    import axios from 'axios';
+    import {arrayify} from 'ethers/lib/utils.js';
 
     let certifyUntil = formatDate(new Date())
     let fileHashes = [];
     let selectedDate = new Date();
+    let structure;
+
+    let username = ''
+    let password = ''
+
 
     let error = ''
 
@@ -62,35 +74,47 @@
         const hasRoleCertifier = await hasRole($vault, $account, "CERTIFIER")
         const _referenceBlockNumber = await $ethersData.provider.getBlockNumber();
         if (!hasRoleCertifier.error) {
-            return
             try {
 
-                let certifyTx = await $vault.certify(untilToTime / 1000, _referenceBlockNumber, false, [])
-                await showPromptSFTCreate(certifyTx)
+                structure = await getFormData(fileHashes)
 
-                let wait = await certifyTx.wait()
-                if (wait.status === 1) {
-                    let interval = setInterval(async () => {
-                        let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                        preData = preData?.data?.offchainAssetReceiptVault.certifications
-                        if (preData && preData.length) {
-                            if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
-                                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-                                let temp = data.data.offchainAssetReceiptVault
-                                auditHistory.set(temp)
-                                // certifyData = $auditHistory?.certifications || []
-                                // let skip = (perPage * (currentPage - 1)) - 1
-                                // filteredCertifications = certifyData.filter((r, index) => index > skip && index <
-                                //     perPage * currentPage)
-                                getMaxCertifyDate()
-                                transactionSuccess.set(true)
-                                transactionInProgress.set(false)
-                                clearInterval(interval)
+                if (structure) {
+
+                    let fileHashesList = fileHashes.map(f => f.hash)
+                    let encodedStructure = encodeCBORStructure(structure, selectedSchema.hash)
+
+                    let structureIpfs = await upload()
+                    let encodedHashList = cborEncode([...fileHashesList,
+                        structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
+                    const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() +
+                        encodedStructure + encodedHashList
+
+                    let certifyTx = await $vault.certify(untilToTime /
+                        1000, _referenceBlockNumber, false, arrayify(meta))
+                    await showPromptSFTCreate(certifyTx)
+
+                    let wait = await certifyTx.wait()
+                    if (wait.status === 1) {
+                        let interval = setInterval(async () => {
+                            let preData = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                            preData = preData?.data?.offchainAssetReceiptVault.certifications
+                            if (preData && preData.length) {
+                                if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
+                                    // certifyData = $auditHistory?.certifications || []
+                                    // let skip = (perPage * (currentPage - 1)) - 1
+                                    // filteredCertifications = certifyData.filter((r, index) => index > skip && index <
+                                    //     perPage * currentPage)
+                                    await getMaxCertifyDate()
+                                    transactionSuccess.set(true)
+                                    transactionInProgress.set(false)
+                                    clearInterval(interval)
+                                }
                             }
-                        }
-                    }, 2000)
-                } else {
-                    transactionError.set(true)
+                        }, 2000)
+                    } else {
+                        transactionError.set(true)
+                    }
+
                 }
 
             } catch (e) {
@@ -125,6 +149,60 @@
         }
     }
 
+    const upload = async () => {
+        error = ""
+        let savedUsername = localStorage.getItem('ipfsUsername');
+        let savedPassword = localStorage.getItem('ipfsPassword');
+        if (!savedPassword || !savedUsername) {
+            navigate("#ipfs")
+        } else {
+            username = savedUsername;
+            password = savedPassword
+
+            let formData = new FormData();
+
+            formData.append('file', structure)
+
+            const requestArr = IPFS_APIS.map((url) => {
+                return axios.request({
+                    url,
+                    auth: {
+                        username,
+                        password
+                    },
+                    method: 'post',
+                    headers: {
+                        "Content-Type": `multipart/form-data;`,
+                    },
+                    data: formData,
+                    onUploadProgress: (async (p) => {
+                        await showPrompt(null, {topText: "Uploading to IPFS, please wait", noBottomText: true})
+                        console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                    }),
+                    withCredentials: true,
+                })
+            });
+
+            let respAll = await Promise.allSettled(requestArr)
+
+            respAll.map(response => {
+                if (response.status === "rejected") {
+                    reportError(response.reason)
+                } else return response
+            })
+
+            let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+            if (!resolvedPromise) {
+                error = "Something went wrong"
+            }
+            username = ""
+            password = ""
+            transactionInProgressShow.set(false)
+            transactionInProgress.set(false)
+
+            return resolvedPromise?.value.data
+        }
+    };
 
 </script>
 

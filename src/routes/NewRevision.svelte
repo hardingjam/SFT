@@ -8,7 +8,8 @@
         getSubgraphData,
         hasRole,
         navigate,
-        showPrompt, showPromptSFTCreate, toSentenceCase
+        showPrompt, showPromptSFTCreate, toSentenceCase,
+        getFormData
     } from '../scripts/helpers.js';
     import {
         activeNetwork,
@@ -164,7 +165,7 @@
     }
 
     const upload = async () => {
-        structure = await getFormData()
+        structure = await getFormData(fileHashes)
         error = ""
         let savedUsername = localStorage.getItem('ipfsUsername');
         let savedPassword = localStorage.getItem('ipfsPassword');
@@ -220,28 +221,7 @@
     };
 
 
-    async function getFormData() {
-        //get form data
-        let formDataArr = jQuery(".svelte-schema-form").serializeArray()
-        const json = {};
-        formDataArr.map(a => {
-            json[a.name] = a.value
-        })
-        if (fileHashes.length) {
-            fileHashes.map(data => {
-                json[data.prop] = data.hash
-            })
-        }
-        let formFields = Object.keys(json)
 
-        let formNotEmpty = formFields.some(f => json[f] !== "")
-        let response = null;
-        if (formNotEmpty) {
-            response = JSON.stringify(json)
-        }
-
-        return response
-    }
 
     async function getReceiptData() {
         let variables

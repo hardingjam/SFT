@@ -105,6 +105,8 @@
                     navigateTo(`#address-overview/${e.params.address}`, {replace: false})
                 } else if (location === `#token-overview/${e.params.address}`) {
                     navigateTo(`#token-overview/${e.params.address}`, {replace: false})
+                } else if (location.includes('#asset-information')) {
+                    navigateTo(location, {replace: false})
                 } else {
                     vault.set({})
                     location = "#"
@@ -534,12 +536,10 @@
     align-items: center;
     justify-content: center;
     padding-top: 9rem;
-    transition: 0.5s ease;
   }
 
   .sft-info-opened {
     margin-left: 36rem;
-    transition: 0.5s ease;
   }
 
   .invalid-network {

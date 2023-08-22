@@ -89,7 +89,7 @@
             <tr class="tb-row">
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
-              <td><span class="underline brown"
+              <td><span class="underline brown cursor-pointer"
                         on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span>
               </td>
               <td><span class="brown cursor-pointer underline">asset class data</span></td>

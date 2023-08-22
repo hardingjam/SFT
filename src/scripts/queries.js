@@ -345,6 +345,13 @@ export const ADDRESS_OVERVIEW_QUERY = `
                     receipt{
                       receiptId
                       id
+                      receiptInformations(orderBy: timestamp, orderDirection: desc first:1) {
+                        information
+                        id
+                        transaction{
+                            id
+                        }
+                      }
                     }
                   }
                 }

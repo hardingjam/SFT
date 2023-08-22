@@ -40,8 +40,8 @@
             <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
           </a>
         </td>
-        <td>{ethers.utils.formatUnits(confiscation.confiscated, 18)}</td>
         <td>{confiscation.offchainAssetReceiptVault.name}</td>
+        <td>{ethers.utils.formatUnits(confiscation.confiscated, 18)}</td>
         <td>{formatAddress(confiscation.confiscatee.address)}</td>
         <td>{toIsoDate(confiscation.timestamp)}</td>
       </tr>

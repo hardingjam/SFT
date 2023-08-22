@@ -102,6 +102,8 @@
                     navigateTo(`#address-overview/${e.params.address}`, {replace: false})
                 } else if (location === `#token-overview/${e.params.address}`) {
                     navigateTo(`#token-overview/${e.params.address}`, {replace: false})
+                } else if (location.includes('#asset-information')) {
+                    navigateTo(location, {replace: false})
                 } else {
                     vault.set({})
                     location = "#"

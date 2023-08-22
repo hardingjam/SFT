@@ -11,7 +11,7 @@
     } from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
-    import {formatAddress, formatDate} from "../scripts/helpers";
+    import {formatAddress} from "../scripts/helpers";
     import {accountRoles} from "../scripts/store.js";
     import SftLoader from '../components/SftLoader.svelte';
     import Pagination from '../components/Pagination.svelte';
@@ -85,14 +85,20 @@
         {#if certifyData.length}
 
           {#each filteredCertifications as cert}
-            <!--            <tr class="tb-row" on:click={()=>{goToReceiptAudit(receipt)}}>-->
             <tr class="tb-row">
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
               <td><span class="underline brown cursor-pointer"
                         on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span>
               </td>
-              <td><span class="brown cursor-pointer underline">asset class data</span></td>
+              <td>
+                {#if (cert?.data)}
+                  <span class="brown cursor-pointer underline" on:click={()=>{navigate(`#audit-report/${cert?.id}`)}}>Asset class data</span>
+                {/if}
+                {#if (!cert?.data)}
+                  N/A
+                {/if}
+              </td>
               <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
                 {toIsoDate(cert?.certifiedUntil)}
               </td>

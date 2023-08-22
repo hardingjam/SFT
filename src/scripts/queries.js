@@ -67,6 +67,8 @@ export const AUDIT_HISTORY_DATA_QUERY = `
               {
                 address
               },
+              id
+              data
               certifiedUntil,
               totalShares
                 transaction {
@@ -578,6 +580,20 @@ export const LATEST_CERTIFY_QUERY = `
               {
                 id
                 certifiedUntil
+                information
+              }
+            }
+          }   
+         `;
+export const CERTIFICATION_QUERY = `
+          query($id: ID!, $certifyId: ID!) {
+            offchainAssetReceiptVault(id: $id) 
+            {
+              certifications(where:{id:$certifyId}) 
+              {
+                id
+                information
+                timestamp
               }
             }
           }   

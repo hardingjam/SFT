@@ -63,6 +63,7 @@
     import AddressOverview from '../routes/AddressOverview.svelte';
     import Certify from '../routes/Certify.svelte';
     import axios from 'axios';
+    import AuditReport from '../routes/AuditReport.svelte';
 
 
     let connectedAccount;
@@ -423,6 +424,7 @@
           <Route path="#manual" component={Manual}/>
           <Route path="#new-revision/:id" component={NewRevision}/>
           <Route path="#certify" component={Certify}/>
+          <Route path="#audit-report/:id" component={AuditReport}/>
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
               <button class:selected="{selectedTab === '#mint'}" class="tab-button"

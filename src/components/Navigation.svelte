@@ -80,8 +80,8 @@
         </div>
       </NavigationButton>
     </div>
-    <div class="items-center pt-16 border-b w-11/12 self-center"></div>
-    <div class="mt-6 flex flex-col justify-start items-center w-full">
+    <div class="items-center pt-4 border-b w-11/12 self-center"></div>
+    <div class="mt-4 flex flex-col justify-start items-center w-full">
       <a href=""
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <span class="leading-5 menu-header">Web 3</span>

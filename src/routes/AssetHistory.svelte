@@ -123,10 +123,16 @@
                   on:click={()=>{goToAssetInformation(information)}}>{timeStampToDate(information.timestamp, "yy-mm-dd/tt:tt")}
                 </span>
               </td>
-              <td class="underline cursor-pointer"
+              <td class="underline cursor-pointer brown"
                   on:click={()=>{viewInExplorer(information.transaction.id)}}>{formatHash(information.transaction.id) ||
               ""}</td>
-              <td>{formatAddress(information.emitter.address) || ""}</td>
+
+              <td>
+               <span class="brown underline cursor-pointer"
+                                    on:click={()=>{navigate(`#address-overview/${information.emitter.address}`)}}>
+                {formatAddress(information.emitter.address) || ""}
+               </span>
+              </td>
               <td>{ethers.utils.formatUnits(information.receipt.deposits[0].amount, 18)}</td>
             </tr>
           {/each}

@@ -31,6 +31,7 @@ import asset_list from '../assets/icons/asset_list.svg'
 import asset_list_dark from '../assets/icons/asset_list_dark.svg'
 import sft_create from '../assets/icons/sft_create.svg'
 import ipfs from '../assets/icons/ipfs.svg'
+import ipfs_white from '../assets/icons/ipfs_white.svg'
 
 export const icons = {
     ethereum,
@@ -65,5 +66,6 @@ export const icons = {
     asset_list_dark,
     arrow_narrow_left,
     sft_create,
-    ipfs
+    ipfs,
+    ipfs_white
 }

@@ -1,6 +1,6 @@
 <script>
-    import {createEventDispatcher} from 'svelte';
-    import {pageTitle} from '../scripts/store.js';
+    import {createEventDispatcher, onDestroy, onMount} from 'svelte';
+    import {pageTitle, titleIcon, tokenName} from '../scripts/store.js';
     import {icons} from '../scripts/assets.js';
 
     export let username = localStorage.getItem('ipfsUsername') || "";
@@ -22,7 +22,15 @@
         });
     }
 
-    pageTitle.set("IPFS login")
+    onMount(async () => {
+        pageTitle.set("IPFS login")
+
+        titleIcon.set(`${icons.ipfs_white}`)
+    })
+
+    onDestroy(() => {
+        titleIcon.set("")
+    })
 
 
     function toggleShowPassword() {

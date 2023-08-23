@@ -88,7 +88,7 @@
         width: 33.3%;
         color: #FFFFFF;
         font-family: "Mukta", sans-serif;
-        font-size: 24px;
+        font-size: 18px;
         font-style: normal;
         font-weight: 700;
         line-height: normal;

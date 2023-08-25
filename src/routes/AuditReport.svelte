@@ -75,28 +75,21 @@
     <div class="display-flex justify-between font-bold mb-8 text-left">
       <span>{$tokenName}</span>
       <span>
-       Revision date:
+       Audit date:
         {certification ? toIsoDate(certification.timestamp) : 0}
       </span>
     </div>
     <div class="flex items-start flex-col mb-8">
       <div class="flex justify-between font-bold text-left w-full">
-        <span class="f-weight-700 w-2/3 whitespace-nowrap flex pr-3">Asset class <span class="dots"></span></span>
-        <span class="f-weight-700 w-1/3">{schemaName}</span>
-      </div>
-      <div class="flex justify-between font-bold text-left w-full">
-        <span class="f-weight-700 w-2/3 whitespace-nowrap flex pr-3">Current revision <span class="dots"></span></span>
-        <span class="f-weight-400 w-1/3">{1}</span>
-      </div>
-      <div class="flex justify-between font-bold text-left w-full">
-        <span class="f-weight-700 w-2/3 whitespace-nowrap flex pr-3">Receipt ID <span class="dots"></span></span>
-        <span class="f-weight-400 w-1/3">{$selectedReceipt?.receipt?.receiptId || 0}</span>
+        <span class="f-weight-700 whitespace-nowrap">Audit type </span>
+        <span class="dots"></span>
+        <span class="f-weight-700 text-right">{schemaName}</span>
       </div>
     </div>
 
     <div class="">
       {#each displayInformation as info}
-        <div class="receipt-row flex justify-between font-bold text-left w-full">
+        <div class="receipt-row flex justify-between w-full">
 
           {#if fileUploadProperties.includes(info.label)}
             <span class="underline btn-hover">
@@ -107,8 +100,9 @@
           {/if}
 
           {#if !fileUploadProperties.includes(info.label)}
-            <span class="w-2/3 whitespace-nowrap flex pr-3">{info.label} <span class="dots"></span> </span>
-            <span class="w-1/3">{ethers.utils.isAddress(info.value) ? formatAddress(info.value) : info.value}</span>
+            <span class="whitespace-nowrap">{info.label}  </span>
+            <span class="dots f-weight-700"></span>
+            <span class="text-right w-1/5">{ethers.utils.isAddress(info.value) ? formatAddress(info.value) : info.value}</span>
           {/if}
 
         </div>
@@ -139,12 +133,8 @@
     .receipt-row {
         padding: 2px 0;
         display: flex;
-        justify-content: space-between;
     }
 
-    .receipt-row span {
-        text-align: start;
-    }
     .card-header{
         padding-left: 60px;
         color: #000;

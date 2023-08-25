@@ -103,6 +103,7 @@
                                     transactionInProgress.set(false)
                                     clearInterval(interval)
                                     setFormInputs()
+                                    navigate(`#audit-report/${preData[0]?.id}`)
                                 }
                             }
                         }, 2000)

@@ -1,6 +1,5 @@
 <script>
     import {
-        selectedReceipt,
         data,
         vault,
         activeNetwork, tokenName
@@ -111,8 +110,8 @@
 
 
     <div class="display-flex justify-between font-bold mt-20 text-left">
-      <span class="w-2/3">Total token amount:</span>
-      <span class="w-1/3">{$data.offchainAssetReceiptVault ?
+      <span>Total token amount:</span>
+      <span>{$data.offchainAssetReceiptVault ?
           ethers.utils.formatUnits($data.offchainAssetReceiptVault.totalShares, 18) :
           0}</span>
     </div>

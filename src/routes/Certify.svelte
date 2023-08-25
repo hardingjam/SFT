@@ -232,12 +232,12 @@
     <div class="flex w-full justify-center f-weight-700 mb-3">{$tokenName}</div>
     {#if selectedSchema.displayName}
       <div class="flex justify-between w-full mb-6 items-end">
-        <span class="f-weight-700">Asset class</span>
+        <span class="f-weight-700">Audit type</span>
         <div class="asset-class"> {selectedSchema.displayName}</div>
       </div>
     {/if}
 
-    <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
+    <Schema schema={selectedSchema} on:fileUpload={handleFileUpload} title="Audit Info."></Schema>
   </div>
   <div class="error">{error}</div>
 

@@ -36,6 +36,7 @@
 
     let username = ''
     let password = ''
+    let force = false
 
 
     let error = ''
@@ -88,7 +89,7 @@
                         encodedStructure + encodedHashList
 
                     let certifyTx = await $vault.certify(untilToTime /
-                        1000, _referenceBlockNumber, false, arrayify(meta))
+                        1000, _referenceBlockNumber, force, arrayify(meta))
                     await showPromptSFTCreate(certifyTx)
 
                     let wait = await certifyTx.wait()
@@ -246,6 +247,11 @@
     {#if maxCertifiedUntil < new Date()}
       <span class="error">System frozen until certified</span>
     {/if}
+    <span>Force</span>
+    <label class="check-container">
+      <input type="checkbox" class="check-box" bind:checked={force}/>
+      <span class="checkmark"></span>
+    </label>
     <Calendar value={selectedDate} on:change={handleDateChange}/>
     <button class="default-btn pl-14 pr-14" on:click={()=>{certify()}}>Certify</button>
   </div>
@@ -298,4 +304,15 @@
         text-align: left;
     }
 
+    .checkmark {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        left: 50%;
+    }
+
+    .checkmark:after {
+        left: 3px;
+        top: -3px;
+    }
 </style>

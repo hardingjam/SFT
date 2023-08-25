@@ -30,6 +30,8 @@ import arrow_narrow_left from '../assets/icons/arrow_narrow_left.svg'
 import asset_list from '../assets/icons/asset_list.svg'
 import asset_list_dark from '../assets/icons/asset_list_dark.svg'
 import sft_create from '../assets/icons/sft_create.svg'
+import ipfs from '../assets/icons/ipfs.svg'
+import ipfs_white from '../assets/icons/ipfs_white.svg'
 import certify from '../assets/icons/certify.svg'
 
 export const icons = {
@@ -64,6 +66,8 @@ export const icons = {
     asset_list,
     asset_list_dark,
     arrow_narrow_left,
+    ipfs,
+    ipfs_white,
     sft_create,
     certify
 }

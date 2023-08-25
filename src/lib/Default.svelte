@@ -114,6 +114,8 @@
                     navigateTo("#", {replace: false})
                 }
             }
+
+            window.scrollTo(0, 0);
         }
     });
 

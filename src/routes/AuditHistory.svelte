@@ -84,7 +84,7 @@
         <tbody>
         {#if certifyData.length}
 
-          {#each filteredCertifications as cert}
+          {#each filteredCertifications as cert, i}
             <tr class="tb-row">
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
@@ -99,9 +99,17 @@
                   N/A
                 {/if}
               </td>
-              <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
-                {toIsoDate(cert?.certifiedUntil)}
-              </td>
+              {#if i===0}
+                <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
+                  {toIsoDate(cert?.certifiedUntil)}
+                </td>
+              {/if}
+              {#if i!==0}
+                <td class="cert-date">
+                  {toIsoDate(cert?.certifiedUntil)}
+                </td>
+              {/if}
+
             </tr>
           {/each}
         {/if}
@@ -141,6 +149,10 @@
 
     .until {
         color: #F11717;;
+    }
+
+    .cert-date{
+        color: #9D9D9D;
     }
 
 </style>

@@ -60,7 +60,7 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             address,
             totalShares,
             receiptContractAddress
-            certifications(orderBy: timestamp, orderDirection: desc)
+            certifications(orderBy: certifiedUntil, orderDirection: desc)
             {
               timestamp,
               certifier

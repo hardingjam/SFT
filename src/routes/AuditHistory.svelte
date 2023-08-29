@@ -99,12 +99,12 @@
                   N/A
                 {/if}
               </td>
-              {#if i===0}
+              {#if cert.certifiedUntil === $auditHistory.certifiedUntil}
                 <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
                   {toIsoDate(cert?.certifiedUntil)}
                 </td>
               {/if}
-              {#if i!==0}
+              {#if cert.certifiedUntil !== $auditHistory.certifiedUntil}
                 <td class="cert-date">
                   {toIsoDate(cert?.certifiedUntil)}
                 </td>
@@ -151,7 +151,7 @@
         color: #F11717;;
     }
 
-    .cert-date{
+    .cert-date {
         color: #9D9D9D;
     }
 

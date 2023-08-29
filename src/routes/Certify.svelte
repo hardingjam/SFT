@@ -7,7 +7,7 @@
         schemas,
         titleIcon,
         tokenName, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
-        vault
+        vault, data
     } from '../scripts/store.js';
     import {icons} from '../scripts/assets.js';
     import {onMount} from 'svelte';
@@ -20,10 +20,9 @@
         getSubgraphData,
         hasRole,
         navigate, setFormInputs, showPrompt,
-        showPromptSFTCreate,
-        timeStampToDate
+        showPromptSFTCreate
     } from '../scripts/helpers.js';
-    import {AUDIT_HISTORY_DATA_QUERY, LATEST_CERTIFY_QUERY} from '../scripts/queries.js';
+    import {AUDIT_HISTORY_DATA_QUERY, QUERY} from '../scripts/queries.js';
     import Calendar from '../components/Calendar.svelte';
     import {IPFS_APIS, MAGIC_NUMBERS} from '../scripts/consts.js';
     import axios from 'axios';
@@ -37,7 +36,7 @@
     let username = ''
     let password = ''
     let force = false
-
+    let certifiedUntil = new Date()
 
     let error = ''
 
@@ -46,7 +45,20 @@
         titleIcon.set(`${icons.certify}`)
     })
 
-    $:$activeNetwork && getMaxCertifyDate()
+    $:$activeNetwork && getSgData()
+
+    async function getSgData() {
+        let variables = {id: $vault.address.toLowerCase()}
+
+        getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
+            if (res && res.data) {
+                data.set(res.data)
+                certifiedUntil = new Date(res.data.offchainAssetReceiptVault.certifiedUntil * 1000)
+            }
+        })
+
+    }
+
 
     let selectedSchema = {}
 
@@ -99,7 +111,6 @@
                             preData = preData?.data?.offchainAssetReceiptVault.certifications
                             if (preData && preData.length) {
                                 if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
-                                    await getMaxCertifyDate()
                                     transactionSuccess.set(true)
                                     transactionInProgress.set(false)
                                     clearInterval(interval)
@@ -126,24 +137,6 @@
 
     function handleDateChange(event) {
         selectedDate = event.detail;
-    }
-
-    let maxCertifiedUntil = 0
-
-    async function getMaxCertifyDate() {
-
-        if ($vault.address) {
-            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, LATEST_CERTIFY_QUERY, 'offchainAssetReceiptVault')
-            if (data) {
-                let temp = data.data.offchainAssetReceiptVault.certifications.length ?
-                    data.data.offchainAssetReceiptVault.certifications[0].certifiedUntil :
-                    null
-                if (temp) {
-                    maxCertifiedUntil = new Date(timeStampToDate(temp, "yyyy-mm-dd")).setHours(23, 59)
-                }
-            } else {
-            }
-        }
     }
 
     const upload = async () => {
@@ -241,17 +234,21 @@
 
     <Schema schema={selectedSchema} on:fileUpload={handleFileUpload} title="Audit Info."></Schema>
   </div>
-  <div class="error">{error}</div>
-
-  <div class="card-footer justify-between pl-6 pr-10">
-    {#if maxCertifiedUntil < new Date()}
-      <span class="error">System frozen until certified</span>
-    {/if}
-    <span>Force</span>
+  <div class="force flex w-100 px-5 py-2 gap-5">
     <label class="check-container">
       <input type="checkbox" class="check-box" bind:checked={force}/>
       <span class="checkmark"></span>
     </label>
+    <div class="ml-3 mt-1">Force the date to override the expiry</div>
+
+  </div>
+  {#if error}
+    <div class="error">{error}</div>
+  {/if}
+  <div class="card-footer justify-between pl-6 pr-10">
+    {#if certifiedUntil < new Date()}
+      <span class="error">System frozen until certified</span>
+    {/if}
     <Calendar value={selectedDate} on:change={handleDateChange}/>
     <button class="default-btn pl-14 pr-14" on:click={()=>{certify()}}>Certify</button>
   </div>
@@ -302,6 +299,10 @@
         margin-top: 8px;
         padding: 0 5px;
         text-align: left;
+    }
+
+    .check-container {
+        left: 10px;
     }
 
     .checkmark {

@@ -7,6 +7,7 @@ export const QUERY = `
                 deployer
                 admin
                 name
+                certifiedUntil
                 symbol
                 deployTimestamp
                 receiptContractAddress
@@ -573,19 +574,6 @@ export const REVISIONS_DATA_QUERY =
                 }
             }
 }`
-export const LATEST_CERTIFY_QUERY = `
-          query($id: ID!) {
-            offchainAssetReceiptVault(id: $id) 
-            {
-              certifications(orderBy: certifiedUntil orderDirection: desc  first:1) 
-              {
-                id
-                certifiedUntil
-                information
-              }
-            }
-          }   
-         `;
 export const CERTIFICATION_QUERY = `
           query($id: ID!, $certifyId: ID!) {
             offchainAssetReceiptVault(id: $id) 

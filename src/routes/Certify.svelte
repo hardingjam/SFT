@@ -232,9 +232,6 @@
     <div class="error">{error}</div>
   {/if}
   <div class="card-footer justify-between pl-6 pr-10">
-    {#if certifiedUntil < new Date()}
-      <span class="error">System frozen until certified</span>
-    {/if}
     <Calendar value={selectedDate} on:change={handleDateChange}/>
     <button class="default-btn pl-14 pr-14" on:click={()=>{certify()}}>Certify</button>
   </div>

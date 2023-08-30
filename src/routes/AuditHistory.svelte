@@ -2,7 +2,7 @@
     import {
         vault,
         auditHistory,
-        activeNetwork, sftInfo, pageTitle
+        activeNetwork, sftInfo, pageTitle, data, currentCertification
     } from "../scripts/store";
     import {
         getSubgraphData,
@@ -120,11 +120,23 @@
       </table>
       <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}>
         <div slot="actions">
-          {#if !loading && ($accountRoles.CERTIFIER)}
-            <div class="certify-btn-container">
-              <button class="default-btn ml-3" on:click={() => navigate('#certify')}>Certify</button>
-            </div>
-          {/if}
+          <div class="actions">
+            {#if new Date($data?.offchainAssetReceiptVault?.certifiedUntil * 1000) < new Date()}
+              <div class="certify-warning">
+                <span class="error">Warning, this token is frozen.</span>
+                {#if ($currentCertification?.id)}
+                  <span class="brown underline cursor-pointer"
+                        on:click={()=>{navigate(`#audit-report/${$currentCertification?.id}`)}}>Current certification</span>
+                {/if}
+              </div>
+            {/if}
+            {#if !loading && ($accountRoles.CERTIFIER)}
+              <div class="certify-btn-container">
+                <button class="default-btn ml-3" on:click={() => navigate('#certify')}>Certify</button>
+              </div>
+            {/if}
+          </div>
+
         </div>
       </Pagination>
     </div>
@@ -147,6 +159,10 @@
 
     .cert-date {
         color: #9D9D9D;
+    }
+
+    .actions {
+        display: flex
     }
 
 </style>

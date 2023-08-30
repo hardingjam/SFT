@@ -351,7 +351,7 @@
 
 
     async function getCurrentCertification() {
-        if ($data.offchainAssetReceiptVault && !$currentCertification.id) {
+        if ($data.offchainAssetReceiptVault && !$currentCertification?.id) {
             let variables = {id: $vault.address, certifiedUntil: $data.offchainAssetReceiptVault.certifiedUntil}
             let resp = await getSubgraphData($activeNetwork, variables, CURRENT_CERTIFICATION_QUERY, 'offchainAssetReceiptVault')
             currentCertification.set(resp.data.offchainAssetReceiptVault.certifications[0])
@@ -387,8 +387,14 @@
     {#if (showCertifyWarning)}
       <div class="certify-warning">
         <span class="error">Warning, this token is frozen.</span>
-        <span class="brown underline cursor-pointer"
-              on:click={()=>{navigate(`#audit-report/${$currentCertification.id}`)}}>Current certification</span>
+        {#if ($currentCertification?.id)}
+          <span class="brown underline cursor-pointer"
+                on:click={()=>{navigate(`#audit-report/${$currentCertification?.id}`)}}>Current certification</span>
+        {/if}
+        {#if (!$currentCertification?.id)}
+          <span class="brown underline cursor-pointer"
+                on:click={()=>{navigate(`#audit-history`)}}>Certify</span>
+        {/if}
       </div>
     {/if}
 

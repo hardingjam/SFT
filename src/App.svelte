@@ -59,7 +59,7 @@
 
 <main>
   {#if ($account)}
-    <Header on:select={handleNetworkSelect}></Header>{location}
+    <Header on:select={handleNetworkSelect}></Header>
     {#if location && (location !== "/" && location !== "#")}
       <BreadCrumbs/>
     {/if}

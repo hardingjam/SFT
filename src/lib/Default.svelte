@@ -632,7 +632,6 @@
   }
 
   .content {
-    margin-top: 80px;
     height: fit-content;
     min-height: 100vh;
   }

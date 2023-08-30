@@ -7,7 +7,7 @@
         schemas,
         titleIcon,
         tokenName, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
-        vault, data
+        vault
     } from '../scripts/store.js';
     import {icons} from '../scripts/assets.js';
     import {onMount} from 'svelte';
@@ -44,21 +44,6 @@
         pageTitle.set(`Certify`)
         titleIcon.set(`${icons.certify}`)
     })
-
-    $:$activeNetwork && getSgData()
-
-    async function getSgData() {
-        let variables = {id: $vault.address.toLowerCase()}
-
-        getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
-            if (res && res.data) {
-                data.set(res.data)
-                certifiedUntil = new Date(res.data.offchainAssetReceiptVault.certifiedUntil * 1000)
-            }
-        })
-
-    }
-
 
     let selectedSchema = {}
 

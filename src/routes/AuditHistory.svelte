@@ -136,12 +136,6 @@
         margin-left: 223px;
     }
 
-    .receipts {
-        width: 100%;
-        margin-right: 20px;
-        margin-top: 102px;
-    }
-
     .certify-btn-container {
         display: flex;
         justify-content: end;

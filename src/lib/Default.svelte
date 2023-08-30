@@ -38,11 +38,9 @@
         showPrompt
     } from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
-    import Tokens from "../routes/Tokens.svelte";
     import Members from "../routes/Members.svelte";
     import AuditHistory from "../routes/AuditHistory.svelte";
     import NewSchema from "../routes/NewSchema.svelte";
-    import SftCreateSuccess from "../routes/SftCreateSuccess.svelte";
     import AssetClasses from "../routes/AssetClasses.svelte";
     import Navigation from "../components/Navigation.svelte";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
@@ -72,6 +70,7 @@
     let isMetamaskInstalled = typeof window.ethereum !== "undefined";
 
     let location = window.location.hash;
+    let showCertifyWarning = '';
     let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
 
@@ -81,13 +80,12 @@
             accountRoles.set(await setAccountRoles($roles, $account));
             tokenName.set($data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : "")
         }
+        showCertifyWarning = shouldShowWarning()
     }
 
     router.subscribe(async e => {
         //reset pageTitle
         pageTitle.set("")
-
-
         if (!e.initial) {
             let contract = await setVault()
             location = e.path
@@ -385,11 +383,40 @@
 
         }
     }
+
+    function shouldShowWarning() {
+        let hideRoutes = [
+            '#setup',
+            '#asset-information',
+            '#ipfs',
+            '#manual',
+            '#new-revision',
+            '',
+            '#',
+            '#audit-history',
+            '#token-overview',
+            '#change-comparison',
+            '#address-overview',
+        ]
+
+        let page = location.split('/')[0]
+
+        return !!(($data.offchainAssetReceiptVault && new Date($data.offchainAssetReceiptVault.certifiedUntil * 1000) <
+            new Date()) && (page && !hideRoutes.includes(page) && page !== '#'));
+
+    }
 </script>
 <Router url={url}>
 
   <div class={$account ? "content" : "content-not-connected"}>
     <Header on:select={handleNetworkSelect} {location}></Header>
+    {#if (showCertifyWarning)}
+      <div class="certify-warning">
+        <span class="error">Warning, this token is frozen.</span>
+        <span class="brown underline cursor-pointer">Current certification</span>
+      </div>
+    {/if}
+
     <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
       <a href="/">
         <img src={icons.logo} alt=""
@@ -397,6 +424,7 @@
       </a>
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
+
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
 
       <div class={$sftInfo ? "sft-info-opened" : "" }>
@@ -415,19 +443,16 @@
 
           <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
           <Route path="#roles" component={Roles}/>
-          <Route path="#list" component={Tokens}/>
           <Route path="#members" component={Members}/>
-          <!--          <Route path="#set-vault" component={SetVault}/>-->
           <Route path="#asset-classes" component={AssetClasses}/>
           <Route path="#new-asset-class" component={NewSchema}/>
           <Route path="#asset-information/:id/:id" component={AssetInformation}/>
-          <Route path="#sft-create-success" component={SftCreateSuccess}/>
           <Route path="#ipfs" component={Ipfs}/>
           <Route path="#manual" component={Manual}/>
           <Route path="#new-revision/:id" component={NewRevision}/>
           <Route path="#certify" component={Certify}/>
           <Route path="#audit-report/:id" component={AuditReport}/>
-          <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
+          <div class={$router.path === '#mint' || $router.path === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
               <button class:selected="{selectedTab === '#mint'}" class="tab-button"
                       on:click="{() =>  changeUrl('#mint')}">
@@ -667,6 +692,13 @@
     backdrop-filter: blur(3.5px);
     top: 0;
     z-index: 3;
+  }
+
+  .certify-warning {
+    position: absolute;
+    top: 5.4rem;
+    width: 100%;
+    transform: translate(0, 50%);
   }
 
 

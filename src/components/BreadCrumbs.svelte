@@ -41,7 +41,7 @@
     }
 
     .breadcrumbs {
-        z-index: 2;
+        z-index: 1;
         top: 3.5rem;
         margin-left: 203px;
         color: #9D7334;

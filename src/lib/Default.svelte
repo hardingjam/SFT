@@ -219,45 +219,6 @@
         return temp;
     }
 
-    async function handleNetworkSelect(event) {
-        let activeNet = event.detail.selected;
-        if ($activeNetwork && activeNet.chainId === $activeNetwork.chainId) {
-            return;
-        }
-        let chainId = ethers.utils.hexValue(activeNet.chainId);
-        try {
-            await window.ethereum.request({
-                method: "wallet_switchEthereumChain",
-                params: [{chainId}]
-            });
-        } catch (switchError) {
-            // This error code indicates that the chain has not been added to MetaMask.
-            if (switchError.code === 4902) {
-                try {
-                    await window.ethereum.request({
-                        method: "wallet_addEthereumChain",
-                        params: [
-                            {
-                                chainId: chainId,
-                                chainName: activeNet.displayName,
-                                rpcUrls: [activeNet.rpcUrl],
-                                blockExplorerUrls: [activeNet.blockExplorer],
-                                nativeCurrency: {
-                                    name: activeNet.currencySymbol,
-                                    symbol: activeNet.currencySymbol,
-                                    decimals: 18
-                                }
-                            }
-                        ]
-                    });
-                } catch (addError) {
-                    // handle "add" error
-                }
-            }
-            // handle other "switch" errors
-        }
-    }
-
     async function connect() {
         if (!isMetamaskInstalled) {
             window.open("https://metamask.io/download/", "_blank");
@@ -409,7 +370,6 @@
 <Router url={url}>
 
   <div class={$account ? "content" : "content-not-connected"}>
-    <Header on:select={handleNetworkSelect} {location}></Header>
     {#if (showCertifyWarning)}
       <div class="certify-warning">
         <span class="error">Warning, this token is frozen.</span>
@@ -564,7 +524,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 9rem;
   }
 
   .sft-info-opened {
@@ -673,6 +632,7 @@
   }
 
   .content {
+    margin-top: 80px;
     height: fit-content;
     min-height: 100vh;
   }

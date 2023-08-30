@@ -406,7 +406,7 @@
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
 
-      <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
+      <Navigation path={$router.path} token={$data.offchainAssetReceiptVault}/>
 
       <div class={$sftInfo ? "sft-info-opened" : "" }>
         <div class="{$activeNetwork  ? 'show' : 'hide'}">

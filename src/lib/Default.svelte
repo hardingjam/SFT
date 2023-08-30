@@ -654,10 +654,8 @@
   }
 
   .certify-warning {
-    position: absolute;
-    top: 5.4rem;
     width: 100%;
-    transform: translate(0, 50%);
+    padding-bottom: 1rem;
   }
 
 

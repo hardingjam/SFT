@@ -2,7 +2,7 @@
     import {
         data,
         vault,
-        activeNetwork, tokenName
+        activeNetwork, tokenName, pageTitle
     } from "../scripts/store.js";
     import {
         bytesToMeta,
@@ -16,6 +16,7 @@
     import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
     import {icons} from '../scripts/assets.js';
     import {router} from 'yrv';
+    import {onMount} from 'svelte';
 
     let schemaName = ''
 
@@ -26,6 +27,9 @@
     let variables;
     let certification;
 
+    onMount(async () => {
+        pageTitle.set("Audit report")
+    })
 
     $:$activeNetwork && getInformation()
 

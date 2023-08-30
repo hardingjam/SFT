@@ -17,7 +17,7 @@
         data,
         roles,
         sftInfo,
-        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, schemas
+        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, schemas, currentCertification
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -33,7 +33,7 @@
         filterArray,
         getContract, getIpfsGetWay,
         getSubgraphData,
-        mapOrder,
+        mapOrder, navigate,
         setAccountRoles,
         showPrompt
     } from "../scripts/helpers.js";
@@ -45,9 +45,13 @@
     import Navigation from "../components/Navigation.svelte";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
-    import {QUERY, VAULT_INFORMATION_QUERY, VAULTS_QUERY} from "../scripts/queries.js";
+    import {
+        CURRENT_CERTIFICATION_QUERY,
+        QUERY,
+        VAULT_INFORMATION_QUERY,
+        VAULTS_QUERY
+    } from "../scripts/queries.js";
     import {MAGIC_NUMBERS, ROLES} from '../scripts/consts.js';
-    import Header from '../components/Header.svelte';
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
     import Manual from '../routes/Manual.svelte';
@@ -63,16 +67,16 @@
     import axios from 'axios';
     import AuditReport from '../routes/AuditReport.svelte';
 
-
     let connectedAccount;
     export let url = "";
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined";
 
     let location = window.location.hash;
-    let showCertifyWarning = '';
+    let showCertifyWarning = false;
     let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
+    $: $data && getCurrentCertification()
 
     async function vaultChanged() {
         if ($vault.address && $activeNetwork.id && $account) {
@@ -345,6 +349,15 @@
         }
     }
 
+
+    async function getCurrentCertification() {
+        if ($data.offchainAssetReceiptVault && !$currentCertification.id) {
+            let variables = {id: $vault.address, certifiedUntil: $data.offchainAssetReceiptVault.certifiedUntil}
+            let resp = await getSubgraphData($activeNetwork, variables, CURRENT_CERTIFICATION_QUERY, 'offchainAssetReceiptVault')
+            currentCertification.set(resp.data.offchainAssetReceiptVault.certifications[0])
+        }
+    }
+
     function shouldShowWarning() {
         let hideRoutes = [
             '#setup',
@@ -358,6 +371,7 @@
             '#token-overview',
             '#change-comparison',
             '#address-overview',
+            '#audit-report'
         ]
 
         let page = location.split('/')[0]
@@ -373,7 +387,8 @@
     {#if (showCertifyWarning)}
       <div class="certify-warning">
         <span class="error">Warning, this token is frozen.</span>
-        <span class="brown underline cursor-pointer">Current certification</span>
+        <span class="brown underline cursor-pointer"
+              on:click={()=>{navigate(`#audit-report/${$currentCertification.id}`)}}>Current certification</span>
       </div>
     {/if}
 

@@ -1,7 +1,7 @@
 <script>
     import {
         account,
-        activeNetwork,
+        activeNetwork, currentCertification,
         ethersData,
         pageTitle,
         schemas,
@@ -22,7 +22,7 @@
         navigate, setFormInputs, showPrompt,
         showPromptSFTCreate
     } from '../scripts/helpers.js';
-    import {AUDIT_HISTORY_DATA_QUERY, QUERY} from '../scripts/queries.js';
+    import {AUDIT_HISTORY_DATA_QUERY} from '../scripts/queries.js';
     import Calendar from '../components/Calendar.svelte';
     import {IPFS_APIS, MAGIC_NUMBERS} from '../scripts/consts.js';
     import axios from 'axios';
@@ -96,6 +96,7 @@
                             preData = preData?.data?.offchainAssetReceiptVault.certifications
                             if (preData && preData.length) {
                                 if (wait.blockNumber.toString() === preData[0].transaction.blockNumber) {
+                                    currentCertification.set(preData[0])
                                     transactionSuccess.set(true)
                                     transactionInProgress.set(false)
                                     clearInterval(interval)

@@ -587,3 +587,16 @@ export const CERTIFICATION_QUERY = `
             }
           }   
          `;
+export const CURRENT_CERTIFICATION_QUERY = `
+          query($id: ID!, $certifiedUntil: String!) {
+            offchainAssetReceiptVault(id: $id) 
+            {
+              certifications(orderBy: timestamp orderDirection: desc where:{certifiedUntil:$certifiedUntil}) 
+              {
+                id
+                information
+                timestamp
+              }
+            }
+          }   
+         `;

@@ -361,10 +361,8 @@
     function shouldShowWarning() {
         let hideRoutes = [
             '#setup',
-            '#asset-information',
             '#ipfs',
             '#manual',
-            '#new-revision',
             '',
             '#',
             '#audit-history',

@@ -8,7 +8,7 @@
         activeNetwork, transactionInProgressShow, transactionInProgress
     } from "../scripts/store.js";
     import ReceiptData from '../components/ReceiptData.svelte';
-    import {cborDecode, getSubgraphData, navigate, showPrompt, timeStampToDate} from '../scripts/helpers.js';
+    import {cborDecode, getSubgraphData, navigate, showPrompt, timeStampToDate, downloadIpfsHashes} from '../scripts/helpers.js';
     import {ethers} from 'ethers';
     import {RECEIPT_INFORMATION_QUERY, RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
     import axios from 'axios';
@@ -57,7 +57,7 @@
             informationIndex = resp.data.receipt.receiptInformations
                 .findIndex(inf => inf.id === revision.id)
             revisionNumber = resp.data.receipt.receiptInformations.length - informationIndex
-
+            console.log(resp.data)
         }
         transactionInProgressShow.set(false)
         transactionInProgress.set(false)
@@ -83,10 +83,15 @@
         await getRevision($selectedReceipt?.receipt.receiptInformations[0].id)
     }
 
+    function downloadHashes(){
+        let hashes = $selectedReceipt.receipt.offchainAssetReceiptVault.hashes.map(h=>h.hash)
+        downloadIpfsHashes(hashes.filter(h=>!!h))
+    }
+
 </script>
 <div class="asset-information">
   <div class="card-header justify-end pr-10">
-    <button class="default-btn" disabled>download IPFS pin list</button>
+    <button class="default-btn" on:click={()=>{downloadHashes()}}>download IPFS pin list</button>
     {#if ($vault.address === $selectedReceipt?.receipt?.offchainAssetReceiptVault?.address)}
       <button class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
         revision

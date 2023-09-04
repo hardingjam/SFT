@@ -146,6 +146,9 @@ export const RECEIPT_INFORMATIONS_QUERY = `
               offchainAssetReceiptVault {
                 name
                 address
+                hashes {
+                   hash
+                }
               }
               receiptId,
               receiptInformations(orderDirection: desc, orderBy: timestamp){

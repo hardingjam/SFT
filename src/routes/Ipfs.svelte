@@ -7,7 +7,12 @@
     let message = ""
     let loggedInUser;
 
+    let username = ''
+    let password = ''
+
     async function updateCredentials(e) {
+        username = e.detail.username;
+        password = e.detail.password;
         message = ""
         let formData = new FormData();
         formData.append('file', 'credentials')
@@ -16,8 +21,8 @@
                 return axios.request({
                     url,
                     auth: {
-                        username:e.detail.username,
-                        password:e.detail.password
+                        username,
+                        password
                     },
                     method: 'post',
                     headers: {

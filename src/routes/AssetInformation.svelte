@@ -85,7 +85,7 @@
 
     function downloadHashes(){
         let hashes = $selectedReceipt.receipt.offchainAssetReceiptVault.hashes.map(h=>h.hash)
-        downloadIpfsHashes(hashes.filter(h=>!!h))
+        downloadIpfsHashes(hashes)
     }
 
 </script>

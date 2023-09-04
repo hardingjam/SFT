@@ -608,13 +608,16 @@ export function navigate(path, options) {
     navigateTo(path)
 }
 
-export function downloadIpfsHashes(hashes){
-    const content = hashes.join("\n");
-    const blob = new Blob([content], { type: "text/plain" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Ipfs_pin_list.txt";
-    a.click();
-    window.URL.revokeObjectURL(url);
+export function downloadIpfsHashes(hashes) {
+    if (hashes.length) {
+        const content = hashes.filter(h=>!!h).join("\n");
+        const blob = new Blob([content], {type: "text/plain"});
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Ipfs_pin_list.txt";
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
 }

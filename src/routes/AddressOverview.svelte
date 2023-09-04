@@ -1,10 +1,10 @@
 <script>
     import {activeNetwork, sftInfo} from '../scripts/store.js';
     import {router} from 'yrv';
-    import {getSubgraphData, getSubgraphDataNoInterval} from '../scripts/helpers.js';
+    import {getSubgraphData, getSubgraphDataNoInterval, downloadIpfsHashes} from '../scripts/helpers.js';
     import {
         ADDRESS_OVERVIEW_QUERY, REVISIONS_DATA_QUERY,
-        VAULTS_BY_DEPLOYER_QUERY
+        VAULTS_BY_DEPLOYER_QUERY, ACCOUNT_PINS_QUERY
     } from '../scripts/queries.js';
     import MintRedeemView from '../components/MintRedeemView.svelte';
     import CertificationsView from '../components/CertificationsView.svelte';
@@ -56,6 +56,19 @@
             receiptConfiscations = receiptConfiscations.map(c => c.receiptConfiscations)
             receiptConfiscations = receiptConfiscations.flat()
 
+        }
+    }
+
+    async function getAccountPins() {
+        let resp = await getSubgraphData($activeNetwork, {address}, ACCOUNT_PINS_QUERY, 'accounts')
+        if (resp && resp.data && resp.data.accounts) {
+
+            let pins = resp.data.accounts.map(a => a.hashes)
+
+            if (pins.length) {
+                pins = pins.flat()
+            }
+            return pins
         }
     }
 
@@ -120,6 +133,11 @@
     }
 
 
+    async function downloadPins() {
+        let pins = await getAccountPins()
+        downloadIpfsHashes(pins.map(p => p.hash))
+    }
+
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} address-overview">
@@ -149,7 +167,7 @@
           </button>
         </div>
         <div class="right">
-          <button class="default-btn" disabled>Download pins</button>
+          <button class="default-btn" on:click={()=>{downloadPins()}}>Download pins</button>
         </div>
       </div>
       {#if (active === 'mint')}

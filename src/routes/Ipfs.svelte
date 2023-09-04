@@ -13,7 +13,7 @@
     async function updateCredentials(e) {
         username = e.detail.username;
         password = e.detail.password;
-        message = ""
+        message = "";
         let formData = new FormData();
         formData.append('file', 'credentials')
         try {

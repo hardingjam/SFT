@@ -8,7 +8,15 @@
         activeNetwork, transactionInProgressShow, transactionInProgress
     } from "../scripts/store.js";
     import ReceiptData from '../components/ReceiptData.svelte';
-    import {cborDecode, getSubgraphData, navigate, showPrompt, timeStampToDate, downloadIpfsHashes} from '../scripts/helpers.js';
+    import {
+        cborDecode,
+        getSubgraphData,
+        navigate,
+        showPrompt,
+        timeStampToDate,
+        downloadIpfsHashes,
+        getAccountPins
+    } from '../scripts/helpers.js';
     import {ethers} from 'ethers';
     import {RECEIPT_INFORMATION_QUERY, RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
     import axios from 'axios';
@@ -57,7 +65,6 @@
             informationIndex = resp.data.receipt.receiptInformations
                 .findIndex(inf => inf.id === revision.id)
             revisionNumber = resp.data.receipt.receiptInformations.length - informationIndex
-            console.log(resp.data)
         }
         transactionInProgressShow.set(false)
         transactionInProgress.set(false)
@@ -83,9 +90,16 @@
         await getRevision($selectedReceipt?.receipt.receiptInformations[0].id)
     }
 
-    function downloadHashes(){
-        let hashes = $selectedReceipt.receipt.offchainAssetReceiptVault.hashes.map(h=>h.hash)
-        downloadIpfsHashes(hashes)
+    async function downloadHashes() {
+        let issuers = $selectedReceipt.receipt.offchainAssetReceiptVault.roleHolders.filter(rh => rh.role.roleName ===
+            'DEPOSITOR')
+        let hashList = []
+        for (let i = 0; i < issuers.length; i++) {
+            hashList = [...hashList, await getAccountPins($activeNetwork, issuers[i].account.address)]
+        }
+        hashList = hashList.flat()
+        hashList = hashList.map(h => h.hash)
+        downloadIpfsHashes(hashList)
     }
 
 </script>

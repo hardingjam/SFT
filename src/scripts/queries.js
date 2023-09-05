@@ -149,6 +149,15 @@ export const RECEIPT_INFORMATIONS_QUERY = `
                 hashes {
                    hash
                 }
+                roleHolders {
+                    role {
+                      roleName
+                      roleHash
+                    }
+                    account {
+                      address
+                    }
+                }
               }
               receiptId,
               receiptInformations(orderDirection: desc, orderBy: timestamp){

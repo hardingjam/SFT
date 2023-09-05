@@ -13,7 +13,7 @@ import {
     transactionInProgressShow,
     transactionSuccess
 } from "./store.js";
-import {VAULT_INFORMATION_QUERY} from "./queries.js";
+import {ACCOUNT_PINS_QUERY, VAULT_INFORMATION_QUERY} from "./queries.js";
 import {navigateTo} from 'yrv';
 
 
@@ -620,4 +620,17 @@ export function downloadIpfsHashes(hashes) {
         window.URL.revokeObjectURL(url);
     }
 
+}
+
+export async function getAccountPins(network, address) {
+    let resp = await getSubgraphData(network, {address}, ACCOUNT_PINS_QUERY, 'accounts')
+    if (resp && resp.data && resp.data.accounts) {
+
+        let pins = resp.data.accounts.map(a => a.hashes)
+
+        if (pins.length) {
+            pins = pins.flat()
+        }
+        return pins
+    }
 }

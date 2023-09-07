@@ -12,6 +12,7 @@
   "devDependencies": {
     "@exodus/schemasafe": "^1.0.1",
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
+    "@synthetixio/synpress": "^3.7.2-beta.6",
     "autoprefixer": "^10.4.14",
     "chai": "^4.3.7",
     "cypress": "^12.8.1",

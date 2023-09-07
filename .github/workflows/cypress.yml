@@ -1,0 +1,29 @@
+name: Cypress Tests
+
+on:
+  [push]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+          npm-version: '7'
+
+      - name: Update npm and clear cache
+        run: |
+          npm install -g npm@latest
+          npm cache clean --force
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress component tests
+        run: npx cypress run-ct

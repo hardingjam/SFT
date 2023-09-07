@@ -1,8 +1,8 @@
 <script>
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {icons} from "../scripts/assets.js"
-    import {account, activeNetwork, ethersData, vault} from "../scripts/store.js";
-    import {getContract, hasRole, tierReport} from "../scripts/helpers.js";
+    import {account, activeNetwork, ethersData, pageTitle, transactionError, vault} from "../scripts/store.js";
+    import {getContract, hasRole, showPrompt, tierReport} from "../scripts/helpers.js";
     import tierContractAbi from "../contract/TierContractAbi.json";
 
 
@@ -55,7 +55,7 @@
 
             if (!hasRoleErc20Tierer.error) {
                 let tx = await $vault.setERC20Tier(erc20TierContract, erc20MinTier, [])
-                await tx.wait()
+                await showPrompt(tx)
                 localStorage.setItem("erc20TierContract", erc20TierContract)
                 localStorage.setItem("erc20MinTier", erc20MinTier)
             } else {
@@ -76,7 +76,7 @@
 
             if (!hasRoleErc1155Tierer.error) {
                 let tx = await $vault.setERC1155Tier(erc1155TierContract, erc1155MinTier, [])
-                await tx.wait()
+                await showPrompt(tx)
                 localStorage.setItem("erc1155TierContract", erc1155TierContract)
                 localStorage.setItem("erc1155MinTier", erc1155MinTier)
 
@@ -89,12 +89,15 @@
         }
     }
 
+    pageTitle.set("Members")
+
+
 </script>
-<DefaultFrame header="Members">
+<DefaultFrame>
   <div slot="content">
-    <div class="members f-weight-700">
+    <div class="members">
       <div class="erc20 tier">
-        <div>ERC20</div>
+        <div class="f-weight-700">ERC20</div>
         <div class="display-flex address-container">
           <div class="f-weight-700 contract label">Contract address:
             <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
@@ -119,14 +122,14 @@
           {/if}
         </div>
         <div>
-          <button class="default-btn"
+          <button class="default-btn "
                   on:click={()=>{checkAddress(erc20TierContract,addressErc20, erc20MinTier, 'erc20')}}>
             Check
           </button>
         </div>
       </div>
       <div class="erc1155 tier">
-        <div>ERC1155</div>
+        <div class="f-weight-700">ERC1155</div>
         <div class="display-flex address-container">
 
           <div class="f-weight-700 contract label">

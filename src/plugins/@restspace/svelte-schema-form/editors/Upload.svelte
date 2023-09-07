@@ -15,6 +15,7 @@ export let highlight = false;
 const isMultiple = schema.multiple || false;
 let inp;
 let dropArea;
+let uploaded;
 let pathProgress = getContext(ProgressContext);
 let progress;
 $: progress = $pathProgress[params.path.join('.')] || {};
@@ -77,12 +78,7 @@ const dragLeave = (ev) => {
 };
 const renderThumbnail = (file) => {
     deleteUploads()
-    const div = document.createElement("div");
-    div.classList.add("sf-upload-file");
-    div.title = file.name;
-    div.innerText = file.name.replace(new RegExp('(^.{4}).+'), '$1' + '…') + afterLast(file.name, ".");
-    dropArea.append(div);
-    renderedThumbnails.push(div);
+    uploaded = file.name.replace(new RegExp('(^.{4}).+'), '$1' + '…') + afterLast(file.name, ".");
 };
 const drop = (ev) => {
     if (schema.readOnly)
@@ -103,7 +99,7 @@ const deleteUploads = () => {
     value = '';
     params.pathChanged(params.path, FileNone);
     params.pathChanged(params.path, value);
-    fileDropped.set({file:File,prop:params.path[0]})
+    fileDropped.set({file: File, prop: params.path[0]})
 };
 
 const openFile = () => {
@@ -120,19 +116,25 @@ const openFile = () => {
          readonly={readOnly}
          on:input={onInput}
          style="display: none" disabled={$uploadBtnLoading}/>
-  <div class="sf-drop-area {mode} default-btn"
-       class:highlight
-       tabIndex="0"
-       on:dragenter={dragEnter}
-       on:dragover={dragOver}
-       on:dragleave={dragLeave}
-       on:drop={drop}
-       on:click={openFile}
-       bind:this={dropArea}>
-    <div class="sf-upload-caption">
-      Upload
+  <div class="sf-drop-area-container flex items-center">
+    <div class="sf-drop-area {mode} default-btn"
+         class:highlight
+         tabIndex="0"
+         on:dragenter={dragEnter}
+         on:dragover={dragOver}
+         on:dragleave={dragLeave}
+         on:drop={drop}
+         on:click={openFile}
+         bind:this={dropArea}>
+      <div class="sf-upload-caption">
+        Upload
+      </div>
     </div>
+    {#if $fileDropped.file}
+      <div class="sf-upload-file ml-2" title={uploaded}>{uploaded || ""}</div>
+    {/if}
   </div>
+
   {#if Object.keys(progress).length > 0}
     <div class="sf-progress-bars">
       {#each Object.entries(progress) as [name, percent]}
@@ -144,3 +146,14 @@ const openFile = () => {
     </div>
   {/if}
 </svelte:component>
+
+<style>
+    .sf-drop-area-container {
+        width: 360px;
+    }
+
+    .sf-upload-file {
+        height: 27px;
+        margin-top: 8px;
+    }
+</style>

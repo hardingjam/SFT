@@ -3,42 +3,29 @@
         activeNetwork,
         vault,
         roles,
-        transactionInProgress,
-        transactionHash,
-        transactionInProgressShow, transactionSuccess, transactionError
+        transactionError, accountRoles
     } from "../scripts/store.js";
 
     export let name;
     export let admin;
     import {icons} from '../scripts/assets.js'
-    import {formatAddress} from "../scripts/helpers.js";
-    import {TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
+    import {formatAddress, navigate, setAccountRoles, showPrompt} from "../scripts/helpers.js";
 
     let account = '';
 
 
     function showAddress(account) {
-        window.open(`${$activeNetwork.blockExplorer}address/${account}`);
+        navigate(`#address-overview/${account}`)
     }
 
 
     async function revokeRole(roleName, account) {
         let role = await $vault[roleName]()
-        transactionError.set(false)
-        transactionSuccess.set(false)
 
         try {
             const revokeRoleTx = await $vault.revokeRole(role, account);
-            if (revokeRoleTx.hash) {
-                transactionHash.set(revokeRoleTx.hash)
-                transactionInProgressShow.set(true)
-                transactionInProgress.set(true)
-            }
-            let wait = await revokeRoleTx.wait()
-            if (wait.status === 1) {
-                transactionSuccess.set(true)
-                transactionInProgress.set(false)
-            }
+            await showPrompt(revokeRoleTx)
+
             let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
             let accountIndex = updatedRoleHolders.indexOf(account)
             updatedRoleHolders.splice(accountIndex, 1)
@@ -49,9 +36,9 @@
                 return role;
             });
             roles.set([...newRoles])
-            // transactionInProgress.set(false)
+            accountRoles.set(await setAccountRoles($roles, account));
+
         } catch (err) {
-            transactionError.set(true)
             console.log(err)
         }
 
@@ -67,10 +54,12 @@
       <span>{admin ? 'Role Admin' : 'Executor'}</span>
       {#if roleHolders?.length}
         {#each roleHolders as roleHolder}
-          <div>
-            {formatAddress(roleHolder.account.address)}
-            <img class="btn-hover action-icon" src={icons.show} alt="show"
-                 on:click={()=>showAddress(roleHolder.account.address)}/>
+          <div class="flex items-center">
+            <span class="underline btn-hover flex items-center mr-2 cursor-pointer"
+                  on:click={()=>showAddress(roleHolder.account.address)}>
+                          {formatAddress(roleHolder.account.address)}
+              <img class="action-icon ml-2" src={icons.show} alt="show"/>
+            </span>
             <img class="btn-hover action-icon" src={icons.delete_icon}
                  on:click={()=>revokeRole(name,roleHolder.account.address)}
                  alt="delete"/>
@@ -87,6 +76,10 @@
         margin-bottom: 25px;
     }
 
+    .role {
+        min-width: 150px;
+    }
+
 
     .role-list {
         display: flex;
@@ -98,6 +91,7 @@
     }
 
     .action-icon {
-        margin: 0 3px;
+        width: 17px;
+        height: 17px;
     }
 </style>

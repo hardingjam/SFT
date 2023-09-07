@@ -1,5 +1,4 @@
 <script>
-    import MintInput from "../components/MintInput.svelte";
     import {ethers} from "ethers";
     import {
         vault,
@@ -8,12 +7,7 @@
         uploadBtnLoading,
         activeNetwork,
         schemas,
-        schemaError,
-        transactionError,
-        transactionSuccess,
-        transactionHash,
-        transactionInProgressShow,
-        transactionInProgress
+        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, tokenName, pageTitle
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -24,24 +18,26 @@
         IPFS_APIS,
         MAGIC_NUMBERS,
         ONE,
-        TRANSACTION_IN_PROGRESS_TEXT,
-        VIEW_ON_EXPLORER_TEXT
     } from "../scripts/consts.js";
-    import SchemaForm from "../components/SchemaForm.svelte"
     import {
         cborDecode,
         cborEncode,
         encodeCBORStructure,
         getIpfsGetWay,
         getSubgraphData,
-        hasRole,
+        hasRole, showPromptSFTCreate,
     } from "../scripts/helpers";
     import jQuery from 'jquery';
-    import SftLoader from "../components/SftLoader.svelte";
     import {beforeUpdate, onMount} from "svelte";
-    import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
+    import {
+        AUDIT_HISTORY_DATA_QUERY,
+        DEPOSITS_QUERY,
+        VAULT_INFORMATION_QUERY
+    } from "../scripts/queries.js";
     import {arrayify} from "ethers/lib/utils.js";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
+    import {navigate} from '../scripts/helpers.js';
+    import MintInput from '../components/MintInput.svelte';
+    import Schema from '../components/Schema.svelte';
 
     let image = {}
 
@@ -93,11 +89,14 @@
     })
 
     onMount(async () => {
+        if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
+            navigateTo('#');
+        }
         await getSchemas()
     })
 
     async function getSchemas() {
-        let variables = {id: $vault.address.toLowerCase()}
+        let variables = {id: $vault?.address?.toLowerCase()}
         if ($vault.address) {
             try {
                 let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
@@ -109,29 +108,33 @@
                     receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
 
                     if (receiptVaultInformations.length) {
-
                         receiptVaultInformations.map(async data => {
                             let cborDecodedInformation = cborDecode(data.information.slice(18))
-                            let schemaHash = cborDecodedInformation[1].get(0)
-                            let url = await getIpfsGetWay(schemaHash)
-                            try {
-                                if (url) {
-                                    let res = await axios.get(url)
-                                    if (res) {
-                                        tempSchema.push({
-                                            ...res.data,
-                                            timestamp: data.timestamp,
-                                            id: data.id,
-                                            hash: schemaHash
-                                        })
-                                        tempSchema = tempSchema.filter(d => d.displayName)
-                                        schemas.set(tempSchema)
-                                        ipfsLoading = false;
+                            if (cborDecodedInformation[0].get(1) === MAGIC_NUMBERS.OA_SCHEMA) {
+                                let schemaHash = cborDecodedInformation[1].get(0)
+                                if (schemaHash && !schemaHash.includes(',')) {
+                                    let url = await getIpfsGetWay(schemaHash)
+                                    try {
+                                        if (url) {
+                                            let res = await axios.get(url)
+                                            if (res) {
+                                                tempSchema.push({
+                                                    ...res.data,
+                                                    timestamp: data.timestamp,
+                                                    id: data.id,
+                                                    hash: schemaHash
+                                                })
+                                                tempSchema = tempSchema.filter(d => d.displayName)
+                                                schemas.set(tempSchema)
+                                                ipfsLoading = false;
+                                            }
+                                        }
+                                    } catch (err) {
+                                        // console.log(err)
                                     }
                                 }
-                            } catch (err) {
-                                // console.log(err)
                             }
+
                         })
                     }
                 }
@@ -145,8 +148,6 @@
     async function mint() {
         try {
             error = ""
-            transactionError.set(false)
-            transactionSuccess.set(false)
 
             if (!parseFloat(amount)) {
                 error = "Zero amount"
@@ -166,25 +167,41 @@
 
                     try {
                         let structureIpfs = await upload(structure)
-                        let encodedHashList = cborEncode([...fileHashesList, structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
-                        const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() + encodedStructure + encodedHashList
+                        let encodedHashList = cborEncode([...fileHashesList,
+                            structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
+                        const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() +
+                            encodedStructure + encodedHashList
                         const tx = await $vault
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
-                        if (tx.hash) {
-                            transactionHash.set(tx.hash)
-                            transactionInProgressShow.set(true)
-                            transactionInProgress.set(true)
-                        }
+                        await showPromptSFTCreate(tx, {errorText: "Mint failed", successText: "Mint successful!"})
                         let wait = await tx.wait()
                         if (wait.status === 1) {
-                            transactionSuccess.set(true)
-                            transactionInProgress.set(false)
+                            let interval = setInterval(async () => {
+                                let deposits = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, DEPOSITS_QUERY, 'offchainAssetReceiptVault')
+                                deposits = deposits?.data?.offchainAssetReceiptVault.deposits
+
+                                if (deposits && deposits.length) {
+                                    if (wait.blockNumber.toString() === deposits[0].transaction.blockNumber) {
+                                        let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                                        if (auditHistory) {
+                                            let temp = data.data.offchainAssetReceiptVault
+                                            auditHistory.set(temp)
+                                        } else {
+                                            auditHistory.set({})
+                                        }
+                                        transactionSuccess.set(true)
+                                        transactionInProgress.set(false)
+                                        clearInterval(interval)
+                                        amount = 0;
+                                    }
+                                }
+                            }, 2000)
+                        } else {
+                            transactionError.set(true)
                         }
-                        amount = 0;
                         fileDropped.set({})
                     } catch (err) {
-                        transactionError.set(true)
                         console.log(err)
                     }
                 }
@@ -263,7 +280,7 @@
         return resolvedPromise?.value.data
     };
 
-    $: ($fileDropped.file && $fileDropped.file.size) && upload($fileDropped, "file");
+    $: $activeNetwork.chainId && getSchemas()
 
     // $: $fileHash && getCertificateUrl($fileHash);
 
@@ -316,60 +333,44 @@
         )
     }
 
+    pageTitle.set("Mint/Redeem")
+
+    function handleFileUpload(event) {
+        fileHashes = event.detail.fileHashes
+    }
 </script>
 
-<div class="mint-container">
+<div class="mint-container relative">
   <div class="header-buttons">
-    <button type="button" class="default-btn mr-2" disabled={!$schemas.length}
-            on:click={()=>{navigateTo('#asset-classes')}}>
-      Asset classes
-    </button>
-    <button type="button" class="default-btn mr-2" on:click={()=>{navigateTo('#new-asset-class')}}>
+    <button type="button" class="default-btn" on:click={()=>{navigate('#new-asset-class')}}>
       New asset class
     </button>
-    <button class="default-btn" on:click={()=>{navigateTo('#audit-history')}}>
+    <button type="button" class="default-btn" disabled={!$schemas.length}
+            on:click={()=>{navigate('#asset-classes')}}>
+      Asset class list
+    </button>
+    <button class="default-btn" on:click={()=>{navigate('#audit-history')}}>
       Audit history
     </button>
   </div>
   {#if (!showAuth)}
 
-    <MintInput bind:amount={amount} amountLabel={"Mint amount"}/>
     <div class="audit-info-container basic-frame-parent">
-      <div class="audit-info basic-frame">
+      <div class="form-frame basic-frame">
+        <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
+        <MintInput bind:amount={amount} amountLabel={"Mint amount"}
+                   info="(Mint amount = number of tokens that will go into your wallet)"/>
         {#if $schemas.length}
           <div class="schema">
-            <div class="schema-dropdown">
-              <label class="f-weight-700 custom-col">Asset class:</label>
+            <div class="schema-dropdown flex justify-between mb-6">
+              <label class="f-weight-700 custom-col">Asset class</label>
               <Select options={$schemas}
 
                       on:select={handleSchemaSelect}
                       label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
 
             </div>
-            {#if selectedSchema?.displayName}
-              <span class="title f-weight-700">Asset info.</span>
-
-              <SchemaForm schema={selectedSchema.schema}></SchemaForm>
-              <div class="error">{$schemaError}</div>
-              {#if $fileHash}
-                <div class="file-uploaded">
-                  <span class="file-load-success">Pie Certificate loaded successfully</span>
-                  <div class="link-to-file">
-                    <span>To Link</span>
-                    <a href={certificateUrl} target="_blank">
-                      <img src="{icons.show}" alt="view file" class="btn-hover">
-                    </a>
-                    <!--                  <img src="{icons.delete_icon}" alt="remove file" class="btn-hover">-->
-                  </div>
-                </div>
-              {/if}
-              {#if $uploadBtnLoading}
-                <div class="sf-upload-spinner">
-                  <SftLoader width="50"></SftLoader>
-                </div>
-              {/if}
-            {/if}
-
+            <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
           </div>
         {/if}
         {#if !$schemas.length}
@@ -383,10 +384,12 @@
     </div>
 
     <div class="error">{error}</div>
-    <div class="info-text f-weight-700">After Minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
+    <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
       (FT)
     </div>
-    <button class="mint-btn btn-solid" on:click={() => mint()} disabled="{!selectedSchema.hash || !parseFloat(amount)}">
+
+    <button class="mint-btn btn-solid" on:click={() => mint()}
+            disabled="{!selectedSchema.hash || !parseFloat(amount)}">
       Mint
     </button>
   {/if}
@@ -404,8 +407,6 @@
   </div>
   <!--{/if}-->
 </div>
-<TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT}
-                             transactionHash={$transactionHash}/>
 
 <style>
     .mint-container {
@@ -413,29 +414,25 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        height: 100%;
     }
 
     .header-buttons {
-        margin-bottom: 15px;
-        display: flex;
+        margin-bottom: 5px;
         width: 100%;
         justify-content: right;
         padding: 0 12px 0 12px;
     }
 
-    .audit-info {
-        padding: 20px 60px;
+    .form-frame {
+        padding: 20px;
         display: flex;
         text-align: left;
         flex-direction: column;
         font-weight: 400;
         font-size: 16px;
         line-height: 27px;
-        min-height: 142px;
-    }
-
-    .audit-info .title {
-        text-align: center;
+        min-height: 325px;
     }
 
     .info-text {
@@ -444,8 +441,8 @@
     }
 
     .mint-btn {
-        width: calc(100% - 70px);
-        margin-top: 10px;
+        width: 413px;
+        margin-top: 30px;
     }
 
     .empty-schemas button {
@@ -458,15 +455,6 @@
 
     .schema table td:nth-child(2) {
         text-align: right;
-    }
-
-    .file-load-success {
-        color: #1EA51B
-    }
-
-    .file-uploaded {
-        display: flex;
-        justify-content: space-between;
     }
 
     .custom-col {
@@ -501,9 +489,9 @@
         text-align: center;
     }
 
-    .schema-dropdown{
-        width: 100%;
-        display: flex;
+    .schema-dropdown {
+        margin-top: 20px;
+        align-items: center;
     }
 
 </style>

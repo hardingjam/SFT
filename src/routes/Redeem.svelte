@@ -1,12 +1,9 @@
 <script>
     import MintInput from "../components/MintInput.svelte";
-    import {getReceiptBalance, getSubgraphData, hasRole, timeStampToDate} from "../scripts/helpers.js";
+    import {getReceiptBalance, getSubgraphData, hasRole, showPrompt, timeStampToDate} from "../scripts/helpers.js";
     import {
         account,
-        activeNetwork,
-        transactionError,
-        transactionHash, transactionInProgress, transactionInProgressShow,
-        transactionSuccess,
+        activeNetwork, pageTitle,
         vault
     } from "../scripts/store.js";
     import {onMount} from "svelte";
@@ -14,8 +11,6 @@
     import SftLoader from "../components/SftLoader.svelte";
     import {DEPLOYER_QUERY, RECEIPTS_QUERY} from '../scripts/queries.js'
     import ReceiptInformation from "./ReceiptInformation.svelte";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
-    import {TRANSACTION_IN_PROGRESS_TEXT, VIEW_ON_EXPLORER_TEXT} from "../scripts/consts.js";
 
     let shouldDisable = false;
     let amount;
@@ -34,8 +29,6 @@
         try {
             if (receipt) {
                 error = ''
-                transactionError.set(false)
-                transactionSuccess.set(false)
                 const hasRoleWithdrawer = await hasRole($vault, $account, "WITHDRAWER")
 
                 if (!hasRoleWithdrawer.error) {
@@ -58,17 +51,9 @@
                         $account,
                         receipt,
                         []
-                   );
-                    if (tx.hash) {
-                        transactionHash.set(tx.hash)
-                        transactionInProgressShow.set(true)
-                        transactionInProgress.set(true)
-                    }
-                    let wait = await tx.wait()
-                    if (wait.status === 1) {
-                        transactionSuccess.set(true)
-                        transactionInProgress.set(false)
-                    }
+                    );
+                    await showPrompt(tx, {errorText: "Redeem failed", successText: "Redeem successful!"})
+
                     // selectedReceipts = []
                     await getData()
 
@@ -82,7 +67,6 @@
                 return
             }
         } catch (err) {
-            transactionError.set(true)
             error = err.reason
         }
         shouldDisable = false;
@@ -122,8 +106,6 @@
 
     async function multiCall() {
         error = ''
-        transactionError.set(false)
-        transactionSuccess.set(false)
 
         if (!selectedReceipts.length) {
             return
@@ -153,18 +135,8 @@
                         multicallArr,
                         {from: $account}
                     );
-                if (tx.hash) {
-                    transactionHash.set(tx.hash)
-                    transactionInProgressShow.set(true)
-                    transactionInProgress.set(true)
-                }
-                let wait = await tx.wait()
-                if (wait.status === 1) {
-                    transactionSuccess.set(true)
-                    transactionInProgress.set(false)
-                }
+                await showPrompt(tx, {errorText: "Redeem failed", successText: "Redeem successful!"})
             } catch (err) {
-                transactionError.set(true)
                 error = err.reason
             }
         } else {
@@ -183,60 +155,72 @@
     }
 
     function goToReceiptInfo(receipt) {
-        receiptClicked = receipt
+        receiptClicked = receipt.receipt
         showReceiptInfo = true
     }
 
     function showReceiptsList(e) {
         showReceiptInfo = e.detail.showReceiptInfo
     }
+
+    pageTitle.set("Mint/Redeem")
+
 </script>
 
 
-<div class="redeem-container">
+<div class="redeem-container flex items-center flex-col">
   {#if !showReceiptInfo}
     <div class="title"><span
-        class="f-weight-700">Total supply: (FT):</span>
+      class="f-weight-700">Total supply: (FT):</span>
       {ethers.utils.formatUnits(totalShares, 18)}
     </div>
     <div class="basic-frame-parent">
-      <div class="receipts-table-container basic-frame">
-        {#if loading}
-          <SftLoader width="50"></SftLoader>
-        {/if}
-        {#if !loading}
-          <table class="receipts-table">
-            <tr>
-              <td class="f-weight-700">Receipt ID (NFT)</td>
-              <td class="f-weight-700">Amount</td>
-              <td class="f-weight-700">Minted</td>
-            </tr>
-            {#each receiptBalances as receipt}
+      <div class="basic-frame p-5">
+        <div class="receipts-table-container">
+          {#if loading}
+            <SftLoader width="50"></SftLoader>
+          {/if}
+          {#if !loading}
+            <table class="receipts-table mb-5">
+              <thead>
               <tr>
-                <td class="receipt-id">
-                  <label class="check-container">
-                    <input type="radio" class="check-box" bind:group={selectedReceipts}
-                           value={receipt.receipt.receiptId}/>
-                    <span class="checkmark"></span>
-                  </label>
-                  <div class="check-box-label btn-hover"
-                       on:click={()=>{goToReceiptInfo(receipt)}}>{receipt.receipt.receiptId}</div>
-                </td>
-                <td class="value"> {ethers.utils.formatUnits(receipt.receipt.balances[0].valueExact, 18)}</td>
-                <td class="value">{timeStampToDate(receipt.receipt.deposits[0].timestamp)}</td>
+                <td class="f-weight-700 w-1/3">Receipt ID (NFT)</td>
+                <td class="f-weight-700">Amount</td>
+                <td class="f-weight-700 w-1/4">Minted</td>
               </tr>
-            {/each}
-
-          </table>
-        {/if}
+              </thead>
+              <tbody>
+              {#each receiptBalances as receipt}
+                <tr class:active={selectedReceipts === receipt.receipt.receiptId}
+                    on:click={()=>{selectedReceipts=receipt.receipt.receiptId}}>
+                  <td class="receipt-id">
+                    <!--                    <label class="check-container">-->
+                    <!--                      <input type="radio" class="check-box" bind:group={selectedReceipts}-->
+                    <!--                             value={receipt.receipt.receiptId}/>-->
+                    <!--                      <span class="checkmark"></span>-->
+                    <!--                    </label>-->
+                    <div class="check-box-label btn-hover"
+                         on:click={()=>{goToReceiptInfo(receipt)}}>{receipt.receipt.receiptId}</div>
+                  </td>
+                  <td class="value"> {ethers.utils.formatUnits(receipt.receipt.balances[0].valueExact, 18)}</td>
+                  <td class="value">{timeStampToDate(receipt.receipt.deposits[0].timestamp)}</td>
+                </tr>
+              {/each}
+              </tbody>
+            </table>
+          {/if}
+        </div>
+        <MintInput bind:amount={amount} amountLabel={"Total to redeem"}
+                   info="(Redeem amount = the number of tokens that will be burned from your wallet)" maxButton={true}
+                   on:setMax={()=>{setMaxValue()}}/>
       </div>
     </div>
     {#if error}
       <span class="error">{error}</span>
     {/if}
-    <MintInput bind:amount={amount} amountLabel={"Total to redeem"} maxButton={true}
-               on:setMax={()=>{setMaxValue()}}/>
-    <button class="redeem-btn btn-solid" disabled="{!selectedReceipts || !parseFloat(amount)}" on:click={() => redeem(selectedReceipts)}>
+
+    <button class="redeem-btn btn-solid mt-3" disabled="{!selectedReceipts || !parseFloat(amount)}"
+            on:click={() => redeem(selectedReceipts)}>
       Redeem
     </button>
 
@@ -247,21 +231,20 @@
   {/if}
 
 </div>
-<TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT}
-                             transactionHash={$transactionHash} errorText="Redeem failed" successText="Redeem Successful!"/>
 
 <style>
     .receipts-table-container {
-        height: 255px;
+        min-height: 255px;
         overflow: auto;
     }
 
     .title {
         padding-top: 25px;
         font-size: 16px;
+        align-self: flex-start;
         line-height: 27px;
-        text-align: right;
-        margin-right: 55px;
+        text-align: left;
+        margin-left: 1rem;
     }
 
     .receipts-table {
@@ -269,25 +252,27 @@
         font-size: 16px;
     }
 
-    .check-box {
-        margin-right: 8px;
+
+    .receipts-table .active, .receipts-table .active:hover {
+        background: #CAE6FF;
+    }
+
+    .receipts-table tbody tr:hover {
+        cursor: pointer;
+        background: #ECECEC;
     }
 
     .receipt-id {
-        /*width: 33%;*/
-        justify-content: left;
+        justify-content: center;
         display: flex;
-        margin-left: 20px;
     }
 
     .redeem-btn {
-        margin-top: 33px;
         width: calc(100% - 50px);
     }
 
     .check-box-label {
-        width: 100%;
-        text-align: left;
+        width: 10px;
     }
 
     .check-box-label:hover {

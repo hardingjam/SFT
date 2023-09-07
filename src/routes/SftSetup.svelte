@@ -1,26 +1,27 @@
 <script>
     import {
         activeNetwork,
-        data,
-        roles, transactionError,
-        transactionHash,
-        transactionInProgress,
-        transactionInProgressShow, transactionSuccess,
-        vault
+        data, pageTitle, SFTCreated, tokens,
+        transactionError, transactionInProgress, transactionInProgressShow,
+        transactionSuccess,
+        vault, titleIcon
     } from '../scripts/store.js';
     import {ethers} from "ethers";
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {
-        ADDRESS_ZERO,
-        TEST_CONTRACT_ADDRESS,
-        TRANSACTION_IN_PROGRESS_TEXT,
-        VIEW_ON_EXPLORER_TEXT
+        ADDRESS_ZERO
     } from "../scripts/consts.js"
-    import {QUERY} from "../scripts/queries.js";
-    import {getEventArgs, getContract, getSubgraphData, filterArray} from "../scripts/helpers.js";
-    import {navigateTo} from "yrv";
-    import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
+    import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
+    import {
+        getEventArgs,
+        getContract,
+        getSubgraphData,
+        getEvent,
+        showPromptSFTCreate
+    } from "../scripts/helpers.js";
+    import {onDestroy, onMount} from 'svelte';
+    import {icons} from "../scripts/assets.js"
 
     let name = "";
     let admin_ledger = "";
@@ -31,6 +32,14 @@
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
     let factoryContract;
+
+    onMount(() => {
+        pageTitle.set("Setup new SFT")
+        titleIcon.set(`${icons.sft_create}`)
+    })
+    onDestroy(() => {
+        titleIcon.set("")
+    })
 
     // async function createToken() {
     //     let contract = await getContract($activeNetwork, TEST_CONTRACT_ADDRESS, contractAbi, signerOrProvider)
@@ -68,22 +77,14 @@
                 constructionConfig
             )
 
-            if (offChainAssetVaultTx.hash) {
-                transactionHash.set(offChainAssetVaultTx.hash)
-                transactionInProgressShow.set(true)
-                transactionInProgress.set(true)
-            }
-            let wait = await offChainAssetVaultTx.wait()
-            if (wait.status === 1) {
-                transactionSuccess.set(true)
-                transactionInProgress.set(false)
-            }
+            await showPromptSFTCreate(offChainAssetVaultTx)
 
+            let eventArgs = await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)
             let contract;
             contract = new ethers.Contract(
                 ethers.utils.hexZeroPad(
                     ethers.utils.hexStripZeros(
-                        (await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)).child
+                        (eventArgs).child
                     ),
                     20
                 ),
@@ -91,27 +92,34 @@
                 signer.address
             );
 
-
-            name = null;
-            admin_ledger = null;
-            symbol = null;
-
-            console.log(
-                "vault deployed to:",
-                contract.address
-            );
+            console.log("vault deployed to:", contract.address);
 
             let newVault = await getContract($activeNetwork, contract.address, contractAbi, signerOrProvider)
-            vault.set(newVault)
-            localStorage.setItem('vaultAddress', $vault.address)
-            //wait for sg data
-            await getSgData(newVault.address)
 
-            navigateTo("#sft-create-success", {replace: false});
+            let createChildEvent = await getEvent(offChainAssetVaultTx, "OffchainAssetReceiptVaultInitialized", newVault)
+            let deployBlockNumber = createChildEvent.blockNumber
+
+            let wait = await offChainAssetVaultTx.wait()
+            if (wait.status === 1) {
+                let interval = setInterval(async () => {
+                    await getTokens()
+                    if (deployBlockNumber.toString() === $tokens[0].deployBlock) {
+                        transactionInProgress.set(false)
+                        transactionInProgressShow.set(false)
+                        SFTCreated.set(true)
+                        clearInterval(interval)
+                        vault.set(newVault)
+                        localStorage.setItem('vaultAddress', $vault.address)
+                        //wait for sg data
+                        await getSgData(newVault.address)
+                    }
+                }, 2000)
+            } else {
+                transactionError.set(true)
+            }
+
         } catch (er) {
-            transactionError.set(true)
-            console.log(er)
-            console.log(er.message)
+            console.log(er.message || er.message)
         }
         loading = false
     }
@@ -122,73 +130,93 @@
         getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault').then((res) => {
             if (res && res.data) {
                 data.set(res.data)
-                roles.set(res.data.offchainAssetReceiptVault?.roles)
-
-                let rolesFiltered = $roles.map(role => {
-                    let roleRevokes = $data.offchainAssetReceiptVault.roleRevokes.filter(r => r.role.roleName === role.roleName)
-                    let roleRevokedAccounts = roleRevokes.map(rr => rr.roleHolder.account.address)
-                    let filtered = filterArray(role.roleHolders, roleRevokedAccounts)
-                    return {roleName: role.roleName, roleHolders: filtered}
-                })
-                roles.set(rolesFiltered)
             }
 
         })
 
     }
 
+    async function getTokens() {
+        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, 'offchainAssetReceiptVaults').then((res) => {
+            if ($activeNetwork) {
+                let temp = res.data.offchainAssetReceiptVaults
+                tokens.set(temp)
+            }
+        })
+    }
+
+
 </script>
 <div>
   <div class="sft-setup-container">
-    <label class="title f-weight-700">SFT setup</label>
+    <div class="card-header justify-start">
+
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <g clip-path="url(#clip0_4713_13519)">
+          <path
+            d="M12.8311 15.4956H16.5729M16.5729 15.4956H20.2145M16.5729 15.4956L16.5805 11.7666M16.5729 15.4956L16.5947 19.1736"
+            stroke="black" stroke-width="2.07204" stroke-linecap="round" stroke-linejoin="round"/>
+          <path
+            d="M20.5154 12.0004C20.5154 11.269 20.4227 10.5594 20.2495 9.88202C19.3063 6.20543 15.9684 3.48535 12.0004 3.48535C7.30103 3.48535 3.48535 7.30103 3.48535 12.0004C3.48535 16.6997 7.30103 20.5154 12.0004 20.5154C12.5151 20.5154 13.0184 20.47 13.5075 20.382"
+            stroke="black" stroke-width="1.89223" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <defs>
+          <clipPath id="clip0_4713_13519">
+            <rect width="24" height="24" fill="white"/>
+          </clipPath>
+        </defs>
+      </svg>
+      <div class="mt-1">Setup new SFT</div>
+    </div>
     <div class="form-box">
-      <div class="space-between"><label class="f-weight-700">Token name:</label> <input type="text" bind:value={name}>
+      <div class="space-between">
+        <label class="f-weight-700" for="name">Token name:</label>
+        <input id="name" type="text" bind:value={name}>
       </div>
-      <div class="space-between"><label class="f-weight-700">Super admin address:</label> <input type="text"
-                                                                                                 bind:value={admin_ledger}>
+      <div class="space-between">
+        <label class="f-weight-700" for="symbol">Token symbol:</label>
+        <input type="text" id="symbol" bind:value={symbol}>
       </div>
-      <div class="space-between"><label class="f-weight-700">Token symbol:</label> <input type="text"
-                                                                                          bind:value={symbol}>
+      <div class="space-between">
+        <label class="f-weight-700" for="admin">Super admin address:</label>
+        <input type="text" id="admin" bind:value={admin_ledger}>
+      </div>
+      <div class="success info-text float-left">The ‘super admin address’ will need to assign roles to manage this
+        token.
       </div>
     </div>
-    <div class="form-after">
-      <span class="info-text f-weight-700">After creating an SFT you’ll be added as an Admin; you’ll need to add other roles to manage the token.</span>
-      <div class="error">{error}</div>
+    <div class="footer">
+      {#if error}
+        <div class="error">{error}</div>
+
+      {/if}
       <button class="create-token btn-solid btn-submit" disabled={!name || !admin_ledger || !symbol}
               on:click={() => createToken()}>Create SFT
       </button>
     </div>
   </div>
-  <TransactionInProgressBanner topText={TRANSACTION_IN_PROGRESS_TEXT} bottomText={VIEW_ON_EXPLORER_TEXT} transactionHash={$transactionHash}/>
 </div>
 <style>
     .sft-setup-container {
-        max-width: 599px;
         left: 420px;
         top: 238px;
         background: #FFFFFF;
         border-radius: 20px;
-        padding: 29px 11px;
         display: flex;
         flex-direction: column;
         text-align: left;
     }
 
-    .title {
-        margin-left: 24px;
-        margin-bottom: 11px;
-        font-style: normal;
-        font-size: 16px;
-        line-height: 27px;
-        color: #000000;
+    .card-header {
+        gap: 13px;
+        padding: 13px 24px;
     }
 
     .form-box {
         box-sizing: border-box;
-        width: 577px;
-        border: 1px solid #D2D2D2;
+        width: 650px;
         border-radius: 10px;
-        padding: 28px;
+        padding: 24px 45px 50px 60px;
     }
 
     .form-box label {
@@ -211,22 +239,24 @@
         line-height: 27px;
     }
 
-    .form-after {
+    .footer {
         align-items: center;
         display: flex;
         flex-direction: column;
+        border-top-width: 1px;
+        padding-top: 16px;
+        padding-bottom: 16px;
     }
 
     .info-text {
-        font-style: normal;
-        font-size: 12px;
+        font-size: 16px;
         line-height: 20px;
-        margin-top: 21px;
-        margin-bottom: 20px;
+        text-align: center;
     }
 
     .create-token {
         width: 413px;
+        /*margin-top: 20px;*/
     }
 
     .error {

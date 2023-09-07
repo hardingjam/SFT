@@ -1,170 +1,130 @@
 <script>
 
-    import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
-    import {activeNetwork, schemas, vault} from "../scripts/store.js";
-    import {cborDecode, getIpfsGetWay, getSubgraphData, timeStampToDate} from "../scripts/helpers";
-    import {VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
-    import axios from "axios";
-    import {onMount} from "svelte";
-    import {ethers} from "ethers";
+    import {activeNetwork, schemas, vault, deposits, titleIcon, tokenName, pageTitle} from "../scripts/store.js";
+    import {getSchemas, getSubgraphData, navigate, timeStampToDate} from "../scripts/helpers";
+    import {DEPOSITS_QUERY} from "../scripts/queries.js";
+    import {onDestroy, onMount} from "svelte";
+    import {icons} from "../scripts/assets.js"
 
     let ipfsLoading = false;
 
     function handleSchemasSelect(schema) {
         console.log(schema)
     }
-    let deposits = []
 
-    onMount(() => {
-        ipfsLoading = true
-        setTimeout(() => {
-            getSchemas()
-        }, 1500);
-        getDeposits()
-
+    onMount(async () => {
+        // if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
+        //     navigateTo('#set-vault');
+        // } else {
+        pageTitle.set(`${$tokenName} asset class list`)
+        titleIcon.set(`${icons.asset_list}`)
+        await getData()
+        // }
     })
-    let tempSchema = []
 
-    async function getSchemas() {
-        let variables = {id: $vault.address.toLowerCase()}
-        if ($vault.address) {
-            try {
-                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
-                let receiptVaultInformations = ""
+    onDestroy(() => {
+        titleIcon.set("")
+    })
 
-                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
-                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+    $: $activeNetwork.chainId && getData()
 
-                    if (receiptVaultInformations.length) {
-
-                        receiptVaultInformations.map(async data => {
-                            let cborDecodedInformation = cborDecode(data.information.slice(18))
-                            let schemaHash = cborDecodedInformation[1].get(0)
-                            let url = await getIpfsGetWay(schemaHash)
-                            let assetCount = getAssetCount(schemaHash)
-
-                            try {
-                                if (url) {
-                                    let res = await axios.get(url)
-                                    if (res) {
-                                        tempSchema.push({
-                                            ...res.data,
-                                            timestamp: data.timestamp,
-                                            id: data.id,
-                                            hash: schemaHash,
-                                            assetCount,
-                                        })
-                                        tempSchema = tempSchema.filter(d => d.displayName)
-                                        schemas.set(tempSchema)
-                                        ipfsLoading = false;
-                                    }
-                                }
-                            } catch (err) {
-                                console.log(err)
-                            }
-                        })
-                    }
-                }
-
-            } catch (err) {
-                console.log(err)
+    async function getData() {
+        if ($activeNetwork.chainId && !$schemas.length) {
+            await getDeposits()
+            let tempSchemas = await getSchemas($activeNetwork, $vault, $deposits)
+            if (tempSchemas) {
+                schemas.set(tempSchemas)
             }
         }
     }
 
-
     async function getDeposits() {
         let variables = {id: $vault.address.toLowerCase()}
 
-        let query =
-        `
-          query($id: ID!) {
-            offchainAssetReceiptVault(id: $id) {
-              deposits {
-                amount
-                receipt {
-                  receiptInformations {
-                    schema
-                  }
-                }
-              }
-            }
-          }
-         `
-
-        getSubgraphData($activeNetwork, variables, query, 'offchainAssetReceiptVault').then((res) => {
-            deposits = res.data.offchainAssetReceiptVault.deposits
+        getSubgraphData($activeNetwork, variables, DEPOSITS_QUERY, 'offchainAssetReceiptVault').then((res) => {
+            deposits.set(res.data.offchainAssetReceiptVault.deposits)
         })
     }
 
-    function getAssetCount(hash){
-        let depositsWithSchema = deposits.filter(d=>d.receipt.receiptInformations[0]?.schema === hash)
-        let depositAmounts = depositsWithSchema.map(d=>d.amount);
-        let assetCount = depositAmounts.reduce(
-            (accumulator, currentValue) => ethers.BigNumber.from(accumulator).add(ethers.BigNumber.from(currentValue)) ,
-            0
-        );
-        return ethers.utils.formatUnits(assetCount, 18)
-    }
 </script>
-
-<DefaultFrame header="Asset class list">
-  <div slot="content">
-    <div class="schemas">
-      <table class="w-100">
-        <tr class="f-weight-700">
-          <th>Asset class label</th>
-          <th>date created</th>
-          <th>Asset count</th>
-        </tr>
-        {#if (tempSchema.length)}
-          {#each tempSchema as schema }
-            <tr class="schema" on:click={()=>{handleSchemasSelect(schema)}}>
-              <td>{schema?.displayName}</td>
-              <td>{timeStampToDate(schema?.timestamp)}</td>
-              <td>{schema?.assetCount || ""}</td>
-            </tr>
-          {/each}
-        {/if}
-
-      </table>
-      {#if ipfsLoading}
-        <SftLoader width="50"></SftLoader>
-      {/if}
+<div class="asset-classes-container">
+  <div class="card-header space-between">
+    <div class="title flex"><img src="{icons.asset_list_dark}" alt="asset class list"/>{`${$tokenName} asset class list`}</div>
+    <div class="buttons">
+      <button class="default-btn" on:click={()=>{navigate("#mint")}}>Mint</button>
+      <button class="default-btn" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
     </div>
+
   </div>
-</DefaultFrame>
+  <div class="schemas">
+    <table class="w-100">
+      <tr class="f-weight-700">
+        <th>Asset class label</th>
+        <th>Date created</th>
+        <th>Asset count</th>
+      </tr>
+      {#if ($schemas?.length)}
+        {#each $schemas as schema }
+          <tr class="schema" on:click={()=>{handleSchemasSelect(schema)}}>
+            <td class="underline">{schema?.displayName}</td>
+            <td>{timeStampToDate(schema?.timestamp)}</td>
+            <td>{schema?.assetCount || 0}</td>
+          </tr>
+        {/each}
+      {/if}
+
+    </table>
+    {#if ipfsLoading}
+      <SftLoader width="50"></SftLoader>
+    {/if}
+  </div>
+</div>
+
 
 <style>
+
+    .asset-classes-container {
+        border-radius: 10px;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .title {
+        font-weight: 800;
+        align-items: center;
+        gap: 3px;
+        justify-content: space-between;
+    }
+
     .schemas {
         overflow: auto;
-        min-height: 200px;
         text-align: left;
         width: 100%;
-        min-width: 435px;
+        min-width: 710px;
         justify-content: space-between;
         line-height: 27px;
+        display: flex;
+        flex-direction: column;
+        min-height: 300px;
+        padding: 16px 45px 60px 45px
     }
-
-    .schema:hover {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-
-    /*table tr:first-child {*/
-    /*    background: #625e91;*/
-    /*    color: #ffffff;*/
-    /*}*/
 
     table td, table th {
         padding: 5px 15px;
     }
 
-    table th {
-        top: 0;
-        position: sticky;
-        z-index: 20;
+    .card-header {
+        justify-content: space-between;
+        padding: 13px 20px 13px 35px;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
     }
 
 </style>

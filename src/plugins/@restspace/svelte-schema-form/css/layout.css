@@ -1,138 +1,154 @@
 form.svelte-schema-form .subset {
-  /*display: grid;*/
-  /*grid-template-rows: auto;*/
-  /*grid-gap: 1em;*/
-  /*align-items: flex-start;*/
-  /*padding-left: 1em;*/
-  /*box-sizing: border-box;*/
-  /*border: none;*/
+    /*display: grid;*/
+    /*grid-template-rows: auto;*/
+    /*grid-gap: 1em;*/
+    /*align-items: flex-start;*/
+    /*padding-left: 1em;*/
+    /*box-sizing: border-box;*/
+    /*border: none;*/
 }
+
 form.svelte-schema-form .depth-0 {
-  padding-left: 0;
+    padding-left: 0;
 }
+
 form.svelte-schema-form .object {
-  /*grid-template-columns: max-content 1fr;*/
-  /*border-left: 1px solid #999;*/
-  /*grid-column: span 2;*/
+    /*grid-template-columns: max-content 1fr;*/
+    /*border-left: 1px solid #999;*/
+    /*grid-column: span 2;*/
 }
+
 form.svelte-schema-form .array > .object {
-  /*grid-column: span 1;*/
+    /*grid-column: span 1;*/
 }
+
 form.svelte-schema-form .object.depth-0 {
-  /*border-left: none;*/
+    /*border-left: none;*/
 }
+
 form.svelte-schema-form .array {
-  /*grid-column: span 2;*/
-  /*grid-template-columns: 1fr max-content;*/
+    /*grid-column: span 2;*/
+    /*grid-template-columns: 1fr max-content;*/
 }
+
 form.svelte-schema-form .subset > .subset-label {
-  margin-bottom: 1em;
+    margin-bottom: 1em;
 }
+
 form.svelte-schema-form .subset > .subset-label .subset-label-title {
-  display: block;
+    display: block;
 }
+
 form.svelte-schema-form .array > legend {
-  margin-left: -1em;
+    margin-left: -1em;
 }
+
 form.svelte-schema-form .array > .object {
-  margin-left: -1em;
+    margin-left: -1em;
 }
+
 form.svelte-schema-form .list-item {
-  display: flex;
+    display: flex;
 }
+
 form.svelte-schema-form input[type=checkbox] {
-  justify-self: start;
+    justify-self: start;
 }
+
 form.svelte-schema-form .error {
-  grid-column: 1/span 2;
+    grid-column: 1/span 2;
 }
+
 form.svelte-schema-form .sf-drop-area {
-  display: flex;
-  width: 84px;
+    display: flex;
+    width: 84px;
+    margin-top: 8px;
 }
+
 form.svelte-schema-form .sf-drop-area .sf-upload-caption {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  width: 100%;
+    cursor: pointer;
+    width: 100%;
 }
 
 form.svelte-schema-form .sf-drop-area .sf-upload-controls {
-  position: absolute;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  padding: 4px;
-  box-sizing: border-box;
+    position: absolute;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 4px;
+    box-sizing: border-box;
 }
+
 form.svelte-schema-form .sf-drop-area .sf-upload-controls button {
-  border: 0;
-  padding: 0;
-  height: 20px;
-  width: 20px;
-  cursor: pointer;
+    border: 0;
+    padding: 0;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
 }
+
 form.svelte-schema-form .sf-drop-area .sf-upload-controls .sf-upload-deleter {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 }
+
 form.svelte-schema-form .sf-drop-area .sf-upload-input {
-  align-self: center;
-  width: calc(100% - 30px);
-  margin: 0 10px;
+    align-self: center;
+    width: calc(100% - 30px);
+    margin: 0 10px;
 }
+
 form.svelte-schema-form .sf-drop-area.link .sf-upload-thumb, form.svelte-schema-form .sf-drop-area.link .sf-upload-file {
-  display: none;
+    display: none;
 }
+
 form.svelte-schema-form .sf-drop-area .sf-upload-file {
-  color: #000000;
-  position: absolute;
-  left: -67px;
+    color: #000000;
 }
+
 form.svelte-schema-form .sf-progress-bars {
-  grid-column: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  box-sizing: border-box;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    box-sizing: border-box;
 }
+
 form.svelte-schema-form .sf-progress-bars .sf-progress-bar {
-  width: 100%;
-  position: relative;
-  box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
 }
+
 form.svelte-schema-form .sf-progress-bars .sf-progress-bar .sf-progress-done {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
 }
+
 form.svelte-schema-form .sf-autocomplete {
-  width: 100%;
-  position: relative;
+    width: 100%;
+    position: relative;
 }
+
 form.svelte-schema-form .sf-autocomplete .sf-items {
-  z-index: 1;
-  position: absolute;
-  right: 0;
-  left: 0;
-  max-height: 12em;
-  overflow-y: auto;
-  overflow-x: hidden;
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    left: 0;
+    max-height: 12em;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
+
 form.svelte-schema-form .sf-autocomplete .sf-items > div,
 form.svelte-schema-form .sf-autocomplete .sf-selected-item {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 /*# sourceMappingURL=layout.css.map */

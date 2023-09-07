@@ -1,22 +1,48 @@
 <script>
-    import {activeNetwork, auditHistory, ethersData, tokens, vault} from "../scripts/store.js";
-    import {getContract, getSubgraphData} from "../scripts/helpers.js";
+    import {
+        account,
+        accountRoles,
+        activeNetwork,
+        auditHistory,
+        ethersData, pageTitle, roles,
+        schemas, tokenName,
+        tokens, transactionInProgress, transactionInProgressShow,
+        vault
+    } from "../scripts/store.js";
+    import {
+        formatAddress,
+        getContract,
+        getSubgraphData,
+        navigate,
+        setAccountRoles, showPrompt,
+        timeStampToDate
+    } from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
-    import {navigateTo} from "yrv";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
+    import {onDestroy} from "svelte";
 
+    let loading = false;
+    let interval;
+
+    onDestroy(() => {
+        clearInterval(interval);
+    });
 
     async function handleTokenSelect(token) {
+        await showPrompt(null, {topText: "SFT loading, please wait", noBottomText: true})
         let contract = await getContract($activeNetwork, token.address, contractAbi, $ethersData.signerOrProvider)
         if (contract) {
             vault.set(contract)
+            schemas.set([])
             localStorage.setItem("vaultAddress", token.address)
             let auditHistoryData = await getAuditHistoryData(token.address)
             auditHistory.set(auditHistoryData)
-            navigateTo("#roles")
-
+            accountRoles.set(await setAccountRoles($roles, $account));
+            transactionInProgressShow.set(false)
+            transactionInProgress.set(false)
+            navigate("#roles", {clear: true})
         }
     }
 
@@ -26,22 +52,29 @@
             return data.data.offchainAssetReceiptVault
         } else return {}
     }
+    pageTitle.set("SFT list")
 
 
 </script>
-<DefaultFrame header="SFT list">
+<DefaultFrame>
   <div slot="content">
     <div class="tokens">
-      <table class="w-100">
+      <table>
         <tr class="f-weight-700">
-          <th>Name</th>
-          <th>Symbol</th>
+          <th style="width: 25%">Name</th>
+          <th style="width: 25%">Symbol</th>
+          <th style="width: 25%">Deployer</th>
+          <th style="width: 25%">Date created</th>
         </tr>
-        {#if ($tokens.length)}
+        {#if $tokens.length}
           {#each $tokens as token }
-            <tr class="token tb-row" on:click={()=>{handleTokenSelect(token)}}>
+            <tr
+              class="{token?.address?.toLowerCase() === $vault?.address?.toLowerCase() ? 'active-token' : ''} token tb-row"
+              on:click={()=>{handleTokenSelect(token)}}>
               <td>{token.name}</td>
               <td>{token.symbol}</td>
+              <td>{formatAddress(token.deployer)}</td>
+              <td>{timeStampToDate(token.deployTimestamp)}</td>
             </tr>
           {/each}
         {/if}
@@ -60,7 +93,7 @@
         min-height: 200px;
         text-align: left;
         width: 100%;
-        min-width: 435px;
+        min-width: 550px;
         justify-content: space-between;
         line-height: 27px;
     }
@@ -75,10 +108,11 @@
     }
 
     table th {
-        top: 0;
-        position: sticky;
-        z-index: 20;
         background: #625e91;
+    }
+
+    .active-token {
+        background: #CAE6FF;
     }
 
 </style>

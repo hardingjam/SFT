@@ -35,6 +35,14 @@
     let password;
     let view = "tile";
     let credentialLinks = {}
+    export let allTokens;
+    $:$tokens && setAllTokens()
+
+    function setAllTokens() {
+        if (!window.Cypress) {
+            allTokens = $tokens
+        }
+    }
 
     async function deployImage(event) {
         let file = event.detail.file
@@ -250,19 +258,19 @@
       <img src={icons.list_view} alt="tiles">
     </div>
   </div>
-  {#if !$tokens.length}
+  {#if !allTokens}
     <div class="loader">
       <SftLoader></SftLoader>
     </div>
   {/if}
-  {#if $tokens.length}
+  {#if allTokens && allTokens.length}
     <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} content mt-5 mr-5">
       {#if (view === "tile")}
-        <TileView tokens={$tokens} on:tokenSelect={handleTokenSelect}
+        <TileView tokens={allTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage} on:okClick={handleOkButtonClick}/>
       {/if}
       {#if (view === "list")}
-        <ListView tokens={$tokens} on:tokenSelect={handleTokenSelect}
+        <ListView tokens={allTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage}
                   on:listEditClick={()=>{isListEditorOpen=true}} on:listEditClosed={()=>{isListEditorOpen=false}}/>
       {/if}

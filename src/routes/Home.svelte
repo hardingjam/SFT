@@ -258,7 +258,7 @@
       <img src={icons.list_view} alt="tiles">
     </div>
   </div>
-  {#if !allTokens}
+  {#if !allTokens?.length}
     <div class="loader">
       <SftLoader></SftLoader>
     </div>

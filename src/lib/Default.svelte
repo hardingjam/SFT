@@ -125,6 +125,7 @@
     }
 
     onMount(async () => {
+        isCypress.set(!!window.Cypress)
         await getEthersData();
 
         if (isMetamaskInstalled) {
@@ -290,6 +291,9 @@
     }
 
     async function getTokens() {
+        if ($isCypress) {
+            return
+        }
         getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
             if ($activeNetwork) {
                 let temp = res.data.offchainAssetReceiptVaults;

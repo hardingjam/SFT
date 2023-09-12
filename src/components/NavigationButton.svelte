@@ -22,7 +22,7 @@
 </script>
 <button on:click={()=>handleNavigationButtonClick()}
         class:active={path===targetPath}
-        class="{child? 'sub-nav-item' : 'nav-item'} space-x-6" disabled={disabled ? 'disabled' : ''}>
+        class="{child? 'sub-nav-item' : 'nav-item'} {targetPath?.replace('#', 'path-')} space-x-6" disabled={disabled ? 'disabled' : ''}>
         <span class="w-3">
           <slot name="icon"></slot>
         </span>

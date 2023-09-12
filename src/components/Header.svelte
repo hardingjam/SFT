@@ -53,7 +53,7 @@
 <div class="{$account ? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
   {#if $account}
     <div class="w-1/3"></div>
-    <div class="page-title">
+    <div class="page-title" id="{$pageTitle.replace(' ','-').toLowerCase()}">
       {#if $titleIcon}
         <img src={$titleIcon} alt="icon"/>
       {/if}

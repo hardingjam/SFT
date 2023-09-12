@@ -103,7 +103,7 @@
         <tr>
           <td class="font-bold label ">Token name</td>
           <td class="sft-name brown">
-            <span on:click={()=>onTokenSelect(sft)} class="underline cursor-pointer">{sft.name}</span>
+            <span on:click={()=>onTokenSelect(sft)} class="underline cursor-pointer" id="{`token-name-${sft.name}`}">{sft.name}</span>
           </td>
         </tr>
         <tr>

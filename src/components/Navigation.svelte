@@ -36,7 +36,9 @@
       {/if}
     </div>
     <div class="mt-16 flex flex-col justify-start items-center w-full">
-      <div class="sft-name f-weight-600 menu-header mb-3">{$account ? $tokenName : ""}</div>
+      <div class="`sft-name f-weight-600 menu-header mb-3 {$tokenName? 'sft-name-navigation-header':''}`">{$account ?
+          $tokenName :
+          ""}</div>
 
       <a href=""
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
@@ -53,7 +55,7 @@
       </NavigationButton>
       {#if $vault && $vault.address}
         <NavigationButton label={$tokenName} {path} clickable={false}>
-          <div slot="icon">
+          <div slot="icon" class="navigation-token-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="8" stroke="#575757" stroke-width="2" stroke-linecap="round"
                       stroke-linejoin="round"/>

@@ -14,7 +14,7 @@ import {
     transactionSuccess
 } from "./store.js";
 import {ACCOUNT_PINS_QUERY, VAULT_INFORMATION_QUERY} from "./queries.js";
-// import {navigateTo} from 'yrv';
+import {navigateTo} from 'yrv';
 
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -605,7 +605,7 @@ export function navigate(path, options) {
             }
         })
     }
-    // navigateTo(path)
+    navigateTo(path)
 }
 
 export function downloadIpfsHashes(hashes) {

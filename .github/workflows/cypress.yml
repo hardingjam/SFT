@@ -4,7 +4,7 @@ on:
   [push]
 
 jobs:
-  cypress-run:
+  cypress-component-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,7 +14,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: '14'
           npm-version: '7'
 
       - name: Update npm and clear cache
@@ -28,11 +28,26 @@ jobs:
       - name: Run Cypress component tests
         run: npx cypress run-ct
 
-      - name: Cypress run
-        run: npx cypress run
+  cypress-e2e-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          project: ./site
-          browser: chrome
-          build: yarn build
-          start: yarn start
-          wait-on: "localhost:5173"
+          node-version: '14'
+          npm-version: '7'
+
+      - name: Update npm and clear cache
+        run: |
+          npm install -g npm@latest
+          npm cache clean --force
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress E2E tests
+        run: npx cypress run

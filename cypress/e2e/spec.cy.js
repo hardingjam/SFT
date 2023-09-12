@@ -32,7 +32,7 @@ let schema = {
     }
 }
 
-describe('Stepper', () => {
+describe('Check schema', () => {
     it('checks output after encode and decode where data is schema', () => {
 
         let cborEncodedSchema = encodeCBOR(schema, MAGIC_NUMBERS.OA_SCHEMA)

@@ -17,7 +17,7 @@
         data,
         roles,
         sftInfo,
-        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle
+        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, isCypress
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -127,13 +127,29 @@
     onMount(async () => {
         isCypress.set(!!window.Cypress)
         await getEthersData();
-
+        if (isCypress) {
+            account.set('0xc0d477556c25c9d67e1f57245c7453da776b51cf')
+            activeNetwork.set({
+                "id": 80001,
+                "chainId": 80001,
+                "name": "mumbai",
+                "displayName": "Mumbai testnet",
+                "currencySymbol": "MATIC",
+                "blockExplorer": "https://mumbai.polygonscan.com",
+                "blockExplorerIcon": "polygonscan",
+                "rpcUrl": "https://rpc-mumbai.maticvigil.com/",
+                "icon": "polygon",
+                "factory_address": "0x94927792b88D518f9a429572dD3D40400b8BE906",
+                "subgraph_url": "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
+            })
+        }
         if (isMetamaskInstalled) {
 
             if (location === "/" || location === "") {
                 navigateTo("#");
             }
             await setNetwork();
+
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
                 account.set(connectedAccount)
@@ -212,6 +228,7 @@
         let temp = networks.find(
             (network) => network.chainId === connectedChainId
         );
+        console.log(temp);
         activeNetwork.set(temp);
         return temp;
     }
@@ -291,9 +308,6 @@
     }
 
     async function getTokens() {
-        if ($isCypress) {
-            return
-        }
         getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
             if ($activeNetwork) {
                 let temp = res.data.offchainAssetReceiptVaults;
@@ -338,7 +352,7 @@
 </script>
 <Router url={url}>
 
-  <div class={$account ? "content" : "content-not-connected"}>
+  <div class={$account || $isCypress? "content" : "content-not-connected"}>
     <Header on:select={handleNetworkSelect} {location}></Header>
     <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
       <a href="/">
@@ -399,7 +413,7 @@
         </div>
       </div>
     </div>
-    {#if !$account}
+    {#if !$account && !isCypress}
       <div>
         <div class="invalid-network f-weight-700">
           <label>To use the app:</label>

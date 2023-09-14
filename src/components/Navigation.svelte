@@ -70,7 +70,7 @@
         <NavigationButton targetPath="#asset-register" {path} child={true}/>
       {/if}
 
-      <NavigationButton targetPath="#manual" {path}>
+      <NavigationButton targetPath="#knowledgebase" {path} externalUrl="https://gildlab.document360.io/">
         <div slot="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

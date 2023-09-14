@@ -71,6 +71,7 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#sft-create-success", "Sft created successfully"],
     ["#ipfs", "IPFS"],
     ["#manual", "Manual"],
+    ["#knowledgebase", "Knowledgebase"],
     ["#asset-register", "Asset register"],
     ["#asset-information", "Asset information"],
     ["#token-overview", "Token overview"],

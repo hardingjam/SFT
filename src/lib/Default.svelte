@@ -308,16 +308,21 @@
     }
 
     async function getTokens() {
-        getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
-            if ($activeNetwork) {
-                let temp = res.data.offchainAssetReceiptVaults;
-                tokens.set(temp);
-                transactionInProgressShow.set(false)
-                transactionInProgress.set(false)
-            } else {
-                tokens.set([])
-            }
-        });
+        try {
+            await getSubgraphData($activeNetwork, {}, VAULTS_QUERY, "offchainAssetReceiptVaults").then((res) => {
+                if ($activeNetwork) {
+                    let temp = res.data.offchainAssetReceiptVaults;
+                    tokens.set(temp);
+                    transactionInProgressShow.set(false)
+                    transactionInProgress.set(false)
+                } else {
+                    tokens.set([])
+                }
+            });
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 
     async function getRoles(vaultAddress) {

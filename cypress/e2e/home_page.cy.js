@@ -9,7 +9,8 @@ describe('The Home Page', () => {
     })
     it('renders $tokens', () => {
         // Load the component with the data
-        cy.get('.content').should('exist');
+        cy.wait(1000)
+        cy.get('.tokens').should('exist');
     });
     it('Should change view to list', () => {
         cy.get('.list-view-button').click();

@@ -42,6 +42,9 @@ jobs:
           node-version: '18'
           npm-version: '10'
 
+      - name: Install wait-on
+        run: npm install wait-on
+
       - name: Update npm and clear cache
         run: |
           npm install -g npm@latest
@@ -51,4 +54,9 @@ jobs:
         run: npm ci
 
       - name: Run Cypress E2E tests
-        run: npx cypress run
+        run: npx wait-on $CYPRESS_BASE_URL && npx cypress run --headed
+
+      - name: Debug Information
+        run: |
+          echo "CYPRESS_BASE_URL: $CYPRESS_BASE_URL"
+          # Add more debugging commands as needed

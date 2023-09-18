@@ -76,7 +76,7 @@ describe('The Home Page', () => {
         cy.get(`.path-setup`).click();
         cy.url().should('include', '/#setup')
     });
-    it.only('Navigates to home', () => {
+    it('Navigates to home', () => {
         cy.get(`#token-name-Jefo`).click();
         cy.wait(1000)
         cy.get(`.path-`).click();

@@ -58,7 +58,6 @@ jobs:
 
       - name: Run Cypress E2E tests
         run: |
-          wait-on $CYPRESS_BASE_URL
           cypress run
 
       - name: Debug Information

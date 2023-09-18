@@ -58,7 +58,7 @@ jobs:
 
       - name: Run Cypress E2E tests
         run: |
-          cypress run
+          npx cypress run
 
       - name: Debug Information
         run: |

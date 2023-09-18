@@ -32,6 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CYPRESS_BASE_URL: 'https://sft.gildlab.xyz/'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -40,21 +41,25 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '18'
-          npm-version: '10'
 
-      - name: Install wait-on
+      - name: Install wait-on with npm
         run: npm install wait-on
+
+      - name: Install Cypress with npm
+        run: npm install cypress
 
       - name: Update npm and clear cache
         run: |
           npm install -g npm@latest
           npm cache clean --force
 
-      - name: Install dependencies
+      - name: Install project dependencies with npm
         run: npm ci
 
       - name: Run Cypress E2E tests
-        run: npx wait-on $CYPRESS_BASE_URL && npx cypress run --headed
+        run: |
+          wait-on $CYPRESS_BASE_URL
+          cypress run
 
       - name: Debug Information
         run: |

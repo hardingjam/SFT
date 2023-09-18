@@ -34,47 +34,54 @@ describe('The Home Page', () => {
     });
     it('Navigates to mint', () => {
         cy.get(`#token-name-Jefo`).click();
+        cy.wait(1000)
         cy.get(`.path-mint`).click();
         cy.url().should('include', '/#mint')
     });
     it('Navigates to asset-classes', () => {
         cy.get(`#token-name-Jefo`).click();
+        cy.wait(1000)
         cy.get(`.path-asset-classes`).click();
         cy.url().should('include', '/#asset-classes')
     });
     it('Navigates to members', () => {
         cy.get(`#token-name-Jefo`).click();
+        cy.wait(1000)
         cy.get(`.path-members`).click();
         cy.url().should('include', '/#members')
     });
     it('Navigates to roles', () => {
         cy.get(`#token-name-Jefo`).click();
+        cy.wait(1000)
         cy.get(`.path-roles`).click();
         cy.url().should('include', '/#roles')
     });
     it('Navigates to audit-history', () => {
         cy.get(`#token-name-Jefo`).click();
+        cy.wait(1000)
         cy.get(`.path-audit-history`).click();
         cy.url().should('include', '/#audit-history')
     });
     it('Navigates to asset-register', () => {
         cy.get(`#token-name-Jefo`).click();
+        cy.wait(1000)
         cy.get(`.path-asset-register`).click();
         cy.url().should('include', '/#asset-register')
     });
     it('Navigates to ipfs', () => {
-        cy.get(`#token-name-Jefo`).click();
         cy.get(`.path-ipfs`).click();
         cy.url().should('include', '/#ipfs')
     });
     it('Navigates to setup', () => {
-        cy.get(`#token-name-Jefo`).click();
         cy.get(`.path-setup`).click();
         cy.url().should('include', '/#setup')
     });
-    it('Navigates to home', () => {
+    it.only('Navigates to home', () => {
         cy.get(`#token-name-Jefo`).click();
+        cy.wait(1000)
         cy.get(`.path-`).click();
         cy.url().should('include', '/#')
+        cy.get('.tokens').should('exist');
+
     });
 })

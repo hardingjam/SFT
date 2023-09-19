@@ -28,41 +28,17 @@ jobs:
       - name: Run Cypress component tests
         run: npx cypress run-ct
 
-  cypress-e2e-tests:
+
+  Cypress-Test:
     runs-on: ubuntu-latest
     env:
       CYPRESS_BASE_URL: 'https://sft.gildlab.xyz/'
-
     steps:
-      - name: Checkout code
+      - name: Checkout GitCode
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
-
-      - name: Install wait-on with npm
-        run: npm install wait-on
-
-      - name: Install Cypress with npm
-        run: npm install cypress
-
-      - name: Update npm and clear cache
-        run: |
-          npm install -g npm@latest
-          npm cache clean --force
-
-      - name: Install project dependencies with npm
-        run: npm ci
-
-      - name: Run Cypress E2E tests
+      - name: Run Cypress Test
         uses: cypress-io/github-action@v4
         with:
           command: npx cypress run
           browser: chrome
-
-      - name: Debug Information
-        run: |
-          echo "CYPRESS_BASE_URL: $CYPRESS_BASE_URL"
-          # Add more debugging commands as needed

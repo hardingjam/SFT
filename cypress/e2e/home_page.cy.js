@@ -7,7 +7,10 @@ describe('The Home Page', () => {
     beforeEach(() => {
         cy.visit('/')
     })
-    it('renders $tokens', () => {
+    it('Check if connect-metamask-btn exists', () => {
+        // Load the component with the data
+        cy.get('.connect-metamask-btn').should('exist');
+    });    it('renders $tokens', () => {
         // Load the component with the data
         cy.wait(1000)
         cy.get('.tokens').should('exist');

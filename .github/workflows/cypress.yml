@@ -32,7 +32,7 @@ jobs:
   Cypress-Test:
     runs-on: ubuntu-latest
     env:
-      CYPRESS_BASE_URL: 'https://sft.gildlab.xyz/'
+      CYPRESS_BASE_URL: 'https://lucky-poetry-9761.on.fleek.co'
     steps:
       - name: Checkout GitCode
         uses: actions/checkout@v2

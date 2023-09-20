@@ -488,7 +488,6 @@
         let temp = networks.find(
             (network) => network.chainId === connectedChainId
         );
-        console.log(temp);
         activeNetwork.set(temp);
         return temp;
     }

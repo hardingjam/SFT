@@ -6,8 +6,18 @@ on:
 jobs:
   linkinator:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: JustinBeckwith/linkinator-action@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
         with:
-          paths: README.md
+          node-version: 18
+
+      - name: Install Linkinator
+        run: npm install -g linkinator
+
+      - name: Run Linkinator
+        run: linkinator https://sft.gildlab.xyz/

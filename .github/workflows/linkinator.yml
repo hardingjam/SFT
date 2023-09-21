@@ -1,4 +1,4 @@
-name: Cypress Tests
+name: Linkinator
 
 on:
   [ push ]
@@ -6,18 +6,8 @@ on:
 jobs:
   linkinator:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2  # This step checks out your code
-
-      - name: Install Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v2
+      - uses: JustinBeckwith/linkinator-action@v1
         with:
-          node-version: 14  # Replace with your desired Node.js version
-
-      - name: Install Linkinator
-        run: npm install -g linkinator
-
-      - name: Run Linkinator
-        run: linkinator https://sft.gildlab.xyz/  # Replace with your desired URL
+          paths: README.md

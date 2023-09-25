@@ -24,6 +24,7 @@
     "vite": "^3.2.2"
   },
   "dependencies": {
+    "@fleekhq/fleek-cli": "^0.1.8",
     "@popperjs/core": "^2.11.7",
     "@sentry/svelte": "^7.38.0",
     "@sentry/tracing": "^7.27.0",

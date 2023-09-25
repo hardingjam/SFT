@@ -1,0 +1,14 @@
+{
+  "site": {
+    "id": "f6bbc70a-5085-46a1-9c67-a0e34c202f1a",
+    "team": "Gild-lab",
+    "platform": "ipfs",
+    "source": "ipfs",
+    "name": "hidden-waterfall-6189"
+  },
+  "build": {
+    "baseDir": "",
+    "publicDir": "test",
+    "rootDir": ""
+  }
+}

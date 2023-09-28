@@ -9,6 +9,8 @@
   "build": {
     "baseDir": "",
     "publicDir": "dist",
-    "rootDir": ""
+    "rootDir": "",
+    "command": "npm install && npm run build",
+    "image": "fleek/svelte:node-16"
   }
 }

@@ -8,7 +8,7 @@
   },
   "build": {
     "baseDir": "",
-    "publicDir": "test",
+    "publicDir": "dist",
     "rootDir": ""
   }
 }

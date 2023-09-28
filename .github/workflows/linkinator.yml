@@ -28,6 +28,9 @@ jobs:
       - name: Install Fleek cli
         run: npm install @fleekhq/fleek-cli
 
+      - name: Update Fleek CLI
+        run: npm update @fleekhq/fleek-cli
+
       - name: Deploy test site
         id: deploy
         uses: fleekhq/action-deploy@v1

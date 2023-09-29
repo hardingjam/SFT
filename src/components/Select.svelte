@@ -39,7 +39,7 @@
 
     <button
       type="button"
-      class={`${className} btn dropdown-toggle`}
+      class={`${className} inputSelect btn dropdown-toggle`}
       bind:this={dropdownTrigger}
     >
       <slot name="icon"></slot>
@@ -48,7 +48,7 @@
         <img class="expand" src={expandIcon} alt="expand"/>
       {/if}
     </button>
-    <div slot="DropdownMenu" class={`${dropDownClass} ${className} dropdown`}>
+    <div slot="DropdownMenu" class={`${dropDownClass} ${className} inputSelect dropdown`}>
       {#each options as option}
         <button class="{selected === option.displayName? 'selected' : ''} dropdown-item" type="button"
                 on:click={()=>commitAction(option)}>
@@ -123,6 +123,24 @@
         color: #FFFFFF;
     }
 
+    .rolesInputSelect{
+        min-width: 160px;
+    }
+
+    .rolesInputSelect.dropdown{
+        min-width: 160px;
+        max-width: 200px;
+    }
+
+    .mintSelect{
+        width: 360px;
+    }
+
+    .mintSelect.dropdown{
+        min-width: 360px;
+        max-width: 360px;
+    }
+
     .inputSelect {
         background: #ECECEC;
         border-radius: 5px;
@@ -131,7 +149,6 @@
         font-size: 16px;
         line-height: 25px;
         color: #000000;
-        width: 360px;
     }
 
     .inputSelect.dropdown {
@@ -139,8 +156,6 @@
         height: auto;
         overflow: auto;
         background-color: #ececec;
-        min-width: 360px;
-        max-width: 360px;
         overflow-x: hidden;
     }
 

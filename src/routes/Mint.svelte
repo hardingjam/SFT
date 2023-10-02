@@ -367,7 +367,7 @@
               <Select options={$schemas}
 
                       on:select={handleSchemaSelect}
-                      label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
+                      label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
 
             </div>
             <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>

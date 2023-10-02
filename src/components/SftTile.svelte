@@ -102,8 +102,12 @@
       <table class="leading-8 text-left">
         <tr>
           <td class="font-bold label ">Token name</td>
-          <td class="sft-name brown">
-            <span on:click={()=>onTokenSelect(sft)} class="underline cursor-pointer" id="{`token-name-${sft.name}`}">{sft.name}</span>
+          <td class=" brown">
+            <div on:click={()=>onTokenSelect(sft)} class="sft-name underline cursor-pointer"
+                 id="{`token-name-${sft.name}`}">
+              {sft.name.slice(0, 20)} {sft.name.length > 20 ? '...' : ''}
+              {#if sft.name.length > 20}<span class="tooltip-text">{sft.name}</span>{/if}
+            </div>
           </td>
         </tr>
         <tr>
@@ -230,6 +234,12 @@
 
     .sft-name {
         padding-left: 40px;
+        position: relative;
+    }
+
+    .sft-name:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
     }
 
     .label {

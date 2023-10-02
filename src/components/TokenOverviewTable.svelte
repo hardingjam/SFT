@@ -37,12 +37,12 @@
     <div class="font-bold label">
       Token name
     </div>
-    <div class="sft-name value">
+    <div class="sft-name">
       {#if navigation && token.name}{token?.name.slice(0, 15)} {token.name.length > 15 ? '...' : ''}
         {#if token.name.length > 15}<span class="tooltip-text">{token.name}</span>{/if}
       {/if}
       {#if !navigation && token.name}
-        {token?.name || ""}
+        <div class="token-name"> {token?.name || ""}</div>
       {/if}
     </div>
   </div>
@@ -127,6 +127,7 @@
     }
 
     .sft-name {
+        width: 50%;
         position: relative;
     }
 

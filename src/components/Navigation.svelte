@@ -36,7 +36,7 @@
       {/if}
     </div>
     <div class="mt-16 flex flex-col justify-start items-center w-full">
-      <div class="`sft-name f-weight-600 menu-header mb-3 {$tokenName? 'sft-name-navigation-header':''}`">{$account ?
+      <div class="sft-name f-weight-600 menu-header mb-3 {$tokenName? 'sft-name-navigation-header':''}">{$account ?
           $tokenName :
           ""}</div>
 

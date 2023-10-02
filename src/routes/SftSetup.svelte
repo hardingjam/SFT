@@ -169,9 +169,10 @@
       <div class="mt-1">Setup new SFT</div>
     </div>
     <div class="form-box">
-      <div class="space-between">
+      <div class="space-between token-name">
         <label class="f-weight-700" for="name">Token name:</label>
-        <input id="name" type="text" bind:value={name}>
+        <input id="name" type="text" bind:value={name} maxlength="20">
+        <div class="input-length">{name.length}/20</div>
       </div>
       <div class="space-between">
         <label class="f-weight-700" for="symbol">Token symbol:</label>
@@ -261,6 +262,18 @@
 
     .error {
         margin-bottom: 10px;
+    }
+
+    .token-name {
+        position: relative;
+    }
+
+    .input-length {
+        position: absolute;
+        right: 5px;
+        margin-top: 3px;
+        color: #B7B7B7;
+        font-size: 14px;
     }
 
 </style>

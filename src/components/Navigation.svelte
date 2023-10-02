@@ -137,7 +137,7 @@
       </div>
       <div class="flex flex-col pt-10 px-5 sft-info-table">
         <span class="font-bold self-center mb-5">Token overview</span>
-        <TokenOverviewTable {token}/>
+        <TokenOverviewTable {token} navigation="{true}"/>
       </div>
     </div>
 

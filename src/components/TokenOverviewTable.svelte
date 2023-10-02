@@ -7,6 +7,7 @@
     let issuers = []
 
     export let token;
+    export let navigation;
     pageTitle.set("Token overview")
 
     $: token && getSftData()
@@ -36,7 +37,14 @@
     <div class="font-bold label">
       Token name
     </div>
-    <div class="sft-name value">{token?.name || ""}</div>
+    <div class="sft-name value">
+      {#if navigation && token.name}{token?.name.slice(0, 15)} {token.name.length > 15 ? '...' : ''}
+        {#if token.name.length > 15}<span class="tooltip-text">{token.name}</span>{/if}
+      {/if}
+      {#if !navigation && token.name}
+        {token?.name || ""}
+      {/if}
+    </div>
   </div>
   <div class="row">
     <div class="font-bold label">
@@ -69,7 +77,7 @@
     </div>
     <div class="sft-info value">
       {#if !auditors.length}
-        <div >N/A</div>
+        <div>N/A</div>
       {/if}
       {#each auditors as auditor}
         <div class="underline brown cursor-pointer ">
@@ -84,7 +92,7 @@
     </div>
     <div class="sft-info value">
       {#if !issuers.length}
-        <div >N/A</div>
+        <div>N/A</div>
       {/if}
       {#each issuers as issuer}
         <div class="underline brown cursor-pointer">
@@ -95,7 +103,7 @@
   </div>
   <div class="row">
 
-  <div class="font-bold label">About</div>
+    <div class="font-bold label">About</div>
   </div>
 </div>
 
@@ -106,16 +114,24 @@
         display: flex;
         align-items: flex-start;
         text-align: left;
-        gap: 45px
     }
 
-    .label{
-        width: 50%;
-        white-space: nowrap;
-    }
-    .value{
+    .label {
         width: 50%;
         white-space: nowrap;
     }
 
+    .value {
+        width: 50%;
+        white-space: nowrap;
+    }
+
+    .sft-name {
+        position: relative;
+    }
+
+    .sft-name:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
 </style>

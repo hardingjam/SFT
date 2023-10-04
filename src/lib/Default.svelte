@@ -145,7 +145,7 @@
 
     onMount(async () => {
         await getEthersData();
-        if (isCypress) {
+        if ($isCypress) {
             account.set(mock.account)
             activeNetwork.set(mock.activeNetwork)
         }
@@ -375,7 +375,6 @@
 
 
     async function getCurrentCertification() {
-        console.log(2)
         if ($data.offchainAssetReceiptVault && !$currentCertification?.id) {
             let variables = {id: $vault.address, certifiedUntil: $data.offchainAssetReceiptVault.certifiedUntil}
             let resp = await getSubgraphData($activeNetwork, variables, CURRENT_CERTIFICATION_QUERY, 'offchainAssetReceiptVault')

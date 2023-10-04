@@ -25,13 +25,13 @@
     let currentPage = 1
 
     async function getAuditHistory() {
+        loading = true
+
         pageTitle.set("Audit history")
         auditHistory.set(mock.auditHistory)
 
         if (!$isCypress) {
             if ($vault.address) {
-
-                loading = true
                 let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
                 if (data) {
                     let temp = data.data.offchainAssetReceiptVault
@@ -67,82 +67,88 @@
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
-  {#if loading}
-    <SftLoader/>
-  {/if}
-  {#if !loading }
-    <div class="sft-table-container">
+  <div class="sft-table-container">
 
-      <table class="sft-table">
-        <thead>
+    <table class="sft-table">
+      <thead>
+      <tr>
+        <th>Total amount</th>
+        <th>Certified on</th>
+        <th>Certified by</th>
+        <th>Audit report</th>
+        <th>Certified until</th>
+      </tr>
+      </thead>
+      <tbody>
+      {#if certifyData.length}
+        {#each filteredCertifications as cert, i}
+          <tr class="tb-row">
+            <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
+            <td>{timeStampToDate(cert?.timestamp)}</td>
+            <td><span class="underline brown cursor-pointer"
+                      on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span>
+            </td>
+            <td>
+              {#if (cert?.data)}
+                <span class="brown cursor-pointer underline" on:click={()=>{navigate(`#audit-report/${cert?.id}`)}}>Asset class data</span>
+              {/if}
+              {#if (!cert?.data)}
+                N/A
+              {/if}
+            </td>
+            {#if cert.certifiedUntil === $auditHistory.certifiedUntil}
+              <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
+                {toIsoDate(cert?.certifiedUntil)}
+              </td>
+            {/if}
+            {#if cert.certifiedUntil !== $auditHistory.certifiedUntil}
+              <td class="cert-date">
+                {toIsoDate(cert?.certifiedUntil)}
+              </td>
+            {/if}
+
+          </tr>
+        {/each}
+      {:else}
         <tr>
-          <th>Total amount</th>
-          <th>Certified on</th>
-          <th>Certified by</th>
-          <th>Audit report</th>
-          <th>Certified until</th>
+          <td colspan="5">
+            {#if (!loading)}
+              No data available
+            {/if}
+            {#if (loading)}
+              <div class="waiting-state">
+                <SftLoader width="50"></SftLoader>
+              </div>
+            {/if}
+          </td>
         </tr>
-        </thead>
-        <tbody>
-        {#if certifyData.length}
-
-          {#each filteredCertifications as cert, i}
-            <tr class="tb-row">
-              <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
-              <td>{timeStampToDate(cert?.timestamp)}</td>
-              <td><span class="underline brown cursor-pointer"
-                        on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span>
-              </td>
-              <td>
-                {#if (cert?.data)}
-                  <span class="brown cursor-pointer underline" on:click={()=>{navigate(`#audit-report/${cert?.id}`)}}>Asset class data</span>
-                {/if}
-                {#if (!cert?.data)}
-                  N/A
-                {/if}
-              </td>
-              {#if cert.certifiedUntil === $auditHistory.certifiedUntil}
-                <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
-                  {toIsoDate(cert?.certifiedUntil)}
-                </td>
-              {/if}
-              {#if cert.certifiedUntil !== $auditHistory.certifiedUntil}
-                <td class="cert-date">
-                  {toIsoDate(cert?.certifiedUntil)}
-                </td>
-              {/if}
-
-            </tr>
-          {/each}
-        {/if}
-
-        </tbody>
+      {/if}
+      </tbody>
 
 
-      </table>
-      <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}>
-        <div slot="actions">
-          <div class="actions">
-            {#if new Date($data?.offchainAssetReceiptVault?.certifiedUntil * 1000) < new Date()}
-              <div class="certify-warning">
-                <span class="error">Warning, this token is frozen.</span>
-                {#if ($currentCertification?.id)}
+    </table>
+    <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}>
+      <div slot="actions">
+        <div class="actions">
+          {#if new Date($data?.offchainAssetReceiptVault?.certifiedUntil * 1000) < new Date()}
+            <div class="certify-warning">
+              <span class="error">Warning, this token is frozen.</span>
+              {#if ($currentCertification?.id)}
                   <span class="brown underline cursor-pointer"
                         on:click={()=>{navigate(`#audit-report/${$currentCertification?.id}`)}}>Current certification</span>
-                {/if}
-              </div>
-            {/if}
-            {#if !loading && ($accountRoles.CERTIFIER)}
-              <div class="certify-btn-container">
-                <button class="default-btn ml-3" on:click={() => navigate('#certify')}>Certify</button>
-              </div>
-            {/if}
-          </div>
-
+              {/if}
+            </div>
+          {/if}
+          {#if !loading && ($accountRoles.CERTIFIER)}
+            <div class="certify-btn-container">
+              <button class="default-btn ml-3" on:click={() => navigate('#certify')}>Certify</button>
+            </div>
+          {/if}
         </div>
-      </Pagination>
-    </div>
-  {/if}
+
+      </div>
+    </Pagination>
+  </div>
 </div>
 
 <style>

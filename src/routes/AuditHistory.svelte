@@ -2,7 +2,7 @@
     import {
         vault,
         auditHistory,
-        activeNetwork, sftInfo, pageTitle, data, currentCertification
+        activeNetwork, sftInfo, pageTitle, data, currentCertification, isCypress
     } from "../scripts/store";
     import {
         getSubgraphData,
@@ -15,6 +15,7 @@
     import {accountRoles} from "../scripts/store.js";
     import SftLoader from '../components/SftLoader.svelte';
     import Pagination from '../components/Pagination.svelte';
+    import {mock} from '../test/mock.js';
 
     let error = ''
     let certifyData = []
@@ -24,18 +25,20 @@
     let currentPage = 1
 
     async function getAuditHistory() {
-
-        //set pageTitle
         pageTitle.set("Audit history")
+        auditHistory.set(mock.auditHistory)
 
-        if ($vault.address) {
-            loading = true
-            let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
-            if (data) {
-                let temp = data.data.offchainAssetReceiptVault
-                auditHistory.set(temp)
-            } else {
-                auditHistory.set({})
+        if (!$isCypress) {
+            if ($vault.address) {
+
+                loading = true
+                let data = await getSubgraphData($activeNetwork, {id: $vault.address.toLowerCase()}, AUDIT_HISTORY_DATA_QUERY, 'offchainAssetReceiptVault')
+                if (data) {
+                    let temp = data.data.offchainAssetReceiptVault
+                    auditHistory.set(temp)
+                } else {
+                    auditHistory.set({})
+                }
             }
         }
         certifyData = $auditHistory?.certifications || []
@@ -46,7 +49,6 @@
     }
 
     $: $activeNetwork && getAuditHistory();
-
 
     function inFuture(date) {
         let day = date.split('-')[0]

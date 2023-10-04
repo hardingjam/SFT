@@ -13,7 +13,7 @@ import {
     transactionInProgressShow,
     transactionSuccess
 } from "./store.js";
-import {VAULT_INFORMATION_QUERY} from "./queries.js";
+import {ACCOUNT_PINS_QUERY, VAULT_INFORMATION_QUERY} from "./queries.js";
 import {navigateTo} from 'yrv';
 import jQuery from 'jquery';
 
@@ -607,6 +607,33 @@ export function navigate(path, options) {
         })
     }
     navigateTo(path)
+}
+
+export function downloadIpfsHashes(hashes) {
+    if (hashes.length) {
+        const content = hashes.filter(h=>!!h).join("\n");
+        const blob = new Blob([content], {type: "text/plain"});
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Ipfs_pin_list.txt";
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
+}
+
+export async function getAccountPins(network, address) {
+    let resp = await getSubgraphData(network, {address}, ACCOUNT_PINS_QUERY, 'accounts')
+    if (resp && resp.data && resp.data.accounts) {
+
+        let pins = resp.data.accounts.map(a => a.hashes)
+
+        if (pins.length) {
+            pins = pins.flat()
+        }
+        return pins
+    }
 }
 
 export async function getFormData(fileHashes) {

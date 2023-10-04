@@ -1,6 +1,6 @@
 <script>
     import {navigate} from '../scripts/helpers.js';
-    import {navigationButtonClicked} from '../scripts/store.js';
+    import {navigationButtonClicked, tokenName} from '../scripts/store.js';
     import {ROUTE_LABEL_MAP} from '../scripts/consts.js';
 
     export let targetPath;
@@ -22,11 +22,13 @@
 </script>
 <button on:click={()=>handleNavigationButtonClick()}
         class:active={path===targetPath}
-        class="{child? 'sub-nav-item' : 'nav-item'} space-x-6" disabled={disabled ? 'disabled' : ''}>
+        class="{child? 'sub-nav-item' : 'nav-item'} {targetPath?.replace('#', 'path-')} space-x-6" disabled={disabled ? 'disabled' : ''}>
         <span class="w-3">
           <slot name="icon"></slot>
         </span>
-  <label class="text-base leading-5  ">{targetPath ? ROUTE_LABEL_MAP.get(targetPath) : label}</label>
+  <label class="text-base leading-5  ">{targetPath ? ROUTE_LABEL_MAP.get(targetPath) : label.slice(0,15)} {label?.length>15? '...':''}
+      {#if label && label.length > 15}<span class="tooltip-text">{label}</span>{/if}
+  </label>
 </button>
 <style>
     .nav-item {
@@ -77,6 +79,20 @@
 
     .nav-item, .nav-item label, .sub-nav-item label {
         cursor: pointer;
+    }
+
+    .text-base{
+        position: relative;
+    }
+
+    .text-base:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .tooltip-text{
+        left: 0;
+        transform: unset;
     }
 
 

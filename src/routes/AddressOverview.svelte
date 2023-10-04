@@ -1,7 +1,7 @@
 <script>
     import {activeNetwork, sftInfo} from '../scripts/store.js';
     import {router} from 'yrv';
-    import {getSubgraphData, getSubgraphDataNoInterval} from '../scripts/helpers.js';
+    import {getSubgraphData, getSubgraphDataNoInterval, downloadIpfsHashes, getAccountPins} from '../scripts/helpers.js';
     import {
         ADDRESS_OVERVIEW_QUERY, REVISIONS_DATA_QUERY,
         VAULTS_BY_DEPLOYER_QUERY
@@ -120,6 +120,11 @@
     }
 
 
+    async function downloadPins() {
+        let pins = await getAccountPins($activeNetwork, address)
+        downloadIpfsHashes(pins.map(p => p.hash))
+    }
+
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} address-overview receipts">
@@ -149,7 +154,7 @@
           </button>
         </div>
         <div class="right">
-          <button class="default-btn" disabled>Download pins</button>
+          <button class="default-btn" on:click={()=>{downloadPins()}}>Download pins</button>
         </div>
       </div>
       {#if (active === 'mint')}

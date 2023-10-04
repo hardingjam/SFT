@@ -13,8 +13,9 @@ module.exports = defineConfig({
   viewportWidth: 1440,
 
   e2e: {
+      baseUrl: process.env.CYPRESS_BASE_URL || 'http://localhost:5173/',
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-  },
+  }
 });

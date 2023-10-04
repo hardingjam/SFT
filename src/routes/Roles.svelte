@@ -94,76 +94,102 @@
 
 </script>
 <div class="roles-container">
-  <DefaultFrame>
-    <div slot="header_buttons">
-      <button class="default-btn" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
+  <div class="roles">
+    <div class="w-full flex justify-between">
+      <div class="grant-role-txt f-weight-700 flex justify-between">Grant a role</div>
+
+      <button class="asset-class-btn default-btn" on:click={()=>{navigate("#new-asset-class")}}>
+        New asset class
+      </button>
+    </div>
+    <div class="info">
+      Roles are granted to specific addresses to control certain duties of a token. Every role has admins control who has the role, and admin for that role. Admins need to grant themselves their role to perform those duties.
+    </div>
+    <div class="error">{error}</div>
+    <div class="role-list">
+      <table>
+        <tr>
+          <td class="flex items-center">
+            <img src={icons.plus_sign} alt="add" class="plus">
+            <label class="f-weight-700">Role:</label></td>
+          <td>
+            <div>
+              <Select options={ROLES.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
+
+                      on:select={handleRoleSelect}
+                      label={'Choose'} className={"rolesInputSelect"} expandIcon={icons.expand_black}></Select>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><label class="f-weight-700">Address:</label></td>
+          <td><input type="text" class="default-input"
+                     bind:value={account}></td>
+        </tr>
+      </table>
+      <button class="default-btn" on:click={grantRole} disabled={!!error || !account || !roleName}>Enter</button>
+    </div>
+    <div class="warning error">Important - Deleting or adding is permanent on the blockchain. If all role admins are
+      removed then it will be unrecoverable.
     </div>
 
-    <div slot="content">
-      <span class="warning error">Important - Deleting or adding is permanent on the blockchain. If all role admins are removed  then it will be unrecoverable.</span>
-      <div class="roles">
-        <div class="grant-role-txt f-weight-700">Grant a role</div>
-        <div class="error">{error}</div>
-        <div class="role-list">
-          <table>
+    {#if loading}
+      <SftLoader width="50"></SftLoader>
+    {/if}
+    {#if !loading}
+      <div class="roles-data">
+
+        <table>
+          {#each executorRoles as role}
             <tr>
-              <td><label class="f-weight-700">Role:</label></td>
               <td>
-                <div>
-                  <Select options={ROLES.map(r=>{return {...r,displayName: toSentenceCase(r.roleName)}})}
-                          width="360"
-                          on:select={handleRoleSelect}
-                          label={'Choose'} className={"inputSelect"} expandIcon={icons.expand_black}></Select>
-                </div>
+                <span class="title f-weight-700">{role.roleName}</span>
               </td>
             </tr>
             <tr>
-              <td><label class="f-weight-700">Address:</label></td>
-              <td><input type="text" class="default-input"
-                         bind:value={account}></td>
+              <td>
+                <Role name={role.roleName}
+                      roleHolders={$roles?.find(r=>r.roleName===role.roleName)?.roleHolders} admin={false}></Role>
+              </td>
+              <td>
+                <Role roleHolders={$roles?.find(r=>r.roleName===role.roleName+"_ADMIN")?.roleHolders}
+                      name={role.roleName+"_ADMIN"} admin={true}></Role>
+              </td>
             </tr>
-          </table>
-
-          <button class="default-btn" on:click={grantRole} disabled={!!error || !account || !roleName}>Enter</button>
-        </div>
-        {#if loading}
-          <SftLoader width="50"></SftLoader>
-        {/if}
-        {#if !loading}
-          <div class="roles-data">
-
-            <table>
-              {#each executorRoles as role}
-                <tr>
-                  <td>
-                    <span class="title f-weight-700">{role.roleName}</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <Role name={role.roleName}
-                          roleHolders={$roles?.find(r=>r.roleName===role.roleName)?.roleHolders} admin={false}></Role>
-                  </td>
-                  <td>
-                    <Role roleHolders={$roles?.find(r=>r.roleName===role.roleName+"_ADMIN")?.roleHolders}
-                          name={role.roleName+"_ADMIN"} admin={true}></Role>
-                  </td>
-                </tr>
-              {/each}
-            </table>
-          </div>
-
-        {/if}
+          {/each}
+        </table>
       </div>
-    </div>
-  </DefaultFrame>
+
+    {/if}
+  </div>
 </div>
 
 
 <style>
 
+    .roles-container{
+        border-radius: 20px;
+        background: #FFF;
+        padding:24px;
+        min-width: 690px;
+    }
+
+    .info{
+        margin-top:16px;
+        color: #575757;
+        font-family: Mukta, sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
     .roles {
         text-align: left;
+        width: 650px;
+        border-radius: 10px;
+        border: 1px solid #C1C1C1;
+        padding: 24px 48px
     }
 
     .roles-data {
@@ -181,6 +207,8 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 20px;
+        margin-top: 18px;
+        margin-bottom: 30px
     }
 
     .grant-role-txt {
@@ -210,12 +238,17 @@
         color: #000000;
     }
 
-    .contract-address {
-        color: inherit;
-    }
-
     .default-input {
         padding-left: 13px;
+    }
+
+    .asset-class-btn {
+        margin-right: -2rem;
+    }
+
+    .plus {
+        margin-left: -22px;
+        margin-right: 7px;
     }
 
 </style>

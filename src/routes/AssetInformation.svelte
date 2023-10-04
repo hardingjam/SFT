@@ -8,7 +8,15 @@
         activeNetwork, transactionInProgressShow, transactionInProgress
     } from "../scripts/store.js";
     import ReceiptData from '../components/ReceiptData.svelte';
-    import {cborDecode, getSubgraphData, navigate, showPrompt, timeStampToDate} from '../scripts/helpers.js';
+    import {
+        cborDecode,
+        getSubgraphData,
+        navigate,
+        showPrompt,
+        timeStampToDate,
+        downloadIpfsHashes,
+        getAccountPins
+    } from '../scripts/helpers.js';
     import {ethers} from 'ethers';
     import {RECEIPT_INFORMATION_QUERY, RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
     import axios from 'axios';
@@ -57,7 +65,6 @@
             informationIndex = resp.data.receipt.receiptInformations
                 .findIndex(inf => inf.id === revision.id)
             revisionNumber = resp.data.receipt.receiptInformations.length - informationIndex
-
         }
         transactionInProgressShow.set(false)
         transactionInProgress.set(false)
@@ -83,10 +90,22 @@
         await getRevision($selectedReceipt?.receipt.receiptInformations[0].id)
     }
 
+    async function downloadHashes() {
+        let issuers = $selectedReceipt.receipt.offchainAssetReceiptVault.roleHolders.filter(rh => rh.role.roleName ===
+            'DEPOSITOR')
+        let hashList = []
+        for (let i = 0; i < issuers.length; i++) {
+            hashList = [...hashList, await getAccountPins($activeNetwork, issuers[i].account.address)]
+        }
+        hashList = hashList.flat()
+        hashList = hashList.map(h => h.hash)
+        downloadIpfsHashes(hashList)
+    }
+
 </script>
 <div class="asset-information">
   <div class="card-header justify-end pr-10">
-    <button class="default-btn" disabled>download IPFS pin list</button>
+    <button class="default-btn" on:click={()=>{downloadHashes()}}>download IPFS pin list</button>
     {#if ($vault.address === $selectedReceipt?.receipt?.offchainAssetReceiptVault?.address)}
       <button class="default-btn" on:click={()=>navigate(`#new-revision/${$selectedReceipt.receipt.receiptId}`)}>New
         revision

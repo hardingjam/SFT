@@ -139,7 +139,7 @@
         return contract
     }
 
-    beforeUpdate(()=>{
+    beforeUpdate(() => {
         isCypress.set(!!window.Cypress)
     })
 
@@ -148,57 +148,58 @@
         if ($isCypress) {
             account.set(mock.account)
             activeNetwork.set(mock.activeNetwork)
-        }
-        if (isMetamaskInstalled) {
-
-            if (location === "/" || location === "") {
-                navigateTo("#");
-            }
-            await setNetwork();
-            await getSchemas();
-            connectedAccount = await getMetamaskConnectedAccount();
-            if (connectedAccount) {
-                account.set(connectedAccount)
-                await vaultChanged()
-                navigateTo(location || '#', {replace: false})
-            } else {
-                localStorage.removeItem("account");
-            }
-
-            window.ethereum.on("accountsChanged", async (accounts) => {
-                if (!accounts.length) {
-                    account.set(null);
+        } else {
+            if (isMetamaskInstalled) {
+                if (location === "/" || location === "") {
+                    navigateTo("#");
+                }
+                await setNetwork();
+                await getSchemas();
+                connectedAccount = await getMetamaskConnectedAccount();
+                if (connectedAccount) {
+                    account.set(connectedAccount)
+                    await vaultChanged()
+                    navigateTo(location || '#', {replace: false})
+                } else {
                     localStorage.removeItem("account");
-                } else {
-                    account.set(accounts[0]);
-                    localStorage.setItem("account", $account);
-                    accountRoles.set(await setAccountRoles($roles, $account));
-
-                    if ((location === '#mint' || location === '#redeem') && !$accountRoles.DEPOSITOR) {
-                        navigateTo('#');
-                    }
                 }
-            });
-            window.addEventListener("hashchange", function (e) {
-                // listen to browser back/forward button click event and update breadcrumbs accordingly
-                let newUrl = e.newURL.split('/')[3]
-                let oldURL = e.oldURL.split('/')[3]
-                if (!$navigationButtonClicked) {
-                    let indexOfNewUrl = $breadCrumbs.findIndex(u => u.path === newUrl)
-                    let indexOfOldUrl = $breadCrumbs.findIndex(u => u.path === oldURL)
-                    if (indexOfNewUrl > 0 && indexOfNewUrl < indexOfOldUrl) {
-                        breadCrumbs.set($breadCrumbs.filter(p => p.path !== oldURL))
-                    }
 
-                    if (!$breadCrumbs.find(b => b.path === newUrl)) {
-                        breadCrumbs.set([...$breadCrumbs, {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
+                window.ethereum.on("accountsChanged", async (accounts) => {
+                    if (!accounts.length) {
+                        account.set(null);
+                        localStorage.removeItem("account");
+                    } else {
+                        account.set(accounts[0]);
+                        localStorage.setItem("account", $account);
+                        accountRoles.set(await setAccountRoles($roles, $account));
+
+                        if ((location === '#mint' || location === '#redeem') && !$accountRoles.DEPOSITOR) {
+                            navigateTo('#');
+                        }
                     }
-                } else {
-                    breadCrumbs.set([{path: "#", label: "Home"},
-                        {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
-                }
-            })
-            window.ethereum.on("chainChanged", networkChanged);
+                });
+                window.addEventListener("hashchange", function (e) {
+                    // listen to browser back/forward button click event and update breadcrumbs accordingly
+                    let newUrl = e.newURL.split('/')[3]
+                    let oldURL = e.oldURL.split('/')[3]
+                    if (!$navigationButtonClicked) {
+                        let indexOfNewUrl = $breadCrumbs.findIndex(u => u.path === newUrl)
+                        let indexOfOldUrl = $breadCrumbs.findIndex(u => u.path === oldURL)
+                        if (indexOfNewUrl > 0 && indexOfNewUrl < indexOfOldUrl) {
+                            breadCrumbs.set($breadCrumbs.filter(p => p.path !== oldURL))
+                        }
+
+                        if (!$breadCrumbs.find(b => b.path === newUrl)) {
+                            breadCrumbs.set([...$breadCrumbs, {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
+                        }
+                    } else {
+                        breadCrumbs.set([{path: "#", label: "Home"},
+                            {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
+                    }
+                })
+                window.ethereum.on("chainChanged", networkChanged);
+            }
+
         }
 
         await getTokens();
@@ -404,7 +405,7 @@
     }
 </script>
 <Router url={url}>
-  <div class={$account || $isCypress ? "content" : "content-not-connected"}>
+  <div class={$account ? "content" : "content-not-connected"}>
     {#if (showCertifyWarning)}
       <div class="certify-warning">
         <span class="error">Warning, this token is frozen.</span>
@@ -478,7 +479,7 @@
         </div>
       </div>
     </div>
-    {#if !$account && !isCypress}
+    {#if !$account}
       <div>
         <div class="invalid-network f-weight-700">
           <label>To use the app:</label>

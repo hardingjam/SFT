@@ -657,7 +657,7 @@
           <img src={icons.logo} alt=""
                class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
         {:else}
-          <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo" class="rounded-full w-full h-full"/>
+          <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo" class="rounded-full w-full h-full token-logo"/>
         {/if}
       </a>
     </div>

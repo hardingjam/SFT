@@ -84,4 +84,12 @@ describe('The Home Page', () => {
         cy.get('.tokens').should('exist');
 
     });
+    it('Sets token image as logo', () => {
+        cy.get(`#token-name-Jefo`).click();
+        cy.url().should('include', '/#token-overview')
+        cy.get('#token-overview').should('exist');
+        cy.get('.navigation-token-icon').should('exist');
+        cy.get('.token-logo').should('exist');
+        cy.get('.token-logo').should('have.attr', 'src').should('include','https://ipfs.io/ipfs/QmSaHGGYMu31evZdaJF4tuX4pVx5paBZnWWYkrN7U8Sc9k')
+    });
 })

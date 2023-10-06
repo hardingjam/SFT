@@ -30,6 +30,8 @@
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
     import {
+        bytesToMeta,
+        cborDecode,
         filterArray,
         getContract,
         getSubgraphData,
@@ -48,7 +50,7 @@
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
     import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
-    import {IPFS_GETWAY, ROLES} from '../scripts/consts.js';
+    import {IPFS_GETWAY, MAGIC_NUMBERS, ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
@@ -616,6 +618,32 @@
                 console.log(e)
             }
 
+        }
+    }
+
+    $:$data && getVaultInformation()
+
+    async function getVaultInformation() {
+        if ($data && $data.offchainAssetReceiptVault
+            && $data.offchainAssetReceiptVault.id) {
+            let receiptVaultInformations = $data.offchainAssetReceiptVault.receiptVaultInformations
+            if (receiptVaultInformations.length) {
+                let receiptInformations = receiptVaultInformations.map(data => {
+                    return cborDecode(data.information.slice(18))
+                })
+                let sftImages = receiptInformations.filter(i => i[0].get(1) === MAGIC_NUMBERS.OA_TOKEN_IMAGE)
+                let sftCredentialLinks = receiptInformations.filter(i => i[0].get(1) ===
+                    MAGIC_NUMBERS.OA_TOKEN_CREDENTIAL_LINKS)
+                if (sftImages.length) {
+                    $data.offchainAssetReceiptVault.icon = sftImages[0][1].get(0)
+                    activeToken.update(() => {
+                        return {...$activeToken, icon: $data.offchainAssetReceiptVault.icon}
+                    })
+                }
+                if (sftCredentialLinks.length) {
+                    $data.offchainAssetReceiptVault.credentialLinks = bytesToMeta(sftCredentialLinks[0][0].get(0), "json")
+                }
+            }
         }
     }
 </script>

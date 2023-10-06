@@ -1,12 +1,11 @@
 <script>
     import {
         sftInfo,
-        data,
         account,
         activeNetwork,
         ethersData,
         transactionSuccess,
-        transactionInProgress, transactionError, transactionInProgressShow, tokens, activeToken, breadCrumbs
+        transactionInProgress, transactionError, transactionInProgressShow, activeToken
     } from '../scripts/store.js';
     import TokenOverviewTable from '../components/TokenOverviewTable.svelte';
     import {
@@ -52,9 +51,6 @@
                     MAGIC_NUMBERS.OA_TOKEN_CREDENTIAL_LINKS)
                 if (sftImages.length) {
                     token.icon = sftImages[0][1].get(0)
-                    activeToken.update(() => {
-                        return {...$activeToken, icon: token.icon}
-                    })
                 }
                 if (sftCredentialLinks.length) {
                     token.credentialLinks = bytesToMeta(sftCredentialLinks[0][0].get(0), "json")

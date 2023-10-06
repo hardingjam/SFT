@@ -1,6 +1,7 @@
 <script>
     import {
         activeNetwork,
+        activeToken,
         account,
         vault,
         tokens,
@@ -47,7 +48,7 @@
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
     import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
-    import {ROLES} from '../scripts/consts.js';
+    import {IPFS_GETWAY, ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
@@ -624,8 +625,12 @@
     <Header on:select={handleNetworkSelect} {location}></Header>
     <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
       <a href="/">
-        <img src={icons.logo} alt=""
-             class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
+        {#if !$activeToken.icon}
+          <img src={icons.logo} alt=""
+               class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
+        {:else}
+          <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo" class="rounded-full w-full h-full"/>
+        {/if}
       </a>
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
@@ -728,6 +733,7 @@
     display: flex;
     top: 20px;
     left: 55px;
+    background: #9D9D9D;
   }
 
   .logo-container img {

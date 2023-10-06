@@ -6,7 +6,7 @@
         activeNetwork,
         ethersData,
         transactionSuccess,
-        transactionInProgress, transactionError, transactionInProgressShow, tokens
+        transactionInProgress, transactionError, transactionInProgressShow, tokens, activeToken, breadCrumbs
     } from '../scripts/store.js';
     import TokenOverviewTable from '../components/TokenOverviewTable.svelte';
     import {
@@ -18,7 +18,7 @@
         navigate, showPrompt,
         showPromptSFTCreate
     } from '../scripts/helpers.js';
-    import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
+    import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS, ROUTE_LABEL_MAP} from '../scripts/consts.js';
     import SftCredentialLinks from '../components/SftCredentialLinks.svelte';
     import {icons} from '../scripts/assets.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
@@ -52,6 +52,9 @@
                     MAGIC_NUMBERS.OA_TOKEN_CREDENTIAL_LINKS)
                 if (sftImages.length) {
                     token.icon = sftImages[0][1].get(0)
+                    activeToken.update(() => {
+                        return {...$activeToken, icon: token.icon}
+                    })
                 }
                 if (sftCredentialLinks.length) {
                     token.credentialLinks = bytesToMeta(sftCredentialLinks[0][0].get(0), "json")
@@ -64,17 +67,18 @@
         deployImage(e.target.files[0])
     }
 
-    async function getToken(){
+    async function getToken() {
         let variables = {id: address}
-            let res;
-            try {
-                res = await getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault')
-                if (res && res.data) {
-                    token = res.data.offchainAssetReceiptVault
-                }
-            } catch (e) {
-                console.log(e)
+        let res;
+        try {
+            res = await getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault')
+            if (res && res.data) {
+                token = res.data.offchainAssetReceiptVault
+                activeToken.set(token)
             }
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     async function deployImage(file) {

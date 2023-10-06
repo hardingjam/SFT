@@ -419,5 +419,39 @@ export let mock = {
                 "amount": "33300000000000000"
             }
         ]
-    }
+    },
+    schemas: [{
+        "displayName": "Lol",
+        "schema": {
+            "type": "object",
+            "required": [
+                "pie_certificate",
+                "producer_wallet",
+                "total_score",
+                "max_options"
+            ],
+            "properties": {
+                "producer_wallet": {
+                    "type": "string",
+                    "title": "Producer Wallet"
+                },
+                "total_score": {
+                    "type": "string",
+                    "title": "Total Score"
+                },
+                "max_options": {
+                    "type": "string",
+                    "title": "Max Options"
+                },
+                "pie_certificate": {
+                    "type": "string",
+                    "editor": "upload",
+                    "title": "PIE Certificate"
+                }
+            }
+        },
+        "timestamp": "1691405946",
+        "id": "0x9d93b48841467b74fe8bd784a5cffce4e80b0ca0347f5ce9b188e894b2828e42",
+        "hash": "QmTQaHSuSGY9x5cHk46QiHTtcb4us8fwoHsDidvsvosFqy"
+    }]
 }

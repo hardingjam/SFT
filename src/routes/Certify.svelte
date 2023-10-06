@@ -27,6 +27,7 @@
     import {IPFS_APIS, MAGIC_NUMBERS} from '../scripts/consts.js';
     import axios from 'axios';
     import {arrayify} from 'ethers/lib/utils.js';
+    import {mock} from "../test/mock.js"
 
     let certifyUntil = formatDate(new Date())
     let fileHashes = [];
@@ -40,9 +41,13 @@
 
     let error = ''
 
+
     onMount(async () => {
         pageTitle.set(`Certify`)
         titleIcon.set(`${icons.certify}`)
+        if (!!window.Cypress) {
+            schemas.set(mock.schemas)
+        }
     })
 
     let selectedSchema = {}

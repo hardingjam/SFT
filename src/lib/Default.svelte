@@ -1,6 +1,7 @@
 <script>
     import {
         activeNetwork,
+        activeToken,
         account,
         vault,
         tokens,
@@ -29,6 +30,8 @@
     import Redeem from "../routes/Redeem.svelte";
     import Mint from "../routes/Mint.svelte";
     import {
+        bytesToMeta,
+        cborDecode,
         filterArray,
         getContract,
         getSubgraphData,
@@ -47,7 +50,7 @@
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
     import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
-    import {ROLES} from '../scripts/consts.js';
+    import {IPFS_GETWAY, MAGIC_NUMBERS, ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
@@ -617,6 +620,32 @@
 
         }
     }
+
+    $:$data && getVaultInformation()
+
+    async function getVaultInformation() {
+        if ($data && $data.offchainAssetReceiptVault
+            && $data.offchainAssetReceiptVault.id) {
+            let receiptVaultInformations = $data.offchainAssetReceiptVault.receiptVaultInformations
+            if (receiptVaultInformations.length) {
+                let receiptInformations = receiptVaultInformations.map(data => {
+                    return cborDecode(data.information.slice(18))
+                })
+                let sftImages = receiptInformations.filter(i => i[0].get(1) === MAGIC_NUMBERS.OA_TOKEN_IMAGE)
+                let sftCredentialLinks = receiptInformations.filter(i => i[0].get(1) ===
+                    MAGIC_NUMBERS.OA_TOKEN_CREDENTIAL_LINKS)
+                if (sftImages.length) {
+                    $data.offchainAssetReceiptVault.icon = sftImages[0][1].get(0)
+                    activeToken.update(() => {
+                        return {...$activeToken, icon: $data.offchainAssetReceiptVault.icon}
+                    })
+                }
+                if (sftCredentialLinks.length) {
+                    $data.offchainAssetReceiptVault.credentialLinks = bytesToMeta(sftCredentialLinks[0][0].get(0), "json")
+                }
+            }
+        }
+    }
 </script>
 <Router url={url}>
 
@@ -624,8 +653,12 @@
     <Header on:select={handleNetworkSelect} {location}></Header>
     <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
       <a href="/">
-        <img src={icons.logo} alt=""
-             class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
+        {#if !$activeToken.icon}
+          <img src={icons.logo} alt=""
+               class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
+        {:else}
+          <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo" class="rounded-full w-full h-full token-logo"/>
+        {/if}
       </a>
     </div>
     <div class="{ $account ? 'block' : 'hide'}">
@@ -728,6 +761,7 @@
     display: flex;
     top: 20px;
     left: 55px;
+    background: #9D9D9D;
   }
 
   .logo-container img {

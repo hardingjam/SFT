@@ -1,12 +1,11 @@
 <script>
     import {
         sftInfo,
-        data,
         account,
         activeNetwork,
         ethersData,
         transactionSuccess,
-        transactionInProgress, transactionError, transactionInProgressShow, tokens
+        transactionInProgress, transactionError, transactionInProgressShow, activeToken
     } from '../scripts/store.js';
     import TokenOverviewTable from '../components/TokenOverviewTable.svelte';
     import {
@@ -18,7 +17,7 @@
         navigate, showPrompt,
         showPromptSFTCreate
     } from '../scripts/helpers.js';
-    import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
+    import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS, ROUTE_LABEL_MAP} from '../scripts/consts.js';
     import SftCredentialLinks from '../components/SftCredentialLinks.svelte';
     import {icons} from '../scripts/assets.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
@@ -64,17 +63,18 @@
         deployImage(e.target.files[0])
     }
 
-    async function getToken(){
+    async function getToken() {
         let variables = {id: address}
-            let res;
-            try {
-                res = await getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault')
-                if (res && res.data) {
-                    token = res.data.offchainAssetReceiptVault
-                }
-            } catch (e) {
-                console.log(e)
+        let res;
+        try {
+            res = await getSubgraphData($activeNetwork, variables, QUERY, 'offchainAssetReceiptVault')
+            if (res && res.data) {
+                token = res.data.offchainAssetReceiptVault
+                activeToken.set(token)
             }
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     async function deployImage(file) {

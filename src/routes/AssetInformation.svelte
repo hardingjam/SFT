@@ -5,7 +5,7 @@
         data,
         pageTitle,
         vault,
-        activeNetwork, transactionInProgressShow, transactionInProgress
+        activeNetwork, transactionInProgressShow, transactionInProgress, schemas
     } from "../scripts/store.js";
     import ReceiptData from '../components/ReceiptData.svelte';
     import {
@@ -19,8 +19,7 @@
     } from '../scripts/helpers.js';
     import {ethers} from 'ethers';
     import {RECEIPT_INFORMATION_QUERY, RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
-    import axios from 'axios';
-    import {IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
+    import {MAGIC_NUMBERS} from '../scripts/consts.js';
     import {navigateTo, router} from 'yrv';
 
     let loading = false
@@ -77,10 +76,8 @@
             let decoded = cborDecode(information.slice(18))
             let schemaHash = decoded ? decoded[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
             if (schemaHash) {
-                let res = await axios.get(`${IPFS_GETWAY}${schemaHash}`)
-                if (res) {
-                    schemaName = res.data.displayName
-                }
+                let assetClass = $schemas.find(s => s.hash === schemaHash.toString())
+                schemaName = assetClass.displayName
             }
         }
     }

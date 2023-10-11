@@ -15,7 +15,7 @@
         pageTitle,
         selectedReceipt, tokenName, transactionInProgress,
         transactionInProgressShow,
-        vault, data, ethersData, account, transactionSuccess, transactionError, fileDropped, breadCrumbs
+        vault, data, ethersData, account, transactionSuccess, transactionError, fileDropped
     } from '../scripts/store.js';
     import axios from 'axios';
     import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';

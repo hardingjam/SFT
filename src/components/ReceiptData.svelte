@@ -8,10 +8,9 @@
         getSubgraphData,
         toSentenceCase
     } from '../scripts/helpers.js';
-    import {activeNetwork, selectedReceipt, vault} from '../scripts/store.js';
+    import {activeNetwork, selectedReceipt, vault, schemas} from '../scripts/store.js';
     import {RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
     import SftLoader from './SftLoader.svelte';
-    import axios from 'axios';
     import {ethers} from 'ethers';
     import {onMount} from 'svelte';
 
@@ -20,7 +19,7 @@
     let ipfsAddress = ""
     let schemaHash = null;
     let displayInformation = []
-    let schema = {}
+    let assetClass = {}
     let fileUploadProperties = []
     export let receipt;
     export let revisionId;
@@ -32,24 +31,12 @@
         getReceiptData()
     })
 
-    async function getSchema() {
-        let url = await getIpfsGetWay(schemaHash)
-        try {
-            let res = await axios.get(url)
-            if (res) {
-                schema = res.data
-            }
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
     async function getSchemaFileProps() {
-        await getSchema()
-        if (schema) {
-            let props = Object.keys(schema.schema.properties)
+        assetClass = $schemas.find(s=>s.hash === schemaHash)
+        if (assetClass) {
+            let props = Object.keys(assetClass.schema.properties)
             fileUploadProperties = props.filter(p => {
-                let value = schema.schema.properties[p]
+                let value = assetClass.schema.properties[p]
                 if (value.editor === "upload") {
                     return p
                 }

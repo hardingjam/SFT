@@ -3,7 +3,7 @@
         vault,
         auditHistory,
         activeNetwork,
-        selectedReceipt, sftInfo, pageTitle
+        selectedReceipt, sftInfo, pageTitle, schemas
     } from "../scripts/store";
     import {
         cborDecode,
@@ -12,12 +12,9 @@
     } from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
-    import {formatDate} from "../scripts/helpers";
     import {
-        IPFS_GETWAY,
         MAGIC_NUMBERS,
     } from "../scripts/consts.js";
-    import axios from "axios";
     import SftLoader from "../components/SftLoader.svelte";
     import Pagination from '../components/Pagination.svelte';
 
@@ -36,21 +33,10 @@
             let information = r.receipt.receiptInformations[0]?.information ?
                 cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) :
                 null
-            let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
-            let schema;
-            if (schemaHash) {
+            let schemaHash = information[0].get(MAGIC_NUMBERS.OA_SCHEMA)
+            let assetClass = $schemas.find(s => s.hash === schemaHash.toString())
 
-                try {
-                    let res = await axios.get(`${IPFS_GETWAY}${schemaHash}`)
-                    if (res) {
-                        schema = {...res.data, id: schemaHash}
-                    }
-                } catch (err) {
-                    console.log(err)
-                }
-            }
-
-            return {...r, information, schema}
+            return {...r, information, schema: assetClass}
         }))
         let skip = (perPage * (currentPage - 1)) - 1
         filteredReceipts = receipts.filter((r, index) => index > skip && index < perPage * currentPage)

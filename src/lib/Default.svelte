@@ -390,7 +390,7 @@
     onMount(async () => {
         isCypress.set(!!window.Cypress)
         await getEthersData();
-        if (isCypress) {
+        if ($isCypress) {
             account.set('0xc0d477556c25c9d67e1f57245c7453da776b51cf')
             activeNetwork.set({
                 "id": 80001,
@@ -714,7 +714,7 @@
         </div>
       </div>
     </div>
-    {#if !$account && !isCypress}
+    {#if !$account }
       <div>
         <div class="invalid-network f-weight-700">
           <label>To use the app:</label>

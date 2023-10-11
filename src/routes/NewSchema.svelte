@@ -71,21 +71,19 @@
                     encodedHashList
                 let transaction = await $vault.connect($ethersData.signer).receiptVaultInformation(arrayify(meta))
                 await showPromptSFTCreate(transaction)
-
                 let wait = await transaction.wait()
                 if (wait.status === 1) {
                     let interval = setInterval(async () => {
                         let assetClassesResp = await getSubgraphData($activeNetwork, {}, RECEIPT_VAULT_INFORMATION_QUERY, 'receiptVaultInformations')
                         assetClassesResp = assetClassesResp?.data?.receiptVaultInformations
                         if (assetClassesResp && assetClassesResp.length) {
-                            if (wait.blockNumber.toString() === assetClassesResp[0].transaction.blockNumber) {
+                            if (wait.blockNumber.toString() === assetClassesResp[0].transaction.blockNumber.toString()) {
                                 await getDeposits()
                                 schemas.set(await getSchemas($activeNetwork, $vault, $deposits))
-
-                                goToAssetClassList()
                                 transactionSuccess.set(true)
                                 transactionInProgress.set(false)
                                 clearInterval(interval)
+                                goToAssetClassList()
                             }
                         }
                     }, 2000)

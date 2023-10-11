@@ -18,7 +18,7 @@
         data,
         roles,
         sftInfo,
-        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, isCypress
+        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, isCypress, deposits
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -657,7 +657,8 @@
           <img src={icons.logo} alt=""
                class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
         {:else}
-          <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo" class="rounded-full w-full h-full token-logo"/>
+          <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
+               class="rounded-full w-full h-full token-logo"/>
         {/if}
       </a>
     </div>

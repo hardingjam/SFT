@@ -209,7 +209,7 @@ export const RECEIPT_INFORMATION_QUERY = `
          `;
 export const RECEIPT_VAULT_INFORMATION_QUERY = `
           query {
-             receiptVaultInformations(orderBy: timestamp, orderDirection: desc) {
+             receiptVaultInformations(orderBy: timestamp, orderDirection: desc, first: 1000) {
                transaction {
                  blockNumber
                }

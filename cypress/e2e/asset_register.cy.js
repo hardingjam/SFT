@@ -19,4 +19,9 @@ describe('Asset register page', () => {
             cy.wrap($td).should('not.be.empty');
         })
     });
+    it('Goes to asset information and sets correct asset class', () => {
+        cy.get('.receipt-6').click()
+        cy.url().should('include', '#asset-information/6')
+        cy.get('.1232222').should('have.text', '1232222')
+    });
 })

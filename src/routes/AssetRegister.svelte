@@ -101,7 +101,7 @@
         {#if receipts.length}
           {#each filteredReceipts as receipt}
             <tr class="tb-row">
-              <td class="brown hover-underline cursor-pointer"
+              <td class="brown hover-underline cursor-pointer receipt-{receipt.receipt.receiptId}"
                   on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
               <td class="asset-class-cell">{receipt.schema?.displayName || ""}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>

@@ -21,6 +21,7 @@
     import {RECEIPT_INFORMATION_QUERY, RECEIPT_INFORMATIONS_QUERY} from '../scripts/queries.js';
     import {MAGIC_NUMBERS} from '../scripts/consts.js';
     import {navigateTo, router} from 'yrv';
+    import {mock} from '../test/mock.js';
 
     let loading = false
 
@@ -76,7 +77,9 @@
             let decoded = cborDecode(information.slice(18))
             let schemaHash = decoded ? decoded[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
             if (schemaHash) {
-                let assetClass = $schemas.find(s => s.hash === schemaHash.toString())
+                let assetClass = !!window.Cypress ?
+                    mock.schemas.find(s => s.hash === schemaHash.toString()) :
+                    $schemas.find(s => s.hash === schemaHash.toString())
                 schemaName = assetClass.displayName
             }
         }
@@ -130,7 +133,7 @@
     <div class="flex items-start flex-col mb-8">
       <div class="flex justify-between font-bold text-left w-full">
         <span class="f-weight-700 w-2/3 whitespace-nowrap flex pr-3">Asset class <span class="dots"></span></span>
-        <span class="f-weight-700 w-1/3">{schemaName}</span>
+        <span class="f-weight-700 w-1/3 {schemaName}">{schemaName}</span>
       </div>
       <div class="flex justify-between font-bold text-left w-full">
         <span class="f-weight-700 w-2/3 whitespace-nowrap flex pr-3">Current revision <span class="dots"></span></span>

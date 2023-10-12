@@ -202,7 +202,7 @@
         left: 420px;
         top: 238px;
         background: #FFFFFF;
-        border-radius: 20px;
+        border-radius: 10px;
         display: flex;
         flex-direction: column;
         text-align: left;

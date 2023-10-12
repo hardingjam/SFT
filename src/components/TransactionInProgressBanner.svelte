@@ -133,7 +133,7 @@
         top: 50%;
         bottom: 0;
         background: rgba(88, 85, 90, 0.92);
-        border-radius: 20px;
+        border-radius: 10px;
         width: 420px;
         height: 420px;
         z-index: 3;
@@ -141,7 +141,7 @@
     }
 
     .content {
-        border-radius: 16px;
+        border-radius: 8px;
         border: 1px solid rgba(255, 255, 255, 0.8);
         display: flex;
         align-items: center;

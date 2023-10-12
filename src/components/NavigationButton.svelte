@@ -69,7 +69,6 @@
         padding-left: 2.5rem;
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
-        border-radius: 0.25rem;
         cursor: pointer;
     }
 

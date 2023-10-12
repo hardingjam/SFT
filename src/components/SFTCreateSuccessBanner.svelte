@@ -81,7 +81,7 @@
         top: 50%;
         bottom: 0;
         background: rgba(88, 85, 90, 0.92);
-        border-radius: 20px;
+        border-radius: 10px;
         width: 616px;
         height: 445px;
         z-index: 2;

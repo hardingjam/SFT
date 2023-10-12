@@ -17,6 +17,7 @@
     } from "../scripts/consts.js";
     import SftLoader from "../components/SftLoader.svelte";
     import Pagination from '../components/Pagination.svelte';
+    import {mock} from '../test/mock.js';
 
     let receipts = []
     let loading = false;
@@ -25,7 +26,6 @@
     let perPage = 20;
     let currentPage = 1;
 
-    $:tempReceipts && setAssetClasses()
     $:$activeNetwork && getAuditHistory();
 
     async function setAssetClasses() {
@@ -34,7 +34,9 @@
                 cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) :
                 null
             let schemaHash = information[0].get(MAGIC_NUMBERS.OA_SCHEMA)
-            let assetClass = $schemas.find(s => s.hash === schemaHash.toString())
+            let assetClass = !!window.Cypress ?
+                mock.schemas.find(s => s.hash === schemaHash.toString()) :
+                $schemas.find(s => s.hash === schemaHash.toString())
 
             return {...r, information, schema: assetClass}
         }))
@@ -70,6 +72,7 @@
             loading = false
         }
         tempReceipts = $auditHistory?.deposits || []
+        await setAssetClasses()
     }
 
     async function handlePageChange(event) {
@@ -100,7 +103,7 @@
             <tr class="tb-row">
               <td class="brown hover-underline cursor-pointer"
                   on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
-              <td>{receipt.schema?.displayName || ""}</td>
+              <td class="asset-class-cell">{receipt.schema?.displayName || ""}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td>{timeStampToDate(receipt.timestamp)}</td>
             </tr>

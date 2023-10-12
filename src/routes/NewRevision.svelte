@@ -15,7 +15,7 @@
         pageTitle,
         selectedReceipt, tokenName, transactionInProgress,
         transactionInProgressShow,
-        vault, data, ethersData, account, transactionSuccess, transactionError, fileDropped
+        vault, data, ethersData, account, transactionSuccess, transactionError, fileDropped, schemas
     } from '../scripts/store.js';
     import axios from 'axios';
     import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
@@ -27,6 +27,7 @@
     } from '../scripts/queries.js';
     import receiptContractAbi from '../contract/ReceiptContractAbi.json';
     import {arrayify} from 'ethers/lib/utils.js';
+    import {mock} from '../test/mock.js';
 
     pageTitle.set("New revision")
 
@@ -47,13 +48,12 @@
 
     async function getSchema() {
 
-        let selectedSchemaHash = localStorage.getItem("selectedReceiptSchema")
-        let res = await axios.get(`${IPFS_GETWAY}${selectedSchemaHash}`)
-        if (res) {
-            schema = {...res.data, hash: selectedSchemaHash}
-        }
+        let schemaHash = localStorage.getItem("selectedReceiptSchema")
+        let assetClass = !!window.Cypress ?
+            mock.schemas.find(s => s.hash === schemaHash.toString()) :
+            $schemas.find(s => s.hash === schemaHash.toString())
+        schema = {...assetClass, hash: schemaHash}
     }
-
     function setFormInputs(values) {
         // Get all input elements inside the form with the class "svelte-schema-form"
         const formInputs = document.querySelectorAll('.svelte-schema-form input');

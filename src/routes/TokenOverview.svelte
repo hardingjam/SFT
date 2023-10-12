@@ -316,7 +316,6 @@
         background: #FFFFFF;
         height: 100vh;
         border-radius: 8px;
-        margin-top: 117px
     }
 
     .left-margin {
@@ -326,7 +325,6 @@
     .token-overview-container {
         background: #FFFFFF;
         border-radius: 10px 10px 0 0;
-        margin-top: 117px;
         margin-right: 102px;
         color: #000000;
         display: flex;

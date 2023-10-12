@@ -124,7 +124,6 @@
     .receipts {
         width: 100%;
         margin-right: 20px;
-        margin-top: 117px;
     }
 
 </style>

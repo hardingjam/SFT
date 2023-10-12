@@ -242,7 +242,7 @@
 
 </script>
 <div class="flex flex-col w-full items-center home-container relative">
-  <div class="views flex justify-end w-full space-x-3 pr-5 pt-4">
+  <div class="views flex justify-end w-full space-x-3 pr-5 pt-4 view-buttons">
     <div class="cursor-pointer tile-view-button" on:click={()=>{view = "tile"}}>
       <img src={icons.tile_view} alt="tiles">
     </div>
@@ -256,7 +256,7 @@
     </div>
   {/if}
   {#if $tokens && $tokens.length}
-    <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} tokens mt-4 mr-5">
+    <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} tokens mr-5">
       {#if (view === "tile")}
         <TileView tokens={$tokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage} on:okClick={handleOkButtonClick}/>
@@ -275,8 +275,12 @@
   {/if}
 </div>
 <style>
-    .home-container {
-        padding-top: 3.5rem;
+
+    .view-buttons{
+        position: fixed;
+        top: 56px;
+        background: #dcdbdd;
+        z-index: 1;
     }
 
     .loader {

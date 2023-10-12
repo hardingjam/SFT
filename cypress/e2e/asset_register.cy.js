@@ -14,12 +14,14 @@ describe('Asset register page', () => {
         cy.url().should('include', '/#asset-register')
     });
     it('Asset class cell should not be empty', () => {
-        cy.get('tr.tb-row .asset-class-cell').each(($td) => {
+        cy.get('.asset-class-cell').each(($td) => {
             cy.wait(1000)
             cy.wrap($td).should('not.be.empty');
         })
     });
     it('Goes to asset information and sets correct asset class', () => {
+        cy.wait(2000)
+
         cy.get('.receipt-6').click()
         cy.url().should('include', '#asset-information/6')
         cy.get('.1232222').should('have.text', '1232222')

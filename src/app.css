@@ -14,7 +14,7 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: #d2d2d2;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 /* Handle on hover */
@@ -289,7 +289,7 @@ li {
 
 .default-frame {
     background: #ffffff;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 20px;
 }
 

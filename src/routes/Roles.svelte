@@ -168,7 +168,7 @@
 <style>
 
     .roles-container{
-        border-radius: 20px;
+        border-radius: 10px;
         background: #FFF;
         padding:24px;
         min-width: 690px;

@@ -302,7 +302,7 @@
 
     .new-revision {
         min-height: 500px;
-        border-radius: 20px;
+        border-radius: 10px;
         background: #FFF;
     }
 

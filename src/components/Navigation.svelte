@@ -17,9 +17,8 @@
 </script>
 <div class="navigation-container relative h-full flex flex-col">
   <div
-    class="flex justify-start items-start bg-white flex-col navigation top-14 fixed h-full {$sftInfo ? '' :'rounded-tr-3xl'}">
+    class="flex justify-start items-start bg-white flex-col navigation top-14 fixed h-full">
     <div class="flex justify-center items-center w-full space-x-3">
-      <!--      <a href="/"><img src={logo} alt="logo" class="border-8 border-white rounded-full w-full h-full"/></a>-->
       {#if !$sftInfo && $vault.address}
         <div class="cursor-pointer absolute right-2 top-2 z-10" on:click={()=>showSftInfo()}>
           <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -122,7 +121,7 @@
   </div>
 
   {#if ($sftInfo)}
-    <div class="bg-white w-5/12 rounded-tr-3xl relative border-l sft-info">
+    <div class="bg-white w-5/12 rounded-tr-10 relative border-l sft-info">
       <div class="cursor-pointer absolute right-2 top-2" on:click={()=>hideSftInfo()}>
         <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5.96387 5L10.9731 10M10.9731 10V5M10.9731 10H5.96387" stroke="#9D9D9D" stroke-width="2"

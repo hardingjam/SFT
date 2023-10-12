@@ -516,46 +516,32 @@ export function mapOrder(array, order, key) {
 export async function getSchemas(activeNetwork, vault, deposits) {
     let tempSchema = []
 
-
     let variables = {id: vault.address.toLowerCase()}
     if (vault.address) {
 
         try {
             let resp = await getSubgraphData(activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
             let receiptVaultInformations = []
-
             if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
                 receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
-
                 if (receiptVaultInformations.length) {
                     for (let i = 0; i < receiptVaultInformations.length; i++) {
                         let cborDecodedInformation = cborDecode(receiptVaultInformations[i].information.slice(18))
                         let schemaHash = cborDecodedInformation[1].get(0)
-                        let url = `${IPFS_GETWAY}${schemaHash}`
+                        let structure = bytesToMeta(cborDecodedInformation[0].get(0), "json")
                         let assetCount = getAssetCount(schemaHash, deposits)
-
-                        try {
-                            if (url) {
-                                let res = await axios.get(url)
-                                if (res) {
-                                    tempSchema = [...tempSchema, {
-                                        ...res.data,
-                                        timestamp: receiptVaultInformations[i].timestamp,
-                                        id: receiptVaultInformations[i].id,
-                                        hash: schemaHash,
-                                        assetCount,
-                                    }]
-                                    tempSchema = tempSchema.filter(d => d.displayName)
-                                }
-                            }
-                        } catch (err) {
-                            console.log(err)
-                        }
+                        tempSchema = [...tempSchema, {
+                            ...structure,
+                            timestamp: receiptVaultInformations[i].timestamp,
+                            id: receiptVaultInformations[i].id,
+                            hash: schemaHash,
+                            assetCount,
+                        }]
+                        tempSchema = tempSchema.filter(d => d.displayName)
                     }
                     return tempSchema
                 }
             }
-
         } catch (err) {
             console.log(err)
         }
@@ -610,7 +596,7 @@ export function navigate(path, options) {
 
 export function downloadIpfsHashes(hashes) {
     if (hashes.length) {
-        const content = hashes.filter(h=>!!h).join("\n");
+        const content = hashes.filter(h => !!h).join("\n");
         const blob = new Blob([content], {type: "text/plain"});
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");

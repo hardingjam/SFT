@@ -18,7 +18,7 @@
         data,
         roles,
         sftInfo,
-        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, isCypress
+        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, isCypress, schemas
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -49,7 +49,7 @@
     import Navigation from "../components/Navigation.svelte";
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
-    import {QUERY, VAULTS_QUERY} from "../scripts/queries.js";
+    import {QUERY, VAULTS_QUERY, VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
     import {IPFS_GETWAY, MAGIC_NUMBERS, ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
@@ -412,7 +412,7 @@
                 navigateTo("#");
             }
             await setNetwork();
-
+            await getSchemas();
             connectedAccount = await getMetamaskConnectedAccount();
             if (connectedAccount) {
                 account.set(connectedAccount)
@@ -646,6 +646,41 @@
             }
         }
     }
+
+    async function getSchemas() {
+        let variables = {id: $vault?.address?.toLowerCase()}
+        if ($vault.address) {
+            try {
+                let resp = await getSubgraphData($activeNetwork, variables, VAULT_INFORMATION_QUERY, 'offchainAssetReceiptVault')
+                let receiptVaultInformations = ""
+                let tempSchema = []
+                if (resp && resp.data && resp.data.offchainAssetReceiptVault) {
+                    receiptVaultInformations = resp.data.offchainAssetReceiptVault.receiptVaultInformations
+                    if (receiptVaultInformations.length) {
+                        receiptVaultInformations.map(async data => {
+                            let cborDecodedInformation = cborDecode(data.information.slice(18))
+                            if (cborDecodedInformation[0].get(1) === MAGIC_NUMBERS.OA_SCHEMA) {
+                                let cborDecodedInformation = cborDecode(data.information.slice(18))
+                                let schemaHash = cborDecodedInformation[1].get(0)
+                                let structure = bytesToMeta(cborDecodedInformation[0].get(0), "json")
+                                tempSchema = [...tempSchema, {
+                                    ...structure,
+                                    timestamp:data.timestamp,
+                                    id: data.id,
+                                    hash: schemaHash,
+                                }]
+                                tempSchema = tempSchema.filter(d => d.displayName)
+                                schemas.set(tempSchema)
+                            }
+                        })
+                    }
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
+
 </script>
 <Router url={url}>
 
@@ -657,7 +692,8 @@
           <img src={icons.logo} alt=""
                class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
         {:else}
-          <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo" class="rounded-full w-full h-full token-logo"/>
+          <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
+               class="rounded-full w-full h-full token-logo"/>
         {/if}
       </a>
     </div>

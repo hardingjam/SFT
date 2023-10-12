@@ -3,7 +3,7 @@
         vault,
         auditHistory,
         activeNetwork,
-        selectedReceipt, sftInfo, pageTitle
+        selectedReceipt, sftInfo, pageTitle, schemas
     } from "../scripts/store";
     import {
         cborDecode,
@@ -12,14 +12,12 @@
     } from "../scripts/helpers.js";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import {ethers} from "ethers";
-    import {formatDate} from "../scripts/helpers";
     import {
-        IPFS_GETWAY,
         MAGIC_NUMBERS,
     } from "../scripts/consts.js";
-    import axios from "axios";
     import SftLoader from "../components/SftLoader.svelte";
     import Pagination from '../components/Pagination.svelte';
+    import {mock} from '../test/mock.js';
 
     let receipts = []
     let loading = false;
@@ -28,7 +26,6 @@
     let perPage = 20;
     let currentPage = 1;
 
-    $:tempReceipts && setAssetClasses()
     $:$activeNetwork && getAuditHistory();
 
     async function setAssetClasses() {
@@ -36,21 +33,12 @@
             let information = r.receipt.receiptInformations[0]?.information ?
                 cborDecode(r.receipt.receiptInformations[0]?.information.slice(18)) :
                 null
-            let schemaHash = information ? information[0].get(MAGIC_NUMBERS.OA_SCHEMA) : null
-            let schema;
-            if (schemaHash) {
+            let schemaHash = information[0].get(MAGIC_NUMBERS.OA_SCHEMA)
+            let assetClass = !!window.Cypress ?
+                mock.schemas.find(s => s.hash === schemaHash.toString()) :
+                $schemas.find(s => s.hash === schemaHash.toString())
 
-                try {
-                    let res = await axios.get(`${IPFS_GETWAY}${schemaHash}`)
-                    if (res) {
-                        schema = {...res.data, id: schemaHash}
-                    }
-                } catch (err) {
-                    console.log(err)
-                }
-            }
-
-            return {...r, information, schema}
+            return {...r, information, schema: assetClass}
         }))
         let skip = (perPage * (currentPage - 1)) - 1
         filteredReceipts = receipts.filter((r, index) => index > skip && index < perPage * currentPage)
@@ -58,7 +46,7 @@
 
     function goToAssetInformation(receipt) {
         selectedReceipt.set(receipt)
-        localStorage.setItem("selectedReceiptSchema", $selectedReceipt.schema.id)
+        localStorage.setItem("selectedReceiptSchema", $selectedReceipt.schema.hash)
         navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${receipt.receipt.receiptInformations[0].id}`)
     }
 
@@ -84,6 +72,7 @@
             loading = false
         }
         tempReceipts = $auditHistory?.deposits || []
+        await setAssetClasses()
     }
 
     async function handlePageChange(event) {
@@ -112,9 +101,9 @@
         {#if receipts.length}
           {#each filteredReceipts as receipt}
             <tr class="tb-row">
-              <td class="brown hover-underline cursor-pointer"
+              <td class="brown hover-underline cursor-pointer receipt-{receipt.receipt.receiptId}"
                   on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
-              <td>{receipt.schema?.displayName || ""}</td>
+              <td class="asset-class-cell">{receipt.schema?.displayName || ""}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td>{timeStampToDate(receipt.timestamp)}</td>
             </tr>

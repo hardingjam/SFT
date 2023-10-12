@@ -20,6 +20,7 @@
         ONE,
     } from "../scripts/consts.js";
     import {
+        bytesToMeta,
         cborDecode,
         cborEncode,
         encodeCBORStructure,
@@ -113,25 +114,16 @@
                             if (cborDecodedInformation[0].get(1) === MAGIC_NUMBERS.OA_SCHEMA) {
                                 let schemaHash = cborDecodedInformation[1].get(0)
                                 if (schemaHash && !schemaHash.includes(',')) {
-                                    let url = await getIpfsGetWay(schemaHash)
-                                    try {
-                                        if (url) {
-                                            let res = await axios.get(url)
-                                            if (res) {
-                                                tempSchema.push({
-                                                    ...res.data,
-                                                    timestamp: data.timestamp,
-                                                    id: data.id,
-                                                    hash: schemaHash
-                                                })
-                                                tempSchema = tempSchema.filter(d => d.displayName)
-                                                schemas.set(tempSchema)
-                                                ipfsLoading = false;
-                                            }
-                                        }
-                                    } catch (err) {
-                                        // console.log(err)
-                                    }
+                                    let structure = bytesToMeta(cborDecodedInformation[0].get(0), "json")
+                                    tempSchema = [...tempSchema, {
+                                        ...structure,
+                                        timestamp: receiptVaultInformations[0].timestamp,
+                                        id: receiptVaultInformations[0].id,
+                                        hash: schemaHash,
+                                    }]
+                                    tempSchema = tempSchema.filter(d => d.displayName)
+                                    schemas.set(tempSchema)
+                                    ipfsLoading = false;
                                 }
                             }
 

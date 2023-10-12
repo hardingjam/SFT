@@ -17,11 +17,11 @@
         navigate, showPrompt,
         showPromptSFTCreate
     } from '../scripts/helpers.js';
-    import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS, ROUTE_LABEL_MAP} from '../scripts/consts.js';
+    import {IPFS_APIS, IPFS_GETWAY, MAGIC_NUMBERS} from '../scripts/consts.js';
     import SftCredentialLinks from '../components/SftCredentialLinks.svelte';
     import {icons} from '../scripts/assets.js';
     import contractAbi from '../contract/OffchainAssetVaultAbi.json';
-    import {QUERY, RECEIPT_VAULT_INFORMATION_QUERY, VAULT_INFORMATION_QUERY, VAULTS_QUERY} from '../scripts/queries.js';
+    import {QUERY, RECEIPT_VAULT_INFORMATION_QUERY, VAULT_INFORMATION_QUERY} from '../scripts/queries.js';
     import axios from 'axios';
     import {arrayify} from 'ethers/lib/utils.js';
     import CredentialLinksEditor from '../components/CredentialLinksEditor.svelte';

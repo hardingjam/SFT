@@ -501,6 +501,10 @@ li {
     cursor: pointer;
 }
 
+.rounded-tr-10 {
+    border-top-right-radius: 10px;
+}
+
 .tooltip-text {
     visibility: hidden;
     background-color: #555;

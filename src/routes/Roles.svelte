@@ -95,7 +95,7 @@
 
 </script>
 <div class="roles-container">
-  <div class="w-full flex justify-between roles-head">
+  <div class="w-full flex justify-between card-header">
     <div class="grant-role-txt f-weight-700 flex gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path
@@ -183,11 +183,8 @@
         min-width: 690px;
     }
 
-    .roles-head {
-        padding: 14px 38px;
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid #EAEAEA;
+    .card-header {
+        padding: 0 38px;
     }
 
     .info {

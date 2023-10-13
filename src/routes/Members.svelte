@@ -1,7 +1,7 @@
 <script>
     import {icons} from "../scripts/assets.js"
     import {
-        account,
+        account, accountRoles,
         activeNetwork,
         ethersData,
         pageTitle,
@@ -46,7 +46,7 @@
                 showCheck[erc] = true
                 isAddressValid[erc] = report[minTier - 1] === 0
             } catch (e) {
-                error = e.message
+                error = "Something went wrong"
                 console.log(e.message)
             }
         }
@@ -61,7 +61,7 @@
             const hasRoleErc20Tierer = await hasRole($vault, $account, "ERC20TIERER")
 
             if (!hasRoleErc20Tierer.error) {
-                let tx = await $vault.setERC20Tier(erc20TierContract, erc20MinTier, [])
+                let tx = await $vault.setERC20Tier(erc20TierContract, erc20MinTier, [], [])
                 await showPrompt(tx)
                 localStorage.setItem("erc20TierContract", erc20TierContract)
                 localStorage.setItem("erc20MinTier", erc20MinTier)
@@ -82,7 +82,7 @@
             const hasRoleErc1155Tierer = await hasRole($vault, $account, "ERC1155TIERER")
 
             if (!hasRoleErc1155Tierer.error) {
-                let tx = await $vault.setERC1155Tier(erc1155TierContract, erc1155MinTier, [])
+                let tx = await $vault.setERC1155Tier(erc1155TierContract, erc1155MinTier, [], [])
                 await showPrompt(tx)
                 localStorage.setItem("erc1155TierContract", erc1155TierContract)
                 localStorage.setItem("erc1155MinTier", erc1155MinTier)
@@ -119,16 +119,24 @@
       <div class="address-container">
         <div class="contract label">
           Contract address:
-          <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
+          {#if ($accountRoles.ERC20TIERER)}
+            <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
+          {:else}
+            <input type="text" class="min-tier address bg-white" value="{erc20TierContract}" disabled>
+          {/if}
         </div>
       </div>
       <div class="display-flex address-container">
         <div class="label">Minimum tier:</div>
         <div class="flex justify-between items-center w-full">
-          <input type="text" class="default-input min-tier" bind:value={erc20MinTier} autofocus>
-          <div class="assign-tier">
-            <button class="default-btn" on:click={()=>{assignTierErc20()}}>Update tier contract</button>
-          </div>
+          {#if ($accountRoles.ERC20TIERER)}
+            <input type="text" class="default-input min-tier " bind:value={erc20MinTier}>
+            <div class="assign-tier">
+              <button class="default-btn" on:click={()=>{assignTierErc20()}}>Update tier contract</button>
+            </div>
+          {:else}
+            <input type="text" class="min-tier bg-white" value="{erc20MinTier}" disabled>
+          {/if}
         </div>
       </div>
 
@@ -155,16 +163,24 @@
 
         <div class="contract label">
           Contract address:
-          <input type="text" class="default-input address" bind:value={erc1155TierContract} autofocus>
+          {#if ($accountRoles.ERC1155TIERER)}
+            <input type="text" class="default-input address" bind:value={erc1155TierContract}>
+          {:else}
+            <input type="text" class="min-tier address bg-white" value="{erc1155TierContract}" disabled>
+          {/if}
         </div>
       </div>
       <div class="display-flex address-container">
         <div class="label">Minimum tier:</div>
         <div class="flex justify-between items-center w-full">
-          <input type="text" class="default-input min-tier" bind:value={erc1155MinTier} autofocus>
-          <div class="assign-tier">
-            <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Update tier contract</button>
-          </div>
+          {#if ($accountRoles.ERC1155TIERER)}
+            <input type="text" class="default-input min-tier " bind:value={erc1155MinTier}>
+            <div class="assign-tier">
+              <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Update tier contract</button>
+            </div>
+          {:else}
+            <input type="text" class="min-tier bg-white" value="{erc1155MinTier}" disabled>
+          {/if}
         </div>
       </div>
 

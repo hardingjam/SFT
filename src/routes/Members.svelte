@@ -122,14 +122,16 @@
           <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
         </div>
       </div>
-      <div class="display-flex address-container ">
-        <div class="label">Minimum tier:
+      <div class="display-flex address-container">
+        <div class="label">Minimum tier:</div>
+        <div class="flex justify-between items-center w-full">
           <input type="text" class="default-input min-tier" bind:value={erc20MinTier} autofocus>
+          <div class="assign-tier">
+            <button class="default-btn" on:click={()=>{assignTierErc20()}}>Update tier contract</button>
+          </div>
         </div>
       </div>
-      <!--        <div class="assign-tier">-->
-      <!--          <button class="default-btn" on:click={()=>{assignTierErc20()}}>Assign tier</button>-->
-      <!--        </div>-->
+
       <div class="address-container">Check address on the tier list:</div>
       <div class="check-address-input-container">
         <input type="text" class="default-input w-100" bind:value={addressErc20}>
@@ -157,13 +159,15 @@
         </div>
       </div>
       <div class="display-flex address-container">
-        <div class="label">Minimum tier:
+        <div class="label">Minimum tier:</div>
+        <div class="flex justify-between items-center w-full">
           <input type="text" class="default-input min-tier" bind:value={erc1155MinTier} autofocus>
+          <div class="assign-tier">
+            <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Update tier contract</button>
+          </div>
         </div>
       </div>
-      <!--        <div class="assign-tier">-->
-      <!--          <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Assign tier</button>-->
-      <!--        </div>-->
+
       <div class="address-container">Check address on the tier list:</div>
       <div class="check-address-input-container">
         {addressErc1155}
@@ -184,8 +188,8 @@
     </div>
     {#if error}
       <div class="error">
-        <!--{error}-->
-                This address can not send or receive tokens. Tokens held by this address can be confiscated by the confiscator
+        {error}
+        <!--                This address can not send or receive tokens. Tokens held by this address can be confiscated by the confiscator-->
       </div>
     {/if}
   </div>
@@ -211,7 +215,7 @@
         text-align: left;
         width: 100%;
         border-radius: 10px;
-        padding: 20px 60px
+        padding: 20px 60px 38px 60px;
     }
 
     .tier {
@@ -225,14 +229,14 @@
 
     .min-tier {
         width: 74px;
-        margin-left: 31px;
+        margin-left: 29px;
     }
 
     .contract {
         white-space: nowrap;
         width: 100%;
         display: flex;
-        align-items: center;
+        align-items: baseline;
         justify-content: space-between;
     }
 
@@ -240,6 +244,7 @@
         justify-content: space-between;
         min-height: 36px;
         margin-left: 10px;
+        align-items: baseline;
     }
 
     .address {
@@ -249,7 +254,7 @@
 
     .label {
         margin-right: 5px;
-
+        white-space: nowrap;
     }
 
     .check-address-input-container {

@@ -1,6 +1,6 @@
 export let mock = {
     account:'0xc0d477556c25c9d67e1f57245c7453da776b51cf',
-    testToken: {
+    testTokens: [{
         "deployer": "0xc0d477556c25c9d67e1f57245c7453da776b51cf",
         "name": "Jefo",
         "address": "0xdbcf2d8b73d06e6fa593b98857097257ebef1951",
@@ -261,6 +261,117 @@ export let mock = {
             "telegram": ""
         }
     },
+        {
+            "deployer": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a",
+            "name": "coca-cola",
+            "address": "0x5fad8b269e9ff56bdc34bf62ecbd77fc8ca868de",
+            "symbol": "CCVR-PA",
+            "deployBlock": "40315285",
+            "deployTimestamp": "1695212922",
+            "totalShares": "0",
+            "receiptContractAddress": "0xe462379973afb1ab1ca5b1c96ba76ea22bb27972",
+            "tokenHolders": [],
+            "roleHolders": [
+                {
+                    "role": {
+                        "roleName": "CERTIFIER_ADMIN",
+                        "roleHash": "0x4bbeb6fd3e5222e55f2f8b0c35bc228e0a06a25d0da772fdb02c3b92fa004f88"
+                    },
+                    "account": {
+                        "address": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a"
+                    }
+                },
+                {
+                    "role": {
+                        "roleName": "HANDLER_ADMIN",
+                        "roleHash": "0x4cbb985fecd7e86ede589f695f46f07d40afe7cb60f6049028c0b9a6bfaf649e"
+                    },
+                    "account": {
+                        "address": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a"
+                    }
+                },
+                {
+                    "role": {
+                        "roleName": "DEPOSITOR_ADMIN",
+                        "roleHash": "0xc091f023e1c6780346fd5f1017395079a3ea0e07d94a4f9e7273a43e3fa2a7e8"
+                    },
+                    "account": {
+                        "address": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a"
+                    }
+                },
+                {
+                    "role": {
+                        "roleName": "ERC20TIERER_ADMIN",
+                        "roleHash": "0xc1a04980ce16d8574a4108b9f0a95358068379059fe211b7eb60a9f805237e60"
+                    },
+                    "account": {
+                        "address": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a"
+                    }
+                },
+                {
+                    "role": {
+                        "roleName": "CONFISCATOR_ADMIN",
+                        "roleHash": "0xc23bede8eabca44a15d0193051ac5429f3d014a7e297a4e78f67d06657d14269"
+                    },
+                    "account": {
+                        "address": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a"
+                    }
+                },
+                {
+                    "role": {
+                        "roleName": "ERC1155TIERER_ADMIN",
+                        "roleHash": "0xd461edcf12d14f5a18f27560fb18cfcb7df6fedb1d46c3664b9634623e9a172d"
+                    },
+                    "account": {
+                        "address": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a"
+                    }
+                },
+                {
+                    "role": {
+                        "roleName": "CERTIFIER",
+                        "roleHash": "0xd646ae07eb0d0f77457502a65e7407930dff4cd4fd99abc6aac87a753f4c8a42"
+                    },
+                    "account": {
+                        "address": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a"
+                    }
+                },
+                {
+                    "role": {
+                        "roleName": "ERC20SNAPSHOTTER_ADMIN",
+                        "roleHash": "0xda44ae5b31a7809c0f15e7306bdde44fffb60fdee235af40c70b73a6610de41e"
+                    },
+                    "account": {
+                        "address": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a"
+                    }
+                },
+                {
+                    "role": {
+                        "roleName": "DEPOSITOR",
+                        "roleHash": "0xe16b3d8fc79140c62874442c8b523e98592b429e73c0db67686a5b378b29f336"
+                    },
+                    "account": {
+                        "address": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a"
+                    }
+                },
+                {
+                    "role": {
+                        "roleName": "WITHDRAWER_ADMIN",
+                        "roleHash": "0xf2491dcc230f29376998d72c6c3ea4cc17d3791c66e46b32ea439c19610d51db"
+                    },
+                    "account": {
+                        "address": "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a"
+                    }
+                }
+            ],
+            "receiptVaultInformations": [
+                {
+                    "information": "0xff0a89c674ee7874a4005841789cab56ca482cce50b2520acc0d30cfaa0aaecc8f342f2b0833f3f331cf0ccf4f498e0af629314b2af54b2cf409ccca0a7077c94f762bc9ce52aa0500351713d3011bff8cd2927c8c86cb02706170706c69636174696f6e2f6a736f6e03676465666c617465a200782e516d50376a7a53796f5937767056364e4c3769576f64635a534c743662754e61714c516a6a5047446f6346746b6a011bff9fae3cc645f463",
+                    "id": "0xce4747af6a815a1c63c045926046f24b608a669e9f144339b2b021cebaa244bd",
+                    "timestamp": "1695213150"
+                }
+            ],
+            "icon": "QmP7jzSyoY7vpV6NL7iWodcZSLt6buNaqLQjjPGDocFtkj"
+        }],
     activeNetwork: {
         "id": 80001,
         "chainId": 80001,

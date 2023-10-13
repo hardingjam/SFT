@@ -92,4 +92,21 @@ describe('The Home Page', () => {
         cy.get('.token-logo').should('exist');
         cy.get('.token-logo').should('have.attr', 'src').should('include','https://ipfs.io/ipfs/QmSaHGGYMu31evZdaJF4tuX4pVx5paBZnWWYkrN7U8Sc9k')
     });
+    it('Should search and filter', () => {
+        cy.get(`.search-bar`).should('exist');
+        cy.get(`.token-Jefo`).should('exist');
+        cy.get(`.token-coca-cola`).should('exist');
+        cy.get('.search-input').type("jefo");
+        cy.get(`.token-coca-cola`).should('not.exist');
+    });
+    it('Should clear search and show all tokens', () => {
+        cy.get(`.search-bar`).should('exist');
+        cy.get(`.token-Jefo`).should('exist');
+        cy.get(`.token-coca-cola`).should('exist');
+        cy.get('.search-input').type("jefo");
+        cy.get(`.token-coca-cola`).should('not.exist');
+        cy.get('.search-input').clear();
+        cy.get(`.token-Jefo`).should('exist');
+        cy.get(`.token-coca-cola`).should('exist');
+    });
 })

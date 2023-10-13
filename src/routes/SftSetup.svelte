@@ -207,7 +207,7 @@
 
     .card-header {
         gap: 13px;
-        padding: 13px 24px;
+        padding: 0 24px;
     }
 
     .form-box {

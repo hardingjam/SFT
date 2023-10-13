@@ -250,10 +250,11 @@
 
     function searchToken() {
         if (searchText) {
-            computedTokens = $tokens.filter(t => t.name.toLowerCase().includes(searchText.toLowerCase()))
+            computedTokens = $tokens.filter(t => t.name.toLowerCase().includes(searchText.toLowerCase()) || t.address.toLowerCase().includes(searchText.toLowerCase()))
         } else {
             computedTokens = $tokens
         }
+        console.log(computedTokens)
     }
 </script>
 <div class="flex flex-col w-full items-center home-container relative">

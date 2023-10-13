@@ -197,7 +197,7 @@
     }
 
     .card-header {
-        padding: 13px 20px 13px 20px;
+        padding: 0 20px;
         color: #575757;
     }
 

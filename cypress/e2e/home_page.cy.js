@@ -109,4 +109,11 @@ describe('The Home Page', () => {
         cy.get(`.token-Jefo`).should('exist');
         cy.get(`.token-coca-cola`).should('exist');
     });
+    it('Should search and filter by token address', () => {
+        cy.get(`.search-bar`).should('exist');
+        cy.get(`.token-Jefo`).should('exist');
+        cy.get(`.token-coca-cola`).should('exist');
+        cy.get('.search-input').type("0xdbcf2d8b73d06e6fa593b98857097257ebef1951");
+        cy.get(`.token-coca-cola`).should('not.exist');
+    });
 })

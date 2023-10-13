@@ -94,16 +94,23 @@
 
 </script>
 <div class="roles-container">
-  <div class="roles">
-    <div class="w-full flex justify-between">
-      <div class="grant-role-txt f-weight-700 flex justify-between">Grant a role</div>
-
-      <button class="asset-class-btn default-btn" on:click={()=>{navigate("#new-asset-class")}}>
-        New asset class
-      </button>
+  <div class="w-full flex justify-between roles-head">
+    <div class="grant-role-txt f-weight-700 flex gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M4 20V19C4 16.2386 6.23858 14 9 14H12.75M17.5355 13.9645V17.5M17.5355 17.5V21.0355M17.5355 17.5H21.0711M17.5355 17.5H14M15 7C15 9.20914 13.2091 11 11 11C8.79086 11 7 9.20914 7 7C7 4.79086 8.79086 3 11 3C13.2091 3 15 4.79086 15 7Z" stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      SFT Roles
     </div>
+
+    <button class="asset-class-btn default-btn" on:click={()=>{navigate("#new-asset-class")}}>
+      New asset class
+    </button>
+  </div>
+  <div class="roles">
+
     <div class="info">
-      Roles are granted to specific addresses to control certain duties of a token. Every role has admins control who has the role, and admin for that role. Admins need to grant themselves their role to perform those duties.
+      Roles are granted to specific addresses to control certain duties of a token. Every role has admins control who
+      has the role, and admin for that role. Admins need to grant themselves their role to perform those duties.
     </div>
     <div class="error">{error}</div>
     <div class="role-list">
@@ -167,15 +174,20 @@
 
 <style>
 
-    .roles-container{
+    .roles-container {
         border-radius: 10px;
         background: #FFF;
-        padding:24px;
         min-width: 690px;
     }
 
-    .info{
-        margin-top:16px;
+    .roles-head {
+        padding: 14px 38px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #EAEAEA;
+    }
+
+    .info {
         color: #575757;
         font-family: Mukta, sans-serif;
         font-size: 16px;
@@ -188,13 +200,11 @@
         text-align: left;
         width: 650px;
         border-radius: 10px;
-        border: 1px solid #C1C1C1;
-        padding: 24px 48px
+        padding: 34px 71px
     }
 
     .roles-data {
         overflow: auto;
-        /*height: calc(100vh - 515px);*/
         height: fit-content;
         display: flex;
         width: 100%;
@@ -242,13 +252,9 @@
         padding-left: 13px;
     }
 
-    .asset-class-btn {
-        margin-right: -2rem;
-    }
-
     .plus {
-        margin-left: -22px;
-        margin-right: 7px;
+        margin-left: -30px;
+        margin-right: 13px;
     }
 
 </style>

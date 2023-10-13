@@ -39,6 +39,12 @@
     let credentialLinks = {}
     let computedTokens = []
 
+    $: $tokens.length && setComputedTokens()
+
+    function setComputedTokens() {
+        computedTokens = $tokens
+    }
+
     $: {
         searchText;
         searchToken()
@@ -250,7 +256,8 @@
 
     function searchToken() {
         if (searchText) {
-            computedTokens = $tokens.filter(t => t.name.toLowerCase().includes(searchText.toLowerCase()) || t.address.toLowerCase().includes(searchText.toLowerCase()))
+            computedTokens = $tokens.filter(t => t.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                t.address.toLowerCase().includes(searchText.toLowerCase()))
         } else {
             computedTokens = $tokens
         }

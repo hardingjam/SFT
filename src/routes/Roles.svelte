@@ -1,10 +1,8 @@
 <script>
     import {
         vault,
-        activeNetwork,
         roles,
-        data,
-        transactionError, accountRoles, pageTitle,
+        data, accountRoles, pageTitle, titleIcon,
     } from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
@@ -13,10 +11,10 @@
         toSentenceCase, showPrompt, setAccountRoles, navigate
     } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
-    import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
     import {ROLES} from "../scripts/consts.js";
     import {ethers} from "ethers";
+    import {onMount} from 'svelte';
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let account = '';
@@ -90,20 +88,32 @@
         }
     }
 
-    pageTitle.set("SFT roles")
+    onMount(() => {
+        pageTitle.set("SFT roles")
+        titleIcon.set(`${icons.roles_icon}`)
+    })
 
 </script>
 <div class="roles-container">
-  <div class="roles">
-    <div class="w-full flex justify-between">
-      <div class="grant-role-txt f-weight-700 flex justify-between">Grant a role</div>
-
-      <button class="asset-class-btn default-btn" on:click={()=>{navigate("#new-asset-class")}}>
-        New asset class
-      </button>
+  <div class="w-full flex justify-between card-header">
+    <div class="grant-role-txt f-weight-700 flex gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M4 20V19C4 16.2386 6.23858 14 9 14H12.75M17.5355 13.9645V17.5M17.5355 17.5V21.0355M17.5355 17.5H21.0711M17.5355 17.5H14M15 7C15 9.20914 13.2091 11 11 11C8.79086 11 7 9.20914 7 7C7 4.79086 8.79086 3 11 3C13.2091 3 15 4.79086 15 7Z"
+          stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      SFT Roles
     </div>
+
+    <button class="asset-class-btn default-btn" on:click={()=>{navigate("#new-asset-class")}}>
+      New asset class
+    </button>
+  </div>
+  <div class="roles">
+
     <div class="info">
-      Roles are granted to specific addresses to control certain duties of a token. Every role has admins control who has the role, and admin for that role. Admins need to grant themselves their role to perform those duties.
+      Roles are granted to specific addresses to control certain duties of a token. Every role has admins control who
+      has the role, and admin for that role. Admins need to grant themselves their role to perform those duties.
     </div>
     <div class="error">{error}</div>
     <div class="role-list">
@@ -122,12 +132,12 @@
           </td>
         </tr>
         <tr>
-          <td><label class="f-weight-700">Address:</label></td>
+          <td class="address"><label class="f-weight-700">Address:</label></td>
           <td><input type="text" class="default-input"
                      bind:value={account}></td>
         </tr>
       </table>
-      <button class="default-btn" on:click={grantRole} disabled={!!error || !account || !roleName}>Enter</button>
+      <button class="default-btn enter" on:click={grantRole} disabled={!!error || !account || !roleName}>Enter</button>
     </div>
     <div class="warning error">Important - Deleting or adding is permanent on the blockchain. If all role admins are
       removed then it will be unrecoverable.
@@ -146,7 +156,7 @@
                 <span class="title f-weight-700">{role.roleName}</span>
               </td>
             </tr>
-            <tr>
+            <tr class="flex justify-between">
               <td>
                 <Role name={role.roleName}
                       roleHolders={$roles?.find(r=>r.roleName===role.roleName)?.roleHolders} admin={false}></Role>
@@ -167,15 +177,17 @@
 
 <style>
 
-    .roles-container{
+    .roles-container {
         border-radius: 10px;
         background: #FFF;
-        padding:24px;
-        min-width: 690px;
+        width: 690px;
     }
 
-    .info{
-        margin-top:16px;
+    .card-header {
+        padding: 0 38px;
+    }
+
+    .info {
         color: #575757;
         font-family: Mukta, sans-serif;
         font-size: 16px;
@@ -186,15 +198,17 @@
 
     .roles {
         text-align: left;
-        width: 650px;
+        width: 100%;
         border-radius: 10px;
-        border: 1px solid #C1C1C1;
-        padding: 24px 48px
+        padding: 34px 71px
+    }
+
+    .address {
+        width: 70px;
     }
 
     .roles-data {
         overflow: auto;
-        /*height: calc(100vh - 515px);*/
         height: fit-content;
         display: flex;
         width: 100%;
@@ -216,6 +230,7 @@
         font-style: normal;
         font-size: 16px;
         line-height: 27px;
+        color: #575757;
     }
 
     .role-list {
@@ -225,9 +240,12 @@
 
     table {
         width: 100%;
+        border: none;
+        border-collapse: collapse;
     }
 
     td {
+        margin-bottom: 6px;
         vertical-align: top;
     }
 
@@ -240,15 +258,17 @@
 
     .default-input {
         padding-left: 13px;
+        width: 100%;
     }
 
-    .asset-class-btn {
-        margin-right: -2rem;
+    .enter {
+        margin-left: 71px;
+        width: 87px;
     }
 
     .plus {
-        margin-left: -22px;
-        margin-right: 7px;
+        margin-left: -30px;
+        margin-right: 13px;
     }
 
 </style>

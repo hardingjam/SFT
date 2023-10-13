@@ -23,10 +23,6 @@
         // }
     })
 
-    onDestroy(() => {
-        titleIcon.set("")
-    })
-
     $: $activeNetwork.chainId && getData()
 
     async function getData() {

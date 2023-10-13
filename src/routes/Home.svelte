@@ -254,7 +254,6 @@
         } else {
             computedTokens = $tokens
         }
-        console.log(computedTokens)
     }
 </script>
 <div class="flex flex-col w-full items-center home-container relative">

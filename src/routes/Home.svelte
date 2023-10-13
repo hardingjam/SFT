@@ -245,7 +245,10 @@
 <div class="flex flex-col w-full items-center home-container relative">
   <div class="views flex justify-end pt-4 view-buttons ">
     <div class="search-bar">
-      <input class="search-input" bind:value={searchText} placeholder="Search by Address/ Token name"/>
+      <div class="search-input-cont">
+        <input class="search-input" bind:value={searchText} placeholder="Search by Address/ Token name"/>
+        <img src={icons.search_icon} alt="search" class="search-icon">
+      </div>
 
     </div>
     <div class="view-changer-buttons">
@@ -333,15 +336,27 @@
     .search-bar {
         width: 100%;
         text-align: right;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .search-input-cont {
+        position: relative;
+        width: calc(50% - 10px);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 6px;
     }
 
     .search-input {
         border-radius: 10px;
         border: none;
         color: #9D9D9D;
-        width: calc(50% - 10px);
-        padding: 6px 12px;
-
+        width: 100%;
+        padding: 6px 46px;
     }
 
     .search-input, .search-input::placeholder {

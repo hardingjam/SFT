@@ -34,6 +34,7 @@
     let username;
     let password;
     let view = "tile";
+    let searchText = "";
     let credentialLinks = {}
 
     async function deployImage(event) {
@@ -242,13 +243,20 @@
 
 </script>
 <div class="flex flex-col w-full items-center home-container relative">
-  <div class="views flex justify-end w-full space-x-3 pr-5 pt-4 view-buttons">
-    <div class="cursor-pointer tile-view-button" on:click={()=>{view = "tile"}}>
-      <img src={icons.tile_view} alt="tiles">
+  <div class="views flex justify-end pt-4 view-buttons ">
+    <div class="search-bar">
+      <input class="search-input" bind:value={searchText} placeholder="Search by Address/ Token name"/>
+
     </div>
-    <div class="cursor-pointer list-view-button" on:click={()=>{view = "list"}}>
-      <img src={icons.list_view} alt="tiles">
+    <div class="view-changer-buttons">
+      <div class="cursor-pointer tile-view-button" on:click={()=>{view = "tile"}}>
+        <img src={icons.tile_view} alt="tiles">
+      </div>
+      <div class="cursor-pointer list-view-button" on:click={()=>{view = "list"}}>
+        <img src={icons.list_view} alt="tiles">
+      </div>
     </div>
+
   </div>
   {#if !$tokens?.length}
     <div class="loader">
@@ -276,7 +284,15 @@
 </div>
 <style>
 
-    .view-buttons{
+    .views {
+        gap: 21px;
+        right: 0;
+        width: calc(100% - 224px);
+        padding-right: 16px;
+        align-items: center;
+    }
+
+    .view-buttons {
         position: fixed;
         top: 56px;
         background: #dcdbdd;
@@ -307,6 +323,34 @@
         align-self: end;
         width: calc(100% - 320px);
         margin-right: 6rem;
+    }
+
+    .view-changer-buttons {
+        display: flex;
+        gap: 14px;
+    }
+
+    .search-bar {
+        width: 100%;
+        text-align: right;
+    }
+
+    .search-input {
+        border-radius: 10px;
+        border: none;
+        color: #9D9D9D;
+        width: calc(50% - 10px);
+        padding: 6px 12px;
+
+    }
+
+    .search-input, .search-input::placeholder {
+        font-family: 'Mukta', sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        height: 35px;
     }
 
 </style>

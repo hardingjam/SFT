@@ -30,12 +30,19 @@
     import {icons} from '../scripts/assets.js';
     import TileView from '../components/TileView.svelte';
     import ListView from '../components/ListView.svelte';
+    import {onMount} from 'svelte';
 
     let username;
     let password;
     let view = "tile";
     let searchText = "";
     let credentialLinks = {}
+    let computedTokens = []
+
+    $: {
+        searchText;
+        searchToken()
+    }
 
     async function deployImage(event) {
         let file = event.detail.file
@@ -241,6 +248,13 @@
         }
     }
 
+    function searchToken() {
+        if (searchText) {
+            computedTokens = $tokens.filter(t => t.name.toLowerCase().includes(searchText.toLowerCase()))
+        } else {
+            computedTokens = $tokens
+        }
+    }
 </script>
 <div class="flex flex-col w-full items-center home-container relative">
   <div class="views flex justify-end pt-4 view-buttons ">
@@ -269,11 +283,11 @@
   {#if $tokens && $tokens.length}
     <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} tokens mr-5">
       {#if (view === "tile")}
-        <TileView tokens={$tokens} on:tokenSelect={handleTokenSelect}
+        <TileView tokens={computedTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage} on:okClick={handleOkButtonClick}/>
       {/if}
       {#if (view === "list")}
-        <ListView tokens={$tokens} on:tokenSelect={handleTokenSelect}
+        <ListView tokens={computedTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage}
                   on:listEditClick={()=>{isListEditorOpen=true}} on:listEditClosed={()=>{isListEditorOpen=false}}/>
       {/if}
@@ -292,6 +306,7 @@
         right: 0;
         width: calc(100% - 224px);
         padding-right: 16px;
+        padding-bottom: 10px;
         align-items: center;
     }
 

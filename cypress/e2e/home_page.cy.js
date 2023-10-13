@@ -82,7 +82,6 @@ describe('The Home Page', () => {
         cy.get(`.path-`).click();
         cy.url().should('include', '/#')
         cy.get('.tokens').should('exist');
-
     });
     it('Sets token image as logo', () => {
         cy.get(`#token-name-Jefo`).click();
@@ -91,5 +90,29 @@ describe('The Home Page', () => {
         cy.get('.navigation-token-icon').should('exist');
         cy.get('.token-logo').should('exist');
         cy.get('.token-logo').should('have.attr', 'src').should('include','https://ipfs.io/ipfs/QmSaHGGYMu31evZdaJF4tuX4pVx5paBZnWWYkrN7U8Sc9k')
+    });
+    it('Should search and filter', () => {
+        cy.get(`.search-bar`).should('exist');
+        cy.get(`.token-Jefo`).should('exist');
+        cy.get(`.token-coca-cola`).should('exist');
+        cy.get('.search-input').type("jefo");
+        cy.get(`.token-coca-cola`).should('not.exist');
+    });
+    it('Should clear search and show all tokens', () => {
+        cy.get(`.search-bar`).should('exist');
+        cy.get(`.token-Jefo`).should('exist');
+        cy.get(`.token-coca-cola`).should('exist');
+        cy.get('.search-input').type("jefo");
+        cy.get(`.token-coca-cola`).should('not.exist');
+        cy.get('.search-input').clear();
+        cy.get(`.token-Jefo`).should('exist');
+        cy.get(`.token-coca-cola`).should('exist');
+    });
+    it('Should search and filter by token address', () => {
+        cy.get(`.search-bar`).should('exist');
+        cy.get(`.token-Jefo`).should('exist');
+        cy.get(`.token-coca-cola`).should('exist');
+        cy.get('.search-input').type("0xdbcf2d8b73d06e6fa593b98857097257ebef1951");
+        cy.get(`.token-coca-cola`).should('not.exist');
     });
 })

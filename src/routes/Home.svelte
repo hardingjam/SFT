@@ -30,11 +30,25 @@
     import {icons} from '../scripts/assets.js';
     import TileView from '../components/TileView.svelte';
     import ListView from '../components/ListView.svelte';
+    import {onMount} from 'svelte';
 
     let username;
     let password;
     let view = "tile";
+    let searchText = "";
     let credentialLinks = {}
+    let computedTokens = []
+
+    $: $tokens.length && setComputedTokens()
+
+    function setComputedTokens() {
+        computedTokens = $tokens
+    }
+
+    $: {
+        searchText;
+        searchToken()
+    }
 
     async function deployImage(event) {
         let file = event.detail.file
@@ -240,15 +254,33 @@
         }
     }
 
+    function searchToken() {
+        if (searchText) {
+            computedTokens = $tokens.filter(t => t.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                t.address.toLowerCase().includes(searchText.toLowerCase()))
+        } else {
+            computedTokens = $tokens
+        }
+    }
 </script>
 <div class="flex flex-col w-full items-center home-container relative">
-  <div class="views flex justify-end w-full space-x-3 pr-5 pt-4 view-buttons">
-    <div class="cursor-pointer tile-view-button" on:click={()=>{view = "tile"}}>
-      <img src={icons.tile_view} alt="tiles">
+  <div class="views flex justify-end pt-4 view-buttons ">
+    <div class="search-bar">
+      <div class="search-input-cont">
+        <input class="search-input" bind:value={searchText} placeholder="Search by Address/ Token name"/>
+        <img src={icons.search_icon} alt="search" class="search-icon">
+      </div>
+
     </div>
-    <div class="cursor-pointer list-view-button" on:click={()=>{view = "list"}}>
-      <img src={icons.list_view} alt="tiles">
+    <div class="view-changer-buttons">
+      <div class="cursor-pointer tile-view-button" on:click={()=>{view = "tile"}}>
+        <img src={icons.tile_view} alt="tiles">
+      </div>
+      <div class="cursor-pointer list-view-button" on:click={()=>{view = "list"}}>
+        <img src={icons.list_view} alt="tiles">
+      </div>
     </div>
+
   </div>
   {#if !$tokens?.length}
     <div class="loader">
@@ -258,11 +290,11 @@
   {#if $tokens && $tokens.length}
     <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} tokens mr-5">
       {#if (view === "tile")}
-        <TileView tokens={$tokens} on:tokenSelect={handleTokenSelect}
+        <TileView tokens={computedTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage} on:okClick={handleOkButtonClick}/>
       {/if}
       {#if (view === "list")}
-        <ListView tokens={$tokens} on:tokenSelect={handleTokenSelect}
+        <ListView tokens={computedTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage}
                   on:listEditClick={()=>{isListEditorOpen=true}} on:listEditClosed={()=>{isListEditorOpen=false}}/>
       {/if}
@@ -276,7 +308,16 @@
 </div>
 <style>
 
-    .view-buttons{
+    .views {
+        gap: 21px;
+        right: 0;
+        width: calc(100% - 224px);
+        padding-right: 16px;
+        padding-bottom: 10px;
+        align-items: center;
+    }
+
+    .view-buttons {
         position: fixed;
         top: 56px;
         background: #dcdbdd;
@@ -307,6 +348,46 @@
         align-self: end;
         width: calc(100% - 320px);
         margin-right: 6rem;
+    }
+
+    .view-changer-buttons {
+        display: flex;
+        gap: 14px;
+    }
+
+    .search-bar {
+        width: 100%;
+        text-align: right;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .search-input-cont {
+        position: relative;
+        width: calc(50% - 10px);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 6px;
+    }
+
+    .search-input {
+        border-radius: 10px;
+        border: none;
+        color: #9D9D9D;
+        width: 100%;
+        padding: 6px 46px;
+    }
+
+    .search-input, .search-input::placeholder {
+        font-family: 'Mukta', sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        height: 35px;
     }
 
 </style>

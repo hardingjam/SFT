@@ -1,9 +1,16 @@
 <script>
-    import DefaultFrame from "../components/DefaultFrame.svelte";
     import {icons} from "../scripts/assets.js"
-    import {account, activeNetwork, ethersData, pageTitle, transactionError, vault} from "../scripts/store.js";
+    import {
+        account,
+        activeNetwork,
+        ethersData,
+        pageTitle,
+        titleIcon,
+        vault
+    } from "../scripts/store.js";
     import {getContract, hasRole, showPrompt, tierReport} from "../scripts/helpers.js";
     import tierContractAbi from "../contract/TierContractAbi.json";
+    import {onMount} from 'svelte';
 
 
     let erc20MinTier = localStorage.getItem("erc20MinTier") || ''
@@ -89,97 +96,121 @@
         }
     }
 
-    pageTitle.set("Members")
-
+    onMount(() => {
+        pageTitle.set("Members")
+        titleIcon.set(`${icons.members_icon}`)
+    })
 
 </script>
-<DefaultFrame>
-  <div slot="content">
-    <div class="members">
-      <div class="erc20 tier">
-        <div class="f-weight-700">ERC20</div>
-        <div class="display-flex address-container">
-          <div class="f-weight-700 contract label">Contract address:
-            <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
-          </div>
-        </div>
-        <div class="display-flex address-container">
-          <div class="f-weight-700 label">Minimum tier:
-            <input type="text" class="default-input min-tier" bind:value={erc20MinTier} autofocus>
-          </div>
-        </div>
-<!--        <div class="assign-tier">-->
-<!--          <button class="default-btn" on:click={()=>{assignTierErc20()}}>Assign tier</button>-->
-<!--        </div>-->
-        <div class="f-weight-700">Check address on the tier list:</div>
-        <div class="check-address-input-container">
-          <input type="text" class="default-input w-100" bind:value={addressErc20}>
-          {#if isAddressValid.erc20 && showCheck.erc20 && addressErc20}
-            <img src={icons.check} alt="check" class="check">
-          {/if}
-          {#if !isAddressValid.erc20 && showCheck.erc20 && addressErc20}
-            <img src={icons.reject} alt="reject" class="reject">
-          {/if}
-        </div>
-        <div>
-          <button class="default-btn "
-                  on:click={()=>{checkAddress(erc20TierContract,addressErc20, erc20MinTier, 'erc20')}}>
-            Check
-          </button>
-        </div>
-      </div>
-      <div class="erc1155 tier">
-        <div class="f-weight-700">ERC1155</div>
-        <div class="display-flex address-container">
-
-          <div class="f-weight-700 contract label">
-            Contract address:
-            <input type="text" class="default-input address" bind:value={erc1155TierContract} autofocus>
-          </div>
-        </div>
-        <div class="display-flex address-container">
-          <div class="f-weight-700 label">Minimum tier:
-            <input type="text" class="default-input min-tier" bind:value={erc1155MinTier} autofocus>
-          </div>
-        </div>
-<!--        <div class="assign-tier">-->
-<!--          <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Assign tier</button>-->
-<!--        </div>-->
-        <div class="f-weight-700">Check address on the tier list:</div>
-        <div class="check-address-input-container">
-          {addressErc1155}
-          <input type="text" class="default-input w-100" bind:value={addressErc1155}>
-          {#if isAddressValid.erc1155 && showCheck.erc1155 && addressErc1155}
-            <img src={icons.check} alt="check" class="check">
-          {/if}
-          {#if !isAddressValid.erc1155 && showCheck.erc1155 && addressErc1155}
-            <img src={icons.reject} alt="reject" class="reject">
-          {/if}
-        </div>
-        <div>
-          <button class="default-btn"
-                  on:click={()=>{checkAddress(erc1155TierContract,addressErc1155, erc1155MinTier, 'erc1155')}}>
-            Check
-          </button>
-        </div>
-      </div>
-      {#if error}
-        <div class="error">
-          {error}
-          <!--        This address can not send or receive tokens. Tokens held by this address can be confiscated by the confiscator-->
-        </div>
-      {/if}
+<div class="members-container">
+  <div class="w-full flex justify-between card-header">
+    <div class="grant-role-txt f-weight-700 flex gap-1.5">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M5 20V19C5 16.2386 7.23858 14 10 14H14C16.7614 14 19 16.2386 19 19V20M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+          stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="mt-1">Members</span>
     </div>
-
   </div>
-</DefaultFrame>
+  <div class="members">
+    <div class="erc20 tier">
+      <div class="f-weight-700">ERC20</div>
+      <div class="display-flex address-container">
+        <div class="f-weight-700 contract label">Contract address:
+          <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
+        </div>
+      </div>
+      <div class="display-flex address-container">
+        <div class="f-weight-700 label">Minimum tier:
+          <input type="text" class="default-input min-tier" bind:value={erc20MinTier} autofocus>
+        </div>
+      </div>
+      <!--        <div class="assign-tier">-->
+      <!--          <button class="default-btn" on:click={()=>{assignTierErc20()}}>Assign tier</button>-->
+      <!--        </div>-->
+      <div class="f-weight-700">Check address on the tier list:</div>
+      <div class="check-address-input-container">
+        <input type="text" class="default-input w-100" bind:value={addressErc20}>
+        {#if isAddressValid.erc20 && showCheck.erc20 && addressErc20}
+          <img src={icons.check} alt="check" class="check">
+        {/if}
+        {#if !isAddressValid.erc20 && showCheck.erc20 && addressErc20}
+          <img src={icons.reject} alt="reject" class="reject">
+        {/if}
+      </div>
+      <div>
+        <button class="default-btn "
+                on:click={()=>{checkAddress(erc20TierContract,addressErc20, erc20MinTier, 'erc20')}}>
+          Check
+        </button>
+      </div>
+    </div>
+    <div class="erc1155 tier">
+      <div class="f-weight-700">ERC1155</div>
+      <div class="display-flex address-container">
+
+        <div class="f-weight-700 contract label">
+          Contract address:
+          <input type="text" class="default-input address" bind:value={erc1155TierContract} autofocus>
+        </div>
+      </div>
+      <div class="display-flex address-container">
+        <div class="f-weight-700 label">Minimum tier:
+          <input type="text" class="default-input min-tier" bind:value={erc1155MinTier} autofocus>
+        </div>
+      </div>
+      <!--        <div class="assign-tier">-->
+      <!--          <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Assign tier</button>-->
+      <!--        </div>-->
+      <div class="f-weight-700">Check address on the tier list:</div>
+      <div class="check-address-input-container">
+        {addressErc1155}
+        <input type="text" class="default-input w-100" bind:value={addressErc1155}>
+        {#if isAddressValid.erc1155 && showCheck.erc1155 && addressErc1155}
+          <img src={icons.check} alt="check" class="check">
+        {/if}
+        {#if !isAddressValid.erc1155 && showCheck.erc1155 && addressErc1155}
+          <img src={icons.reject} alt="reject" class="reject">
+        {/if}
+      </div>
+      <div>
+        <button class="default-btn"
+                on:click={()=>{checkAddress(erc1155TierContract,addressErc1155, erc1155MinTier, 'erc1155')}}>
+          Check
+        </button>
+      </div>
+    </div>
+    {#if error}
+      <div class="error">
+        {error}
+        <!--        This address can not send or receive tokens. Tokens held by this address can be confiscated by the confiscator-->
+      </div>
+    {/if}
+  </div>
+
+</div>
 <style>
 
-    .members {
+    .members-container {
         text-align: left;
         display: flex;
         flex-direction: column;
-        width: 385px;
+        width: 655px;
+        border-radius: 10px;
+        background: #FFF;
+    }
+
+    .card-header {
+        padding: 0 32px;
+        color: #575757;
+    }
+
+    .members {
+        text-align: left;
+        width: 100%;
+        border-radius: 10px;
+        padding: 34px 71px
     }
 
     .tier {

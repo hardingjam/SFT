@@ -44,7 +44,7 @@
 
 </script>
 <div class="ipfs-container">
-  <div class="card-header justify-start pt-4 pl-6">
+  <div class="card-header justify-start pl-6">
     <div class="title flex gap-3"><img src="{icons.ipfs}" alt="ipfs"/>IPFS login</div>
 
   </div>

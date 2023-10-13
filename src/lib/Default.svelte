@@ -339,6 +339,7 @@
             await getRoles($vault.address)
             accountRoles.set(await setAccountRoles($roles, $account));
             tokenName.set($data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : "")
+            await getSchemas()
         }
     }
 
@@ -660,7 +661,6 @@
                         receiptVaultInformations.map(async data => {
                             let cborDecodedInformation = cborDecode(data.information.slice(18))
                             if (cborDecodedInformation[0].get(1) === MAGIC_NUMBERS.OA_SCHEMA) {
-                                let cborDecodedInformation = cborDecode(data.information.slice(18))
                                 let schemaHash = cborDecodedInformation[1].get(0)
                                 let structure = bytesToMeta(cborDecodedInformation[0].get(0), "json")
                                 tempSchema = [...tempSchema, {
@@ -700,7 +700,7 @@
     <div class="{ $account ? 'block' : 'hide'}">
       <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
 
-      <div class={$sftInfo ? "sft-info-opened" : "" }>
+      <div class={$sftInfo ? "sft-info-opened mt-61" : "mt-61" }>
         <div class="{$activeNetwork  ? 'show' : 'hide'}">
           <Route path="#" component={Home}/>
           <Route path="#asset-register" component={AssetRegister}/>
@@ -839,7 +839,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 9rem;
+    //padding-top: 117px;
   }
 
   .sft-info-opened {

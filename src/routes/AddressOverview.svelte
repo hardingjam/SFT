@@ -183,7 +183,6 @@
     .address-overview {
         width: 100%;
         margin-right: 20px;
-        margin-top: 102px;
     }
 
     .address-overview-container {
@@ -198,7 +197,7 @@
     }
 
     .card-header {
-        padding: 13px 20px 13px 20px;
+        padding: 0 20px;
         color: #575757;
     }
 

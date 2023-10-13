@@ -480,8 +480,8 @@ li {
     align-items: center;
     justify-content: center;
     border-bottom-width: 1px;;
-    padding: 13px 0;
     gap: 20px;
+    height: 52px;
 }
 
 .card-content {
@@ -530,6 +530,10 @@ li {
     border-width: 5px;
     border-style: solid;
     border-color: #555 transparent transparent transparent;
+}
+
+.mt-61 {
+    margin-top: 117px;
 }
 
 @media (prefers-color-scheme: light) {

@@ -161,7 +161,7 @@
       <div class="f-weight-700 mb-2">ERC1155</div>
       <div class="display-flex address-container">
 
-        <div class="contract label">
+        <div class="contract">
           Contract address:
           {#if ($accountRoles.ERC1155TIERER)}
             <input type="text" class="default-input address" bind:value={erc1155TierContract}>

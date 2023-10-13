@@ -37,9 +37,6 @@
         pageTitle.set("Setup new SFT")
         titleIcon.set(`${icons.sft_create}`)
     })
-    onDestroy(() => {
-        titleIcon.set("")
-    })
 
     // async function createToken() {
     //     let contract = await getContract($activeNetwork, TEST_CONTRACT_ADDRESS, contractAbi, signerOrProvider)

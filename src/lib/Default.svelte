@@ -18,7 +18,7 @@
         data,
         roles,
         sftInfo,
-        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, isCypress, schemas
+        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, isCypress, schemas, titleIcon
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -345,7 +345,7 @@
     router.subscribe(async e => {
         //reset pageTitle
         pageTitle.set("")
-
+        titleIcon.set("")
 
         if (!e.initial) {
             let contract = await setVault()
@@ -665,7 +665,7 @@
                                 let structure = bytesToMeta(cborDecodedInformation[0].get(0), "json")
                                 tempSchema = [...tempSchema, {
                                     ...structure,
-                                    timestamp:data.timestamp,
+                                    timestamp: data.timestamp,
                                     id: data.id,
                                     hash: schemaHash,
                                 }]

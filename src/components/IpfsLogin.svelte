@@ -28,10 +28,6 @@
         titleIcon.set(`${icons.ipfs_white}`)
     })
 
-    onDestroy(() => {
-        titleIcon.set("")
-    })
-
 
     function toggleShowPassword() {
         type = passwordInput.getAttribute("type")

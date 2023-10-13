@@ -1,10 +1,8 @@
 <script>
     import {
         vault,
-        activeNetwork,
         roles,
-        data,
-        transactionError, accountRoles, pageTitle,
+        data, accountRoles, pageTitle, titleIcon,
     } from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
@@ -13,10 +11,10 @@
         toSentenceCase, showPrompt, setAccountRoles, navigate
     } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
-    import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
     import {ROLES} from "../scripts/consts.js";
     import {ethers} from "ethers";
+    import {onMount} from 'svelte';
 
     let executorRoles = []//$roles ? $roles.filter(r => !r.roleName.includes('_ADMIN')) : []
     let account = '';
@@ -90,14 +88,19 @@
         }
     }
 
-    pageTitle.set("SFT roles")
+    onMount(() => {
+        pageTitle.set("SFT roles")
+        titleIcon.set(`${icons.roles_icon}`)
+    })
 
 </script>
 <div class="roles-container">
   <div class="w-full flex justify-between roles-head">
     <div class="grant-role-txt f-weight-700 flex gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M4 20V19C4 16.2386 6.23858 14 9 14H12.75M17.5355 13.9645V17.5M17.5355 17.5V21.0355M17.5355 17.5H21.0711M17.5355 17.5H14M15 7C15 9.20914 13.2091 11 11 11C8.79086 11 7 9.20914 7 7C7 4.79086 8.79086 3 11 3C13.2091 3 15 4.79086 15 7Z" stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path
+          d="M4 20V19C4 16.2386 6.23858 14 9 14H12.75M17.5355 13.9645V17.5M17.5355 17.5V21.0355M17.5355 17.5H21.0711M17.5355 17.5H14M15 7C15 9.20914 13.2091 11 11 11C8.79086 11 7 9.20914 7 7C7 4.79086 8.79086 3 11 3C13.2091 3 15 4.79086 15 7Z"
+          stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       SFT Roles
     </div>

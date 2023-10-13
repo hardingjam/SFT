@@ -32,6 +32,7 @@ import asset_list_dark from '../assets/icons/asset_list_dark.svg'
 import sft_create from '../assets/icons/sft_create.svg'
 import ipfs from '../assets/icons/ipfs.svg'
 import ipfs_white from '../assets/icons/ipfs_white.svg'
+import roles_icon from '../assets/icons/roles_icon.svg'
 
 export const icons = {
     ethereum,
@@ -67,5 +68,6 @@ export const icons = {
     arrow_narrow_left,
     sft_create,
     ipfs,
-    ipfs_white
+    ipfs_white,
+    roles_icon
 }

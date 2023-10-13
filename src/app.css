@@ -480,8 +480,8 @@ li {
     align-items: center;
     justify-content: center;
     border-bottom-width: 1px;;
-    padding: 13px 0;
     gap: 20px;
+    height: 52px;
 }
 
 .card-content {

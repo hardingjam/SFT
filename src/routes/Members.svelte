@@ -115,21 +115,22 @@
   </div>
   <div class="members">
     <div class="erc20 tier">
-      <div class="f-weight-700">ERC20</div>
-      <div class="display-flex address-container">
-        <div class="f-weight-700 contract label">Contract address:
+      <div class="f-weight-700 mb-2">ERC20</div>
+      <div class="address-container">
+        <div class="contract label">
+          Contract address:
           <input type="text" class="default-input address" bind:value={erc20TierContract} autofocus>
         </div>
       </div>
-      <div class="display-flex address-container">
-        <div class="f-weight-700 label">Minimum tier:
+      <div class="display-flex address-container ">
+        <div class="label">Minimum tier:
           <input type="text" class="default-input min-tier" bind:value={erc20MinTier} autofocus>
         </div>
       </div>
       <!--        <div class="assign-tier">-->
       <!--          <button class="default-btn" on:click={()=>{assignTierErc20()}}>Assign tier</button>-->
       <!--        </div>-->
-      <div class="f-weight-700">Check address on the tier list:</div>
+      <div class="address-container">Check address on the tier list:</div>
       <div class="check-address-input-container">
         <input type="text" class="default-input w-100" bind:value={addressErc20}>
         {#if isAddressValid.erc20 && showCheck.erc20 && addressErc20}
@@ -139,7 +140,7 @@
           <img src={icons.reject} alt="reject" class="reject">
         {/if}
       </div>
-      <div>
+      <div class="flex items-center justify-end w-full">
         <button class="default-btn "
                 on:click={()=>{checkAddress(erc20TierContract,addressErc20, erc20MinTier, 'erc20')}}>
           Check
@@ -147,23 +148,23 @@
       </div>
     </div>
     <div class="erc1155 tier">
-      <div class="f-weight-700">ERC1155</div>
+      <div class="f-weight-700 mb-2">ERC1155</div>
       <div class="display-flex address-container">
 
-        <div class="f-weight-700 contract label">
+        <div class="contract label">
           Contract address:
           <input type="text" class="default-input address" bind:value={erc1155TierContract} autofocus>
         </div>
       </div>
       <div class="display-flex address-container">
-        <div class="f-weight-700 label">Minimum tier:
+        <div class="label">Minimum tier:
           <input type="text" class="default-input min-tier" bind:value={erc1155MinTier} autofocus>
         </div>
       </div>
       <!--        <div class="assign-tier">-->
       <!--          <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Assign tier</button>-->
       <!--        </div>-->
-      <div class="f-weight-700">Check address on the tier list:</div>
+      <div class="address-container">Check address on the tier list:</div>
       <div class="check-address-input-container">
         {addressErc1155}
         <input type="text" class="default-input w-100" bind:value={addressErc1155}>
@@ -174,7 +175,7 @@
           <img src={icons.reject} alt="reject" class="reject">
         {/if}
       </div>
-      <div>
+      <div class="flex items-center justify-end w-full">
         <button class="default-btn"
                 on:click={()=>{checkAddress(erc1155TierContract,addressErc1155, erc1155MinTier, 'erc1155')}}>
           Check
@@ -183,8 +184,8 @@
     </div>
     {#if error}
       <div class="error">
-        {error}
-        <!--        This address can not send or receive tokens. Tokens held by this address can be confiscated by the confiscator-->
+        <!--{error}-->
+                This address can not send or receive tokens. Tokens held by this address can be confiscated by the confiscator
       </div>
     {/if}
   </div>
@@ -210,7 +211,7 @@
         text-align: left;
         width: 100%;
         border-radius: 10px;
-        padding: 34px 71px
+        padding: 20px 60px
     }
 
     .tier {
@@ -219,26 +220,31 @@
     }
 
     .erc20 {
-        margin-bottom: 35px;
+        margin-bottom: 15px;
     }
 
     .min-tier {
-        width: 80px;
+        width: 74px;
+        margin-left: 31px;
     }
 
     .contract {
         white-space: nowrap;
-        width: 215px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .address-container {
         justify-content: space-between;
         min-height: 36px;
+        margin-left: 10px;
     }
 
     .address {
-        width: 258px;
-        margin-right: 20px;
+        width: 100%;
+        margin-left: 12px;
     }
 
     .label {

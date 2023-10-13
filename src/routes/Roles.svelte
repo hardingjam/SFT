@@ -226,6 +226,7 @@
         font-style: normal;
         font-size: 16px;
         line-height: 27px;
+        color: #575757;
     }
 
     .role-list {

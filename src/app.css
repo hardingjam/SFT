@@ -76,17 +76,17 @@ body {
 }
 
 .btn-solid:disabled {
-    background: #FFFFFF;
-    border: 1px solid #B7B7B7;
-    color: #B7B7B7;
+    background: #D2D2D2;
+    color: #AAAAAA;
 }
 
 .btn-solid:disabled:hover {
+    background: #D2D2D2;
     cursor: default;
 }
 
 .btn-solid:disabled:active {
-    background: #B7B7B7;
+    background: #D2D2D2;
     box-shadow: none;
 }
 
@@ -253,18 +253,17 @@ li {
 }
 
 .default-btn:disabled {
-    border: 1px solid #B7B7B7;
-    color: #B7B7B7;
-    background-color: #FFffff;
+    color: #AAAAAA;
+    background-color: #D2D2D2;
 }
 
 .default-btn:disabled:hover {
-    background: none;
+    background: #D2D2D2;
     cursor: default;
 }
 
 .default-btn:disabled:active {
-    background: none;
+    background: #D2D2D2;
     box-shadow: none;
 }
 

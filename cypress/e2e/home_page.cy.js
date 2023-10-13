@@ -82,7 +82,6 @@ describe('The Home Page', () => {
         cy.get(`.path-`).click();
         cy.url().should('include', '/#')
         cy.get('.tokens').should('exist');
-
     });
     it('Sets token image as logo', () => {
         cy.get(`#token-name-Jefo`).click();

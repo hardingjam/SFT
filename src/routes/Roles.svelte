@@ -132,12 +132,12 @@
           </td>
         </tr>
         <tr>
-          <td><label class="f-weight-700">Address:</label></td>
+          <td class="address"><label class="f-weight-700">Address:</label></td>
           <td><input type="text" class="default-input"
                      bind:value={account}></td>
         </tr>
       </table>
-      <button class="default-btn" on:click={grantRole} disabled={!!error || !account || !roleName}>Enter</button>
+      <button class="default-btn enter" on:click={grantRole} disabled={!!error || !account || !roleName}>Enter</button>
     </div>
     <div class="warning error">Important - Deleting or adding is permanent on the blockchain. If all role admins are
       removed then it will be unrecoverable.
@@ -156,7 +156,7 @@
                 <span class="title f-weight-700">{role.roleName}</span>
               </td>
             </tr>
-            <tr>
+            <tr class="flex justify-between">
               <td>
                 <Role name={role.roleName}
                       roleHolders={$roles?.find(r=>r.roleName===role.roleName)?.roleHolders} admin={false}></Role>
@@ -180,7 +180,7 @@
     .roles-container {
         border-radius: 10px;
         background: #FFF;
-        min-width: 690px;
+        width: 690px;
     }
 
     .card-header {
@@ -198,9 +198,13 @@
 
     .roles {
         text-align: left;
-        width: 650px;
+        width: 100%;
         border-radius: 10px;
         padding: 34px 71px
+    }
+
+    .address {
+        width: 70px;
     }
 
     .roles-data {
@@ -236,9 +240,12 @@
 
     table {
         width: 100%;
+        border: none;
+        border-collapse: collapse;
     }
 
     td {
+        margin-bottom: 6px;
         vertical-align: top;
     }
 
@@ -251,6 +258,12 @@
 
     .default-input {
         padding-left: 13px;
+        width: 100%;
+    }
+
+    .enter {
+        margin-left: 71px;
+        width: 87px;
     }
 
     .plus {

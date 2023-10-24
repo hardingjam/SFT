@@ -13,6 +13,10 @@ describe('Members page', () => {
         cy.get(`.path-members`).click();
         cy.url().should('include', '/#members')
     });
+    it('Should check page title exists', () => {
+        cy.get(`.path-members`).click();
+        cy.get(`#members`).should('exist')
+    });
     it('Update tier button should exist', () => {
         cy.get(`.path-members`).click();
         cy.get(`.update-tier-erc20`).should('exist')

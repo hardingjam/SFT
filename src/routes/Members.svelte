@@ -44,10 +44,14 @@
                 let report = await tierContract.report(account.trim(), [])
                 report = tierReport(report)
                 showCheck[erc] = true
-                isAddressValid[erc] = report[minTier - 1] === 0
+                if (minTier === '0') {
+                    isAddressValid[erc] = report[0] === 0
+                } else {
+                    isAddressValid[erc] = report[minTier - 1] === 0
+                }
             } catch (e) {
                 error = "Something went wrong"
-                console.log(e.message)
+                console.log(e)
             }
         }
     }
@@ -132,7 +136,8 @@
           {#if ($accountRoles.ERC20TIERER)}
             <input type="text" class="default-input min-tier " bind:value={erc20MinTier}>
             <div class="assign-tier">
-              <button class="default-btn update-tier-erc20" on:click={()=>{assignTierErc20()}}>Update tier contract</button>
+              <button class="default-btn update-tier-erc20" on:click={()=>{assignTierErc20()}}>Update tier contract
+              </button>
             </div>
           {:else}
             <input type="text" class="min-tier bg-white" value="{erc20MinTier}" disabled>
@@ -176,7 +181,9 @@
           {#if ($accountRoles.ERC1155TIERER)}
             <input type="text" class="default-input min-tier " bind:value={erc1155MinTier}>
             <div class="assign-tier">
-              <button class="default-btn update-tier-erc1155" on:click={()=>{assignTierErc1155()}}>Update tier contract</button>
+              <button class="default-btn update-tier-erc1155" on:click={()=>{assignTierErc1155()}}>Update tier
+                contract
+              </button>
             </div>
           {:else}
             <input type="text" class="min-tier bg-white" value="{erc1155MinTier}" disabled>

@@ -132,7 +132,7 @@
           {#if ($accountRoles.ERC20TIERER)}
             <input type="text" class="default-input min-tier " bind:value={erc20MinTier}>
             <div class="assign-tier">
-              <button class="default-btn" on:click={()=>{assignTierErc20()}}>Update tier contract</button>
+              <button class="default-btn update-tier-erc20" on:click={()=>{assignTierErc20()}}>Update tier contract</button>
             </div>
           {:else}
             <input type="text" class="min-tier bg-white" value="{erc20MinTier}" disabled>
@@ -151,7 +151,7 @@
         {/if}
       </div>
       <div class="flex items-center justify-end w-full">
-        <button class="default-btn "
+        <button class="default-btn"
                 on:click={()=>{checkAddress(erc20TierContract,addressErc20, erc20MinTier, 'erc20')}}>
           Check
         </button>
@@ -176,7 +176,7 @@
           {#if ($accountRoles.ERC1155TIERER)}
             <input type="text" class="default-input min-tier " bind:value={erc1155MinTier}>
             <div class="assign-tier">
-              <button class="default-btn" on:click={()=>{assignTierErc1155()}}>Update tier contract</button>
+              <button class="default-btn update-tier-erc1155" on:click={()=>{assignTierErc1155()}}>Update tier contract</button>
             </div>
           {:else}
             <input type="text" class="min-tier bg-white" value="{erc1155MinTier}" disabled>

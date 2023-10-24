@@ -33,6 +33,7 @@ import sft_create from '../assets/icons/sft_create.svg'
 import ipfs from '../assets/icons/ipfs.svg'
 import ipfs_white from '../assets/icons/ipfs_white.svg'
 import roles_icon from '../assets/icons/roles_icon.svg'
+import members_icon from '../assets/icons/members_icon.svg'
 import search_icon from '../assets/icons/search_icon.svg'
 
 export const icons = {
@@ -71,5 +72,6 @@ export const icons = {
     ipfs,
     ipfs_white,
     roles_icon,
-    search_icon
+    search_icon,
+    members_icon
 }

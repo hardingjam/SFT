@@ -35,6 +35,8 @@ import ipfs_white from '../assets/icons/ipfs_white.svg'
 import roles_icon from '../assets/icons/roles_icon.svg'
 import members_icon from '../assets/icons/members_icon.svg'
 import search_icon from '../assets/icons/search_icon.svg'
+import sft_logo_white from '../assets/icons/sft_logo_white.svg'
+import globe from '../assets/icons/globe.png'
 
 export const icons = {
     ethereum,
@@ -73,5 +75,7 @@ export const icons = {
     ipfs_white,
     roles_icon,
     search_icon,
-    members_icon
+    members_icon,
+    sft_logo_white,
+    globe
 }

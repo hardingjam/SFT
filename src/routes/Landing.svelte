@@ -1,0 +1,188 @@
+<script>
+    import {icons} from '../scripts/assets.js';
+</script>
+
+<div class="landing-container">
+  <div class="landing-head">
+    <img src="{icons.sft_logo_white}" alt="sft">
+    <button class="launch-button">Launch app</button>
+  </div>
+
+  <div class="globe-container">
+    <div class="text">
+
+      <div class="title">Create, review, and share tokens backed by real world assets.</div>
+      <div class="info">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <line x1="16" y1="1" x2="-8.74228e-08" y2="0.999999" stroke="white" stroke-width="2"/>
+          <line x1="1" y1="4.37114e-08" x2="0.999999" y2="16" stroke="white" stroke-width="2"/>
+        </svg>
+        Join our transparent, decentralised, programmatic, Semi Fungible Token system.
+      </div>
+      <button class="launch-button">Launch app</button>
+
+    </div>
+    <div class="globe">
+      <img src="{icons.globe}" alt="globe"/>
+    </div>
+  </div>
+
+  <div class="poems">
+    <div class="minis">
+      <div class="mini mini-first">
+        From a consumer POV: This is a place to check the trustworthiness of a token.
+      </div>
+      <div class="mini mini-second">For a token creator’s POV: This is a place to create, regulate and promote your
+        token.
+      </div>
+    </div>
+
+    <div class="large">
+      <span>
+        Every mint has both a standard ERC20 token that can be traded and held but also an NFT receipt that records the
+        offchain asset that backs it permanently on the blockchain.
+      </span>
+      <span>
+        All mints and burns for every token are visible in the SFT website.
+      </span>
+      <span>
+          Assets must be regularly audited or the entire token freezes.
+      </span>
+      <span>
+        Asset issuers compete to be the most transparent and liquid by presenting their token on the
+        website with links to documentation.
+      </span>
+    </div>
+  </div>
+</div>
+
+<style>
+    .landing-container {
+        background: radial-gradient(100% 100% at 39.16% 30.23%, #72A4F0 0%, rgba(92, 117, 185, 0.61) 53.56%, rgba(58, 43, 99, 0.00) 100%);;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .landing-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding-top: 25px;
+        padding-left: 100px;
+        padding-right: 40px;
+
+    }
+
+    .launch-button {
+        border-radius: 30px;
+        background: #2C2C54;
+        color: #FFFFFF;
+        font-family: 'Mukta', sans-serif;
+        font-size: 25px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        padding: 5px 40px;
+        width: fit-content;
+    }
+
+    .globe-container {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .text {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        padding-left: 170px;
+        align-items: flex-start;
+        text-align: left;
+        padding-top: 100px;
+    }
+
+    .text .title {
+        color: #FFF;
+        font-family: 'Inter', sans-serif;
+        font-size: 45px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+
+    .text .info {
+        color: #FFF;
+        font-family: 'Inter', sans-serif;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        position: relative;
+    }
+
+    .text .info svg {
+        position: absolute;
+        top: -8px;
+        left: -16px
+    }
+
+    .globe {
+        width: 50%;
+    }
+
+    .poems {
+        margin-right: 200px;
+        margin-left: 200px;
+        width: calc(100% - 400px);
+        margin-top: 250px;
+    }
+
+    .minis {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .poems .mini {
+        color: #575757;
+        text-align: center;
+        font-family: 'Manrope', sans-serif;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 40px; /* 133.333% */
+    }
+
+    .poems .mini.mini-first {
+        width: 360px;
+
+    }
+
+    .poems .mini.mini-second {
+        width: 297px;
+        align-self: flex-end;
+        margin-top: -85px;
+    }
+
+    .poems .large {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 50px;
+        padding-bottom: 120px;
+        margin-top: 120px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 523px;
+        color: #575757;
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 40px; /* 133.333% */
+    }
+</style>

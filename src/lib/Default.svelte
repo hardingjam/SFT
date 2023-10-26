@@ -64,9 +64,11 @@
     import ChangeComparison from '../routes/ChangeComparison.svelte';
     import AddressOverview from '../routes/AddressOverview.svelte';
     import {mock} from '../test/mock.js';
+    import Landing from '../routes/Landing.svelte';
 
     let connectedAccount;
     export let url = "";
+    let landing = true;
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined";
 
@@ -424,109 +426,116 @@
 </script>
 <Router url={url}>
 
-  <div class={$account || $isCypress? "content" : "content-not-connected"}>
-    <Header on:select={handleNetworkSelect} {location}></Header>
-    <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
-      <a href="/">
-        {#if !$activeToken.icon}
-          <img src={icons.logo} alt=""
-               class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
-        {:else}
-          <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
-               class="rounded-full w-full h-full token-logo"/>
-        {/if}
-      </a>
-    </div>
-    <div class="{ $account ? 'block' : 'hide'}">
-      <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
+  {#if landing}
+    <Landing></Landing>
+  {:else }
 
-      <div class={$sftInfo ? "sft-info-opened mt-61" : "mt-61" }>
-        <div class="{$activeNetwork  ? 'show' : 'hide'}">
-          <Route path="#" component={Home}/>
-          <Route path="#asset-register" component={AssetRegister}/>
-          <Route path="#asset-history/:id" component={AssetHistory}/>
-          <Route path="#audit-history" component={AuditHistory}/>
-          <Route path="#token-overview/:address" component={TokenOverview}/>
-          <Route path="#change-comparison" component={ChangeComparison}/>
-          <Route path="#address-overview/:address" component={AddressOverview}/>
-        </div>
+    <div class={$account || $isCypress? "content" : "content-not-connected"}>
+      <Header on:select={handleNetworkSelect} {location}></Header>
+      <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
+        <a href="/">
+          {#if !$activeToken.icon}
+            <img src={icons.logo} alt=""
+                 class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
+          {:else}
+            <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
+                 class="rounded-full w-full h-full token-logo"/>
+          {/if}
+        </a>
       </div>
-      <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
-        <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">
+      <div class="{ $account ? 'block' : 'hide'}">
+        <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
 
-          <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
-          <Route path="#roles" component={Roles}/>
-          <Route path="#list" component={Tokens}/>
-          <Route path="#members" component={Members}/>
-          <!--          <Route path="#set-vault" component={SetVault}/>-->
-          <Route path="#asset-classes" component={AssetClasses}/>
-          <Route path="#new-asset-class" component={NewSchema}/>
-          <Route path="#asset-information/:id/:id" component={AssetInformation}/>
-          <Route path="#sft-create-success" component={SftCreateSuccess}/>
-          <Route path="#ipfs" component={Ipfs}/>
-          <Route path="#manual" component={Manual}/>
-          <Route path="#new-revision/:id" component={NewRevision}/>
-          <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
-            <div class="tab-buttons">
-              <button class:selected="{selectedTab === '#mint'}" class="tab-button"
-                      on:click="{() =>  changeUrl('#mint')}">
-                Mint
-              </button>
-              <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
-                      class="redeem-tab tab-button"
-                      on:click="{() =>  changeUrl('#redeem')}">
-                Redeem
-              </button>
-            </div>
-
-            <div class="tab-panel-container">
-              <Route path="#mint" component={Mint} ethersData={$ethersData}/>
-              <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
-            </div>
+        <div class={$sftInfo ? "sft-info-opened mt-61" : "mt-61" }>
+          <div class="{$activeNetwork  ? 'show' : 'hide'}">
+            <Route path="#" component={Home}/>
+            <Route path="#asset-register" component={AssetRegister}/>
+            <Route path="#asset-history/:id" component={AssetHistory}/>
+            <Route path="#audit-history" component={AuditHistory}/>
+            <Route path="#token-overview/:address" component={TokenOverview}/>
+            <Route path="#change-comparison" component={ChangeComparison}/>
+            <Route path="#address-overview/:address" component={AddressOverview}/>
           </div>
         </div>
-        <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
-          <label>Choose a supported network from the list above</label>
+        <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
+          <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">
+
+            <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
+            <Route path="#roles" component={Roles}/>
+            <Route path="#list" component={Tokens}/>
+            <Route path="#members" component={Members}/>
+            <!--          <Route path="#set-vault" component={SetVault}/>-->
+            <Route path="#asset-classes" component={AssetClasses}/>
+            <Route path="#new-asset-class" component={NewSchema}/>
+            <Route path="#asset-information/:id/:id" component={AssetInformation}/>
+            <Route path="#sft-create-success" component={SftCreateSuccess}/>
+            <Route path="#ipfs" component={Ipfs}/>
+            <Route path="#manual" component={Manual}/>
+            <Route path="#new-revision/:id" component={NewRevision}/>
+            <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
+              <div class="tab-buttons">
+                <button class:selected="{selectedTab === '#mint'}" class="tab-button"
+                        on:click="{() =>  changeUrl('#mint')}">
+                  Mint
+                </button>
+                <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
+                        class="redeem-tab tab-button"
+                        on:click="{() =>  changeUrl('#redeem')}">
+                  Redeem
+                </button>
+              </div>
+
+              <div class="tab-panel-container">
+                <Route path="#mint" component={Mint} ethersData={$ethersData}/>
+                <Route path="#redeem" component={Redeem} ethersData={$ethersData}/>
+              </div>
+            </div>
+          </div>
+          <div class={!$activeNetwork  ? 'invalid-network show' : 'invalid-network hide'}>
+            <label>Choose a supported network from the list above</label>
+          </div>
         </div>
       </div>
+      {#if !$account }
+        <div>
+          <div class="invalid-network f-weight-700">
+            <label>To use the app:</label>
+            <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
+              {#if isMetamaskInstalled}
+                <span>Connect Metamask</span>
+              {/if}
+              {#if !isMetamaskInstalled}
+                <span>Install Metamask</span>
+              {/if}
+            </button>
+          </div>
+        </div>
+      {/if}
     </div>
-    {#if !$account }
-      <div>
-        <div class="invalid-network f-weight-700">
-          <label>To use the app:</label>
-          <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
-            {#if isMetamaskInstalled}
-              <span>Connect Metamask</span>
-            {/if}
-            {#if !isMetamaskInstalled}
-              <span>Install Metamask</span>
-            {/if}
-          </button>
-        </div>
+
+    <div class="footer w-full p-2 mt-5 {$account ? 'bg-white' :'' }">
+      <div class="powered-by">
+        <span>Powered by</span>
+        <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>
+        <span>and Rain</span>
+        <div><a href="https://www.rainprotocol.xyz/" target="_blank"><img src={icons.rain} alt="Rain"/></a></div>
       </div>
+
+    </div>
+    {#if $transactionInProgressShow}
+      <div class="blur"></div>
     {/if}
-  </div>
-
-  <div class="footer w-full p-2 mt-5 {$account ? 'bg-white' :'' }">
-    <div class="powered-by">
-      <span>Powered by</span>
-      <div><a href="https://www.gildlab.xyz/" target="_blank"><img src={icons.gild_lab} alt="Gild Lab"/></a></div>
-      <span>and Rain</span>
-      <div><a href="https://www.rainprotocol.xyz/" target="_blank"><img src={icons.rain} alt="Rain"/></a></div>
-    </div>
-
-  </div>
-  {#if $transactionInProgressShow}
-    <div class="blur"></div>
+    <TransactionInProgressBanner topText={$promptTopText}
+                                 bottomText={$promptBottomText}
+                                 transactionHash={$transactionHash}
+                                 noBottomText={$promptNoBottom}
+                                 errorText={$promptErrorText}
+                                 successText={$promptSuccessText}
+                                 on:close={$promptCloseAction}/>
+    <SFTCreateSuccessBanner/>
   {/if}
-  <TransactionInProgressBanner topText={$promptTopText}
-                               bottomText={$promptBottomText}
-                               transactionHash={$transactionHash}
-                               noBottomText={$promptNoBottom}
-                               errorText={$promptErrorText}
-                               successText={$promptSuccessText}
-                               on:close={$promptCloseAction}/>
-  <SFTCreateSuccessBanner/>
+
+
 </Router>
 
 

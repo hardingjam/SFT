@@ -44,6 +44,13 @@
   </div>
 
   <div class="poems">
+    <div class="poem-gradient1">
+
+    </div>
+    <div class="poem-gradient2">
+
+    </div>
+
     <div class="minis">
       <div class="mini mini-first">
         From a consumer POV: This is a place to check the trustworthiness of a token.
@@ -74,15 +81,17 @@
 
 <style>
     .landing-container {
-        background: radial-gradient(100% 100% at 39.16% 30.23%, #72A4F0 0%, rgba(92, 117, 185, 0.61) 53.56%, rgba(58, 43, 99, 0.00) 100%);;
+        background: #B5DCFF;
         margin-left: auto;
         margin-right: auto;
-        z-index: 1;
+        overflow: hidden;
+
     }
 
     .landing-head {
-        background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 93.27%);
+        background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
         position: relative;
+        z-index: 1;
     }
 
     .head-gradient {
@@ -168,6 +177,30 @@
         margin-left: 200px;
         width: calc(100% - 400px);
         margin-top: 250px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .poem-gradient1 {
+        position: absolute;
+        width: calc(100% + 400px);
+        height: 1011px;
+        border-radius: 2129px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+        top: -250px;
+        z-index: -1;
+        left: calc(-33% - 200px);
+    }
+
+    .poem-gradient2 {
+        position: absolute;
+        width: calc(100% + 400px);
+        height: 1378px;
+        border-radius: 1576px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+        top: -250px;
+        z-index: -1;
+        left: 50%;
     }
 
     .minis {

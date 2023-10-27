@@ -59,22 +59,31 @@
         token.
       </div>
     </div>
+    <div class="large-container">
+      <div class="poem-gradient3">
 
-    <div class="large">
-      <span>
+      </div>
+      <div class="poem-gradient4">
+
+      </div>
+      <div class="large">
+
+    <span>
         Every mint has both a standard ERC20 token that can be traded and held but also an NFT receipt that records the
         offchain asset that backs it permanently on the blockchain.
       </span>
-      <span>
+        <span>
         All mints and burns for every token are visible in the SFT website.
       </span>
-      <span>
+        <span>
           Assets must be regularly audited or the entire token freezes.
       </span>
-      <span>
+        <span>
         Asset issuers compete to be the most transparent and liquid by presenting their token on the
         website with links to documentation.
       </span>
+      </div>
+
     </div>
   </div>
 </div>
@@ -246,5 +255,34 @@
         font-style: normal;
         font-weight: 700;
         line-height: 40px; /* 133.333% */
+    }
+
+    .large-container {
+        position: relative;
+        z-index: 1;
+        width: calc(100% + 400px);
+        margin-left: -200px;
+    }
+
+    .poem-gradient3 {
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        right: -50px;
+        width: 2396px;
+        height: 1252px;
+        border-radius: 2396px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #BFCDFF 0%, rgba(217, 221, 255, 0.92) 53.13%, rgba(233, 233, 233, 0.00) 100%);
+    }
+
+    .poem-gradient4 {
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 1576px;
+        height: 1378px;
+        border-radius: 1576px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
     }
 </style>

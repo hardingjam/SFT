@@ -66,6 +66,9 @@
       <div class="poem-gradient4">
 
       </div>
+      <div class="poem-gradient5">
+
+      </div>
       <div class="large">
 
     <span>
@@ -84,6 +87,11 @@
       </span>
       </div>
 
+    </div>
+
+    <div class="cut-out">
+      <span>Cut out scams, only see tokens that are liked by people you follow</span>
+      <div class="read-more-button">Read more</div>
     </div>
   </div>
 </div>
@@ -257,6 +265,36 @@
         line-height: 40px; /* 133.333% */
     }
 
+    .poems .cut-out {
+        float: right;
+        width: 300px;
+        color: #707070;
+        text-align: center;
+        font-family: 'Mukta Mahee', sans-serif;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 40px; /* 133.333% */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+        gap: 40px;
+    }
+
+    .read-more-button {
+        border-radius: 15px;
+        background: linear-gradient(180deg, #6F5EA1 33.06%, #B5DCFF 129.84%);
+        color: var(--text-secondary, #FFF);
+        font-family: 'Mukta Mahee', sans-serif;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        padding: 5px 30px
+    }
+
     .large-container {
         position: relative;
         z-index: 1;
@@ -276,7 +314,7 @@
     }
 
     .poem-gradient4 {
-        z-index: -1;
+        z-index: -2;
         position: absolute;
         top: 0;
         left: 50%;
@@ -284,5 +322,16 @@
         height: 1378px;
         border-radius: 1576px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+    }
+
+    .poem-gradient5 {
+        z-index: -2;
+        position: absolute;
+        top: 50%;
+        left: 65%;
+        width: 1576px;
+        height: 1378px;
+        border-radius: 1576px;
+        background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
     }
 </style>

@@ -4,26 +4,42 @@
 
 <div class="landing-container">
   <div class="landing-head">
-    <img src="{icons.sft_logo_white}" alt="sft">
-    <button class="launch-button">Launch app</button>
-  </div>
-
-  <div class="globe-container">
-    <div class="text">
-
-      <div class="title">Create, review, and share tokens backed by real world assets.</div>
-      <div class="info">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <line x1="16" y1="1" x2="-8.74228e-08" y2="0.999999" stroke="white" stroke-width="2"/>
-          <line x1="1" y1="4.37114e-08" x2="0.999999" y2="16" stroke="white" stroke-width="2"/>
-        </svg>
-        Join our transparent, decentralised, programmatic, Semi Fungible Token system.
-      </div>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1016" viewBox="0 0 1440 1016" fill="none"
+         class="head-gradient">
+      <path
+        d="M2371 172C2371 638.128 1581.01 1016 606.5 1016C-368.006 1016 -1158 638.128 -1158 172C-1158 -294.128 -368.006 -672 606.5 -672C1581.01 -672 2371 -294.128 2371 172Z"
+        fill="url(#paint0_radial_6596_11952)"/>
+      <defs>
+        <radialGradient id="paint0_radial_6596_11952" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+                        gradientTransform="translate(224.085 121.721) rotate(-158.213) scale(915.355 591.723)">
+          <stop stop-color="#72A4F0"/>
+          <stop offset="0.535632" stop-color="#5C75B9" stop-opacity="0.606986"/>
+          <stop offset="1" stop-color="#3A2B63" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+    </svg>
+    <div class="landing-logo">
+      <img src="{icons.sft_logo_white}" alt="sft">
       <button class="launch-button">Launch app</button>
-
     </div>
-    <div class="globe">
-      <img src="{icons.globe}" alt="globe"/>
+
+    <div class="globe-container">
+      <div class="text">
+
+        <div class="title">Create, review, and share tokens backed by real world assets.</div>
+        <div class="info">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <line x1="16" y1="1" x2="-8.74228e-08" y2="0.999999" stroke="white" stroke-width="2"/>
+            <line x1="1" y1="4.37114e-08" x2="0.999999" y2="16" stroke="white" stroke-width="2"/>
+          </svg>
+          Join our transparent, decentralised, programmatic, Semi Fungible Token system.
+        </div>
+        <button class="launch-button">Launch app</button>
+
+      </div>
+      <div class="globe">
+        <img src="{icons.globe}" alt="globe"/>
+      </div>
     </div>
   </div>
 
@@ -61,9 +77,22 @@
         background: radial-gradient(100% 100% at 39.16% 30.23%, #72A4F0 0%, rgba(92, 117, 185, 0.61) 53.56%, rgba(58, 43, 99, 0.00) 100%);;
         margin-left: auto;
         margin-right: auto;
+        z-index: 1;
     }
 
     .landing-head {
+        background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 93.27%);
+        position: relative;
+    }
+
+    .head-gradient {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: -1;
+    }
+
+    .landing-logo {
         display: flex;
         align-items: center;
         justify-content: space-between;

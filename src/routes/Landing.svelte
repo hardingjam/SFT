@@ -51,14 +51,6 @@
 
     </div>
 
-    <div class="minis">
-      <div class="mini mini-first">
-        From a consumer POV: This is a place to check the trustworthiness of a token.
-      </div>
-      <div class="mini mini-second">For a token creator’s POV: This is a place to create, regulate and promote your
-        token.
-      </div>
-    </div>
     <div class="large-container">
       <div class="poem-gradient3">
 
@@ -69,30 +61,14 @@
       <div class="poem-gradient5">
 
       </div>
-      <div class="large">
+      <div class="poem-gradient6">
 
-    <span>
-        Every mint has both a standard ERC20 token that can be traded and held but also an NFT receipt that records the
-        offchain asset that backs it permanently on the blockchain.
-      </span>
-        <span>
-        All mints and burns for every token are visible in the SFT website.
-      </span>
-        <span>
-          Assets must be regularly audited or the entire token freezes.
-      </span>
-        <span>
-        Asset issuers compete to be the most transparent and liquid by presenting their token on the
-        website with links to documentation.
-      </span>
+      </div>
+      <div class="large">
       </div>
 
     </div>
 
-    <div class="cut-out">
-      <span>Cut out scams, only see tokens that are liked by people you follow</span>
-      <div class="read-more-button">Read more</div>
-    </div>
   </div>
 </div>
 
@@ -190,9 +166,7 @@
     }
 
     .poems {
-        margin-right: 200px;
-        margin-left: 200px;
-        width: calc(100% - 400px);
+        width: 100%;
         margin-top: 250px;
         position: relative;
         z-index: 1;
@@ -327,8 +301,18 @@
     .poem-gradient5 {
         z-index: -2;
         position: absolute;
-        top: 50%;
-        left: 65%;
+        top: 0;
+        left: 50%;
+        width: 1576px;
+        height: 1378px;
+        border-radius: 1576px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+    }
+
+    .poem-gradient6 {
+        z-index: -2;
+        position: absolute;
+        left: -20%;
         width: 1576px;
         height: 1378px;
         border-radius: 1576px;

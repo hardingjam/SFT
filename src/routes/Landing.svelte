@@ -194,32 +194,6 @@
         left: 50%;
     }
 
-    .minis {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .poems .mini {
-        color: #575757;
-        text-align: center;
-        font-family: 'Manrope', sans-serif;
-        font-size: 30px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 40px; /* 133.333% */
-    }
-
-    .poems .mini.mini-first {
-        width: 360px;
-
-    }
-
-    .poems .mini.mini-second {
-        width: 297px;
-        align-self: flex-end;
-        margin-top: -85px;
-    }
-
     .poems .large {
         display: flex;
         align-items: center;
@@ -237,24 +211,6 @@
         font-style: normal;
         font-weight: 700;
         line-height: 40px; /* 133.333% */
-    }
-
-    .poems .cut-out {
-        float: right;
-        width: 300px;
-        color: #707070;
-        text-align: center;
-        font-family: 'Mukta Mahee', sans-serif;
-        font-size: 30px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 40px; /* 133.333% */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        z-index: 1;
-        gap: 40px;
     }
 
     .read-more-button {

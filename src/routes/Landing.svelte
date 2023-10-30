@@ -164,18 +164,7 @@
     <button class="launch-button">Watch videos</button>
 
   </div>
-  <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="264" viewBox="0 0 1440 264" fill="none" class="wave">
-    <path
-      d="M0 53.4994C120 45.6987 268 -10.0107 508 2.33408C748 14.2245 1114.5 216.999 1440 74.9994V166.704V263.645H1320C1200 263.645 960 263.645 720 263.645C480 263.645 240 263.645 120 263.645H0V53.4994Z"
-      fill="url(#paint0_radial_6709_12254)"/>
-    <defs>
-      <radialGradient id="paint0_radial_6709_12254" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
-                      gradientTransform="translate(558.999 39.0687) rotate(7.61729) scale(788.458 3395.79)">
-        <stop stop-color="#73A2EF"/>
-        <stop offset="1" stop-color="#7FB8FB"/>
-      </radialGradient>
-    </defs>
-  </svg>
+  <img src={icons.wave} alt="wave" class="wave">
 </div>
 
 <style>
@@ -587,5 +576,6 @@
 
     .wave {
         margin-top: 180px;
+        width: 100%;
     }
 </style>

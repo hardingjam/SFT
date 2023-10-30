@@ -40,6 +40,7 @@ import globe from '../assets/icons/globe.png'
 import investor from '../assets/icons/investor.png'
 import lock from '../assets/icons/lock.svg'
 import microphone from '../assets/icons/microphone.svg'
+import wave from '../assets/icons/wave.png'
 
 export const icons = {
     ethereum,
@@ -83,5 +84,6 @@ export const icons = {
     globe,
     investor,
     lock,
-    microphone
+    microphone,
+    wave
 }

@@ -104,8 +104,78 @@
     <div class="poem-gradient4"></div>
     <div class="poem-gradient5"></div>
     <div class="poem-gradient6"></div>
-    <div class="large"></div>
+    <div class="transparency">
+      <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none" class="eye">
+        <path
+          d="M28.5642 22.0001C28.5642 25.6301 25.6308 28.5634 22.0008 28.5634C18.3708 28.5634 15.4375 25.6301 15.4375 22.0001C15.4375 18.3701 18.3708 15.4368 22.0008 15.4368C25.6308 15.4368 28.5642 18.3701 28.5642 22.0001Z"
+          stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path
+          d="M22.0017 37.1617C28.4733 37.1617 34.505 33.3484 38.7033 26.7484C40.3533 24.1634 40.3533 19.8184 38.7033 17.2334C34.505 10.6334 28.4733 6.82007 22.0017 6.82007C15.53 6.82007 9.49833 10.6334 5.3 17.2334C3.65 19.8184 3.65 24.1634 5.3 26.7484C9.49833 33.3484 15.53 37.1617 22.0017 37.1617Z"
+          stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      100% <span>transparency</span>
+      - facts checked by auditors
+      <br>(eg KPMG, Deloitte)
+    </div>
+
+    <div class="setting-up">
+      <label>Setting up a new token as easy as:</label>
+    </div>
+
+    <div class="groups-line"></div>
+    <div class="setting-up-flow">
+      <div class="flow">
+        <div class="icon color-1">1.</div>
+        <div class="flow-text">
+          <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 0 37 38" fill="none">
+            <path
+              d="M19.7812 24.6559H25.55M25.55 24.6559H31.1641M25.55 24.6559L25.5616 18.907M25.55 24.6559L25.5835 30.326"
+              stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M31.6257 19.2665C31.6257 18.139 31.4828 17.045 31.2159 16.0007C29.7617 10.3326 24.6157 6.13916 18.4984 6.13916C11.2536 6.13916 5.37109 12.0217 5.37109 19.2665C5.37109 26.5113 11.2536 32.3938 18.4984 32.3938C19.2919 32.3938 20.0679 32.3238 20.8219 32.1881"
+              stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Setup new SFT</span>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="icon color-2">2.</div>
+        <div class="flow-text">
+          <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 0 37 38" fill="none">
+            <path
+              d="M6.16797 31.2161V29.6745C6.16797 25.4173 9.61911 21.9661 13.8763 21.9661H19.6576M27.0352 21.9114V27.362M27.0352 27.362V32.8126M27.0352 27.362H32.4858M27.0352 27.362H21.5846M23.1263 11.1745C23.1263 14.5802 20.3654 17.3411 16.9596 17.3411C13.5539 17.3411 10.793 14.5802 10.793 11.1745C10.793 7.76872 13.5539 5.00781 16.9596 5.00781C20.3654 5.00781 23.1263 7.76872 23.1263 11.1745Z"
+              stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>SFT roles</span>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="icon color-3">3.</div>
+        <div class="flow-text">
+          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="51" viewBox="0 0 44 51" fill="none">
+            <path
+              d="M22.0013 33.7161L22.0013 25.3827M22.0013 17.0494L22.0013 25.3827M22.0013 25.3827L7.33464 25.3827M22.0013 25.3827L36.668 25.3827M7.33464 25.3827L11.918 30.5911M7.33464 25.3827L11.918 20.1744M36.668 25.3827L32.0846 20.1744M36.668 25.3827L32.0846 30.5911"
+              stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Mint/Redeem</span>
+        </div>
+      </div>
+    </div>
+    <button class="launch-button">Watch videos</button>
+
   </div>
+  <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="264" viewBox="0 0 1440 264" fill="none" class="wave">
+    <path
+      d="M0 53.4994C120 45.6987 268 -10.0107 508 2.33408C748 14.2245 1114.5 216.999 1440 74.9994V166.704V263.645H1320C1200 263.645 960 263.645 720 263.645C480 263.645 240 263.645 120 263.645H0V53.4994Z"
+      fill="url(#paint0_radial_6709_12254)"/>
+    <defs>
+      <radialGradient id="paint0_radial_6709_12254" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+                      gradientTransform="translate(558.999 39.0687) rotate(7.61729) scale(788.458 3395.79)">
+        <stop stop-color="#73A2EF"/>
+        <stop offset="1" stop-color="#7FB8FB"/>
+      </radialGradient>
+    </defs>
+  </svg>
 </div>
 
 <style>
@@ -209,7 +279,7 @@
     }
 
     .groups-line {
-        margin-top: 80px;
+        margin-top: 120px;
         width: 100%;
         height: 6px;
         background: linear-gradient(90deg, #674AA5 8.61%, #59C3FF 100%);
@@ -222,6 +292,7 @@
         gap: 41px;
         margin-left: 60px;
         margin-right: 60px;
+        margin-bottom: 165px;
     }
 
     .group {
@@ -273,20 +344,21 @@
         width: 55px;
         height: 55px;
     }
+
     .group .icon img.lock {
         scale: 0.75;
     }
 
-    .group .icon.color-1 {
+    .color-1 {
         background: #655DB4;
     }
 
-    .group .icon.color-2 {
+    .color-2 {
         background: #6180CD;
 
     }
 
-    .group .icon.color-3 {
+    .color-3 {
         background: #5E97DF;
     }
 
@@ -324,6 +396,90 @@
         width: 516px;
         height: 117px;
         flex-shrink: 0;
+    }
+
+    .transparency {
+        position: relative;
+        text-align: left;
+        border-radius: 0 10px 10px 0;
+        background: #705FA2;
+        padding: 40px 225px 40px 90px;
+        width: 45%;
+        color: #FFF;
+        font-family: 'Manrope', sans-serif;
+        font-size: 25px;
+        font-style: normal;
+        font-weight: 700;
+        margin-bottom: 224px;
+        line-height: 40px; /* 160% */
+        box-shadow: 0.3px 0.5px 0.7px hsla(244, 28%, 63%, 0.3),
+        1.4px 2.8px 3.9px -0.8px hsla(244, 28%, 63%, 0.4),
+        4.9px 9.7px 13.6px -1.6px hsla(244, 28%, 63%, 0.5);
+    }
+
+    .transparency .eye {
+        position: absolute;
+        right: 63px;
+        top: 40px
+    }
+
+    .transparency span {
+        color: #88E2FF;
+    }
+
+    .setting-up {
+        color: #575757;
+        text-align: center;
+        font-family: 'Mukta Mahee', sans-serif;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 40px; /* 133.333% */
+    }
+
+    .setting-up-flow {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        gap: 200px;
+        margin-bottom: 100px;
+    }
+
+    .flow {
+        position: relative;
+    }
+
+    .flow-text {
+        display: flex;
+        gap: 7px;
+        margin-top: 50px;
+        color: #575757;
+        text-align: center;
+        font-family: 'Mukta', sans-serif;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 40px; /* 133.333% */
+    }
+
+    .flow .icon {
+        top: -50%;
+        left: 50%;
+        position: absolute;
+        border-radius: 50%;
+        color: #FFF;
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        font-size: 37px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        transform: translate(-50%, 7px);
+        width: 55px;
+        height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .poem-gradient1 {
@@ -427,5 +583,9 @@
         height: 1378px;
         border-radius: 1576px;
         background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
+    }
+
+    .wave {
+        margin-top: 180px;
     }
 </style>

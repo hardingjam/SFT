@@ -52,6 +52,7 @@
 
     <div class="groups">
       <div class="group">
+        <div class="investor"><img src="{icons.investor}" alt="investor"/></div>
         <div class="group-title">Investors</div>
         <div class="group-info">
           Buy/ trade/ hold tokens based on individual research & info from curators.
@@ -61,6 +62,8 @@
         </div>
       </div>
       <div class="group">
+        <div class="icon color-1"><img src="{icons.microphone}" alt="investor"/></div>
+
         <div class="group-title">Curators</div>
         <div class="group-info">Research reputable tokens and issuers to help investors make decisions.
           <div class="mt-7"></div>
@@ -68,6 +71,8 @@
         </div>
       </div>
       <div class="group">
+        <div class="icon color-2"><img src="{icons.sft_create}" alt="investor"/></div>
+
         <div class="group-title">Issuers</div>
         <div class="group-info">Mint (create) the tokens.
           <div class="mt-7"></div>
@@ -79,6 +84,8 @@
         </div>
       </div>
       <div class="group">
+        <div class="icon color-3"><img src="{icons.lock}" alt="investor" class="lock"/></div>
+
         <div class="group-title">Auditors</div>
         <div class="group-info">Auditors check that all onchain data matches offchain reality.
           <div class="mt-7"></div>
@@ -218,11 +225,69 @@
     }
 
     .group {
+        position: relative;
         padding: 77px 50px;
         width: 25%;
         border-radius: 0 0 10px 10px;
         background: #FFF;
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        /* For low elevation */
+        /*box-shadow:*/
+        /*        0.3px 0.5px 0.7px hsla(244, 28%, 63%, 0.32),*/
+        /*        1px 1.9px 2.7px -1.6px hsla(244, 28%, 63%, 0.48);*/
+        /* --shadow-elevation-low */
+
+        /* For medium elevation */
+        box-shadow: 0.3px 0.5px 0.7px hsla(244, 28%, 63%, 0.3),
+        1.4px 2.8px 3.9px -0.8px hsla(244, 28%, 63%, 0.4),
+        4.9px 9.7px 13.6px -1.6px hsla(244, 28%, 63%, 0.5);
+        /* --shadow-elevation-medium */
+
+        /* For high elevation */
+        /* box-shadow:
+          0.3px 0.5px 0.7px hsla(244, 28%, 63%, 0.33),
+          2.8px 5.6px 7.8px -0.4px hsla(244, 28%, 63%, 0.4),
+          6.1px 12.2px 17.1px -0.8px hsla(244, 28%, 63%, 0.47),
+          12.2px 24.5px 34.3px -1.2px hsla(244, 28%, 63%, 0.54),
+          23.5px 47px 65.8px -1.6px hsla(244, 28%, 63%, 0.61); */
+        /* --shadow-elevation-high */
+    }
+
+    .group .investor {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+    }
+
+    .group .icon {
+        padding: 14px;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+    }
+
+    .group .icon img {
+        width: 55px;
+        height: 55px;
+    }
+    .group .icon img.lock {
+        scale: 0.75;
+    }
+
+    .group .icon.color-1 {
+        background: #655DB4;
+    }
+
+    .group .icon.color-2 {
+        background: #6180CD;
+
+    }
+
+    .group .icon.color-3 {
+        background: #5E97DF;
     }
 
     .group-title {

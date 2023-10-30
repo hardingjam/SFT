@@ -44,31 +44,60 @@
   </div>
 
   <div class="poems">
-    <div class="poem-gradient1">
 
+    <div class="poems-header">
+      SFT is an ecosystem of 4 groups:
     </div>
-    <div class="poem-gradient2">
+    <div class="groups-line"></div>
 
+    <div class="groups">
+      <div class="group">
+        <div class="group-title">Investors</div>
+        <div class="group-info">
+          Buy/ trade/ hold tokens based on individual research & info from curators.
+          <div class="mt-7"></div>
+          Organic liquidity for high quality
+          tokens is built.
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-title">Curators</div>
+        <div class="group-info">Research reputable tokens and issuers to help investors make decisions.
+          <div class="mt-7"></div>
+          Every recommendation is recorded permanently onchain so that investors can assess the quality of each curator.
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-title">Issuers</div>
+        <div class="group-info">Mint (create) the tokens.
+          <div class="mt-7"></div>
+
+          Real world assets associated with each token.
+          <div class="mt-7"></div>
+          Issuance is permissionless; it is up to each issuer to prove the
+          quality of their offering.
+        </div>
+      </div>
+      <div class="group">
+        <div class="group-title">Auditors</div>
+        <div class="group-info">Auditors check that all onchain data matches offchain reality.
+          <div class="mt-7"></div>
+          Appointed by the issuer,
+          high quality audits improve investor confidence to increase token liquidity.
+          <div class="mt-7"></div>
+          If an audit fails, the token
+          freezes (transfers are paused) until the problem is fixed.
+        </div>
+      </div>
     </div>
 
-    <div class="large-container">
-      <div class="poem-gradient3">
-
-      </div>
-      <div class="poem-gradient4">
-
-      </div>
-      <div class="poem-gradient5">
-
-      </div>
-      <div class="poem-gradient6">
-
-      </div>
-      <div class="large">
-      </div>
-
-    </div>
-
+    <div class="poem-gradient1"></div>
+    <div class="poem-gradient2"></div>
+    <div class="poem-gradient3"></div>
+    <div class="poem-gradient4"></div>
+    <div class="poem-gradient5"></div>
+    <div class="poem-gradient6"></div>
+    <div class="large"></div>
   </div>
 </div>
 
@@ -167,9 +196,69 @@
 
     .poems {
         width: 100%;
-        margin-top: 250px;
+        margin-top: 200px;
         position: relative;
         z-index: 1;
+    }
+
+    .groups-line {
+        margin-top: 80px;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(90deg, #674AA5 8.61%, #59C3FF 100%);
+    }
+
+    .groups {
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        gap: 41px;
+        margin-left: 60px;
+        margin-right: 60px;
+    }
+
+    .group {
+        padding: 77px 50px;
+        width: 25%;
+        border-radius: 0 0 10px 10px;
+        background: #FFF;
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    .group-title {
+        color: #575757;
+        text-align: center;
+        font-family: 'Manrope', sans-serif;
+        font-size: 25px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 40px; /* 160% */
+    }
+
+    .group-info {
+        color: #575757;
+        font-family: 'Manrope', sans-serif;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 40px;
+    }
+
+    .poems-header {
+        margin-left: 100px;
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        font-size: 45px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 40px; /* 88.889% */
+        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        width: 516px;
+        height: 117px;
+        flex-shrink: 0;
     }
 
     .poem-gradient1 {

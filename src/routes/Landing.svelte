@@ -32,7 +32,7 @@
             <line x1="16" y1="1" x2="-8.74228e-08" y2="0.999999" stroke="white" stroke-width="2"/>
             <line x1="1" y1="4.37114e-08" x2="0.999999" y2="16" stroke="white" stroke-width="2"/>
           </svg>
-          Join our transparent, decentralised, programmatic, Semi Fungible Token system.
+          Join our transparent, decentralised, programmatic, <span>Semi Fungible Token</span> system.
         </div>
         <button class="launch-button">Launch app</button>
 
@@ -196,7 +196,7 @@
         width: 100%;
         padding-top: 25px;
         padding-left: 100px;
-        padding-right: 40px;
+        padding-right: 48px;
 
     }
 
@@ -225,7 +225,7 @@
         display: flex;
         flex-direction: column;
         gap: 25px;
-        padding-left: 170px;
+        padding-left: 120px;
         align-items: flex-start;
         text-align: left;
         padding-top: 100px;
@@ -242,22 +242,38 @@
 
     .text .info {
         color: #FFF;
-        font-family: 'Inter', sans-serif;
-        font-size: 30px;
+        font-family: 'Manrope', sans-serif;
+        font-size: 25px;
         font-style: normal;
         font-weight: 400;
         line-height: normal;
-        position: relative;
     }
 
     .text .info svg {
         position: absolute;
         top: -8px;
-        left: -16px
+        left: -41px
+    }
+
+    .text .info span {
+        color: #FFF;
+        font-family: 'Manrope', sans-serif;
+        font-size: 25px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
     }
 
     .globe {
-        width: 50%;
+        width: 608px;
+        height: 608px;
+        margin-right: 48px;
+
+    }
+
+    .globe img {
+        width: 100%;
+        height: 100%;
     }
 
     .poems {
@@ -373,7 +389,7 @@
     .poems-header {
         margin-left: 100px;
         text-align: center;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Manrope', sans-serif;
         font-size: 45px;
         font-style: normal;
         font-weight: 700;

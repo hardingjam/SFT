@@ -3,6 +3,12 @@
 </script>
 
 <div class="landing-container">
+  <div class="poem-gradient1"></div>
+  <div class="poem-gradient2"></div>
+  <div class="poem-gradient3"></div>
+  <div class="poem-gradient4"></div>
+  <div class="poem-gradient6"></div>
+  <div class="poem-gradient7"></div>
   <div class="landing-head">
     <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1016" viewBox="0 0 1440 1016" fill="none"
          class="head-gradient">
@@ -97,13 +103,6 @@
         </div>
       </div>
     </div>
-
-    <div class="poem-gradient1"></div>
-    <div class="poem-gradient2"></div>
-    <div class="poem-gradient3"></div>
-    <div class="poem-gradient4"></div>
-    <div class="poem-gradient5"></div>
-    <div class="poem-gradient6"></div>
     <div class="transparency">
       <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none" class="eye">
         <path
@@ -164,7 +163,11 @@
     <button class="launch-button">Watch videos</button>
 
   </div>
-  <img src={icons.wave} alt="wave" class="wave">
+  <div class="landing-footer">
+<!--    <div class="bottom-gradient"></div>-->
+    <img src={icons.wave} alt="wave" class="wave">
+
+  </div>
 </div>
 
 <style>
@@ -172,14 +175,16 @@
         background: #B5DCFF;
         margin-left: auto;
         margin-right: auto;
+        padding-bottom: 500px;
         overflow: hidden;
-
+        position: relative;
     }
 
     .landing-head {
         background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
         position: relative;
         z-index: 1;
+        overflow: hidden;
     }
 
     .head-gradient {
@@ -187,6 +192,8 @@
         left: 0;
         top: 0;
         z-index: -1;
+        height: 850px;
+        flex-shrink: 0;
     }
 
     .landing-logo {
@@ -302,7 +309,7 @@
 
     .group {
         position: relative;
-        padding: 77px 50px;
+        padding: 77px 25px;
         width: 25%;
         border-radius: 0 0 10px 10px;
         background: #FFF;
@@ -493,8 +500,8 @@
         height: 1011px;
         border-radius: 2129px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: -250px;
-        z-index: -1;
+        top: 699px;
+        z-index: 1;
         left: calc(-33% - 200px);
     }
 
@@ -504,9 +511,8 @@
         height: 1378px;
         border-radius: 1576px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: -250px;
-        z-index: -1;
-        left: 50%;
+        top: 699px;
+        left: 35%;
     }
 
     .poems .large {
@@ -548,10 +554,10 @@
     }
 
     .poem-gradient3 {
-        z-index: -1;
+        z-index: 1;
         position: absolute;
-        top: 0;
-        right: -50px;
+        top: 1507px;
+        right: 15%;
         width: 2396px;
         height: 1252px;
         border-radius: 2396px;
@@ -559,21 +565,10 @@
     }
 
     .poem-gradient4 {
-        z-index: -2;
+        z-index: 0;
         position: absolute;
-        top: 0;
-        left: 50%;
-        width: 1576px;
-        height: 1378px;
-        border-radius: 1576px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-    }
-
-    .poem-gradient5 {
-        z-index: -2;
-        position: absolute;
-        top: 0;
-        left: 50%;
+        top: 1570px;
+        right: 15%;
         width: 1576px;
         height: 1378px;
         border-radius: 1576px;
@@ -581,17 +576,39 @@
     }
 
     .poem-gradient6 {
-        z-index: -2;
         position: absolute;
-        left: -20%;
+        top: 1600px;
+        left: 50%;
         width: 1576px;
         height: 1378px;
         border-radius: 1576px;
-        background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
     }
 
+    .poem-gradient7 {
+        z-index: 1;
+        position: absolute;
+        top: 1009px;
+        left: -30%;
+        width: 1769px;
+        height: 1547px;
+        border-radius: 1769px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 77.71%, rgba(233, 233, 233, 0.00) 100%);
+    }
+
+    /*.bottom-gradient {*/
+    /*    z-index: 0;*/
+    /*    position: absolute;*/
+    /*    bottom: 0;*/
+    /*    left: 0;*/
+    /*    width: 100%;*/
+    /*    height: 645px;*/
+    /*    background: radial-gradient(154.65% 108.34% at 52.47% -16.11%, #DAE4F8 1.98%, rgba(223, 238, 252, 0.39) 44.27%, #7FB8FB 100%);*/
+    /*}*/
+
     .wave {
-        margin-top: 180px;
         width: 100%;
+        position: absolute;
+        bottom: 0;
     }
 </style>

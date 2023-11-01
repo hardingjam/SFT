@@ -113,6 +113,7 @@
           stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       100% <span>transparency</span>
+      <br>
       - facts checked by auditors
       <br>(eg KPMG, Deloitte)
     </div>
@@ -475,7 +476,7 @@
     }
 
     .flow .icon {
-        top: -50%;
+        top: calc(-50% + 6px);
         left: 50%;
         position: absolute;
         border-radius: 50%;
@@ -486,7 +487,7 @@
         font-style: normal;
         font-weight: 700;
         line-height: normal;
-        transform: translate(-50%, 7px);
+        transform: translate(-50%, 12px);
         width: 55px;
         height: 55px;
         display: flex;

@@ -125,7 +125,7 @@
     <div class="groups-line"></div>
     <div class="setting-up-flow">
       <div class="flow">
-        <div class="icon color-1">1.</div>
+        <div class="icon color-1">1</div>
         <div class="flow-text">
           <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 0 37 38" fill="none">
             <path
@@ -139,7 +139,7 @@
         </div>
       </div>
       <div class="flow">
-        <div class="icon color-2">2.</div>
+        <div class="icon color-2">2</div>
         <div class="flow-text">
           <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 0 37 38" fill="none">
             <path
@@ -150,7 +150,7 @@
         </div>
       </div>
       <div class="flow">
-        <div class="icon color-3">3.</div>
+        <div class="icon color-3">3</div>
         <div class="flow-text">
           <svg xmlns="http://www.w3.org/2000/svg" width="44" height="51" viewBox="0 0 44 51" fill="none">
             <path
@@ -165,7 +165,7 @@
 
   </div>
   <div class="landing-footer">
-<!--    <div class="bottom-gradient"></div>-->
+    <!--    <div class="bottom-gradient"></div>-->
     <img src={icons.wave} alt="wave" class="wave">
 
   </div>
@@ -425,9 +425,6 @@
         font-weight: 700;
         margin-bottom: 224px;
         line-height: 40px; /* 160% */
-        box-shadow: 0.3px 0.5px 0.7px hsla(244, 28%, 63%, 0.3),
-        1.4px 2.8px 3.9px -0.8px hsla(244, 28%, 63%, 0.4),
-        4.9px 9.7px 13.6px -1.6px hsla(244, 28%, 63%, 0.5);
     }
 
     .transparency .eye {

@@ -166,7 +166,7 @@
         </div>
       </div>
     </div>
-    <button class="launch-button">Watch videos</button>
+    <button class="launch-button" on:click={()=>launchApp()}>Launch app</button>
 
   </div>
   <div class="landing-footer">

@@ -17,7 +17,7 @@
         accountRoles,
         data,
         roles,
-        sftInfo,
+        sftInfo, landing,
         tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, isCypress, schemas, titleIcon
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
@@ -68,7 +68,6 @@
 
     let connectedAccount;
     export let url = "";
-    let landing = true;
 
     let isMetamaskInstalled = typeof window.ethereum !== "undefined";
 
@@ -426,7 +425,7 @@
 </script>
 <Router url={url}>
 
-  {#if landing}
+  {#if $landing}
     <Landing></Landing>
   {:else }
 

@@ -1,5 +1,10 @@
 <script>
     import {icons} from '../scripts/assets.js';
+    import {landing} from '../scripts/store.js';
+
+    function launchApp() {
+        landing.set(false)
+    }
 </script>
 
 <div class="landing-container">
@@ -26,7 +31,7 @@
     </svg>
     <div class="landing-logo">
       <img src="{icons.sft_logo_white}" alt="sft">
-      <button class="launch-button">Launch app</button>
+      <button class="launch-button" on:click="{()=>launchApp()}">Launch app</button>
     </div>
 
     <div class="globe-container">
@@ -40,7 +45,7 @@
           </svg>
           Join our transparent, decentralised, programmatic, <span>Semi Fungible Token</span> system.
         </div>
-        <button class="launch-button">Launch app</button>
+        <button class="launch-button" on:click="{()=>launchApp()}">Launch app</button>
 
       </div>
       <div class="globe">
@@ -513,44 +518,6 @@
         left: 35%;
     }
 
-    .poems .large {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        gap: 50px;
-        padding-bottom: 120px;
-        margin-top: 120px;
-        margin-left: auto;
-        margin-right: auto;
-        width: 523px;
-        color: #575757;
-        text-align: center;
-        font-family: 'Inter', sans-serif;
-        font-size: 30px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 40px; /* 133.333% */
-    }
-
-    .read-more-button {
-        border-radius: 15px;
-        background: linear-gradient(180deg, #6F5EA1 33.06%, #B5DCFF 129.84%);
-        color: var(--text-secondary, #FFF);
-        font-family: 'Mukta Mahee', sans-serif;
-        font-size: 30px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-        padding: 5px 30px
-    }
-
-    .large-container {
-        position: relative;
-        z-index: 1;
-        width: calc(100% + 400px);
-        margin-left: -200px;
-    }
-
     .poem-gradient3 {
         z-index: 1;
         position: absolute;
@@ -594,15 +561,6 @@
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 77.71%, rgba(233, 233, 233, 0.00) 100%);
     }
 
-    /*.bottom-gradient {*/
-    /*    z-index: 0;*/
-    /*    position: absolute;*/
-    /*    bottom: 0;*/
-    /*    left: 0;*/
-    /*    width: 100%;*/
-    /*    height: 645px;*/
-    /*    background: radial-gradient(154.65% 108.34% at 52.47% -16.11%, #DAE4F8 1.98%, rgba(223, 238, 252, 0.39) 44.27%, #7FB8FB 100%);*/
-    /*}*/
 
     .wave {
         width: 100%;

@@ -80,8 +80,8 @@ describe('The Home Page', () => {
     it('Navigates to home', () => {
         cy.get(`#token-name-Jefo`).click();
         cy.wait(1000)
-        cy.get(`.path-`).click();
-        cy.url().should('include', '/#')
+        cy.get(`.path-list`).click();
+        cy.url().should('include', '/#list')
         cy.get('.tokens').should('exist');
     });
     it('Sets token image as logo', () => {

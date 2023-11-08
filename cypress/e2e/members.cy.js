@@ -6,6 +6,8 @@ describe('Members page', () => {
     })
     beforeEach(() => {
         cy.visit('/')
+        cy.get(`#launch-button`).click();
+
         cy.get(`#token-name-Jefo`).click();
         cy.url().should('include', '/#token-overview')
     })

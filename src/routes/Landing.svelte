@@ -33,7 +33,7 @@
     </svg>
     <div class="landing-logo">
       <img src="{icons.sft_logo_white}" alt="sft">
-      <button class="launch-button" on:click="{()=>launchApp()}">Launch app</button>
+      <button class="launch-button" id="launch-button" on:click="{()=>launchApp()}">Launch app</button>
     </div>
 
     <div class="globe-container">

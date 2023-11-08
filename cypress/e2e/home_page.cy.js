@@ -6,6 +6,7 @@ describe('The Home Page', () => {
     })
     beforeEach(() => {
         cy.visit('/')
+        cy.get(`#launch-button`).click();
     })
     it('renders $tokens', () => {
         // Load the component with the data

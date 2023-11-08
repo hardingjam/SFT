@@ -10,4 +10,8 @@ describe('Landing page', () => {
     it('should show landing page', () => {
         cy.get(`.landing-container`).should('exist');
     });
+    it('should navigate to sft list page', () => {
+        cy.get(`#launch-button`).click();
+        cy.url().should('include', '/#list')
+    })
 })

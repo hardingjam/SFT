@@ -119,6 +119,10 @@
           d="M22.0017 37.1617C28.4733 37.1617 34.505 33.3484 38.7033 26.7484C40.3533 24.1634 40.3533 19.8184 38.7033 17.2334C34.505 10.6334 28.4733 6.82007 22.0017 6.82007C15.53 6.82007 9.49833 10.6334 5.3 17.2334C3.65 19.8184 3.65 24.1634 5.3 26.7484C9.49833 33.3484 15.53 37.1617 22.0017 37.1617Z"
           stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
+      <a href="https://gildlab.document360.io/docs/sft-transparency" target="_blank">
+        <button class="launch-button read-more">Read more</button>
+      </a>
+
       100% <span>transparency</span>
       <br>
       - facts checked by auditors
@@ -436,7 +440,7 @@
 
     .transparency .eye {
         position: absolute;
-        right: 63px;
+        right: 116px;
         top: 40px
     }
 
@@ -563,10 +567,15 @@
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 77.71%, rgba(233, 233, 233, 0.00) 100%);
     }
 
-
     .wave {
         width: 100%;
         position: absolute;
         bottom: 0;
+    }
+
+    .read-more {
+        position: absolute;
+        right: 41px;
+        bottom: 24px;
     }
 </style>

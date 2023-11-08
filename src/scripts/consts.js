@@ -61,7 +61,7 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#setup", "Setup new SFT"],
     ["#roles", "SFT roles"],
     ["#mint", "Mint/Redeem"],
-    ["#list", "SFT list"],
+    ["#list", "Home"],
     ["#members", "Members"],
     ["#audit-history", "Audit history"],
     ["#", "Home"],

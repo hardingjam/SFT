@@ -17,7 +17,7 @@
         accountRoles,
         data,
         roles,
-        sftInfo, landing,
+        sftInfo,
         tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, isCypress, schemas, titleIcon
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
@@ -64,7 +64,6 @@
     import ChangeComparison from '../routes/ChangeComparison.svelte';
     import AddressOverview from '../routes/AddressOverview.svelte';
     import {mock} from '../test/mock.js';
-    import Landing from '../routes/Landing.svelte';
 
     let connectedAccount;
     export let url = "";
@@ -111,8 +110,8 @@
                     navigateTo(location, {replace: false})
                 } else {
                     vault.set({})
-                    location = "#"
-                    navigateTo("#", {replace: false})
+                    location = "#list"
+                    navigateTo("#list", {replace: false})
                 }
             }
 
@@ -151,7 +150,7 @@
         if (isMetamaskInstalled) {
 
             if (location === "/" || location === "") {
-                navigateTo("#");
+                navigateTo("#list");
             }
             await setNetwork();
             await getSchemas();
@@ -159,7 +158,7 @@
             if (connectedAccount) {
                 account.set(connectedAccount)
                 await vaultChanged()
-                navigateTo(location || '#', {replace: false})
+                navigateTo(location || '#list', {replace: false})
             } else {
                 localStorage.removeItem("account");
             }
@@ -174,7 +173,7 @@
                     accountRoles.set(await setAccountRoles($roles, $account));
 
                     if ((location === '#mint' || location === '#redeem') && !$accountRoles.DEPOSITOR) {
-                        navigateTo('#');
+                        navigateTo('#list');
                     }
                 }
             });
@@ -193,7 +192,7 @@
                         breadCrumbs.set([...$breadCrumbs, {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
                     }
                 } else {
-                    breadCrumbs.set([{path: "#", label: "Home"},
+                    breadCrumbs.set([{path: "#list", label: "Home"},
                         {path: newUrl, label: ROUTE_LABEL_MAP.get(newUrl)}])
                 }
             })
@@ -213,7 +212,7 @@
         vault.set({});
         await setNetwork();
         await getTokens();
-        navigateTo("#");
+        navigateTo("#list");
     }
 
     async function getEthersData() {
@@ -425,14 +424,10 @@
 </script>
 <Router url={url}>
 
-  {#if $landing}
-    <Landing></Landing>
-  {:else }
-
     <div class={$account || $isCypress? "content" : "content-not-connected"}>
       <Header on:select={handleNetworkSelect} {location}></Header>
       <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
-        <a href="/">
+        <a href="/#list">
           {#if !$activeToken.icon}
             <img src={icons.logo} alt=""
                  class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
@@ -447,7 +442,7 @@
 
         <div class={$sftInfo ? "sft-info-opened mt-61" : "mt-61" }>
           <div class="{$activeNetwork  ? 'show' : 'hide'}">
-            <Route path="#" component={Home}/>
+            <Route path="#list" component={Home}/>
             <Route path="#asset-register" component={AssetRegister}/>
             <Route path="#asset-history/:id" component={AssetHistory}/>
             <Route path="#audit-history" component={AuditHistory}/>
@@ -532,8 +527,6 @@
                                  successText={$promptSuccessText}
                                  on:close={$promptCloseAction}/>
     <SFTCreateSuccessBanner/>
-  {/if}
-
 
 </Router>
 

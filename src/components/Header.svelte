@@ -67,7 +67,7 @@
                       items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect} triggerIcon="">
       </HeaderDropdown>
     </div>
-    {#if location && (location !== "/" && location !== "#")}
+    {#if location && (location !== "/" && location !== "#list")}
       <BreadCrumbs/>
     {/if}
   {/if}

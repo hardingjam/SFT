@@ -1,9 +1,22 @@
 <script>
     import Default from "./lib/Default.svelte";
+    import Landing from './routes/Landing.svelte';
+    import {landing} from './scripts/store.js';
+    import {onMount} from 'svelte';
+
+    onMount(()=>{
+        if(window.location.hash && window.location.hash !== '/' ){
+            landing.set(false)
+        }
+    })
 </script>
 
 <main>
-  <Default/>
+  {#if $landing}
+    <Landing></Landing>
+  {:else }
+    <Default/>
+  {/if}
 </main>
 
 <style>

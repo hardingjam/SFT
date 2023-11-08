@@ -1,8 +1,10 @@
 <script>
     import {icons} from '../scripts/assets.js';
     import {landing} from '../scripts/store.js';
+    import {navigate} from '../scripts/helpers.js';
 
     function launchApp() {
+        navigate("#list")
         landing.set(false)
     }
 </script>

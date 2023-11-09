@@ -78,4 +78,5 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#asset-history", "Asset history"],
     ["#change-comparison", "Change comparison"],
     ["#address-overview", "Address overview"],
+    ["#knowledgebase", "Knowledgebase"]
 ]);

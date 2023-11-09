@@ -10,9 +10,15 @@
     export let disabled = false;
 
     export let clickable = true;
+    export let externalUrl = '';
 
     function handleNavigationButtonClick() {
+
         if (!clickable) {
+            return
+        }
+        if (externalUrl) {
+            window.open(externalUrl, '_blank')
             return
         }
         navigate(targetPath, {clear: true})

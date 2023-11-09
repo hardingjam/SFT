@@ -18,7 +18,15 @@
         data,
         roles,
         sftInfo,
-        tokenName, breadCrumbs, navigationButtonClicked, transactionInProgress, pageTitle, isCypress, schemas, titleIcon
+        tokenName,
+        breadCrumbs,
+        navigationButtonClicked,
+        transactionInProgress,
+        pageTitle,
+        isCypress,
+        schemas,
+        titleIcon,
+        landing
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -165,7 +173,7 @@
 
             window.ethereum.on("accountsChanged", async (accounts) => {
                 if (!accounts.length) {
-                    account.set(null);
+                    account.set('');
                     localStorage.removeItem("account");
                 } else {
                     account.set(accounts[0]);

@@ -1,4 +1,4 @@
-import logo from '../../public/SFT.svg';
+import logo from '../../public/SFT_logo_gold.png';
 import ethereum from '../assets/networks/ethereum.svg'
 import polygon from '../assets/networks/polygon.svg'
 import show from '../assets/icons/show.svg'

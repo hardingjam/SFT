@@ -429,7 +429,7 @@
       <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
         <a href="/#list">
           {#if !$activeToken.icon}
-            <img src={icons.logo} alt=""
+            <img src={$account? icons.logo: icons.sft_logo_white} alt=""
                  class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
           {:else}
             <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"

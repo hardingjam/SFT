@@ -538,7 +538,6 @@
     display: flex;
     top: 20px;
     left: 55px;
-    background: #9D9D9D;
   }
 
   .logo-container img {

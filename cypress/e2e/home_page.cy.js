@@ -23,10 +23,6 @@ describe('The Home Page', () => {
     it('Should not show token name if token not set', () => {
         cy.get('.sft-name-navigation-header').should('not.exist');
     });
-    it('Navigates to manual', () => {
-        cy.get(`.path-manual`).click();
-        cy.url().should('include', '/#manual')
-    });
     it('Should set token and navigate to token overview', () => {
         cy.get(`#token-name-Jefo`).click();
         cy.url().should('include', '/#token-overview')

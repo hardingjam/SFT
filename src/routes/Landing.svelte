@@ -4,8 +4,8 @@
     import {navigate} from '../scripts/helpers.js';
 
     function launchApp() {
-        navigate("#list")
         landing.set(false)
+        navigate("#list")
     }
 </script>
 

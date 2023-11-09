@@ -1,6 +1,5 @@
 <script>
     import Default from "./lib/Default.svelte";
-    import Landing from './routes/Landing.svelte';
     import {landing} from './scripts/store.js';
     import {onMount} from 'svelte';
 
@@ -12,11 +11,7 @@
 </script>
 
 <main>
-  {#if $landing}
-    <Landing></Landing>
-  {:else }
     <Default/>
-  {/if}
 </main>
 
 <style>

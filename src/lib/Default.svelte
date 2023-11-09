@@ -72,6 +72,7 @@
     import ChangeComparison from '../routes/ChangeComparison.svelte';
     import AddressOverview from '../routes/AddressOverview.svelte';
     import {mock} from '../test/mock.js';
+    import Landing from '../routes/Landing.svelte';
 
     let connectedAccount;
     export let url = "";
@@ -95,7 +96,11 @@
         //reset pageTitle
         pageTitle.set("")
         titleIcon.set("")
-
+        if (e.path === '' || e.path === '/') {
+            landing.set(true)
+        } else {
+            landing.set(false)
+        }
         if (!e.initial) {
             let contract = await setVault()
             location = e.path
@@ -122,7 +127,6 @@
                     navigateTo("#list", {replace: false})
                 }
             }
-
             window.scrollTo(0, 0);
         }
     });
@@ -156,8 +160,7 @@
             })
         }
         if (isMetamaskInstalled) {
-
-            if (location === "/" || location === "") {
+            if ((location === "/" || location === "") && !$landing) {
                 navigateTo("#list");
             }
             await setNetwork();
@@ -166,7 +169,9 @@
             if (connectedAccount) {
                 account.set(connectedAccount)
                 await vaultChanged()
-                navigateTo(location || '#list', {replace: false})
+                if (!$landing) {
+                    navigateTo(location || '#list', {replace: false})
+                }
             } else {
                 localStorage.removeItem("account");
             }
@@ -331,6 +336,7 @@
                     transactionInProgressShow.set(false)
                     transactionInProgress.set(false)
                 } else {
+                    console.log(5)
                     tokens.set([])
                 }
             });
@@ -431,7 +437,10 @@
 
 </script>
 <Router url={url}>
-
+  <div class="{ $landing ? 'block' : 'hide'}">
+    <Route path="/" component={Landing}/>
+  </div>
+  <div class="{ !$landing ? 'block' : 'hide'}">
     <div class={$account || $isCypress? "content" : "content-not-connected"}>
       <Header on:select={handleNetworkSelect} {location}></Header>
       <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
@@ -447,7 +456,6 @@
       </div>
       <div class="{ $account ? 'block' : 'hide'}">
         <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
-
         <div class={$sftInfo ? "sft-info-opened mt-61" : "mt-61" }>
           <div class="{$activeNetwork  ? 'show' : 'hide'}">
             <Route path="#list" component={Home}/>
@@ -464,7 +472,7 @@
 
             <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
             <Route path="#roles" component={Roles}/>
-            <Route path="#list" component={Tokens}/>
+            <!--            <Route path="#list" component={Tokens}/>-->
             <Route path="#members" component={Members}/>
             <!--          <Route path="#set-vault" component={SetVault}/>-->
             <Route path="#asset-classes" component={AssetClasses}/>
@@ -535,7 +543,7 @@
                                  successText={$promptSuccessText}
                                  on:close={$promptCloseAction}/>
     <SFTCreateSuccessBanner/>
-
+  </div>
 </Router>
 
 

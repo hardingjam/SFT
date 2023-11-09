@@ -178,7 +178,9 @@
   <div class="landing-footer">
     <!--    <div class="bottom-gradient"></div>-->
     <img src={icons.wave} alt="wave" class="wave">
-
+    <div class="landing-logo">
+      <img src="{icons.sft_logo_white}" alt="sft">
+    </div>
   </div>
 </div>
 
@@ -577,5 +579,12 @@
         position: absolute;
         right: 41px;
         bottom: 24px;
+    }
+
+    .landing-footer .landing-logo{
+      position: absolute;
+        bottom: 67px;
+        left: 50px;
+        padding: 0;
     }
 </style>

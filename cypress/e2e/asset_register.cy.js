@@ -5,7 +5,8 @@ describe('Asset register page', () => {
         return false
     })
     beforeEach(() => {
-        cy.visit('/#list')
+        cy.visit('/')
+        cy.get(`#launch-button`).click();
         cy.get(`#token-name-Jefo`).click();
         cy.wait(1000)
         cy.get(`.path-asset-register`).click();

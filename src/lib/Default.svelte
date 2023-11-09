@@ -122,9 +122,12 @@
                 } else if (location.includes('#asset-information')) {
                     navigateTo(location, {replace: false})
                 } else {
-                    vault.set({})
-                    location = "#list"
-                    navigateTo("#list", {replace: false})
+                    if(!$landing){
+                        vault.set({})
+                        location = "/#list"
+                        navigateTo("/#list", {replace: false})
+                    }
+
                 }
             }
             window.scrollTo(0, 0);

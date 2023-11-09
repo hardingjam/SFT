@@ -172,7 +172,7 @@
         </div>
       </div>
     </div>
-    <button class="launch-button" on:click={()=>launchApp()}>Launch app</button>
+    <button class="launch-button bottom" on:click={()=>launchApp()}>Launch app</button>
 
   </div>
   <div class="landing-footer">
@@ -228,7 +228,7 @@
         font-family: 'Mukta', sans-serif;
         font-size: 25px;
         font-style: normal;
-        font-weight: 700;
+        font-weight: 600;
         line-height: normal;
         padding: 5px 40px;
         width: fit-content;
@@ -465,7 +465,7 @@
         justify-content: center;
         width: 100%;
         gap: 200px;
-        margin-bottom: 100px;
+        margin-bottom: 50px;
     }
 
     .flow {
@@ -586,5 +586,9 @@
         bottom: 67px;
         left: 50px;
         padding: 0;
+    }
+
+    .launch-button.bottom{
+        padding: 10px 45px ;
     }
 </style>

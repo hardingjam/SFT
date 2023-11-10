@@ -43,7 +43,7 @@
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <span class="text-base leading-5 menu-header">SFT</span>
       </a>
-      <NavigationButton targetPath="#" {path}>
+      <NavigationButton targetPath="#list" {path}>
         <div slot="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -71,7 +71,7 @@
         <NavigationButton targetPath="#asset-register" {path} child={true}/>
       {/if}
 
-      <NavigationButton targetPath="#manual" {path}>
+      <NavigationButton targetPath="#knowledgebase" {path} externalUrl="https://gildlab.document360.io/">
         <div slot="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

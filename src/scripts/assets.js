@@ -1,4 +1,4 @@
-import logo from '../../public/SFT.svg';
+import logo from '../../public/SFT_logo_gold.png';
 import ethereum from '../assets/networks/ethereum.svg'
 import polygon from '../assets/networks/polygon.svg'
 import show from '../assets/icons/show.svg'
@@ -35,6 +35,12 @@ import ipfs_white from '../assets/icons/ipfs_white.svg'
 import roles_icon from '../assets/icons/roles_icon.svg'
 import members_icon from '../assets/icons/members_icon.svg'
 import search_icon from '../assets/icons/search_icon.svg'
+import sft_logo_white from '../assets/icons/sft_logo_white.svg'
+import globe from '../assets/icons/globe.webp'
+import investor from '../assets/icons/investor.png'
+import lock from '../assets/icons/lock.svg'
+import microphone from '../assets/icons/microphone.svg'
+import wave from '../assets/icons/wave.png'
 
 export const icons = {
     ethereum,
@@ -73,5 +79,11 @@ export const icons = {
     ipfs_white,
     roles_icon,
     search_icon,
-    members_icon
+    members_icon,
+    sft_logo_white,
+    globe,
+    investor,
+    lock,
+    microphone,
+    wave
 }

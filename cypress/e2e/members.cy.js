@@ -6,6 +6,8 @@ describe('Members page', () => {
     })
     beforeEach(() => {
         cy.visit('/')
+        cy.get(`#launch-button`).click();
+
         cy.get(`#token-name-Jefo`).click();
         cy.url().should('include', '/#token-overview')
     })
@@ -26,7 +28,7 @@ describe('Members page', () => {
         cy.get(`.update-tier-erc1155`).should('exist')
     });
     it('Should check update tier buttons does not exits if no role', () => {
-        cy.get(`.path-`).click();
+        cy.get(`.path-list`).click();
         cy.get(`#token-name-coca-cola`).click();
         cy.get(`.path-members`).click();
         cy.get(`.update-tier-erc20`).should('not.exist')

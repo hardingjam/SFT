@@ -6,6 +6,7 @@ describe('The Home Page', () => {
     })
     beforeEach(() => {
         cy.visit('/')
+        cy.get(`#launch-button`).click();
     })
     it('renders $tokens', () => {
         // Load the component with the data
@@ -21,10 +22,6 @@ describe('The Home Page', () => {
     });
     it('Should not show token name if token not set', () => {
         cy.get('.sft-name-navigation-header').should('not.exist');
-    });
-    it('Navigates to manual', () => {
-        cy.get(`.path-manual`).click();
-        cy.url().should('include', '/#manual')
     });
     it('Should set token and navigate to token overview', () => {
         cy.get(`#token-name-Jefo`).click();
@@ -79,8 +76,8 @@ describe('The Home Page', () => {
     it('Navigates to home', () => {
         cy.get(`#token-name-Jefo`).click();
         cy.wait(1000)
-        cy.get(`.path-`).click();
-        cy.url().should('include', '/#')
+        cy.get(`.path-list`).click();
+        cy.url().should('include', '/#list')
         cy.get('.tokens').should('exist');
     });
     it('Sets token image as logo', () => {

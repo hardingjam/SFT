@@ -576,10 +576,10 @@ export function navigate(path, options) {
     let label = ROUTE_LABEL_MAP.get(bcId)
     navigationButtonClicked.update(() => false)
     if (options && options.clear) {
-        if (path === "#") {
+        if (path === "#list") {
             breadCrumbs.update(() => [])
         } else {
-            breadCrumbs.update(() => [{path: "#", label: "Home", id: 'home'}, {path, label, id: bcId}])
+            breadCrumbs.update(() => [{path: "#list", label: "Home", id: 'home'}, {path, label, id: bcId}])
         }
     } else {
         breadCrumbs.update(bc => {

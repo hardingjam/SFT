@@ -111,22 +111,28 @@
       </div>
     </div>
     <div class="transparency">
-      <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none" class="eye">
-        <path
-          d="M28.5642 22.0001C28.5642 25.6301 25.6308 28.5634 22.0008 28.5634C18.3708 28.5634 15.4375 25.6301 15.4375 22.0001C15.4375 18.3701 18.3708 15.4368 22.0008 15.4368C25.6308 15.4368 28.5642 18.3701 28.5642 22.0001Z"
-          stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path
-          d="M22.0017 37.1617C28.4733 37.1617 34.505 33.3484 38.7033 26.7484C40.3533 24.1634 40.3533 19.8184 38.7033 17.2334C34.505 10.6334 28.4733 6.82007 22.0017 6.82007C15.53 6.82007 9.49833 10.6334 5.3 17.2334C3.65 19.8184 3.65 24.1634 5.3 26.7484C9.49833 33.3484 15.53 37.1617 22.0017 37.1617Z"
-          stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <a href="https://gildlab.document360.io/docs/sft-transparency" target="_blank">
-        <button class="launch-button read-more">Read more</button>
-      </a>
+      <div class="left">
+        100% <span>transparency</span>
+        <br>
+        - facts checked by auditors
+        <br>(eg KPMG, Deloitte)
 
-      100% <span>transparency</span>
-      <br>
-      - facts checked by auditors
-      <br>(eg KPMG, Deloitte)
+      </div>
+      <div class="right">
+        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none" class="eye">
+          <path
+            d="M28.5642 22.0001C28.5642 25.6301 25.6308 28.5634 22.0008 28.5634C18.3708 28.5634 15.4375 25.6301 15.4375 22.0001C15.4375 18.3701 18.3708 15.4368 22.0008 15.4368C25.6308 15.4368 28.5642 18.3701 28.5642 22.0001Z"
+            stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path
+            d="M22.0017 37.1617C28.4733 37.1617 34.505 33.3484 38.7033 26.7484C40.3533 24.1634 40.3533 19.8184 38.7033 17.2334C34.505 10.6334 28.4733 6.82007 22.0017 6.82007C15.53 6.82007 9.49833 10.6334 5.3 17.2334C3.65 19.8184 3.65 24.1634 5.3 26.7484C9.49833 33.3484 15.53 37.1617 22.0017 37.1617Z"
+            stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <a href="https://gildlab.document360.io/docs/sft-transparency" target="_blank">
+          <button class="launch-button read-more">Read more</button>
+        </a>
+      </div>
+
+
     </div>
 
     <div class="setting-up">
@@ -425,12 +431,13 @@
     }
 
     .transparency {
-        position: relative;
-        text-align: left;
+        /*position: relative;*/
+        /*text-align: left;*/
+        display: flex;
         border-radius: 0 10px 10px 0;
         background: #705FA2;
-        padding: 40px 225px 40px 90px;
-        width: 45%;
+        padding: 40px 41px 40px 89px;
+        width: calc(50% - 20px);
         color: #FFF;
         font-family: 'Manrope', sans-serif;
         font-size: 25px;
@@ -438,12 +445,14 @@
         font-weight: 700;
         margin-bottom: 224px;
         line-height: 40px; /* 160% */
+        justify-content: space-between;
     }
 
-    .transparency .eye {
-        position: absolute;
-        right: 116px;
-        top: 40px
+    .transparency .right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 45px
     }
 
     .transparency span {
@@ -575,20 +584,14 @@
         bottom: 0;
     }
 
-    .read-more {
+    .landing-footer .landing-logo {
         position: absolute;
-        right: 41px;
-        bottom: 24px;
-    }
-
-    .landing-footer .landing-logo{
-      position: absolute;
         bottom: 67px;
         left: 50px;
         padding: 0;
     }
 
-    .launch-button.bottom{
-        padding: 10px 45px ;
+    .launch-button.bottom {
+        padding: 10px 45px;
     }
 </style>

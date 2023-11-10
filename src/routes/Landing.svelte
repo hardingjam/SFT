@@ -431,12 +431,10 @@
     }
 
     .transparency {
-        /*position: relative;*/
-        /*text-align: left;*/
         display: flex;
         border-radius: 0 10px 10px 0;
         background: #705FA2;
-        padding: 40px 41px 40px 89px;
+        padding: 40px 41px 40px 60px;
         width: calc(50% - 20px);
         color: #FFF;
         font-family: 'Manrope', sans-serif;
@@ -453,6 +451,10 @@
         flex-direction: column;
         align-items: center;
         gap: 45px
+    }
+
+    .transparency .left {
+        text-align: left;
     }
 
     .transparency span {

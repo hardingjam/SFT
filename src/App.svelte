@@ -2,16 +2,17 @@
     import Default from "./lib/Default.svelte";
     import {landing} from './scripts/store.js';
     import {onMount} from 'svelte';
+    import {landingPages} from './scripts/consts.js';
 
-    onMount(()=>{
-        if(window.location.hash && window.location.hash !== '/' ){
+    onMount(() => {
+        if (window.location.hash && !landingPages.includes(window.location.hash)) {
             landing.set(false)
         }
     })
 </script>
 
 <main>
-    <Default/>
+  <Default/>
 </main>
 
 <style>

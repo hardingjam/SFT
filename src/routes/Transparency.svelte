@@ -13,7 +13,8 @@
   <div class="poem-gradient3"></div>
   <div class="poem-gradient4"></div>
   <div class="poem-gradient6"></div>
-  <!--  <div class="poem-gradient7"></div>-->
+    <div class="poem-gradient7"></div>
+    <div class="poem-gradient8"></div>
   <div class="landing-head">
     <div class="landing-logo">
       <img src="{icons.logo}" alt="sft">
@@ -70,7 +71,10 @@
         users can filter and search everything according to all the same data that everyone else sees.
       </div>
       <div class="info-card-border"></div>
-
+      <div class="learn-more">
+        Learn more about how to use the SFT <br>application:
+        <div class="launch-button">Launch app</div>
+      </div>
     </div>
 
   </div>
@@ -88,7 +92,7 @@
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 3000px;
+        min-height: 2960px;
         overflow: hidden;
     }
 
@@ -104,7 +108,7 @@
         padding-top: 25px;
         padding-left: 100px;
         padding-right: 48px;
-        position: fixed;
+        position: absolute;
         z-index: 3;
     }
 
@@ -220,16 +224,26 @@
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
     }
 
-    /*.poem-gradient7 {*/
-    /*    z-index: 1;*/
-    /*    position: absolute;*/
-    /*    top: 1009px;*/
-    /*    left: -30%;*/
-    /*    width: 1769px;*/
-    /*    height: 1547px;*/
-    /*    border-radius: 2089px;*/
-    /*    background: radial-gradient(88.83% 39.47% at 59.22% 37.9%, #C5E3FF 58.97%, rgba(185, 221, 254, 0.00) 100%);*/
-    /*}*/
+    .poem-gradient7 {
+        z-index: 1;
+        position: absolute;
+        top: 2194px;
+        left: -30%;
+        width: calc(100% + 600px);
+        height: 784px;
+        border-radius: 2089px;
+        background: radial-gradient(88.83% 39.47% at 59.22% 37.9%, #C5E3FF 58.97%, rgba(185, 221, 254, 0.00) 100%);
+    }
+    .poem-gradient8 {
+        z-index: 0;
+        position: absolute;
+        top: 2295px;
+        left: 30%;
+        width: 90%;
+        height: 686px;
+        border-radius: 1096px;
+        background: radial-gradient(58.23% 53.35% at 70.99% 20.56%, #CFE8FF 0%, #C5E3FF 10.9%, #B9DDFE 60.87%, #7EC0FB 100%);
+    }
 
     .wave {
         width: 100%;
@@ -251,7 +265,30 @@
         width: calc(100% - 50px);
     }
 
-    .launch-button.bottom {
-        padding: 10px 45px;
+    .learn-more {
+        margin-top: 97px;
+        color: #575757;
+        text-align: center;
+        font-family: 'Mukta Mahee', sans-serif;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 40px; /* 133.333% */
+        display: flex;
+        flex-direction: column;
+        gap: 61px;
+        align-items: center;
+    }
+
+    .launch-button {
+        border-radius: 30px;
+        background: #2C2C54;
+        color: #FFF;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        padding: 6px 32px;
+        width: fit-content;
     }
 </style>

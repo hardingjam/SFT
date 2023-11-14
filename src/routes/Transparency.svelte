@@ -2,6 +2,7 @@
     import {icons} from '../scripts/assets.js';
     import {navigate} from '../scripts/helpers.js';
     import LandingNav from '../components/LandingNav.svelte';
+    import {Link} from 'yrv';
 
     function launchApp() {
         navigate("#list")
@@ -13,11 +14,13 @@
   <div class="poem-gradient3"></div>
   <div class="poem-gradient4"></div>
   <div class="poem-gradient6"></div>
-    <div class="poem-gradient7"></div>
-    <div class="poem-gradient8"></div>
+  <div class="poem-gradient7"></div>
+  <div class="poem-gradient8"></div>
   <div class="landing-head">
     <div class="landing-logo">
-      <img src="{icons.logo}" alt="sft">
+      <Link href="#">
+        <img src="{icons.logo}" alt="sft">
+      </Link>
       <LandingNav/>
     </div>
   </div>
@@ -234,6 +237,7 @@
         border-radius: 2089px;
         background: radial-gradient(88.83% 39.47% at 59.22% 37.9%, #C5E3FF 58.97%, rgba(185, 221, 254, 0.00) 100%);
     }
+
     .poem-gradient8 {
         z-index: 0;
         position: absolute;

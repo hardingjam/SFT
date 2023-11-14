@@ -7,14 +7,13 @@
         navigate("#list")
     }
 </script>
-
 <div class="landing-container">
   <div class="poem-gradient1"></div>
   <div class="poem-gradient2"></div>
   <div class="poem-gradient3"></div>
   <div class="poem-gradient4"></div>
   <div class="poem-gradient6"></div>
-  <div class="poem-gradient7"></div>
+  <!--  <div class="poem-gradient7"></div>-->
   <div class="landing-head">
     <div class="landing-logo">
       <img src="{icons.logo}" alt="sft">
@@ -70,12 +69,12 @@
         End
         users can filter and search everything according to all the same data that everyone else sees.
       </div>
+      <div class="info-card-border"></div>
+
     </div>
 
   </div>
-
   <div class="landing-footer">
-    <!--    <div class="bottom-gradient"></div>-->
     <img src={icons.wave} alt="wave" class="wave">
     <div class="landing-logo">
       <img src="{icons.sft_logo_white}" alt="sft">
@@ -88,15 +87,13 @@
         background: #B5DCFF;
         margin-left: auto;
         margin-right: auto;
-        padding-bottom: 500px;
-        overflow: hidden;
         position: relative;
+        min-height: 3000px;
+        overflow: hidden;
     }
 
     .landing-head {
         background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
-        z-index: 1;
-        overflow: hidden;
     }
 
     .landing-logo {
@@ -114,13 +111,6 @@
     .landing-logo img {
         width: 65px;
         height: 65px;
-    }
-
-    .content {
-    }
-
-    .tube-container {
-        /*position: relative;*/
     }
 
     .title-text {
@@ -147,10 +137,18 @@
     .info-card {
         position: absolute;
         top: 677px;
-        left: 122px;
-        width: calc(100% - 244px);
+        padding: 0 122px;
         z-index: 1;
         text-align: left;
+    }
+
+    .info-card-border {
+        margin-top: 270px;
+
+        background: linear-gradient(90deg, #674AA5 8.61%, #59C3FF 100%);
+        height: 6px;
+        width: calc(100% + 244px);
+        margin-left: -122px;
     }
 
     .paragraph {
@@ -163,75 +161,86 @@
         line-height: 40px;
     }
 
+    .gradients {
+        position: relative;
+        overflow: hidden;
+    }
+
 
     .poem-gradient1 {
         position: absolute;
-        width: calc(100% + 400px);
+        width: 2129px;
         height: 1011px;
         border-radius: 2129px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 699px;
+        top: 710px;
         z-index: 1;
-        left: calc(-33% - 200px);
+        right: 0;
     }
 
     .poem-gradient2 {
         position: absolute;
-        width: calc(100% + 400px);
-        height: 1378px;
+        width: 1576px;
+        height: 714px;
         border-radius: 1576px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 699px;
-        left: 35%;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #F2F4F6 0%, rgba(242, 244, 246, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+        top: 787px;
+        left: 40%;
     }
 
     .poem-gradient3 {
         z-index: 1;
         position: absolute;
-        top: 1507px;
-        right: 15%;
-        width: 2396px;
-        height: 1252px;
-        border-radius: 2396px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #BFCDFF 0%, rgba(217, 221, 255, 0.92) 53.13%, rgba(233, 233, 233, 0.00) 100%);
-    }
-
-    .poem-gradient4 {
-        z-index: 0;
-        position: absolute;
-        top: 1570px;
-        right: 15%;
-        width: 1576px;
-        height: 1378px;
-        border-radius: 1576px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-    }
-
-    .poem-gradient6 {
-        position: absolute;
-        top: 1600px;
-        left: 50%;
-        width: 1576px;
-        height: 1378px;
-        border-radius: 1576px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-    }
-
-    .poem-gradient7 {
-        z-index: 1;
-        position: absolute;
-        top: 1009px;
-        left: -30%;
+        top: 1027px;
+        right: 5%;
         width: 1769px;
         height: 1547px;
         border-radius: 1769px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 77.71%, rgba(233, 233, 233, 0.00) 100%);
     }
 
+    .poem-gradient4 {
+        z-index: 0;
+        position: absolute;
+        top: 1495px;
+        width: 1576px;
+        height: 1378px;
+        flex-shrink: 0;
+        border-radius: 1576px;
+        background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
+    }
+
+    .poem-gradient6 {
+        position: absolute;
+        top: 1600px;
+        left: 5%;
+        width: 1576px;
+        height: 1378px;
+        border-radius: 1576px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+    }
+
+    /*.poem-gradient7 {*/
+    /*    z-index: 1;*/
+    /*    position: absolute;*/
+    /*    top: 1009px;*/
+    /*    left: -30%;*/
+    /*    width: 1769px;*/
+    /*    height: 1547px;*/
+    /*    border-radius: 2089px;*/
+    /*    background: radial-gradient(88.83% 39.47% at 59.22% 37.9%, #C5E3FF 58.97%, rgba(185, 221, 254, 0.00) 100%);*/
+    /*}*/
+
     .wave {
         width: 100%;
-        position: absolute;
         bottom: 0;
+    }
+
+    .landing-footer {
+        bottom: 0;
+        position: absolute;
+        width: 100%;
+        left: 0;
     }
 
     .landing-footer .landing-logo {
@@ -239,6 +248,7 @@
         bottom: 67px;
         left: 50px;
         padding: 0;
+        width: calc(100% - 50px);
     }
 
     .launch-button.bottom {

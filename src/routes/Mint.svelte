@@ -7,7 +7,14 @@
         uploadBtnLoading,
         activeNetwork,
         schemas,
-        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, tokenName, pageTitle
+        transactionError,
+        transactionSuccess,
+        transactionInProgress,
+        auditHistory,
+        accountRoles,
+        tokenName,
+        pageTitle,
+        isCypress
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -138,24 +145,26 @@
     }
 
     async function mint() {
+
         try {
             error = ""
 
             if (!parseFloat(amount)) {
+
                 error = "Zero amount"
                 return;
             }
-            const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
+
+            const hasRoleDepositor = $isCypress ? true : await hasRole($vault, $account, "DEPOSITOR")
+
             if (!hasRoleDepositor.error) {
                 let structure = await submitForm()
                 if (structure) {
-
                     let fileHashesList = fileHashes.map(f => f.hash)
                     let encodedStructure = encodeCBORStructure(structure, selectedSchema.hash)
 
                     let shareRatio = ONE
                     const shares = ethers.utils.parseEther(amount.toString());
-
 
                     try {
                         let structureIpfs = await upload(structure)
@@ -401,6 +410,7 @@
     <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
   </div>
   <!--{/if}-->
+
 </div>
 
 <style>

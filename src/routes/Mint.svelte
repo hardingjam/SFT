@@ -159,6 +159,9 @@
 
                     try {
                         let structureIpfs = await upload(structure)
+                        if (!structureIpfs.Hash) {
+                            return
+                        }
                         let encodedHashList = cborEncode([...fileHashesList,
                             structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
                         const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() +

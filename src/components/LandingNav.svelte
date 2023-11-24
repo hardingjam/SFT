@@ -15,7 +15,7 @@
 </script>
 <div class="landing-nav-container">
   <div class="links">
-    <div class="{$router.path === '#transparency' ? 'active link' : 'link'}">
+    <div class="{$router.path === '#transparency' ? 'active link' : 'link transparency-button'}">
       <Link href="#transparency">SFT transparency</Link>
     </div>
   </div>

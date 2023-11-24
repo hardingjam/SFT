@@ -8,7 +8,7 @@
         navigate("#list")
     }
 </script>
-<div class="landing-container">
+<div class="transparency-container">
   <div class="poem-gradient1"></div>
   <div class="poem-gradient2"></div>
   <div class="poem-gradient3"></div>
@@ -90,7 +90,7 @@
 </div>
 
 <style>
-    .landing-container {
+    .transparency-container {
         background: #B5DCFF;
         margin-left: auto;
         margin-right: auto;

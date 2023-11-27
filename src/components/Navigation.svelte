@@ -2,6 +2,7 @@
     import {account, accountRoles, sftInfo, tokenName, vault} from "../scripts/store.js";
     import NavigationButton from './NavigationButton.svelte';
     import TokenOverviewTable from './TokenOverviewTable.svelte';
+    import {navigate} from '../scripts/helpers.js';
 
     function showSftInfo() {
         sftInfo.set(true)
@@ -14,6 +15,19 @@
     export let path = "/"
     export let token = {}
 
+    function handleClick(e) {
+        navigate(e.detail, {clear: true})
+    }
+
+    function handleMintClick(e) {
+        let ipfsUsername = localStorage.getItem('ipfsUsername');
+        let ipfsPassword = localStorage.getItem('ipfsPassword');
+        if (!ipfsPassword || !ipfsUsername) {
+            navigate('#ipfs', {clear: true})
+        }else{
+            navigate(e.detail, {clear: true})
+        }
+    }
 </script>
 <div class="navigation-container relative h-full flex flex-col">
   <div
@@ -43,7 +57,7 @@
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <span class="text-base leading-5 menu-header">SFT</span>
       </a>
-      <NavigationButton targetPath="#list" {path}>
+      <NavigationButton targetPath="#list" {path} on:navClick={handleClick}>
         <div slot="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -53,7 +67,7 @@
         </div>
       </NavigationButton>
       {#if $vault && $vault.address}
-        <NavigationButton label={$tokenName} {path} clickable={false}>
+        <NavigationButton label={$tokenName} {path}>
           <div slot="icon" class="navigation-token-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="8" stroke="#575757" stroke-width="2" stroke-linecap="round"
@@ -62,13 +76,13 @@
           </div>
         </NavigationButton>
         {#if $accountRoles.DEPOSITOR}
-          <NavigationButton targetPath="#mint" {path} child={true}/>
-          <NavigationButton targetPath="#asset-classes" {path} child={true}/>
+          <NavigationButton targetPath="#mint" {path} child={true} on:navClick={handleMintClick}/>
+          <NavigationButton targetPath="#asset-classes" {path} child={true} on:navClick={handleClick}/>
         {/if}
-        <NavigationButton targetPath="#members" {path} child={true}/>
-        <NavigationButton targetPath="#roles" {path} child={true}/>
-        <NavigationButton targetPath="#audit-history" {path} child={true}/>
-        <NavigationButton targetPath="#asset-register" {path} child={true}/>
+        <NavigationButton targetPath="#members" {path} child={true} on:navClick={handleClick}/>
+        <NavigationButton targetPath="#roles" {path} child={true} on:navClick={handleClick}/>
+        <NavigationButton targetPath="#audit-history" {path} child={true} on:navClick={handleClick}/>
+        <NavigationButton targetPath="#asset-register" {path} child={true} on:navClick={handleClick}/>
       {/if}
 
       <NavigationButton targetPath="#knowledgebase" {path} externalUrl="https://gildlab.document360.io/">
@@ -87,7 +101,7 @@
          class="flex jusitfy-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <span class="leading-5 menu-header">Web 3</span>
       </a>
-      <NavigationButton targetPath="#ipfs" {path}>
+      <NavigationButton targetPath="#ipfs" {path} on:navClick={handleClick}>
         <div slot="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -98,7 +112,7 @@
           </svg>
         </div>
       </NavigationButton>
-      <NavigationButton targetPath="#setup" {path}>
+      <NavigationButton targetPath="#setup" {path} on:navClick={handleClick}>
         <div slot="icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_3949_12119)">

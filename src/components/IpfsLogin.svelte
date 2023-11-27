@@ -7,6 +7,7 @@
     export let password = localStorage.getItem('ipfsPassword') || "";
     export let loggedIn = username && password
     export let message = ""
+    export let error = ""
     let passwordInput;
     let type = ""
     let show = true;
@@ -66,6 +67,7 @@
   </div>
   <div class="card-footer justify-start pt-4">
     <div class="message">{message}</div>
+    <div class="error text-left mr-3">{error}</div>
     <button class="default-btn ok-button" disabled={!password || !username} on:click={onOkButtonClick}>OK
     </button>
   </div>
@@ -79,7 +81,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 650px
+        min-width: 650px
     }
 
     .credentials {
@@ -109,7 +111,7 @@
 
     .view {
         position: absolute;
-        right: 5px;
+        right: 15px;
         font-weight: 400;
         font-size: 14px;
         cursor: pointer;

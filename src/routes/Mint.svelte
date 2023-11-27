@@ -86,7 +86,6 @@
 
     let amount;
     let shouldDisable = !$schemas.length
-    let showAuth = false;
     let username = "";
     let password = "";
     let promise;
@@ -155,7 +154,6 @@
             error = ""
 
             if (!parseFloat(amount)) {
-
                 error = "Zero amount"
                 return;
             }
@@ -230,16 +228,8 @@
         error = ""
         uploadBtnLoading.set(true)
 
-        let savedUsername = localStorage.getItem('ipfsUsername');
-        let savedPassword = localStorage.getItem('ipfsPassword');
-        if (!savedPassword || !savedUsername) {
-            showAuth = true;
-            await waitForCredentials()
-        } else {
-            username = savedUsername;
-            password = savedPassword
-        }
-
+        username = localStorage.getItem('ipfsUsername');
+        password = localStorage.getItem('ipfsPassword');
 
         let formData = new FormData();
 
@@ -274,9 +264,6 @@
 
         let resolvedPromise = respAll.find(r => r.status === "fulfilled")
         if (resolvedPromise) {
-
-            localStorage.setItem('ipfsUsername', username);
-            localStorage.setItem('ipfsPassword', password);
             if (type === "file" && data.file.size) {
                 fileHashes = [...fileHashes, {prop: data.prop, hash: resolvedPromise.value.data.Hash}]//.set(resolvedPromise.value.data.Hash)
             }
@@ -330,18 +317,6 @@
         return response
     }
 
-    async function waitForCredentials() {
-        const confirm = document.getElementById("ok-button")
-
-        promise = new Promise((resolve) => {
-            confirm.addEventListener('click', resolve)
-        })
-        return await promise.then(() => {
-                showAuth = false;
-            }
-        )
-    }
-
     pageTitle.set("Mint/Redeem")
 
     function handleFileUpload(event) {
@@ -362,59 +337,43 @@
       Audit history
     </button>
   </div>
-  {#if (!showAuth)}
+  <div class="audit-info-container basic-frame-parent">
+    <div class="form-frame basic-frame">
+      <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
+      <MintInput bind:amount={amount} amountLabel={"Mint amount"}
+                 info="(Mint amount = number of tokens that will go into your wallet)"/>
+      {#if $schemas.length}
+        <div class="schema">
+          <div class="schema-dropdown flex justify-between mb-6">
+            <label class="f-weight-700 custom-col">Asset class</label>
+            <Select options={$schemas}
 
-    <div class="audit-info-container basic-frame-parent">
-      <div class="form-frame basic-frame">
-        <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
-        <MintInput bind:amount={amount} amountLabel={"Mint amount"}
-                   info="(Mint amount = number of tokens that will go into your wallet)"/>
-        {#if $schemas.length}
-          <div class="schema">
-            <div class="schema-dropdown flex justify-between mb-6">
-              <label class="f-weight-700 custom-col">Asset class</label>
-              <Select options={$schemas}
+                    on:select={handleSchemaSelect}
+                    label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
 
-                      on:select={handleSchemaSelect}
-                      label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
-
-            </div>
-            <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
           </div>
-        {/if}
-        {#if !$schemas.length}
-          <div class="empty-schemas">
-            <span>Please create a new asset class to mint </span>
-          </div>
-        {/if}
-
-      </div>
+          <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
+        </div>
+      {/if}
+      {#if !$schemas.length}
+        <div class="empty-schemas">
+          <span>Please create a new asset class to mint </span>
+        </div>
+      {/if}
 
     </div>
 
-    <div class="error">{error}</div>
-    <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
-      (FT)
-    </div>
-
-    <button class="mint-btn btn-solid" on:click={() => mint()}
-            disabled="{!selectedSchema.hash || !parseFloat(amount)}">
-      Mint
-    </button>
-  {/if}
-  <!--{#if showAuth}-->
-  <div class={showAuth  ? 'auth show' : 'auth hide'}>
-    <div class="display-flex space-between">
-      <label>Username:</label>
-      <input class="default-input" type="text" bind:value={username} autofocus/>
-    </div>
-    <div class="display-flex space-between">
-      <label>Password:</label>
-      <input class="default-input" type="password" bind:value={password}/>
-    </div>
-    <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
   </div>
-  <!--{/if}-->
+
+  <div class="error">{error}</div>
+  <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
+    (FT)
+  </div>
+
+  <button class="mint-btn btn-solid" on:click={() => mint()}
+          disabled="{!selectedSchema.hash || !parseFloat(amount)}">
+    Mint
+  </button>
 
 </div>
 
@@ -469,29 +428,6 @@
 
     .custom-col {
         margin-right: 25px;
-    }
-
-    .auth {
-        background: #FFFFFF;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: left;
-        padding: 40px;
-        width: calc(100% - 80px);
-    }
-
-    .default-input {
-        width: 250px;
-    }
-
-    .show {
-        display: flex;
-    }
-
-    .hide {
-        display: none;
     }
 
     .empty-schemas {

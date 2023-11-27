@@ -51,11 +51,11 @@
     <div class="flex flex-col gap-2 w-full">
       <div class="w-full space-between items-center">
         <label class="mr-2">Username:</label>
-        <input class="default-input" type="text" bind:value={username} autofocus/>
+        <input class="default-input ipfs-username" type="text" bind:value={username} autofocus/>
       </div>
       <div class="w-full space-between password items-center">
         <label class="mr-3">Password:</label>
-        <input class="default-input" type="password" bind:value={password} bind:this={passwordInput}/>
+        <input class="default-input ipfs-password" type="password" bind:value={password} bind:this={passwordInput}/>
         {#if password}
           <div class="view" on:click={()=>{toggleShowPassword()}}>{show ? 'show' : 'hide'}</div>
         {/if}

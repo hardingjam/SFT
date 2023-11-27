@@ -22,7 +22,7 @@
     function handleMintClick(e) {
         let ipfsUsername = localStorage.getItem('ipfsUsername');
         let ipfsPassword = localStorage.getItem('ipfsPassword');
-        if ((!ipfsPassword || !ipfsUsername) && !$isCypress) {
+        if (!ipfsPassword || !ipfsUsername) {
             navigate('#ipfs', {clear: true})
         } else {
             navigate(e.detail, {clear: true})

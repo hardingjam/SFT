@@ -8,23 +8,35 @@ describe('The Home Page', () => {
         cy.visit('/')
         cy.get(`#launch-button`).click();
         cy.get(`#token-name-Jefo`).click();
-        cy.wait(1000)
-        cy.get(`.path-mint`).click();
-        cy.url().should('include', '/#mint')
     })
-    it('Navigates to new-asset-class', () => {
-        cy.get(`.new-asset-class`).click();
-        cy.wait(1000)
-        cy.url().should('include', '/#new-asset-class')
+    it('IPFS sign in should be visible if not logged in or navigate to mint', () => {
+        cy.get(`.path-mint`).click();
+        cy.window().its('localStorage').then((localStorage) => {
+            // Now you can access localStorage variables
+            let ipfsUsername = localStorage.getItem('ipfsUsername');
+            let ipfsPassword = localStorage.getItem('ipfsPassword');
+            console.log(111, ipfsUsername, ipfsPassword)
+
+            if (!ipfsPassword || !ipfsUsername) {
+                cy.url().should('include', '/#ipfs')
+                cy.get('.ipfs-username').type('gildlab1')
+                cy.get('.ipfs-password').type('twet.gral.yew.phai')
+                localStorage.setItem('ipfsUsername', 'gildlab1');
+                localStorage.setItem('ipfsPassword', 'twet.gral.yew.phai');
+            } else {
+                cy.url().should('include', '/#mint')
+            }
+        });
+
     });
-    it('Navigates to asset-class-list', () => {
-        cy.get(`.asset-class-list`).click();
-        cy.wait(1000)
-        cy.url().should('include', '/#asset-classes')
-    });
-    it('Navigates to audit-history', () => {
-        cy.get(`.audit-history`).click();
-        cy.wait(1000)
-        cy.url().should('include', '/#audit-history')
+    it('Should visit mint after setting ipfs credentials', () => {
+        cy.get(`.path-mint`).click();
+        cy.window().its('localStorage').then((localStorage) => {
+            localStorage.setItem('ipfsUsername', 'gildlab1');
+            localStorage.setItem('ipfsPassword', 'twet.gral.yew.phai');
+        });
+
+        cy.get('.path-mint').click()
+        cy.url().should('include', '/#mint')
     });
 })

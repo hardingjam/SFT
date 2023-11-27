@@ -58,7 +58,7 @@
                 loggedIn = true;
                 message = "Login successful!";
             } else {
-                error = "Double check your login details and if the problem persists, contact us"
+                error = "Double check your login details. If the problem persists, contact us."
             }
         } catch (e) {
             console.log(e)

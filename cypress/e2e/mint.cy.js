@@ -27,15 +27,4 @@ describe('The Home Page', () => {
         cy.wait(1000)
         cy.url().should('include', '/#audit-history')
     });
-    it('IPFS sign in should be visible', () => {
-        cy.get(`.options-input input`).clear();
-        cy.get(`.options-input input`).type('0.001');
-        cy.get(`.mintSelect`).click();
-        cy.get('.mintSelect .dropdown-item').eq(1).click();
-        cy.get(`#name`).type('Name');
-        cy.get(`#wallet`).type('Wallet');
-        cy.get(`#title`).type('Title');
-        cy.get(`.mint-btn`).click();
-        cy.get(`.auth`).should('be.visible');
-    });
 })

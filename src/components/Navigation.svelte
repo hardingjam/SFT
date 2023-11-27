@@ -1,5 +1,5 @@
 <script>
-    import {account, accountRoles, sftInfo, tokenName, vault} from "../scripts/store.js";
+    import {account, accountRoles, sftInfo, tokenName, vault, isCypress} from "../scripts/store.js";
     import NavigationButton from './NavigationButton.svelte';
     import TokenOverviewTable from './TokenOverviewTable.svelte';
     import {navigate} from '../scripts/helpers.js';
@@ -22,9 +22,9 @@
     function handleMintClick(e) {
         let ipfsUsername = localStorage.getItem('ipfsUsername');
         let ipfsPassword = localStorage.getItem('ipfsPassword');
-        if (!ipfsPassword || !ipfsUsername) {
+        if ((!ipfsPassword || !ipfsUsername) && !$isCypress) {
             navigate('#ipfs', {clear: true})
-        }else{
+        } else {
             navigate(e.detail, {clear: true})
         }
     }

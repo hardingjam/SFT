@@ -97,6 +97,11 @@
     })
 
     onMount(async () => {
+        let ipfsUsername = localStorage.getItem('ipfsUsername');
+        let ipfsPassword = localStorage.getItem('ipfsPassword');
+        if (!ipfsUsername || !ipfsPassword) {
+            navigateTo("/#ipfs")
+        }
         if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
             navigateTo('#');
         }

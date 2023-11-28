@@ -1,7 +1,7 @@
 <script>
-    import {navigate} from '../scripts/helpers.js';
     import {navigationButtonClicked, tokenName} from '../scripts/store.js';
     import {ROUTE_LABEL_MAP} from '../scripts/consts.js';
+    import {createEventDispatcher} from 'svelte';
 
     export let targetPath;
     export let label;
@@ -9,31 +9,32 @@
     export let child = false;
     export let disabled = false;
 
-    export let clickable = true;
     export let externalUrl = '';
+    const dispatch = createEventDispatcher();
 
     function handleNavigationButtonClick() {
-
-        if (!clickable) {
-            return
-        }
         if (externalUrl) {
             window.open(externalUrl, '_blank')
             return
+        } else {
+            dispatch('navClick', targetPath);
         }
-        navigate(targetPath, {clear: true})
         navigationButtonClicked.set(true)
+
     }
 
 </script>
 <button on:click={()=>handleNavigationButtonClick()}
         class:active={path===targetPath}
-        class="{child? 'sub-nav-item' : 'nav-item'} {targetPath?.replace('#', 'path-')} space-x-6" disabled={disabled ? 'disabled' : ''}>
+        class="{child? 'sub-nav-item' : 'nav-item'} {targetPath?.replace('#', 'path-')} space-x-6"
+        disabled={disabled ? 'disabled' : ''}>
         <span class="w-3">
           <slot name="icon"></slot>
         </span>
-  <label class="text-base leading-5  ">{targetPath ? ROUTE_LABEL_MAP.get(targetPath) : label.slice(0,15)} {label?.length>15? '...':''}
-      {#if label && label.length > 15}<span class="tooltip-text">{label}</span>{/if}
+  <label class="text-base leading-5  ">{targetPath ?
+      ROUTE_LABEL_MAP.get(targetPath) :
+      label.slice(0, 15)} {label?.length > 15 ? '...' : ''}
+    {#if label && label.length > 15}<span class="tooltip-text">{label}</span>{/if}
   </label>
 </button>
 <style>
@@ -86,7 +87,7 @@
         cursor: pointer;
     }
 
-    .text-base{
+    .text-base {
         position: relative;
     }
 
@@ -95,7 +96,7 @@
         opacity: 1;
     }
 
-    .tooltip-text{
+    .tooltip-text {
         left: 0;
         transform: unset;
     }

@@ -43,12 +43,23 @@
         })
     }
 
+    function goToMint(route) {
+        let ipfsUsername = localStorage.getItem('ipfsUsername');
+        let ipfsPassword = localStorage.getItem('ipfsPassword');
+        if (!ipfsPassword || !ipfsUsername) {
+            navigate('#ipfs', {clear: true})
+        } else {
+            navigate(route, {clear: true})
+        }
+    }
+
 </script>
 <div class="asset-classes-container">
   <div class="card-header space-between">
-    <div class="title flex"><img src="{icons.asset_list_dark}" alt="asset class list"/>{`${$tokenName} asset class list`}</div>
+    <div class="title flex"><img src="{icons.asset_list_dark}"
+                                 alt="asset class list"/>{`${$tokenName} asset class list`}</div>
     <div class="buttons">
-      <button class="default-btn" on:click={()=>{navigate("#mint")}}>Mint</button>
+      <button class="default-btn" on:click={()=>{goToMint("#mint")}}>Mint</button>
       <button class="default-btn" on:click={()=>{navigate("#new-asset-class")}}>New asset class</button>
     </div>
 

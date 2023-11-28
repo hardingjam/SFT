@@ -33,7 +33,8 @@ describe('The Home Page', () => {
         cy.get(`#token-name-Jefo`).click();
         cy.wait(1000)
         cy.get(`.path-mint`).click();
-        cy.url().should('include', '/#mint')
+        //There is no user logged in so it should go to ipfs login page
+        cy.url().should('include', '/#ipfs')
     });
     it('Navigates to asset-classes', () => {
         cy.get(`#token-name-Jefo`).click();

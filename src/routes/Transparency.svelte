@@ -129,7 +129,7 @@
         font-size: 35px;
         font-style: normal;
         font-weight: 700;
-        line-height: 55px; /* 157.143% */
+        line-height: 55px;
     }
 
     .header-text {
@@ -137,7 +137,7 @@
         font-size: 45px;
         font-style: normal;
         font-weight: 700;
-        line-height: 55px; /* 122.222% */
+        line-height: 55px;
         margin-bottom: 124px;
     }
 

@@ -145,7 +145,7 @@
         position: absolute;
         top: 677px;
         padding: 0 122px;
-        z-index: 1;
+        z-index: 2;
         text-align: left;
     }
 
@@ -197,12 +197,12 @@
     }
 
     .poem-gradient3 {
-        z-index: 1;
+        z-index: 2;
         position: absolute;
         top: 1027px;
         left: -24%;
         width: 1769px;
-        height: 1547px;
+        height: 1120px;
         border-radius: 1769px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 77.71%, rgba(233, 233, 233, 0.00) 100%);
     }
@@ -242,11 +242,11 @@
     }
 
     .poem-gradient8 {
-        z-index: 0;
+        z-index: 1;
         position: absolute;
         bottom: 15%;
-        right: -5%;
-        width: 140%;
+        right: -17%;
+        width: 2396px;
         height: 1252px;
         border-radius: 2396px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #BFCDFF 0%, rgba(217, 221, 255, 0.92) 53.13%, rgba(233, 233, 233, 0.00) 100%);

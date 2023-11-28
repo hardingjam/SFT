@@ -231,11 +231,11 @@
 
     .poem-gradient7 {
         left: 27%;
-        bottom: -30%;
+        bottom: -40%;
         z-index: 1;
         position: absolute;
         width: 1891px;
-        height: 1771px;
+        height: 100%;
         transform: rotate(17deg);
         border-radius: 1891px;
         background: radial-gradient(53.97% 41.99% at 46.31% 47.43%, #9ECEFF 0%, rgba(181, 217, 254, 0.06) 53.34%, rgba(233, 233, 233, 0.00) 100%);

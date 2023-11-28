@@ -7,6 +7,7 @@
     export let password = localStorage.getItem('ipfsPassword') || "";
     export let loggedIn = username && password
     export let message = ""
+    export let error = ""
     let passwordInput;
     let type = ""
     let show = true;
@@ -51,11 +52,11 @@
     <div class="flex flex-col gap-2 w-full">
       <div class="w-full space-between items-center">
         <label class="mr-2">Username:</label>
-        <input class="default-input" type="text" bind:value={username} autofocus/>
+        <input class="default-input ipfs-username" type="text" bind:value={username} autofocus/>
       </div>
       <div class="w-full space-between password items-center">
         <label class="mr-3">Password:</label>
-        <input class="default-input" type="password" bind:value={password} bind:this={passwordInput}/>
+        <input class="default-input ipfs-password" type="password" bind:value={password} bind:this={passwordInput}/>
         {#if password}
           <div class="view" on:click={()=>{toggleShowPassword()}}>{show ? 'show' : 'hide'}</div>
         {/if}
@@ -66,6 +67,7 @@
   </div>
   <div class="card-footer justify-start pt-4">
     <div class="message">{message}</div>
+    <div class="error text-left mr-3">{error}</div>
     <button class="default-btn ok-button" disabled={!password || !username} on:click={onOkButtonClick}>OK
     </button>
   </div>
@@ -79,7 +81,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 650px
+        min-width: 650px
     }
 
     .credentials {
@@ -109,7 +111,7 @@
 
     .view {
         position: absolute;
-        right: 5px;
+        right: 15px;
         font-weight: 400;
         font-size: 14px;
         cursor: pointer;

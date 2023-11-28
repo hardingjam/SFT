@@ -7,7 +7,14 @@
         uploadBtnLoading,
         activeNetwork,
         schemas,
-        transactionError, transactionSuccess, transactionInProgress, auditHistory, accountRoles, tokenName, pageTitle
+        transactionError,
+        transactionSuccess,
+        transactionInProgress,
+        auditHistory,
+        accountRoles,
+        tokenName,
+        pageTitle,
+        isCypress
     } from "../scripts/store.js";
     import {account} from "../scripts/store.js";
     import {navigateTo} from "yrv";
@@ -79,7 +86,6 @@
 
     let amount;
     let shouldDisable = !$schemas.length
-    let showAuth = false;
     let username = "";
     let password = "";
     let promise;
@@ -138,6 +144,7 @@
     }
 
     async function mint() {
+
         try {
             error = ""
 
@@ -145,20 +152,23 @@
                 error = "Zero amount"
                 return;
             }
-            const hasRoleDepositor = await hasRole($vault, $account, "DEPOSITOR")
+
+            const hasRoleDepositor = $isCypress ? true : await hasRole($vault, $account, "DEPOSITOR")
+
             if (!hasRoleDepositor.error) {
                 let structure = await submitForm()
                 if (structure) {
-
                     let fileHashesList = fileHashes.map(f => f.hash)
                     let encodedStructure = encodeCBORStructure(structure, selectedSchema.hash)
 
                     let shareRatio = ONE
                     const shares = ethers.utils.parseEther(amount.toString());
 
-
                     try {
                         let structureIpfs = await upload(structure)
+                        if (!structureIpfs.Hash) {
+                            return
+                        }
                         let encodedHashList = cborEncode([...fileHashesList,
                             structureIpfs?.Hash].toString(), MAGIC_NUMBERS.OA_HASH_LIST)
                         const meta = "0x" + MAGIC_NUMBERS.RAIN_META_DOCUMENT.toString(16).toLowerCase() +
@@ -213,16 +223,8 @@
         error = ""
         uploadBtnLoading.set(true)
 
-        let savedUsername = localStorage.getItem('ipfsUsername');
-        let savedPassword = localStorage.getItem('ipfsPassword');
-        if (!savedPassword || !savedUsername) {
-            showAuth = true;
-            await waitForCredentials()
-        } else {
-            username = savedUsername;
-            password = savedPassword
-        }
-
+        username = localStorage.getItem('ipfsUsername');
+        password = localStorage.getItem('ipfsPassword');
 
         let formData = new FormData();
 
@@ -257,9 +259,6 @@
 
         let resolvedPromise = respAll.find(r => r.status === "fulfilled")
         if (resolvedPromise) {
-
-            localStorage.setItem('ipfsUsername', username);
-            localStorage.setItem('ipfsPassword', password);
             if (type === "file" && data.file.size) {
                 fileHashes = [...fileHashes, {prop: data.prop, hash: resolvedPromise.value.data.Hash}]//.set(resolvedPromise.value.data.Hash)
             }
@@ -313,18 +312,6 @@
         return response
     }
 
-    async function waitForCredentials() {
-        const confirm = document.getElementById("ok-button")
-
-        promise = new Promise((resolve) => {
-            confirm.addEventListener('click', resolve)
-        })
-        return await promise.then(() => {
-                showAuth = false;
-            }
-        )
-    }
-
     pageTitle.set("Mint/Redeem")
 
     function handleFileUpload(event) {
@@ -334,70 +321,55 @@
 
 <div class="mint-container relative">
   <div class="header-buttons">
-    <button type="button" class="default-btn" on:click={()=>{navigate('#new-asset-class')}}>
+    <button type="button" class="default-btn new-asset-class" on:click={()=>{navigate('#new-asset-class')}}>
       New asset class
     </button>
-    <button type="button" class="default-btn" disabled={!$schemas.length}
+    <button type="button" class="default-btn asset-class-list" disabled={!$schemas.length}
             on:click={()=>{navigate('#asset-classes')}}>
       Asset class list
     </button>
-    <button class="default-btn" on:click={()=>{navigate('#audit-history')}}>
+    <button class="default-btn audit-history" on:click={()=>{navigate('#audit-history')}}>
       Audit history
     </button>
   </div>
-  {#if (!showAuth)}
+  <div class="audit-info-container basic-frame-parent">
+    <div class="form-frame basic-frame">
+      <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
+      <MintInput bind:amount={amount} amountLabel={"Mint amount"}
+                 info="(Mint amount = number of tokens that will go into your wallet)"/>
+      {#if $schemas.length}
+        <div class="schema">
+          <div class="schema-dropdown flex justify-between mb-6">
+            <label class="f-weight-700 custom-col">Asset class</label>
+            <Select options={$schemas}
 
-    <div class="audit-info-container basic-frame-parent">
-      <div class="form-frame basic-frame">
-        <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
-        <MintInput bind:amount={amount} amountLabel={"Mint amount"}
-                   info="(Mint amount = number of tokens that will go into your wallet)"/>
-        {#if $schemas.length}
-          <div class="schema">
-            <div class="schema-dropdown flex justify-between mb-6">
-              <label class="f-weight-700 custom-col">Asset class</label>
-              <Select options={$schemas}
+                    on:select={handleSchemaSelect}
+                    label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
 
-                      on:select={handleSchemaSelect}
-                      label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
-
-            </div>
-            <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
           </div>
-        {/if}
-        {#if !$schemas.length}
-          <div class="empty-schemas">
-            <span>Please create a new asset class to mint </span>
-          </div>
-        {/if}
-
-      </div>
+          <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
+        </div>
+      {/if}
+      {#if !$schemas.length}
+        <div class="empty-schemas">
+          <span>Please create a new asset class to mint </span>
+        </div>
+      {/if}
 
     </div>
 
-    <div class="error">{error}</div>
-    <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
-      (FT)
-    </div>
-
-    <button class="mint-btn btn-solid" on:click={() => mint()}
-            disabled="{!selectedSchema.hash || !parseFloat(amount)}">
-      Mint
-    </button>
-  {/if}
-  <!--{#if showAuth}-->
-  <div class={showAuth  ? 'auth show' : 'auth hide'}>
-    <div class="display-flex space-between">
-      <label>Username:</label>
-      <input class="default-input" type="text" bind:value={username} autofocus/>
-    </div>
-    <div class="display-flex space-between">
-      <label>Password:</label>
-      <input class="default-input" type="password" bind:value={password}/>
-    </div>
-    <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
   </div>
-  <!--{/if}-->
+
+  <div class="error">{error}</div>
+  <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
+    (FT)
+  </div>
+
+  <button class="mint-btn btn-solid" on:click={() => mint()}
+          disabled="{!selectedSchema.hash || !parseFloat(amount)}">
+    Mint
+  </button>
+
 </div>
 
 <style>
@@ -451,29 +423,6 @@
 
     .custom-col {
         margin-right: 25px;
-    }
-
-    .auth {
-        background: #FFFFFF;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: left;
-        padding: 40px;
-        width: calc(100% - 80px);
-    }
-
-    .default-input {
-        width: 250px;
-    }
-
-    .show {
-        display: flex;
-    }
-
-    .hide {
-        display: none;
     }
 
     .empty-schemas {

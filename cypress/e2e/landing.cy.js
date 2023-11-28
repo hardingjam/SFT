@@ -4,7 +4,7 @@ describe('Landing page', () => {
         return false
     })
     beforeEach(() => {
-        cy.visit('/')
+        cy.visit('/#')
     })
     it('should show landing page', () => {
         cy.get(`.landing-container`).should('exist');

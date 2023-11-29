@@ -1,4 +1,4 @@
-describe('Landing page', () => {
+describe('transparency page', () => {
     Cypress.on('uncaught:exception', (err, runnable) => {
         // returning false here prevents Cypress from failing the test
         return false
@@ -6,11 +6,10 @@ describe('Landing page', () => {
     beforeEach(() => {
         cy.visit('/#')
     })
-    it('should show landing page', () => {
+    it('should show landing page and navigate to transparency', () => {
         cy.get(`.landing-container`).should('exist');
+        cy.get(`.transparency-button`).click();
+        cy.url().should('include', '/#transparency')
     });
-    it('should navigate to sft list page', () => {
-        cy.get(`#launch-button`).click();
-        cy.url().should('include', '/#list')
-    })
+
 })

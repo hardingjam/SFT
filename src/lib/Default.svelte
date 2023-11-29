@@ -58,7 +58,7 @@
     import TransactionInProgressBanner from "../components/TransactionInProgressBanner.svelte";
     import Ipfs from "../routes/Ipfs.svelte";
     import {QUERY, VAULTS_QUERY, VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
-    import {IPFS_GETWAY, MAGIC_NUMBERS, ROLES} from '../scripts/consts.js';
+    import {IPFS_GETWAY, landingPages, MAGIC_NUMBERS, ROLES} from '../scripts/consts.js';
     import Header from '../components/Header.svelte';
     import {ROUTE_LABEL_MAP} from '../scripts/consts';
     import SFTCreateSuccessBanner from '../components/SFTCreateSuccessBanner.svelte';
@@ -73,6 +73,7 @@
     import AddressOverview from '../routes/AddressOverview.svelte';
     import {mock} from '../test/mock.js';
     import Landing from '../routes/Landing.svelte';
+    import Transparency from '../routes/Transparency.svelte';
 
     let connectedAccount;
     export let url = "";
@@ -96,7 +97,7 @@
         //reset pageTitle
         pageTitle.set("")
         titleIcon.set("")
-        if (e.path === '' || e.path === '/') {
+        if (landingPages.includes(e.path)) {
             landing.set(true)
         } else {
             landing.set(false)
@@ -165,6 +166,9 @@
         if (isMetamaskInstalled) {
             if ((location === "/" || location === "") && !$landing) {
                 navigateTo("#list");
+            }
+            if ((location === "/" || location === "") && $landing) {
+                navigateTo("#");
             }
             await setNetwork();
             await getSchemas();
@@ -441,7 +445,8 @@
 </script>
 <Router url={url}>
   <div class="{ $landing ? 'block' : 'hide'}">
-    <Route path="/" component={Landing}/>
+    <Route path="#" component={Landing}/>
+    <Route path="#transparency" component={Transparency}/>
   </div>
   <div class="{ !$landing ? 'block' : 'hide'}">
     <div class={$account || $isCypress? "content" : "content-not-connected"}>

@@ -80,3 +80,5 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#address-overview", "Address overview"],
     ["#knowledgebase", "Knowledgebase"]
 ]);
+
+export const landingPages = ['', '/', '#', '#transparency']

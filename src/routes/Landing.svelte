@@ -1,6 +1,13 @@
 <script>
     import {icons} from '../scripts/assets.js';
     import LandingNav from '../components/LandingNav.svelte';
+    import {landing} from '../scripts/store.js';
+    import {navigate} from '../scripts/helpers.js';
+
+    function launchApp() {
+        landing.set(false)
+        navigate("#list")
+    }
 </script>
 
 <div class="landing-container">
@@ -59,7 +66,7 @@
 
     <div class="groups">
       <div class="group">
-        <div class="investor"><img src="{icons.investor}" alt="investor"/></div>
+        <div class="investor"><img src="{icons.investors}" alt="investor" class="flip-horizontal"/></div>
         <div class="group-title">Investors</div>
         <div class="group-info">
           Buy/ trade/ hold tokens based on individual research & info from curators.
@@ -357,6 +364,11 @@
         border-radius: 50%;
     }
 
+    .group .investor img {
+        width: 95px;
+        height: 120px;
+    }
+
     .group .icon {
         padding: 14px;
         position: absolute;
@@ -589,5 +601,10 @@
 
     .launch-button.bottom {
         padding: 10px 45px;
+    }
+
+    .flip-horizontal {
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
     }
 </style>

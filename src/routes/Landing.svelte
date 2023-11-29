@@ -48,7 +48,7 @@
           </svg>
           Join our transparent, decentralised, programmatic, <span>Semi Fungible Token</span> system.
         </div>
-        <button class="launch-button" on:click="{()=>launchApp()}">Launch app</button>
+        <button class="launch-button" id="launch-button-1" on:click="{()=>launchApp()}">Launch app</button>
 
       </div>
       <div class="globe">
@@ -179,7 +179,7 @@
         </div>
       </div>
     </div>
-    <button class="launch-button bottom" on:click={()=>launchApp()}>Launch app</button>
+    <button class="launch-button bottom" id="launch-button-2" on:click={()=>launchApp()}>Launch app</button>
 
   </div>
   <div class="landing-footer">

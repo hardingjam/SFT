@@ -74,6 +74,7 @@
     import {mock} from '../test/mock.js';
     import Landing from '../routes/Landing.svelte';
     import Transparency from '../routes/Transparency.svelte';
+    import Investors from '../routes/Investors.svelte';
 
     let connectedAccount;
     export let url = "";
@@ -444,9 +445,11 @@
 
 </script>
 <Router url={url}>
+<!--  Any route added in landing section should be specified in landingPages array -->
   <div class="{ $landing ? 'block' : 'hide'}">
     <Route path="#" component={Landing}/>
     <Route path="#transparency" component={Transparency}/>
+    <Route path="#investors" component={Investors}/>
   </div>
   <div class="{ !$landing ? 'block' : 'hide'}">
     <div class={$account || $isCypress? "content" : "content-not-connected"}>

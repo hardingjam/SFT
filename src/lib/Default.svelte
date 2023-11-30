@@ -187,6 +187,7 @@
                 if (!accounts.length) {
                     account.set('');
                     localStorage.removeItem("account");
+                    activeToken.set({})
                 } else {
                     account.set(accounts[0]);
                     localStorage.setItem("account", $account);
@@ -458,7 +459,7 @@
                  class="{$account ? 'bg-white account' : 'no-account'} rounded-full w-full h-full"/>
           {:else}
             <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
-                 class="rounded-full w-full h-full token-logo"/>
+                 class="rounded-full token-logo"/>
           {/if}
         </a>
       </div>
@@ -741,5 +742,9 @@
     z-index: 3;
   }
 
+  .token-logo {
+    width: 85px;
+    height: 85px;
+  }
 
 </style>

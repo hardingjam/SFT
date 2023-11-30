@@ -12,10 +12,10 @@
   <div class="poem-gradient1"></div>
   <div class="poem-gradient2"></div>
   <div class="poem-gradient3"></div>
-  <div class="poem-gradient4"></div>
-  <div class="poem-gradient6"></div>
-  <div class="poem-gradient7"></div>
-  <div class="poem-gradient8"></div>
+    <div class="poem-gradient4"></div>
+    <div class="poem-gradient6"></div>
+  <!--  <div class="poem-gradient7"></div>-->
+  <!--  <div class="poem-gradient8"></div>-->
   <div class="landing-head">
     <div class="landing-logo">
       <Link href="#">
@@ -190,19 +190,13 @@
         line-height: 40px;
     }
 
-    .gradients {
-        position: relative;
-        overflow: hidden;
-    }
-
-
     .poem-gradient1 {
         position: absolute;
         width: 2129px;
         height: 1011px;
         border-radius: 2129px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 710px;
+        top: 635px;
         z-index: 1;
         right: 0;
     }
@@ -220,23 +214,23 @@
     .poem-gradient3 {
         z-index: 1;
         position: absolute;
-        top: 1027px;
+        top: 990px;
         right: 5%;
         width: 1769px;
         height: 1547px;
-        border-radius: 1769px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 77.71%, rgba(233, 233, 233, 0.00) 100%);
+        border-radius: 1576px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #F2F4F6 0%, rgba(242, 244, 246, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
     }
 
     .poem-gradient4 {
         z-index: 0;
         position: absolute;
-        top: 1495px;
-        width: 1576px;
-        height: 1378px;
-        flex-shrink: 0;
-        border-radius: 1576px;
-        background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
+        right: -5%;
+        top: 1455px;
+        width: 2396px;
+        height: 1252px;
+        border-radius: 2396px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #BFCDFF 0%, rgba(217, 221, 255, 0.92) 53.13%, rgba(233, 233, 233, 0.00) 100%);
     }
 
     .poem-gradient6 {

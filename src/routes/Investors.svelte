@@ -30,7 +30,7 @@
     </div>
 
     <div class="info-card">
-      <div class="flex justify-between w-full items-center">
+      <div class="flex justify-between w-full items-center mb-12">
         <div class="header-text title-text">Investors</div>
         <img src="{icons.investors}" alt="investors"/>
       </div>
@@ -112,7 +112,7 @@
 
 <style>
     .transparency-container {
-        background: #F7F8F9;
+        background: #FCFCFC;
         margin-left: auto;
         margin-right: auto;
         position: relative;
@@ -151,6 +151,7 @@
         font-style: normal;
         font-weight: 700;
         line-height: 55px; /* 157.143% */
+        margin-bottom: 40px;
     }
 
     .header-text {
@@ -164,7 +165,7 @@
 
     .info-card {
         position: absolute;
-        top: 515px;
+        top: 470px;
         padding: 0 122px;
         z-index: 1;
         text-align: left;

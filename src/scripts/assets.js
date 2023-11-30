@@ -37,11 +37,11 @@ import members_icon from '../assets/icons/members_icon.svg'
 import search_icon from '../assets/icons/search_icon.svg'
 import sft_logo_white from '../assets/icons/sft_logo_white.svg'
 import globe from '../assets/icons/globe.webp'
-import investor from '../assets/icons/investor.png'
 import lock from '../assets/icons/lock.svg'
 import microphone from '../assets/icons/microphone.svg'
 import wave from '../assets/icons/wave.png'
 import tube from '../assets/icons/tube.webp'
+import investors from '../assets/icons/investor.png'
 
 export const icons = {
     ethereum,
@@ -83,9 +83,9 @@ export const icons = {
     members_icon,
     sft_logo_white,
     globe,
-    investor,
     lock,
     microphone,
     wave,
-    tube
+    tube,
+    investors
 }

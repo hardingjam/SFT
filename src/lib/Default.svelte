@@ -456,7 +456,7 @@
         <a href="/#list">
           {#if !$activeToken.icon}
             <img src={$account? icons.logo: icons.sft_logo_white} alt=""
-                 class="{$account ? 'bg-white account' : 'no-account'} rounded-full w-full h-full"/>
+                 class="{$account ? 'bg-white account' : 'no-account'} rounded-full token-logo"/>
           {:else}
             <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
                  class="rounded-full token-logo"/>
@@ -745,6 +745,9 @@
   .token-logo {
     width: 85px;
     height: 85px;
+    border-radius: 84.5px;
+    background: #FFF;
+    box-shadow: 0 0 3px 1px #DADADA;
   }
 
 </style>

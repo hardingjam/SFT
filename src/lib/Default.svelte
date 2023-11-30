@@ -124,7 +124,7 @@
                 } else if (location.includes('#asset-information')) {
                     navigateTo(location, {replace: false})
                 } else {
-                    if(!$landing){
+                    if (!$landing) {
                         vault.set({})
                         location = "/#list"
                         navigateTo("/#list", {replace: false})
@@ -458,7 +458,7 @@
         <a href="/#list">
           {#if !$activeToken.icon}
             <img src={$account? icons.logo: icons.sft_logo_white} alt=""
-                 class="{$account ? 'bg-white' : ''} rounded-full w-full h-full"/>
+                 class="{$account ? 'bg-white account' : 'no-account'} rounded-full w-full h-full"/>
           {:else}
             <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
                  class="rounded-full w-full h-full token-logo"/>
@@ -567,10 +567,18 @@
     left: 55px;
   }
 
-  .logo-container img {
+  .logo-container .account {
     height: 85px;
     width: 85px;
   }
+
+  .logo-container .no-account {
+    margin-left: 45px;
+    width: 65px;
+    height: 66px;
+    margin-top: 5px;
+  }
+
 
   .border-6 {
     border-width: 6px

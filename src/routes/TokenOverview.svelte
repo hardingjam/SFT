@@ -247,9 +247,6 @@
       <div class="links">
         <SftCredentialLinks sft={token} on:editClick={handleEditClick}></SftCredentialLinks>
       </div>
-      <button class="btn-hover mr-3" on:click={()=>{navigate("#", {clear:true})}}>
-        <img src={icons.back} alt="back">
-      </button>
     </div>
     <div class="content">
       <div class="w-full flex justify-between">

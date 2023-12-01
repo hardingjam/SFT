@@ -42,7 +42,7 @@ import microphone from '../assets/icons/microphone.svg'
 import wave from '../assets/icons/wave.png'
 import tube from '../assets/icons/tube.webp'
 import investor_wave from '../assets/icons/investor_wave.webp'
-import investors from '../assets/icons/investor.png'
+import investors from '../assets/icons/investor.webp'
 
 export const icons = {
     ethereum,

@@ -75,6 +75,7 @@
     import Landing from '../routes/Landing.svelte';
     import Transparency from '../routes/Transparency.svelte';
     import Investors from '../routes/Investors.svelte';
+    import LandingNav from '../components/LandingNav.svelte';
 
     let connectedAccount;
     export let url = "";

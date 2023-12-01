@@ -170,9 +170,9 @@
       <div class="flow">
         <div class="icon color-3">3</div>
         <div class="flow-text">
-          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="51" viewBox="0 0 44 51" fill="none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="34" height="22" viewBox="0 0 34 22" fill="none">
             <path
-              d="M22.0013 33.7161L22.0013 25.3827M22.0013 17.0494L22.0013 25.3827M22.0013 25.3827L7.33464 25.3827M22.0013 25.3827L36.668 25.3827M7.33464 25.3827L11.918 30.5911M7.33464 25.3827L11.918 20.1744M36.668 25.3827L32.0846 20.1744M36.668 25.3827L32.0846 30.5911"
+              d="M17.0013 19.3333L17.0013 10.9999M17.0013 2.66658L17.0013 10.9999M17.0013 10.9999L2.33464 10.9999M17.0013 10.9999L31.668 10.9999M2.33464 10.9999L6.91798 16.2083M2.33464 10.9999L6.91797 5.79159M31.668 10.9999L27.0846 5.79158M31.668 10.9999L27.0846 16.2083"
               stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           <span>Mint/Redeem</span>
@@ -490,8 +490,9 @@
     }
 
     .flow-text {
+        align-items: center;
         display: flex;
-        gap: 7px;
+        gap: 21px;
         margin-top: 50px;
         color: #575757;
         text-align: center;

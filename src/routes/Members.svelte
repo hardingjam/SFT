@@ -266,7 +266,6 @@
     .address-container {
         justify-content: space-between;
         min-height: 36px;
-        margin-left: 10px;
         align-items: baseline;
     }
 

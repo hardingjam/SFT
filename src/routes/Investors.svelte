@@ -14,8 +14,8 @@
   <div class="poem-gradient3"></div>
     <div class="poem-gradient4"></div>
     <div class="poem-gradient6"></div>
-  <!--  <div class="poem-gradient7"></div>-->
-  <!--  <div class="poem-gradient8"></div>-->
+    <div class="poem-gradient7"></div>
+    <div class="poem-gradient8"></div>
   <div class="landing-head">
     <div class="landing-logo">
       <Link href="#">
@@ -116,7 +116,7 @@
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 2960px;
+        min-height: 3400px;
         overflow: hidden;
     }
 
@@ -167,7 +167,7 @@
         position: absolute;
         top: 470px;
         padding: 0 122px;
-        z-index: 1;
+        z-index: 4;
         text-align: left;
     }
 
@@ -212,7 +212,7 @@
     }
 
     .poem-gradient3 {
-        z-index: 1;
+        z-index: 2;
         position: absolute;
         top: 990px;
         right: 5%;
@@ -223,7 +223,7 @@
     }
 
     .poem-gradient4 {
-        z-index: 0;
+        z-index: 1;
         position: absolute;
         right: -5%;
         top: 1455px;
@@ -234,6 +234,7 @@
     }
 
     .poem-gradient6 {
+        z-index: 1;
         position: absolute;
         top: 1600px;
         left: 5%;
@@ -244,25 +245,25 @@
     }
 
     .poem-gradient7 {
-        z-index: 1;
+        z-index: 0;
         position: absolute;
         top: 2194px;
-        left: -30%;
-        width: calc(100% + 600px);
-        height: 784px;
-        border-radius: 2089px;
-        background: radial-gradient(88.83% 39.47% at 59.22% 37.9%, #C5E3FF 58.97%, rgba(185, 221, 254, 0.00) 100%);
+        left: -25%;
+        width: 1576px;
+        height: 1378px;
+        border-radius: 1576px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
     }
 
     .poem-gradient8 {
         z-index: 0;
         position: absolute;
-        top: 2295px;
-        left: 30%;
-        width: 90%;
-        height: 686px;
-        border-radius: 1096px;
-        background: radial-gradient(58.23% 53.35% at 70.99% 20.56%, #CFE8FF 0%, #C5E3FF 10.9%, #B9DDFE 60.87%, #7EC0FB 100%);
+        top: 1800px;
+        left: 60%;
+        width: 1576px;
+        height: 1378px;
+        border-radius: 1576px;
+        background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
     }
 
     .wave {

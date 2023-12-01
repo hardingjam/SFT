@@ -22,10 +22,10 @@
         <span class="cursor-pointer">SFT Ecosystem members</span>
       </div>
       <div class="dropdown-content">
-        <a href="/#investors" class="{$router.path === '#investors' ? 'active-list-item' : ''}">Investors</a>
-        <a href="/#curators" class="{$router.path === '#curators' ? 'active-list-item' : ''}">Curators</a>
-        <a href="/#issuers" class="{$router.path === '#issuers' ? 'active-list-item' : ''}">Issuers</a>
-        <a href="/#auditors" class="{$router.path === '#auditors' ? 'active-list-item' : ''}">Auditors</a>
+        <a href="/#investors" class="{$router.path === '#investors' ? 'active-list-item' : ''} investors">Investors</a>
+        <a href="/#curators" class="{$router.path === '#curators' ? 'active-list-item' : ''}   curators">Curators</a>
+        <a href="/#issuers" class="{$router.path === '#issuers' ? 'active-list-item' : ''}     issuers">Issuers</a>
+        <a href="/#auditors" class="{$router.path === '#auditors' ? 'active-list-item' : ''}   auditors">Auditors</a>
       </div>
     </div>
     <div class="{$router.path === '#transparency' ? 'active link' : 'link transparency-button'}">

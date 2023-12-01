@@ -8,9 +8,16 @@ describe('Investors page', () => {
     beforeEach(() => {
         cy.visit('/#')
     })
-    it('should show landing page and dropdown on SFT Ecosystem members hover', () => {
+    it('Should show landing page and dropdown on SFT Ecosystem members hover', () => {
         cy.get(`.landing-container`).should('exist');
         cy.get('.dropdown .link').realHover();
         cy.get('.dropdown-content').should('be.visible');
     });
+
+    it('Should navigate to investors', () => {
+        cy.get('.dropdown .link').realHover();
+        cy.get(`.investors`).click();
+        cy.url().should('include', '/#investors')
+    });
+
 })

@@ -21,12 +21,16 @@
       <div class="{membersPages.includes($router.path) ? 'active link' : 'link'}">
         <span class="cursor-pointer">SFT Ecosystem members</span>
       </div>
-      <div class="dropdown-content">
-        <a href="/#investors" class="{$router.path === '#investors' ? 'active-list-item' : ''} investors">Investors</a>
-        <!--        <a href="/#curators" class="{$router.path === '#curators' ? 'active-list-item' : ''}   curators">Curators</a>-->
-        <!--        <a href="/#issuers" class="{$router.path === '#issuers' ? 'active-list-item' : ''}     issuers">Issuers</a>-->
-        <!--        <a href="/#auditors" class="{$router.path === '#auditors' ? 'active-list-item' : ''}   auditors">Auditors</a>-->
+      <div class="dropdown-content-wrapper">
+        <div class="dropdown-content">
+          <a href="/#investors"
+             class="{$router.path === '#investors' ? 'active-list-item' : ''} investors">Investors</a>
+          <!--        <a href="/#curators" class="{$router.path === '#curators' ? 'active-list-item' : ''}   curators">Curators</a>-->
+          <!--        <a href="/#issuers" class="{$router.path === '#issuers' ? 'active-list-item' : ''}     issuers">Issuers</a>-->
+          <!--        <a href="/#auditors" class="{$router.path === '#auditors' ? 'active-list-item' : ''}   auditors">Auditors</a>-->
+        </div>
       </div>
+
     </div>
     <div class="{$router.path === '#transparency' ? 'active link' : 'link transparency-button'}">
       <Link href="#transparency">SFT transparency</Link>
@@ -76,6 +80,15 @@
         border: 1px solid transparent;
     }
 
+
+    .dropdown-content-wrapper {
+        border-top: 10px solid transparent;
+        display: none;
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+    }
+
     .links .active {
         border-bottom: 3px solid #2C2C54;
     }
@@ -93,15 +106,12 @@
 
     /* Styles for the dropdown content */
     .dropdown-content {
-        display: none;
-        position: absolute;
         background-color: rgba(255, 255, 255, 0.10);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         z-index: 1;
         width: 100%;
         flex-direction: column;
         gap: 12px;
-        border-top: 10px solid transparent;
     }
 
     /* Styles for each dropdown item */
@@ -126,6 +136,10 @@
 
     /* Display the dropdown content when hovering over the dropdown */
     .dropdown:hover .dropdown-content {
+        display: flex;
+    }
+
+    .dropdown:hover .dropdown-content-wrapper {
         display: flex;
     }
 </style>

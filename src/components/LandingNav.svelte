@@ -18,7 +18,7 @@
 <div class="landing-nav-container">
   <div class="links">
     <div class="dropdown">
-      <div class="{membersPages.includes($router.path) ? 'active link' : 'link transparency-button'}">
+      <div class="{membersPages.includes($router.path) ? 'active link' : 'link'}">
         <span class="cursor-pointer">SFT Ecosystem members</span>
       </div>
       <div class="dropdown-content">

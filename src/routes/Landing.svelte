@@ -275,11 +275,13 @@
         font-style: normal;
         font-weight: 400;
         line-height: normal;
+        position: relative;
+        margin-top:20px;
     }
 
     .text .info svg {
         position: absolute;
-        top: -8px;
+        top: -13px;
         left: -41px
     }
 

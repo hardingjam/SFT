@@ -32,7 +32,6 @@
     <div class="info-card">
       <div class="flex justify-between w-full items-center mb-12">
         <div class="header-text">Curators</div>
-        <img src="{icons.investors}" alt="investors" class="investor-img"/>
       </div>
       <div class="paragraph">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets for extended periods, others may adopt a more active approach, engaging in daily trading to capitalise on short-term market movements. Regardless of the strategy, every investor needs access to critical information to make informed decisions.
       </div>

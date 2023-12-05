@@ -12,6 +12,7 @@
   <div class="poem-gradient6"></div>
   <div class="poem-gradient7"></div>
   <div class="poem-gradient8"></div>
+  <div class="poem-gradient9  "></div>
   <div class="landing-head">
     <div class="landing-logo">
       <Link href="#">
@@ -28,67 +29,44 @@
     <div class="info-card">
       <div class="flex justify-between w-full items-left flex-col gap-16">
         <div class="flex items-center justify-center rounded-full bg-amber-500 mic">
-         <img src="{icons.sft_create}" alt="issuer" class="issuer-plus-icon"/>
+          <img src="{icons.sft_create}" alt="issuer" class="issuer-plus-icon"/>
         </div>
         <div class="header-text">Issuers</div>
       </div>
-      <div class="paragraph">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets
-        for extended periods, others may adopt a more active approach, engaging in daily trading to capitalise on
-        short-term market movements. Regardless of the strategy, every investor needs access to critical information to
-        make informed decisions.
+      <div class="paragraph">An issuer is someone looking to create a token, a digital representation of value. This
+        involves two key aspects: the technology for token creation (minting) and ensuring liquidity for trading.
       </div>
-      <div class="title-text">There’s more data available to discern your investments</div>
+      <div class="title-text">Minting and Liquidity</div>
 
       <div class="paragraph">
-        One crucial aspect is understanding the resiliency of the token they are investing in. For instance, stablecoins
-        like Tether, with a significant circulation, have raised questions about the transparency of their backing. It's
-        important for investors to know what supports the value of a token and the measures in place to prevent
-        fraudulent activities.
+        Minting is about using smart contracts, often on platforms like Ethereum, to create tokens. Liquidity, on the
+        other hand, ensures there are buyers and sellers in the market. It's akin to having someone ready to buy or sell
+        custom surfboards – without enough participants, even a valuable item may struggle to find takers.
       </div>
-      <div class="title-text">Short-Term vs. Long-Term Considerations</div>
+      <div class="title-text">The Catch-22 Challenge</div>
 
       <div class="paragraph">
-        Whether you're a short-term trader or a long-term investor, understanding the underlying technology and
-        governance of a token is crucial. Short-term traders focus on day-to-day market movements, identifying
-        opportunities to buy and sell for profit. On the other hand, long-term investors seek tokens with resilience and
-        longevity, emphasising factors like the token's collateralisation and the credibility of the issuing entity.
+        The challenge lies in a catch-22 situation. Tokens lack liquidity without users, yet users are hesitant if
+        liquidity is scarce. The key for issuers is to encourage widespread adoption of their token. For instance, a
+        gold token's value isn't just in the gold it represents but in the ease of access within the blockchain system.
       </div>
-
-      <div class="title-text">The Challenge of Information in the Crypto Space</div>
+      <div class="title-text">The Role of Transparency</div>
 
       <div class="paragraph">
-        One challenge investors face in the crypto space is the lack of standardised information. Unlike traditional
-        investments, where companies disclose detailed financial reports, cryptocurrency investments often lack
-        transparency. Basic information about a token, such as its purpose, the creator behind it, and the potential
-        risks, may not be readily available; SFT provides these.
+        Transparency is a crucial tool for issuers. In the often opaque world of token creation, being transparent about
+        the token's quality during minting builds trust. This is vital in a landscape where many tokens lack clear
+        information, making users wary.
       </div>
-
-      <div class="title-text">The Role of Transparency in Crypto Investments</div>
+      <div class="title-text">Beyond Token Creation</div>
 
       <div class="paragraph">
-        To address the information gap, transparency becomes a cornerstone for healthy crypto investments. Unlike
-        traditional financial systems, cryptocurrencies operate on decentralised and trustless networks. This
-        decentralisation, while a key strength, can also pose challenges when it comes to verifying information.
-        Investors need to be able to trust that the information they receive is accurate, unaltered, and comes from a
-        reliable source.
-      </div>
-
-      <div class="title-text">The Two-Token System: A solution for Transparency</div>
-
-      <div class="paragraph">
-        One innovative solution to enhance transparency is the implementation of a two-token system. This system allows
-        one token to represent the minting and burning process, providing a cryptographic trail of relevant information.
-        This approach ensures that critical details about the token's creation and destruction are securely recorded on
-        the blockchain, reducing the risk of manipulation or fraud.
-      </div>
-
-
-      <div class="paragraph">
-        To empower investors, the crypto community must prioritise transparency, providing accessible and accurate
-        information. Whether you're a long-term holder or a day trader, having the right information at your fingertips
-        allows you to make informed decisions, contributing to the overall health and growth of the crypto market. As an
-        investor, understanding the assets you hold is key, and the more information you have, the better equipped you
-        are to navigate the dynamic landscape.
+        To succeed, issuers need more than just a token – they need a compelling narrative. Transparency acts as the
+        linchpin, connecting issuers with users, fostering liquidity, and ensuring the token's relevance in the digital
+        space.
+        <p>
+          Issuers must not only focus on creating tokens but also on storytelling and transparency. The success of a
+          token ultimately hinges on user confidence and liquidity in the fast-paced world of digital assets.
+        </p>
       </div>
 
 
@@ -110,11 +88,11 @@
 
 <style>
     .transparency-container {
-        background: #CFD1F3;
+        background: #D2D0FF;
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 3400px;
+        min-height: 2900px;
         overflow: hidden;
     }
 
@@ -167,7 +145,7 @@
     .info-card {
         position: absolute;
         top: 433px;
-        padding: 0 122px;
+        padding: 0 289px 0 122px;
         z-index: 4;
         text-align: left;
     }
@@ -193,41 +171,42 @@
 
     .poem-gradient1 {
         position: absolute;
-        width: 2129px;
-        height: 1011px;
-        border-radius: 2129px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 635px;
-        z-index: 1;
-        right: 0;
-    }
-
-    .poem-gradient2 {
-        position: absolute;
         width: 1576px;
         height: 714px;
         border-radius: 1576px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #F2F4F6 0%, rgba(242, 244, 246, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 787px;
+        top: 757px;
+        z-index: 1;
         left: 40%;
+    }
+
+    .poem-gradient2 {
+        position: absolute;
+        width: 1769px;
+        height: 1547px;
+        border-radius: 1769px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 77.71%, rgba(233, 233, 233, 0.00) 100%);
+        top: 1020px;
+        left: -25%;
+        z-index: 2;
     }
 
     .poem-gradient3 {
         z-index: 2;
         position: absolute;
-        top: 990px;
-        right: 5%;
-        width: 1769px;
-        height: 1547px;
-        border-radius: 1576px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #F2F4F6 0%, rgba(242, 244, 246, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+        top: 1020px;
+        left: -25%;
+        width: 2129px;
+        height: 1011px;
+        border-radius: 2129px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
     }
 
     .poem-gradient4 {
         z-index: 1;
         position: absolute;
-        right: -5%;
-        top: 1455px;
+        left: -30%;
+        top: 1414px;
         width: 2396px;
         height: 1252px;
         border-radius: 2396px;
@@ -237,18 +216,18 @@
     .poem-gradient6 {
         z-index: 1;
         position: absolute;
-        top: 1600px;
-        left: 5%;
+        top: 1338px;
+        left: -30%;
         width: 1576px;
         height: 1378px;
         border-radius: 1576px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+        background: radial-gradient(50% 50% at 50% 50%, #ABC8FF 0%, rgba(144, 211, 249, 0.00) 100%);
     }
 
     .poem-gradient7 {
         z-index: 0;
         position: absolute;
-        top: 2194px;
+        top: 2110px;
         left: -25%;
         width: 1576px;
         height: 1378px;
@@ -259,8 +238,19 @@
     .poem-gradient8 {
         z-index: 0;
         position: absolute;
-        top: 1800px;
-        left: 60%;
+        top: 1552px;
+        left: 50%;
+        width: 1576px;
+        height: 1378px;
+        border-radius: 1576px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+    }
+
+    .poem-gradient9 {
+        z-index: 0;
+        position: absolute;
+        top: 1790px;
+        left: 50%;
         width: 1576px;
         height: 1378px;
         border-radius: 1576px;
@@ -326,10 +316,10 @@
     }
 
     .items-left {
-        margin-bottom: 99px;
+        margin-bottom: 50px;
     }
 
-    .issuer-plus-icon{
+    .issuer-plus-icon {
         width: 44px;
         height: 44px;
     }

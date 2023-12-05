@@ -26,7 +26,7 @@
   </div>
   <div class="content">
     <div class="tube-container">
-      <img src="{icons.curator}" alt="globe"/>
+      <img src="{icons.curator}" alt="globe" class="w-100"/>
     </div>
 
     <div class="info-card">
@@ -88,7 +88,7 @@
 
 <style>
     .transparency-container {
-        background: #FCFCFC;
+        background: #CFD1F3;
         margin-left: auto;
         margin-right: auto;
         position: relative;
@@ -144,7 +144,7 @@
 
     .info-card {
         position: absolute;
-        top: 470px;
+        top: 580px;
         padding: 0 122px;
         z-index: 4;
         text-align: left;

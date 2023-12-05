@@ -155,7 +155,7 @@
 
         background: linear-gradient(90deg, #674AA5 8.61%, #59C3FF 100%);
         height: 6px;
-        width: calc(100% + 244px);
+        width: calc(100% + 411px);
         margin-left: -122px;
     }
 

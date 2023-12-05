@@ -12,10 +12,10 @@
   <div class="poem-gradient1"></div>
   <div class="poem-gradient2"></div>
   <div class="poem-gradient3"></div>
-    <div class="poem-gradient4"></div>
-    <div class="poem-gradient6"></div>
-    <div class="poem-gradient7"></div>
-    <div class="poem-gradient8"></div>
+  <div class="poem-gradient4"></div>
+  <div class="poem-gradient6"></div>
+  <div class="poem-gradient7"></div>
+  <div class="poem-gradient8"></div>
   <div class="landing-head">
     <div class="landing-logo">
       <Link href="#">
@@ -30,43 +30,73 @@
     </div>
 
     <div class="info-card">
-      <div class="flex justify-between w-full items-center mb-12">
+      <div class="flex justify-between w-full items-left mb-12 flex-col gap-14">
+        <div class="flex items-center justify-center rounded-full bg-amber-500 mic">
+          <svg xmlns="http://www.w3.org/2000/svg" width="43" height="43" viewBox="0 0 43 43" fill="none">
+            <path
+              d="M25.0851 37.6249H17.9184M27.3784 19.0812L11.8626 28.2724C11.4694 28.5062 11.0017 28.5808 10.5553 28.4809C10.1089 28.3809 9.71768 28.1141 9.46175 27.7349L7.32966 24.5995C7.07776 24.2196 6.98014 23.7579 7.05671 23.3085C7.13327 22.8591 7.37824 22.4558 7.74175 22.1807L22.0751 11.2157L27.3784 19.0812ZM20.7313 9.20907L28.6684 21.0878L20.7313 9.20907ZM34.6705 8.54616C33.6079 6.97169 31.9636 5.88348 30.0991 5.52066C28.2346 5.15783 26.3022 5.55006 24.7267 6.61116C23.277 7.62937 22.2557 9.14847 21.8601 10.8753L27.7367 19.6007C29.5063 19.877 31.3152 19.4807 32.8072 18.4899C33.5892 17.9637 34.2598 17.2883 34.7805 16.5025C35.3012 15.7167 35.6617 14.8359 35.8414 13.9105C36.0212 12.9852 36.0166 12.0335 35.828 11.1099C35.6393 10.1863 35.2704 9.309 34.7422 8.52824L34.6705 8.54616ZM21.5017 23.2916V37.6249V23.2916Z"
+              stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
         <div class="header-text">Curators</div>
       </div>
-      <div class="paragraph">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets for extended periods, others may adopt a more active approach, engaging in daily trading to capitalise on short-term market movements. Regardless of the strategy, every investor needs access to critical information to make informed decisions.
+      <div class="paragraph">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets
+        for extended periods, others may adopt a more active approach, engaging in daily trading to capitalise on
+        short-term market movements. Regardless of the strategy, every investor needs access to critical information to
+        make informed decisions.
       </div>
       <div class="title-text">There’s more data available to discern your investments</div>
 
       <div class="paragraph">
-        One crucial aspect is understanding the resiliency of the token they are investing in. For instance, stablecoins like Tether, with a significant circulation, have raised questions about the transparency of their backing. It's important for investors to know what supports the value of a token and the measures in place to prevent fraudulent activities.
+        One crucial aspect is understanding the resiliency of the token they are investing in. For instance, stablecoins
+        like Tether, with a significant circulation, have raised questions about the transparency of their backing. It's
+        important for investors to know what supports the value of a token and the measures in place to prevent
+        fraudulent activities.
       </div>
       <div class="title-text">Short-Term vs. Long-Term Considerations</div>
 
       <div class="paragraph">
-        Whether you're a short-term trader or a long-term investor, understanding the underlying technology and governance of a token is crucial. Short-term traders focus on day-to-day market movements, identifying opportunities to buy and sell for profit. On the other hand, long-term investors seek tokens with resilience and longevity, emphasising factors like the token's collateralisation and the credibility of the issuing entity.
+        Whether you're a short-term trader or a long-term investor, understanding the underlying technology and
+        governance of a token is crucial. Short-term traders focus on day-to-day market movements, identifying
+        opportunities to buy and sell for profit. On the other hand, long-term investors seek tokens with resilience and
+        longevity, emphasising factors like the token's collateralisation and the credibility of the issuing entity.
       </div>
 
       <div class="title-text">The Challenge of Information in the Crypto Space</div>
 
       <div class="paragraph">
-        One challenge investors face in the crypto space is the lack of standardised information. Unlike traditional investments, where companies disclose detailed financial reports, cryptocurrency investments often lack transparency. Basic information about a token, such as its purpose, the creator behind it, and the potential risks, may not be readily available; SFT provides these.
+        One challenge investors face in the crypto space is the lack of standardised information. Unlike traditional
+        investments, where companies disclose detailed financial reports, cryptocurrency investments often lack
+        transparency. Basic information about a token, such as its purpose, the creator behind it, and the potential
+        risks, may not be readily available; SFT provides these.
       </div>
 
       <div class="title-text">The Role of Transparency in Crypto Investments</div>
 
       <div class="paragraph">
-        To address the information gap, transparency becomes a cornerstone for healthy crypto investments. Unlike traditional financial systems, cryptocurrencies operate on decentralised and trustless networks. This decentralisation, while a key strength, can also pose challenges when it comes to verifying information. Investors need to be able to trust that the information they receive is accurate, unaltered, and comes from a reliable source.
+        To address the information gap, transparency becomes a cornerstone for healthy crypto investments. Unlike
+        traditional financial systems, cryptocurrencies operate on decentralised and trustless networks. This
+        decentralisation, while a key strength, can also pose challenges when it comes to verifying information.
+        Investors need to be able to trust that the information they receive is accurate, unaltered, and comes from a
+        reliable source.
       </div>
 
       <div class="title-text">The Two-Token System: A solution for Transparency</div>
 
       <div class="paragraph">
-        One innovative solution to enhance transparency is the implementation of a two-token system. This system allows one token to represent the minting and burning process, providing a cryptographic trail of relevant information. This approach ensures that critical details about the token's creation and destruction are securely recorded on the blockchain, reducing the risk of manipulation or fraud.
+        One innovative solution to enhance transparency is the implementation of a two-token system. This system allows
+        one token to represent the minting and burning process, providing a cryptographic trail of relevant information.
+        This approach ensures that critical details about the token's creation and destruction are securely recorded on
+        the blockchain, reducing the risk of manipulation or fraud.
       </div>
 
 
       <div class="paragraph">
-        To empower investors, the crypto community must prioritise transparency, providing accessible and accurate information. Whether you're a long-term holder or a day trader, having the right information at your fingertips allows you to make informed decisions, contributing to the overall health and growth of the crypto market. As an investor, understanding the assets you hold is key, and the more information you have, the better equipped you are to navigate the dynamic landscape.
+        To empower investors, the crypto community must prioritise transparency, providing accessible and accurate
+        information. Whether you're a long-term holder or a day trader, having the right information at your fingertips
+        allows you to make informed decisions, contributing to the overall health and growth of the crypto market. As an
+        investor, understanding the assets you hold is key, and the more information you have, the better equipped you
+        are to navigate the dynamic landscape.
       </div>
 
 
@@ -292,8 +322,14 @@
         width: fit-content;
     }
 
-    .investor-img{
+    .investor-img {
         width: 197px;
         height: 252px;
+    }
+
+    .mic {
+        width: 65px;
+        height: 65px;
+        background: #655DB4;
     }
 </style>

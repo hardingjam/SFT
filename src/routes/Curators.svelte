@@ -1,12 +1,8 @@
 <script>
     import {icons} from '../scripts/assets.js';
-    import {navigate} from '../scripts/helpers.js';
     import LandingNav from '../components/LandingNav.svelte';
     import {Link} from 'yrv';
 
-    function launchApp() {
-        navigate("#list")
-    }
 </script>
 <div class="transparency-container">
   <div class="poem-gradient1"></div>

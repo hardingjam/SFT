@@ -19,7 +19,7 @@
   <div class="landing-head">
     <div class="landing-logo">
       <Link href="#">
-        <img src="{icons.logo}" alt="sft">
+        <img src="{icons.sft_logo_white}" alt="sft">
       </Link>
       <LandingNav/>
     </div>

@@ -26,11 +26,11 @@
   </div>
   <div class="content">
     <div class="tube-container">
-      <img src="{icons.curator}" alt="globe" class="w-100"/>
+      <img src="{icons.curator}" alt="globe"/>
     </div>
 
     <div class="info-card">
-      <div class="flex justify-between w-full items-left mb-12 flex-col gap-14">
+      <div class="flex justify-between w-full items-left flex-col gap-16">
         <div class="flex items-center justify-center rounded-full bg-amber-500 mic">
           <svg xmlns="http://www.w3.org/2000/svg" width="43" height="43" viewBox="0 0 43 43" fill="none">
             <path
@@ -174,7 +174,7 @@
 
     .info-card {
         position: absolute;
-        top: 580px;
+        top: 460px;
         padding: 0 122px;
         z-index: 4;
         text-align: left;
@@ -331,5 +331,9 @@
         width: 65px;
         height: 65px;
         background: #655DB4;
+    }
+
+    .items-left {
+        margin-bottom: 99px;
     }
 </style>

@@ -143,7 +143,7 @@
         font-style: normal;
         font-weight: 700;
         line-height: 55px; /* 122.222% */
-        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
+        background: linear-gradient(272deg, #5F9AD1 74.74%, #8B5BB0 98.07%);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -151,7 +151,7 @@
 
     .info-card {
         position: absolute;
-        top: 460px;
+        top: 395px;
         padding: 0 289px 0 122px;
         z-index: 4;
         text-align: left;

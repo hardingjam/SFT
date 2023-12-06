@@ -99,7 +99,7 @@
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 2895px;
+        min-height: 3000px;
         overflow: hidden;
     }
 
@@ -152,17 +152,16 @@
     .info-card {
         position: absolute;
         top: 460px;
-        padding: 0 122px;
+        padding: 0 289px 0 122px;
         z-index: 4;
         text-align: left;
     }
 
     .info-card-border {
         margin-top: 270px;
-
         background: linear-gradient(90deg, #674AA5 8.61%, #59C3FF 100%);
         height: 6px;
-        width: calc(100% + 244px);
+        width: calc(100% + 411px);
         margin-left: -122px;
     }
 

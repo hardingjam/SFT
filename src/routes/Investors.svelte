@@ -1,21 +1,18 @@
 <script>
     import {icons} from '../scripts/assets.js';
-    import {navigate} from '../scripts/helpers.js';
     import LandingNav from '../components/LandingNav.svelte';
     import {Link} from 'yrv';
+    import LandingFooter from '../components/LandingFooter.svelte';
 
-    function launchApp() {
-        navigate("#list")
-    }
 </script>
 <div class="transparency-container">
   <div class="poem-gradient1"></div>
   <div class="poem-gradient2"></div>
   <div class="poem-gradient3"></div>
-    <div class="poem-gradient4"></div>
-    <div class="poem-gradient6"></div>
-    <div class="poem-gradient7"></div>
-    <div class="poem-gradient8"></div>
+  <div class="poem-gradient4"></div>
+  <div class="poem-gradient6"></div>
+  <div class="poem-gradient7"></div>
+  <div class="poem-gradient8"></div>
   <div class="landing-head">
     <div class="landing-logo">
       <Link href="#">
@@ -92,22 +89,10 @@
         investor, understanding the assets you hold is key, and the more information you have, the better equipped you
         are to navigate the dynamic landscape.
       </div>
-
-
-      <div class="info-card-border"></div>
-      <div class="learn-more">
-        Learn more about how to use the SFT <br>application:
-        <div class="launch-button">Launch app</div>
-      </div>
-    </div>
-
-  </div>
-  <div class="landing-footer">
-    <img src={icons.wave} alt="wave" class="wave">
-    <div class="landing-logo">
-      <img src="{icons.sft_logo_white}" alt="sft">
     </div>
   </div>
+  <LandingFooter></LandingFooter>
+
 </div>
 
 <style>
@@ -172,15 +157,6 @@
         padding: 0 122px;
         z-index: 4;
         text-align: left;
-    }
-
-    .info-card-border {
-        margin-top: 270px;
-
-        background: linear-gradient(90deg, #674AA5 8.61%, #59C3FF 100%);
-        height: 6px;
-        width: calc(100% + 244px);
-        margin-left: -122px;
     }
 
     .paragraph {
@@ -269,54 +245,7 @@
         background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
     }
 
-    .wave {
-        width: 100%;
-        bottom: 0;
-    }
-
-    .landing-footer {
-        bottom: 0;
-        position: absolute;
-        width: 100%;
-        left: 0;
-    }
-
-    .landing-footer .landing-logo {
-        position: absolute;
-        bottom: 67px;
-        left: 50px;
-        padding: 0;
-        width: calc(100% - 50px);
-    }
-
-    .learn-more {
-        margin-top: 97px;
-        color: #575757;
-        text-align: center;
-        font-family: 'Mukta Mahee', sans-serif;
-        font-size: 30px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 40px; /* 133.333% */
-        display: flex;
-        flex-direction: column;
-        gap: 61px;
-        align-items: center;
-    }
-
-    .launch-button {
-        border-radius: 30px;
-        background: #2C2C54;
-        color: #FFF;
-        font-size: 30px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-        padding: 6px 32px;
-        width: fit-content;
-    }
-
-    .investor-img{
+    .investor-img {
         width: 197px;
         height: 252px;
     }

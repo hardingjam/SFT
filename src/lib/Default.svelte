@@ -75,6 +75,7 @@
     import Landing from '../routes/Landing.svelte';
     import Transparency from '../routes/Transparency.svelte';
     import Investors from '../routes/Investors.svelte';
+    import Issuers from '../routes/Issuers.svelte';
     import Curators from '../routes/Curators.svelte';
 
     let connectedAccount;
@@ -452,6 +453,7 @@
     <Route path="#" component={Landing}/>
     <Route path="#transparency" component={Transparency}/>
     <Route path="#investors" component={Investors}/>
+    <Route path="#issuers" component={Issuers}/>
     <Route path="#curators" component={Curators}/>
   </div>
   <div class="{ !$landing ? 'block' : 'hide'}">

@@ -25,9 +25,9 @@
         <div class="dropdown-content">
           <a href="/#investors"
              class="{$router.path === '#investors' ? 'active-list-item' : ''} investors">Investors</a>
-          <a href="/#curators" class="{$router.path === '#curators' ? 'active-list-item' : ''} curators">Curators</a>
-          <!--        <a href="/#issuers" class="{$router.path === '#issuers' ? 'active-list-item' : ''} issuers">Issuers</a>-->
-          <!--        <a href="/#auditors" class="{$router.path === '#auditors' ? 'active-list-item' : ''} auditors">Auditors</a>-->
+          <a href="/#curators" class="{$router.path === '#curators' ? 'active-list-item' : ''}   curators">Curators</a>
+          <a href="/#issuers" class="{$router.path === '#issuers' ? 'active-list-item' : ''}     issuers">Issuers</a>
+          <!--        <a href="/#auditors" class="{$router.path === '#auditors' ? 'active-list-item' : ''}   auditors">Auditors</a>-->
         </div>
       </div>
 

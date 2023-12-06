@@ -43,6 +43,7 @@ import wave from '../assets/icons/wave.png'
 import tube from '../assets/icons/tube.webp'
 import investor_wave from '../assets/icons/investor_wave.webp'
 import investors from '../assets/icons/investor.webp'
+import issuers from '../assets/icons/issuers.webp'
 import curator from '../assets/icons/curators.webp'
 
 export const icons = {
@@ -91,5 +92,6 @@ export const icons = {
     tube,
     investors,
     investor_wave,
+    issuers,
     curator
 }

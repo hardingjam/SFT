@@ -71,12 +71,12 @@
 
 
       <div class="info-card-border"></div>
-      <div class="learn-more">
-        Learn more about how to use the SFT <br>application:
-        <div class="launch-button">Launch app</div>
-      </div>
-    </div>
 
+    </div>
+    <div class="learn-more">
+      Learn more about how to use the SFT <br>application:
+      <div class="launch-button">Launch app</div>
+    </div>
   </div>
   <div class="landing-footer">
     <img src={icons.wave} alt="wave" class="wave">
@@ -289,6 +289,10 @@
         flex-direction: column;
         gap: 61px;
         align-items: center;
+        position: absolute;
+        z-index: 2;
+        bottom: 430px;
+        width: 100%;
     }
 
     .launch-button {

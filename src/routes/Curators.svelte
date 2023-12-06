@@ -9,7 +9,6 @@
   <div class="poem-gradient2"></div>
   <div class="poem-gradient3"></div>
   <div class="poem-gradient4"></div>
-  <div class="poem-gradient6"></div>
   <div class="poem-gradient7"></div>
   <div class="poem-gradient8"></div>
   <div class="landing-head">
@@ -36,66 +35,48 @@
         </div>
         <div class="header-text">Curators</div>
       </div>
-      <div class="paragraph">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets
-        for extended periods, others may adopt a more active approach, engaging in daily trading to capitalise on
-        short-term market movements. Regardless of the strategy, every investor needs access to critical information to
-        make informed decisions.
+      <div class="title-text">
+        Curators: Connecting Investors and Auditors
       </div>
-      <div class="title-text">There’s more data available to discern your investments</div>
 
       <div class="paragraph">
-        One crucial aspect is understanding the resiliency of the token they are investing in. For instance, stablecoins
-        like Tether, with a significant circulation, have raised questions about the transparency of their backing. It's
-        important for investors to know what supports the value of a token and the measures in place to prevent
-        fraudulent activities.
+        Curators act as guides for investors. They help navigate the numerous new tokens that have been minted,
+        distinguishing between legitimate ones and potential scams or low-quality projects.
       </div>
-      <div class="title-text">Short-Term vs. Long-Term Considerations</div>
-
+      <div class="title-text">
+        Similar to Playlist Makers
+      </div>
       <div class="paragraph">
-        Whether you're a short-term trader or a long-term investor, understanding the underlying technology and
-        governance of a token is crucial. Short-term traders focus on day-to-day market movements, identifying
-        opportunities to buy and sell for profit. On the other hand, long-term investors seek tokens with resilience and
-        longevity, emphasising factors like the token's collateralisation and the credibility of the issuing entity.
+        Think of curators like those who create playlists. They compile lists of tokens, covering different categories
+        like short-term options or those related to real estate. The main goal is to provide investors with a curated
+        selection of tokens that show promise.
       </div>
-
-      <div class="title-text">The Challenge of Information in the Crypto Space</div>
-
+      <div class="title-text">
+        Challenges for Investors: Accountability Issues
+      </div>
       <div class="paragraph">
-        One challenge investors face in the crypto space is the lack of standardised information. Unlike traditional
-        investments, where companies disclose detailed financial reports, cryptocurrency investments often lack
-        transparency. Basic information about a token, such as its purpose, the creator behind it, and the potential
-        risks, may not be readily available; SFT provides these.
+        Some issuers face challenges, like curators taking money to talk about specific tokens without being upfront
+        about it. This lack of honesty has led to issues. To address this, on-chain curators have been introduced. These
+        curators need to make transparent and unchangeable records of their actions.
       </div>
-
-      <div class="title-text">The Role of Transparency in Crypto Investments</div>
-
+      <div class="title-text">
+        Transparency in Action
+      </div>
       <div class="paragraph">
-        To address the information gap, transparency becomes a cornerstone for healthy crypto investments. Unlike
-        traditional financial systems, cryptocurrencies operate on decentralised and trustless networks. This
-        decentralisation, while a key strength, can also pose challenges when it comes to verifying information.
-        Investors need to be able to trust that the information they receive is accurate, unaltered, and comes from a
-        reliable source.
+        On-chain curators use blockchain technology to be transparent. By making records on the blockchain, curators
+        create a permanent and unalterable record. This helps investors assess a curator's past performance and decide
+        if they can be trusted.
       </div>
-
-      <div class="title-text">The Two-Token System: A solution for Transparency</div>
-
+      <div class="title-text">
+        Reliable Guides
+      </div>
       <div class="paragraph">
-        One innovative solution to enhance transparency is the implementation of a two-token system. This system allows
-        one token to represent the minting and burning process, providing a cryptographic trail of relevant information.
-        This approach ensures that critical details about the token's creation and destruction are securely recorded on
-        the blockchain, reducing the risk of manipulation or fraud.
+        Unlike traditional gatekeepers who set rules, the crypto curator system is open and clear. It prevents a single
+        group from having too much power. It's like having various guides to help you, similar to how email systems use
+        filters to block spam. You can pick the guides you like and trust. They help investors by being honest and
+        transparent, creating lists of tokens that show real potential. It's a decentralized system that gives investors
+        more choices and helps prevent scams.
       </div>
-
-
-      <div class="paragraph">
-        To empower investors, the crypto community must prioritise transparency, providing accessible and accurate
-        information. Whether you're a long-term holder or a day trader, having the right information at your fingertips
-        allows you to make informed decisions, contributing to the overall health and growth of the crypto market. As an
-        investor, understanding the assets you hold is key, and the more information you have, the better equipped you
-        are to navigate the dynamic landscape.
-      </div>
-
-
       <div class="info-card-border"></div>
       <div class="learn-more">
         Learn more about how to use the SFT <br>application:
@@ -118,7 +99,7 @@
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 3400px;
+        min-height: 2895px;
         overflow: hidden;
     }
 
@@ -236,17 +217,6 @@
         height: 1252px;
         border-radius: 2396px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #BFCDFF 0%, rgba(217, 221, 255, 0.92) 53.13%, rgba(233, 233, 233, 0.00) 100%);
-    }
-
-    .poem-gradient6 {
-        z-index: 1;
-        position: absolute;
-        top: 1600px;
-        left: 5%;
-        width: 1576px;
-        height: 1378px;
-        border-radius: 1576px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
     }
 
     .poem-gradient7 {

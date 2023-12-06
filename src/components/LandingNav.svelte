@@ -19,14 +19,14 @@
   <div class="links">
     <div class="dropdown">
       <div class="{membersPages.includes($router.path) ? 'active link' : 'link'}">
-        <span class="cursor-pointer">SFT Ecosystem members</span>
+        <span class="cursor-pointer">SFT Ecosystems</span>
       </div>
       <div class="dropdown-content-wrapper">
         <div class="dropdown-content">
           <a href="/#investors"
              class="{$router.path === '#investors' ? 'active-list-item' : ''} investors">Investors</a>
-          <!--        <a href="/#curators" class="{$router.path === '#curators' ? 'active-list-item' : ''}   curators">Curators</a>-->
-                  <a href="/#issuers" class="{$router.path === '#issuers' ? 'active-list-item' : ''}     issuers">Issuers</a>
+          <a href="/#curators" class="{$router.path === '#curators' ? 'active-list-item' : ''}   curators">Curators</a>
+          <a href="/#issuers" class="{$router.path === '#issuers' ? 'active-list-item' : ''}     issuers">Issuers</a>
           <!--        <a href="/#auditors" class="{$router.path === '#auditors' ? 'active-list-item' : ''}   auditors">Auditors</a>-->
         </div>
       </div>

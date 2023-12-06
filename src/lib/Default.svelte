@@ -75,8 +75,8 @@
     import Landing from '../routes/Landing.svelte';
     import Transparency from '../routes/Transparency.svelte';
     import Investors from '../routes/Investors.svelte';
-    import LandingNav from '../components/LandingNav.svelte';
     import Issuers from '../routes/Issuers.svelte';
+    import Curators from '../routes/Curators.svelte';
 
     let connectedAccount;
     export let url = "";
@@ -454,6 +454,7 @@
     <Route path="#transparency" component={Transparency}/>
     <Route path="#investors" component={Investors}/>
     <Route path="#issuers" component={Issuers}/>
+    <Route path="#curators" component={Curators}/>
   </div>
   <div class="{ !$landing ? 'block' : 'hide'}">
     <div class={$account || $isCypress? "content" : "content-not-connected"}>

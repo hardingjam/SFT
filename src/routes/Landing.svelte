@@ -276,7 +276,7 @@
         font-weight: 400;
         line-height: normal;
         position: relative;
-        margin-top:20px;
+        margin-top: 20px;
     }
 
     .text .info svg {

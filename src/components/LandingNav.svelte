@@ -19,7 +19,7 @@
   <div class="links">
     <div class="dropdown">
       <div class="{membersPages.includes($router.path) ? 'active link' : 'link'}">
-        <span class="cursor-pointer">SFT Ecosystem members</span>
+        <span class="cursor-pointer">SFT Ecosystems</span>
       </div>
       <div class="dropdown-content-wrapper">
         <div class="dropdown-content">

@@ -3,6 +3,7 @@
     import LandingNav from '../components/LandingNav.svelte';
     import {Link} from 'yrv';
     import LandingFooter from '../components/LandingFooter.svelte';
+    import EcosystemsTemplate from '../components/EcosystemsTemplate.svelte';
 
 </script>
 <div class="transparency-container">
@@ -22,44 +23,30 @@
       <LandingNav/>
     </div>
   </div>
-  <div class="content">
-    <div class="tube-container">
-      <img src="{icons.issuers}" alt="globe"/>
-    </div>
-
-    <div class="info-card">
-      <div class="flex justify-between w-full items-left flex-col gap-16">
-        <div class="flex items-center justify-center rounded-full bg-amber-500 mic">
-          <img src="{icons.sft_create}" alt="issuer" class="issuer-plus-icon"/>
-        </div>
-        <div class="header-text">Issuers</div>
-      </div>
+  <EcosystemsTemplate icon="{icons.issuers_icon}" hero="{icons.issuers_hero}" name="Issuers" iconBackground="#5F7BC0">
+    <div slot="content">
       <div class="paragraph">An issuer is someone looking to create a token, a digital representation of value. This
         involves two key aspects: the technology for token creation (minting) and ensuring liquidity for trading.
       </div>
       <div class="title-text">Minting and Liquidity</div>
-
       <div class="paragraph">
         Minting is about using smart contracts, often on platforms like Ethereum, to create tokens. Liquidity, on the
         other hand, ensures there are buyers and sellers in the market. It's akin to having someone ready to buy or sell
         custom surfboards – without enough participants, even a valuable item may struggle to find takers.
       </div>
       <div class="title-text">The Catch-22 Challenge</div>
-
       <div class="paragraph">
         The challenge lies in a catch-22 situation. Tokens lack liquidity without users, yet users are hesitant if
         liquidity is scarce. The key for issuers is to encourage widespread adoption of their token. For instance, a
         gold token's value isn't just in the gold it represents but in the ease of access within the blockchain system.
       </div>
       <div class="title-text">The Role of Transparency</div>
-
       <div class="paragraph">
         Transparency is a crucial tool for issuers. In the often opaque world of token creation, being transparent about
         the token's quality during minting builds trust. This is vital in a landscape where many tokens lack clear
         information, making users wary.
       </div>
       <div class="title-text">Beyond Token Creation</div>
-
       <div class="paragraph">
         To succeed, issuers need more than just a token – they need a compelling narrative. Transparency acts as the
         linchpin, connecting issuers with users, fostering liquidity, and ensuring the token's relevance in the digital
@@ -70,7 +57,7 @@
         </p>
       </div>
     </div>
-  </div>
+  </EcosystemsTemplate>
   <LandingFooter></LandingFooter>
 </div>
 

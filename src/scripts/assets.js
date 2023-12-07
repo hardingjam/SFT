@@ -43,10 +43,11 @@ import wave from '../assets/icons/wave.png'
 import tube from '../assets/icons/tube.webp'
 import investor_hero from '../assets/icons/investor_wave.webp'
 import investors from '../assets/icons/investor.webp'
-import issuers from '../assets/icons/issuers.webp'
+import issuers_hero from '../assets/icons/issuers.webp'
 import curator_hero from '../assets/icons/curators.webp'
 import investor_icon from '../assets/icons/investor_icon.svg';
 import curator_icon from '../assets/icons/curator_icon.svg';
+import issuers_icon from '../assets/icons/issuers_icon.svg';
 
 export const icons = {
     ethereum,
@@ -94,8 +95,9 @@ export const icons = {
     tube,
     investors,
     investor_hero,
-    issuers,
+    issuers_hero,
     curator_hero,
     investor_icon,
-    curator_icon
+    curator_icon,
+    issuers_icon
 }

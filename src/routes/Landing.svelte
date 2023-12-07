@@ -66,7 +66,7 @@
 
     <div class="groups">
       <div class="group">
-        <div class="investor"><img src="{icons.investors}" alt="investor" class="flip-horizontal"/></div>
+        <div class="icon color-4"><img src="{icons.investor_icon}" alt="investor" class="flip-horizontal"/></div>
         <div class="group-title">Investors</div>
         <div class="group-info">
           Buy/ trade/ hold tokens based on individual research & info from curators.
@@ -76,7 +76,7 @@
         </div>
       </div>
       <div class="group">
-        <div class="icon color-1"><img src="{icons.microphone}" alt="investor"/></div>
+        <div class="icon color-1"><img src="{icons.curator_icon}" alt="investor"/></div>
 
         <div class="group-title">Curators</div>
         <div class="group-info">Research reputable tokens and issuers to help investors make decisions.
@@ -85,7 +85,7 @@
         </div>
       </div>
       <div class="group">
-        <div class="icon color-2"><img src="{icons.sft_create}" alt="investor"/></div>
+        <div class="icon color-2"><img src="{icons.issuers_icon}" alt="investor"/></div>
 
         <div class="group-title">Issuers</div>
         <div class="group-info">Mint (create) the tokens.
@@ -400,6 +400,10 @@
 
     .color-3 {
         background: #5E97DF;
+    }
+
+    .color-4 {
+        background: #674AA5;
     }
 
     .group-title {

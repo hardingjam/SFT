@@ -25,36 +25,47 @@
   </div>
   <EcosystemsTemplate icon="{icons.lock}" hero="{icons.auditors_hero}" name="Auditors" iconBackground="#5E97DF">
     <div slot="content">
-      <div class="paragraph">An issuer is someone looking to create a token, a digital representation of value. This
-        involves two key aspects: the technology for token creation (minting) and ensuring liquidity for trading.
-      </div>
-      <div class="title-text">Minting and Liquidity</div>
       <div class="paragraph">
-        Minting is about using smart contracts, often on platforms like Ethereum, to create tokens. Liquidity, on the
-        other hand, ensures there are buyers and sellers in the market. It's akin to having someone ready to buy or sell
-        custom surfboards – without enough participants, even a valuable item may struggle to find takers.
+        SFT tokens represent real-world assets, it's crucial that investors can trust their legitimacy. To maintain this
+        trust, independent auditors play a key role in verifying that what's on the blockchain matches what's happening
+        in the real world.
       </div>
-      <div class="title-text">The Catch-22 Challenge</div>
+      <div class="title-text">The Auditors Job</div>
       <div class="paragraph">
-        The challenge lies in a catch-22 situation. Tokens lack liquidity without users, yet users are hesitant if
-        liquidity is scarce. The key for issuers is to encourage widespread adoption of their token. For instance, a
-        gold token's value isn't just in the gold it represents but in the ease of access within the blockchain system.
+        Just like big financial companies get audits, cryptocurrency issuers appoint auditors. These auditors use their
+        private key to sign off on audit reports, after issuers appoint their public key to the token to do so.
       </div>
-      <div class="title-text">The Role of Transparency</div>
+      <div class="title-text">Why Auditor Approval Matters</div>
       <div class="paragraph">
-        Transparency is a crucial tool for issuers. In the often opaque world of token creation, being transparent about
-        the token's quality during minting builds trust. This is vital in a landscape where many tokens lack clear
-        information, making users wary.
+        If the auditor finds a problem, they file a report. Depending on the report (approval or disapproval), the
+        tokens could freeze. Frozen tokens mean the whole system stops working. This motivates issuers to fix any
+        problems the auditor found so they can get approval and unfreeze the system.
       </div>
-      <div class="title-text">Beyond Token Creation</div>
+      <div class="title-text">Quality Check: Auditors and Issuers</div>
       <div class="paragraph">
-        To succeed, issuers need more than just a token – they need a compelling narrative. Transparency acts as the
-        linchpin, connecting issuers with users, fostering liquidity, and ensuring the token's relevance in the digital
-        space.
-        <p>
-          Issuers must not only focus on creating tokens but also on storytelling and transparency. The success of a
-          token ultimately hinges on user confidence and liquidity in the fast-paced world of digital assets.
-        </p>
+        The credibility of the auditor is super important. Some issuers might try to appoint themselves as auditors, but
+        the blockchain makes this visible. Having a recognized and professional auditor adds trust. It shows investors
+        that the audit follows standards, is accurate, and happens on time.
+      </div>
+      <div class="title-text">Regulations and Legal Stuff</div>
+      <div class="paragraph">
+        Sometimes, audits aren't just a good idea—they're the law. In some places, you can't issue tokens without an
+        audit. Having native support in the smart contracts for auditing requirements is a must for any serious issuer.
+      </div>
+      <div class="title-text">The Auditors Role</div>
+      <div class="paragraph">
+        Contrary to seeming complicated, the auditor's job is pretty straightforward. Issuers pay them standard rates to
+        check documentation against the public record. No fancy stuff. The auditor should not hold the token itself, or
+        have any other conflicts of interest that might bias their reports. The auditor's private key is used to sign
+        off on the audit.
+      </div>
+      <div class="title-text">Transparency is Key</div>
+      <div class="paragraph">
+        Auditors must keep it simple too. They should only use information that's already public in the onchain minting
+        record for their checks. If issuers can submit secret documents, it messes up the whole point of auditing and
+        leaves investors without important information. These documents may even be important for potential court cases
+        in the extreme event of issuer fraud, so the auditor should insist on sticking to the public record. By keeping
+        it simple, being transparent, and following the rules, auditors help create a reliable cryptocurrency system.
       </div>
     </div>
   </EcosystemsTemplate>
@@ -63,11 +74,11 @@
 
 <style>
     .transparency-container {
-        background: #D2D0FF;
+        background: #C3E7F6;
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 2900px;
+        min-height: 3300px;
         overflow: hidden;
     }
 
@@ -196,7 +207,7 @@
         z-index: 0;
         position: absolute;
         top: 1790px;
-        left: 50%;
+        left: 80%;
         width: 1576px;
         height: 1378px;
         border-radius: 1576px;

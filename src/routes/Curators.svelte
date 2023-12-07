@@ -3,6 +3,7 @@
     import LandingNav from '../components/LandingNav.svelte';
     import {Link} from 'yrv';
     import LandingFooter from '../components/LandingFooter.svelte';
+    import EcosystemsTemplate from '../components/EcosystemsTemplate.svelte';
 
 </script>
 <div class="transparency-container">
@@ -20,22 +21,8 @@
       <LandingNav/>
     </div>
   </div>
-  <div class="content">
-    <div class="tube-container">
-      <img src="{icons.curator}" alt="globe"/>
-    </div>
-
-    <div class="info-card">
-      <div class="flex justify-between w-full items-left flex-col gap-16">
-        <div class="flex items-center justify-center rounded-full mic">
-          <svg xmlns="http://www.w3.org/2000/svg" width="43" height="43" viewBox="0 0 43 43" fill="none">
-            <path
-              d="M25.0851 37.6249H17.9184M27.3784 19.0812L11.8626 28.2724C11.4694 28.5062 11.0017 28.5808 10.5553 28.4809C10.1089 28.3809 9.71768 28.1141 9.46175 27.7349L7.32966 24.5995C7.07776 24.2196 6.98014 23.7579 7.05671 23.3085C7.13327 22.8591 7.37824 22.4558 7.74175 22.1807L22.0751 11.2157L27.3784 19.0812ZM20.7313 9.20907L28.6684 21.0878L20.7313 9.20907ZM34.6705 8.54616C33.6079 6.97169 31.9636 5.88348 30.0991 5.52066C28.2346 5.15783 26.3022 5.55006 24.7267 6.61116C23.277 7.62937 22.2557 9.14847 21.8601 10.8753L27.7367 19.6007C29.5063 19.877 31.3152 19.4807 32.8072 18.4899C33.5892 17.9637 34.2598 17.2883 34.7805 16.5025C35.3012 15.7167 35.6617 14.8359 35.8414 13.9105C36.0212 12.9852 36.0166 12.0335 35.828 11.1099C35.6393 10.1863 35.2704 9.309 34.7422 8.52824L34.6705 8.54616ZM21.5017 23.2916V37.6249V23.2916Z"
-              stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="header-text">Curators</div>
-      </div>
+  <EcosystemsTemplate icon="{icons.curator_icon}" hero="{icons.curator_hero}" name="Curators" iconBackground="#655DB4">
+    <div slot="content">
       <div class="title-text">
         Curators: Connecting Investors and Auditors
       </div>
@@ -80,8 +67,7 @@
       </div>
 
     </div>
-
-  </div>
+  </EcosystemsTemplate>
   <LandingFooter></LandingFooter>
 </div>
 
@@ -127,26 +113,6 @@
         font-weight: 700;
         line-height: 55px; /* 157.143% */
         margin-bottom: 40px;
-    }
-
-    .header-text {
-        font-family: 'Inter', sans-serif;
-        font-size: 45px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 55px; /* 122.222% */
-        background: linear-gradient(272deg, #5F9AD1 74.74%, #8B5BB0 98.07%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .info-card {
-        position: absolute;
-        top: 395px;
-        padding: 0 289px 0 122px;
-        z-index: 4;
-        text-align: left;
     }
 
     .paragraph {
@@ -222,20 +188,5 @@
         height: 1378px;
         border-radius: 1576px;
         background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
-    }
-
-    .investor-img {
-        width: 197px;
-        height: 252px;
-    }
-
-    .mic {
-        width: 65px;
-        height: 65px;
-        background: #655DB4;
-    }
-
-    .items-left {
-        margin-bottom: 99px;
     }
 </style>

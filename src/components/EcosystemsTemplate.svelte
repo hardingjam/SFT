@@ -2,6 +2,7 @@
     export let name = ''
     export let hero = ''
     export let icon = ''
+    export let iconBackground = ''
 </script>
 <div class="content">
   <div class="tube-container">
@@ -10,7 +11,8 @@
 
   <div class="info-card">
     <div class="gap-20 flex flex-col mb-24">
-      <div class="flex items-center justify-center rounded-full page-icon">
+      <div class="flex items-center justify-center rounded-full page-icon" style="
+		   background: {iconBackground}">
         <img src="{icon}" alt="investor"/>
       </div>
       <div class="header-text">{name}</div>
@@ -44,6 +46,5 @@
     .page-icon {
         width: 65px;
         height: 65px;
-        background: #674AA5;
     }
 </style>

@@ -41,11 +41,12 @@ import lock from '../assets/icons/lock.svg'
 import microphone from '../assets/icons/microphone.svg'
 import wave from '../assets/icons/wave.png'
 import tube from '../assets/icons/tube.webp'
-import investor_wave from '../assets/icons/investor_wave.webp'
+import investor_hero from '../assets/icons/investor_wave.webp'
 import investors from '../assets/icons/investor.webp'
 import issuers from '../assets/icons/issuers.webp'
-import curator from '../assets/icons/curators.webp'
+import curator_hero from '../assets/icons/curators.webp'
 import investor_icon from '../assets/icons/investor_icon.svg';
+import curator_icon from '../assets/icons/curator_icon.svg';
 
 export const icons = {
     ethereum,
@@ -92,8 +93,9 @@ export const icons = {
     wave,
     tube,
     investors,
-    investor_wave,
+    investor_hero,
     issuers,
-    curator,
-    investor_icon
+    curator_hero,
+    investor_icon,
+    curator_icon
 }

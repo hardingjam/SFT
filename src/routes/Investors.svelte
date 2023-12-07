@@ -3,6 +3,7 @@
     import LandingNav from '../components/LandingNav.svelte';
     import {Link} from 'yrv';
     import LandingFooter from '../components/LandingFooter.svelte';
+    import EcosystemsTemplate from '../components/EcosystemsTemplate.svelte';
 
 </script>
 <div class="transparency-container">
@@ -21,23 +22,16 @@
       <LandingNav/>
     </div>
   </div>
-  <div class="content">
-    <div class="tube-container">
-      <img src="{icons.investor_wave}" alt="globe"/>
-    </div>
 
-    <div class="info-card">
-      <div class="flex justify-between w-full items-center mb-12">
-        <div class="header-text">Investors</div>
-        <img src="{icons.investors}" alt="investors" class="investor-img"/>
-      </div>
+  <EcosystemsTemplate icon="{icons.investor_icon}" hero="{icons.investor_hero}" name="Investors"
+                      iconBackground="#674AA5">
+    <div slot="content">
       <div class="paragraph">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets
         for extended periods, others may adopt a more active approach, engaging in daily trading to capitalise on
         short-term market movements. Regardless of the strategy, every investor needs access to critical information to
         make informed decisions.
       </div>
       <div class="title-text">There’s more data available to discern your investments</div>
-
       <div class="paragraph">
         One crucial aspect is understanding the resiliency of the token they are investing in. For instance, stablecoins
         like Tether, with a significant circulation, have raised questions about the transparency of their backing. It's
@@ -45,25 +39,20 @@
         fraudulent activities.
       </div>
       <div class="title-text">Short-Term vs. Long-Term Considerations</div>
-
       <div class="paragraph">
         Whether you're a short-term trader or a long-term investor, understanding the underlying technology and
         governance of a token is crucial. Short-term traders focus on day-to-day market movements, identifying
         opportunities to buy and sell for profit. On the other hand, long-term investors seek tokens with resilience and
         longevity, emphasising factors like the token's collateralisation and the credibility of the issuing entity.
       </div>
-
       <div class="title-text">The Challenge of Information in the Crypto Space</div>
-
       <div class="paragraph">
         One challenge investors face in the crypto space is the lack of standardised information. Unlike traditional
         investments, where companies disclose detailed financial reports, cryptocurrency investments often lack
         transparency. Basic information about a token, such as its purpose, the creator behind it, and the potential
         risks, may not be readily available; SFT provides these.
       </div>
-
       <div class="title-text">The Role of Transparency in Crypto Investments</div>
-
       <div class="paragraph">
         To address the information gap, transparency becomes a cornerstone for healthy crypto investments. Unlike
         traditional financial systems, cryptocurrencies operate on decentralised and trustless networks. This
@@ -71,17 +60,13 @@
         Investors need to be able to trust that the information they receive is accurate, unaltered, and comes from a
         reliable source.
       </div>
-
       <div class="title-text">The Two-Token System: A solution for Transparency</div>
-
       <div class="paragraph">
         One innovative solution to enhance transparency is the implementation of a two-token system. This system allows
         one token to represent the minting and burning process, providing a cryptographic trail of relevant information.
         This approach ensures that critical details about the token's creation and destruction are securely recorded on
         the blockchain, reducing the risk of manipulation or fraud.
       </div>
-
-
       <div class="paragraph">
         To empower investors, the crypto community must prioritise transparency, providing accessible and accurate
         information. Whether you're a long-term holder or a day trader, having the right information at your fingertips
@@ -90,7 +75,7 @@
         are to navigate the dynamic landscape.
       </div>
     </div>
-  </div>
+  </EcosystemsTemplate>
   <LandingFooter></LandingFooter>
 
 </div>
@@ -115,7 +100,7 @@
         justify-content: space-between;
         width: 100%;
         padding-top: 25px;
-        padding-left: 100px;
+        padding-left: 122px;
         padding-right: 48px;
         position: absolute;
         z-index: 3;
@@ -137,36 +122,6 @@
         font-weight: 700;
         line-height: 55px; /* 157.143% */
         margin-bottom: 40px;
-    }
-
-    .header-text {
-        font-family: 'Inter', sans-serif;
-        font-size: 45px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 55px; /* 122.222% */
-        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .info-card {
-        position: absolute;
-        top: 470px;
-        padding: 0 122px;
-        z-index: 4;
-        text-align: left;
-    }
-
-    .paragraph {
-        margin-bottom: 40px;
-        color: #575757;
-        font-family: 'Manrope', sans-serif;
-        font-size: 20px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 40px;
     }
 
     .poem-gradient1 {
@@ -191,7 +146,7 @@
     }
 
     .poem-gradient3 {
-        z-index: 2;
+        z-index: 3;
         position: absolute;
         top: 990px;
         right: 5%;
@@ -202,7 +157,7 @@
     }
 
     .poem-gradient4 {
-        z-index: 1;
+        z-index: 2;
         position: absolute;
         right: -5%;
         top: 1455px;
@@ -245,8 +200,13 @@
         background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
     }
 
-    .investor-img {
-        width: 197px;
-        height: 252px;
+    .paragraph {
+        margin-bottom: 40px;
+        color: #575757;
+        font-family: 'Manrope', sans-serif;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 40px;
     }
 </style>

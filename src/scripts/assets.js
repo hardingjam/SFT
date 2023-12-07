@@ -38,13 +38,14 @@ import search_icon from '../assets/icons/search_icon.svg'
 import sft_logo_white from '../assets/icons/sft_logo_white.svg'
 import globe from '../assets/icons/globe.webp'
 import lock from '../assets/icons/lock.svg'
-import microphone from '../assets/icons/microphone.svg'
 import wave from '../assets/icons/wave.png'
 import tube from '../assets/icons/tube.webp'
-import investor_wave from '../assets/icons/investor_wave.webp'
-import investors from '../assets/icons/investor.webp'
-import issuers from '../assets/icons/issuers.webp'
-import curator from '../assets/icons/curators.webp'
+import investor_hero from '../assets/icons/investor_wave.webp'
+import issuers_hero from '../assets/icons/issuers.webp'
+import curator_hero from '../assets/icons/curators.webp'
+import investor_icon from '../assets/icons/investor_icon.svg';
+import curator_icon from '../assets/icons/curator_icon.svg';
+import issuers_icon from '../assets/icons/issuers_icon.svg';
 
 export const icons = {
     ethereum,
@@ -87,11 +88,12 @@ export const icons = {
     sft_logo_white,
     globe,
     lock,
-    microphone,
     wave,
     tube,
-    investors,
-    investor_wave,
-    issuers,
-    curator
+    investor_hero,
+    issuers_hero,
+    curator_hero,
+    investor_icon,
+    curator_icon,
+    issuers_icon
 }

@@ -27,11 +27,11 @@
     </div>
 
     <div class="info-card">
-        <div class="header-text gap-20 flex flex-col mb-24">
+        <div class=" gap-20 flex flex-col mb-24">
           <div class="flex items-center justify-center rounded-full page-icon">
             <img src="{icons.investor_icon}" alt="investor"/>
           </div>
-          <span>Investors</span>
+          <div class="header-text">Investors</div>
         </div>
       <div class="paragraph">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets
         for extended periods, others may adopt a more active approach, engaging in daily trading to capitalise on
@@ -147,7 +147,7 @@
         font-style: normal;
         font-weight: 700;
         line-height: 55px; /* 122.222% */
-        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
+        background: linear-gradient(272deg, #5F9AD1 74.74%, #8B5BB0 98.07%);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -247,14 +247,9 @@
         background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
     }
 
-    .investor-img {
-        width: 197px;
-        height: 252px;
-    }
-
     .page-icon {
         width: 65px;
         height: 65px;
-        background: #655DB4;
+        background: #674AA5;
     }
 </style>

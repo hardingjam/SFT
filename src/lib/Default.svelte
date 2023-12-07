@@ -77,6 +77,7 @@
     import Investors from '../routes/Investors.svelte';
     import Issuers from '../routes/Issuers.svelte';
     import Curators from '../routes/Curators.svelte';
+    import Auditors from '../routes/Auditors.svelte';
 
     let connectedAccount;
     export let url = "";
@@ -455,6 +456,7 @@
     <Route path="#investors" component={Investors}/>
     <Route path="#issuers" component={Issuers}/>
     <Route path="#curators" component={Curators}/>
+    <Route path="#auditors" component={Auditors}/>
   </div>
   <div class="{ !$landing ? 'block' : 'hide'}">
     <div class={$account || $isCypress? "content" : "content-not-connected"}>

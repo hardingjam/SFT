@@ -223,7 +223,7 @@
         justify-content: space-between;
         width: 100%;
         padding-top: 25px;
-        padding-left: 100px;
+        padding-left: 122px;
         padding-right: 48px;
 
     }

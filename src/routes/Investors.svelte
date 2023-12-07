@@ -27,10 +27,12 @@
     </div>
 
     <div class="info-card">
-      <div class="flex justify-between w-full items-center mb-12">
-        <div class="header-text">Investors</div>
-        <img src="{icons.investors}" alt="investors" class="investor-img"/>
-      </div>
+        <div class="header-text gap-20 flex flex-col mb-24">
+          <div class="flex items-center justify-center rounded-full page-icon">
+            <img src="{icons.investor_icon}" alt="investor"/>
+          </div>
+          <span>Investors</span>
+        </div>
       <div class="paragraph">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets
         for extended periods, others may adopt a more active approach, engaging in daily trading to capitalise on
         short-term market movements. Regardless of the strategy, every investor needs access to critical information to
@@ -115,7 +117,7 @@
         justify-content: space-between;
         width: 100%;
         padding-top: 25px;
-        padding-left: 100px;
+        padding-left: 122px;
         padding-right: 48px;
         position: absolute;
         z-index: 3;
@@ -248,5 +250,11 @@
     .investor-img {
         width: 197px;
         height: 252px;
+    }
+
+    .page-icon {
+        width: 65px;
+        height: 65px;
+        background: #655DB4;
     }
 </style>

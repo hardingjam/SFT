@@ -46,6 +46,7 @@ import curator_hero from '../assets/icons/curators.webp'
 import investor_icon from '../assets/icons/investor_icon.svg';
 import curator_icon from '../assets/icons/curator_icon.svg';
 import issuers_icon from '../assets/icons/issuers_icon.svg';
+import auditors_hero from '../assets/icons/auditors_hero.webp';
 
 export const icons = {
     ethereum,
@@ -95,5 +96,6 @@ export const icons = {
     curator_hero,
     investor_icon,
     curator_icon,
-    issuers_icon
+    issuers_icon,
+    auditors_hero
 }

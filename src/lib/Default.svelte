@@ -77,6 +77,7 @@
     import Investors from '../routes/Investors.svelte';
     import Issuers from '../routes/Issuers.svelte';
     import Curators from '../routes/Curators.svelte';
+    import Auditors from '../routes/Auditors.svelte';
 
     let connectedAccount;
     export let url = "";
@@ -455,6 +456,7 @@
     <Route path="#investors" component={Investors}/>
     <Route path="#issuers" component={Issuers}/>
     <Route path="#curators" component={Curators}/>
+    <Route path="#auditors" component={Auditors}/>
   </div>
   <div class="{ !$landing ? 'block' : 'hide'}">
     <div class={$account || $isCypress? "content" : "content-not-connected"}>
@@ -463,7 +465,7 @@
         <a href="/#list">
           {#if !$activeToken.icon}
             <img src={$account? icons.logo: icons.sft_logo_white} alt=""
-                 class="{$account ? 'bg-white account' : 'no-account'} rounded-full token-logo"/>
+                 class="{$account ? 'account token-logo' : 'no-account'} rounded-full "/>
           {:else}
             <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
                  class="rounded-full token-logo"/>

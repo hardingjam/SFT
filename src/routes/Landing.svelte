@@ -202,7 +202,7 @@
     }
 
     .landing-head {
-        background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
+        background: linear-gradient(178deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
         position: relative;
         z-index: 1;
         overflow: hidden;

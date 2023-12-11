@@ -23,6 +23,9 @@ describe('The Home Page', () => {
     it('Should not show token name if token not set', () => {
         cy.get('.sft-name-navigation-header').should('not.exist');
     });
+    it('Should not show breadcrumbs on homepage', () => {
+        cy.get('.breadcrumbs').should('not.exist');
+    });
     it('Should set token and navigate to token overview', () => {
         cy.get(`#token-name-Jefo`).click();
         cy.url().should('include', '/#token-overview')

@@ -202,7 +202,7 @@
     }
 
     .landing-head {
-        background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
+        background: linear-gradient(178deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
         position: relative;
         z-index: 1;
         overflow: hidden;
@@ -427,18 +427,15 @@
 
     .poems-header {
         margin-left: 100px;
-        text-align: center;
-        font-family: 'Manrope', sans-serif;
+        text-align: left;
+        font-family: 'Inter', sans-serif;
         font-size: 45px;
         font-style: normal;
         font-weight: 700;
-        line-height: 40px; /* 88.889% */
         background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        width: 516px;
-        height: 117px;
         flex-shrink: 0;
     }
 

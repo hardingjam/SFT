@@ -47,7 +47,7 @@
         event.detail.selected.action()
     }
 
-// let pageTitle = "Asset register"
+    // let pageTitle = "Asset register"
 </script>
 
 <div class="{$account ? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">

@@ -129,7 +129,7 @@
                 } else {
                     if (!$landing) {
                         vault.set({})
-                        location = "/#list"
+                        location = "#list"
                         navigateTo("/#list", {replace: false})
                     }
 

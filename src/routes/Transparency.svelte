@@ -134,19 +134,10 @@
 
     .info-card {
         position: absolute;
-        top: 677px;
+        top: 600px;
         padding: 0 122px;
         z-index: 2;
         text-align: left;
-    }
-
-    .info-card-border {
-        margin-top: 270px;
-
-        background: linear-gradient(90deg, #674AA5 8.61%, #59C3FF 100%);
-        height: 6px;
-        width: calc(100% + 244px);
-        margin-left: -122px;
     }
 
     .paragraph {
@@ -158,12 +149,6 @@
         font-weight: 600;
         line-height: 40px;
     }
-
-    .gradients {
-        position: relative;
-        overflow: hidden;
-    }
-
 
     .poem-gradient1 {
         position: absolute;
@@ -243,18 +228,6 @@
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #BFCDFF 0%, rgba(217, 221, 255, 0.92) 53.13%, rgba(233, 233, 233, 0.00) 100%);
     }
 
-    .wave {
-        width: 100%;
-        bottom: 0;
-    }
-
-    .landing-footer {
-        bottom: 0;
-        position: absolute;
-        width: 100%;
-        left: 0;
-    }
-
     .landing-footer .landing-logo {
         position: absolute;
         bottom: 67px;
@@ -263,30 +236,4 @@
         width: calc(100% - 50px);
     }
 
-    .learn-more {
-        margin-top: 97px;
-        color: #575757;
-        text-align: center;
-        font-family: 'Mukta Mahee', sans-serif;
-        font-size: 30px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 40px; /* 133.333% */
-        display: flex;
-        flex-direction: column;
-        gap: 61px;
-        align-items: center;
-    }
-
-    .launch-button {
-        border-radius: 30px;
-        background: #2C2C54;
-        color: #FFF;
-        font-size: 30px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-        padding: 6px 32px;
-        width: fit-content;
-    }
 </style>

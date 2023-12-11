@@ -3,6 +3,7 @@
     import {navigate} from '../scripts/helpers.js';
     import LandingNav from '../components/LandingNav.svelte';
     import {Link} from 'yrv';
+    import LandingFooter from '../components/LandingFooter.svelte';
 
     function launchApp() {
         navigate("#list")
@@ -73,20 +74,10 @@
         End
         users can filter and search everything according to all the same data that everyone else sees.
       </div>
-      <div class="info-card-border"></div>
-      <div class="learn-more">
-        Learn more about how to use the SFT <br>application:
-        <div class="launch-button">Launch app</div>
-      </div>
     </div>
 
   </div>
-  <div class="landing-footer">
-    <img src={icons.wave} alt="wave" class="wave">
-    <div class="landing-logo">
-      <img src="{icons.sft_logo_white}" alt="sft">
-    </div>
-  </div>
+  <LandingFooter></LandingFooter>
 </div>
 
 <style>

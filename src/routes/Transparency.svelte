@@ -134,7 +134,7 @@
 
     .info-card {
         position: absolute;
-        top: calc(100vh - 8%);
+        top: calc(100vh - 7.15%);
         padding: 0 122px;
         z-index: 2;
         text-align: left;

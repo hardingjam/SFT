@@ -129,12 +129,12 @@
         font-style: normal;
         font-weight: 700;
         line-height: 55px;
-        margin-bottom: 124px;
+        margin-bottom: 65px;
     }
 
     .info-card {
         position: absolute;
-        top: calc(100vh - 7.15%);
+        top: calc(100vh - 5.2%);
         padding: 0 122px;
         z-index: 2;
         text-align: left;

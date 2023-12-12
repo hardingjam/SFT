@@ -134,7 +134,7 @@
 
     .info-card {
         position: absolute;
-        top: 565px;
+        top: 525px;
         padding: 0 122px;
         z-index: 2;
         text-align: left;

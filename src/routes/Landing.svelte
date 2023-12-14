@@ -66,7 +66,7 @@
     <div class="groups-line"></div>
 
     <div class="groups">
-      <div class="group investors">
+      <div class="group">
         <div>
           <div class="icon color-4"><img src="{icons.investor_icon}" alt="investor" class="flip-horizontal"/></div>
           <div class="group-title">Investors</div>
@@ -78,10 +78,10 @@
           </div>
         </div>
         <Link href="#investors">
-          <div class="launch-button">Read more</div>
+          <div class="launch-button investors-read-more">Read more</div>
         </Link>
       </div>
-      <div class="group curators">
+      <div class="group">
         <div>
           <div class="icon color-1"><img src="{icons.curator_icon}" alt="investor"/></div>
 
@@ -92,7 +92,7 @@
           </div>
         </div>
         <Link href="#curators">
-          <div class="launch-button">Read more</div>
+          <div class="launch-button curators-read-more">Read more</div>
         </Link>
       </div>
       <div class="group issuers">
@@ -110,10 +110,10 @@
           </div>
         </div>
         <Link href="#issuers">
-          <div class="launch-button">Read more</div>
+          <div class="launch-button issuers-read-more">Read more</div>
         </Link>
       </div>
-      <div class="group auditors">
+      <div class="group">
         <div class="pb-16">
           <div class="icon color-3"><img src="{icons.lock}" alt="investor" class="lock"/></div>
 
@@ -128,7 +128,7 @@
           </div>
         </div>
         <Link href="#auditors">
-          <div class="launch-button">Read more</div>
+          <div class="launch-button auditors-read-more">Read more</div>
         </Link>
       </div>
     </div>

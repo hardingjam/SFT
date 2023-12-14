@@ -95,7 +95,7 @@
           <div class="launch-button curators-read-more">Read more</div>
         </Link>
       </div>
-      <div class="group issuers">
+      <div class="group">
         <div>
           <div class="icon color-2"><img src="{icons.issuers_icon}" alt="investor"/></div>
 

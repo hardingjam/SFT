@@ -81,8 +81,8 @@
       </div>
 
       <div class="group-item">
-        <div class="color-1 group-icon group-icon-right"> <img src="{icons.curator_icon}" alt="investor" /></div>
-        <div class="overflow-hidden"><img src="{icons.curator_hero}" alt="investor" class="group-hero investors-hero"/></div>
+        <div class="color-1 group-icon group-icon-right"> <img src="{icons.curator_icon}" alt="curators" /></div>
+        <div class="overflow-hidden"><img src="{icons.curator_hero}" alt="curators" class="group-hero investors-hero"/></div>
         <div class="group-text flex flex-col justify-between right-0 group-text-right">
           <div class="group-title">Curators</div>
           <div class="group-info">
@@ -96,38 +96,26 @@
         </div>
 
       </div>
-      <!--      <div class="group-item">-->
-      <!--        <img src="{icons.investor_icon}" alt="investor" class="group-img"/>-->
-      <!--        <div class="group-text">-->
-      <!--          <div class="group-title">Curators</div>-->
-      <!--          <div class="group-info">Research reputable tokens and issuers to help investors make decisions.-->
-      <!--            <div class="mt-7"></div>-->
-      <!--            Every recommendation is recorded permanently onchain so that investors can assess the quality of each-->
-      <!--            curator.-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--        <Link href="#investors">-->
-      <!--          <div class="launch-button investors-read-more">Read more</div>-->
-      <!--        </Link>-->
-      <!--      </div>-->
-      <!--      <div class="group-item">-->
-      <!--        <img src="{icons.investor_icon}" alt="investor" class="group-img"/>-->
-      <!--        <div class="group-text">-->
-      <!--          <div class="group-title">Issuers</div>-->
-      <!--          <div class="group-info">Mint (create) the tokens.-->
-      <!--            <div class="mt-7"></div>-->
 
-      <!--            Real world assets associated with each token.-->
-      <!--            <div class="mt-7"></div>-->
-      <!--            Issuance is permissionless; it is up to each issuer to prove the-->
-      <!--            quality of their offering.-->
-      <!--          </div>-->
+      <div class="group-item">
+        <div class="color-2 group-icon group-icon-left"> <img src="{icons.issuers_icon}" alt="issuers" /></div>
+        <div class="w-full h-inherit overflow-hidden"><img src="{icons.issuers_hero}" alt="issuers" class="group-hero"/></div>
+        <div class="group-text left-0 flex flex-col justify-between">
+          <div class="group-title">Issuers</div>
+          <div class="group-info">
+            Mint (create) the tokens.
+            <div class="mt-7"></div>
+            Real world assets associated with each token.
+            <div class="mt-7"></div>
+            Issuance is permissionless; it is up to each issuer to prove the quality of their offering.
+          </div>
+          <Link href="#issuers" class="items-center flex w-full justify-center">
+            <div class="launch-button investors-read-more ">Read more</div>
+          </Link>
+        </div>
 
-      <!--        </div>-->
-      <!--        <Link href="#investors">-->
-      <!--          <div class="launch-button investors-read-more">Read more</div>-->
-      <!--        </Link>-->
-      <!--      </div>-->
+      </div>
+
       <!--      <div class="group-item">-->
       <!--        <img src="{icons.investor_icon}" alt="investor" class="flip-horizontal"/>-->
       <!--        <div class="group-text">-->
@@ -392,7 +380,7 @@
         height: 100%;
         padding: 70px 130px 70px 130px;
         max-width: 50%;
-        border-radius: 20px;
+        border-radius: 20px 0 0 20px;
     }
 
     .group-text-right{

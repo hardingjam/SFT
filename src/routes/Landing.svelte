@@ -16,8 +16,6 @@
   <div class="poem-gradient2"></div>
   <div class="poem-gradient3"></div>
   <div class="poem-gradient4"></div>
-<!--  <div class="poem-gradient6"></div>-->
-<!--  <div class="poem-gradient7"></div>-->
   <div class="landing-head">
     <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1016" viewBox="0 0 1440 1016" fill="none"
          class="head-gradient">
@@ -94,7 +92,7 @@
             curator.
           </div>
           <Link href="#curators" class="items-center flex w-full justify-center">
-            <div class="launch-button investors-read-more ">Read more</div>
+            <div class="launch-button curators-read-more ">Read more</div>
           </Link>
         </div>
 
@@ -114,7 +112,7 @@
             Issuance is permissionless; it is up to each issuer to prove the quality of their offering.
           </div>
           <Link href="#issuers" class="items-center flex w-full justify-center">
-            <div class="launch-button investors-read-more ">Read more</div>
+            <div class="launch-button issuers-read-more ">Read more</div>
           </Link>
         </div>
 
@@ -134,7 +132,7 @@
             If an audit fails, the token freezes (transfers are paused) until the problem is fixed.
           </div>
           <Link href="#auditors" class="items-center flex w-full justify-center">
-            <div class="launch-button investors-read-more ">Read more</div>
+            <div class="launch-button auditors-read-more ">Read more</div>
           </Link>
         </div>
 
@@ -215,7 +213,6 @@
 
   </div>
   <div class="landing-footer">
-    <!--    <div class="bottom-gradient"></div>-->
     <img src={icons.wave} alt="wave" class="wave">
     <div class="landing-logo">
       <img src="{icons.sft_logo_white}" alt="sft">
@@ -609,27 +606,6 @@
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(201, 232, 255, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
     }
 
-    .poem-gradient6 {
-        position: absolute;
-        top: 1600px;
-        left: 50%;
-        width: 1576px;
-        height: 1378px;
-        border-radius: 1576px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-    }
-
-    .poem-gradient7 {
-        z-index: 1;
-        position: absolute;
-        top: 1009px;
-        left: -30%;
-        width: 1769px;
-        height: 1547px;
-        border-radius: 1769px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 77.71%, rgba(233, 233, 233, 0.00) 100%);
-    }
-
     .wave {
         width: 100%;
         position: absolute;
@@ -647,8 +623,4 @@
         padding: 10px 45px;
     }
 
-    .flip-horizontal {
-        -webkit-transform: scaleX(-1);
-        transform: scaleX(-1);
-    }
 </style>

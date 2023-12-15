@@ -65,7 +65,7 @@
       <div class="group-item">
         <div class="color-4 group-icon group-icon-left"> <img src="{icons.investor_icon}" alt="investor" /></div>
         <div class="w-full h-inherit overflow-hidden"><img src="{icons.investor_hero}" alt="investor" class="group-hero investors-hero"/></div>
-        <div class="group-text flex flex-col justify-between">
+        <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Investors</div>
           <div class="group-info">
             Buy/ trade/ hold tokens based on individual research & info from curators.
@@ -74,6 +74,23 @@
             tokens is built.
           </div>
           <Link href="#investors" class="items-center flex w-full justify-center">
+            <div class="launch-button investors-read-more ">Read more</div>
+          </Link>
+        </div>
+
+      </div>
+
+      <div class="group-item">
+        <div class="color-1 group-icon group-icon-right"> <img src="{icons.curator_icon}" alt="investor" /></div>
+        <div class="overflow-hidden"><img src="{icons.curator_hero}" alt="investor" class="group-hero investors-hero"/></div>
+        <div class="group-text flex flex-col justify-between right-0 group-text-right">
+          <div class="group-title">Curators</div>
+          <div class="group-info">
+            Research reputable tokens and issuers to help investors make decisions.
+            <div class="mt-7"></div>
+            Every recommendation is recorded permanently onchain so that investors can assess the quality of each curator.
+          </div>
+          <Link href="#curators" class="items-center flex w-full justify-center">
             <div class="launch-button investors-read-more ">Read more</div>
           </Link>
         </div>
@@ -245,7 +262,6 @@
         padding-top: 25px;
         padding-left: 122px;
         padding-right: 48px;
-
     }
 
     .launch-button {
@@ -356,8 +372,6 @@
         display: flex;
         background: #FFFFFF;
         flex-direction: column;
-        height: 633px;
-        padding: 70px 0;
         border-radius: 20px;
         box-shadow: 0.2px 0.6px 0.7px hsl(222deg 36% 61% / 0.22),
         0.9px 2.5px 3px -0.3px hsl(222deg 36% 61% / 0.22),
@@ -376,10 +390,14 @@
         position: absolute;
         background: #FFFFFF;
         height: 100%;
-        left: 0;
-        padding: 70px 130px 122px 130px;
+        padding: 70px 130px 70px 130px;
         max-width: 50%;
         border-radius: 20px;
+    }
+
+    .group-text-right{
+        border-radius: 0 20px 20px 0;
+
     }
 
     .group-icon {
@@ -415,7 +433,7 @@
     }
 
     .group-icon-right {
-
+        right: -73px
     }
 
     .color-4{
@@ -425,6 +443,7 @@
 
     .color-1 {
         background: #655DB4;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     }
 
     .color-2 {

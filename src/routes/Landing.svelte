@@ -16,8 +16,8 @@
   <div class="poem-gradient2"></div>
   <div class="poem-gradient3"></div>
   <div class="poem-gradient4"></div>
-  <div class="poem-gradient6"></div>
-  <div class="poem-gradient7"></div>
+<!--  <div class="poem-gradient6"></div>-->
+<!--  <div class="poem-gradient7"></div>-->
   <div class="landing-head">
     <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1016" viewBox="0 0 1440 1016" fill="none"
          class="head-gradient">
@@ -490,7 +490,7 @@
         font-size: 25px;
         font-style: normal;
         font-weight: 700;
-        margin-bottom: 224px;
+        margin-bottom: 238px;
         line-height: 40px; /* 160% */
         justify-content: space-between;
     }
@@ -568,45 +568,45 @@
 
     .poem-gradient1 {
         position: absolute;
-        width: calc(100% + 400px);
-        height: 1011px;
-        border-radius: 2129px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 699px;
+        width: 2641px;
+        height: 1048px;
+        border-radius: 2641px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(250, 250, 250, 0.76) 15.84%, rgba(255, 255, 255, 0.56) 66.34%, rgba(233, 233, 233, 0.00) 100%);
+        top: 687px;
         z-index: 1;
         left: calc(-33% - 200px);
     }
 
     .poem-gradient2 {
         position: absolute;
-        width: calc(100% + 400px);
-        height: 1378px;
-        border-radius: 1576px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 699px;
-        left: 35%;
+        width: 2641px;
+        height: 1679px;
+        border-radius: 2641px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(250, 250, 250, 0.76) 15.84%, rgba(245, 245, 245, 0.56) 79.88%, rgba(233, 233, 233, 0.00) 100%);
+        top: 1267px;
     }
 
     .poem-gradient3 {
         z-index: 1;
         position: absolute;
-        top: 1507px;
-        right: 15%;
-        width: 2396px;
-        height: 1252px;
-        border-radius: 2396px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #BFCDFF 0%, rgba(217, 221, 255, 0.92) 53.13%, rgba(233, 233, 233, 0.00) 100%);
+        top: 2435px;
+        width: 2641px;
+        height: 1744px;
+        border-radius: 2641px;
+        left: -20%;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(250, 250, 250, 0.76) 15.84%, rgba(165, 200, 255, 0.56) 38.56%, rgba(233, 233, 233, 0.00) 100%);
     }
 
     .poem-gradient4 {
         z-index: 0;
         position: absolute;
-        top: 1570px;
-        right: 15%;
-        width: 1576px;
-        height: 1378px;
-        border-radius: 1576px;
-        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+        top: 3455px;
+        right: -20%;
+        width: 2484px;
+        height: 1432px;
+        transform: rotate(-135deg);
+        border-radius: 2484px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(201, 232, 255, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
     }
 
     .poem-gradient6 {

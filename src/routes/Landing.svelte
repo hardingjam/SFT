@@ -60,15 +60,12 @@
 
   <div class="poems">
 
-    <div class="poems-header">
-      SFT is an ecosystem of 4 groups:
-    </div>
-    <div class="groups-line"></div>
 
     <div class="groups">
-      <div class="group">
-        <div>
-          <div class="icon color-4"><img src="{icons.investor_icon}" alt="investor" class="flip-horizontal"/></div>
+      <div class="group-item">
+        <div class="color-4 group-icon group-icon-left"> <img src="{icons.investor_icon}" alt="investor" /></div>
+        <div class="w-full h-inherit overflow-hidden"><img src="{icons.investor_hero}" alt="investor" class="group-hero investors-hero"/></div>
+        <div class="group-text flex flex-col justify-between">
           <div class="group-title">Investors</div>
           <div class="group-info">
             Buy/ trade/ hold tokens based on individual research & info from curators.
@@ -76,62 +73,64 @@
             Organic liquidity for high quality
             tokens is built.
           </div>
+          <Link href="#investors" class="items-center flex w-full justify-center">
+            <div class="launch-button investors-read-more ">Read more</div>
+          </Link>
         </div>
-        <Link href="#investors">
-          <div class="launch-button investors-read-more">Read more</div>
-        </Link>
-      </div>
-      <div class="group">
-        <div>
-          <div class="icon color-1"><img src="{icons.curator_icon}" alt="investor"/></div>
 
-          <div class="group-title">Curators</div>
-          <div class="group-info">Research reputable tokens and issuers to help investors make decisions.
-            <div class="mt-7"></div>
-            Every recommendation is recorded permanently onchain so that investors can assess the quality of each curator.
-          </div>
-        </div>
-        <Link href="#curators">
-          <div class="launch-button curators-read-more">Read more</div>
-        </Link>
       </div>
-      <div class="group">
-        <div>
-          <div class="icon color-2"><img src="{icons.issuers_icon}" alt="investor"/></div>
+      <!--      <div class="group-item">-->
+      <!--        <img src="{icons.investor_icon}" alt="investor" class="group-img"/>-->
+      <!--        <div class="group-text">-->
+      <!--          <div class="group-title">Curators</div>-->
+      <!--          <div class="group-info">Research reputable tokens and issuers to help investors make decisions.-->
+      <!--            <div class="mt-7"></div>-->
+      <!--            Every recommendation is recorded permanently onchain so that investors can assess the quality of each-->
+      <!--            curator.-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <Link href="#investors">-->
+      <!--          <div class="launch-button investors-read-more">Read more</div>-->
+      <!--        </Link>-->
+      <!--      </div>-->
+      <!--      <div class="group-item">-->
+      <!--        <img src="{icons.investor_icon}" alt="investor" class="group-img"/>-->
+      <!--        <div class="group-text">-->
+      <!--          <div class="group-title">Issuers</div>-->
+      <!--          <div class="group-info">Mint (create) the tokens.-->
+      <!--            <div class="mt-7"></div>-->
 
-          <div class="group-title">Issuers</div>
-          <div class="group-info">Mint (create) the tokens.
-            <div class="mt-7"></div>
+      <!--            Real world assets associated with each token.-->
+      <!--            <div class="mt-7"></div>-->
+      <!--            Issuance is permissionless; it is up to each issuer to prove the-->
+      <!--            quality of their offering.-->
+      <!--          </div>-->
 
-            Real world assets associated with each token.
-            <div class="mt-7"></div>
-            Issuance is permissionless; it is up to each issuer to prove the
-            quality of their offering.
-          </div>
-        </div>
-        <Link href="#issuers">
-          <div class="launch-button issuers-read-more">Read more</div>
-        </Link>
-      </div>
-      <div class="group">
-        <div class="pb-16">
-          <div class="icon color-3"><img src="{icons.lock}" alt="investor" class="lock"/></div>
-
-          <div class="group-title">Auditors</div>
-          <div class="group-info">Auditors check that all onchain data matches offchain reality.
-            <div class="mt-7"></div>
-            Appointed by the issuer,
-            high quality audits improve investor confidence to increase token liquidity.
-            <div class="mt-7"></div>
-            If an audit fails, the token
-            freezes (transfers are paused) until the problem is fixed.
-          </div>
-        </div>
-        <Link href="#auditors">
-          <div class="launch-button auditors-read-more">Read more</div>
-        </Link>
-      </div>
+      <!--        </div>-->
+      <!--        <Link href="#investors">-->
+      <!--          <div class="launch-button investors-read-more">Read more</div>-->
+      <!--        </Link>-->
+      <!--      </div>-->
+      <!--      <div class="group-item">-->
+      <!--        <img src="{icons.investor_icon}" alt="investor" class="flip-horizontal"/>-->
+      <!--        <div class="group-text">-->
+      <!--          <div class="group-title">Auditors</div>-->
+      <!--          <div class="group-info">Auditors check that all onchain data matches offchain reality.-->
+      <!--            <div class="mt-7"></div>-->
+      <!--            Appointed by the issuer,-->
+      <!--            high quality audits improve investor confidence to increase token liquidity.-->
+      <!--            <div class="mt-7"></div>-->
+      <!--            If an audit fails, the token-->
+      <!--            freezes (transfers are paused) until the problem is fixed.-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <Link href="#investors">-->
+      <!--          <div class="launch-button investors-read-more">Read more</div>-->
+      <!--        </Link>-->
+      <!--      </div>-->
     </div>
+
+
     <div class="transparency">
       <div class="left">
         100% <span>transparency</span>
@@ -343,58 +342,85 @@
 
     .groups {
         display: flex;
-        align-items: stretch;
-        justify-content: center;
-        gap: 41px;
-        margin-left: 60px;
-        margin-right: 60px;
-        margin-bottom: 165px;
-    }
-
-    .group {
-        display: flex;
         flex-direction: column;
+        gap: 87px;
+        width: 100%;
         align-items: center;
-        justify-content: space-between;
+    }
+
+    .group-item {
         position: relative;
-        padding: 77px 25px 38px 25px;
-        width: 25%;
-        border-radius: 0 0 10px 10px;
-        background: #FFF;
-        box-shadow: 0.3px 0.5px 0.7px hsla(244, 28%, 63%, 0.3),
-        1.4px 2.8px 3.9px -0.8px hsla(244, 28%, 63%, 0.4),
-        4.9px 9.7px 13.6px -1.6px hsla(244, 28%, 63%, 0.5);
+        width: calc(100% - 240px);
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        background: #FFFFFF;
+        flex-direction: column;
+        height: 633px;
+        padding: 70px 0;
+        border-radius: 20px;
+        box-shadow: 0.2px 0.6px 0.7px hsl(222deg 36% 61% / 0.22),
+        0.9px 2.5px 3px -0.3px hsl(222deg 36% 61% / 0.22),
+        1.5px 4.4px 5.2px -0.6px hsl(222deg 36% 61% / 0.22),
+        2.2px 6.6px 7.8px -0.8px hsl(222deg 36% 61% / 0.22),
+        3.3px 9.6px 11.4px -1.1px hsl(222deg 36% 61% / 0.22),
+        4.7px 13.7px 16.3px -1.4px hsl(222deg 36% 61% / 0.22),
+        6.7px 19.5px 23.2px -1.7px hsl(222deg 36% 61% / 0.22),
+        9.3px 27.2px 32.3px -1.9px hsl(222deg 36% 61% / 0.22),
+        12.8px 37.3px 44.4px -2.2px hsl(222deg 36% 61% / 0.22),
+        17.2px 50.3px 59.8px -2.5px hsl(222deg 36% 61% / 0.22);
+
     }
 
-    .group .investor {
+    .group-text {
         position: absolute;
-        top: -10px;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
+        background: #FFFFFF;
+        height: 100%;
+        left: 0;
+        padding: 70px 130px 122px 130px;
+        max-width: 50%;
+        border-radius: 20px;
     }
 
-    .group .investor img {
-        width: 95px;
-        height: 120px;
-    }
-
-    .group .icon {
+    .group-icon {
+        position: absolute;
+        top: 45px;
         padding: 14px;
-        position: absolute;
-        top: 0;
-        left: 50%;
         transform: translate(-50%, -50%);
         border-radius: 50%;
+        z-index: 1;
+        width: 123px;
+        height: 123px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .group .icon img {
-        width: 55px;
-        height: 55px;
+    .group-icon img{
+        width: 81px;
     }
 
-    .group .icon img.lock {
-        scale: 0.75;
+    .group-hero {
+        width: 100%;
+        border-radius: 20px;
+    }
+
+    .investors-hero {
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+
+    .group-icon-left {
+        left: 50px
+    }
+
+    .group-icon-right {
+
+    }
+
+    .color-4{
+        background: #674AA5;
+        filter: drop-shadow(0px 7px 8px #B4B3DB);
     }
 
     .color-1 {
@@ -403,25 +429,22 @@
 
     .color-2 {
         background: #6180CD;
-
     }
 
     .color-3 {
         background: #5E97DF;
     }
 
-    .color-4 {
-        background: #674AA5;
-    }
-
     .group-title {
-        color: #575757;
-        text-align: center;
-        font-family: 'Manrope', sans-serif;
-        font-size: 25px;
+        font-family: 'Inter', sans-serif;
+        font-size: 45px;
         font-style: normal;
         font-weight: 700;
-        line-height: 40px; /* 160% */
+        line-height: 40px; /* 88.889% */
+        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .group-info {
@@ -431,20 +454,6 @@
         font-style: normal;
         font-weight: 400;
         line-height: 40px;
-    }
-
-    .poems-header {
-        margin-left: 100px;
-        text-align: left;
-        font-family: 'Inter', sans-serif;
-        font-size: 45px;
-        font-style: normal;
-        font-weight: 700;
-        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        flex-shrink: 0;
     }
 
     .transparency {

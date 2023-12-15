@@ -57,13 +57,11 @@
   </div>
 
   <div class="poems">
-
-
     <div class="groups">
       <div class="group-item">
         <div class="color-4 group-icon group-icon-left"><img src="{icons.investor_icon}" alt="investor"/></div>
         <div class="w-full h-inherit overflow-hidden rounded-3xl"><img src="{icons.investor_hero}" alt="investor"
-                                                           class="group-hero investors-hero mt-20"/></div>
+                                                                       class="group-hero investors-hero mt-20"/></div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Investors</div>
           <div class="group-info pr-36 pl-36">
@@ -461,7 +459,7 @@
         font-style: normal;
         font-weight: 700;
         line-height: 40px; /* 88.889% */
-        background:linear-gradient(272deg, #5F9AD1 27.74%, #8B5BB0 56.07%);
+        background: linear-gradient(272deg, #5F9AD1 27.74%, #8B5BB0 56.07%);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;

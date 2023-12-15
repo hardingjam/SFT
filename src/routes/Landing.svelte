@@ -63,11 +63,12 @@
 
     <div class="groups">
       <div class="group-item">
-        <div class="color-4 group-icon group-icon-left"> <img src="{icons.investor_icon}" alt="investor" /></div>
-        <div class="w-full h-inherit overflow-hidden"><img src="{icons.investor_hero}" alt="investor" class="group-hero investors-hero"/></div>
+        <div class="color-4 group-icon group-icon-left"><img src="{icons.investor_icon}" alt="investor"/></div>
+        <div class="w-full h-inherit overflow-hidden"><img src="{icons.investor_hero}" alt="investor"
+                                                           class="group-hero investors-hero"/></div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Investors</div>
-          <div class="group-info">
+          <div class="group-info pr-36 pl-36">
             Buy/ trade/ hold tokens based on individual research & info from curators.
             <div class="mt-7"></div>
             Organic liquidity for high quality
@@ -81,14 +82,16 @@
       </div>
 
       <div class="group-item">
-        <div class="color-1 group-icon group-icon-right"> <img src="{icons.curator_icon}" alt="curators" /></div>
-        <div class="overflow-hidden"><img src="{icons.curator_hero}" alt="curators" class="group-hero investors-hero"/></div>
+        <div class="color-1 group-icon group-icon-right"><img src="{icons.curator_icon}" alt="curators"/></div>
+        <div class="overflow-hidden"><img src="{icons.curator_hero}" alt="curators" class="group-hero investors-hero"/>
+        </div>
         <div class="group-text flex flex-col justify-between right-0 group-text-right">
           <div class="group-title">Curators</div>
-          <div class="group-info">
+          <div class="group-info pr-32 pl-32">
             Research reputable tokens and issuers to help investors make decisions.
             <div class="mt-7"></div>
-            Every recommendation is recorded permanently onchain so that investors can assess the quality of each curator.
+            Every recommendation is recorded permanently onchain so that investors can assess the quality of each
+            curator.
           </div>
           <Link href="#curators" class="items-center flex w-full justify-center">
             <div class="launch-button investors-read-more ">Read more</div>
@@ -98,11 +101,12 @@
       </div>
 
       <div class="group-item">
-        <div class="color-2 group-icon group-icon-left"> <img src="{icons.issuers_icon}" alt="issuers" /></div>
-        <div class="w-full h-inherit overflow-hidden"><img src="{icons.issuers_hero}" alt="issuers" class="group-hero"/></div>
+        <div class="color-2 group-icon group-icon-left"><img src="{icons.issuers_icon}" alt="issuers"/></div>
+        <div class="w-full h-inherit overflow-hidden"><img src="{icons.issuers_hero}" alt="issuers" class="group-hero"/>
+        </div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Issuers</div>
-          <div class="group-info">
+          <div class="group-info pr-32 pl-32">
             Mint (create) the tokens.
             <div class="mt-7"></div>
             Real world assets associated with each token.
@@ -116,23 +120,26 @@
 
       </div>
 
-      <!--      <div class="group-item">-->
-      <!--        <img src="{icons.investor_icon}" alt="investor" class="flip-horizontal"/>-->
-      <!--        <div class="group-text">-->
-      <!--          <div class="group-title">Auditors</div>-->
-      <!--          <div class="group-info">Auditors check that all onchain data matches offchain reality.-->
-      <!--            <div class="mt-7"></div>-->
-      <!--            Appointed by the issuer,-->
-      <!--            high quality audits improve investor confidence to increase token liquidity.-->
-      <!--            <div class="mt-7"></div>-->
-      <!--            If an audit fails, the token-->
-      <!--            freezes (transfers are paused) until the problem is fixed.-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--        <Link href="#investors">-->
-      <!--          <div class="launch-button investors-read-more">Read more</div>-->
-      <!--        </Link>-->
-      <!--      </div>-->
+      <div class="group-item">
+        <div class="color-3 group-icon lock group-icon-right"><img src="{icons.lock}" alt="curators"/></div>
+        <div class="overflow-hidden"><img src="{icons.auditors_hero}" alt="curators" class="group-hero investors-hero"/>
+        </div>
+        <div class="group-text flex flex-col justify-between right-0 group-text-right">
+          <div class="group-title">Auditors</div>
+          <div class="group-info pr-20 pl-20">
+            Auditors check that all onchain data matches offchain reality.
+            <div class="mt-7"></div>
+            Appointed by the issuer, high quality audits improve investor confidence to increase token liquidity.
+            <div class="mt-7"></div>
+            If an audit fails, the token freezes (transfers are paused) until the problem is fixed.
+          </div>
+          <Link href="#auditors" class="items-center flex w-full justify-center">
+            <div class="launch-button investors-read-more ">Read more</div>
+          </Link>
+        </div>
+
+      </div>
+
     </div>
 
 
@@ -350,6 +357,7 @@
         gap: 87px;
         width: 100%;
         align-items: center;
+        margin-bottom: 235px;
     }
 
     .group-item {
@@ -378,12 +386,13 @@
         position: absolute;
         background: #FFFFFF;
         height: 100%;
-        padding: 70px 130px 70px 130px;
+        padding-bottom: 70px;
+        padding-top: 70px;
         max-width: 50%;
         border-radius: 20px 0 0 20px;
     }
 
-    .group-text-right{
+    .group-text-right {
         border-radius: 0 20px 20px 0;
 
     }
@@ -402,7 +411,11 @@
         justify-content: center;
     }
 
-    .group-icon img{
+    .group-icon.lock img {
+        height: 60px;
+    }
+
+    .group-icon img {
         width: 81px;
     }
 
@@ -424,7 +437,7 @@
         right: -73px
     }
 
-    .color-4{
+    .color-4 {
         background: #674AA5;
         filter: drop-shadow(0px 7px 8px #B4B3DB);
     }
@@ -440,6 +453,7 @@
 
     .color-3 {
         background: #5E97DF;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     }
 
     .group-title {
@@ -448,7 +462,7 @@
         font-style: normal;
         font-weight: 700;
         line-height: 40px; /* 88.889% */
-        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
+        background:linear-gradient(272deg, #5F9AD1 27.74%, #8B5BB0 56.07%);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;

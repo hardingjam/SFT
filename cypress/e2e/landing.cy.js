@@ -21,4 +21,20 @@ describe('Landing page', () => {
         cy.get(`#launch-button-2`).click();
         cy.url().should('include', '/#list')
     })
+    it('should navigate to investors page with Read more button', () => {
+        cy.get(`.investors-read-more`).click();
+        cy.url().should('include', '/#investors')
+    })
+    it('should navigate to curators page with Read more button', () => {
+        cy.get(`.curators-read-more`).click();
+        cy.url().should('include', '/#curators')
+    })
+    it('should navigate to auditors page with Read more button', () => {
+        cy.get(`.auditors-read-more`).click();
+        cy.url().should('include', '/#auditors')
+    })
+    it('should navigate to issuers page with Read more button', () => {
+        cy.get(`.issuers-read-more`).click();
+        cy.url().should('include', '/#issuers')
+    })
 })

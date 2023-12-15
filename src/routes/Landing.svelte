@@ -3,6 +3,7 @@
     import LandingNav from '../components/LandingNav.svelte';
     import {landing} from '../scripts/store.js';
     import {navigate} from '../scripts/helpers.js';
+    import {Link} from 'yrv';
 
     function launchApp() {
         landing.set(false)
@@ -66,49 +67,69 @@
 
     <div class="groups">
       <div class="group">
-        <div class="icon color-4"><img src="{icons.investor_icon}" alt="investor" class="flip-horizontal"/></div>
-        <div class="group-title">Investors</div>
-        <div class="group-info">
-          Buy/ trade/ hold tokens based on individual research & info from curators.
-          <div class="mt-7"></div>
-          Organic liquidity for high quality
-          tokens is built.
+        <div>
+          <div class="icon color-4"><img src="{icons.investor_icon}" alt="investor" class="flip-horizontal"/></div>
+          <div class="group-title">Investors</div>
+          <div class="group-info">
+            Buy/ trade/ hold tokens based on individual research & info from curators.
+            <div class="mt-7"></div>
+            Organic liquidity for high quality
+            tokens is built.
+          </div>
         </div>
+        <Link href="#investors">
+          <div class="launch-button investors-read-more">Read more</div>
+        </Link>
       </div>
       <div class="group">
-        <div class="icon color-1"><img src="{icons.curator_icon}" alt="investor"/></div>
+        <div>
+          <div class="icon color-1"><img src="{icons.curator_icon}" alt="investor"/></div>
 
-        <div class="group-title">Curators</div>
-        <div class="group-info">Research reputable tokens and issuers to help investors make decisions.
-          <div class="mt-7"></div>
-          Every recommendation is recorded permanently onchain so that investors can assess the quality of each curator.
+          <div class="group-title">Curators</div>
+          <div class="group-info">Research reputable tokens and issuers to help investors make decisions.
+            <div class="mt-7"></div>
+            Every recommendation is recorded permanently onchain so that investors can assess the quality of each curator.
+          </div>
         </div>
+        <Link href="#curators">
+          <div class="launch-button curators-read-more">Read more</div>
+        </Link>
       </div>
       <div class="group">
-        <div class="icon color-2"><img src="{icons.issuers_icon}" alt="investor"/></div>
+        <div>
+          <div class="icon color-2"><img src="{icons.issuers_icon}" alt="investor"/></div>
 
-        <div class="group-title">Issuers</div>
-        <div class="group-info">Mint (create) the tokens.
-          <div class="mt-7"></div>
+          <div class="group-title">Issuers</div>
+          <div class="group-info">Mint (create) the tokens.
+            <div class="mt-7"></div>
 
-          Real world assets associated with each token.
-          <div class="mt-7"></div>
-          Issuance is permissionless; it is up to each issuer to prove the
-          quality of their offering.
+            Real world assets associated with each token.
+            <div class="mt-7"></div>
+            Issuance is permissionless; it is up to each issuer to prove the
+            quality of their offering.
+          </div>
         </div>
+        <Link href="#issuers">
+          <div class="launch-button issuers-read-more">Read more</div>
+        </Link>
       </div>
       <div class="group">
-        <div class="icon color-3"><img src="{icons.lock}" alt="investor" class="lock"/></div>
+        <div class="pb-16">
+          <div class="icon color-3"><img src="{icons.lock}" alt="investor" class="lock"/></div>
 
-        <div class="group-title">Auditors</div>
-        <div class="group-info">Auditors check that all onchain data matches offchain reality.
-          <div class="mt-7"></div>
-          Appointed by the issuer,
-          high quality audits improve investor confidence to increase token liquidity.
-          <div class="mt-7"></div>
-          If an audit fails, the token
-          freezes (transfers are paused) until the problem is fixed.
+          <div class="group-title">Auditors</div>
+          <div class="group-info">Auditors check that all onchain data matches offchain reality.
+            <div class="mt-7"></div>
+            Appointed by the issuer,
+            high quality audits improve investor confidence to increase token liquidity.
+            <div class="mt-7"></div>
+            If an audit fails, the token
+            freezes (transfers are paused) until the problem is fixed.
+          </div>
         </div>
+        <Link href="#auditors">
+          <div class="launch-button auditors-read-more">Read more</div>
+        </Link>
       </div>
     </div>
     <div class="transparency">
@@ -331,31 +352,18 @@
     }
 
     .group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
         position: relative;
-        padding: 77px 25px;
+        padding: 77px 25px 38px 25px;
         width: 25%;
         border-radius: 0 0 10px 10px;
         background: #FFF;
-        /* For low elevation */
-        /*box-shadow:*/
-        /*        0.3px 0.5px 0.7px hsla(244, 28%, 63%, 0.32),*/
-        /*        1px 1.9px 2.7px -1.6px hsla(244, 28%, 63%, 0.48);*/
-        /* --shadow-elevation-low */
-
-        /* For medium elevation */
         box-shadow: 0.3px 0.5px 0.7px hsla(244, 28%, 63%, 0.3),
         1.4px 2.8px 3.9px -0.8px hsla(244, 28%, 63%, 0.4),
         4.9px 9.7px 13.6px -1.6px hsla(244, 28%, 63%, 0.5);
-        /* --shadow-elevation-medium */
-
-        /* For high elevation */
-        /* box-shadow:
-          0.3px 0.5px 0.7px hsla(244, 28%, 63%, 0.33),
-          2.8px 5.6px 7.8px -0.4px hsla(244, 28%, 63%, 0.4),
-          6.1px 12.2px 17.1px -0.8px hsla(244, 28%, 63%, 0.47),
-          12.2px 24.5px 34.3px -1.2px hsla(244, 28%, 63%, 0.54),
-          23.5px 47px 65.8px -1.6px hsla(244, 28%, 63%, 0.61); */
-        /* --shadow-elevation-high */
     }
 
     .group .investor {

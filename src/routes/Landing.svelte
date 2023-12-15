@@ -64,8 +64,8 @@
     <div class="groups">
       <div class="group-item">
         <div class="color-4 group-icon group-icon-left"><img src="{icons.investor_icon}" alt="investor"/></div>
-        <div class="w-full h-inherit overflow-hidden"><img src="{icons.investor_hero}" alt="investor"
-                                                           class="group-hero investors-hero"/></div>
+        <div class="w-full h-inherit overflow-hidden rounded-3xl"><img src="{icons.investor_hero}" alt="investor"
+                                                           class="group-hero investors-hero mt-20"/></div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Investors</div>
           <div class="group-info pr-36 pl-36">
@@ -361,6 +361,8 @@
     }
 
     .group-item {
+        min-height: 500px;
+        max-height: 633px;
         position: relative;
         width: calc(100% - 240px);
         align-items: center;

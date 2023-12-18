@@ -23,7 +23,7 @@
       <LandingNav/>
     </div>
   </div>
-  <EcosystemsTemplate icon="{icons.issuers_icon}" hero="{icons.issuers_hero}" name="Issuers" iconBackground="#4A64A5" headingGradient="{['#286196','#8B5BB0' ]}">
+  <EcosystemsTemplate icon="{icons.issuers_icon}" hero="{icons.issuers_hero}" name="Issuers" iconBackground="#4A64A5">
     <div slot="content">
       <div class="paragraph short">An issuer is someone looking to create a token, a digital representation of value. This
         involves two key aspects: the technology for token creation (minting) and ensuring liquidity for trading.

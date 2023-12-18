@@ -17,8 +17,7 @@
 		   background: {iconBackground}">
         <img src="{icon}" alt="investor"/>
       </div>
-      <div class="header-text"  style="background: linear-gradient(272deg, {headingGradient[0]} 74.74%, {headingGradient[1]} 98.07%);
-      background-clip: text;">{name}</div>
+      <div class="{`header-text ${name.toLowerCase()}`}">{name}</div>
     </div>
     <slot name="content"></slot>
   </div>
@@ -33,6 +32,19 @@
         font-weight: 700;
         line-height: 55px; /* 122.222% */
         background: linear-gradient(272deg, #5F9AD1 74.74%, #8B5BB0 98.07%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .header-text.curators{
+        background: linear-gradient(272deg, #4A64A5 74.74%, #8B5BB0 98.07%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .header-text.issuers{
+        background: linear-gradient(272deg, #286196 74.74%, #8B5BB0 98.07%);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;

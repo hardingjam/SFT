@@ -153,7 +153,6 @@
 
     .paragraph.short{
         max-width: 1000px;
-        background: red;
     }
 
     .poem-gradient1 {

@@ -136,7 +136,7 @@
         height: 1011px;
         border-radius: 2129px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 635px;
+        top: 990px;
         z-index: 1;
         right: 0;
     }
@@ -147,7 +147,7 @@
         height: 714px;
         border-radius: 1576px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #F2F4F6 0%, rgba(242, 244, 246, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 787px;
+        top: 980px;
         left: 40%;
     }
 

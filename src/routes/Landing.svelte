@@ -643,8 +643,8 @@
     .poem-gradient8 {
         z-index: 0;
         position: absolute;
-        top: 3580px;
-        left: -10%;
+        bottom: 200px;
+        left: -2%;
         width: 1761px;
         height: 1361px;
         border-radius: 1761px;

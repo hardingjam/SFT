@@ -361,7 +361,6 @@
 
     .group-item {
         min-height: 500px;
-        max-height: 633px;
         position: relative;
         width: calc(100% - 240px);
         align-items: center;

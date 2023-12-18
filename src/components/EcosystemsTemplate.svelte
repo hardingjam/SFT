@@ -3,6 +3,8 @@
     export let hero = ''
     export let icon = ''
     export let iconBackground = ''
+    export let headingGradient = []
+
 </script>
 <div class="content">
   <div class="tube-container">
@@ -15,7 +17,8 @@
 		   background: {iconBackground}">
         <img src="{icon}" alt="investor"/>
       </div>
-      <div class="header-text">{name}</div>
+      <div class="header-text"  style="background: linear-gradient(272deg, {headingGradient[0]} 74.74%, {headingGradient[1]} 98.07%);
+      background-clip: text;">{name}</div>
     </div>
     <slot name="content"></slot>
   </div>

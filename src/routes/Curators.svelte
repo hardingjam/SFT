@@ -21,7 +21,7 @@
       <LandingNav/>
     </div>
   </div>
-  <EcosystemsTemplate icon="{icons.curator_icon}" hero="{icons.curator_hero}" name="Curators" iconBackground="#655DB4">
+  <EcosystemsTemplate icon="{icons.curator_icon}" hero="{icons.curator_hero}" name="Curators" iconBackground="#655DB4" headingGradient="{['#4A64A5','#8B5BB0' ]}">
     <div slot="content">
       <div class="title-text">
         Curators: Connecting Investors and Auditors

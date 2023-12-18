@@ -83,7 +83,7 @@
 
 <style>
     .transparency-container {
-        background: #F7F8F9;
+        background: #e7f4fd;
         margin-left: auto;
         margin-right: auto;
         position: relative;
@@ -162,7 +162,7 @@
         height: 1011px;
         border-radius: 2129px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 1105px;
+        top: 1000px;
         z-index: 1;
         right: -30%;
     }

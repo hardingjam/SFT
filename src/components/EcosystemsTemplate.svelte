@@ -6,7 +6,7 @@
 </script>
 <div class="content">
   <div class="tube-container">
-    <img src="{hero}" alt="hero"/>
+    <img src="{hero}" alt="hero" class="hero-img"/>
   </div>
 
   <div class="info-card">
@@ -46,5 +46,9 @@
     .page-icon {
         width: 65px;
         height: 65px;
+    }
+
+    .tube-container .hero-img{
+        width:100%
     }
 </style>

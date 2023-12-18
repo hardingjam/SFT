@@ -27,7 +27,7 @@
   </div>
   <div class="content">
     <div class="tube-container">
-      <img src="{icons.tube}" alt="globe"/>
+      <img src="{icons.tube}" alt="globe" class="hero-img"/>
     </div>
 
     <div class="info-card">
@@ -234,6 +234,10 @@
         left: 50px;
         padding: 0;
         width: calc(100% - 50px);
+    }
+
+    .tube-container .hero-img {
+        width: 100%
     }
 
 </style>

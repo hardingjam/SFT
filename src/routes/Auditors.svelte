@@ -25,7 +25,7 @@
   </div>
   <EcosystemsTemplate icon="{icons.lock}" hero="{icons.auditors_hero}" name="Auditors" iconBackground="#5E97DF">
     <div slot="content">
-      <div class="paragraph">
+      <div class="paragraph short">
         SFT tokens represent real-world assets, it's crucial that investors can trust their legitimacy. To maintain this
         trust, independent auditors play a key role in verifying that what's on the blockchain matches what's happening
         in the real world.
@@ -124,8 +124,12 @@
         font-style: normal;
         font-weight: 600;
         line-height: 40px;
+        max-width: 1500px;
     }
 
+    .paragraph.short{
+        max-width: 1000px;
+    }
     .poem-gradient1 {
         position: absolute;
         width: 1576px;

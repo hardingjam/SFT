@@ -35,7 +35,7 @@
 
       <div class="title-text">Facts checked by auditors (eg KPMG, Deloitte)</div>
 
-      <div class="paragraph">What makes it transparent is that the auditors are doing the audits based on the public
+      <div class="paragraph short">What makes it transparent is that the auditors are doing the audits based on the public
         data
         on IPFS.
         Transparency in this system is achieved through several key mechanisms:
@@ -148,6 +148,12 @@
         font-style: normal;
         font-weight: 600;
         line-height: 40px;
+        max-width: 1500px;
+    }
+
+    .paragraph.short{
+        max-width: 1000px;
+        background: red;
     }
 
     .poem-gradient1 {

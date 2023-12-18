@@ -27,7 +27,7 @@
         Curators: Connecting Investors and Auditors
       </div>
 
-      <div class="paragraph">
+      <div class="paragraph short">
         Curators act as guides for investors. They help navigate the numerous new tokens that have been minted,
         distinguishing between legitimate ones and potential scams or low-quality projects.
       </div>
@@ -123,6 +123,11 @@
         font-style: normal;
         font-weight: 600;
         line-height: 40px;
+        max-width: 1500px;
+    }
+
+    .paragraph.short{
+        max-width: 1000px;
     }
 
     .poem-gradient1 {

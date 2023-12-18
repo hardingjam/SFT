@@ -26,7 +26,7 @@
   <EcosystemsTemplate icon="{icons.investor_icon}" hero="{icons.investor_hero}" name="Investors"
                       iconBackground="#674AA5">
     <div slot="content">
-      <div class="paragraph">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets
+      <div class="paragraph short">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets
         for extended periods, others may adopt a more active approach, engaging in daily trading to capitalise on
         short-term market movements. Regardless of the strategy, every investor needs access to critical information to
         make informed decisions.
@@ -208,5 +208,10 @@
         font-style: normal;
         font-weight: 600;
         line-height: 40px;
+        max-width: 1500px;
+    }
+
+    .paragraph.short{
+        max-width: 1000px;
     }
 </style>

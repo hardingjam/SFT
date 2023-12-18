@@ -25,7 +25,7 @@
   </div>
   <EcosystemsTemplate icon="{icons.issuers_icon}" hero="{icons.issuers_hero}" name="Issuers" iconBackground="#5F7BC0">
     <div slot="content">
-      <div class="paragraph">An issuer is someone looking to create a token, a digital representation of value. This
+      <div class="paragraph short">An issuer is someone looking to create a token, a digital representation of value. This
         involves two key aspects: the technology for token creation (minting) and ensuring liquidity for trading.
       </div>
       <div class="title-text">Minting and Liquidity</div>
@@ -113,6 +113,11 @@
         font-style: normal;
         font-weight: 600;
         line-height: 40px;
+        max-width: 1500px;
+    }
+
+    .paragraph.short{
+        max-width: 1000px;
     }
 
     .poem-gradient1 {

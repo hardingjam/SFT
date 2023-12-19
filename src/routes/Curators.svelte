@@ -179,7 +179,7 @@
     }
 
     .poem-gradient8 {
-        z-index: 0;
+        z-index: -1;
         position: absolute;
         top: 1400px;
         left: 60%;

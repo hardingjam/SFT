@@ -2,19 +2,10 @@
     import {icons} from '../scripts/assets.js';
     import LandingNav from '../components/LandingNav.svelte';
     import {Link} from 'yrv';
-    import LandingFooter from '../components/LandingFooter.svelte';
     import EcosystemsTemplate from '../components/EcosystemsTemplate.svelte';
 
 </script>
 <div class="transparency-container">
-  <div class="poem-gradient1"></div>
-  <div class="poem-gradient2"></div>
-  <div class="poem-gradient3"></div>
-  <div class="poem-gradient4"></div>
-  <div class="poem-gradient6"></div>
-  <div class="poem-gradient7"></div>
-  <div class="poem-gradient8"></div>
-  <div class="poem-gradient9  "></div>
   <div class="landing-head">
     <div class="landing-logo">
       <Link href="#">
@@ -24,6 +15,16 @@
     </div>
   </div>
   <EcosystemsTemplate icon="{icons.issuers_icon}" hero="{icons.issuers_hero}" name="Issuers" iconBackground="#5F7BC0">
+    <div slot="gradients">
+      <div class="poem-gradient1"></div>
+      <div class="poem-gradient2"></div>
+      <div class="poem-gradient3"></div>
+      <div class="poem-gradient4"></div>
+      <div class="poem-gradient6"></div>
+      <div class="poem-gradient7"></div>
+      <div class="poem-gradient8"></div>
+      <div class="poem-gradient9"></div>
+    </div>
     <div slot="content">
       <div class="paragraph">An issuer is someone looking to create a token, a digital representation of value. This
         involves two key aspects: the technology for token creation (minting) and ensuring liquidity for trading.
@@ -58,7 +59,6 @@
       </div>
     </div>
   </EcosystemsTemplate>
-  <LandingFooter></LandingFooter>
 </div>
 
 <style>
@@ -67,7 +67,6 @@
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 2900px;
         overflow: hidden;
     }
 
@@ -121,7 +120,7 @@
         height: 714px;
         border-radius: 1576px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #F2F4F6 0%, rgba(242, 244, 246, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 757px;
+        top: 357px;
         z-index: 1;
         left: 40%;
     }
@@ -132,7 +131,7 @@
         height: 1547px;
         border-radius: 1769px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 77.71%, rgba(233, 233, 233, 0.00) 100%);
-        top: 1020px;
+        top: 240px;
         left: -25%;
         z-index: 2;
     }
@@ -140,7 +139,7 @@
     .poem-gradient3 {
         z-index: 2;
         position: absolute;
-        top: 1020px;
+        top: 620px;
         left: -25%;
         width: 2129px;
         height: 1011px;
@@ -152,7 +151,7 @@
         z-index: 1;
         position: absolute;
         left: -30%;
-        top: 1414px;
+        top: 1014px;
         width: 2396px;
         height: 1252px;
         border-radius: 2396px;
@@ -162,7 +161,7 @@
     .poem-gradient6 {
         z-index: 1;
         position: absolute;
-        top: 1338px;
+        top: 938px;
         left: -30%;
         width: 1576px;
         height: 1378px;
@@ -173,7 +172,7 @@
     .poem-gradient7 {
         z-index: 0;
         position: absolute;
-        top: 2110px;
+        top: 1710px;
         left: -25%;
         width: 1576px;
         height: 1378px;
@@ -184,7 +183,7 @@
     .poem-gradient8 {
         z-index: 0;
         position: absolute;
-        top: 1552px;
+        top: 1100px;
         left: 50%;
         width: 1576px;
         height: 1378px;
@@ -195,7 +194,7 @@
     .poem-gradient9 {
         z-index: 0;
         position: absolute;
-        top: 1790px;
+        top: 1390px;
         left: 50%;
         width: 1576px;
         height: 1378px;

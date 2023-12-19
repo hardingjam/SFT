@@ -263,7 +263,7 @@
         width: calc(100% - 50px);
     }
 
-    .tube-container .hero-img {
+    .tube-container, .tube-container .hero-img {
         width: 100%
     }
 

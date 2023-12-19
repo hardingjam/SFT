@@ -39,13 +39,14 @@
         -webkit-text-fill-color: transparent;
     }
 
-    .header-text.curators{
+    .header-text.curators {
         background: linear-gradient(272deg, #4A64A5 74.74%, #8B5BB0 98.07%);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
-    .header-text.issuers{
+
+    .header-text.issuers {
         background: linear-gradient(272deg, #286196 74.74%, #8B5BB0 98.07%);
         background-clip: text;
         -webkit-background-clip: text;
@@ -71,7 +72,7 @@
         height: 65px;
     }
 
-    .tube-container .hero-img{
+    .tube-container, .tube-container .hero-img{
         width:100%
     }
 </style>

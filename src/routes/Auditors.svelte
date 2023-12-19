@@ -129,13 +129,14 @@
     .paragraph.short{
         max-width: 1000px;
     }
+
     .poem-gradient1 {
         position: absolute;
         width: 1576px;
         height: 714px;
         border-radius: 1576px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #F2F4F6 0%, rgba(242, 244, 246, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 357px;
+        top: 560px;
         z-index: 1;
         left: 40%;
     }

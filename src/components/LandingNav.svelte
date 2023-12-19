@@ -142,4 +142,10 @@
     .dropdown:hover .dropdown-content-wrapper {
         display: flex;
     }
+
+    @media only screen and (max-width: 920px) {
+        #launch-button {
+            display: none;
+        }
+    }
 </style>

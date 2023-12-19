@@ -668,4 +668,43 @@
         padding: 10px 45px;
     }
 
+
+    @media only screen and (max-width: 920px) {
+
+
+        .landing-head{
+            padding-left: 79px;
+            padding-right: 79px;
+        }
+        .landing-logo {
+            padding-top: 23px;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .globe-container{
+            flex-direction: column;
+        }
+
+        .text{
+            padding-left: 0;
+            padding-right: 0;
+            width: 85%;
+        }
+
+        .globe {
+            width: 100%;
+            display: flex;
+            justify-content: end;
+        }
+        .globe img{
+            width: 488px;
+            height: 488px;
+        }
+
+        #launch-button-1,
+        #launch-button-2{
+            display: none;
+        }
+    }
 </style>

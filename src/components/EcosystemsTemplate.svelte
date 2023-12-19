@@ -1,15 +1,16 @@
 <script>
+    import LandingFooter from './LandingFooter.svelte';
     export let name = ''
     export let hero = ''
     export let icon = ''
     export let iconBackground = ''
 </script>
-<div class="content">
-  <div class="tube-container">
+<div class="content-container ">
+  <div class="tube-container absolute top-0">
     <img src="{hero}" alt="hero"/>
   </div>
-
-  <div class="info-card">
+  <div class="content">
+    <slot name="gradients"></slot>
     <div class="gap-20 flex flex-col mb-24">
       <div class="flex items-center justify-center rounded-full page-icon" style="
 		   background: {iconBackground}">
@@ -17,8 +18,11 @@
       </div>
       <div class="header-text">{name}</div>
     </div>
-    <slot name="content"></slot>
+    <div class="paragraphs">
+      <slot name="content"></slot>
+    </div>
   </div>
+  <LandingFooter></LandingFooter>
 </div>
 
 <style>
@@ -35,12 +39,18 @@
         -webkit-text-fill-color: transparent;
     }
 
-    .info-card {
-        position: absolute;
-        top: 395px;
-        padding: 0 122px;
-        z-index: 4;
+    .content {
+        position: relative;
+        margin-top: 400px;
+        z-index: 2;
         text-align: left;
+        padding: 0 122px;
+    }
+
+    .paragraphs {
+        margin-bottom: 200px;
+        position: relative;
+        z-index: 3;
     }
 
     .page-icon {

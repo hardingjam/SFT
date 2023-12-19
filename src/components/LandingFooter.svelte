@@ -28,6 +28,7 @@ import {icons} from '../scripts/assets.js';
         flex-direction: column;
         gap: 128px;
         z-index: 2;
+        position: relative;
     }
 
     .landing-footer .landing-logo {
@@ -72,7 +73,7 @@ import {icons} from '../scripts/assets.js';
         height: 6px;
         width: calc(100% + 411px);
         margin-left: -122px;
-        z-index: 1;
+        z-index: 2;
     }
 
 </style>

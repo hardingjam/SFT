@@ -26,7 +26,7 @@
       <div class="poem-gradient9"></div>
     </div>
     <div slot="content">
-      <div class="paragraph">An issuer is someone looking to create a token, a digital representation of value. This
+      <div class="paragraph short">An issuer is someone looking to create a token, a digital representation of value. This
         involves two key aspects: the technology for token creation (minting) and ensuring liquidity for trading.
       </div>
       <div class="title-text">Minting and Liquidity</div>

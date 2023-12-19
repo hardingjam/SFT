@@ -5,9 +5,9 @@
     export let icon = ''
     export let iconBackground = ''
 </script>
-<div class="content-container ">
+<div class="content-container">
   <div class="tube-container absolute top-0">
-    <img src="{hero}" alt="hero"/>
+    <img src="{hero}" alt="hero" class="hero-img"/>
   </div>
   <div class="content">
     <slot name="gradients"></slot>
@@ -16,7 +16,7 @@
 		   background: {iconBackground}">
         <img src="{icon}" alt="investor"/>
       </div>
-      <div class="header-text">{name}</div>
+      <div class="{`header-text ${name.toLowerCase()}`}">{name}</div>
     </div>
     <div class="paragraphs">
       <slot name="content"></slot>
@@ -39,6 +39,19 @@
         -webkit-text-fill-color: transparent;
     }
 
+    .header-text.curators{
+        background: linear-gradient(272deg, #4A64A5 74.74%, #8B5BB0 98.07%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .header-text.issuers{
+        background: linear-gradient(272deg, #286196 74.74%, #8B5BB0 98.07%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
     .content {
         position: relative;
         margin-top: 400px;
@@ -56,5 +69,9 @@
     .page-icon {
         width: 65px;
         height: 65px;
+    }
+
+    .tube-container .hero-img{
+        width:100%
     }
 </style>

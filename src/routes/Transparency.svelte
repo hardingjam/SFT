@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="tube-container absolute">
-    <img src="{icons.tube}" alt="globe"/>
+    <img src="{icons.tube}" alt="globe" class="hero-img"/>
   </div>
   <div class="content">
     <div class="gradients">
@@ -37,7 +37,8 @@
 
       <div class="title-text">Facts checked by auditors (eg KPMG, Deloitte)</div>
 
-      <div class="paragraph">What makes it transparent is that the auditors are doing the audits based on the public
+      <div class="paragraph short">What makes it transparent is that the auditors are doing the audits based on the
+        public
         data
         on IPFS.
         Transparency in this system is achieved through several key mechanisms:
@@ -84,7 +85,7 @@
 
 <style>
     .transparency-container {
-        background: #F7F8F9;
+        background: #e7f4fd;
         margin-left: auto;
         margin-right: auto;
         position: relative;
@@ -156,6 +157,11 @@
         font-style: normal;
         font-weight: 600;
         line-height: 40px;
+        max-width: 1500px;
+    }
+
+    .paragraph.short {
+        max-width: 1000px;
     }
 
     .poem-gradient1 {
@@ -255,6 +261,16 @@
         left: 50px;
         padding: 0;
         width: calc(100% - 50px);
+    }
+
+    .tube-container .hero-img {
+        width: 100%
+    }
+
+    @media only screen and (min-width: 1920px) {
+        .content {
+            top: calc(100vh - 10.2%);
+        }
     }
 
 </style>

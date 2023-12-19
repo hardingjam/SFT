@@ -63,12 +63,15 @@
   <div class="poems">
     <div class="groups">
       <div class="group-item">
+        <div class="group-title-resp">Investors</div>
+
         <div class="color-4 group-icon group-icon-left"><img src="{icons.investor_icon}" alt="investor"/></div>
-        <div class="w-full h-inherit overflow-hidden rounded-3xl"><img src="{icons.investor_hero}" alt="investor"
-                                                                       class="group-hero investors-hero mt-20"/></div>
+        <div class="w-full h-inherit overflow-hidden rounded-3xl">
+          <img src="{icons.investor_hero}" alt="investor" class="group-hero investors-hero mt-20"/>
+        </div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Investors</div>
-          <div class="group-info pr-36 pl-36">
+          <div class="group-info pl-36">
             Buy/ trade/ hold tokens based on individual research & info from curators.
             <div class="mt-7"></div>
             Organic liquidity for high quality
@@ -82,8 +85,10 @@
       </div>
 
       <div class="group-item">
+        <div class="group-title-resp text-white">Curators</div>
+
         <div class="color-1 group-icon group-icon-right"><img src="{icons.curator_icon}" alt="curators"/></div>
-        <div class="overflow-hidden"><img src="{icons.curator_hero}" alt="curators" class="group-hero investors-hero"/>
+        <div class="overflow-hidden"><img src="{icons.curator_hero}" alt="curators" class="group-hero curators-hero"/>
         </div>
         <div class="group-text flex flex-col justify-between right-0 group-text-right">
           <div class="group-title">Curators</div>
@@ -101,6 +106,8 @@
       </div>
 
       <div class="group-item">
+        <div class="group-title-resp text-white">Issuers</div>
+
         <div class="color-2 group-icon group-icon-left"><img src="{icons.issuers_icon}" alt="issuers"/></div>
         <div class="w-full h-inherit overflow-hidden"><img src="{icons.issuers_hero}" alt="issuers" class="group-hero"/>
         </div>
@@ -121,8 +128,10 @@
       </div>
 
       <div class="group-item">
+        <div class="group-title-resp text-white">Auditors</div>
+
         <div class="color-3 group-icon lock group-icon-right"><img src="{icons.lock}" alt="curators"/></div>
-        <div class="overflow-hidden"><img src="{icons.auditors_hero}" alt="curators" class="group-hero investors-hero"/>
+        <div class="overflow-hidden"><img src="{icons.auditors_hero}" alt="curators" class="group-hero auditors-hero"/>
         </div>
         <div class="group-text flex flex-col justify-between right-0 group-text-right">
           <div class="group-title">Auditors</div>
@@ -424,7 +433,7 @@
         border-radius: 20px;
     }
 
-    .investors-hero {
+    .investors-hero, .curators-hero, .auditors-hero {
         -webkit-transform: scaleX(-1);
         transform: scaleX(-1);
     }
@@ -456,7 +465,7 @@
         filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     }
 
-    .group-title {
+    .group-title, .group-title-resp {
         font-family: 'Inter', sans-serif;
         font-size: 45px;
         font-style: normal;
@@ -468,6 +477,14 @@
         -webkit-text-fill-color: transparent;
     }
 
+    .group-title-resp {
+        display: none;
+        position: absolute;
+        top: 61px;
+        left: 69px;
+        z-index: 1;
+    }
+
     .group-info {
         color: #575757;
         font-family: 'Manrope', sans-serif;
@@ -475,6 +492,7 @@
         font-style: normal;
         font-weight: 400;
         line-height: 40px;
+        padding: 0 144px;
     }
 
     .transparency {
@@ -672,21 +690,22 @@
     @media only screen and (max-width: 920px) {
 
 
-        .landing-head{
+        .landing-head {
             padding-left: 79px;
             padding-right: 79px;
         }
+
         .landing-logo {
             padding-top: 23px;
             padding-left: 0;
             padding-right: 0;
         }
 
-        .globe-container{
+        .globe-container {
             flex-direction: column;
         }
 
-        .text{
+        .text {
             padding-left: 0;
             padding-right: 0;
             width: 85%;
@@ -697,14 +716,68 @@
             display: flex;
             justify-content: end;
         }
-        .globe img{
+
+        .globe img {
             width: 488px;
             height: 488px;
         }
 
         #launch-button-1,
-        #launch-button-2{
+        #launch-button-2 {
             display: none;
+        }
+
+        .groups {
+            gap: 279px
+        }
+
+        .group-text {
+            position: unset;
+            max-width: 100%;
+            padding-top: 0;
+            border-radius: 20px 0 20px 20px;
+            margin-top: 36px;
+        }
+
+        .group-info {
+            margin-bottom: 56px;
+        }
+
+        .group-title-resp {
+            display: block;
+        }
+
+        .group-title {
+            display: none;
+        }
+
+        .group-icon {
+            top: 0;
+            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+        }
+
+        .group-icon-left {
+            left: 0;
+        }
+
+        .group-icon-right {
+            left: 0;
+        }
+
+        .investors-hero {
+            border-radius: 20px 20px 0 0;
+        }
+
+        .group-hero:not(.investors-hero) {
+            transform: unset;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .text-white {
+            background: unset;
+            background-clip: unset;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: unset;
         }
     }
 </style>

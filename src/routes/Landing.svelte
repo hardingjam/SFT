@@ -225,6 +225,7 @@
   </div>
   <div class="landing-footer">
     <img src={icons.wave} alt="wave" class="wave">
+    <img src={icons.wave_resp} alt="wave" class="wave-resp">
     <div class="landing-logo">
       <img src="{icons.sft_logo_white}" alt="sft">
     </div>
@@ -669,10 +670,14 @@
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #E4F7FF 0%, rgba(228, 243, 255, 0.56) 47.4%, rgba(233, 233, 233, 0.00) 100%);
     }
 
-    .wave {
+    .wave, .wave-resp {
         width: 100%;
         position: absolute;
         bottom: 0;
+    }
+
+    .wave-resp {
+        display: none;
     }
 
     .landing-footer .landing-logo {
@@ -795,6 +800,14 @@
         .flow-text {
             font-size: 25px;
             gap: 5px;
+        }
+
+        .wave-resp {
+            display: block;
+        }
+
+        .wave {
+            display: none;
         }
     }
 </style>

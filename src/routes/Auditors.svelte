@@ -78,7 +78,6 @@
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 3300px;
         overflow: hidden;
     }
 

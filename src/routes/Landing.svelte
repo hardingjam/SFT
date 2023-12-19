@@ -779,5 +779,22 @@
             -webkit-background-clip: unset;
             -webkit-text-fill-color: unset;
         }
+
+        .transparency {
+            width: 78%;
+        }
+
+        .groups-line {
+            margin-top: 235px;
+        }
+
+        .setting-up-flow {
+            gap: 65px
+        }
+
+        .flow-text {
+            font-size: 25px;
+            gap: 5px;
+        }
     }
 </style>

@@ -10,13 +10,6 @@
     }
 </script>
 <div class="transparency-container">
-  <div class="poem-gradient1"></div>
-  <div class="poem-gradient2"></div>
-  <div class="poem-gradient3"></div>
-  <div class="poem-gradient4"></div>
-  <div class="poem-gradient6"></div>
-  <div class="poem-gradient7"></div>
-  <div class="poem-gradient8"></div>
   <div class="landing-head">
     <div class="landing-logo">
       <Link href="#">
@@ -25,17 +18,27 @@
       <LandingNav/>
     </div>
   </div>
+  <div class="tube-container absolute">
+    <img src="{icons.tube}" alt="globe" class="hero-img"/>
+  </div>
   <div class="content">
-    <div class="tube-container">
-      <img src="{icons.tube}" alt="globe"/>
+    <div class="gradients">
+      <div class="poem-gradient1"></div>
+      <div class="poem-gradient2"></div>
+      <div class="poem-gradient3"></div>
+      <div class="poem-gradient4"></div>
+      <div class="poem-gradient5"></div>
+      <div class="poem-gradient6"></div>
+      <div class="poem-gradient7"></div>
+      <div class="poem-gradient8"></div>
     </div>
-
-    <div class="info-card">
+    <div class="paragraphs">
       <div class="header-text title-text">SFT transparency</div>
 
       <div class="title-text">Facts checked by auditors (eg KPMG, Deloitte)</div>
 
-      <div class="paragraph">What makes it transparent is that the auditors are doing the audits based on the public
+      <div class="paragraph short">What makes it transparent is that the auditors are doing the audits based on the
+        public
         data
         on IPFS.
         Transparency in this system is achieved through several key mechanisms:
@@ -75,18 +78,17 @@
         users can filter and search everything according to all the same data that everyone else sees.
       </div>
     </div>
-
+    <LandingFooter></LandingFooter>
   </div>
-  <LandingFooter></LandingFooter>
+
 </div>
 
 <style>
     .transparency-container {
-        background: #F7F8F9;
+        background: #e7f4fd;
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 2960px;
         overflow: hidden;
     }
 
@@ -121,6 +123,7 @@
         font-style: normal;
         font-weight: 700;
         line-height: 55px;
+        margin-bottom: 40px;
     }
 
     .header-text {
@@ -132,12 +135,18 @@
         margin-bottom: 65px;
     }
 
-    .info-card {
-        position: absolute;
-        top: calc(100vh - 5.2%);
-        padding: 0 122px;
+    .content {
+        position: relative;
+        margin-top: calc(100vh - 11.8%);
         z-index: 2;
         text-align: left;
+    }
+
+    .paragraphs {
+        padding: 0 122px;
+        margin-bottom: 200px;
+        position: relative;
+        z-index: 3;
     }
 
     .paragraph {
@@ -148,6 +157,11 @@
         font-style: normal;
         font-weight: 600;
         line-height: 40px;
+        max-width: 1500px;
+    }
+
+    .paragraph.short {
+        max-width: 1000px;
     }
 
     .poem-gradient1 {
@@ -156,9 +170,9 @@
         height: 1011px;
         border-radius: 2129px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 654px;
+        top: -85px;
         z-index: 1;
-        right: -30%;
+        left: -30%;
     }
 
     .poem-gradient2 {
@@ -168,14 +182,15 @@
         transform: rotate(17.043deg);
         border-radius: 1788px;
         background: radial-gradient(63.35% 39.54% at 46.09% 49.91%, #B5D9FE 0%, rgba(181, 217, 254, 0.06) 53.34%, rgba(233, 233, 233, 0.00) 100%);
-        top: 531px;
-        left: 23%;
+        top: 300px;
+        left: 20%;
+        z-index: 1;
     }
 
     .poem-gradient3 {
         z-index: 2;
         position: absolute;
-        top: 1027px;
+        top: 440px;
         left: -24%;
         width: 1769px;
         height: 1120px;
@@ -184,10 +199,10 @@
     }
 
     .poem-gradient4 {
-        z-index: 0;
+        z-index: 1;
         position: absolute;
-        top: 1366px;
-        right: -55%;
+        top: 500px;
+        right: -40%;
         width: 1424px;
         height: 1043px;
         transform: rotate(62deg);
@@ -195,9 +210,21 @@
         background: radial-gradient(63.35% 39.54% at 46.09% 49.91%, #90C7FF 0%, rgba(181, 217, 254, 0.06) 53.34%, rgba(233, 233, 233, 0.00) 100%);
     }
 
-    .poem-gradient6 {
+    .poem-gradient5 {
+        z-index: 1;
         position: absolute;
-        top: 766px;
+        top: 30px;
+        left: 25%;
+        width: 1576px;
+        height: 714px;
+        border-radius: 1576px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #F2F4F6 0%, rgba(242, 244, 246, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
+    }
+
+    .poem-gradient6 {
+        z-index: 1;
+        position: absolute;
+        top: 370px;
         left: -30%;
         width: 1769px;
         height: 1547px;
@@ -207,8 +234,8 @@
 
     .poem-gradient7 {
         left: 27%;
-        bottom: -40%;
-        z-index: 1;
+        top: 50%;
+        z-index: -1;
         position: absolute;
         width: 1891px;
         height: 100%;
@@ -220,7 +247,7 @@
     .poem-gradient8 {
         z-index: 1;
         position: absolute;
-        bottom: 15%;
+        bottom: 22%;
         right: -17%;
         width: 2396px;
         height: 1252px;
@@ -234,6 +261,16 @@
         left: 50px;
         padding: 0;
         width: calc(100% - 50px);
+    }
+
+    .tube-container, .tube-container .hero-img {
+        width: 100%
+    }
+
+    @media only screen and (min-width: 1920px) {
+        .content {
+            top: calc(100vh - 10.2%);
+        }
     }
 
 </style>

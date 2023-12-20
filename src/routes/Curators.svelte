@@ -2,17 +2,10 @@
     import {icons} from '../scripts/assets.js';
     import LandingNav from '../components/LandingNav.svelte';
     import {Link} from 'yrv';
-    import LandingFooter from '../components/LandingFooter.svelte';
     import EcosystemsTemplate from '../components/EcosystemsTemplate.svelte';
 
 </script>
 <div class="transparency-container">
-  <div class="poem-gradient1"></div>
-  <div class="poem-gradient2"></div>
-  <div class="poem-gradient3"></div>
-  <div class="poem-gradient4"></div>
-  <div class="poem-gradient7"></div>
-  <div class="poem-gradient8"></div>
   <div class="landing-head">
     <div class="landing-logo">
       <Link href="#">
@@ -22,12 +15,20 @@
     </div>
   </div>
   <EcosystemsTemplate icon="{icons.curator_icon}" hero="{icons.curator_hero}" name="Curators" iconBackground="#655DB4">
+    <div slot="gradients">
+      <div class="poem-gradient1"></div>
+      <div class="poem-gradient2"></div>
+      <div class="poem-gradient3"></div>
+      <div class="poem-gradient4"></div>
+      <div class="poem-gradient7"></div>
+      <div class="poem-gradient8"></div>
+    </div>
     <div slot="content">
       <div class="title-text">
         Curators: Connecting Investors and Auditors
       </div>
 
-      <div class="paragraph">
+      <div class="paragraph short">
         Curators act as guides for investors. They help navigate the numerous new tokens that have been minted,
         distinguishing between legitimate ones and potential scams or low-quality projects.
       </div>
@@ -68,7 +69,6 @@
 
     </div>
   </EcosystemsTemplate>
-  <LandingFooter></LandingFooter>
 </div>
 
 <style>
@@ -77,7 +77,6 @@
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 3000px;
         overflow: hidden;
     }
 
@@ -123,6 +122,11 @@
         font-style: normal;
         font-weight: 600;
         line-height: 40px;
+        max-width: 1500px;
+    }
+
+    .paragraph.short{
+        max-width: 1000px;
     }
 
     .poem-gradient1 {
@@ -131,7 +135,7 @@
         height: 1011px;
         border-radius: 2129px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 635px;
+        top: 580px;
         z-index: 1;
         right: 0;
     }
@@ -142,14 +146,14 @@
         height: 714px;
         border-radius: 1576px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #F2F4F6 0%, rgba(242, 244, 246, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 787px;
+        top: 600px;
         left: 40%;
     }
 
     .poem-gradient3 {
         z-index: 2;
         position: absolute;
-        top: 990px;
+        top: 590px;
         right: 5%;
         width: 1769px;
         height: 1547px;
@@ -161,7 +165,7 @@
         z-index: 1;
         position: absolute;
         right: -5%;
-        top: 1455px;
+        top: 1000px;
         width: 2396px;
         height: 1252px;
         border-radius: 2396px;
@@ -171,7 +175,7 @@
     .poem-gradient7 {
         z-index: 0;
         position: absolute;
-        top: 2194px;
+        top: 1750px;
         left: -25%;
         width: 1576px;
         height: 1378px;
@@ -180,9 +184,9 @@
     }
 
     .poem-gradient8 {
-        z-index: 0;
+        z-index: -1;
         position: absolute;
-        top: 1800px;
+        top: 1400px;
         left: 60%;
         width: 1576px;
         height: 1378px;

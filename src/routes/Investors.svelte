@@ -2,18 +2,10 @@
     import {icons} from '../scripts/assets.js';
     import LandingNav from '../components/LandingNav.svelte';
     import {Link} from 'yrv';
-    import LandingFooter from '../components/LandingFooter.svelte';
     import EcosystemsTemplate from '../components/EcosystemsTemplate.svelte';
 
 </script>
 <div class="transparency-container">
-  <div class="poem-gradient1"></div>
-  <div class="poem-gradient2"></div>
-  <div class="poem-gradient3"></div>
-  <div class="poem-gradient4"></div>
-  <div class="poem-gradient6"></div>
-  <div class="poem-gradient7"></div>
-  <div class="poem-gradient8"></div>
   <div class="landing-head">
     <div class="landing-logo">
       <Link href="#">
@@ -25,8 +17,18 @@
 
   <EcosystemsTemplate icon="{icons.investor_icon}" hero="{icons.investor_hero}" name="Investors"
                       iconBackground="#674AA5">
+    <div slot="gradients">
+      <div class="poem-gradient1"></div>
+      <div class="poem-gradient2"></div>
+      <div class="poem-gradient3"></div>
+      <div class="poem-gradient4"></div>
+      <div class="poem-gradient6"></div>
+      <div class="poem-gradient7"></div>
+      <div class="poem-gradient8"></div>
+      <div class="poem-gradient9"></div>
+    </div>
     <div slot="content">
-      <div class="paragraph">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets
+      <div class="paragraph short">Some investors are inclined towards a long-term strategy, preferring to buy and hold assets
         for extended periods, others may adopt a more active approach, engaging in daily trading to capitalise on
         short-term market movements. Regardless of the strategy, every investor needs access to critical information to
         make informed decisions.
@@ -76,7 +78,6 @@
       </div>
     </div>
   </EcosystemsTemplate>
-  <LandingFooter></LandingFooter>
 
 </div>
 
@@ -86,7 +87,6 @@
         margin-left: auto;
         margin-right: auto;
         position: relative;
-        min-height: 3400px;
         overflow: hidden;
     }
 
@@ -130,25 +130,26 @@
         height: 1011px;
         border-radius: 2129px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 635px;
+        top: 235px;
         z-index: 1;
         right: 0;
     }
 
     .poem-gradient2 {
+        z-index: 1;
         position: absolute;
         width: 1576px;
         height: 714px;
         border-radius: 1576px;
         background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #F2F4F6 0%, rgba(242, 244, 246, 0.56) 67.25%, rgba(233, 233, 233, 0.00) 100%);
-        top: 787px;
+        top: 355px;
         left: 40%;
     }
 
     .poem-gradient3 {
         z-index: 3;
         position: absolute;
-        top: 990px;
+        top: 590px;
         right: 5%;
         width: 1769px;
         height: 1547px;
@@ -160,7 +161,7 @@
         z-index: 2;
         position: absolute;
         right: -5%;
-        top: 1455px;
+        top: 1000px;
         width: 2396px;
         height: 1252px;
         border-radius: 2396px;
@@ -168,9 +169,9 @@
     }
 
     .poem-gradient6 {
-        z-index: 1;
+        z-index: 2;
         position: absolute;
-        top: 1600px;
+        top: 1200px;
         left: 5%;
         width: 1576px;
         height: 1378px;
@@ -179,9 +180,9 @@
     }
 
     .poem-gradient7 {
-        z-index: 0;
+        z-index: 1;
         position: absolute;
-        top: 2194px;
+        top: 1750px;
         left: -25%;
         width: 1576px;
         height: 1378px;
@@ -190,14 +191,25 @@
     }
 
     .poem-gradient8 {
-        z-index: 0;
+        z-index: 1;
         position: absolute;
-        top: 1800px;
-        left: 60%;
+        top: 1400px;
+        left: 55%;
         width: 1576px;
         height: 1378px;
         border-radius: 1576px;
         background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
+    }
+
+    .poem-gradient9 {
+        z-index: 1;
+        position: absolute;
+        top: 560px;
+        left: -20%;
+        width: 1769px;
+        height: 1547px;
+        border-radius: 1769px;
+        background: radial-gradient(50.35% 50.24% at 46.09% 49.91%, #FFF 0%, rgba(245, 245, 245, 0.56) 77.71%, rgba(233, 233, 233, 0.00) 100%);
     }
 
     .paragraph {
@@ -208,5 +220,10 @@
         font-style: normal;
         font-weight: 600;
         line-height: 40px;
+        max-width: 1500px;
+    }
+
+    .paragraph.short{
+        max-width: 1000px;
     }
 </style>

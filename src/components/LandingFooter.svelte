@@ -22,13 +22,13 @@ import {icons} from '../scripts/assets.js';
 
     .landing-footer {
         bottom: 0;
-        position: absolute;
         width: 100%;
         left: 0;
         display: flex;
         flex-direction: column;
         gap: 128px;
         z-index: 2;
+        position: relative;
     }
 
     .landing-footer .landing-logo {
@@ -69,11 +69,11 @@ import {icons} from '../scripts/assets.js';
     }
 
     .footer-border {
-        margin-top: 270px;
         background: linear-gradient(90deg, #674AA5 8.61%, #59C3FF 100%);
         height: 6px;
         width: calc(100% + 411px);
         margin-left: -122px;
+        z-index: 2;
     }
 
 </style>

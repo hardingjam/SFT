@@ -20,6 +20,23 @@
   <div class="poem-gradient6"></div>
   <div class="poem-gradient7"></div>
   <div class="poem-gradient8"></div>
+  <div class="poem-gradient-resp-1 d-none"></div>
+  <div class="poem-gradient-resp-2 d-none">
+    <svg xmlns="http://www.w3.org/2000/svg" width="920" height="1016" viewBox="0 0 920 1016" fill="none">
+      <path
+        d="M2371 172C2371 638.128 1581.01 1016 606.5 1016C-368.006 1016 -1158 638.128 -1158 172C-1158 -294.128 -368.006 -672 606.5 -672C1581.01 -672 2371 -294.128 2371 172Z"
+        fill="url(#paint0_radial_7846_9403)"/>
+      <defs>
+        <radialGradient id="paint0_radial_7846_9403" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+                        gradientTransform="translate(224.085 121.721) rotate(-158.213) scale(915.355 591.723)">
+          <stop stop-color="#72A4F0"/>
+          <stop offset="0.535632" stop-color="#5C75B9" stop-opacity="0.606986"/>
+          <stop offset="1" stop-color="#3A2B63" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+    </svg>
+  </div>
+
   <div class="landing-head">
     <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1016" viewBox="0 0 1440 1016" fill="none"
          class="head-gradient">
@@ -695,11 +712,10 @@
 
 
     @media only screen and (max-width: 920px) {
-
-
         .landing-head {
             padding-left: 79px;
             padding-right: 79px;
+            background: none;
         }
 
         .landing-logo {
@@ -720,6 +736,7 @@
             max-width: 680px;
             margin-right: auto;
             margin-left: auto;
+            margin-top: 80px;
         }
 
         .text {
@@ -832,6 +849,31 @@
 
         .wave {
             display: none;
+        }
+
+        .poem-gradient-resp-1 {
+            display: block;
+            z-index: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1440px;
+            height: 645px;
+            background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 87.27%);
+        }
+
+        .poem-gradient-resp-2 {
+            display: block;
+            z-index: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3529px;
+            height: 2625px;
+        }
+
+        .poem-gradient1 {
+            top: 687px;
         }
     }
 </style>

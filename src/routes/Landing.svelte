@@ -152,6 +152,9 @@
     </div>
 
 
+  </div>
+  <div class="relative z-10">
+
     <div class="transparency">
       <div class="left">
         100% <span>transparency</span>
@@ -176,7 +179,6 @@
 
 
     </div>
-
     <div class="setting-up">
       <label>Setting up a new token as easy as:</label>
     </div>
@@ -221,8 +223,8 @@
       </div>
     </div>
     <button class="launch-button bottom" id="launch-button-2" on:click={()=>launchApp()}>Launch app</button>
-
   </div>
+
   <div class="landing-footer">
     <img src={icons.wave} alt="wave" class="wave">
     <img src={icons.wave_resp} alt="wave" class="wave-resp">
@@ -710,6 +712,12 @@
             flex-direction: column;
         }
 
+        .poems {
+            max-width: 680px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
         .text {
             padding-left: 0;
             padding-right: 0;
@@ -734,6 +742,10 @@
 
         .groups {
             gap: 279px
+        }
+
+        .group-item {
+            width: 100%;
         }
 
         .group-text {

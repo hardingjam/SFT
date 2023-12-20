@@ -71,7 +71,7 @@
         </div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Investors</div>
-          <div class="group-info pl-36">
+          <div class="group-info pl-36 pr-36">
             Buy/ trade/ hold tokens based on individual research & info from curators.
             <div class="mt-7"></div>
             Organic liquidity for high quality
@@ -493,7 +493,7 @@
         font-style: normal;
         font-weight: 400;
         line-height: 40px;
-        padding: 0 144px;
+        /*padding: 0 144px;*/
     }
 
     .transparency {
@@ -746,6 +746,9 @@
 
         .group-info {
             margin-bottom: 56px;
+            padding-left: unset;
+            padding-right: unset;
+            max-width: 455px;
         }
 
         .group-title-resp {
@@ -771,6 +774,7 @@
 
         .investors-hero {
             border-radius: 20px 20px 0 0;
+            margin-top: 55px;
         }
 
         .group-hero:not(.investors-hero) {

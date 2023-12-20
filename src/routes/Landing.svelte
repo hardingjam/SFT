@@ -706,10 +706,14 @@
             padding-top: 23px;
             padding-left: 0;
             padding-right: 0;
+            position: absolute;
+            left: 20px;
         }
 
         .globe-container {
             flex-direction: column;
+            max-width: 680px;
+            align-items: center;
         }
 
         .poems {
@@ -722,12 +726,16 @@
             padding-left: 0;
             padding-right: 0;
             width: 85%;
+            padding-top: 180px
+
         }
 
         .globe {
             width: 100%;
             display: flex;
-            justify-content: end;
+            margin-right: 0;
+            align-items: center;
+            justify-content: center;
         }
 
         .globe img {

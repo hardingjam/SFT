@@ -147,5 +147,8 @@
         #launch-button {
             display: none;
         }
+        .landing-nav-container {
+            display: none;
+        }
     }
 </style>

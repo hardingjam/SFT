@@ -503,7 +503,7 @@
     .group-title-resp {
         display: none;
         position: absolute;
-        top: 61px;
+        top: 7vw;
         left: 69px;
         z-index: 1;
     }
@@ -705,8 +705,8 @@
 
     .landing-footer .landing-logo {
         position: absolute;
-        bottom: 67px;
-        left: 50px;
+        bottom: calc(25px + 4.390625vw);
+        left: calc(10px + 2.390625vw);
         padding: 0;
     }
 
@@ -717,8 +717,8 @@
 
     @media only screen and (max-width: 920px) {
         .landing-head {
-            padding-left: 79px;
-            padding-right: 79px;
+            padding-left: 8vw;
+            padding-right: 8vw;
             background: none;
         }
 
@@ -737,7 +737,7 @@
         }
 
         .poems {
-            max-width: 680px;
+            max-width: 74vw;
             margin-right: auto;
             margin-left: auto;
             margin-top: 80px;
@@ -752,7 +752,6 @@
         }
 
         .globe {
-            width: 100%;
             display: flex;
             margin-right: 0;
             align-items: center;
@@ -770,7 +769,7 @@
         }
 
         .groups {
-            gap: 279px
+            gap: 30vw;
         }
 
         .group-item {
@@ -843,7 +842,6 @@
         }
 
         .flow-text {
-            font-size: 25px;
             gap: 5px;
         }
 
@@ -880,4 +878,45 @@
             top: 687px;
         }
     }
+
+    @media only screen and (max-width: 414px) {
+        .landing-head {
+            padding-left: 5vw;
+            padding-right: 5vw;
+        }
+
+        .poems {
+            max-width: 95vw;
+        }
+
+        .group-icon-left, .group-icon-right {
+            width: 55px;
+            height: 55px;
+            left: 20px;
+        }
+
+        .transparency {
+            width: 95%;
+            padding: 15px;
+            flex-direction: column;
+        }
+
+        .transparency .right {
+            gap: 20px;
+        }
+
+        .setting-up-flow {
+            gap: 0;
+        }
+
+        .flow {
+            width: 33.3%;
+        }
+
+        .flow-text {
+            font-size: 13px;
+            justify-content: center;
+        }
+    }
+
 </style>

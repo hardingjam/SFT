@@ -88,11 +88,9 @@
         </div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Investors</div>
-          <div class="group-info pl-36 pr-36">
-            Buy/ trade/ hold tokens based on individual research & info from curators.
-            <div class="mt-7"></div>
-            Organic liquidity for high quality
-            tokens is built.
+          <div class="group-info">
+            <span>Buy/ trade/ hold tokens based on individual research & info from curators.</span>
+            <span>Organic liquidity for high quality tokens is built.</span>
           </div>
           <Link href="#investors" class="items-center flex w-full justify-center">
             <div class="launch-button investors-read-more ">Read more</div>
@@ -109,11 +107,9 @@
         </div>
         <div class="group-text flex flex-col justify-between right-0 group-text-right">
           <div class="group-title">Curators</div>
-          <div class="group-info pr-32 pl-32">
-            Research reputable tokens and issuers to help investors make decisions.
-            <div class="mt-7"></div>
-            Every recommendation is recorded permanently onchain so that investors can assess the quality of each
-            curator.
+          <div class="group-info">
+            <span>Research reputable tokens and issuers to help investors make decisions.</span>
+            <span>Every recommendation is recorded permanently onchain so that investors can assess the quality of each curator.</span>
           </div>
           <Link href="#curators" class="items-center flex w-full justify-center">
             <div class="launch-button curators-read-more ">Read more</div>
@@ -130,34 +126,28 @@
         </div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Issuers</div>
-          <div class="group-info pr-32 pl-32">
-            Mint (create) the tokens.
-            <div class="mt-7"></div>
-            Real world assets associated with each token.
-            <div class="mt-7"></div>
-            Issuance is permissionless; it is up to each issuer to prove the quality of their offering.
+          <div class="group-info">
+            <span>Mint (create) the tokens.</span>
+            <span>Real world assets associated with each token.</span>
+            <span>Issuance is permissionless; it is up to each issuer to prove the quality of their offering.</span>
           </div>
           <Link href="#issuers" class="items-center flex w-full justify-center">
             <div class="launch-button issuers-read-more ">Read more</div>
           </Link>
         </div>
-
       </div>
 
       <div class="group-item">
         <div class="group-title-resp text-white">Auditors</div>
-
         <div class="color-3 group-icon lock group-icon-right"><img src="{icons.lock}" alt="curators"/></div>
         <div class="overflow-hidden"><img src="{icons.auditors_hero}" alt="curators" class="group-hero auditors-hero"/>
         </div>
         <div class="group-text flex flex-col justify-between right-0 group-text-right">
           <div class="group-title">Auditors</div>
-          <div class="group-info pr-20 pl-20">
-            Auditors check that all onchain data matches offchain reality.
-            <div class="mt-7"></div>
-            Appointed by the issuer, high quality audits improve investor confidence to increase token liquidity.
-            <div class="mt-7"></div>
-            If an audit fails, the token freezes (transfers are paused) until the problem is fixed.
+          <div class="group-info">
+            <span>Auditors check that all onchain data matches offchain reality.</span>
+            <span>Appointed by the issuer, high quality audits improve investor confidence to increase token liquidity.</span>
+            <span>If an audit fails, the token freezes (transfers are paused) until the problem is fixed.</span>
           </div>
           <Link href="#auditors" class="items-center flex w-full justify-center">
             <div class="launch-button auditors-read-more ">Read more</div>
@@ -421,6 +411,7 @@
         padding-top: 70px;
         max-width: 50%;
         border-radius: 20px 0 0 20px;
+        align-items: center;
     }
 
     .group-text-right {
@@ -508,14 +499,16 @@
     }
 
     .group-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5vw;
         color: #575757;
         font-family: 'Manrope', sans-serif;
-        /*font-size: 20px;*/
-        font-size: calc(15px + 0.390625vw);
+        font-size: 1.5vw;
         font-style: normal;
         font-weight: 400;
         line-height: 40px;
-        /*padding: 0 144px;*/
+        max-width: calc(100% - 8vw);
     }
 
     .transparency {

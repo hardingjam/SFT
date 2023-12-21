@@ -879,7 +879,7 @@
         }
     }
 
-    @media only screen and (max-width: 414px) {
+    @media only screen and (max-width: 430px) {
         .landing-head {
             padding-left: 5vw;
             padding-right: 5vw;

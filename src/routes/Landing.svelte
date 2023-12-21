@@ -81,11 +81,8 @@
     <div class="groups">
       <div class="group-item">
         <div class="group-title-resp">Investors</div>
-
+        <img src="{icons.investor_hero}" alt="investor" class="group-hero investors-hero mt-20"/>
         <div class="color-4 group-icon group-icon-left"><img src="{icons.investor_icon}" alt="investor"/></div>
-        <div class="w-full h-inherit overflow-hidden rounded-3xl">
-          <img src="{icons.investor_hero}" alt="investor" class="group-hero investors-hero mt-20"/>
-        </div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Investors</div>
           <div class="group-info">
@@ -101,10 +98,8 @@
 
       <div class="group-item">
         <div class="group-title-resp text-white">Curators</div>
-
+        <img src="{icons.curator_hero}" alt="curators" class="group-hero curators-hero"/>
         <div class="color-1 group-icon group-icon-right"><img src="{icons.curator_icon}" alt="curators"/></div>
-        <div class="overflow-hidden"><img src="{icons.curator_hero}" alt="curators" class="group-hero curators-hero"/>
-        </div>
         <div class="group-text flex flex-col justify-between right-0 group-text-right">
           <div class="group-title">Curators</div>
           <div class="group-info">
@@ -120,10 +115,8 @@
 
       <div class="group-item">
         <div class="group-title-resp text-white">Issuers</div>
-
+        <img src="{icons.issuers_hero}" alt="issuers" class="group-hero"/>
         <div class="color-2 group-icon group-icon-left"><img src="{icons.issuers_icon}" alt="issuers"/></div>
-        <div class="w-full h-inherit overflow-hidden"><img src="{icons.issuers_hero}" alt="issuers" class="group-hero"/>
-        </div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Issuers</div>
           <div class="group-info">
@@ -139,9 +132,8 @@
 
       <div class="group-item">
         <div class="group-title-resp text-white">Auditors</div>
+        <img src="{icons.auditors_hero}" alt="curators" class="group-hero auditors-hero"/>
         <div class="color-3 group-icon lock group-icon-right"><img src="{icons.lock}" alt="curators"/></div>
-        <div class="overflow-hidden"><img src="{icons.auditors_hero}" alt="curators" class="group-hero auditors-hero"/>
-        </div>
         <div class="group-text flex flex-col justify-between right-0 group-text-right">
           <div class="group-title">Auditors</div>
           <div class="group-info">
@@ -282,7 +274,7 @@
         background: #2C2C54;
         color: #FFFFFF;
         font-family: 'Mukta', sans-serif;
-        font-size: 25px;
+        font-size: 1.7vw;
         font-style: normal;
         font-weight: 600;
         line-height: normal;
@@ -381,7 +373,6 @@
     }
 
     .group-item {
-        min-height: 500px;
         position: relative;
         width: calc(100% - 240px);
         align-items: center;
@@ -407,11 +398,11 @@
         position: absolute;
         background: #FFFFFF;
         height: 100%;
-        padding-bottom: 70px;
-        padding-top: 70px;
         max-width: 50%;
         border-radius: 20px 0 0 20px;
+        display: flex;
         align-items: center;
+        justify-content: space-around;
     }
 
     .group-text-right {
@@ -480,10 +471,10 @@
 
     .group-title, .group-title-resp {
         font-family: 'Inter', sans-serif;
-        font-size: calc(40px + 0.390625vw);
+        font-size: 3.15vw;
         font-style: normal;
         font-weight: 700;
-        line-height: 40px; /* 88.889% */
+        line-height: 3.5vw; /* 88.889% */
         background: linear-gradient(272deg, #5F9AD1 27.74%, #8B5BB0 56.07%);
         background-clip: text;
         -webkit-background-clip: text;
@@ -507,7 +498,7 @@
         font-size: 1.5vw;
         font-style: normal;
         font-weight: 400;
-        line-height: 40px;
+        line-height: 3vw;
         max-width: calc(100% - 8vw);
     }
 
@@ -779,6 +770,7 @@
             padding-top: 0;
             border-radius: 20px 0 20px 20px;
             margin-top: 36px;
+            padding-bottom: 70px;
         }
 
         .group-info {

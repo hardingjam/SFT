@@ -726,6 +726,11 @@
             padding-top: 23px;
             padding-left: 0;
             padding-right: 0;
+            width: 100%;
+            justify-content: flex-end;
+        }
+
+        .landing-logo img {
             position: absolute;
             left: 20px;
         }

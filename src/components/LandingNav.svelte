@@ -13,26 +13,44 @@
         console.log($router);
     })
 
+    let showDropdown = false;
+
     const membersPages = ['#investors', '#curators', '#issuers', '#auditors']
 </script>
 <div class="landing-nav-container">
   <div class="links">
     <div class="dropdown">
       <div class="{membersPages.includes($router.path) ? 'active link' : 'link'}">
-        <span class="cursor-pointer">SFT Ecosystems</span>
+        <span class="cursor-pointer dropdown-trigger" on:mouseenter={()=>{showDropdown = true}}>SFT Ecosystems</span>
+        <div class="hamburger" on:click={()=>{showDropdown = !showDropdown}}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 54 54" fill="none">
+            <path d="M11.25 15.75H42.75" stroke="white" stroke-width="3" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <path d="M11.25 27H42.75" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M11.25 38.25H42.75" stroke="white" stroke-width="3" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+          </svg>
+        </div>
       </div>
       <div class="dropdown-content-wrapper">
+        {#if showDropdown}
         <div class="dropdown-content">
           <a href="/#investors"
              class="{$router.path === '#investors' ? 'active-list-item' : ''} investors">Investors</a>
           <a href="/#curators" class="{$router.path === '#curators' ? 'active-list-item' : ''}   curators">Curators</a>
           <a href="/#issuers" class="{$router.path === '#issuers' ? 'active-list-item' : ''}     issuers">Issuers</a>
           <a href="/#auditors" class="{$router.path === '#auditors' ? 'active-list-item' : ''}   auditors">Auditors</a>
+          <div class="transparency-link pt-6">
+            <a href="/#transparency" class="{$router.path === '#transparency' ? 'active-list-item' : ''} ">SFT
+              transparency</a>
+          </div>
+
         </div>
+          {/if}
       </div>
 
     </div>
-    <div class="{$router.path === '#transparency' ? 'active link' : 'link transparency-button'}">
+    <div class="{$router.path === '#transparency' ? 'active link' : 'link'} transparency-button">
       <Link href="#transparency">SFT transparency</Link>
     </div>
 
@@ -79,7 +97,6 @@
         padding: 3px 0;
         border: 1px solid transparent;
     }
-
 
     .dropdown-content-wrapper {
         border-top: 10px solid transparent;
@@ -143,12 +160,57 @@
         display: flex;
     }
 
+    .hamburger, .transparency-link {
+        display: none;
+    }
+
     @media only screen and (max-width: 920px) {
         #launch-button {
             display: none;
         }
-        .landing-nav-container {
+
+        .dropdown-trigger {
             display: none;
+        }
+
+        .transparency-button {
+            display: none;
+        }
+
+        .hamburger {
+            display: block;
+            margin-right: calc(16px - 8vw);
+        }
+
+        .dropdown-content-wrapper {
+            right: calc(30px - 8vw);
+            width: unset;
+            background: #535353;
+            border-top: 0;
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+            border-radius: 0 0 10px 10px;
+        }
+
+        .dropdown-content {
+            gap: 30px;
+            padding: 30px 50px 30px 50px;
+            border-radius: 0 0 10px 10px;
+            white-space: nowrap;
+            align-items: start;
+        }
+
+        .dropdown-content a {
+            color: #FFF;
+            font-family: 'Inter', sans-serif;
+            font-size: 30px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        }
+
+        .transparency-link {
+            display: flex;
+            border-top: 1px solid #AAA;
         }
     }
 </style>

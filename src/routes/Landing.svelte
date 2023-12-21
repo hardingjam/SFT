@@ -321,7 +321,8 @@
     .text .title {
         color: #FFF;
         font-family: 'Inter', sans-serif;
-        font-size: 45px;
+        font-size: calc(40px + 0.390625vw);
+        /*font-size:  45px;*/
         font-style: normal;
         font-weight: 700;
         line-height: normal;
@@ -330,7 +331,9 @@
     .text .info {
         color: #FFF;
         font-family: 'Manrope', sans-serif;
-        font-size: 25px;
+        /*font-size: 25px;*/
+        font-size: calc(20px + 0.390625vw);
+
         font-style: normal;
         font-weight: 400;
         line-height: normal;
@@ -487,7 +490,7 @@
 
     .group-title, .group-title-resp {
         font-family: 'Inter', sans-serif;
-        font-size: 45px;
+        font-size: calc(40px + 0.390625vw);
         font-style: normal;
         font-weight: 700;
         line-height: 40px; /* 88.889% */
@@ -508,7 +511,8 @@
     .group-info {
         color: #575757;
         font-family: 'Manrope', sans-serif;
-        font-size: 20px;
+        /*font-size: 20px;*/
+        font-size: calc(15px + 0.390625vw);
         font-style: normal;
         font-weight: 400;
         line-height: 40px;
@@ -523,7 +527,7 @@
         width: calc(50% - 20px);
         color: #FFF;
         font-family: 'Manrope', sans-serif;
-        font-size: 25px;
+        font-size: calc(20px + 0.390625vw);
         font-style: normal;
         font-weight: 700;
         margin-bottom: 238px;
@@ -550,7 +554,7 @@
         color: #575757;
         text-align: center;
         font-family: 'Mukta Mahee', sans-serif;
-        font-size: 30px;
+        font-size: calc(25px + 0.390625vw);
         font-style: normal;
         font-weight: 700;
         line-height: 40px; /* 133.333% */
@@ -576,7 +580,7 @@
         color: #575757;
         text-align: center;
         font-family: 'Mukta', sans-serif;
-        font-size: 30px;
+        font-size: calc(25px + 0.390625vw);
         font-style: normal;
         font-weight: 700;
         line-height: 40px; /* 133.333% */

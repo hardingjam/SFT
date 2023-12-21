@@ -358,9 +358,8 @@
 
     .globe {
         width: 608px;
-        height: 608px;
+        height: auto;
         margin-right: 48px;
-
     }
 
     .globe img {

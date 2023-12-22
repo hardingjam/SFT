@@ -412,13 +412,13 @@
 
     .group-icon {
         position: absolute;
-        top: 45px;
+        top: 3vw;
         padding: 14px;
         transform: translate(-50%, -50%);
         border-radius: 50%;
         z-index: 1;
-        width: 123px;
-        height: 123px;
+        width: 9vw;
+        height: 9vw;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -447,7 +447,7 @@
     }
 
     .group-icon-right {
-        right: -73px
+        right: -5vw
     }
 
     .color-4 {

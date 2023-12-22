@@ -6,8 +6,9 @@
 </script>
 <div class="transparency-container">
   <LandingNav/>
+  <div class="mt-5"></div>
   <EcosystemsTemplate icon="{icons.investor_icon}" hero="{icons.investor_hero}" name="Investors"
-                      iconBackground="#674AA5">
+                      iconBackground="#674AA5" heroClassName="top-16">
     <div slot="gradients">
       <div class="poem-gradient1"></div>
       <div class="poem-gradient2"></div>
@@ -80,19 +81,6 @@
         margin-right: auto;
         position: relative;
         overflow: hidden;
-    }
-
-    .title-text {
-        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-family: 'Inter', sans-serif;
-        font-size: 35px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 55px; /* 157.143% */
-        margin-bottom: 40px;
     }
 
     .poem-gradient1 {

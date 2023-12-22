@@ -84,19 +84,6 @@
         overflow: hidden;
     }
 
-    .title-text {
-        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-family: 'Inter', sans-serif;
-        font-size: 35px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 55px;
-        margin-bottom: 40px;
-    }
-
     .header-text {
         font-family: 'Inter', sans-serif;
         font-size: 45px;
@@ -114,7 +101,7 @@
     }
 
     .paragraphs {
-        padding: 0 122px;
+        padding: 0 8.5vw;
         margin-bottom: 200px;
         position: relative;
         z-index: 3;
@@ -241,6 +228,12 @@
     @media only screen and (min-width: 1920px) {
         .content {
             top: calc(100vh - 10.2%);
+        }
+    }
+
+    @media only screen and (max-width: 920px) {
+        .content {
+            margin-top: 60vw;
         }
     }
 

@@ -1,17 +1,19 @@
 <script>
     import LandingFooter from './LandingFooter.svelte';
+
     export let name = ''
     export let hero = ''
     export let icon = ''
     export let iconBackground = ''
+    export let heroClassName = ''
 </script>
 <div class="content-container">
-  <div class="tube-container absolute top-0">
+  <div class="tube-container absolute top-0 {heroClassName}">
     <img src="{hero}" alt="hero" class="hero-img"/>
   </div>
   <div class="content">
     <slot name="gradients"></slot>
-    <div class="gap-20 flex flex-col mb-24">
+    <div class="gap-20 flex flex-col mb-24 head-icon-and-text">
       <div class="flex items-center justify-center rounded-full page-icon" style="
 		   background: {iconBackground}">
         <img src="{icon}" alt="investor"/>
@@ -58,7 +60,7 @@
         margin-top: 400px;
         z-index: 2;
         text-align: left;
-        padding: 0 122px;
+        padding: 0 8.5vw;
     }
 
     .paragraphs {
@@ -72,7 +74,21 @@
         height: 65px;
     }
 
-    .tube-container, .tube-container .hero-img{
-        width:100%
+    .tube-container, .tube-container .hero-img {
+        width: 100%
+    }
+
+    @media only screen and (max-width: 920px) {
+        .head-icon-and-text {
+            align-items: center;
+        }
+
+        .header-text{
+            background: linear-gradient(272deg, #5F9AD1 0%, #8B5BB0 80%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
     }
 </style>

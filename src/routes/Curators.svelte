@@ -72,19 +72,6 @@
         overflow: hidden;
     }
 
-    .title-text {
-        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-family: 'Inter', sans-serif;
-        font-size: 35px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 55px; /* 157.143% */
-        margin-bottom: 40px;
-    }
-
     .paragraph {
         margin-bottom: 40px;
         color: #575757;

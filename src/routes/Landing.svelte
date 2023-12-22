@@ -269,10 +269,7 @@
     }
 
     .globe-container {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        align-items: flex-start;
+        margin-top: 90px;
     }
 
     .text {
@@ -280,17 +277,17 @@
         display: flex;
         flex-direction: column;
         gap: 25px;
-        padding-left: 120px;
+        padding-left: 9vw;
         align-items: flex-start;
         text-align: left;
         padding-top: 100px;
+        position: absolute;
     }
 
     .text .title {
         color: #FFF;
         font-family: 'Inter', sans-serif;
-        font-size: calc(40px + 0.390625vw);
-        /*font-size:  45px;*/
+        font-size: 3.1vw;
         font-style: normal;
         font-weight: 700;
         line-height: normal;
@@ -299,9 +296,7 @@
     .text .info {
         color: #FFF;
         font-family: 'Manrope', sans-serif;
-        /*font-size: 25px;*/
-        font-size: calc(20px + 0.390625vw);
-
+        font-size: 1.7vw;
         font-style: normal;
         font-weight: 400;
         line-height: normal;
@@ -318,7 +313,7 @@
     .text .info span {
         color: #FFF;
         font-family: 'Manrope', sans-serif;
-        font-size: 25px;
+        font-size: 1.7vw;
         font-style: normal;
         font-weight: 700;
         line-height: normal;
@@ -327,7 +322,8 @@
     .globe {
         width: 608px;
         height: auto;
-        margin-right: 48px;
+        margin-right: 3vw;
+        float: right;
     }
 
     .globe img {
@@ -695,6 +691,10 @@
             flex-direction: column;
             max-width: 680px;
             align-items: center;
+            margin-top: 0;
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
         }
 
         .poems {
@@ -708,8 +708,8 @@
             padding-left: 0;
             padding-right: 0;
             width: 85%;
-            padding-top: 180px
-
+            padding-top: 180px;
+            position: unset;
         }
 
         .globe {

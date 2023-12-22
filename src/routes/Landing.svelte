@@ -36,7 +36,7 @@
       </defs>
     </svg>
   </div>
-
+  <LandingNav/>
   <div class="landing-head">
     <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1016" viewBox="0 0 1440 1016" fill="none"
          class="head-gradient">
@@ -52,10 +52,6 @@
         </radialGradient>
       </defs>
     </svg>
-    <div class="landing-logo">
-      <img src="{icons.sft_logo_white}" alt="sft">
-      <LandingNav/>
-    </div>
 
     <div class="globe-container">
       <div class="text">
@@ -257,16 +253,6 @@
         z-index: -1;
         height: 850px;
         flex-shrink: 0;
-    }
-
-    .landing-logo {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding-top: 25px;
-        padding-left: 122px;
-        padding-right: 48px;
     }
 
     .launch-button {
@@ -703,19 +689,6 @@
             padding-left: 8vw;
             padding-right: 8vw;
             background: none;
-        }
-
-        .landing-logo {
-            padding-top: 23px;
-            padding-left: 0;
-            padding-right: 0;
-            width: 100%;
-            justify-content: flex-end;
-        }
-
-        .landing-logo img {
-            position: absolute;
-            left: 20px;
         }
 
         .globe-container {

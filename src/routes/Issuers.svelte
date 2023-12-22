@@ -1,19 +1,11 @@
 <script>
     import {icons} from '../scripts/assets.js';
     import LandingNav from '../components/LandingNav.svelte';
-    import {Link} from 'yrv';
     import EcosystemsTemplate from '../components/EcosystemsTemplate.svelte';
 
 </script>
 <div class="transparency-container">
-  <div class="landing-head">
-    <div class="landing-logo">
-      <Link href="#">
-        <img src="{icons.sft_logo_white}" alt="sft">
-      </Link>
-      <LandingNav/>
-    </div>
-  </div>
+  <LandingNav/>
   <EcosystemsTemplate icon="{icons.issuers_icon}" hero="{icons.issuers_hero}" name="Issuers" iconBackground="#4a64a5">
     <div slot="gradients">
       <div class="poem-gradient1"></div>
@@ -69,27 +61,6 @@
         margin-right: auto;
         position: relative;
         overflow: hidden;
-    }
-
-    .landing-head {
-        background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
-    }
-
-    .landing-logo {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding-top: 25px;
-        padding-left: 122px;
-        padding-right: 48px;
-        position: absolute;
-        z-index: 3;
-    }
-
-    .landing-logo img {
-        width: 65px;
-        height: 65px;
     }
 
     .title-text {

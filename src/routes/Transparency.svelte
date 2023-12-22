@@ -2,7 +2,6 @@
     import {icons} from '../scripts/assets.js';
     import {navigate} from '../scripts/helpers.js';
     import LandingNav from '../components/LandingNav.svelte';
-    import {Link} from 'yrv';
     import LandingFooter from '../components/LandingFooter.svelte';
 
     function launchApp() {
@@ -10,14 +9,7 @@
     }
 </script>
 <div class="transparency-container">
-  <div class="landing-head">
-    <div class="landing-logo">
-      <Link href="#">
-        <img src="{icons.logo}" alt="sft">
-      </Link>
-      <LandingNav/>
-    </div>
-  </div>
+  <LandingNav/>
   <div class="tube-container absolute">
     <img src="{icons.tube}" alt="globe" class="hero-img"/>
   </div>
@@ -90,27 +82,6 @@
         margin-right: auto;
         position: relative;
         overflow: hidden;
-    }
-
-    .landing-head {
-        background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
-    }
-
-    .landing-logo {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding-top: 25px;
-        padding-left: 122px;
-        padding-right: 48px;
-        position: absolute;
-        z-index: 3;
-    }
-
-    .landing-logo img {
-        width: 65px;
-        height: 65px;
     }
 
     .title-text {

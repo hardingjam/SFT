@@ -692,6 +692,10 @@
         margin-bottom: 14vw;
     }
 
+    .read-more{
+        white-space: nowrap;
+    }
+
 
     @media only screen and (max-width: 920px) {
         .landing-head {

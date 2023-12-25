@@ -208,7 +208,7 @@
       <div class="flow">
         <div class="icon color-3">3</div>
         <div class="flow-text">
-          <svg xmlns="http://www.w3.org/2000/svg" width="34" height="22" viewBox="0 0 34 22" fill="none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 -7 37 38" fill="none">
             <path
               d="M17.0013 19.3333L17.0013 10.9999M17.0013 2.66658L17.0013 10.9999M17.0013 10.9999L2.33464 10.9999M17.0013 10.9999L31.668 10.9999M2.33464 10.9999L6.91798 16.2083M2.33464 10.9999L6.91797 5.79159M31.668 10.9999L27.0846 5.79158M31.668 10.9999L27.0846 16.2083"
               stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -541,8 +541,8 @@
     .flow-text {
         align-items: center;
         display: flex;
-        gap: 21px;
-        margin-top: 50px;
+        gap: 1.5vw;
+        margin-top: 3.5vw;
         color: #575757;
         text-align: center;
         font-family: 'Mukta', sans-serif;
@@ -551,6 +551,10 @@
         font-weight: 700;
         line-height: 2.3vw; /* 133.333% */
         white-space: nowrap;
+    }
+
+    .flow-text svg {
+        width: 2.5vw;
     }
 
     .flow .icon {
@@ -692,7 +696,7 @@
         margin-bottom: 14vw;
     }
 
-    .read-more{
+    .read-more {
         white-space: nowrap;
     }
 
@@ -820,10 +824,6 @@
             gap: 65px
         }
 
-        .flow-text {
-            gap: 5px;
-        }
-
         .wave-resp {
             display: block;
         }
@@ -860,6 +860,7 @@
         .flow .icon {
             width: 6vw;
             height: 6vw;
+            top: calc(-50% - 6px)
         }
     }
 
@@ -895,11 +896,14 @@
 
         .flow {
             width: 33.3%;
+            display: flex;
+            justify-content: center;
         }
 
-        .flow-text {
-            font-size: 13px;
-            justify-content: center;
+        .flow .icon {
+            width: 8vw;
+            height: 8vw;
+            font-size: 3.3vw;
         }
     }
 

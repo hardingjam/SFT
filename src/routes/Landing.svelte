@@ -148,7 +148,7 @@
 
 
   </div>
-  <div class="relative z-10">
+  <div class="relative z-10 set-up">
 
     <div class="transparency">
       <div class="left">
@@ -227,6 +227,7 @@
       <img src="{icons.sft_logo_white}" alt="sft">
     </div>
   </div>
+
 </div>
 
 <style>
@@ -234,7 +235,7 @@
         background: #B5DCFF;
         margin-left: auto;
         margin-right: auto;
-        padding-bottom: 500px;
+        /*padding-bottom: 500px;*/
         overflow: hidden;
         position: relative;
     }
@@ -529,7 +530,7 @@
         display: flex;
         justify-content: center;
         width: 100%;
-        gap: 200px;
+        gap: 14vw;
         margin-bottom: 50px;
     }
 
@@ -549,6 +550,7 @@
         font-style: normal;
         font-weight: 700;
         line-height: 40px; /* 133.333% */
+        white-space: nowrap;
     }
 
     .flow .icon {
@@ -660,23 +662,33 @@
 
     .wave, .wave-resp {
         width: 100%;
-        position: absolute;
-        bottom: 0;
+        /*position: absolute;*/
+        /*bottom: 0;*/
     }
 
     .wave-resp {
         display: none;
     }
 
+    .landing-footer{
+        position: relative;
+        bottom: 0
+    }
     .landing-footer .landing-logo {
         position: absolute;
-        bottom: calc(25px + 4.390625vw);
+        top: 50%;
+        transform: translate(0, -15%);
         left: calc(10px + 2.390625vw);
         padding: 0;
+        width: 4.2vw;
     }
 
     .launch-button.bottom {
         padding: 10px 45px;
+    }
+
+    .set-up{
+        margin-bottom: 14vw;
     }
 
 

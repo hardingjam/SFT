@@ -76,7 +76,7 @@
 
 <style>
     .transparency-container {
-        background: #FCFCFC;
+        background: #FFFFFF;
         margin-left: auto;
         margin-right: auto;
         position: relative;

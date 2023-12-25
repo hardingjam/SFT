@@ -224,8 +224,8 @@
         }
 
         .dropdown-content {
-            gap: 30px;
-            padding: 30px 50px 30px 50px;
+            gap: 2.1vw;
+            padding: 2.1vw 3.5vw;
             border-radius: 0 0 10px 10px;
             white-space: nowrap;
             align-items: start;
@@ -234,7 +234,7 @@
         .dropdown-content a {
             color: #FFF;
             font-family: 'Inter', sans-serif;
-            font-size: 30px;
+            font-size: calc(15px + 0.390625vw);
             font-style: normal;
             font-weight: 700;
             line-height: normal;

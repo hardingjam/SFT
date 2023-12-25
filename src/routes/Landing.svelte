@@ -546,10 +546,10 @@
         color: #575757;
         text-align: center;
         font-family: 'Mukta', sans-serif;
-        font-size: calc(25px + 0.390625vw);
+        font-size: 2.1vw;
         font-style: normal;
         font-weight: 700;
-        line-height: 40px; /* 133.333% */
+        line-height: 2.3vw; /* 133.333% */
         white-space: nowrap;
     }
 
@@ -561,13 +561,13 @@
         color: #FFF;
         text-align: center;
         font-family: 'Arial', sans-serif;
-        font-size: 37px;
+        font-size: 2.3vw;
         font-style: normal;
         font-weight: 700;
         line-height: normal;
         transform: translate(-50%, 12px);
-        width: 55px;
-        height: 55px;
+        width: 3.8vw;
+        height: 3.8vw;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -670,10 +670,11 @@
         display: none;
     }
 
-    .landing-footer{
+    .landing-footer {
         position: relative;
         bottom: 0
     }
+
     .landing-footer .landing-logo {
         position: absolute;
         top: 50%;
@@ -687,7 +688,7 @@
         padding: 10px 45px;
     }
 
-    .set-up{
+    .set-up {
         margin-bottom: 14vw;
     }
 
@@ -850,6 +851,11 @@
 
         .poem-gradient1 {
             top: 687px;
+        }
+
+        .flow .icon {
+            width: 6vw;
+            height: 6vw;
         }
     }
 

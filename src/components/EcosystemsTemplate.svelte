@@ -83,7 +83,7 @@
             align-items: center;
         }
 
-        .header-text{
+        .header-text {
             background: linear-gradient(272deg, #5F9AD1 0%, #8B5BB0 80%);
             background-clip: text;
             -webkit-background-clip: text;

@@ -78,7 +78,6 @@
             return navigator.clipboard.writeText(text);
 
         }
-        console.log(showTooltip)
         return Promise.reject("The Clipboard API is not available.");
     }
 </script>

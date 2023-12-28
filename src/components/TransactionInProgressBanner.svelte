@@ -16,6 +16,10 @@
     export let errorText = "";
     export let successText = "";
     export let transactionHash = null;
+    let showTooltip = {
+        contract: false,
+        tx: false
+    }
 
     function viewInExplorer(hash) {
         window.open(`${$activeNetwork.blockExplorer}/tx/${hash}`);
@@ -65,10 +69,16 @@
         }
     }
 
-    function copy(text) {
+    function copy(text, type) {
         if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+            showTooltip[type] = true;
+            setTimeout(() => {
+                showTooltip[type] = false;
+            }, 1500);
             return navigator.clipboard.writeText(text);
+
         }
+        console.log(showTooltip)
         return Promise.reject("The Clipboard API is not available.");
     }
 </script>
@@ -136,7 +146,10 @@
         </svg>
             </span>
           </div>
-          <span class="icon copy-icon-contract" on:click={()=>{copy($vault.address)}}>
+          <span class="icon copy-icon-contract relative" on:click={()=>{copy($vault.address, 'contract')}}>
+            {#if showTooltip.contract}
+              <span class="tooltip-text">Copied</span>
+            {/if}
             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path
   d="M11.3334 9.13685V12.1118C11.3334 14.591 10.3417 15.5827 7.86258 15.5827H4.88758C2.40841 15.5827 1.41675 14.591 1.41675 12.1118V9.13685C1.41675 6.65768 2.40841 5.66602 4.88758 5.66602H7.86258C10.3417 5.66602 11.3334 6.65768 11.3334 9.13685Z"
@@ -167,7 +180,10 @@
         </svg>
             </span>
           </div>
-          <span class="icon copy-icon-tx" on:click={()=>{copy(transactionHash)}}>
+          <span class="icon copy-icon-tx relative" on:click={()=>{copy(transactionHash, 'tx')}}>
+            {#if showTooltip.tx}
+              <span class="tooltip-text">Copied</span>
+            {/if}
             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path
   d="M11.3334 9.13685V12.1118C11.3334 14.591 10.3417 15.5827 7.86258 15.5827H4.88758C2.40841 15.5827 1.41675 14.591 1.41675 12.1118V9.13685C1.41675 6.65768 2.40841 5.66602 4.88758 5.66602H7.86258C10.3417 5.66602 11.3334 6.65768 11.3334 9.13685Z"
@@ -239,5 +255,13 @@
         right: 20px;
         cursor: pointer;
     }
+
+    .tooltip-text{
+        visibility: unset;
+        opacity: 1;
+        font-weight: 400;
+        font-size: 16px;
+    }
+
 
 </style>

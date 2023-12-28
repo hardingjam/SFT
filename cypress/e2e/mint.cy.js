@@ -58,7 +58,7 @@ describe('The Home Page', () => {
         cy.get(`#mint-amount`).type('0.01');
         cy.get('.mint-btn').should('be.disabled')
     });
-    it.only('Should Mint', () => {
+    it('Should check transaction banner on mint', () => {
         cy.get(`.path-mint`).click();
         cy.window().its('localStorage').then((localStorage) => {
             localStorage.setItem('ipfsUsername', 'gildlab1');
@@ -77,6 +77,35 @@ describe('The Home Page', () => {
         cy.get(`#mint-amount`).type('0.01');
         cy.get('.mint-btn').should('not.be.disabled')
         cy.get('.mint-btn').click()
-
+        cy.get('.frame').should('exist')
+        cy.get('.tx-in-progress').should('exist')
+        cy.get('.contract-address').should('exist')
+        cy.get('.tx-id').should('exist')
+        cy.wait(4000)
+        cy.get('.tx-in-progress').should('not.exist')
+        cy.get('.contract-address').should('exist')
+        cy.get('.tx-id').should('exist')
+        cy.get('.copy-icon-contract').should('exist')
+        cy.get('.copy-icon-contract').click()
+        // Wait for a short duration to allow clipboard operation to complete
+        cy.wait(1000); // Adjust the wait time based on your needs
+        let testContractAddress = "0xdbcf2d8b73d06e6fa593b98857097257ebef1951"
+        // Read the clipboard content and assert its value
+        cy.window().then((win) => {
+            return win.navigator.clipboard.readText().then((clipboardText) => {
+                expect(clipboardText.trim()).to.equal(testContractAddress.trim());
+            });
+        });
+        cy.get('.copy-icon-tx').should('exist')
+        cy.get('.copy-icon-tx').click()
+        // Wait for a short duration to allow clipboard operation to complete
+        cy.wait(1000); // Adjust the wait time based on your needs
+        let testTxHash = "0x74e6434511672cce3d94b332b0e44a3744bfef4382bf1c989577ed6d29bfabc4"
+        // Read the clipboard content and assert its value
+        cy.window().then((win) => {
+            return win.navigator.clipboard.readText().then((clipboardText) => {
+                expect(clipboardText.trim()).to.equal(testTxHash.trim());
+            });
+        });
     });
 })

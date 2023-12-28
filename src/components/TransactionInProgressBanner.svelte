@@ -77,7 +77,7 @@
      on:click_outside={handleClickOutside}>
   <div class="content">
     {#if ($transactionInProgress)}
-      <div class="top-text">{topText || TRANSACTION_IN_PROGRESS_TEXT}</div>
+      <div class="top-text tx-in-progress">{topText || TRANSACTION_IN_PROGRESS_TEXT}</div>
     {/if}
     {#if (!$transactionInProgress)}
       <div class="close-btn" on:click={closeBtnClick}>
@@ -136,7 +136,7 @@
         </svg>
             </span>
           </div>
-          <span class="icon copy-icon" on:click={()=>{copy($vault.address)}}>
+          <span class="icon copy-icon-contract" on:click={()=>{copy($vault.address)}}>
             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path
   d="M11.3334 9.13685V12.1118C11.3334 14.591 10.3417 15.5827 7.86258 15.5827H4.88758C2.40841 15.5827 1.41675 14.591 1.41675 12.1118V9.13685C1.41675 6.65768 2.40841 5.66602 4.88758 5.66602H7.86258C10.3417 5.66602 11.3334 6.65768 11.3334 9.13685Z"
@@ -148,7 +148,7 @@
           </span>
         </div>
         <div class="flex items-center justify-between w-full gap-4">
-          <div class="flex items-center justify-between w-full"
+          <div class="flex items-center justify-between w-full tx-id"
                on:click={()=>viewInExplorer(transactionHash)}>{bottomText || VIEW_ON_EXPLORER_TEXT}
             <span class="icon">
              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -167,7 +167,7 @@
         </svg>
             </span>
           </div>
-          <span class="icon copy-icon" on:click={()=>{copy(transactionHash)}}>
+          <span class="icon copy-icon-tx" on:click={()=>{copy(transactionHash)}}>
             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path
   d="M11.3334 9.13685V12.1118C11.3334 14.591 10.3417 15.5827 7.86258 15.5827H4.88758C2.40841 15.5827 1.41675 14.591 1.41675 12.1118V9.13685C1.41675 6.65768 2.40841 5.66602 4.88758 5.66602H7.86258C10.3417 5.66602 11.3334 6.65768 11.3334 9.13685Z"

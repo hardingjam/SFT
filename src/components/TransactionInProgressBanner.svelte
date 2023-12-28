@@ -74,7 +74,7 @@
             showTooltip[type] = true;
             setTimeout(() => {
                 showTooltip[type] = false;
-            }, 1500);
+            }, 800);
             return navigator.clipboard.writeText(text);
 
         }

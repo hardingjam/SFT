@@ -56,7 +56,7 @@ export const MAGIC_NUMBERS = {
 };
 
 export const TRANSACTION_IN_PROGRESS_TEXT = "Transaction taking place, please wait."
-export const VIEW_ON_EXPLORER_TEXT = "View on the block explorer"
+export const VIEW_ON_EXPLORER_TEXT = "View transaction"
 export const ROUTE_LABEL_MAP = new Map([
     ["#setup", "Setup new SFT"],
     ["#roles", "SFT roles"],

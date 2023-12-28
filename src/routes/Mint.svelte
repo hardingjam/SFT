@@ -335,7 +335,7 @@
   <div class="audit-info-container basic-frame-parent">
     <div class="form-frame basic-frame">
       <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
-      <MintInput bind:amount={amount} amountLabel={"Mint amount"}
+      <MintInput bind:amount={amount} amountLabel={"Mint amount"} id="mint-amount"
                  info="(Mint amount = number of tokens that will go into your wallet)"/>
       {#if $schemas.length}
         <div class="schema">

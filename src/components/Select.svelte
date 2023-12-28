@@ -51,7 +51,7 @@
     <div slot="DropdownMenu" class={`${dropDownClass} ${className} inputSelect dropdown`}>
       {#each options as option}
         <button class="{selected === option.displayName? 'selected' : ''} dropdown-item" type="button"
-                on:click={()=>commitAction(option)}>
+                on:click={()=>commitAction(option)} id="{option.hash}">
           {#if option.icon}
             <img src={icons[option.icon]} alt={option?.displayName}/>
           {/if}

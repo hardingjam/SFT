@@ -5,6 +5,7 @@
     export let maxButton;
     export let amountLabel;
     export let info;
+    export let id;
 
     function allowNumbersOnly(evt) {
         const charCode = evt.keyCode;
@@ -36,7 +37,7 @@
         </div>
         <div class="options-input flex ">
           <input class="focus:shadow-none focus:ring-0 w-100" autofocus type="text" bind:value={amount}
-                 on:keydown={(e)=>allowNumbersOnly(e)}>
+                 on:keydown={(e)=>allowNumbersOnly(e)} id="{id}">
           {#if maxButton}
             <button class="max-button btn-hover" on:click={(e)=>setMaxValue(e)}>MAX</button>
           {/if}

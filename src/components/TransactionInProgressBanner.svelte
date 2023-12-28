@@ -231,8 +231,8 @@
         font-size: 20px;
         line-height: 33px;
         position: relative;
-        padding-top: 60px;
-        padding-bottom: 60px;
+        padding-top: 50px;
+        padding-bottom: 40px;
         width: 100%;
     }
 
@@ -241,9 +241,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 70%;
+        width: 61%;
         text-decoration-line: underline;
         text-decoration-thickness: 1px;
+        font-size: 18px;
+        line-height: 42px;
+        font-family: 'Mukta', sans-serif;
     }
 
     .close-btn {

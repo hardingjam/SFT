@@ -3,6 +3,7 @@
     import NavigationButton from './NavigationButton.svelte';
     import TokenOverviewTable from './TokenOverviewTable.svelte';
     import {navigate} from '../scripts/helpers.js';
+    import {Link} from 'yrv';
 
     function showSftInfo() {
         sftInfo.set(true)
@@ -49,10 +50,11 @@
       {/if}
     </div>
     <div class="mt-16 flex flex-col justify-start items-center w-full">
-      <div class="sft-name f-weight-600 menu-header mb-3 {$tokenName? 'sft-name-navigation-header':''}">{$account ?
-          $tokenName :
-          ""}</div>
-
+      <Link href="#token-overview/{$vault.address}">
+        <div class="sft-name f-weight-600 menu-header mb-3 {$tokenName? 'sft-name-navigation-header':''}">{$account ?
+            $tokenName :
+            ""}</div>
+      </Link>
       <a href=""
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <span class="text-base leading-5 menu-header">SFT</span>

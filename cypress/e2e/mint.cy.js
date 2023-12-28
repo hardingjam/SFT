@@ -58,7 +58,7 @@ describe('The Home Page', () => {
         cy.get(`#mint-amount`).type('0.01');
         cy.get('.mint-btn').should('be.disabled')
     });
-    it('Should Mint', () => {
+    it.only('Should Mint', () => {
         cy.get(`.path-mint`).click();
         cy.window().its('localStorage').then((localStorage) => {
             localStorage.setItem('ipfsUsername', 'gildlab1');
@@ -73,6 +73,10 @@ describe('The Home Page', () => {
         cy.get('#wallet').type('test Wallet')
         cy.get('#title').type('test Title')
         cy.get('.mint-btn').should('be.disabled')
+        cy.get(`#mint-amount`).clear();
+        cy.get(`#mint-amount`).type('0.01');
+        cy.get('.mint-btn').should('not.be.disabled')
+        cy.get('.mint-btn').click()
 
     });
 })

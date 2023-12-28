@@ -127,7 +127,7 @@
                                         id: receiptVaultInformations[0].id,
                                         hash: schemaHash,
                                     }]
-                                    tempSchema = tempSchema.filter(d => d.displayName)
+                                    tempSchema = tempSchema.filter(d => d.displayName && d.hash)
                                     schemas.set(tempSchema)
                                     ipfsLoading = false;
                                 }

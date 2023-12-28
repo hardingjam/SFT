@@ -117,7 +117,7 @@
       <div class="bottom-text">
         {#if (!$transactionInProgress)}
           <div class="flex items-center justify-between w-full gap-4">
-            <div class="flex items-center justify-between w-full" on:click={()=>viewContract($vault.address)}>
+            <div class="flex items-center justify-between w-full contract-address" on:click={()=>viewContract($vault.address)}>
               View contract address
               <span class="icon">
              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

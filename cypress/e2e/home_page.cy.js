@@ -90,7 +90,9 @@ describe('The Home Page', () => {
         cy.get('#token-overview').should('exist');
         cy.get('.navigation-token-icon').should('exist');
         cy.get('.token-logo').should('exist');
-        cy.get('.token-logo').should('have.attr', 'src').should('include','https://ipfs.io/ipfs/QmSaHGGYMu31evZdaJF4tuX4pVx5paBZnWWYkrN7U8Sc9k')
+        cy.get('.token-logo')
+            .should('have.attr', 'src')
+            .should('include', 'https://ipfs.io/ipfs/QmSaHGGYMu31evZdaJF4tuX4pVx5paBZnWWYkrN7U8Sc9k')
     });
     it('Should search and filter', () => {
         cy.get(`.search-bar`).should('exist');
@@ -123,6 +125,5 @@ describe('The Home Page', () => {
         cy.url().should('include', '/#token-overview')
         cy.get('#token-overview').should('exist');
         cy.get('.navigation-token-icon').should('exist');
-
     });
 })

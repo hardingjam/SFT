@@ -91,4 +91,10 @@
         }
 
     }
+
+    @media only screen and (max-width: 430px) {
+        .content {
+            margin-top: 350px;
+        }
+    }
 </style>

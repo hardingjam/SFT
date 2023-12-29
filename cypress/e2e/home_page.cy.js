@@ -90,7 +90,9 @@ describe('The Home Page', () => {
         cy.get('#token-overview').should('exist');
         cy.get('.navigation-token-icon').should('exist');
         cy.get('.token-logo').should('exist');
-        cy.get('.token-logo').should('have.attr', 'src').should('include','https://ipfs.io/ipfs/QmSaHGGYMu31evZdaJF4tuX4pVx5paBZnWWYkrN7U8Sc9k')
+        cy.get('.token-logo')
+            .should('have.attr', 'src')
+            .should('include', 'https://ipfs.io/ipfs/QmSaHGGYMu31evZdaJF4tuX4pVx5paBZnWWYkrN7U8Sc9k')
     });
     it('Should search and filter', () => {
         cy.get(`.search-bar`).should('exist');
@@ -115,5 +117,13 @@ describe('The Home Page', () => {
         cy.get(`.token-coca-cola`).should('exist');
         cy.get('.search-input').type("0xdbcf2d8b73d06e6fa593b98857097257ebef1951");
         cy.get(`.token-coca-cola`).should('not.exist');
+    });
+    it('Navigates to token overview', () => {
+        cy.get(`#token-name-Jefo`).click();
+        cy.get(`.path-setup`).click();
+        cy.get(`.sft-name`).click();
+        cy.url().should('include', '/#token-overview')
+        cy.get('#token-overview').should('exist');
+        cy.get('.navigation-token-icon').should('exist');
     });
 })

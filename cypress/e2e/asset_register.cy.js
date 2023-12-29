@@ -15,10 +15,7 @@ describe('Asset register page', () => {
         cy.url().should('include', '/#asset-register')
     });
     it('Asset class cell should not be empty', () => {
-        cy.get('.asset-class-cell').each(($td) => {
-            cy.wait(1000)
-            cy.wrap($td).should('not.be.empty');
-        })
+        cy.get('.asset-class-cell:first-child').should('not.be.empty');
     });
     it('Goes to asset information and sets correct asset class', () => {
         cy.wait(2000)

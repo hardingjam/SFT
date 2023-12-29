@@ -127,7 +127,7 @@
                                         id: receiptVaultInformations[0].id,
                                         hash: schemaHash,
                                     }]
-                                    tempSchema = tempSchema.filter(d => d.displayName)
+                                    tempSchema = tempSchema.filter(d => d.displayName && d.hash)
                                     schemas.set(tempSchema)
                                     ipfsLoading = false;
                                 }
@@ -144,6 +144,20 @@
     }
 
     async function mint() {
+
+        if ($isCypress) {
+            let tx = {
+                hash: "0x74e6434511672cce3d94b332b0e44a3744bfef4382bf1c989577ed6d29bfabc4"
+            }
+            await showPromptSFTCreate(tx, {errorText: "Mint failed", successText: "Mint successful!"})
+
+            setTimeout(() => {
+                transactionSuccess.set(true)
+                transactionInProgress.set(false)
+            }, 3000);
+
+            return
+        }
 
         try {
             error = ""
@@ -177,6 +191,7 @@
                             .connect(signer)
                             ["mint(uint256,address,uint256,bytes)"](shares, $account, shareRatio, arrayify(meta));
                         await showPromptSFTCreate(tx, {errorText: "Mint failed", successText: "Mint successful!"})
+
                         let wait = await tx.wait()
                         if (wait.status === 1) {
                             let interval = setInterval(async () => {
@@ -335,7 +350,7 @@
   <div class="audit-info-container basic-frame-parent">
     <div class="form-frame basic-frame">
       <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
-      <MintInput bind:amount={amount} amountLabel={"Mint amount"}
+      <MintInput bind:amount={amount} amountLabel={"Mint amount"} id="mint-amount"
                  info="(Mint amount = number of tokens that will go into your wallet)"/>
       {#if $schemas.length}
         <div class="schema">

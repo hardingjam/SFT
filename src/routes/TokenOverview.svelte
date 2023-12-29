@@ -343,6 +343,10 @@
         justify-content: center;
     }
 
+    #sft-logo-upload:hover .update{
+        display: flex ;
+    }
+
     .sft-logo-container {
         background: #9D9D9D;
         width: 303px;
@@ -363,6 +367,7 @@
 
     .sft-logo-container .update {
         position: absolute;
+        display: none;
     }
 
     .update-container {

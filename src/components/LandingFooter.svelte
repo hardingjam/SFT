@@ -9,6 +9,7 @@
   </div>
   <div class="wave-container">
     <img src={icons.wave} alt="wave" class="wave">
+    <img src={icons.wave_resp} alt="wave" class="wave-resp">
     <div class="landing-logo">
       <img src="{icons.sft_logo_white}" alt="sft">
     </div>
@@ -25,6 +26,10 @@
     .wave {
         width: 100%;
         bottom: 0;
+    }
+
+    .wave-resp {
+        display: none;
     }
 
     .landing-footer {
@@ -83,6 +88,34 @@
         width: calc(100% + 411px);
         margin-left: -122px;
         z-index: 2;
+    }
+
+    @media only screen and (max-width: 430px) {
+        .content {
+            margin-top: 350px;
+        }
+
+        .footer-border {
+            display: none;
+        }
+
+        .learn-more {
+            display: none;
+        }
+
+        .wave-resp {
+            display: block;
+        }
+
+        .wave {
+            display: none;
+        }
+
+        .landing-footer .landing-logo{
+            width: 65px;
+            transform: unset;
+            top:31%
+        }
     }
 
 </style>

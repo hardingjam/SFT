@@ -905,6 +905,54 @@
             height: 8vw;
             font-size: 3.3vw;
         }
+
+        .text .title {
+            font-size: 36px;
+        }
+
+        .text .info, .text .info span {
+            font-size: 25px;
+        }
+
+        .group-title-resp {
+            font-size: 35px;
+            line-height: 36px;
+        }
+
+        .group-info {
+            font-size: 20px;
+            line-height: 25px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-bottom: 36px;
+        }
+
+        .group-text {
+            padding-bottom: 36px;
+        }
+
+        .launch-button {
+            font-size: 25px;
+        }
+
+        .flow-text {
+            font-size: 20px;
+            flex-direction: column-reverse;
+            margin-top: 30px
+        }
+
+        .flow-text svg {
+            width: 30px;
+        }
+
+        .flow .icon{
+            top: calc(-50% + 10px)
+        }
+
+        .landing-footer .landing-logo{
+            width: 65px;
+            transform: translate(0, -35%);
+        }
     }
 
 </style>

@@ -8,7 +8,7 @@
   <LandingNav/>
   <div class="mt-5"></div>
   <EcosystemsTemplate icon="{icons.investor_icon}" hero="{icons.investor_hero}" name="Investors"
-                      iconBackground="#674AA5" heroClassName="top-32">
+                      iconBackground="#674AA5" heroClassName="top-30">
     <div slot="gradients">
       <div class="poem-gradient1"></div>
       <div class="poem-gradient2"></div>

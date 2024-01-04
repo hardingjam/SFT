@@ -96,5 +96,14 @@
         .content {
             margin-top: 350px;
         }
+
+        .tube-container {
+            /*top: 100px;*/
+        }
+
+        .head-icon-and-text {
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
     }
 </style>

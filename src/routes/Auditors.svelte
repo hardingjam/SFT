@@ -5,6 +5,7 @@
 
 </script>
 <div class="transparency-container">
+  <div class="poem-gradient10"></div>
   <LandingNav/>
   <EcosystemsTemplate icon="{icons.lock}" hero="{icons.auditors_hero}" name="Auditors" iconBackground="#5E97DF">
     <div slot="gradients">
@@ -174,6 +175,23 @@
         height: 1378px;
         border-radius: 1576px;
         background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
+    }
+
+    .poem-gradient10 {
+        position: absolute;
+        width: 100%;
+        height: 150px;
+        top: 0;
+        z-index: 0;
+        display: none;
+        background: rgb(104,94,173);
+        background: linear-gradient(90deg, rgb(103 183 249) 0%, rgb(100 182 252) 50%, rgb(99 181 251) 81%, rgb(88 176 249) 98%)
+    }
+
+    @media only screen and (max-width: 430px) {
+        .poem-gradient10 {
+            display: flex;
+        }
     }
 
 </style>

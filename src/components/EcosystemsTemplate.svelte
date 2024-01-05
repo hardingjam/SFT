@@ -98,7 +98,7 @@
         }
 
         .tube-container {
-            /*top: 100px;*/
+            top: 70px;
         }
 
         .head-icon-and-text {

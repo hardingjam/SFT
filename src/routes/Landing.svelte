@@ -28,7 +28,6 @@
         const images = document.querySelectorAll('img');
 
         images.forEach((image) => {
-            console.log(image)
             image.addEventListener('load', handleImageLoad);
         });
     });

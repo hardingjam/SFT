@@ -91,6 +91,7 @@
         line-height: normal;
         padding: 6px 32px;
         width: fit-content;
+        cursor: pointer;
     }
 
     .footer-border {

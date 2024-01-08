@@ -454,7 +454,8 @@
 
     .group-title, .group-title-resp {
         font-family: 'Inter', sans-serif;
-        font-size: 3.15vw;
+        /*font-size: 3.15vw;*/
+        font-size: calc(35px + 0.500625vw);
         font-style: normal;
         font-weight: 700;
         line-height: 3.5vw; /* 88.889% */
@@ -478,11 +479,11 @@
         gap: 1.5vw;
         color: #575757;
         font-family: 'Manrope', sans-serif;
-        font-size: 1.5vw;
         font-style: normal;
         font-weight: 400;
-        line-height: 3vw;
         max-width: calc(100% - 8vw);
+        line-height: calc(20px + 0.200625vw);
+        font-size: calc(20px + 0.200625vw);
     }
 
     .transparency {
@@ -886,6 +887,10 @@
             flex-direction: column;
         }
 
+        .groups-line {
+            margin-top: 80px
+        }
+
         .transparency .right {
             gap: 20px;
         }
@@ -945,11 +950,11 @@
             width: 30px;
         }
 
-        .flow .icon{
+        .flow .icon {
             top: calc(-50% + 10px)
         }
 
-        .landing-footer .landing-logo{
+        .landing-footer .landing-logo {
             width: 65px;
             transform: translate(0, -35%);
         }

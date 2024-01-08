@@ -288,7 +288,7 @@
     .text .title {
         color: #FFF;
         font-family: 'Inter', sans-serif;
-        font-size: 3.1vw;
+        font-size: calc(36px + 0.590625vw);
         font-style: normal;
         font-weight: 700;
         line-height: normal;
@@ -297,7 +297,7 @@
     .text .info {
         color: #FFF;
         font-family: 'Manrope', sans-serif;
-        font-size: 1.7vw;
+        font-size: calc(25px + 0.400625vw);
         font-style: normal;
         font-weight: 400;
         line-height: normal;
@@ -314,7 +314,7 @@
     .text .info span {
         color: #FFF;
         font-family: 'Manrope', sans-serif;
-        font-size: 1.7vw;
+        font-size: calc(25px + 0.400625vw);
         font-style: normal;
         font-weight: 700;
         line-height: normal;
@@ -340,7 +340,7 @@
     }
 
     .groups-line {
-        margin-top: 120px;
+        margin-top: 80px;
         width: 100%;
         height: 6px;
         background: linear-gradient(90deg, #674AA5 8.61%, #59C3FF 100%);
@@ -823,10 +823,6 @@
             padding: 20px;
         }
 
-        .groups-line {
-            margin-top: 235px;
-        }
-
         .setting-up-flow {
             gap: 65px
         }
@@ -891,10 +887,6 @@
             width: 95%;
             padding: 15px;
             flex-direction: column;
-        }
-
-        .groups-line {
-            margin-top: 80px
         }
 
         .transparency .right {

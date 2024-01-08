@@ -1,11 +1,17 @@
 <script>
     import {icons} from '../scripts/assets.js';
+    import {landing} from '../scripts/store.js';
+    import {navigate} from '../scripts/helpers.js';
+    function launchApp() {
+        landing.set(false)
+        navigate("#list")
+    }
 </script>
 <div class="landing-footer">
   <div class="footer-border"></div>
   <div class="learn-more">
     Learn more about how to use the SFT <br>application:
-    <div class="launch-button">Launch app</div>
+    <div class="launch-button" id="launch-button-1" on:click="{()=>launchApp()}">Launch app</div>
   </div>
   <div class="wave-container">
     <img src={icons.wave} alt="wave" class="wave">

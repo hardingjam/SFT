@@ -91,7 +91,7 @@
 
         </div>
         <div class="globe">
-          <img src="{icons.globe}" alt="globe" loading="lazy"/>
+          <img src="{icons.globe}" alt="globe"/>
         </div>
       </div>
     </div>
@@ -100,7 +100,7 @@
       <div class="groups">
         <div class="group-item">
           <div class="group-title-resp">Investors</div>
-          <img src="{icons.investor_hero}" alt="investor" loading="lazy" class="group-hero investors-hero mt-20"/>
+          <img src="{icons.investor_hero}" alt="investor" class="group-hero investors-hero mt-20"/>
           <div class="color-4 group-icon group-icon-left"><img src="{icons.investor_icon}" alt="investor"/></div>
           <div class="group-text left-0 flex flex-col justify-between">
             <div class="group-title">Investors</div>
@@ -117,7 +117,7 @@
 
         <div class="group-item">
           <div class="group-title-resp text-white">Curators</div>
-          <img src="{icons.curator_hero}" loading="lazy" alt="curators" class="group-hero curators-hero"/>
+          <img src="{icons.curator_hero}" alt="curators" class="group-hero curators-hero"/>
           <div class="color-1 group-icon group-icon-right"><img src="{icons.curator_icon}" alt="curators"/></div>
           <div class="group-text flex flex-col justify-between right-0 group-text-right">
             <div class="group-title">Curators</div>
@@ -134,7 +134,7 @@
 
         <div class="group-item">
           <div class="group-title-resp text-white">Issuers</div>
-          <img src="{icons.issuers_hero}" loading="lazy" alt="issuers" class="group-hero"/>
+          <img src="{icons.issuers_hero}" alt="issuers" class="group-hero"/>
           <div class="color-2 group-icon group-icon-left"><img src="{icons.issuers_icon}" alt="issuers"/></div>
           <div class="group-text left-0 flex flex-col justify-between">
             <div class="group-title">Issuers</div>
@@ -151,7 +151,7 @@
 
         <div class="group-item">
           <div class="group-title-resp text-white">Auditors</div>
-          <img src="{icons.auditors_hero}" alt="curators" loading="lazy" class="group-hero auditors-hero"/>
+          <img src="{icons.auditors_hero}" alt="curators" class="group-hero auditors-hero"/>
           <div class="color-3 group-icon lock group-icon-right"><img src="{icons.lock}" alt="curators"/></div>
           <div class="group-text flex flex-col justify-between right-0 group-text-right">
             <div class="group-title">Auditors</div>

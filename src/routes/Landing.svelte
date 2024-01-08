@@ -9,226 +9,243 @@
         landing.set(false)
         navigate("#list")
     }
+    import { onMount } from 'svelte';
+
+    let isDocumentLoaded = false;
+
+    onMount(() => {
+        // This function will be called after the component is mounted.
+        // You can use it to set isDocumentLoaded to true when the document is fully loaded.
+        isDocumentLoaded = true;
+    });
+
 </script>
 
-<div class="landing-container">
-  <div class="poem-gradient1"></div>
-  <div class="poem-gradient2"></div>
-  <div class="poem-gradient3"></div>
-  <div class="poem-gradient4"></div>
-  <div class="poem-gradient5"></div>
-  <div class="poem-gradient6"></div>
-  <div class="poem-gradient7"></div>
-  <div class="poem-gradient8"></div>
-  <div class="poem-gradient-resp-1 d-none"></div>
-  <div class="poem-gradient-resp-2 d-none">
-    <svg xmlns="http://www.w3.org/2000/svg" width="920" height="1016" viewBox="0 0 920 1016" fill="none">
-      <path
-        d="M2371 172C2371 638.128 1581.01 1016 606.5 1016C-368.006 1016 -1158 638.128 -1158 172C-1158 -294.128 -368.006 -672 606.5 -672C1581.01 -672 2371 -294.128 2371 172Z"
-        fill="url(#paint0_radial_7846_9403)"/>
-      <defs>
-        <radialGradient id="paint0_radial_7846_9403" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
-                        gradientTransform="translate(224.085 121.721) rotate(-158.213) scale(915.355 591.723)">
-          <stop stop-color="#72A4F0"/>
-          <stop offset="0.535632" stop-color="#5C75B9" stop-opacity="0.606986"/>
-          <stop offset="1" stop-color="#3A2B63" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-    </svg>
-  </div>
-  <LandingNav/>
-  <div class="landing-head">
-    <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1016" viewBox="0 0 1440 1016" fill="none"
-         class="head-gradient">
-      <path
-        d="M2371 172C2371 638.128 1581.01 1016 606.5 1016C-368.006 1016 -1158 638.128 -1158 172C-1158 -294.128 -368.006 -672 606.5 -672C1581.01 -672 2371 -294.128 2371 172Z"
-        fill="url(#paint0_radial_6596_11952)"/>
-      <defs>
-        <radialGradient id="paint0_radial_6596_11952" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
-                        gradientTransform="translate(224.085 121.721) rotate(-158.213) scale(915.355 591.723)">
-          <stop stop-color="#72A4F0"/>
-          <stop offset="0.535632" stop-color="#5C75B9" stop-opacity="0.606986"/>
-          <stop offset="1" stop-color="#3A2B63" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-    </svg>
-
-    <div class="globe-container">
-      <div class="text">
-
-        <div class="title">Create, review, and share tokens backed by real world assets.</div>
-        <div class="info">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <line x1="16" y1="1" x2="-8.74228e-08" y2="0.999999" stroke="white" stroke-width="2"/>
-            <line x1="1" y1="4.37114e-08" x2="0.999999" y2="16" stroke="white" stroke-width="2"/>
-          </svg>
-          Join our transparent, decentralised, programmatic, <span>Semi Fungible Token</span> system.
-        </div>
-        <button class="launch-button" id="launch-button-1" on:click="{()=>launchApp()}">Launch app</button>
-
-      </div>
-      <div class="globe">
-        <img src="{icons.globe}" alt="globe"/>
-      </div>
+{#if isDocumentLoaded}
+  <div class="landing-container">
+    <div class="poem-gradient1"></div>
+    <div class="poem-gradient2"></div>
+    <div class="poem-gradient3"></div>
+    <div class="poem-gradient4"></div>
+    <div class="poem-gradient5"></div>
+    <div class="poem-gradient6"></div>
+    <div class="poem-gradient7"></div>
+    <div class="poem-gradient8"></div>
+    <div class="poem-gradient-resp-1 d-none"></div>
+    <div class="poem-gradient-resp-2 d-none">
+      <svg xmlns="http://www.w3.org/2000/svg" width="920" height="1016" viewBox="0 0 920 1016" fill="none">
+        <path
+          d="M2371 172C2371 638.128 1581.01 1016 606.5 1016C-368.006 1016 -1158 638.128 -1158 172C-1158 -294.128 -368.006 -672 606.5 -672C1581.01 -672 2371 -294.128 2371 172Z"
+          fill="url(#paint0_radial_7846_9403)"/>
+        <defs>
+          <radialGradient id="paint0_radial_7846_9403" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+                          gradientTransform="translate(224.085 121.721) rotate(-158.213) scale(915.355 591.723)">
+            <stop stop-color="#72A4F0"/>
+            <stop offset="0.535632" stop-color="#5C75B9" stop-opacity="0.606986"/>
+            <stop offset="1" stop-color="#3A2B63" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+      </svg>
     </div>
-  </div>
+    <LandingNav/>
+    <div class="landing-head">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1016" viewBox="0 0 1440 1016" fill="none"
+           class="head-gradient">
+        <path
+          d="M2371 172C2371 638.128 1581.01 1016 606.5 1016C-368.006 1016 -1158 638.128 -1158 172C-1158 -294.128 -368.006 -672 606.5 -672C1581.01 -672 2371 -294.128 2371 172Z"
+          fill="url(#paint0_radial_6596_11952)"/>
+        <defs>
+          <radialGradient id="paint0_radial_6596_11952" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+                          gradientTransform="translate(224.085 121.721) rotate(-158.213) scale(915.355 591.723)">
+            <stop stop-color="#72A4F0"/>
+            <stop offset="0.535632" stop-color="#5C75B9" stop-opacity="0.606986"/>
+            <stop offset="1" stop-color="#3A2B63" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+      </svg>
 
-  <div class="poems">
-    <div class="groups">
-      <div class="group-item">
-        <div class="group-title-resp">Investors</div>
-        <img src="{icons.investor_hero}" alt="investor" class="group-hero investors-hero mt-20"/>
-        <div class="color-4 group-icon group-icon-left"><img src="{icons.investor_icon}" alt="investor"/></div>
-        <div class="group-text left-0 flex flex-col justify-between">
-          <div class="group-title">Investors</div>
-          <div class="group-info">
-            <span>Buy/ trade/ hold tokens based on individual research & info from curators.</span>
-            <span>Organic liquidity for high quality tokens is built.</span>
+      <div class="globe-container">
+        <div class="text">
+
+          <div class="title">Create, review, and share tokens backed by real world assets.</div>
+          <div class="info">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <line x1="16" y1="1" x2="-8.74228e-08" y2="0.999999" stroke="white" stroke-width="2"/>
+              <line x1="1" y1="4.37114e-08" x2="0.999999" y2="16" stroke="white" stroke-width="2"/>
+            </svg>
+            Join our transparent, decentralised, programmatic, <span>Semi Fungible Token</span> system.
           </div>
-          <Link href="#investors" class="items-center flex w-full justify-center">
-            <div class="launch-button investors-read-more ">Read more</div>
-          </Link>
+          <button class="launch-button" id="launch-button-1" on:click="{()=>launchApp()}">Launch app</button>
+
         </div>
-
-      </div>
-
-      <div class="group-item">
-        <div class="group-title-resp text-white">Curators</div>
-        <img src="{icons.curator_hero}" alt="curators" class="group-hero curators-hero"/>
-        <div class="color-1 group-icon group-icon-right"><img src="{icons.curator_icon}" alt="curators"/></div>
-        <div class="group-text flex flex-col justify-between right-0 group-text-right">
-          <div class="group-title">Curators</div>
-          <div class="group-info">
-            <span>Research reputable tokens and issuers to help investors make decisions.</span>
-            <span>Every recommendation is recorded permanently onchain so that investors can assess the quality of each curator.</span>
-          </div>
-          <Link href="#curators" class="items-center flex w-full justify-center">
-            <div class="launch-button curators-read-more ">Read more</div>
-          </Link>
-        </div>
-
-      </div>
-
-      <div class="group-item">
-        <div class="group-title-resp text-white">Issuers</div>
-        <img src="{icons.issuers_hero}" alt="issuers" class="group-hero"/>
-        <div class="color-2 group-icon group-icon-left"><img src="{icons.issuers_icon}" alt="issuers"/></div>
-        <div class="group-text left-0 flex flex-col justify-between">
-          <div class="group-title">Issuers</div>
-          <div class="group-info">
-            <span>Mint (create) the tokens.</span>
-            <span>Real world assets associated with each token.</span>
-            <span>Issuance is permissionless; it is up to each issuer to prove the quality of their offering.</span>
-          </div>
-          <Link href="#issuers" class="items-center flex w-full justify-center">
-            <div class="launch-button issuers-read-more ">Read more</div>
-          </Link>
+        <div class="globe">
+          <img src="{icons.globe}" alt="globe"/>
         </div>
       </div>
-
-      <div class="group-item">
-        <div class="group-title-resp text-white">Auditors</div>
-        <img src="{icons.auditors_hero}" alt="curators" class="group-hero auditors-hero"/>
-        <div class="color-3 group-icon lock group-icon-right"><img src="{icons.lock}" alt="curators"/></div>
-        <div class="group-text flex flex-col justify-between right-0 group-text-right">
-          <div class="group-title">Auditors</div>
-          <div class="group-info">
-            <span>Auditors check that all onchain data matches offchain reality.</span>
-            <span>Appointed by the issuer, high quality audits improve investor confidence to increase token liquidity.</span>
-            <span>If an audit fails, the token freezes (transfers are paused) until the problem is fixed.</span>
-          </div>
-          <Link href="#auditors" class="items-center flex w-full justify-center">
-            <div class="launch-button auditors-read-more ">Read more</div>
-          </Link>
-        </div>
-
-      </div>
-
     </div>
 
+    <div class="poems">
+      <div class="groups">
+        <div class="group-item">
+          <div class="group-title-resp">Investors</div>
+          <img src="{icons.investor_hero}" alt="investor" class="group-hero investors-hero mt-20"/>
+          <div class="color-4 group-icon group-icon-left"><img src="{icons.investor_icon}" alt="investor"/></div>
+          <div class="group-text left-0 flex flex-col justify-between">
+            <div class="group-title">Investors</div>
+            <div class="group-info">
+              <span>Buy/ trade/ hold tokens based on individual research & info from curators.</span>
+              <span>Organic liquidity for high quality tokens is built.</span>
+            </div>
+            <Link href="#investors" class="items-center flex w-full justify-center">
+              <div class="launch-button investors-read-more ">Read more</div>
+            </Link>
+          </div>
+
+        </div>
+
+        <div class="group-item">
+          <div class="group-title-resp text-white">Curators</div>
+          <img src="{icons.curator_hero}" alt="curators" class="group-hero curators-hero"/>
+          <div class="color-1 group-icon group-icon-right"><img src="{icons.curator_icon}" alt="curators"/></div>
+          <div class="group-text flex flex-col justify-between right-0 group-text-right">
+            <div class="group-title">Curators</div>
+            <div class="group-info">
+              <span>Research reputable tokens and issuers to help investors make decisions.</span>
+              <span>Every recommendation is recorded permanently onchain so that investors can assess the quality of each curator.</span>
+            </div>
+            <Link href="#curators" class="items-center flex w-full justify-center">
+              <div class="launch-button curators-read-more ">Read more</div>
+            </Link>
+          </div>
+
+        </div>
+
+        <div class="group-item">
+          <div class="group-title-resp text-white">Issuers</div>
+          <img src="{icons.issuers_hero}" alt="issuers" class="group-hero"/>
+          <div class="color-2 group-icon group-icon-left"><img src="{icons.issuers_icon}" alt="issuers"/></div>
+          <div class="group-text left-0 flex flex-col justify-between">
+            <div class="group-title">Issuers</div>
+            <div class="group-info">
+              <span>Mint (create) the tokens.</span>
+              <span>Real world assets associated with each token.</span>
+              <span>Issuance is permissionless; it is up to each issuer to prove the quality of their offering.</span>
+            </div>
+            <Link href="#issuers" class="items-center flex w-full justify-center">
+              <div class="launch-button issuers-read-more ">Read more</div>
+            </Link>
+          </div>
+        </div>
+
+        <div class="group-item">
+          <div class="group-title-resp text-white">Auditors</div>
+          <img src="{icons.auditors_hero}" alt="curators" class="group-hero auditors-hero"/>
+          <div class="color-3 group-icon lock group-icon-right"><img src="{icons.lock}" alt="curators"/></div>
+          <div class="group-text flex flex-col justify-between right-0 group-text-right">
+            <div class="group-title">Auditors</div>
+            <div class="group-info">
+              <span>Auditors check that all onchain data matches offchain reality.</span>
+              <span>Appointed by the issuer, high quality audits improve investor confidence to increase token liquidity.</span>
+              <span>If an audit fails, the token freezes (transfers are paused) until the problem is fixed.</span>
+            </div>
+            <Link href="#auditors" class="items-center flex w-full justify-center">
+              <div class="launch-button auditors-read-more ">Read more</div>
+            </Link>
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="relative z-10 set-up">
+
+      <div class="transparency">
+        <div class="left">
+          100% <span>transparency</span>
+          <br>
+          - facts checked by auditors
+          <br>(eg KPMG, Deloitte)
+
+        </div>
+        <div class="right">
+          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none" class="eye">
+            <path
+              d="M28.5642 22.0001C28.5642 25.6301 25.6308 28.5634 22.0008 28.5634C18.3708 28.5634 15.4375 25.6301 15.4375 22.0001C15.4375 18.3701 18.3708 15.4368 22.0008 15.4368C25.6308 15.4368 28.5642 18.3701 28.5642 22.0001Z"
+              stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M22.0017 37.1617C28.4733 37.1617 34.505 33.3484 38.7033 26.7484C40.3533 24.1634 40.3533 19.8184 38.7033 17.2334C34.505 10.6334 28.4733 6.82007 22.0017 6.82007C15.53 6.82007 9.49833 10.6334 5.3 17.2334C3.65 19.8184 3.65 24.1634 5.3 26.7484C9.49833 33.3484 15.53 37.1617 22.0017 37.1617Z"
+              stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <a href="https://gildlab.document360.io/docs/sft-transparency" target="_blank">
+            <button class="launch-button read-more">Read more</button>
+          </a>
+        </div>
+
+
+      </div>
+      <div class="setting-up">
+        <label>Setting up a new token as easy as:</label>
+      </div>
+
+      <div class="groups-line"></div>
+      <div class="setting-up-flow">
+        <div class="flow">
+          <div class="icon color-1">1</div>
+          <div class="flow-text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 0 37 38" fill="none">
+              <path
+                d="M19.7812 24.6559H25.55M25.55 24.6559H31.1641M25.55 24.6559L25.5616 18.907M25.55 24.6559L25.5835 30.326"
+                stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
+              <path
+                d="M31.6257 19.2665C31.6257 18.139 31.4828 17.045 31.2159 16.0007C29.7617 10.3326 24.6157 6.13916 18.4984 6.13916C11.2536 6.13916 5.37109 12.0217 5.37109 19.2665C5.37109 26.5113 11.2536 32.3938 18.4984 32.3938C19.2919 32.3938 20.0679 32.3238 20.8219 32.1881"
+                stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Setup new SFT</span>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="icon color-2">2</div>
+          <div class="flow-text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 0 37 38" fill="none">
+              <path
+                d="M6.16797 31.2161V29.6745C6.16797 25.4173 9.61911 21.9661 13.8763 21.9661H19.6576M27.0352 21.9114V27.362M27.0352 27.362V32.8126M27.0352 27.362H32.4858M27.0352 27.362H21.5846M23.1263 11.1745C23.1263 14.5802 20.3654 17.3411 16.9596 17.3411C13.5539 17.3411 10.793 14.5802 10.793 11.1745C10.793 7.76872 13.5539 5.00781 16.9596 5.00781C20.3654 5.00781 23.1263 7.76872 23.1263 11.1745Z"
+                stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>SFT roles</span>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="icon color-3">3</div>
+          <div class="flow-text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 -7 37 38" fill="none">
+              <path
+                d="M17.0013 19.3333L17.0013 10.9999M17.0013 2.66658L17.0013 10.9999M17.0013 10.9999L2.33464 10.9999M17.0013 10.9999L31.668 10.9999M2.33464 10.9999L6.91798 16.2083M2.33464 10.9999L6.91797 5.79159M31.668 10.9999L27.0846 5.79158M31.668 10.9999L27.0846 16.2083"
+                stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Mint/Redeem</span>
+          </div>
+        </div>
+      </div>
+      <button class="launch-button bottom" id="launch-button-2" on:click={()=>launchApp()}>Launch app</button>
+    </div>
+
+    <div class="landing-footer">
+      <img src={icons.wave} alt="wave" class="wave">
+      <img src={icons.wave_resp} alt="wave" class="wave-resp">
+      <div class="landing-logo">
+        <img src="{icons.sft_logo_white}" alt="sft">
+      </div>
+    </div>
 
   </div>
-  <div class="relative z-10 set-up">
-
-    <div class="transparency">
-      <div class="left">
-        100% <span>transparency</span>
-        <br>
-        - facts checked by auditors
-        <br>(eg KPMG, Deloitte)
-
-      </div>
-      <div class="right">
-        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none" class="eye">
-          <path
-            d="M28.5642 22.0001C28.5642 25.6301 25.6308 28.5634 22.0008 28.5634C18.3708 28.5634 15.4375 25.6301 15.4375 22.0001C15.4375 18.3701 18.3708 15.4368 22.0008 15.4368C25.6308 15.4368 28.5642 18.3701 28.5642 22.0001Z"
-            stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <path
-            d="M22.0017 37.1617C28.4733 37.1617 34.505 33.3484 38.7033 26.7484C40.3533 24.1634 40.3533 19.8184 38.7033 17.2334C34.505 10.6334 28.4733 6.82007 22.0017 6.82007C15.53 6.82007 9.49833 10.6334 5.3 17.2334C3.65 19.8184 3.65 24.1634 5.3 26.7484C9.49833 33.3484 15.53 37.1617 22.0017 37.1617Z"
-            stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <a href="https://gildlab.document360.io/docs/sft-transparency" target="_blank">
-          <button class="launch-button read-more">Read more</button>
-        </a>
-      </div>
-
-
-    </div>
-    <div class="setting-up">
-      <label>Setting up a new token as easy as:</label>
-    </div>
-
-    <div class="groups-line"></div>
-    <div class="setting-up-flow">
-      <div class="flow">
-        <div class="icon color-1">1</div>
-        <div class="flow-text">
-          <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 0 37 38" fill="none">
-            <path
-              d="M19.7812 24.6559H25.55M25.55 24.6559H31.1641M25.55 24.6559L25.5616 18.907M25.55 24.6559L25.5835 30.326"
-              stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
-            <path
-              d="M31.6257 19.2665C31.6257 18.139 31.4828 17.045 31.2159 16.0007C29.7617 10.3326 24.6157 6.13916 18.4984 6.13916C11.2536 6.13916 5.37109 12.0217 5.37109 19.2665C5.37109 26.5113 11.2536 32.3938 18.4984 32.3938C19.2919 32.3938 20.0679 32.3238 20.8219 32.1881"
-              stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>Setup new SFT</span>
-        </div>
-      </div>
-      <div class="flow">
-        <div class="icon color-2">2</div>
-        <div class="flow-text">
-          <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 0 37 38" fill="none">
-            <path
-              d="M6.16797 31.2161V29.6745C6.16797 25.4173 9.61911 21.9661 13.8763 21.9661H19.6576M27.0352 21.9114V27.362M27.0352 27.362V32.8126M27.0352 27.362H32.4858M27.0352 27.362H21.5846M23.1263 11.1745C23.1263 14.5802 20.3654 17.3411 16.9596 17.3411C13.5539 17.3411 10.793 14.5802 10.793 11.1745C10.793 7.76872 13.5539 5.00781 16.9596 5.00781C20.3654 5.00781 23.1263 7.76872 23.1263 11.1745Z"
-              stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>SFT roles</span>
-        </div>
-      </div>
-      <div class="flow">
-        <div class="icon color-3">3</div>
-        <div class="flow-text">
-          <svg xmlns="http://www.w3.org/2000/svg" width="37" height="38" viewBox="0 -7 37 38" fill="none">
-            <path
-              d="M17.0013 19.3333L17.0013 10.9999M17.0013 2.66658L17.0013 10.9999M17.0013 10.9999L2.33464 10.9999M17.0013 10.9999L31.668 10.9999M2.33464 10.9999L6.91798 16.2083M2.33464 10.9999L6.91797 5.79159M31.668 10.9999L27.0846 5.79158M31.668 10.9999L27.0846 16.2083"
-              stroke="#575757" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>Mint/Redeem</span>
-        </div>
-      </div>
-    </div>
-    <button class="launch-button bottom" id="launch-button-2" on:click={()=>launchApp()}>Launch app</button>
+{:else}
+  <div>
+    Loading...
   </div>
+{/if}
 
-  <div class="landing-footer">
-    <img src={icons.wave} alt="wave" class="wave">
-    <img src={icons.wave_resp} alt="wave" class="wave-resp">
-    <div class="landing-logo">
-      <img src="{icons.sft_logo_white}" alt="sft">
-    </div>
-  </div>
-
-</div>
 
 <style>
     .landing-container {

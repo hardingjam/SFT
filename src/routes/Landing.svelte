@@ -3,26 +3,39 @@
     import LandingNav from '../components/LandingNav.svelte';
     import {landing} from '../scripts/store.js';
     import {navigate} from '../scripts/helpers.js';
-    import {Link} from 'yrv';
+    import { onMount } from 'svelte';
 
+    import {Link} from 'yrv';
     function launchApp() {
         landing.set(false)
         navigate("#list")
     }
-    import { onMount } from 'svelte';
 
     let isDocumentLoaded = false;
 
+    let imagesLoaded = 0;
+    const totalImages = 12;
+
+    function handleImageLoad() {
+        imagesLoaded++;
+
+        if (imagesLoaded === totalImages) {
+            isDocumentLoaded = true;
+        }
+    }
+
     onMount(() => {
-        // This function will be called after the component is mounted.
-        // You can use it to set isDocumentLoaded to true when the document is fully loaded.
-        isDocumentLoaded = true;
+        const images = document.querySelectorAll('img');
+
+        images.forEach((image) => {
+            console.log(image)
+            image.addEventListener('load', handleImageLoad);
+        });
     });
 
 </script>
 
-{#if isDocumentLoaded}
-  <div class="landing-container">
+  <div class="landing-container {isDocumentLoaded? 'show':'hide'}">
     <div class="poem-gradient1"></div>
     <div class="poem-gradient2"></div>
     <div class="poem-gradient3"></div>
@@ -240,11 +253,9 @@
     </div>
 
   </div>
-{:else}
-  <div>
+  <div class="{isDocumentLoaded? 'hide': 'show'}">
     Loading...
   </div>
-{/if}
 
 
 <style>

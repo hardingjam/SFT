@@ -261,7 +261,7 @@
         background: #2C2C54;
         color: #FFFFFF;
         font-family: 'Mukta', sans-serif;
-        font-size: 1.7vw;
+        font-size: calc(25px + 0.190625vw);
         font-style: normal;
         font-weight: 600;
         line-height: normal;
@@ -454,15 +454,17 @@
 
     .group-title, .group-title-resp {
         font-family: 'Inter', sans-serif;
-        /*font-size: 3.15vw;*/
-        font-size: calc(35px + 0.500625vw);
         font-style: normal;
         font-weight: 700;
-        line-height: 3.5vw; /* 88.889% */
         background: linear-gradient(272deg, #5F9AD1 27.74%, #8B5BB0 56.07%);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+    }
+
+    .group-title {
+        font-size: calc(40px + 0.390625vw);
+        line-height: calc(40px + 0.390625vw);
     }
 
     .group-title-resp {
@@ -471,6 +473,8 @@
         top: 7vw;
         left: 69px;
         z-index: 1;
+        font-size: calc(35px + 0.500625vw);
+        line-height: calc(35px + 0.500625vw);
     }
 
     .group-info {

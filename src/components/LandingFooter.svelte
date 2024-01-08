@@ -51,12 +51,17 @@
 
     .landing-footer .landing-logo {
         position: absolute;
-        bottom: 50%;
+        width: 100%;
+        height: calc(100% - 3.4vw);
         left: calc(10px + 2.390625vw);
         padding: 0;
+        bottom: 0;
+    }
+
+    .landing-footer .landing-logo img {
+        position: absolute;
         top: 50%;
-        transform: translate(0, -15%);
-        width: 4.2vw;
+        transform: translate(0, -50%);
     }
 
     .learn-more {
@@ -115,12 +120,6 @@
 
         .wave {
             display: none;
-        }
-
-        .landing-footer .landing-logo{
-            width: 65px;
-            transform: unset;
-            top:31%
         }
     }
 

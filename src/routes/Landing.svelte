@@ -686,11 +686,17 @@
 
     .landing-footer .landing-logo {
         position: absolute;
-        top: 50%;
-        transform: translate(0, -15%);
+        width: 100%;
+        height: calc(100% - 3.4vw);
         left: calc(10px + 2.390625vw);
         padding: 0;
-        width: 4.2vw;
+        bottom: 0;
+    }
+
+    .landing-footer .landing-logo img{
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
     }
 
     .launch-button.bottom {
@@ -865,6 +871,16 @@
             height: 6vw;
             top: calc(-50% - 6px)
         }
+
+        .landing-footer .landing-logo {
+            height: calc(100% - 5.4vw);
+        }
+
+        /*.landing-footer .landing-logo img{*/
+        /*    position: absolute;*/
+        /*    top: 50%;*/
+        /*    transform: translate(0, -50%);*/
+        /*}*/
     }
 
     @media only screen and (max-width: 430px) {
@@ -950,11 +966,6 @@
 
         .flow .icon {
             top: calc(-50% + 10px)
-        }
-
-        .landing-footer .landing-logo {
-            width: 65px;
-            transform: translate(0, -35%);
         }
     }
 

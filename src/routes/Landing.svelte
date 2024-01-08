@@ -261,7 +261,7 @@
         background: #2C2C54;
         color: #FFFFFF;
         font-family: 'Mukta', sans-serif;
-        font-size: calc(25px + 0.190625vw);
+        font-size: calc(20px + 0.190625vw);
         font-style: normal;
         font-weight: 600;
         line-height: normal;
@@ -486,8 +486,8 @@
         font-style: normal;
         font-weight: 400;
         max-width: calc(100% - 8vw);
-        line-height: calc(20px + 0.090625vw);
-        font-size: calc(20px + 0.090625vw);
+        line-height: calc(14px + 0.500625vw);
+        font-size: calc(14px + 0.500625vw);
     }
 
     .transparency {

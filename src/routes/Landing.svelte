@@ -819,6 +819,8 @@
 
         .transparency {
             width: 78%;
+            font-size: calc(16px + 0.390625vw);
+            padding: 20px;
         }
 
         .groups-line {

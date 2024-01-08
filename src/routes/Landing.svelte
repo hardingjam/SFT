@@ -486,8 +486,8 @@
         font-style: normal;
         font-weight: 400;
         max-width: calc(100% - 8vw);
-        line-height: calc(20px + 0.200625vw);
-        font-size: calc(20px + 0.200625vw);
+        line-height: calc(20px + 0.090625vw);
+        font-size: calc(20px + 0.090625vw);
     }
 
     .transparency {

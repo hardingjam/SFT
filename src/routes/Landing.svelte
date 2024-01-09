@@ -524,7 +524,7 @@
         font-size: calc(20px + 0.390625vw);
         font-style: normal;
         font-weight: 700;
-        margin-bottom: 238px;
+        margin-bottom: 20vw;
         line-height: 40px; /* 160% */
         justify-content: space-between;
     }
@@ -727,7 +727,7 @@
     }
 
     .set-up {
-        margin-bottom: 14vw;
+        margin-bottom: 20vw;
     }
 
     .read-more {

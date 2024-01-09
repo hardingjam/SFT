@@ -925,7 +925,7 @@
         .transparency {
             width: 95%;
             padding: 15px;
-            flex-direction: column;
+            align-items: center;
         }
 
         .transparency .right {

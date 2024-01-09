@@ -18,7 +18,7 @@
     </div>
     <div slot="content">
       <div class="title-text">
-        Curators: Connecting Investors and Auditors
+       Connecting Investors and Auditors
       </div>
 
       <div class="paragraph short">

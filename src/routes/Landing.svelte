@@ -925,13 +925,21 @@
 
         .transparency {
             width: 95%;
-            padding: 15px;
-            align-items: center;
+            padding: 15px 15px 35px 40px;
             margin-bottom: 45vw;
+            flex-direction: column;
+            align-items: flex-start;
+            gap:30px
         }
 
         .transparency .right {
-            gap: 20px;
+            width: 100%;
+        }
+
+        .transparency .right .eye{
+            position: absolute;
+            right: 45px;
+            top: 25px;
         }
 
         .setting-up-flow {

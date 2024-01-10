@@ -444,9 +444,9 @@
         border-radius: 20px;
     }
 
-    .investors-hero, .curators-hero, .auditors-hero {
-        /*-webkit-transform: scaleX(-1);*/
-        /*transform: scaleX(-1);*/
+    .curators-hero, .auditors-hero {
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
     }
 
     .group-icon-left {

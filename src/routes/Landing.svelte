@@ -101,7 +101,7 @@
     <div class="groups">
       <div class="group-item">
         <div class="group-title-resp">Investors</div>
-        <img src="{icons.investor_hero}" alt="investor" class="group-hero investors-hero mt-20"/>
+        <img src="{icons.investor_hero_tile}" alt="investor" class="group-hero investors-hero "/>
         <div class="color-4 group-icon group-icon-left"><img src="{icons.investor_icon}" alt="investor"/></div>
         <div class="group-text left-0 flex flex-col justify-between">
           <div class="group-title">Investors</div>
@@ -445,8 +445,8 @@
     }
 
     .investors-hero, .curators-hero, .auditors-hero {
-        -webkit-transform: scaleX(-1);
-        transform: scaleX(-1);
+        /*-webkit-transform: scaleX(-1);*/
+        /*transform: scaleX(-1);*/
     }
 
     .group-icon-left {

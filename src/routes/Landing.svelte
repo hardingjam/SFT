@@ -796,10 +796,9 @@
         .group-text {
             position: unset;
             max-width: 100%;
-            padding-top: 0;
             border-radius: 20px 0 20px 20px;
             margin-top: 36px;
-            padding-bottom: 70px;
+            padding: 0 10px 70px 10px
         }
 
         .group-info {
@@ -973,7 +972,7 @@
 
         .group-info {
             font-size: 20px;
-            line-height: 25px;
+            line-height: 35px;
             padding-left: 10px;
             padding-right: 10px;
             margin-bottom: 36px;

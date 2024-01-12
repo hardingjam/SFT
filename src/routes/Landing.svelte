@@ -510,7 +510,7 @@
         font-style: normal;
         font-weight: 400;
         max-width: calc(100% - 8vw);
-        line-height: calc(14px + 0.500625vw);
+        line-height: calc(28px + 0.500625vw);
         font-size: calc(14px + 0.500625vw);
     }
 

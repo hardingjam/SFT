@@ -535,9 +535,35 @@ li {
     margin-top: 117px;
 }
 
+.title-text {
+    background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 55px; /* 157.143% */
+    margin-bottom: 40px;
+}
+
 @media (prefers-color-scheme: light) {
 }
 
 @tailwind components;
 
 @tailwind utilities;
+
+@media only screen and (max-width: 920px) {
+
+    .title-text {
+        text-align: center;
+    }
+}
+@media only screen and (max-width: 430px) {
+
+    .title-text {
+        text-align: left;
+    }
+}

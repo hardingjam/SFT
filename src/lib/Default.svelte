@@ -110,6 +110,9 @@
             let contract = await setVault()
             location = e.path
             selectedTab = location || '#mint'
+            if ((location === "/" || location === "") && $landing) {
+                navigateTo("#");
+            }
             if (!contract) {
                 location = e.path
                 if (location === "#list" && $tokens.length) {
@@ -170,9 +173,6 @@
         if (isMetamaskInstalled) {
             if ((location === "/" || location === "") && !$landing) {
                 navigateTo("#list");
-            }
-            if ((location === "/" || location === "") && $landing) {
-                navigateTo("#");
             }
             await setNetwork();
             await getSchemas();
@@ -449,7 +449,7 @@
 
 </script>
 <Router url={url}>
-<!--  Any route added in landing section should be specified in landingPages array -->
+  <!--  Any route added in landing section should be specified in landingPages array -->
   <div class="{ $landing ? 'block' : 'hide'}">
     <Route path="#" component={Landing}/>
     <Route path="#transparency" component={Transparency}/>

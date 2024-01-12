@@ -2,7 +2,6 @@
     import {icons} from '../scripts/assets.js';
     import {navigate} from '../scripts/helpers.js';
     import LandingNav from '../components/LandingNav.svelte';
-    import {Link} from 'yrv';
     import LandingFooter from '../components/LandingFooter.svelte';
 
     function launchApp() {
@@ -10,14 +9,7 @@
     }
 </script>
 <div class="transparency-container">
-  <div class="landing-head">
-    <div class="landing-logo">
-      <Link href="#">
-        <img src="{icons.logo}" alt="sft">
-      </Link>
-      <LandingNav/>
-    </div>
-  </div>
+  <LandingNav/>
   <div class="tube-container absolute">
     <img src="{icons.tube}" alt="globe" class="hero-img"/>
   </div>
@@ -92,40 +84,6 @@
         overflow: hidden;
     }
 
-    .landing-head {
-        background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
-    }
-
-    .landing-logo {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding-top: 25px;
-        padding-left: 122px;
-        padding-right: 48px;
-        position: absolute;
-        z-index: 3;
-    }
-
-    .landing-logo img {
-        width: 65px;
-        height: 65px;
-    }
-
-    .title-text {
-        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-family: 'Inter', sans-serif;
-        font-size: 35px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 55px;
-        margin-bottom: 40px;
-    }
-
     .header-text {
         font-family: 'Inter', sans-serif;
         font-size: 45px;
@@ -143,7 +101,7 @@
     }
 
     .paragraphs {
-        padding: 0 122px;
+        padding: 0 8.5vw;
         margin-bottom: 200px;
         position: relative;
         z-index: 3;
@@ -270,6 +228,12 @@
     @media only screen and (min-width: 1920px) {
         .content {
             top: calc(100vh - 10.2%);
+        }
+    }
+
+    @media only screen and (max-width: 920px) {
+        .content {
+            margin-top: 60vw;
         }
     }
 

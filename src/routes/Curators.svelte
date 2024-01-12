@@ -1,19 +1,12 @@
 <script>
     import {icons} from '../scripts/assets.js';
     import LandingNav from '../components/LandingNav.svelte';
-    import {Link} from 'yrv';
     import EcosystemsTemplate from '../components/EcosystemsTemplate.svelte';
 
 </script>
 <div class="transparency-container">
-  <div class="landing-head">
-    <div class="landing-logo">
-      <Link href="#">
-        <img src="{icons.sft_logo_white}" alt="sft">
-      </Link>
-      <LandingNav/>
-    </div>
-  </div>
+  <div class="poem-gradient9"></div>
+  <LandingNav/>
   <EcosystemsTemplate icon="{icons.curator_icon}" hero="{icons.curator_hero}" name="Curators" iconBackground="#655DB4">
     <div slot="gradients">
       <div class="poem-gradient1"></div>
@@ -25,7 +18,7 @@
     </div>
     <div slot="content">
       <div class="title-text">
-        Curators: Connecting Investors and Auditors
+       Connecting Investors and Auditors
       </div>
 
       <div class="paragraph short">
@@ -80,40 +73,6 @@
         overflow: hidden;
     }
 
-    .landing-head {
-        background: linear-gradient(176deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
-    }
-
-    .landing-logo {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding-top: 25px;
-        padding-left: 122px;
-        padding-right: 48px;
-        position: absolute;
-        z-index: 3;
-    }
-
-    .landing-logo img {
-        width: 65px;
-        height: 65px;
-    }
-
-    .title-text {
-        background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-family: 'Inter', sans-serif;
-        font-size: 35px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 55px; /* 157.143% */
-        margin-bottom: 40px;
-    }
-
     .paragraph {
         margin-bottom: 40px;
         color: #575757;
@@ -125,7 +84,7 @@
         max-width: 1500px;
     }
 
-    .paragraph.short{
+    .paragraph.short {
         max-width: 1000px;
     }
 
@@ -192,5 +151,22 @@
         height: 1378px;
         border-radius: 1576px;
         background: radial-gradient(50% 50% at 50% 50%, #90D3F9 0%, rgba(144, 211, 249, 0.00) 100%);
+    }
+
+    .poem-gradient9 {
+        position: absolute;
+        width: 100%;
+        height: 150px;
+        top: 0;
+        z-index: 0;
+        display: none;
+        background: rgb(104,94,173);
+        background: linear-gradient(90deg, rgba(104,94,173,1) 0%, rgba(111,96,173,1) 50%, rgba(124,108,181,1) 81%, rgba(129,116,184,1) 98%)
+    }
+
+    @media only screen and (max-width: 430px) {
+        .poem-gradient9 {
+            display: flex;
+        }
     }
 </style>

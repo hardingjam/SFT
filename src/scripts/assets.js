@@ -1,4 +1,4 @@
-import logo from "../../public/SFT_logo_gold.png";
+import logo from "../assets/icons/st0x_logo.png";
 import ethereum from "../assets/networks/ethereum.svg";
 import polygon from "../assets/networks/polygon.svg";
 import show from "../assets/icons/show.svg";
@@ -49,10 +49,8 @@ import issuers_icon from "../assets/icons/issuers_icon.svg";
 import auditors_hero from "../assets/icons/auditors_hero.webp";
 import wave_resp from "../assets/icons/wave_resp.svg";
 import investor_hero_tile from "../assets/icons/investor_hero_tile.webp";
-import st0xLogo from "../assets/icons/st0x_logo.png";
 
 export const icons = {
-    st0xLogo,
     ethereum,
     polygon,
     show,

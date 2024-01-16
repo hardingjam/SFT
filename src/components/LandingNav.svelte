@@ -101,7 +101,7 @@
         display: flex;
         align-items: center;
         gap: 46px;
-        color: #2C2C54;
+        color: #e7e7e7;
         text-align: center;
         font-family: 'Inter', sans-serif;
         font-size: 20px;

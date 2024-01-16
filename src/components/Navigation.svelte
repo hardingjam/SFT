@@ -32,7 +32,7 @@
 </script>
 <div class="navigation-container relative h-full flex flex-col">
   <div
-    class="flex justify-start items-start bg-white flex-col navigation top-14 fixed h-full">
+    class="flex justify-start items-start bg-white bg-opacity-60 backdrop-blur-md flex-col navigation top-14 fixed h-full">
     <div class="flex justify-center items-center w-full space-x-3">
       {#if !$sftInfo && $vault.address}
         <div class="cursor-pointer absolute right-2 top-2 z-10" on:click={()=>showSftInfo()}>

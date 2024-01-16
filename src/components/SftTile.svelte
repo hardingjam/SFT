@@ -84,7 +84,7 @@
         dispatch('okClick', {credentialLinks: event.detail.credentialLinks, token: event.detail.token});
     }
 </script>
-<div class="w-full bg-white pt-5 pb-5 {!isEditorOpen? 'pl-10 pr-6' : ''} tile relative token-{sft.name}">
+<div class="w-full bg-white pt-5 pb-5 bg-opacity-70 backdrop-blur-md {!isEditorOpen? 'pl-10 pr-6' : ''} tile relative token-{sft.name}">
   <div class="absolute right-2 cursor-pointer expand-btn">
     <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M14 10.3999L19 5.1999M19 5.1999L19 10.3999M19 5.1999L14 5.1999" stroke="#9D9D9D" stroke-width="2"

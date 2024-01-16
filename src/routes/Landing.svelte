@@ -44,7 +44,7 @@
   <div class="poem-gradient6"></div>
   <div class="poem-gradient7"></div>
   <div class="poem-gradient8"></div>
-  <div class="poem-gradient-resp-1 d-none"></div>
+  <!-- <div class="poem-gradient-resp-1 d-none"></div> -->
   <div class="poem-gradient-resp-2 d-none">
     <svg xmlns="http://www.w3.org/2000/svg" width="920" height="1016" viewBox="0 0 920 1016" fill="none">
       <path
@@ -92,7 +92,7 @@
 
       </div>
       <div class="globe">
-        <img src="{icons.globe}" alt="globe"/>
+        <img src="{icons.st0xLogo}" alt="globe"/>
       </div>
     </div>
   </div>
@@ -256,7 +256,13 @@
 
 <style>
     .landing-container {
-        background: #B5DCFF;
+        background-image: url("/src/assets/st0x_background.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+
+
+        /* background: #B5DCFF; */
         margin-left: auto;
         margin-right: auto;
         /*padding-bottom: 500px;*/
@@ -265,7 +271,7 @@
     }
 
     .landing-head {
-        background: linear-gradient(178deg, #6F5EA1 57.64%, #B5DCFF 91.27%);
+        /* background: linear-gradient(178deg, #6F5EA1 57.64%, #B5DCFF 91.27%); */
         position: relative;
         z-index: 1;
         overflow: hidden;

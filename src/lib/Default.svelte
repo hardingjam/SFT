@@ -458,21 +458,21 @@
     <Route path="#curators" component={Curators}/>
     <Route path="#auditors" component={Auditors}/>
   </div>
-  <div class="{ !$landing ? 'block' : 'hide'}">
-    <div class={$account || $isCypress? "content" : "content-not-connected"}>
+  <div class="{!$landing ? 'block' : 'hide'}">
+    <div class="content">
       <Header on:select={handleNetworkSelect} {location}></Header>
-      <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
+      <div class="logo-container rounded-full border-white">
         <a href="/#list">
           {#if !$activeToken.icon}
-            <img src={$account? icons.logo: icons.sft_logo_white} alt=""
-                 class="{$account ? 'account token-logo' : 'no-account'} rounded-full "/>
+            <img src={!$landing? icons.logo: icons.sft_logo_white} alt=""
+                 class="{!$landing ? 'account token-logo' : 'no-account'} rounded-full "/>
           {:else}
             <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
                  class="rounded-full token-logo"/>
           {/if}
         </a>
       </div>
-      <div class="{ $account ? 'block' : 'hide'}">
+      <div class="block">
         <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
         <div class={$sftInfo ? "sft-info-opened mt-61" : "mt-61" }>
           <div class="{$activeNetwork  ? 'show' : 'hide'}">
@@ -524,21 +524,6 @@
           </div>
         </div>
       </div>
-      {#if !$account }
-        <div>
-          <div class="invalid-network f-weight-700">
-            <label>To use the app:</label>
-            <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
-              {#if isMetamaskInstalled}
-                <span>Connect Metamask</span>
-              {/if}
-              {#if !isMetamaskInstalled}
-                <span>Install Metamask</span>
-              {/if}
-            </button>
-          </div>
-        </div>
-      {/if}
     </div>
 
     <div class="footer w-full p-2 mt-5 {$account ? 'bg-white' :'' }">

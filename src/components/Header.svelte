@@ -50,8 +50,8 @@
     // let pageTitle = "Asset register"
 </script>
 
-<div class="{$account ? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
-  {#if $account}
+<div class="header flex w-full h-14 justify-between pr-12 items-center font-bold">
+
     <div class="w-1/3"></div>
     <div class="page-title" id="{$pageTitle.replace(' ','-').toLowerCase()}">
       {#if $titleIcon}
@@ -62,15 +62,16 @@
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
                       triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
-
+      {#if $account}
       <HeaderDropdown triggerLabel={formatAddress($account)}
                       items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect} triggerIcon="">
       </HeaderDropdown>
+      {/if}
     </div>
     {#if location && (location !== "/" && location !== "#list")}
       <BreadCrumbs/>
     {/if}
-  {/if}
+
 </div>
 
 

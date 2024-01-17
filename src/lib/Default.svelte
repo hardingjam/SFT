@@ -179,9 +179,10 @@
             await setNetwork();
             await getSchemas();
             connectedAccount = await getMetamaskConnectedAccount();
+            await vaultChanged()
+
             if (connectedAccount) {
                 account.set(connectedAccount)
-                await vaultChanged()
                 if (!$landing) {
                     navigateTo(location || '#list', {replace: false})
                 }

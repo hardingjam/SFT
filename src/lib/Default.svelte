@@ -26,7 +26,7 @@
         isCypress,
         schemas,
         titleIcon,
-        landing
+        landing, isMetamaskInstalled
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -82,16 +82,18 @@
     let connectedAccount;
     export let url = "";
 
-    let isMetamaskInstalled = typeof window.ethereum !== "undefined";
+    isMetamaskInstalled.set(typeof window.ethereum !== "undefined");
 
     let location = window.location.hash;
     let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
 
     async function vaultChanged() {
-        if ($vault.address && $activeNetwork.id && $account) {
+        if ($vault.address && $activeNetwork.id) {
             await getRoles($vault.address)
-            accountRoles.set(await setAccountRoles($roles, $account));
+            if ($account) {
+                accountRoles.set(await setAccountRoles($roles, $account));
+            }
             tokenName.set($data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : "")
             await getSchemas()
         }
@@ -170,7 +172,7 @@
                 "subgraph_url": "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
             })
         }
-        if (isMetamaskInstalled) {
+        if ($isMetamaskInstalled) {
             if ((location === "/" || location === "") && !$landing) {
                 navigateTo("#list");
             }
@@ -300,31 +302,8 @@
         }
     }
 
-    async function connect() {
-        if (!isMetamaskInstalled) {
-            window.open("https://metamask.io/download/", "_blank");
-        } else {
-            try {
-                const accounts = await window.ethereum.request({
-                    method: "wallet_requestPermissions",
-                    params: [{
-                        eth_accounts: {}
-                    }]
-                }).then(() => window.ethereum.request({
-                    method: "eth_requestAccounts"
-                }));
-                account.set(accounts[0]);
-                accountRoles.set(await setAccountRoles($roles, $account));
-                localStorage.setItem("account", $account);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        await setVault()
-    }
-
     async function getMetamaskConnectedAccount() {
-        if (isMetamaskInstalled) {
+        if ($isMetamaskInstalled) {
             const accounts = await $ethersData.provider.listAccounts();
             return accounts.length > 0 ? accounts[0] : null;
         }
@@ -447,6 +426,10 @@
         }
     }
 
+    function installMetamask() {
+        window.open("https://metamask.io/download/", "_blank");
+    }
+
 </script>
 <Router url={url}>
   <!--  Any route added in landing section should be specified in landingPages array -->
@@ -459,20 +442,20 @@
     <Route path="#auditors" component={Auditors}/>
   </div>
   <div class="{!$landing ? 'block' : 'hide'}">
-    <div class="content">
+    <div class={$isMetamaskInstalled || $isCypress? "content" : "content-not-connected"}>
       <Header on:select={handleNetworkSelect} {location}></Header>
-      <div class="logo-container rounded-full border-white">
+      <div class="logo-container rounded-full border-white {$isMetamaskInstalled ? 'border-6' : ''}  ">
         <a href="/#list">
           {#if !$activeToken.icon}
-            <img src={!$landing? icons.logo: icons.sft_logo_white} alt=""
-                 class="{!$landing ? 'account token-logo' : 'no-account'} rounded-full "/>
+            <img src={$isMetamaskInstalled? icons.logo: icons.sft_logo_white} alt=""
+                 class="{$isMetamaskInstalled ? 'account token-logo' : 'no-account'} rounded-full "/>
           {:else}
             <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
                  class="rounded-full token-logo"/>
           {/if}
         </a>
       </div>
-      <div class="block">
+      <div class="{ $isMetamaskInstalled ? 'block' : 'hide'}">
         <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
         <div class={$sftInfo ? "sft-info-opened mt-61" : "mt-61" }>
           <div class="{$activeNetwork  ? 'show' : 'hide'}">
@@ -524,6 +507,18 @@
           </div>
         </div>
       </div>
+      {#if !$isMetamaskInstalled }
+        <div>
+          <div class="invalid-network f-weight-700">
+            <label>To use the app:</label>
+            <button class="connect-metamask-btn f-weight-700" on:click={()=>installMetamask()}>
+              {#if !$isMetamaskInstalled}
+                <span>Install Metamask</span>
+              {/if}
+            </button>
+          </div>
+        </div>
+      {/if}
     </div>
 
     <div class="footer w-full p-2 mt-5 {$account ? 'bg-white' :'' }">

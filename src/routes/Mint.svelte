@@ -46,6 +46,7 @@
     import {navigate} from '../scripts/helpers.js';
     import MintInput from '../components/MintInput.svelte';
     import Schema from '../components/Schema.svelte';
+    import Connect from '../components/Connect.svelte';
 
     let image = {}
 
@@ -96,9 +97,6 @@
     })
 
     onMount(async () => {
-        if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
-            navigateTo('#');
-        }
         await getSchemas()
     })
 
@@ -349,28 +347,32 @@
   </div>
   <div class="audit-info-container basic-frame-parent">
     <div class="form-frame basic-frame">
-      <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
-      <MintInput bind:amount={amount} amountLabel={"Mint amount"} id="mint-amount"
-                 info="(Mint amount = number of tokens that will go into your wallet)"/>
-      {#if $schemas.length}
-        <div class="schema">
-          <div class="schema-dropdown flex justify-between mb-6">
-            <label class="f-weight-700 custom-col">Asset class</label>
-            <Select options={$schemas}
+      {#if $account}
+        <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
+        <MintInput bind:amount={amount} amountLabel={"Mint amount"} id="mint-amount"
+                   info="(Mint amount = number of tokens that will go into your wallet)"/>
+        {#if $schemas.length}
+          <div class="schema">
+            <div class="schema-dropdown flex justify-between mb-6">
+              <label class="f-weight-700 custom-col">Asset class</label>
+              <Select options={$schemas}
 
-                    on:select={handleSchemaSelect}
-                    label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
+                      on:select={handleSchemaSelect}
+                      label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
 
+            </div>
+            <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
           </div>
-          <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
-        </div>
+        {/if}
+        {#if !$schemas.length}
+          <div class="empty-schemas">
+            <span>Please create a new asset class to mint </span>
+          </div>
+        {/if}
+      {:else}
+        <span>To mint, connect your wallet </span>
+        <Connect></Connect>
       {/if}
-      {#if !$schemas.length}
-        <div class="empty-schemas">
-          <span>Please create a new asset class to mint </span>
-        </div>
-      {/if}
-
     </div>
 
   </div>

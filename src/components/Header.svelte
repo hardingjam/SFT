@@ -1,5 +1,5 @@
 <script>
-    import {account, activeNetwork, pageTitle, titleIcon} from "../scripts/store.js";
+    import {account, activeNetwork, isMetamaskInstalled, pageTitle, titleIcon} from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
@@ -50,9 +50,9 @@
     // let pageTitle = "Asset register"
 </script>
 
-<div class="header flex w-full h-14 justify-between pr-12 items-center font-bold">
-
-    <div class="w-1/3"></div>
+<div class="{$isMetamaskInstalled ? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
+  {#if $isMetamaskInstalled}
+  <div class="w-1/3"></div>
     <div class="page-title" id="{$pageTitle.replace(' ','-').toLowerCase()}">
       {#if $titleIcon}
         <img src={$titleIcon} alt="icon"/>
@@ -71,7 +71,7 @@
     {#if location && (location !== "/" && location !== "#list")}
       <BreadCrumbs/>
     {/if}
-
+    {/if}
 </div>
 
 

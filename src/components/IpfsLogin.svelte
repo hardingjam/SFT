@@ -77,7 +77,7 @@
 <style>
     .ipfs-container {
         border-radius: 10px;
-        background: #ffffff;
+  background: rgba(255, 255, 255, 0.7);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -91,13 +91,12 @@
         font-weight: 500;
         font-size: 16px;
         line-height: 27px;
-        background: #ffffff;
         align-items: flex-start;
         width: 100%;
     }
 
     .title {
-        font-family: "Mukta", sans-serif;
+        font-family: "Monserrat", sans-serif;
         color: #000;
         font-size: 16px;
         font-style: normal;
@@ -129,7 +128,7 @@
         color: #9D9D9D;
         text-align: left;
         margin-bottom: 25px;
-        font-family: 'Mukta', sans-serif;
+        font-family: 'Monserrat', sans-serif;
         font-style: normal;
         font-weight: 500;
         font-size: 16px;

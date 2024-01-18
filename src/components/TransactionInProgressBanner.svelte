@@ -225,7 +225,7 @@
         height: 100%;
         flex-direction: column;
         color: #FFFFFF;
-        font-family: 'Mukta', sans-serif;
+        font-family: 'Monserrat', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 20px;
@@ -246,7 +246,7 @@
         text-decoration-thickness: 1px;
         font-size: 18px;
         line-height: 42px;
-        font-family: 'Mukta', sans-serif;
+        font-family: 'Monserrat', sans-serif;
     }
 
     .close-btn {

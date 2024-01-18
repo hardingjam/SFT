@@ -95,7 +95,7 @@
         height: 100%;
         flex-direction: column;
         color: #FFFFFF;
-        font-family: 'Mukta', sans-serif;
+        font-family: 'Monserrat', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 20px;

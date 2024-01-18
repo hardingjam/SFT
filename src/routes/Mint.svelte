@@ -334,7 +334,13 @@
     }
 </script>
 
-<div class="mint-container relative">
+   <!-- padding-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%; -->
+
+<div class="mb-1 relative pt-4 flex-col flex items-center h-full">
   <div class="header-buttons">
     <button type="button" class="default-btn new-asset-class" on:click={()=>{navigate('#new-asset-class')}}>
       New asset class
@@ -389,7 +395,7 @@
 
 <style>
     .mint-container {
-        padding-top: 17px;
+        padding-top: 1rem;
         display: flex;
         flex-direction: column;
         align-items: center;

@@ -81,13 +81,13 @@
         position: fixed;
         top: 0;
         background: #6F5EA1;
-        background: linear-gradient(90.04deg, #B5DCFF 2.46%, #6F5EA1 96.36%);
+        background: linear-gradient(90.04deg, #E5E4E4 2.46%, #1A5C8E 96.36%);
     }
 
     .page-title {
         width: 33.3%;
         color: #FFFFFF;
-        font-family: "Mukta", sans-serif;
+        font-family: "Monserrat", sans-serif;
         font-size: 18px;
         font-style: normal;
         font-weight: 700;

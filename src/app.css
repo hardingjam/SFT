@@ -32,11 +32,10 @@ body {
 }
 
 #app {
-    background: #DCDBDD;
-
+    background: #dcdbdd;
     text-align: center;
     width: 100%;
-    font-family: "Mukta", sans-serif;
+    font-family: "Monserrat", sans-serif;
 }
 
 .space-between {
@@ -60,33 +59,33 @@ body {
     border: none;
     cursor: pointer;
     padding: 0 30px;
-    background: #9D7334;
+    background: #9d7334;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .btn-solid:hover {
-    background: #C98F36;
+    background: #c98f36;
 }
 
 .btn-solid:active {
-    background: #C98F36;
+    background: #c98f36;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) inset;
 }
 
 .btn-solid:disabled {
-    background: #D2D2D2;
-    color: #AAAAAA;
+    background: #d2d2d2;
+    color: #aaaaaa;
 }
 
 .btn-solid:disabled:hover {
-    background: #D2D2D2;
+    background: #d2d2d2;
     cursor: default;
 }
 
 .btn-solid:disabled:active {
-    background: #D2D2D2;
+    background: #d2d2d2;
     box-shadow: none;
 }
 
@@ -155,7 +154,11 @@ button:focus-visible {
     font-weight: 600;
 }
 
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
     display: block;
     margin-inline-start: 0;
     margin-inline-end: 0;
@@ -220,7 +223,9 @@ li {
     text-decoration: underline;
 }
 
-.pdf-container tr, .pdf-container td, .pdf-container th {
+.pdf-container tr,
+.pdf-container td,
+.pdf-container th {
     border-collapse: collapse;
     border: 1px solid #dcdbdd;
     padding: 0.2rem;
@@ -236,34 +241,34 @@ li {
     min-width: 73px;
     height: 27px;
     border-radius: 5px;
-    background-color: #D2D2D2;
+    background-color: #d2d2d2;
     width: fit-content;
     color: #000000;
 }
 
 .default-btn:hover {
-    background: #CAE6FF;
+    background: #cae6ff;
     cursor: pointer;
 }
 
 .default-btn:active {
-    background: #CAE6FF;
+    background: #cae6ff;
     border-radius: 5px;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) inset;
 }
 
 .default-btn:disabled {
-    color: #AAAAAA;
-    background-color: #D2D2D2;
+    color: #aaaaaa;
+    background-color: #d2d2d2;
 }
 
 .default-btn:disabled:hover {
-    background: #D2D2D2;
+    background: #d2d2d2;
     cursor: default;
 }
 
 .default-btn:disabled:active {
-    background: #D2D2D2;
+    background: #d2d2d2;
     box-shadow: none;
 }
 
@@ -287,7 +292,7 @@ li {
 }
 
 .default-frame {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
     padding: 20px;
 }
@@ -378,7 +383,7 @@ li {
 }
 
 .tb-row:hover {
-    background: #ECECEC;
+    background: #ececec;
 }
 
 .right {
@@ -409,14 +414,15 @@ li {
 }
 
 .brown {
-    color: #9D7334;
+    color: #9d7334;
 }
 
 .sft-table {
     width: 100%;
     text-align: center;
     line-height: 1.75rem;
-    box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.10), 0 1px 3px 0 rgba(0, 0, 0, 0.10);
+    box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.1),
+        0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 .sft-table tr {
@@ -429,25 +435,25 @@ li {
     position: relative;
     height: calc(100vh - 180px);
     margin-bottom: -100px;
-    background: #FFFFFF;
+    background: rgba(255, 255, 255, 0.7);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
 
 .sft-table tbody tr:nth-child(even) {
-    background-color: #F0EFF1;
+    background-color: #f0eff1;
 }
 
 .sft-table tbody tr:nth-child(odd) {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
 }
 
 .sft-table thead th {
-    background-color: #9196C5;
+    background-color: #9196c5;
 }
 
 .sft-table thead tr {
-    color: #FFFFFF;
+    color: #ffffff;
     font-weight: 700;
 }
 
@@ -459,7 +465,6 @@ li {
     border-top-right-radius: 10px;
 }
 
-
 /* Add dots styling */
 .dots {
     white-space: nowrap;
@@ -469,8 +474,11 @@ li {
 
 .dots::after {
     font-size: 10px;
-    color: #D2D2D2;
-    content: ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . "; /* Add as many dots as you want */
+    color: #d2d2d2;
+    content: ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "
+        ". . . . . . . . . . . . . . . . . . . . "; /* Add as many dots as you want */
 }
 
 .card-header {
@@ -478,7 +486,7 @@ li {
     width: 100%;
     align-items: center;
     justify-content: center;
-    border-bottom-width: 1px;;
+    border-bottom-width: 1px;
     gap: 20px;
     height: 52px;
 }
@@ -489,7 +497,7 @@ li {
     justify-content: space-between;
     width: 630px;
     min-height: 300px;
-    padding: 24px 60px 60px 60px
+    padding: 24px 60px 60px 60px;
 }
 
 .link-icon {
@@ -536,11 +544,11 @@ li {
 }
 
 .title-text {
-    background: linear-gradient(272deg, #5F9AD1 -14.26%, #8B5BB0 102.07%);
+    background: linear-gradient(272deg, #5f9ad1 -14.26%, #8b5bb0 102.07%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 35px;
     font-style: normal;
     font-weight: 700;
@@ -556,13 +564,11 @@ li {
 @tailwind utilities;
 
 @media only screen and (max-width: 920px) {
-
     .title-text {
         text-align: center;
     }
 }
 @media only screen and (max-width: 430px) {
-
     .title-text {
         text-align: left;
     }

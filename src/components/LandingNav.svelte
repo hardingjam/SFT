@@ -88,7 +88,7 @@
         border-radius: 30px;
         background: #2C2C54;
         color: #FFFFFF;
-        font-family: 'Mukta', sans-serif;
+        font-family: 'Monserrat', sans-serif;
         font-size: 25px;
         font-style: normal;
         font-weight: 600;

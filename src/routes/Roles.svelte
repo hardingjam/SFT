@@ -179,7 +179,7 @@
 
     .roles-container {
         border-radius: 10px;
-        background: #FFF;
+  background: rgba(255, 255, 255, 0.7);
         width: 690px;
     }
 
@@ -189,7 +189,7 @@
 
     .info {
         color: #575757;
-        font-family: Mukta, sans-serif;
+        font-family: Monserrat, sans-serif;
         font-size: 16px;
         font-style: normal;
         font-weight: 400;

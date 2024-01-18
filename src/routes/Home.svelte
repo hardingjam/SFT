@@ -288,7 +288,7 @@
     </div>
   {/if}
   {#if $tokens && $tokens.length}
-    <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} tokens mr-5">
+    <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} tokens">
       {#if (view === "tile")}
         <TileView tokens={computedTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage} on:okClick={handleOkButtonClick}/>
@@ -311,7 +311,7 @@
     .views {
         gap: 21px;
         right: 0;
-        width: calc(100% - 224px);
+        width: calc(100% - 203px);
         padding-right: 16px;
         padding-bottom: 10px;
         align-items: center;
@@ -342,12 +342,14 @@
         align-self: end;
         width: calc(100% - 243px);
         margin-right: 20px;
+     
     }
 
     .tile-view {
         align-self: end;
-        width: calc(100% - 320px);
-        margin-right: 6rem;
+        width: calc(100% - 240px);
+        margin-right: 1rem;
+        margin-top: 1.5rem;
     }
 
     .view-changer-buttons {
@@ -360,6 +362,8 @@
         text-align: right;
         display: flex;
         justify-content: flex-end;
+        margin-bottom: 10px;
+        margin-left: 10px
     }
 
     .search-input-cont {
@@ -382,7 +386,7 @@
     }
 
     .search-input, .search-input::placeholder {
-        font-family: 'Mukta', sans-serif;
+        font-family: 'Monserrat', sans-serif;
         font-size: 16px;
         font-style: normal;
         font-weight: 400;

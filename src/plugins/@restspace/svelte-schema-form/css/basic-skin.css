@@ -4,11 +4,11 @@
 }
 
 form.svelte-schema-form {
-    font-family: "Mukta", sans-serif;
+    font-family: "Monserrat", sans-serif;
 }
 
 form.svelte-schema-form input {
-    font-family: "Mukta", sans-serif;
+    font-family: "Monserrat", sans-serif;
 }
 
 form.svelte-schema-form .collapser {
@@ -66,12 +66,12 @@ form.svelte-schema-form .info {
     cursor: pointer;
 }
 
-form.svelte-schema-form label, form.svelte-schema-form .subset-label {
+form.svelte-schema-form label,
+form.svelte-schema-form .subset-label {
     color: #000000;
     font-weight: 400;
     font-size: 16px;
     line-height: 27px;
-
 }
 
 form.svelte-schema-form .subset-label {
@@ -87,19 +87,23 @@ form.svelte-schema-form .depth-0 > .subset-label {
     text-decoration: underline;
 }
 
-form.svelte-schema-form input, form.svelte-schema-form select, form.svelte-schema-form .input {
-    border: 2px solid #ECECEC;
+form.svelte-schema-form input,
+form.svelte-schema-form select,
+form.svelte-schema-form .input {
+    border: 2px solid #ececec;
     border-radius: 5px;
     color: #000000;
-    background: #ECECEC;
+    background: #ececec;
     width: 360px;
     height: 27px;
     margin-top: 8px;
     padding: 0 2px;
 }
 
-form.svelte-schema-form input:hover, form.svelte-schema-form select:hover, form.svelte-schema-form .input:hover {
-    border: 2px solid #A0C7DD;
+form.svelte-schema-form input:hover,
+form.svelte-schema-form select:hover,
+form.svelte-schema-form .input:hover {
+    border: 2px solid #a0c7dd;
 }
 
 form.svelte-schema-form button {
@@ -109,7 +113,7 @@ form.svelte-schema-form button {
 form.svelte-schema-form .error {
     position: relative;
     top: -0.5em;
-    color: #DD1212;
+    color: #dd1212;
 }
 
 form.svelte-schema-form .button-container {
@@ -163,7 +167,10 @@ form.svelte-schema-form .sf-drop-area .sf-upload-controls .sf-upload-deleter {
     background-size: contain;
 }
 
-form.svelte-schema-form .sf-drop-area .sf-upload-controls .sf-upload-to-uploader {
+form.svelte-schema-form
+    .sf-drop-area
+    .sf-upload-controls
+    .sf-upload-to-uploader {
     background-image: url(../img/upload.svg);
     background-repeat: no-repeat;
     background-size: contain;
@@ -189,7 +196,8 @@ form.svelte-schema-form .sf-autocomplete .sf-items {
     background-color: #f8f8f8;
 }
 
-form.svelte-schema-form .sf-autocomplete .sf-items img, form.svelte-schema-form .sf-autocomplete .sf-selected-item img {
+form.svelte-schema-form .sf-autocomplete .sf-items img,
+form.svelte-schema-form .sf-autocomplete .sf-selected-item img {
     max-height: 3em;
     max-width: 5em;
     margin-right: 1em;

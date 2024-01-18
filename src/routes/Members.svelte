@@ -226,7 +226,7 @@
         flex-direction: column;
         width: 655px;
         border-radius: 10px;
-        background: #FFF;
+  background: rgba(255, 255, 255, 0.7);
     }
 
     .card-header {

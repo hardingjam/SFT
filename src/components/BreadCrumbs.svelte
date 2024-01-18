@@ -36,7 +36,7 @@
         top: 3.5rem;
         margin-left: 203px;
         color: #9D7334;
-        background: #DCDBDD;
+        background: #E5E4E4;
         font-weight: 400;
         padding: 0.7rem 0 0.7rem 1.5rem
     }

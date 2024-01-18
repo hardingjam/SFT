@@ -68,7 +68,7 @@
         margin-top: 40px;;
         color: #575757;
         text-align: center;
-        font-family: 'Mukta Mahee', sans-serif;
+        font-family: 'Monserrat', sans-serif;
         font-size: 2.1vw;
         font-style: normal;
         font-weight: 700;

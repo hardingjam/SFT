@@ -290,7 +290,7 @@
         border-radius: 30px;
         background: #2C2C54;
         color: #FFFFFF;
-        font-family: 'Mukta', sans-serif;
+        font-family: 'Monserrat', sans-serif;
         font-size: calc(20px + 0.190625vw);
         font-style: normal;
         font-weight: 600;
@@ -554,7 +554,7 @@
     .setting-up {
         color: #575757;
         text-align: center;
-        font-family: 'Mukta Mahee', sans-serif;
+        font-family: 'Monserrat', sans-serif;
         font-size: calc(25px + 0.390625vw);
         font-style: normal;
         font-weight: 700;
@@ -580,7 +580,7 @@
         margin-top: 3.5vw;
         color: #575757;
         text-align: center;
-        font-family: 'Mukta', sans-serif;
+        font-family: 'Monserrat', sans-serif;
         font-size: 2.1vw;
         font-style: normal;
         font-weight: 700;

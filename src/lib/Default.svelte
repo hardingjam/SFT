@@ -609,7 +609,7 @@
   }
 
   .logo-label {
-    font-family: 'Mukta', sans-serif;
+    font-family: 'Monserrat', sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 18px;
@@ -621,6 +621,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     //padding-top: 117px;
   }
 
@@ -685,7 +686,7 @@
     min-width: 600px;
     max-width: 700px;
     min-height: 535px;
-    background: #FFFFFF;
+    background: rgba(255, 255, 255, 0.7);
     border-radius: 0 20px 20px 20px;
     padding-bottom: 20px;
   }

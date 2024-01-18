@@ -370,10 +370,7 @@
           </div>
         {/if}
       {:else}
-        <div class="flex flex-col gap-2 w-full items-center h-full mt-auto mb-auto">
-          <span>To mint, connect your wallet </span>
-          <Connect></Connect>
-        </div>
+        <Connect action="mint"></Connect>
       {/if}
     </div>
 

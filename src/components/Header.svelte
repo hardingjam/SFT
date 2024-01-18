@@ -62,7 +62,7 @@
         <img src={$titleIcon} alt="icon"/>
       {/if}
       {$pageTitle}</div>
-    <div class="flex justify-end w-1/3 whitespace-nowrap">
+    <div class="flex justify-end w-1/3 whitespace-nowrap items-center">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
                       triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
@@ -117,7 +117,7 @@
         font-weight: 500;
         line-height: normal;
         font-family: "Mukta", sans-serif;
-        padding: 6px 32px;
+        padding: 2px 32px;
         width: fit-content;
         cursor: pointer;
     }

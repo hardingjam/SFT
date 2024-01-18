@@ -1,28 +1,14 @@
 <script>
-    import {account, accountRoles, roles} from '../scripts/store.js';
-    import {setAccountRoles} from '../scripts/helpers.js';
+    import {account} from '../scripts/store.js';
 
     async function connect() {
-        try {
-            const accounts = await window.ethereum.request({
-                method: "wallet_requestPermissions",
-                params: [{
-                    eth_accounts: {}
-                }]
-            }).then(() => window.ethereum.request({
-                method: "eth_requestAccounts"
-            }));
-            account.set(accounts[0]);
-            accountRoles.set(await setAccountRoles($roles, $account));
-            localStorage.setItem("account", $account);
-        } catch (error) {
-            console.log(error);
-        }
+        let acc = await connectAccount()
+        account.set(acc);
     }
 </script>
 <div class="invalid-network f-weight-700">
   <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
-      <span>Connect wallet</span>
+    <span>Connect wallet</span>
   </button>
 </div>
 

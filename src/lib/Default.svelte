@@ -87,6 +87,7 @@
     let location = window.location.hash;
     let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
+    $: $account && accountChanged();
 
     async function vaultChanged() {
         if ($vault.address && $activeNetwork.id) {
@@ -96,6 +97,11 @@
             }
             tokenName.set($data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : "")
             await getSchemas()
+        }
+    }
+    async function accountChanged() {
+        if ($account) {
+            accountRoles.set(await setAccountRoles($roles, $account));
         }
     }
 

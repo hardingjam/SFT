@@ -1,12 +1,11 @@
 <script>
-    import DefaultFrame from "../components/DefaultFrame.svelte";
     import {
         activeNetwork, deposits,
         ethersData, pageTitle, schemas,
         transactionError,
         transactionInProgress, transactionInProgressShow, transactionSuccess,
         uploadBtnLoading,
-        vault
+        vault, account
     } from "../scripts/store.js";
     import {
         cborEncode,
@@ -22,6 +21,7 @@
     import {validator} from "@exodus/schemasafe";
     import {nullOptionalsAllowed} from '../plugins/@restspace/svelte-schema-form/utilities';
     import {DEPOSITS_QUERY, RECEIPT_VAULT_INFORMATION_QUERY} from "../scripts/queries.js";
+    import Connect from '../components/Connect.svelte';
 
 
     let label = ""
@@ -77,7 +77,8 @@
                         let assetClassesResp = await getSubgraphData($activeNetwork, {}, RECEIPT_VAULT_INFORMATION_QUERY, 'receiptVaultInformations')
                         assetClassesResp = assetClassesResp?.data?.receiptVaultInformations
                         if (assetClassesResp && assetClassesResp.length) {
-                            if (wait.blockNumber.toString() === assetClassesResp[0].transaction.blockNumber.toString()) {
+                            if (wait.blockNumber.toString() ===
+                                assetClassesResp[0].transaction.blockNumber.toString()) {
                                 await getDeposits()
                                 schemas.set(await getSchemas($activeNetwork, $vault, $deposits))
                                 transactionSuccess.set(true)
@@ -224,48 +225,71 @@
     pageTitle.set("New asset class")
 
 </script>
-<DefaultFrame>
-  <div slot="content" class="schema-content">
-    <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
-      <div class="label">
-        <span class="f-weight-700">Asset class label:</span>
-        <input class="label-input" bind:value={label}/>
-      </div>
-      <div class="label">
-        <!--        <div class="info-icon">-->
-        <!--          <a href="" target="_blank">-->
-        <!--          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-        <!--            <path d="M9 10C9 9.40666 9.17595 8.82664 9.50559 8.33329C9.83524 7.83994 10.3038 7.45543 10.852 7.22836C11.4001 7.0013 12.0033 6.94189 12.5853 7.05765C13.1672 7.1734 13.7018 7.45912 14.1213 7.87868C14.5409 8.29824 14.8266 8.83279 14.9424 9.41473C15.0581 9.99667 14.9987 10.5999 14.7716 11.1481C14.5446 11.6962 14.1601 12.1648 13.6667 12.4944C13.1734 12.8241 12.5933 13 12 13V14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#AE6E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>-->
-        <!--            <circle cx="12" cy="17" r="1" fill="#AE6E00"/>-->
-        <!--          </svg></a>-->
-        <!--        </div>-->
-        <span class="f-weight-700">Schema:</span>
-      </div>
-      <div class="schema">
-        <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
-      </div>
-      <button class="default-btn deploy-btn" on:click={()=>{deploySchema()}}
-              disabled={!content.text || error || invalidJson || labelError}>
-        Create new asset class
-      </button>
-      <div class="error">{error || labelError}</div>
-    </div>
-
-    <div class={showAuth  ? 'auth show' : 'auth hide'}>
-      <div class="display-flex space-between">
-        <label>Username:</label>
-        <input class="default-input" type="text" bind:value={username} autofocus/>
-      </div>
-      <div class="display-flex space-between">
-        <label>Password:</label>
-        <input class="default-input" type="password" bind:value={password}/>
-      </div>
-      <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
-    </div>
-
+<div class="asset-classes-container min-w-[40rem] min-h-[30rem]">
+  <div class="card-header justify-start pl-16">
+    <div class="title flex">New asset class</div>
   </div>
-</DefaultFrame>
+  {#if $account}
+    <div class="schema-content px-16 py-5">
+      <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
+        <div class="label">
+          <span class="f-weight-700">Asset class label:</span>
+          <input class="label-input" bind:value={label}/>
+        </div>
+        <div class="label">
+          <!--        <div class="info-icon">-->
+          <!--          <a href="" target="_blank">-->
+          <!--          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+          <!--            <path d="M9 10C9 9.40666 9.17595 8.82664 9.50559 8.33329C9.83524 7.83994 10.3038 7.45543 10.852 7.22836C11.4001 7.0013 12.0033 6.94189 12.5853 7.05765C13.1672 7.1734 13.7018 7.45912 14.1213 7.87868C14.5409 8.29824 14.8266 8.83279 14.9424 9.41473C15.0581 9.99667 14.9987 10.5999 14.7716 11.1481C14.5446 11.6962 14.1601 12.1648 13.6667 12.4944C13.1734 12.8241 12.5933 13 12 13V14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#AE6E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>-->
+          <!--            <circle cx="12" cy="17" r="1" fill="#AE6E00"/>-->
+          <!--          </svg></a>-->
+          <!--        </div>-->
+          <span class="f-weight-700">Schema:</span>
+        </div>
+        <div class="schema">
+          <JSONEditor bind:content mode="text" mainMenuBar="{false}"/>
+        </div>
+        <button class="default-btn deploy-btn" on:click={()=>{deploySchema()}}
+                disabled={!content.text || error || invalidJson || labelError}>
+          Create new asset class
+        </button>
+        <div class="error">{error || labelError}</div>
+      </div>
+
+      <div class={showAuth  ? 'auth show' : 'auth hide'}>
+        <div class="display-flex space-between">
+          <label>Username:</label>
+          <input class="default-input" type="text" bind:value={username} autofocus/>
+        </div>
+        <div class="display-flex space-between">
+          <label>Password:</label>
+          <input class="default-input" type="password" bind:value={password}/>
+        </div>
+        <button id="ok-button" class="default-btn" disabled={!password || !username}>OK</button>
+      </div>
+
+    </div>
+  {:else}
+    <Connect action="new asset class"></Connect>
+  {/if}
+</div>
 <style>
+
+    .asset-classes-container {
+        border-radius: 10px;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .title {
+        text-align: left;
+        font-weight: 700;
+        gap: 3px;
+        justify-content: space-between;
+        color: #9D9D9D;
+    }
 
     .schema-content {
         min-width: 660px;

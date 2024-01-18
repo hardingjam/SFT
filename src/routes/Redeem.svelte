@@ -11,6 +11,7 @@
     import SftLoader from "../components/SftLoader.svelte";
     import {DEPLOYER_QUERY, RECEIPTS_QUERY} from '../scripts/queries.js'
     import ReceiptInformation from "./ReceiptInformation.svelte";
+    import Connect from '../components/Connect.svelte';
 
     let shouldDisable = false;
     let amount;
@@ -166,9 +167,7 @@
     pageTitle.set("Mint/Redeem")
 
 </script>
-
-
-<div class="redeem-container flex items-center flex-col">
+{#if $account}<div class="redeem-container flex items-center flex-col">
   {#if !showReceiptInfo}
     <div class="title"><span
       class="f-weight-700">Total supply: (FT):</span>
@@ -231,6 +230,10 @@
   {/if}
 
 </div>
+{:else}
+<Connect action="redeem" class="mt-20"></Connect>
+{/if}
+
 
 <style>
     .receipts-table-container {

@@ -9,7 +9,7 @@
 
     export let action = ''
 </script>
-<div class="flex flex-col gap-2 w-full items-center h-full mt-auto mb-auto">
+<div class="flex flex-col gap-2 w-full items-center h-full pt-20">
   <span class="to-text">To {action}, connect your wallet </span>
   <div class="invalid-network f-weight-700">
     <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>

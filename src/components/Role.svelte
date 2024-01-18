@@ -1,9 +1,9 @@
 <script>
     import {
-        activeNetwork,
+        account,
         vault,
         roles,
-        transactionError, accountRoles
+        accountRoles
     } from "../scripts/store.js";
 
     export let name;
@@ -11,23 +11,23 @@
     import {icons} from '../scripts/assets.js'
     import {formatAddress, navigate, setAccountRoles, showPrompt} from "../scripts/helpers.js";
 
-    let account = '';
+    let address = '';
 
 
-    function showAddress(account) {
-        navigate(`#address-overview/${account}`)
+    function showAddress(address) {
+        navigate(`#address-overview/${address}`)
     }
 
 
-    async function revokeRole(roleName, account) {
+    async function revokeRole(roleName, address) {
         let role = await $vault[roleName]()
 
         try {
-            const revokeRoleTx = await $vault.revokeRole(role, account);
+            const revokeRoleTx = await $vault.revokeRole(role, address);
             await showPrompt(revokeRoleTx)
 
             let updatedRoleHolders = $roles.find(r => r.roleName === roleName).roleHolders
-            let accountIndex = updatedRoleHolders.indexOf(account)
+            let accountIndex = updatedRoleHolders.indexOf(address)
             updatedRoleHolders.splice(accountIndex, 1)
             const newRoles = $roles.map(role => {
                 if (role.roleName === roleName) {
@@ -36,7 +36,7 @@
                 return role;
             });
             roles.set([...newRoles])
-            accountRoles.set(await setAccountRoles($roles, account));
+            accountRoles.set(await setAccountRoles($roles, address));
 
         } catch (err) {
             console.log(err)
@@ -60,9 +60,11 @@
                           {formatAddress(roleHolder.account.address)}
               <img class="action-icon ml-2" src={icons.show} alt="show"/>
             </span>
-            <img class="btn-hover action-icon" src={icons.delete_icon}
-                 on:click={()=>revokeRole(name,roleHolder.account.address)}
-                 alt="delete"/>
+            {#if $account}
+              <img class="btn-hover action-icon" src={icons.delete_icon}
+                   on:click={()=>revokeRole(name,roleHolder.account.address)}
+                   alt="delete"/>
+            {/if}
           </div>
         {/each}
       {/if}

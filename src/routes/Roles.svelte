@@ -146,7 +146,7 @@
         removed then it will be unrecoverable.
       </div>
     {:else}
-      <Connect action="SFT roles"></Connect>
+      <Connect action="use SFT roles"></Connect>
     {/if}
     {#if loading}
       <SftLoader width="50"></SftLoader>

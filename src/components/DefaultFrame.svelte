@@ -28,7 +28,7 @@
     .default-frame-container {
   background: rgba(255, 255, 255, 0.7);
         border-radius: 10px;
-        border: 1px solid #C1C1C1;
+
         color: #000000;
         display: flex;
         flex-direction: column;

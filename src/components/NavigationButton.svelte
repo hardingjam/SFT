@@ -51,7 +51,7 @@
     }
 
     .nav-item:hover {
-        background: #ECECEC
+        background: #E5E4E4
     }
 
     .nav-item:focus {
@@ -80,7 +80,7 @@
     }
 
     .sub-nav-item:hover {
-        background: #ECECEC;
+        background: #E5E4E4;
     }
 
     .nav-item, .nav-item label, .sub-nav-item label {

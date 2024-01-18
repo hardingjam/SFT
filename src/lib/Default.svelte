@@ -621,6 +621,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-left: 203px;
 
     //padding-top: 117px;
   }
@@ -733,6 +734,7 @@
   .content {
     height: fit-content;
     min-height: 100vh;
+
   }
 
   .content-not-connected {

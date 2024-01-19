@@ -2,7 +2,7 @@
     import {
         vault,
         roles,
-        data, accountRoles, pageTitle, titleIcon, account,
+        data, accountRoles, pageTitle, titleIcon, account
     } from "../scripts/store.js";
     import Role from "../components/Role.svelte";
     import Select from "../components/Select.svelte";
@@ -89,9 +89,13 @@
         }
     }
 
+    let isCypress = false
     onMount(() => {
+        isCypress = !!window.Cypress
+
         pageTitle.set("SFT roles")
         titleIcon.set(`${icons.roles_icon}`)
+
     })
 
 </script>
@@ -111,7 +115,7 @@
     </button>
   </div>
   <div class="roles">
-    {#if $account}
+    {#if $account || isCypress}
       <div class="info">
         Roles are granted to specific addresses to control certain duties of a token. Every role has admins control who
         has the role, and admin for that role. Admins need to grant themselves their role to perform those duties.

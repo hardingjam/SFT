@@ -60,7 +60,7 @@
     .options-background {
         width: 100%;
         padding: 6px 0;
-        background: linear-gradient(270deg, #342604 12.96%, #A28541 87.96%);
+        background: linear-gradient(270deg, #342604 12.96%, #F3B13C 87.96%);
     }
 
     .options {

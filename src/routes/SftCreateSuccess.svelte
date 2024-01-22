@@ -49,7 +49,7 @@
         box-sizing: border-box;
         width: 577px;
         height: 191px;
-        border: 1px solid #D2D2D2;
+        border: 1px solid #E5E4E4;
         border-radius: 10px;
         padding: 28px;
     }

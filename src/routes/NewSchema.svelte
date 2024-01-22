@@ -276,7 +276,7 @@
         width: 560px;
         box-sizing: border-box;
         height: 36px;
-        border: 1px solid #D2D2D2;
+        border: 1px solid #E5E4E4;
         border-radius: 5px;
         margin-left: 10px;
     }

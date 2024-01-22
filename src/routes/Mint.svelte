@@ -382,7 +382,7 @@
   </div>
 
   <div class="error">{error}</div>
-  <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
+  <div class="info-text f-weight-400">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>
 
@@ -421,7 +421,7 @@
     }
 
     .info-text {
-        font-size: 12px;
+        font-size: 14px;
         line-height: 20px;
     }
 

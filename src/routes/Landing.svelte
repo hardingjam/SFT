@@ -487,7 +487,7 @@
         font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: 700;
-        background: linear-gradient(272deg, #5F9AD1 27.74%, #8B5BB0 56.07%);
+        background: linear-gradient(272deg, #37134D 27.74%, #8B5BB0 56.07%);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;

@@ -7,13 +7,13 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #d2d2d2;
+    background: #e5e4e4;
     box-shadow: inset 0 0 0 4px white;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #d2d2d2;
+    background: #e5e4e4;
     border-radius: 10px;
 }
 
@@ -76,17 +76,17 @@ body {
 }
 
 .btn-solid:disabled {
-    background: #d2d2d2;
+    background: #e5e4e4;
     color: #aaaaaa;
 }
 
 .btn-solid:disabled:hover {
-    background: #d2d2d2;
+    background: #e5e4e4;
     cursor: default;
 }
 
 .btn-solid:disabled:active {
-    background: #d2d2d2;
+    background: #e5e4e4;
     box-shadow: none;
 }
 
@@ -242,7 +242,7 @@ li {
     min-width: 73px;
     height: 27px;
     border-radius: 5px;
-    background-color: #d2d2d2;
+    background-color: #e5e4e4;
     width: fit-content;
     color: #000000;
 }
@@ -260,16 +260,16 @@ li {
 
 .default-btn:disabled {
     color: #aaaaaa;
-    background-color: #d2d2d2;
+    background-color: #e5e4e4;
 }
 
 .default-btn:disabled:hover {
-    background: #d2d2d2;
+    background: #e5e4e4;
     cursor: default;
 }
 
 .default-btn:disabled:active {
-    background: #d2d2d2;
+    background: #e5e4e4;
     box-shadow: none;
 }
 
@@ -288,7 +288,7 @@ li {
 .basic-frame {
     box-sizing: border-box;
     width: 100%;
-    border: 1px solid #d2d2d2;
+    border: 1px solid #e5e4e4;
     border-radius: 10px;
 }
 
@@ -475,7 +475,7 @@ li {
 
 .dots::after {
     font-size: 10px;
-    color: #d2d2d2;
+    color: #e5e4e4;
     content: ". . . . . . . . . . . . . . . . . . . . "
         ". . . . . . . . . . . . . . . . . . . . "
         ". . . . . . . . . . . . . . . . . . . . "
@@ -545,7 +545,7 @@ li {
 }
 
 .title-text {
-    background: linear-gradient(272deg, #5f9ad1 -14.26%, #8b5bb0 102.07%);
+    background: linear-gradient(272deg, #37134d -14.26%, #8b5bb0 102.07%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

@@ -34,8 +34,8 @@
   <div
     class="flex justify-start items-start bg-white bg-opacity-70 backdrop-blur-md flex-col navigation fixed h-full">
     <div class="flex justify-center items-center w-full space-x-3">
-      {#if !$sftInfo && $vault.address}
-        <div class="cursor-pointer absolute right-2 top-2 z-10" on:click={()=>showSftInfo()}>
+      {#if $vault.address}
+      <div class="cursor-pointer absolute right-2 top-2 z-10" on:click={()=>{if (!$sftInfo) {showSftInfo()} else hideSftInfo()}}>
           <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14 10.3999L19 5.1999M19 5.1999L19 10.3999M19 5.1999L14 5.1999" stroke="#9D9D9D" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round"/>
@@ -164,7 +164,7 @@
 <style lang="postcss">
 
     .text-nav {
-        color: #5F9AD1;
+        color: #37134D;
     }
 
     .navigation-container {
@@ -179,7 +179,7 @@
 
 
     .menu-header {
-        color: #5F9AD1;
+        color: #37134D;
     }
 
     .sft-info-table {

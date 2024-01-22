@@ -345,9 +345,9 @@
       Audit history
     </button>
   </div>
-  <div class="audit-info-container basic-frame-parent">
-    <div class="form-frame basic-frame">
-      {#if $account}
+  {#if $account}
+    <div class="audit-info-container basic-frame-parent">
+      <div class="form-frame basic-frame">
         <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
         <MintInput bind:amount={amount} amountLabel={"Mint amount"} id="mint-amount"
                    info="(Mint amount = number of tokens that will go into your wallet)"/>
@@ -369,23 +369,22 @@
             <span>Please create a new asset class to mint </span>
           </div>
         {/if}
-      {:else}
-        <Connect action="mint" className="pt-20"></Connect>
-      {/if}
+      </div>
+
     </div>
 
-  </div>
+    <div class="error">{error}</div>
+    <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
+      (FT)
+    </div>
 
-  <div class="error">{error}</div>
-  <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
-    (FT)
-  </div>
-
-  <button class="mint-btn btn-solid" on:click={() => mint()}
-          disabled="{!selectedSchema.hash || !parseFloat(amount)}">
-    Mint
-  </button>
-
+    <button class="mint-btn btn-solid" on:click={() => mint()}
+            disabled="{!selectedSchema.hash || !parseFloat(amount)}">
+      Mint
+    </button>
+  {:else}
+    <Connect action="mint" className="pt-20"></Connect>
+  {/if}
 </div>
 
 <style>

@@ -51,7 +51,8 @@
     </div>
     <div class="mt-16 flex flex-col justify-start items-center w-full">
       <Link href="#token-overview/{$vault.address}">
-        <div class="sft-name f-weight-600 menu-header mb-3 {$tokenName? 'sft-name-navigation-header':''}">{$tokenName}</div>
+        <div
+          class="sft-name f-weight-600 menu-header mb-3 {$tokenName? 'sft-name-navigation-header':''}">{$tokenName}</div>
       </Link>
       <a href=""
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
@@ -75,10 +76,8 @@
             </svg>
           </div>
         </NavigationButton>
-        {#if $accountRoles.DEPOSITOR}
-          <NavigationButton targetPath="#mint" {path} child={true} on:navClick={handleMintClick}/>
-          <NavigationButton targetPath="#asset-classes" {path} child={true} on:navClick={handleClick}/>
-        {/if}
+        <NavigationButton targetPath="#mint" {path} child={true} on:navClick={handleMintClick}/>
+        <NavigationButton targetPath="#asset-classes" {path} child={true} on:navClick={handleClick}/>
         <NavigationButton targetPath="#members" {path} child={true} on:navClick={handleClick}/>
         <NavigationButton targetPath="#roles" {path} child={true} on:navClick={handleClick}/>
         <NavigationButton targetPath="#audit-history" {path} child={true} on:navClick={handleClick}/>

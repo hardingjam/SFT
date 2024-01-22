@@ -50,7 +50,7 @@
     // let pageTitle = "Asset register"
 </script>
 
-<div class="{$account ? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
+<div class="{$account ? 'header' : ''} flex w-full h-14 justify-between items-center font-bold">
   {#if $account}
     <div class="w-1/3"></div>
     <div class="page-title" id="{$pageTitle.replace(' ','-').toLowerCase()}">
@@ -81,7 +81,6 @@
         position: fixed;
         top: 0;
         background: #6F5EA1;
-        background: linear-gradient(90.04deg, #E5E4E4 2.46%, rgba(26, 92, 142, 0.3) 96.36%);
     }
 
     .page-title {

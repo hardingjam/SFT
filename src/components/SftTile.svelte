@@ -193,14 +193,14 @@
               {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
                 <div class="update absolute flex-col flex items-center justify-center">
                   <img src="{icons.camera}" alt="sft logo"/>
-                  <span class="text">Update</span>
+                  <span class="text-sm">Update</span>
                 </div>
               {/if}
             {/if}
             {#if !sft.icon}
               {#if sft.deployer.toLowerCase() === $account.toLowerCase()}
                 <img src="{icons.camera}" alt="sft logo"/>
-                <span class="text">Update</span>
+                <span class="text-sm">Update</span>
               {/if}
             {/if}
             {#if sft.deployer.toLowerCase() === $account.toLowerCase()}

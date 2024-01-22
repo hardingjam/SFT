@@ -464,7 +464,7 @@
       <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
         <a href="/#list">
           {#if !$activeToken.icon}
-            <img src={$account? icons.logo: icons.sft_logo_white} alt=""
+            <img src={$account? icons.logo: icons.logo} alt=""
                  class="{$account ? 'account token-logo' : 'no-account'} rounded-full "/>
           {:else}
             <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
@@ -485,7 +485,7 @@
             <Route path="#address-overview/:address" component={AddressOverview}/>
           </div>
         </div>
-        <div class={$sftInfo ? "main-card sft-info-opened" : "main-card" }>
+        <div class={"main-card"}>
           <div class="{$activeNetwork  ? 'show' : 'hide'} display-flex flex-col">
 
             <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
@@ -624,10 +624,6 @@
     padding-left: 203px;
 
     //padding-top: 117px;
-  }
-
-  .sft-info-opened {
-    margin-left: 36rem;
   }
 
   .invalid-network {

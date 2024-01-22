@@ -17,7 +17,7 @@
     <img src={icons.wave} alt="wave" class="wave">
     <img src={icons.wave_resp} alt="wave" class="wave-resp">
     <div class="landing-logo">
-      <img src="{icons.sft_logo_white}" alt="sft">
+      <img src="{icons.logo}" alt="sft">
     </div>
   </div>
 

@@ -14,9 +14,10 @@
     const membersPages = ['#investors', '#curators', '#issuers', '#auditors']
     const goldLogoPages = ['#investors', '#transparency']
 </script>
+
 <div class="landing-logo">
   <Link href="#">
-    <img src="{goldLogoPages.includes($router.path) ? icons.logo :icons.sft_logo_white}" alt="sft" class="logo">
+    <img src="{icons.logo}" alt="sft" class="logo">
   </Link>
   <div class="landing-nav-container">
     <div class="links">
@@ -153,7 +154,7 @@
         padding: 6px 16px;
         display: block;
         text-decoration: none;
-        color: var(--Dark-Blue, #2C2C54);
+        color: #E5E4E4;
         text-align: center;
         font-family: 'Inter', sans-serif;
         font-size: 20px;
@@ -164,7 +165,7 @@
 
     /* Hover effect for dropdown items */
     .dropdown-content a:hover, .active-list-item {
-        background-color: #CAE6FF;
+        background-color: #1A5C8E;
     }
 
 

@@ -106,13 +106,13 @@
     .pagination-container {
         padding: 0 45px;
         background: #FFFFFF;
-        position: absolute;
+        /*position: absolute;*/
         display: flex;
         justify-content: space-between;
         width: 100%;
         height: 90px;
         align-items: center;
-        bottom: -90px;
+        /*bottom: 0px;*/
         box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.10), 0 1px 3px 0 rgba(0, 0, 0, 0.10);
     }
 

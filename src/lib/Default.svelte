@@ -464,7 +464,7 @@
       <div class="{ $isMetamaskInstalled ? 'block' : 'hide'}">
         <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
         <div class={$sftInfo ? "sft-info-opened mt-61" : "mt-61" }>
-          <div class="{$activeNetwork  ? 'show' : 'hide'}">
+          <div class="{$activeNetwork  ? 'block' : 'hide'}">
             <Route path="#list" component={Home}/>
             <Route path="#asset-register" component={AssetRegister}/>
             <Route path="#asset-history/:id" component={AssetHistory}/>
@@ -716,7 +716,6 @@
   }
 
   .content {
-    height: fit-content;
     min-height: 100vh;
   }
 

@@ -413,6 +413,9 @@ li {
 }
 
 .sft-table {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    position: relative;
     width: 100%;
     text-align: center;
     line-height: 1.75rem;
@@ -426,12 +429,17 @@ li {
 }
 
 .sft-table-container {
-    position: relative;
-    height: calc(100vh - 180px);
-    margin-bottom: -100px;
+    /*position: relative;*/
+    /*min-height: calc(100vh - 260px);*/
+
+    min-height: calc(100vh - 180px);
+    /*margin-bottom: -100px;*/
     background: #FFFFFF;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .sft-table tbody tr:nth-child(even) {
@@ -561,6 +569,7 @@ li {
         text-align: center;
     }
 }
+
 @media only screen and (max-width: 430px) {
 
     .title-text {

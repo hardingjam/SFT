@@ -110,8 +110,8 @@
           {/each}
         {/if}
         </tbody>
-        <Pagination dataLength={receipts.length} {perPage} on:pageChange={handlePageChange}/>
       </table>
+      <Pagination dataLength={receipts.length} {perPage} on:pageChange={handlePageChange}/>
     </div>
   {/if}
 </div>
@@ -122,7 +122,7 @@
     }
 
     .receipts {
-        width: 100%;
+        /*width: 100%;*/
         margin-right: 20px;
     }
 

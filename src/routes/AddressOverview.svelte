@@ -181,7 +181,6 @@
     }
 
     .address-overview {
-        width: 100%;
         margin-right: 20px;
     }
 
@@ -193,7 +192,6 @@
         flex-direction: column;
         text-align: left;
         width: 100%;
-        min-height: 100vh;
     }
 
     .card-header {

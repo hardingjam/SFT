@@ -231,7 +231,7 @@
 
 </div>
 {:else}
-<Connect action="redeem" class="mt-20"></Connect>
+<Connect action="redeem" className="pt-20"></Connect>
 {/if}
 
 
@@ -251,7 +251,7 @@
     }
 
     .receipts-table {
-        width: 100%;
+        /*width: 100%;*/
         font-size: 16px;
     }
 

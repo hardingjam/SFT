@@ -370,7 +370,7 @@
           </div>
         {/if}
       {:else}
-        <Connect action="mint"></Connect>
+        <Connect action="mint" className="pt-20"></Connect>
       {/if}
     </div>
 

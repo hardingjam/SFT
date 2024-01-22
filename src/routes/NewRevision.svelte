@@ -298,7 +298,7 @@
       </button>
     </div>
   {:else}
-    <Connect action="create new revision"></Connect>
+    <Connect action="create new revision" className="pt-20"></Connect>
   {/if}
 </div>
 

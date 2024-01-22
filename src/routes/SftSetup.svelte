@@ -195,7 +195,7 @@
       </button>
     </div>
   {:else}
-    <Connect action="setup new SFT"></Connect>
+    <Connect action="setup new SFT" className="pt-20"></Connect>
   {/if}
 
 </div>

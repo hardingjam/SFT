@@ -270,7 +270,7 @@
 
     </div>
   {:else}
-    <Connect action="create new asset class"></Connect>
+    <Connect action="create new asset class" className="pt-20"></Connect>
   {/if}
 </div>
 <style>

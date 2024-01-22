@@ -150,7 +150,9 @@
         removed then it will be unrecoverable.
       </div>
     {:else}
-      <Connect action="use SFT roles"></Connect>
+      <div class="border mt-5 rounded-2xl -mr-8 -ml-8">
+        <Connect action="use SFT roles" className="pt-12 pb-12"></Connect>
+      </div>
     {/if}
     {#if loading}
       <SftLoader width="50"></SftLoader>
@@ -278,6 +280,10 @@
     .plus {
         margin-left: -30px;
         margin-right: 13px;
+    }
+
+    .border{
+        border: 1px solid #D2D2D2;
     }
 
 </style>

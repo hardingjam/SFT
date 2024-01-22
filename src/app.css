@@ -478,7 +478,7 @@ li {
     width: 100%;
     align-items: center;
     justify-content: center;
-    border-bottom-width: 1px;;
+    border-bottom: 1px solid #D2D2D2;
     gap: 20px;
     height: 52px;
 }

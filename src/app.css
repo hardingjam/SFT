@@ -96,6 +96,7 @@ body {
 
 input {
     border: none;
+    padding: 0 13px;
 }
 
 input:focus {

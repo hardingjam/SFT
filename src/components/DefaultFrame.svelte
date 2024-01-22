@@ -26,8 +26,8 @@
 <style>
 
     .default-frame-container {
-  background: rgba(255, 255, 255, 0.7);
-        border-radius: 10px;
+  /* background: rgba(255, 255, 255, 0.7); */
+        /* border-radius: 10px; */
 
         color: #000000;
         display: flex;

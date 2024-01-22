@@ -81,7 +81,7 @@
         position: fixed;
         top: 0;
         background: #6F5EA1;
-        background: linear-gradient(90.04deg, #E5E4E4 2.46%, #1A5C8E 96.36%);
+        background: linear-gradient(90.04deg, #E5E4E4 2.46%, rgba(26, 92, 142, 0.3) 96.36%);
     }
 
     .page-title {

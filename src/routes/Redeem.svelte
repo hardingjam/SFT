@@ -254,7 +254,7 @@
 
 
     .receipts-table .active, .receipts-table .active:hover {
-        background: #CAE6FF;
+        background: rgba(26, 92, 142, 0.3);
     }
 
     .receipts-table tbody tr:hover {

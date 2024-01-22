@@ -165,7 +165,7 @@
 
     /* Hover effect for dropdown items */
     .dropdown-content a:hover, .active-list-item {
-        background-color: #1A5C8E;
+        background-color: rgba(26, 92, 142, 0.3);
     }
 
 

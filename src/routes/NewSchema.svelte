@@ -225,7 +225,7 @@
 
 </script>
 <DefaultFrame>
-  <div slot="content" class="schema-content">
+  <div slot="content" class="schema-content bg-none">
     <div class={!showAuth  ? 'schema-container show' : 'schema-container hide'}>
       <div class="label">
         <span class="f-weight-700">Asset class label:</span>

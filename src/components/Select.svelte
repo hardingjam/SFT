@@ -170,10 +170,10 @@
 
     .dropdown-item:focus, .dropdown-item:hover {
         text-decoration: none;
-        background: #CAE6FF
+        background: rgba(26, 92, 142, 0.3)
     }
 
     .selected {
-        background: #CAE6FF
+        background: rgba(26, 92, 142, 0.3)
     }
 </style>

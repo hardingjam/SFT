@@ -64,7 +64,7 @@
     </div>
 
   </div>
-  <div class="schemas">
+  <div class="schemas ">
     <table class="w-100">
       <tr class="f-weight-700">
         <th>Asset class label</th>
@@ -107,6 +107,7 @@
     }
 
     .schemas {
+      
         overflow: auto;
         text-align: left;
         width: 100%;

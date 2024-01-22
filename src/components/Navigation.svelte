@@ -137,11 +137,7 @@
   </div>
 
   {#if ($sftInfo)}
-      <!-- width: 22rem;
-        margin-left: 12.71rem;
-        margin-top: 103px;
-        position: fixed;
-        z-index: 3; -->
+
     <div class="bg-white w-[22rem] ml-[12.7rem] fixed mt-[103px] bg-opacity-70 backdrop-blur-md rounded-r-lg  pt-6  border-l sft-info">
       <div class="cursor-pointer absolute right-2 top-2" on:click={()=>hideSftInfo()}>
         <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">

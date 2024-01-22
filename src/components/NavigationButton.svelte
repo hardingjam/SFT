@@ -63,7 +63,7 @@
     }
 
     .active {
-        background: #CAE6FF;
+        background: rgba(26, 92, 142, 0.3);
     }
 
     .sub-nav-item {

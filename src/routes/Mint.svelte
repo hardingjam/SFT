@@ -353,7 +353,7 @@
   {#if !loggedIn || !$account}
     <div class="flex flex-col gap-5 w-full">
 
-      <span class="font-bold w-full text-left ml-12"> {$tokenName}</span>
+      <span class="font-bold w-full text-left ml-6"> {$tokenName}</span>
       <div class="border flex items-center p-5 steps"><span>2 things to do before minting - You need to connect a wallet so you can send transactions
       to the blockchain and you need a data storage (Currently using IPFS, Holochain coming soon).</span>
       </div>

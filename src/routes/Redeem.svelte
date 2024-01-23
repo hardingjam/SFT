@@ -183,7 +183,7 @@
 
     {#if !$account}
       <div class="border flex items-center">
-        <Connect action="mint" className="pt-5 pb-5"></Connect>
+        <Connect action="redeem" className="pt-5 pb-5"></Connect>
       </div>
     {/if}
   </div>

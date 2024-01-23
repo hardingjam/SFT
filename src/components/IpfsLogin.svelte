@@ -4,6 +4,7 @@
     import {icons} from '../scripts/assets.js';
     import {IPFS_APIS} from '../scripts/consts.js';
     import axios from 'axios';
+    import {router} from 'yrv';
 
     let username = localStorage.getItem('ipfsUsername') || "";
     let password = localStorage.getItem('ipfsPassword') || "";
@@ -80,12 +81,11 @@
             localStorage.removeItem('ipfsPassword');
         }
 
-
     }
 
 </script>
-<div class="ipfs-container">
-  <div class="card-header justify-start pl-6">
+<div class="ipfs-container {$router.path === '#ipfs' ? '' : 'border'}">
+  <div class="card-header justify-start pl-6 {$router.path === '#ipfs' ? '' : 'no-border-b'}">
     <div class="title flex gap-3"><img src="{icons.ipfs}" alt="ipfs"/>IPFS login</div>
 
   </div>
@@ -109,7 +109,7 @@
 
 
   </div>
-  <div class="card-footer justify-start pt-4">
+  <div class="card-footer justify-start pt-4 {$router.path === '#ipfs' ? '' : 'no-border-t'}">
     <div class="message">{message}</div>
     <div class="error text-left mr-3">{error}</div>
     <button class="default-btn ok-button" disabled={!password || !username} on:click={updateCredentials}>OK
@@ -188,7 +188,7 @@
     .card-footer {
         align-items: center;
         display: flex;
-        border-top-width: 1px;
+        border-top: 1px solid #D2D2D2;
         padding: 16px 60px;
         width: 100%;
         justify-content: space-between;
@@ -198,5 +198,19 @@
         height: 36px;
         margin-bottom: 0;
         width: 100%;
+    }
+
+    .border {
+        border: 1px solid #D2D2D2;
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+    }
+
+    .no-border-b {
+        border-bottom: none;
+    }
+
+    .no-border-t {
+        border-top: none;
     }
 </style>

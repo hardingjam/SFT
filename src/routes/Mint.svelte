@@ -348,7 +348,28 @@
       Audit history
     </button>
   </div>
-  {#if $account}
+
+
+  {#if !loggedIn || !$account}
+    <span class="font-bold w-full text-left ml-20"> {$tokenName}</span>
+    <div class="border flex items-center mt-5 p-5 mb-5 steps"><span>2 things to do before minting - You need to connect a wallet so you can send transactions
+      to the blockchain and you need a data storage (Currently using IPFS, Holochain coming soon).</span>
+    </div>
+
+    {#if !loggedIn}
+      <div class="mb-5">
+        <IpfsLogin on:success={()=>{loggedIn = true}}/>
+      </div>
+    {/if}
+
+    {#if !$account}
+      <div class="border flex items-center">
+        <Connect action="mint" className="pt-5 pb-5"></Connect>
+      </div>
+    {/if}
+
+
+  {:else}
     <div class="audit-info-container basic-frame-parent">
       <div class="form-frame basic-frame">
         <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
@@ -388,13 +409,6 @@
 
   {/if}
 
-  {#if !loggedIn}
-    <IpfsLogin on:success={()=>{loggedIn = true}}/>
-  {/if}
-
-  {#if !$account}
-    <Connect action="mint" className="pt-20"></Connect>
-  {/if}
 
 </div>
 
@@ -461,5 +475,22 @@
         align-items: center;
     }
 
+    .border {
+        border: 1px solid #D2D2D2;
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+        border-radius: 10px;
+        width: calc(100% - 3rem);
+    }
+
+    .steps {
+        color: #000;
+
+        font-family: "Mukta", sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
 </style>
 

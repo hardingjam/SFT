@@ -246,7 +246,7 @@
         align-items: center;
         display: flex;
         flex-direction: column;
-        border-top-width: 1px;
+        border-top: 1px solid #D2D2D2;
         padding-top: 16px;
         padding-bottom: 16px;
     }

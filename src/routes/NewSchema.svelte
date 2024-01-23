@@ -227,7 +227,7 @@
 </script>
 <div class="asset-classes-container min-w-[40rem] min-h-[30rem]">
   <div class="card-header justify-start pl-16">
-    <div class="title flex">New asset class</div>
+    <div class="flex">New asset class</div>
   </div>
   {#if $account}
     <div class="schema-content px-16 py-5">
@@ -281,14 +281,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-
-    .title {
-        text-align: left;
-        font-weight: 700;
-        gap: 3px;
-        justify-content: space-between;
-        color: #9D9D9D;
     }
 
     .schema-content {

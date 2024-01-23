@@ -196,7 +196,6 @@
 
     .card-header {
         padding: 0 20px;
-        color: #575757;
     }
 
     .address-overview-table-container {

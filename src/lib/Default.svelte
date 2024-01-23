@@ -656,7 +656,7 @@
 
   .tab-button {
     margin: 0;
-    color: #000000;
+    color: #575757;
     width: 105px;
     height: 36px;
     background: linear-gradient(227.8deg, #FFFFFF 21.59%, #C5C4C4 61.47%);

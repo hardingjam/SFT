@@ -485,6 +485,8 @@ li {
     border-bottom: 1px solid #D2D2D2;
     gap: 20px;
     height: 52px;
+    color: #575757;
+    font-weight: 700;
 }
 
 .card-content {

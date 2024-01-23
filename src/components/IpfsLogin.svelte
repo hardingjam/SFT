@@ -140,15 +140,6 @@
         width: 100%;
     }
 
-    .title {
-        font-family: "Mukta", sans-serif;
-        color: #000;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-    }
-
     .password {
         position: relative;
     }

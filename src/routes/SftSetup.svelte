@@ -153,10 +153,10 @@
       <g clip-path="url(#clip0_4713_13519)">
         <path
           d="M12.8311 15.4956H16.5729M16.5729 15.4956H20.2145M16.5729 15.4956L16.5805 11.7666M16.5729 15.4956L16.5947 19.1736"
-          stroke="black" stroke-width="2.07204" stroke-linecap="round" stroke-linejoin="round"/>
+          stroke="#575757"stroke-width="2.07204" stroke-linecap="round" stroke-linejoin="round"/>
         <path
           d="M20.5154 12.0004C20.5154 11.269 20.4227 10.5594 20.2495 9.88202C19.3063 6.20543 15.9684 3.48535 12.0004 3.48535C7.30103 3.48535 3.48535 7.30103 3.48535 12.0004C3.48535 16.6997 7.30103 20.5154 12.0004 20.5154C12.5151 20.5154 13.0184 20.47 13.5075 20.382"
-          stroke="black" stroke-width="1.89223" stroke-linecap="round" stroke-linejoin="round"/>
+          stroke="#575757" stroke-width="1.89223" stroke-linecap="round" stroke-linejoin="round"/>
       </g>
       <defs>
         <clipPath id="clip0_4713_13519">

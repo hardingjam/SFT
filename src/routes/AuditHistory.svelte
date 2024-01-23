@@ -20,6 +20,8 @@
     import SftLoader from '../components/SftLoader.svelte';
     import Pagination from '../components/Pagination.svelte';
     import Calendar from '../components/Calendar.svelte';
+    import Connect from '../components/Connect.svelte';
+    import ReceiptInformation from './ReceiptInformation.svelte';
 
     let error = ''
     let certifyUntil = formatDate(new Date())
@@ -145,7 +147,9 @@
   {/if}
   {#if !loading }
     <div class="sft-table-container">
-
+      {#if !$account}
+        <Connect action="certify" className="pt-12"></Connect>
+      {/if}
       <table class="sft-table">
         <thead>
         <tr>
@@ -163,7 +167,9 @@
             <tr class="tb-row">
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
-              <td><span class="underline brown cursor-pointer" on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span></td>
+              <td><span class="underline brown cursor-pointer"
+                        on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span>
+              </td>
               <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
                 {timeStampToDate(cert?.certifiedUntil)}
               </td>

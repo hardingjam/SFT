@@ -3,7 +3,7 @@
     import {getReceiptBalance, getSubgraphData, hasRole, showPrompt, timeStampToDate} from "../scripts/helpers.js";
     import {
         account,
-        activeNetwork, pageTitle,
+        activeNetwork, pageTitle, tokenName,
         vault
     } from "../scripts/store.js";
     import {onMount} from "svelte";
@@ -12,6 +12,7 @@
     import {DEPLOYER_QUERY, RECEIPTS_QUERY} from '../scripts/queries.js'
     import ReceiptInformation from "./ReceiptInformation.svelte";
     import Connect from '../components/Connect.svelte';
+    import IpfsLogin from '../components/IpfsLogin.svelte';
 
     let shouldDisable = false;
     let amount;
@@ -165,73 +166,95 @@
     }
 
     pageTitle.set("Mint/Redeem")
+    let loggedIn = localStorage.getItem('ipfsPassword') || localStorage.getItem('ipfsUsername');
 
 </script>
-{#if $account}<div class="redeem-container flex items-center flex-col">
-  {#if !showReceiptInfo}
-    <div class="title"><span
-      class="f-weight-700">Total supply: (FT):</span>
-      {ethers.utils.formatUnits(totalShares, 18)}
+
+{#if !loggedIn || !$account}
+  <div class="flex flex-col gap-5 w-full">
+    <span class="font-bold w-full text-left float-left ml-6 mt-5"> {$tokenName}</span>
+    <div class="border flex items-center p-5 steps"><span>2 things to do before minting - You need to connect a wallet so you can send transactions
+      to the blockchain and you need a data storage (Currently using IPFS, Holochain coming soon).</span>
     </div>
-    <div class="basic-frame-parent">
-      <div class="basic-frame p-5">
-        <div class="receipts-table-container">
-          {#if loading}
-            <SftLoader width="50"></SftLoader>
-          {/if}
-          {#if !loading}
-            <table class="receipts-table mb-5">
-              <thead>
-              <tr>
-                <td class="f-weight-700 w-1/3">Receipt ID (NFT)</td>
-                <td class="f-weight-700">Amount</td>
-                <td class="f-weight-700 w-1/4">Minted</td>
-              </tr>
-              </thead>
-              <tbody>
-              {#each receiptBalances as receipt}
-                <tr class:active={selectedReceipts === receipt.receipt.receiptId}
-                    on:click={()=>{selectedReceipts=receipt.receipt.receiptId}}>
-                  <td class="receipt-id">
-                    <!--                    <label class="check-container">-->
-                    <!--                      <input type="radio" class="check-box" bind:group={selectedReceipts}-->
-                    <!--                             value={receipt.receipt.receiptId}/>-->
-                    <!--                      <span class="checkmark"></span>-->
-                    <!--                    </label>-->
-                    <div class="check-box-label btn-hover"
-                         on:click={()=>{goToReceiptInfo(receipt)}}>{receipt.receipt.receiptId}</div>
-                  </td>
-                  <td class="value"> {ethers.utils.formatUnits(receipt.receipt.balances[0].valueExact, 18)}</td>
-                  <td class="value">{timeStampToDate(receipt.receipt.deposits[0].timestamp)}</td>
-                </tr>
-              {/each}
-              </tbody>
-            </table>
-          {/if}
-        </div>
-        <MintInput bind:amount={amount} amountLabel={"Total to redeem"}
-                   info="(Redeem amount = the number of tokens that will be burned from your wallet)" maxButton={true}
-                   on:setMax={()=>{setMaxValue()}}/>
-      </div>
-    </div>
-    {#if error}
-      <span class="error">{error}</span>
+
+    {#if !loggedIn}
+        <IpfsLogin on:success={()=>{loggedIn = true}}/>
     {/if}
 
-    <button class="redeem-btn btn-solid mt-3" disabled="{!selectedReceipts || !parseFloat(amount)}"
-            on:click={() => redeem(selectedReceipts)}>
-      Redeem
-    </button>
+    {#if !$account}
+      <div class="border flex items-center">
+        <Connect action="mint" className="pt-5 pb-5"></Connect>
+      </div>
+    {/if}
+  </div>
 
-  {/if}
 
-  {#if showReceiptInfo}
-    <ReceiptInformation receipt={receiptClicked} on:back={showReceiptsList}/>
-  {/if}
 
-</div>
 {:else}
-<Connect action="redeem" className="pt-20"></Connect>
+  <div class="redeem-container flex items-center flex-col">
+    {#if !showReceiptInfo}
+      <div class="title"><span
+        class="f-weight-700">Total supply: (FT):</span>
+        {ethers.utils.formatUnits(totalShares, 18)}
+      </div>
+      <div class="basic-frame-parent">
+        <div class="basic-frame p-5">
+          <div class="receipts-table-container">
+            {#if loading}
+              <SftLoader width="50"></SftLoader>
+            {/if}
+            {#if !loading}
+              <table class="receipts-table mb-5">
+                <thead>
+                <tr>
+                  <td class="f-weight-700 w-1/3">Receipt ID (NFT)</td>
+                  <td class="f-weight-700">Amount</td>
+                  <td class="f-weight-700 w-1/4">Minted</td>
+                </tr>
+                </thead>
+                <tbody>
+                {#each receiptBalances as receipt}
+                  <tr class:active={selectedReceipts === receipt.receipt.receiptId}
+                      on:click={()=>{selectedReceipts=receipt.receipt.receiptId}}>
+                    <td class="receipt-id">
+                      <!--                    <label class="check-container">-->
+                      <!--                      <input type="radio" class="check-box" bind:group={selectedReceipts}-->
+                      <!--                             value={receipt.receipt.receiptId}/>-->
+                      <!--                      <span class="checkmark"></span>-->
+                      <!--                    </label>-->
+                      <div class="check-box-label btn-hover"
+                           on:click={()=>{goToReceiptInfo(receipt)}}>{receipt.receipt.receiptId}</div>
+                    </td>
+                    <td class="value"> {ethers.utils.formatUnits(receipt.receipt.balances[0].valueExact, 18)}</td>
+                    <td class="value">{timeStampToDate(receipt.receipt.deposits[0].timestamp)}</td>
+                  </tr>
+                {/each}
+                </tbody>
+              </table>
+            {/if}
+          </div>
+          <MintInput bind:amount={amount} amountLabel={"Total to redeem"}
+                     info="(Redeem amount = the number of tokens that will be burned from your wallet)" maxButton={true}
+                     on:setMax={()=>{setMaxValue()}}/>
+        </div>
+      </div>
+      {#if error}
+        <span class="error">{error}</span>
+      {/if}
+
+      <button class="redeem-btn btn-solid mt-3" disabled="{!selectedReceipts || !parseFloat(amount)}"
+              on:click={() => redeem(selectedReceipts)}>
+        Redeem
+      </button>
+
+    {/if}
+
+    {#if showReceiptInfo}
+      <ReceiptInformation receipt={receiptClicked} on:back={showReceiptsList}/>
+    {/if}
+
+  </div>
+
 {/if}
 
 
@@ -281,5 +304,20 @@
     .check-box-label:hover {
         text-decoration: underline;
     }
+    .border {
+        border: 1px solid #D2D2D2;
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+        border-radius: 10px;
+        width: calc(100% - 3rem);
+    }
 
+    .steps {
+        color: #000;
+        font-family: "Mukta", sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
 </style>

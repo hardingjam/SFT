@@ -351,24 +351,24 @@
 
 
   {#if !loggedIn || !$account}
-    <span class="font-bold w-full text-left ml-20"> {$tokenName}</span>
-    <div class="border flex items-center mt-5 p-5 mb-5 steps"><span>2 things to do before minting - You need to connect a wallet so you can send transactions
+    <div class="flex flex-col gap-5 w-full">
+
+      <span class="font-bold w-full text-left ml-12"> {$tokenName}</span>
+      <div class="border flex items-center p-5 steps"><span>2 things to do before minting - You need to connect a wallet so you can send transactions
       to the blockchain and you need a data storage (Currently using IPFS, Holochain coming soon).</span>
-    </div>
+      </div>
 
-    {#if !loggedIn}
-      <div class="mb-5">
+      {#if !loggedIn}
         <IpfsLogin on:success={()=>{loggedIn = true}}/>
-      </div>
-    {/if}
+      {/if}
 
-    {#if !$account}
-      <div class="border flex items-center">
-        <Connect action="mint" className="pt-5 pb-5"></Connect>
-      </div>
-    {/if}
+      {#if !$account}
+        <div class="border flex items-center">
+          <Connect action="mint" className="pt-5 pb-5"></Connect>
+        </div>
+      {/if}
 
-
+    </div>
   {:else}
     <div class="audit-info-container basic-frame-parent">
       <div class="form-frame basic-frame">

@@ -20,15 +20,6 @@
         navigate(e.detail, {clear: true})
     }
 
-    function handleMintClick(e) {
-        let ipfsUsername = localStorage.getItem('ipfsUsername');
-        let ipfsPassword = localStorage.getItem('ipfsPassword');
-        if (!ipfsPassword || !ipfsUsername) {
-            navigate('#ipfs', {clear: true})
-        } else {
-            navigate(e.detail, {clear: true})
-        }
-    }
 </script>
 <div class="navigation-container relative h-full flex flex-col">
   <div
@@ -76,7 +67,7 @@
             </svg>
           </div>
         </NavigationButton>
-        <NavigationButton targetPath="#mint" {path} child={true} on:navClick={handleMintClick}/>
+        <NavigationButton targetPath="#mint" {path} child={true} on:navClick={handleClick}/>
         <NavigationButton targetPath="#asset-classes" {path} child={true} on:navClick={handleClick}/>
         <NavigationButton targetPath="#members" {path} child={true} on:navClick={handleClick}/>
         <NavigationButton targetPath="#roles" {path} child={true} on:navClick={handleClick}/>

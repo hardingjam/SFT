@@ -2,26 +2,22 @@
     import {createEventDispatcher, onDestroy, onMount} from 'svelte';
     import {pageTitle, titleIcon, tokenName} from '../scripts/store.js';
     import {icons} from '../scripts/assets.js';
+    import {IPFS_APIS} from '../scripts/consts.js';
+    import axios from 'axios';
 
-    export let username = localStorage.getItem('ipfsUsername') || "";
-    export let password = localStorage.getItem('ipfsPassword') || "";
-    export let loggedIn = username && password
-    export let message = ""
-    export let error = ""
+    let username = localStorage.getItem('ipfsUsername') || "";
+    let password = localStorage.getItem('ipfsPassword') || "";
+    let loggedIn = username && password
+    let message = ""
+    let error = ""
     let passwordInput;
     let type = ""
     let show = true;
+    let success = true;
     export let loggedInUser = localStorage.getItem('ipfsUsername')
     $:type && (show = !show)
 
     const dispatch = createEventDispatcher();
-
-    const onOkButtonClick = (e) => {
-        dispatch('okClick', {
-            username,
-            password
-        });
-    }
 
     onMount(async () => {
         pageTitle.set("IPFS login")
@@ -37,6 +33,54 @@
         } else {
             passwordInput.setAttribute("type", "password")
         }
+    }
+
+    async function updateCredentials() {
+        message = "";
+        error = "";
+        let formData = new FormData();
+        formData.append('file', 'credentials')
+
+
+        const requestArr = IPFS_APIS.map((url) => {
+            return axios.request({
+                url,
+                auth: {
+                    username,
+                    password
+                },
+                method: 'post',
+                headers: {
+                    "Content-Type": `multipart/form-data;`,
+                },
+                data: formData,
+                onUploadProgress: ((p) => {
+                    console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                }),
+                withCredentials: true,
+            })
+        });
+
+        let respAll = await Promise.allSettled(requestArr)
+
+        respAll.map(response => {
+            if (response.status === "rejected") {
+                reportError(response.reason)
+            } else return response
+        })
+
+        let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+        if (resolvedPromise) {
+            localStorage.setItem('ipfsUsername', username);
+            localStorage.setItem('ipfsPassword', password);
+            dispatch('success');
+        } else {
+            error = "Double check your login details. If the problem persists, contact us."
+            localStorage.removeItem('ipfsUsername');
+            localStorage.removeItem('ipfsPassword');
+        }
+
+
     }
 
 </script>
@@ -68,7 +112,7 @@
   <div class="card-footer justify-start pt-4">
     <div class="message">{message}</div>
     <div class="error text-left mr-3">{error}</div>
-    <button class="default-btn ok-button" disabled={!password || !username} on:click={onOkButtonClick}>OK
+    <button class="default-btn ok-button" disabled={!password || !username} on:click={updateCredentials}>OK
     </button>
   </div>
 </div>

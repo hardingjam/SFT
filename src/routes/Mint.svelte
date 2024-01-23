@@ -47,6 +47,7 @@
     import MintInput from '../components/MintInput.svelte';
     import Schema from '../components/Schema.svelte';
     import Connect from '../components/Connect.svelte';
+    import IpfsLogin from '../components/IpfsLogin.svelte';
 
     let image = {}
 
@@ -330,6 +331,8 @@
     function handleFileUpload(event) {
         fileHashes = event.detail.fileHashes
     }
+
+    let loggedIn = localStorage.getItem('ipfsPassword') || localStorage.getItem('ipfsUsername');
 </script>
 
 <div class="mint-container relative">
@@ -382,9 +385,17 @@
             disabled="{!selectedSchema.hash || !parseFloat(amount)}">
       Mint
     </button>
-  {:else}
+
+  {/if}
+
+  {#if !loggedIn}
+    <IpfsLogin on:success={()=>{loggedIn = true}}/>
+  {/if}
+
+  {#if !$account}
     <Connect action="mint" className="pt-20"></Connect>
   {/if}
+
 </div>
 
 <style>

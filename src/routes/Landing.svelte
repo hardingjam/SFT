@@ -86,7 +86,7 @@
             <line x1="16" y1="1" x2="-8.74228e-08" y2="0.999999" stroke="white" stroke-width="2"/>
             <line x1="1" y1="4.37114e-08" x2="0.999999" y2="16" stroke="white" stroke-width="2"/>
           </svg>
-          Join our transparent, decentralised, programmatic, <span>Semi Fungible Token</span> system.
+          Use our transparent, decentralised, programmatic, <span>Semi Fungible Token</span> system.
         </div>
         <button class="launch-button" id="launch-button-1" on:click="{()=>launchApp()}">Launch app</button>
 

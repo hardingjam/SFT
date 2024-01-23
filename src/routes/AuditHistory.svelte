@@ -8,6 +8,7 @@
         transactionError, transactionSuccess, transactionInProgress, sftInfo, pageTitle
     } from "../scripts/store";
     import {
+        connectAccount,
         getSubgraphData,
         hasRole, navigate,
         showPromptSFTCreate,
@@ -139,6 +140,12 @@
     function handleDateChange(event) {
         selectedDate = event.detail;
     }
+
+    async function connect() {
+        let acc = await connectAccount()
+        account.set(acc);
+    }
+
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
@@ -147,9 +154,6 @@
   {/if}
   {#if !loading }
     <div class="sft-table-container">
-      {#if !$account}
-        <Connect action="certify" className="pt-12"></Connect>
-      {/if}
       <table class="sft-table">
         <thead>
         <tr>
@@ -183,6 +187,12 @@
       </table>
       <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}>
         <div slot="actions">
+          {#if !$account}
+            <span class="mr-5">To certify, connect your wallet </span>
+            <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
+              <span>Connect wallet</span>
+            </button>
+          {/if}
           {#if !loading && ($accountRoles.CERTIFIER)}
             <div class="certify-btn-container">
               {#if maxCertifiedUntil < new Date()}
@@ -217,5 +227,20 @@
     .until {
         color: #F11717;;
     }
+
+    .connect-metamask-btn {
+        border-radius: 30px;
+        background: #2C2C54;
+        color: #FFF;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        font-family: "Mukta", sans-serif;
+        padding: 2px 32px;
+        width: fit-content;
+        cursor: pointer;
+    }
+
 
 </style>

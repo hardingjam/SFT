@@ -376,7 +376,7 @@
     .search-input {
         border-radius: 10px;
         border: none;
-        color: #9D9D9D;
+        color: #000000;
         width: 100%;
         padding: 6px 46px;
     }

@@ -28,6 +28,7 @@
     import receiptContractAbi from '../contract/ReceiptContractAbi.json';
     import {arrayify} from 'ethers/lib/utils.js';
     import {mock} from '../test/mock.js';
+    import Connect from '../components/Connect.svelte';
 
     pageTitle.set("New revision")
 
@@ -54,6 +55,7 @@
             $schemas.find(s => s.hash === schemaHash.toString())
         schema = {...assetClass, hash: schemaHash}
     }
+
     function setFormInputs(values) {
         // Get all input elements inside the form with the class "svelte-schema-form"
         const formInputs = document.querySelectorAll('.svelte-schema-form input');
@@ -70,13 +72,13 @@
             } else if (input.type === 'file') {
 
                 if (values) {
-                    fileHashes = [...fileHashes, {prop: input.id, hash: values[input.id]} ]
-                    const linkURL = values[input.id] ? IPFS_GETWAY + values[input.id]: null;
+                    fileHashes = [...fileHashes, {prop: input.id, hash: values[input.id]}]
+                    const linkURL = values[input.id] ? IPFS_GETWAY + values[input.id] : null;
 
                     // Create the link (<a>) element
-                    if(linkURL){
+                    if (linkURL) {
                         const linkElement = document.createElement('a');
-                        linkElement.href = linkURL ;
+                        linkElement.href = linkURL;
                         linkElement.target = '_blank';
                         linkElement.classList.add('display-flex');
                         linkElement.classList.add('absolute');
@@ -86,7 +88,7 @@
 
                         // Create the image (<img>) element
                         const spanElement = document.createElement('span');
-                        spanElement.textContent =  toSentenceCase(input.id)//+ toSentenceCase(input.id)
+                        spanElement.textContent = toSentenceCase(input.id)//+ toSentenceCase(input.id)
                         spanElement.classList.add('underline');
 
 
@@ -269,30 +271,35 @@
 
 </script>
 
-<div class="new-revision">
+<div class="new-revision min-w-[40rem] min-h-[30rem]">
   <div class="card-header f-weight-700">
     {$tokenName}
   </div>
-  <div class="info-container card-content">
-    <div class="flex justify-between w-full mb-6 items-end">
-      <span class="f-weight-700">Asset class</span>
-      <div class="asset-class"> {schema.displayName}</div>
+  {#if $account}
+    <div class="info-container card-content">
+      <div class="flex justify-between w-full mb-6 items-end">
+        <span class="f-weight-700">Asset class</span>
+        <div class="asset-class"> {schema.displayName}</div>
+      </div>
+      <div class="text-left schema-container">
+        <Schema schema={schema} on:fileUpload={handleFileUpload}></Schema>
+      </div>
+      <div class="flex justify-between w-full mb-6 items-center mt-6">
+        <span class="f-weight-700">Amount</span>
+        <div class="asset-class"> {$selectedReceipt && $selectedReceipt.receipt ?
+            ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
+            0}</div>
+      </div>
+      <div class="default-btn self-end" on:click={()=>{upload()}}>Upload</div>
     </div>
-    <div class="text-left schema-container">
-      <Schema schema={schema} on:fileUpload={handleFileUpload}></Schema>
+    <div class="footer">
+      <div class="info f-weight-700 mb-5">Changes to the asset are permanent on IPFS and Blockchain</div>
+      <button class="btn-solid w-full ok-btn" on:click={()=>{createNewRevision()}} disabled="{!uploadedData}">OK
+      </button>
     </div>
-    <div class="flex justify-between w-full mb-6 items-center mt-6">
-      <span class="f-weight-700">Amount</span>
-      <div class="asset-class"> {$selectedReceipt && $selectedReceipt.receipt ?
-          ethers.utils.formatUnits($selectedReceipt?.receipt.deposits[0].amount, 18) :
-          0}</div>
-    </div>
-    <div class="default-btn self-end" on:click={()=>{upload()}}>Upload</div>
-  </div>
-  <div class="footer">
-    <div class="info f-weight-700 mb-5">Changes to the asset are permanent on IPFS and Blockchain</div>
-    <button class="btn-solid w-full ok-btn" on:click={()=>{createNewRevision()}} disabled="{!uploadedData}">OK</button>
-  </div>
+  {:else}
+    <Connect action="create new revision" className="pt-20"></Connect>
+  {/if}
 </div>
 
 <style>

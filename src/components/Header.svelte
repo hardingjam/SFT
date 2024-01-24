@@ -1,9 +1,9 @@
 <script>
-    import {account, activeNetwork, pageTitle, titleIcon} from "../scripts/store.js";
+    import {account, activeNetwork, isMetamaskInstalled, pageTitle, titleIcon} from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
-    import {formatAddress} from "../scripts/helpers.js";
+    import {formatAddress, connectAccount} from "../scripts/helpers.js";
     import HeaderDropdown from './HeaderDropdown.svelte';
     import BreadCrumbs from './BreadCrumbs.svelte';
 
@@ -47,25 +47,35 @@
         event.detail.selected.action()
     }
 
-    // let pageTitle = "Asset register"
+    async function connect() {
+        let acc = await connectAccount()
+        account.set(acc);
+    }
+
 </script>
 
-<div class="{$account ? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
-  {#if $account}
+<div class="{$isMetamaskInstalled ? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
+  {#if $isMetamaskInstalled}
     <div class="w-1/3"></div>
     <div class="page-title" id="{$pageTitle.replace(' ','-').toLowerCase()}">
       {#if $titleIcon}
         <img src={$titleIcon} alt="icon"/>
       {/if}
       {$pageTitle}</div>
-    <div class="flex justify-end w-1/3 whitespace-nowrap">
+    <div class="flex justify-end w-1/3 whitespace-nowrap items-center">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
                       triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
+      {#if $account}
+        <HeaderDropdown triggerLabel={formatAddress($account)}
+                        items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect} triggerIcon="">
+        </HeaderDropdown>
+      {:else }
+        <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
+          <span>Connect wallet</span>
+        </button>
 
-      <HeaderDropdown triggerLabel={formatAddress($account)}
-                      items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect} triggerIcon="">
-      </HeaderDropdown>
+      {/if}
     </div>
     {#if location && (location !== "/" && location !== "#list")}
       <BreadCrumbs/>
@@ -96,6 +106,20 @@
         align-items: center;
         gap: 4px;
         justify-content: center;
+    }
+
+    .connect-metamask-btn {
+        border-radius: 30px;
+        background: #2C2C54;
+        color: #FFF;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        font-family: "Mukta", sans-serif;
+        padding: 2px 32px;
+        width: fit-content;
+        cursor: pointer;
     }
 
 </style>

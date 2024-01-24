@@ -8,6 +8,7 @@
         transactionError, transactionSuccess, transactionInProgress, sftInfo, pageTitle
     } from "../scripts/store";
     import {
+        connectAccount,
         getSubgraphData,
         hasRole, navigate,
         showPromptSFTCreate,
@@ -20,6 +21,8 @@
     import SftLoader from '../components/SftLoader.svelte';
     import Pagination from '../components/Pagination.svelte';
     import Calendar from '../components/Calendar.svelte';
+    import Connect from '../components/Connect.svelte';
+    import ReceiptInformation from './ReceiptInformation.svelte';
 
     let error = ''
     let certifyUntil = formatDate(new Date())
@@ -137,6 +140,12 @@
     function handleDateChange(event) {
         selectedDate = event.detail;
     }
+
+    async function connect() {
+        let acc = await connectAccount()
+        account.set(acc);
+    }
+
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
@@ -145,7 +154,6 @@
   {/if}
   {#if !loading }
     <div class="sft-table-container">
-
       <table class="sft-table">
         <thead>
         <tr>
@@ -163,7 +171,9 @@
             <tr class="tb-row">
               <td>{ethers.utils.formatUnits(cert?.totalShares, 18)}</td>
               <td>{timeStampToDate(cert?.timestamp)}</td>
-              <td><span class="underline brown cursor-pointer" on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span></td>
+              <td><span class="underline brown cursor-pointer"
+                        on:click={()=>{navigate(`#address-overview/${cert?.certifier.address}`)}}>{formatAddress(cert?.certifier.address)}</span>
+              </td>
               <td class={inFuture(timeStampToDate(cert?.certifiedUntil)) ? "success" : "until"}>
                 {timeStampToDate(cert?.certifiedUntil)}
               </td>
@@ -177,6 +187,12 @@
       </table>
       <Pagination dataLength={certifyData.length} {perPage} on:pageChange={handlePageChange}>
         <div slot="actions">
+          {#if !$account}
+            <span class="mr-5">To certify, connect your wallet </span>
+            <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
+              <span>Connect wallet</span>
+            </button>
+          {/if}
           {#if !loading && ($accountRoles.CERTIFIER)}
             <div class="certify-btn-container">
               {#if maxCertifiedUntil < new Date()}
@@ -198,7 +214,7 @@
     }
 
     .receipts {
-        width: 100%;
+        /*width: 100%;*/
         margin-right: 20px;
         /*margin-top: 117px;*/
     }
@@ -211,5 +227,20 @@
     .until {
         color: #F11717;;
     }
+
+    .connect-metamask-btn {
+        border-radius: 30px;
+        background: #2C2C54;
+        color: #FFF;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        font-family: "Mukta", sans-serif;
+        padding: 2px 32px;
+        width: fit-content;
+        cursor: pointer;
+    }
+
 
 </style>

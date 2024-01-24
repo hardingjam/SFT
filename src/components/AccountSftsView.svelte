@@ -16,6 +16,7 @@
     let filteredData = []
 
     $: sftsData && handlePageChange()
+
     async function handlePageChange(event) {
         currentPage = event?.detail.currentPage || 1
         let skip = (perPage * (currentPage - 1)) - 1
@@ -40,7 +41,8 @@
             <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
           </a>
         </td>
-        <td><span on:click={()=>{navigate(`#token-overview/${sft.address}`)}} class="brown underline cursor-pointer">{sft.name}</span></td>
+        <td><span on:click={()=>{navigate(`#token-overview/${sft.address}`)}}
+                  class="brown underline cursor-pointer">{sft.name}</span></td>
         <td>{ethers.utils.formatUnits(sft.totalShares, 18)}</td>
       </tr>
     {/each}

@@ -49,12 +49,12 @@
         </div>
       {/if}
     </div>
-    <div class="mt-16 flex flex-col justify-start items-center w-full">
-      <Link href="#token-overview/{$vault.address}">
+    <div class="mt-36 flex flex-col justify-start items-center w-full">
+      <!-- <Link href="#token-overview/{$vault.address}">
         <div class="sft-name f-weight-600 menu-header mb-3 {$tokenName? 'sft-name-navigation-header':''}">{$account ?
             $tokenName :
             ""}</div>
-      </Link>
+      </Link> -->
       <a href=""
          class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
         <span class="text-base leading-5 menu-header">SFT</span>
@@ -164,7 +164,7 @@
 <style lang="postcss">
 
     .text-nav {
-        color: #37134D;
+        color: #af7f2b;
     }
 
     .navigation-container {
@@ -179,7 +179,7 @@
 
 
     .menu-header {
-        color: #37134D;
+        color: #dacd40;
     }
 
     .sft-info-table {

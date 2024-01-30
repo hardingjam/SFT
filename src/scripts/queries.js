@@ -105,7 +105,6 @@ export const AUDIT_HISTORY_DATA_QUERY = `
         }
     `;
 
-
 export const RECEIPTS_QUERY = `
           query($id: ID!) {
               account(id: $id) {
@@ -235,7 +234,7 @@ export const VAULT_INFORMATION_QUERY = `
 
 export const VAULTS_QUERY = `
         query {
-          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc first:200){
+          offchainAssetReceiptVaults(orderBy:deployTimestamp orderDirection:desc first:200 where: {deployer: "0x4eAada46237a937c2d9D110F41ee85F8ae8F6905"}){
             deployer
             name
             address
@@ -385,7 +384,7 @@ export const VAULTS_BY_DEPLOYER_QUERY = `
               address
             }
         }
-       `
+       `;
 
 export const ACCOUNT_PINS_QUERY = `
     query($address: String!) {
@@ -395,9 +394,8 @@ export const ACCOUNT_PINS_QUERY = `
             hash
           }
         }
- }`
-export const REVISIONS_DATA_QUERY =
-    `query($address: String!) {
+ }`;
+export const REVISIONS_DATA_QUERY = `query($address: String!) {
        depositWithReceipts(
            where: {caller_: {address: $address}}
        orderBy: timestamp
@@ -488,4 +486,4 @@ export const REVISIONS_DATA_QUERY =
                   name
                 }
             }
-}`
+}`;

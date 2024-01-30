@@ -298,11 +298,7 @@
                   on:fileDrop={deployImage}
                   on:listEditClick={()=>{isListEditorOpen=true}} on:listEditClosed={()=>{isListEditorOpen=false}}/>
       {/if}
-      {#if !isListEditorOpen}
-        <div class="note">
-          <span class="py-2">Note: token creation is permissionless and so all the data on this site could be malicious/ scam, please do your own research before downloading any files or buying any tokens. </span>
-        </div>
-      {/if}
+        
     </div>
   {/if}
 </div>

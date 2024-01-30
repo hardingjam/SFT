@@ -1,4 +1,4 @@
-import logo from "../assets/icons/st0x_logo.png";
+import logo from "../assets/icons/midas-logo.png";
 import ethereum from "../assets/networks/ethereum.svg";
 import polygon from "../assets/networks/polygon.svg";
 import show from "../assets/icons/show.svg";

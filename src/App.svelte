@@ -23,7 +23,7 @@
 
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap');
     main {
-        background-image: url("/src/assets/st0x_background.png");
+
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;

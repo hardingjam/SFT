@@ -80,7 +80,7 @@
         z-index: 2;
         position: fixed;
         top: 0;
-        background: #6F5EA1;
+background: linear-gradient(270deg, #342604 12.96%, #F3B13C 87.96%);
     }
 
     .page-title {

@@ -343,14 +343,13 @@
 <div class="mb-1 relative pt-4 flex-col flex items-center h-full">
   <div class="header-buttons">
     <button type="button" class="default-btn new-asset-class" on:click={()=>{navigate('#new-asset-class')}}>
-      New asset class
+      New Asset Class
     </button>
     <button type="button" class="default-btn asset-class-list" disabled={!$schemas.length}
             on:click={()=>{navigate('#asset-classes')}}>
-      Asset class list
-    </button>
+      Asset Classes    </button>
     <button class="default-btn audit-history" on:click={()=>{navigate('#audit-history')}}>
-      Audit history
+      Audit History
     </button>
   </div>
   <div class="audit-info-container basic-frame-parent">

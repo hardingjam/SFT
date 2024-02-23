@@ -420,6 +420,9 @@ li {
 }
 
 .sft-table {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    position: relative;
     width: 100%;
     text-align: center;
     line-height: 1.75rem;
@@ -434,12 +437,20 @@ li {
 }
 
 .sft-table-container {
+<<<<<<< HEAD
     position: relative;
     height: calc(100vh - 180px);
     margin-bottom: -100px;
     background: rgba(255, 255, 255, 0.7);
+=======
+    min-height: calc(100vh - 180px);
+    background: #FFFFFF;
+>>>>>>> main
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .sft-table tbody tr:nth-child(even) {
@@ -488,9 +499,15 @@ li {
     width: 100%;
     align-items: center;
     justify-content: center;
+<<<<<<< HEAD
     border-bottom-width: 1px;
+=======
+    border-bottom: 1px solid #D2D2D2;
+>>>>>>> main
     gap: 20px;
     height: 52px;
+    color: #575757;
+    font-weight: 500;
 }
 
 .card-content {
@@ -570,6 +587,7 @@ li {
         text-align: center;
     }
 }
+
 @media only screen and (max-width: 430px) {
     .title-text {
         text-align: left;

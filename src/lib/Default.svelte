@@ -26,7 +26,7 @@
         isCypress,
         schemas,
         titleIcon,
-        landing
+        landing, isMetamaskInstalled
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -82,19 +82,26 @@
     let connectedAccount;
     export let url = "";
 
-    let isMetamaskInstalled = typeof window.ethereum !== "undefined";
+    isMetamaskInstalled.set(typeof window.ethereum !== "undefined");
 
     let location = window.location.hash;
     let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
+    $: $account, accountChanged()
 
     async function vaultChanged() {
-        if ($vault.address && $activeNetwork.id && $account) {
+        if ($vault.address && $activeNetwork.id) {
             await getRoles($vault.address)
-            accountRoles.set(await setAccountRoles($roles, $account));
+            if ($account) {
+                accountRoles.set(await setAccountRoles($roles, $account));
+            }
             tokenName.set($data && $data.offchainAssetReceiptVault ? $data.offchainAssetReceiptVault.name : "")
             await getSchemas()
         }
+    }
+
+    async function accountChanged() {
+        accountRoles.set(await setAccountRoles($roles, $account));
     }
 
     router.subscribe(async e => {
@@ -170,16 +177,17 @@
                 "subgraph_url": "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
             })
         }
-        if (isMetamaskInstalled) {
+        if ($isMetamaskInstalled) {
             if ((location === "/" || location === "") && !$landing) {
                 navigateTo("#list");
             }
             await setNetwork();
             await getSchemas();
             connectedAccount = await getMetamaskConnectedAccount();
+            await vaultChanged()
+
             if (connectedAccount) {
                 account.set(connectedAccount)
-                await vaultChanged()
                 if (!$landing) {
                     navigateTo(location || '#list', {replace: false})
                 }
@@ -300,31 +308,8 @@
         }
     }
 
-    async function connect() {
-        if (!isMetamaskInstalled) {
-            window.open("https://metamask.io/download/", "_blank");
-        } else {
-            try {
-                const accounts = await window.ethereum.request({
-                    method: "wallet_requestPermissions",
-                    params: [{
-                        eth_accounts: {}
-                    }]
-                }).then(() => window.ethereum.request({
-                    method: "eth_requestAccounts"
-                }));
-                account.set(accounts[0]);
-                accountRoles.set(await setAccountRoles($roles, $account));
-                localStorage.setItem("account", $account);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        await setVault()
-    }
-
     async function getMetamaskConnectedAccount() {
-        if (isMetamaskInstalled) {
+        if ($isMetamaskInstalled) {
             const accounts = await $ethersData.provider.listAccounts();
             return accounts.length > 0 ? accounts[0] : null;
         }
@@ -447,6 +432,10 @@
         }
     }
 
+    function installMetamask() {
+        window.open("https://metamask.io/download/", "_blank");
+    }
+
 </script>
 <Router url={url}>
   <!--  Any route added in landing section should be specified in landingPages array -->
@@ -458,24 +447,29 @@
     <Route path="#curators" component={Curators}/>
     <Route path="#auditors" component={Auditors}/>
   </div>
-  <div class="{ !$landing ? 'block' : 'hide'}">
-    <div class={$account || $isCypress? "content" : "content-not-connected"}>
+  <div class="{!$landing ? 'block' : 'hide'}">
+    <div class={$isMetamaskInstalled || $isCypress? "content" : "content-not-connected"}>
       <Header on:select={handleNetworkSelect} {location}></Header>
-      <div class="logo-container rounded-full {$account ? 'border-6' : ''}  border-white">
+      <div class="logo-container rounded-full border-white {$isMetamaskInstalled ? 'border-6' : ''}  ">
         <a href="/#list">
           {#if !$activeToken.icon}
+<<<<<<< HEAD
             <img src={$account? icons.logo: icons.logo} alt=""
                  class="{$account ? 'account token-logo' : 'no-account'} rounded-full "/>
+=======
+            <img src={$isMetamaskInstalled? icons.logo: icons.sft_logo_white} alt=""
+                 class="{$isMetamaskInstalled ? 'account token-logo' : 'no-account'} rounded-full "/>
+>>>>>>> main
           {:else}
             <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
                  class="rounded-full token-logo"/>
           {/if}
         </a>
       </div>
-      <div class="{ $account ? 'block' : 'hide'}">
+      <div class="{ $isMetamaskInstalled ? 'block' : 'hide'}">
         <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
         <div class={$sftInfo ? "sft-info-opened mt-61" : "mt-61" }>
-          <div class="{$activeNetwork  ? 'show' : 'hide'}">
+          <div class="{$activeNetwork  ? 'block' : 'hide'}">
             <Route path="#list" component={Home}/>
             <Route path="#asset-register" component={AssetRegister}/>
             <Route path="#asset-history/:id" component={AssetHistory}/>
@@ -506,7 +500,7 @@
                         on:click="{() =>  changeUrl('#mint')}">
                   Mint
                 </button>
-                <button class:selected="{selectedTab === '#redeem'}" disabled={!$accountRoles?.WITHDRAWER}
+                <button class:selected="{selectedTab === '#redeem'}"
                         class="redeem-tab tab-button"
                         on:click="{() =>  changeUrl('#redeem')}">
                   Redeem
@@ -524,15 +518,12 @@
           </div>
         </div>
       </div>
-      {#if !$account }
+      {#if !$isMetamaskInstalled }
         <div>
           <div class="invalid-network f-weight-700">
             <label>To use the app:</label>
-            <button class="connect-metamask-btn f-weight-700" on:click={()=>connect()}>
-              {#if isMetamaskInstalled}
-                <span>Connect Metamask</span>
-              {/if}
-              {#if !isMetamaskInstalled}
+            <button class="connect-metamask-btn f-weight-700" on:click={()=>installMetamask()}>
+              {#if !$isMetamaskInstalled}
                 <span>Install Metamask</span>
               {/if}
             </button>
@@ -668,7 +659,7 @@
 
   .tab-button {
     margin: 0;
-    color: #000000;
+    color: #575757;
     width: 105px;
     height: 36px;
     background: linear-gradient(227.8deg, #FFFFFF 21.59%, #C5C4C4 61.47%);
@@ -728,7 +719,6 @@
   }
 
   .content {
-    height: fit-content;
     min-height: 100vh;
 
   }

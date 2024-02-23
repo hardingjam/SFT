@@ -2,26 +2,23 @@
     import {createEventDispatcher, onDestroy, onMount} from 'svelte';
     import {pageTitle, titleIcon, tokenName} from '../scripts/store.js';
     import {icons} from '../scripts/assets.js';
+    import {IPFS_APIS} from '../scripts/consts.js';
+    import axios from 'axios';
+    import {router} from 'yrv';
 
-    export let username = localStorage.getItem('ipfsUsername') || "";
-    export let password = localStorage.getItem('ipfsPassword') || "";
-    export let loggedIn = username && password
-    export let message = ""
-    export let error = ""
+    let username = localStorage.getItem('ipfsUsername') || "";
+    let password = localStorage.getItem('ipfsPassword') || "";
+    let loggedIn = username && password
+    let message = ""
+    let error = ""
     let passwordInput;
     let type = ""
     let show = true;
+    let success = true;
     export let loggedInUser = localStorage.getItem('ipfsUsername')
     $:type && (show = !show)
 
     const dispatch = createEventDispatcher();
-
-    const onOkButtonClick = (e) => {
-        dispatch('okClick', {
-            username,
-            password
-        });
-    }
 
     onMount(async () => {
         pageTitle.set("IPFS login")
@@ -39,9 +36,56 @@
         }
     }
 
+    async function updateCredentials() {
+        message = "";
+        error = "";
+        let formData = new FormData();
+        formData.append('file', 'credentials')
+
+
+        const requestArr = IPFS_APIS.map((url) => {
+            return axios.request({
+                url,
+                auth: {
+                    username,
+                    password
+                },
+                method: 'post',
+                headers: {
+                    "Content-Type": `multipart/form-data;`,
+                },
+                data: formData,
+                onUploadProgress: ((p) => {
+                    console.log(`Uploading...  ${p.loaded} / ${p.total}`);
+                }),
+                withCredentials: true,
+            })
+        });
+
+        let respAll = await Promise.allSettled(requestArr)
+
+        respAll.map(response => {
+            if (response.status === "rejected") {
+                reportError(response.reason)
+            } else return response
+        })
+
+        let resolvedPromise = respAll.find(r => r.status === "fulfilled")
+        if (resolvedPromise) {
+            localStorage.setItem('ipfsUsername', username);
+            localStorage.setItem('ipfsPassword', password);
+            dispatch('success');
+        } else {
+            error = "Double check your login details. If the problem persists, contact us."
+            localStorage.removeItem('ipfsUsername');
+            localStorage.removeItem('ipfsPassword');
+        }
+
+    }
+
 </script>
-<div class="ipfs-container">
-  <div class="card-header justify-start pl-6">
+<div class="ipfs-container {$router.path === '#ipfs' ? '' : 'border'}">
+  <div class="card-header justify-start pl-6 {$router.path === '#ipfs' ? '' : 'no-border-b'}">
     <div class="title flex gap-3"><img src="{icons.ipfs}" alt="ipfs"/>IPFS login</div>
 
   </div>
@@ -65,10 +109,10 @@
 
 
   </div>
-  <div class="card-footer justify-start pt-4">
+  <div class="card-footer justify-start pt-4 {$router.path === '#ipfs' ? '' : 'no-border-t'}">
     <div class="message">{message}</div>
     <div class="error text-left mr-3">{error}</div>
-    <button class="default-btn ok-button" disabled={!password || !username} on:click={onOkButtonClick}>OK
+    <button class="default-btn ok-button" disabled={!password || !username} on:click={updateCredentials}>OK
     </button>
   </div>
 </div>
@@ -95,6 +139,7 @@
         width: 100%;
     }
 
+<<<<<<< HEAD
     .title {
         font-family: "Monserrat", sans-serif;
         color: #000;
@@ -104,6 +149,8 @@
         line-height: normal;
     }
 
+=======
+>>>>>>> main
     .password {
         position: relative;
     }
@@ -143,7 +190,7 @@
     .card-footer {
         align-items: center;
         display: flex;
-        border-top-width: 1px;
+        border-top: 1px solid #D2D2D2;
         padding: 16px 60px;
         width: 100%;
         justify-content: space-between;
@@ -153,5 +200,19 @@
         height: 36px;
         margin-bottom: 0;
         width: 100%;
+    }
+
+    .border {
+        border: 1px solid #D2D2D2;
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+    }
+
+    .no-border-b {
+        border-bottom: none;
+    }
+
+    .no-border-t {
+        border-top: none;
     }
 </style>

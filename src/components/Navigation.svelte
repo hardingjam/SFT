@@ -27,6 +27,7 @@
         navigate(e.detail, { clear: true });
     }
 
+<<<<<<< HEAD
     function handleMintClick(e) {
         let ipfsUsername = localStorage.getItem("ipfsUsername");
         let ipfsPassword = localStorage.getItem("ipfsPassword");
@@ -36,6 +37,8 @@
             navigate(e.detail, { clear: true });
         }
     }
+=======
+>>>>>>> main
 </script>
 
 <div class="navigation-container relative h-full flex flex-col">
@@ -93,6 +96,7 @@
                 </div>
             {/if}
         </div>
+<<<<<<< HEAD
         <div class="mt-36 flex flex-col justify-start items-center w-full">
             <!-- <Link href="#token-overview/{$vault.address}">
         <div class="sft-name f-weight-600 menu-header mb-3 {$tokenName? 'sft-name-navigation-header':''}">{$account ?
@@ -189,6 +193,44 @@
                     on:navClick={handleClick}
                 />
             {/if}
+=======
+      {/if}
+    </div>
+    <div class="mt-16 flex flex-col justify-start items-center w-full">
+      <Link href="#token-overview/{$vault.address}">
+        <div
+          class="sft-name f-weight-600 menu-header mb-3 {$tokenName? 'sft-name-navigation-header':''}">{$tokenName}</div>
+      </Link>
+      <a href=""
+         class="flex justify-start items-center space-x-6 w-full  focus:outline-none  focus:text-indigo-400 rounded py-2 text-nav font-semibold pl-5">
+        <span class="text-base leading-5 menu-header">SFT</span>
+      </a>
+      <NavigationButton targetPath="#list" {path} on:navClick={handleClick}>
+        <div slot="icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M5.77778 10.2222V18C5.77778 19.1046 6.67321 20 7.77778 20H12M5.77778 10.2222L11.2929 4.70711C11.6834 4.31658 12.3166 4.31658 12.7071 4.70711L17.5 9.5M5.77778 10.2222L4 12M18.2222 10.2222V18C18.2222 19.1046 17.3268 20 16.2222 20H12M18.2222 10.2222L20 12M18.2222 10.2222L17.5 9.5M17.5 9.5V6M12 20V15"
+              stroke="#575757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </NavigationButton>
+      {#if $vault && $vault.address}
+        <NavigationButton label={$tokenName} {path}>
+          <div slot="icon" class="navigation-token-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="8" stroke="#575757" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </NavigationButton>
+        <NavigationButton targetPath="#mint" {path} child={true} on:navClick={handleClick}/>
+        <NavigationButton targetPath="#asset-classes" {path} child={true} on:navClick={handleClick}/>
+        <NavigationButton targetPath="#members" {path} child={true} on:navClick={handleClick}/>
+        <NavigationButton targetPath="#roles" {path} child={true} on:navClick={handleClick}/>
+        <NavigationButton targetPath="#audit-history" {path} child={true} on:navClick={handleClick}/>
+        <NavigationButton targetPath="#asset-register" {path} child={true} on:navClick={handleClick}/>
+      {/if}
+>>>>>>> main
 
             <NavigationButton
                 targetPath="#knowledgebase"

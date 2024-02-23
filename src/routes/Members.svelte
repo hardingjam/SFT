@@ -231,7 +231,6 @@
 
     .card-header {
         padding: 0 32px;
-        color: #575757;
     }
 
     .members {

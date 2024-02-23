@@ -84,7 +84,7 @@
 
 <div class={$transactionInProgressShow? "frame show": "frame hide" } use:clickOutside
      on:click_outside={handleClickOutside}>
-  <div class="content">
+  <div class="{noBottomText  ? 'justify-center' : 'justify-between' } content">
     {#if ($transactionInProgress)}
       <div class="top-text tx-in-progress">{topText || TRANSACTION_IN_PROGRESS_TEXT}</div>
     {/if}
@@ -221,7 +221,7 @@
         border: 1px solid rgba(255, 255, 255, 0.8);
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        /*justify-content: space-between;*/
         height: 100%;
         flex-direction: column;
         color: #FFFFFF;
@@ -258,7 +258,7 @@
         cursor: pointer;
     }
 
-    .tooltip-text{
+    .tooltip-text {
         visibility: unset;
         opacity: 1;
         font-weight: 400;

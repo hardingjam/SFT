@@ -100,7 +100,6 @@
     }
 
     .title {
-        font-weight: 800;
         align-items: center;
         gap: 3px;
         justify-content: space-between;

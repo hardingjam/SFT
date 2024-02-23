@@ -46,6 +46,8 @@
     import {navigate} from '../scripts/helpers.js';
     import MintInput from '../components/MintInput.svelte';
     import Schema from '../components/Schema.svelte';
+    import Connect from '../components/Connect.svelte';
+    import IpfsLogin from '../components/IpfsLogin.svelte';
 
     let image = {}
 
@@ -96,9 +98,6 @@
     })
 
     onMount(async () => {
-        if ($vault.address && ((Object.keys($accountRoles).length && !$accountRoles.DEPOSITOR))) {
-            navigateTo('#');
-        }
         await getSchemas()
     })
 
@@ -332,6 +331,8 @@
     function handleFileUpload(event) {
         fileHashes = event.detail.fileHashes
     }
+
+    let loggedIn = localStorage.getItem('ipfsPassword') || localStorage.getItem('ipfsUsername');
 </script>
 
    <!-- padding-top: 1rem;
@@ -352,43 +353,74 @@
       Audit History
     </button>
   </div>
-  <div class="audit-info-container basic-frame-parent">
-    <div class="form-frame basic-frame">
-      <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
-      <MintInput bind:amount={amount} amountLabel={"Mint amount"} id="mint-amount"
-                 info="(Mint amount = number of tokens that will go into your wallet)"/>
-      {#if $schemas.length}
-        <div class="schema">
-          <div class="schema-dropdown flex justify-between mb-6">
-            <label class="f-weight-700 custom-col">Asset class</label>
-            <Select options={$schemas}
 
-                    on:select={handleSchemaSelect}
-                    label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
 
-          </div>
-          <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
-        </div>
+  {#if !loggedIn || !$account}
+    <div class="flex flex-col gap-5 w-full">
+
+      <span class="font-bold w-full text-left ml-6"> {$tokenName}</span>
+      <div class="border flex items-center p-5 steps"><span>2 things to do before minting - You need to connect a wallet so you can send transactions
+      to the blockchain and you need a data storage (Currently using IPFS, Holochain coming soon).</span>
+      </div>
+
+      {#if !loggedIn}
+        <IpfsLogin on:success={()=>{loggedIn = true}}/>
       {/if}
-      {#if !$schemas.length}
-        <div class="empty-schemas">
-          <span>Please create a new asset class to mint </span>
+
+      {#if !$account}
+        <div class="border flex items-center">
+          <Connect action="mint" className="pt-5 pb-5"></Connect>
         </div>
       {/if}
 
     </div>
+  {:else}
+    <div class="audit-info-container basic-frame-parent">
+      <div class="form-frame basic-frame">
+        <label class="f-weight-700 text-center mb-3">{$tokenName || ""}</label>
+        <MintInput bind:amount={amount} amountLabel={"Mint amount"} id="mint-amount"
+                   info="(Mint amount = number of tokens that will go into your wallet)"/>
+        {#if $schemas.length}
+          <div class="schema">
+            <div class="schema-dropdown flex justify-between mb-6">
+              <label class="f-weight-700 custom-col">Asset class</label>
+              <Select options={$schemas}
 
-  </div>
+                      on:select={handleSchemaSelect}
+                      label={'Choose'} className={"mintSelect"} expandIcon={icons.expand_black}></Select>
 
+<<<<<<< HEAD
   <div class="error">{error}</div>
   <div class="info-text f-weight-400">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
     (FT)
   </div>
+=======
+            </div>
+            <Schema schema={selectedSchema} on:fileUpload={handleFileUpload}></Schema>
+          </div>
+        {/if}
+        {#if !$schemas.length}
+          <div class="empty-schemas">
+            <span>Please create a new asset class to mint </span>
+          </div>
+        {/if}
+      </div>
 
-  <button class="mint-btn btn-solid" on:click={() => mint()}
-          disabled="{!selectedSchema.hash || !parseFloat(amount)}">
-    Mint
-  </button>
+    </div>
+
+    <div class="error">{error}</div>
+    <div class="info-text f-weight-700">After minting an amount you receive 2 things: ERC1155 token (NFT) and an ERC20
+      (FT)
+    </div>
+
+    <button class="mint-btn btn-solid" on:click={() => mint()}
+            disabled="{!selectedSchema.hash || !parseFloat(amount)}">
+      Mint
+    </button>
+
+  {/if}
+>>>>>>> main
+
 
 </div>
 
@@ -455,5 +487,22 @@
         align-items: center;
     }
 
+    .border {
+        border: 1px solid #D2D2D2;
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+        border-radius: 10px;
+        width: calc(100% - 3rem);
+    }
+
+    .steps {
+        color: #000;
+
+        font-family: "Mukta", sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
 </style>
 

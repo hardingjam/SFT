@@ -105,6 +105,7 @@
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
+<<<<<<< HEAD
     {#if loading}
         <SftLoader />
     {/if}
@@ -152,6 +153,39 @@
             </table>
         </div>
     {/if}
+=======
+  {#if loading}
+    <SftLoader/>
+  {/if}
+  {#if !loading }
+    <div class="sft-table-container">
+      <table class="sft-table">
+        <thead>
+        <tr>
+          <th>Receipt ID</th>
+          <th>Asset class</th>
+          <th>Amount</th>
+          <th>Last updated</th>
+        </tr>
+        </thead>
+        <tbody>
+        {#if receipts.length}
+          {#each filteredReceipts as receipt}
+            <tr class="tb-row">
+              <td class="brown hover-underline cursor-pointer receipt-{receipt.receipt.receiptId}"
+                  on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
+              <td class="asset-class-cell">{receipt.schema?.displayName || ""}</td>
+              <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
+              <td>{timeStampToDate(receipt.timestamp)}</td>
+            </tr>
+          {/each}
+        {/if}
+        </tbody>
+      </table>
+      <Pagination dataLength={receipts.length} {perPage} on:pageChange={handlePageChange}/>
+    </div>
+  {/if}
+>>>>>>> main
 </div>
 
 <style>
@@ -160,7 +194,7 @@
     }
 
     .receipts {
-        width: 100%;
+        /*width: 100%;*/
         margin-right: 20px;
     }
 </style>

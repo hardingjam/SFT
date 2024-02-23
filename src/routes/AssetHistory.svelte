@@ -138,14 +138,14 @@
           {/each}
         {/if}
         </tbody>
-        <Pagination dataLength={receiptInformations.length} {perPage} on:pageChange={handlePageChange}>
-          <div slot="actions">
-            <div class="certify-btn-container">
-              <button class="default-btn ml-3" on:click={() => compareHistory()}>Compare History</button>
-            </div>
-          </div>
-        </Pagination>
       </table>
+      <Pagination dataLength={receiptInformations.length} {perPage} on:pageChange={handlePageChange}>
+      <div slot="actions">
+        <div class="certify-btn-container">
+          <button class="default-btn ml-3" on:click={() => compareHistory()}>Compare History</button>
+        </div>
+      </div>
+    </Pagination>
     </div>
   {/if}
 </div>
@@ -161,7 +161,7 @@
     }
 
     .receipts {
-        width: 100%;
+        /*width: 100%;*/
         margin-right: 20px;
     }
 

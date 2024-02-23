@@ -5,6 +5,7 @@ import pako from "pako"
 import {encodeCanonical, decodeAllSync} from "cbor-web";
 import {arrayify, isBytesLike} from "ethers/lib/utils.js";
 import {
+    account,
     breadCrumbs, navigationButtonClicked,
     promptBottomText, promptCloseAction, promptErrorText, promptNoBottom, promptSuccessText,
     promptTopText, transactionError,
@@ -618,5 +619,24 @@ export async function getAccountPins(network, address) {
             pins = pins.flat()
         }
         return pins
+    }
+}
+
+export async function connectAccount() {
+    try {
+        const accounts = await window.ethereum.request({
+            method: "wallet_requestPermissions",
+            params: [{
+                eth_accounts: {}
+            }]
+        }).then(() => window.ethereum.request({
+            method: "eth_requestAccounts"
+        }));
+        let connectedAccount = accounts[0];
+        localStorage.setItem("account", connectedAccount);
+
+        return connectedAccount
+    } catch (error) {
+        console.log(error);
     }
 }
